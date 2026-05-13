@@ -3,6 +3,7 @@ import { B } from '../tokens'
 
 const NAV_LINKS = [
   { label: "ABOUT", href: "#about" },
+  { label: "COMMUNITY", href: "#community" },
   { label: "LINEUP", href: "#lineup" },
   { label: "TICKETS", href: "#tickets" },
   { label: "FAQ", href: "#faq" },

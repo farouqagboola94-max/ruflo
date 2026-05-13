@@ -4,8 +4,8 @@ import { GrainOverlay, AmberGlow, SectionTag, Divider } from '../components/Shar
 const STATS = [
   { num: "200+", label: "RARE KICKS", accent: true },
   { num: "50+", label: "VENDORS" },
-  { num: "10K+", label: "ATTENDEES" },
-  { num: "1", label: "CULTURE" },
+  { num: "10K+", label: "COMMUNITY" },
+  { num: "5", label: "PLATFORMS" },
 ]
 
 export default function About() {
@@ -19,27 +19,36 @@ export default function About() {
 
       <div style={{ position: "relative", zIndex: 10, maxWidth: 1100, margin: "0 auto" }}>
         <div style={{ display: "flex", gap: 80, alignItems: "flex-start", flexWrap: "wrap" }}>
+
           {/* Left: Text */}
           <div style={{ flex: "1 1 400px" }}>
-            <SectionTag>ABOUT THE EVENT</SectionTag>
+            <SectionTag>WHO WE ARE</SectionTag>
             <div style={{
               fontFamily: "'Bebas Neue', sans-serif",
               fontSize: "clamp(40px, 6vw, 68px)",
               color: B.white, lineHeight: 0.9, marginBottom: 24,
             }}>
-              MORE THAN<br />SNEAKERS.<br />
-              <span style={{ color: B.amber }}>IT'S THE CULTURE.</span>
+              ONLINE COMMUNITY.<br />
+              <span style={{ color: B.amber }}>PHYSICAL PRESENCE.</span>
             </div>
             <Divider />
             <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: B.smoke, lineHeight: 1.8, marginBottom: 18 }}>
-              Sneakers Fest is West Africa's premier sneaker culture event — a convergence of collectors, creators, DJs, and street culture tastemakers. Born from the streets of Lagos, built for the world.
+              Sneakers Fest started as a conversation online and grew into West Africa's premier sneaker culture event.
+              We are an online community first — the physical event is where the community comes alive.
             </div>
-            <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: B.smoke, lineHeight: 1.8, marginBottom: 36 }}>
-              Every pair tells a story. Every vendor is a pillar. Every visitor becomes part of the movement. This is where sole meets soul.
+            <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: B.smoke, lineHeight: 1.8, marginBottom: 18 }}>
+              We create content daily across Instagram, Twitter, YouTube, Snapchat, and WhatsApp.
+              The community grows 365 days a year. July 18 is just the day we all meet in person.
+            </div>
+            <div style={{
+              fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.neonCyan,
+              letterSpacing: "0.3em", marginBottom: 32, lineHeight: 1.8,
+            }}>
+              COLLECTORS · CREATORS · CULTURE MAKERS
             </div>
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
               <a
-                href="#tickets"
+                href="#community"
                 style={{
                   display: "inline-block", padding: "12px 28px",
                   background: B.amber, color: B.black,
@@ -47,10 +56,10 @@ export default function About() {
                   textDecoration: "none", borderRadius: 2,
                 }}
               >
-                SECURE YOUR SPOT →
+                JOIN THE COMMUNITY →
               </a>
               <a
-                href="#highlights"
+                href="#tickets"
                 style={{
                   display: "inline-block", padding: "12px 28px",
                   border: `1px solid ${B.gunmetal}`, color: B.smoke,
@@ -58,7 +67,7 @@ export default function About() {
                   textDecoration: "none", borderRadius: 2,
                 }}
               >
-                WHAT'S INSIDE
+                GET EVENT TICKETS
               </a>
             </div>
           </div>
@@ -74,7 +83,9 @@ export default function About() {
               }}>
                 <div style={{
                   position: "absolute", top: 0, left: 0, right: 0, height: 2,
-                  background: s.accent ? `linear-gradient(90deg, ${B.amber}, transparent)` : `linear-gradient(90deg, ${B.neonCyan}30, transparent)`,
+                  background: s.accent
+                    ? `linear-gradient(90deg, ${B.amber}, transparent)`
+                    : `linear-gradient(90deg, ${B.neonCyan}30, transparent)`,
                 }} />
                 <div style={{
                   fontFamily: "'Orbitron', monospace", fontWeight: 900,

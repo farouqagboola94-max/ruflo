@@ -3,6 +3,7 @@ import Navbar from './components/Navbar'
 import Hero from './sections/Hero'
 import About from './sections/About'
 import Highlights from './sections/Highlights'
+import Community from './sections/Community'
 import Lineup from './sections/Lineup'
 import Tickets from './sections/Tickets'
 import FAQ from './sections/FAQ'
@@ -26,6 +27,7 @@ export default function App() {
       <Hero />
       <About />
       <Highlights />
+      <Community />
       <Lineup />
       <Tickets />
       <FAQ />
