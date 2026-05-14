@@ -3,55 +3,22 @@ import { B } from '../tokens'
 
 // ─── REPLACE WITH YOUR REAL HANDLES / LINKS ──────────────────────────────
 const LINKS = {
-  tiktok:   "https://tiktok.com/@sneakersfest",
-  youtube:  "https://youtube.com/@sneakersfest",
-  twitter:  "https://twitter.com/sneakersfest",
-  snapchat: "https://snapchat.com/add/sneakersfest",
-  whatsapp: "https://chat.whatsapp.com/YOUR_GROUP_LINK_HERE",
+  tiktok:    "https://tiktok.com/@sneakersfest",
+  youtube:   "https://youtube.com/@sneakersfest",
+  twitter:   "https://twitter.com/sneakersfest",
+  instagram: "https://instagram.com/sneakersfest",
+  snapchat:  "https://snapchat.com/add/sneakersfest",
+  whatsapp:  "https://chat.whatsapp.com/YOUR_GROUP_LINK_HERE",
 }
 // ─────────────────────────────────────────────────────────────────────
 
 const PLATFORMS = [
-  {
-    id: "tiktok",
-    label: "TIKTOK",
-    abbr: "TK",
-    color: "#69C9D0",
-    href: LINKS.tiktok,
-    tip: "Challenges & Clips",
-  },
-  {
-    id: "youtube",
-    label: "YOUTUBE",
-    abbr: "YT",
-    color: B.neonMagenta,
-    href: LINKS.youtube,
-    tip: "Docs & Interviews",
-  },
-  {
-    id: "twitter",
-    label: "TWITTER",
-    abbr: "X",
-    color: B.neonCyan,
-    href: LINKS.twitter,
-    tip: "Live Updates",
-  },
-  {
-    id: "snapchat",
-    label: "SNAPCHAT",
-    abbr: "SC",
-    color: B.amber,
-    href: LINKS.snapchat,
-    tip: "Stories & BTS",
-  },
-  {
-    id: "whatsapp",
-    label: "WHATSAPP",
-    abbr: "WA",
-    color: B.neonLime,
-    href: LINKS.whatsapp,
-    tip: "Join Community",
-  },
+  { id: "tiktok",     label: "TIKTOK",     abbr: "TK", color: "#69C9D0",      href: LINKS.tiktok,     tip: "Challenges & Clips" },
+  { id: "youtube",   label: "YOUTUBE",    abbr: "YT", color: B.neonMagenta,  href: LINKS.youtube,    tip: "Docs & Interviews" },
+  { id: "twitter",   label: "TWITTER",    abbr: "X",  color: B.neonCyan,     href: LINKS.twitter,    tip: "Live Updates" },
+  { id: "instagram", label: "INSTAGRAM",  abbr: "IG", color: "#E1306C",      href: LINKS.instagram,  tip: "Drops & Culture" },
+  { id: "snapchat",  label: "SNAPCHAT",   abbr: "SC", color: B.amber,        href: LINKS.snapchat,   tip: "Stories & BTS" },
+  { id: "whatsapp",  label: "WHATSAPP",   abbr: "WA", color: B.neonLime,     href: LINKS.whatsapp,   tip: "Join Community" },
 ]
 
 export default function SocialDock() {
@@ -78,7 +45,7 @@ export default function SocialDock() {
           onMouseEnter={() => setHovered(p.id)}
           onMouseLeave={() => setHovered(null)}
         >
-          {/* Tooltip label — slides in from right on hover */}
+          {/* Tooltip label */}
           <div style={{
             marginRight: 8,
             opacity: hovered === p.id ? 1 : 0,
@@ -96,18 +63,12 @@ export default function SocialDock() {
               <span style={{
                 fontFamily: "'Space Mono', monospace",
                 fontSize: 7, fontWeight: 700,
-                color: p.color, letterSpacing: "0.15em",
-                whiteSpace: "nowrap",
-              }}>
-                {p.label}
-              </span>
+                color: p.color, letterSpacing: "0.15em", whiteSpace: "nowrap",
+              }}>{p.label}</span>
               <span style={{
                 fontFamily: "'Syne', sans-serif",
-                fontSize: 9, color: B.smoke,
-                whiteSpace: "nowrap",
-              }}>
-                {p.tip}
-              </span>
+                fontSize: 9, color: B.smoke, whiteSpace: "nowrap",
+              }}>{p.tip}</span>
             </div>
           </div>
 
@@ -125,21 +86,17 @@ export default function SocialDock() {
             <span style={{
               fontFamily: "'Orbitron', monospace",
               fontSize: p.abbr === "X" ? 13 : 9,
-              fontWeight: 900,
-              color: p.color,
+              fontWeight: 900, color: p.color,
               letterSpacing: p.abbr === "X" ? 0 : "0.05em",
-            }}>
-              {p.abbr}
-            </span>
+            }}>{p.abbr}</span>
           </div>
         </a>
       ))}
 
-      {/* Connecting line */}
       <div style={{
-        position: "absolute", top: "50%", right: 20, width: 1, height: "120%",
+        position: "absolute", top: "50%", right: 20, width: 1, height: "130%",
         transform: "translateY(-50%)",
-        background: `linear-gradient(${B.neonMagenta}00, ${B.amber}25, ${B.neonLime}00)`,
+        background: `linear-gradient(${B.neonMagenta}00, ${B.amber}20, ${B.neonLime}00)`,
         zIndex: -1, pointerEvents: "none",
       }} />
     </div>

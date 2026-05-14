@@ -3,20 +3,22 @@ import { GrainOverlay } from '../components/Shared'
 
 // ─── REPLACE WITH YOUR REAL LINKS ─────────────────────────────────────────
 const SOCIAL_LINKS = {
-  tiktok:   "https://tiktok.com/@sneakersfest",
-  youtube:  "https://youtube.com/@sneakersfest",
-  twitter:  "https://twitter.com/sneakersfest",
-  snapchat: "https://snapchat.com/add/sneakersfest",
-  whatsapp: "https://chat.whatsapp.com/YOUR_GROUP_LINK_HERE",
+  tiktok:    "https://tiktok.com/@sneakersfest",
+  youtube:   "https://youtube.com/@sneakersfest",
+  twitter:   "https://twitter.com/sneakersfest",
+  instagram: "https://instagram.com/sneakersfest",
+  snapchat:  "https://snapchat.com/add/sneakersfest",
+  whatsapp:  "https://chat.whatsapp.com/YOUR_GROUP_LINK_HERE",
 }
 // ──────────────────────────────────────────────────────────────────────────
 
 const SOCIALS = [
-  { platform: "TIKTOK",     handle: "@SNEAKERSFEST",     href: SOCIAL_LINKS.tiktok,    color: "#69C9D0",    icon: "TK", tip: "Challenges & Clips" },
-  { platform: "YOUTUBE",    handle: "@SNEAKERSFEST",     href: SOCIAL_LINKS.youtube,   color: B.neonMagenta, icon: "YT", tip: "Docs & Interviews" },
-  { platform: "TWITTER / X",handle: "@SNEAKERSFEST",     href: SOCIAL_LINKS.twitter,   color: B.neonCyan,    icon: "X",  tip: "Live Updates" },
-  { platform: "SNAPCHAT",   handle: "SNEAKERSFEST",      href: SOCIAL_LINKS.snapchat,  color: B.amber,       icon: "SC", tip: "Stories & BTS" },
-  { platform: "WHATSAPP",   handle: "JOIN COMMUNITY",    href: SOCIAL_LINKS.whatsapp,  color: B.neonLime,    icon: "WA", tip: "Inner Circle" },
+  { platform: "TIKTOK",      handle: "@SNEAKERSFEST",   href: SOCIAL_LINKS.tiktok,     color: "#69C9D0",     icon: "TK", tip: "Challenges & Clips" },
+  { platform: "YOUTUBE",     handle: "@SNEAKERSFEST",   href: SOCIAL_LINKS.youtube,    color: B.neonMagenta, icon: "YT", tip: "Docs & Interviews" },
+  { platform: "TWITTER / X", handle: "@SNEAKERSFEST",   href: SOCIAL_LINKS.twitter,    color: B.neonCyan,    icon: "X",  tip: "Live Updates" },
+  { platform: "INSTAGRAM",   handle: "@SNEAKERSFEST",   href: SOCIAL_LINKS.instagram,  color: "#E1306C",     icon: "IG", tip: "Drops & Culture" },
+  { platform: "SNAPCHAT",    handle: "SNEAKERSFEST",    href: SOCIAL_LINKS.snapchat,   color: B.amber,       icon: "SC", tip: "Stories & BTS" },
+  { platform: "WHATSAPP",    handle: "JOIN COMMUNITY",  href: SOCIAL_LINKS.whatsapp,   color: B.neonLime,    icon: "WA", tip: "Inner Circle" },
 ]
 
 const NAV = [
@@ -38,7 +40,7 @@ export default function Footer() {
 
       <div style={{
         position: "absolute", top: 0, left: 0, right: 0, height: 3,
-        background: `linear-gradient(90deg, ${'#69C9D0'}, ${B.neonMagenta}, ${B.neonCyan}, ${B.amber}, ${B.neonLime})`,
+        background: `linear-gradient(90deg, ${'#69C9D0'}, ${B.neonMagenta}, ${'#E1306C'}, ${B.neonCyan}, ${B.amber}, ${B.neonLime})`,
       }} />
 
       <div style={{ position: "relative", zIndex: 10, maxWidth: 1100, margin: "0 auto" }}>
@@ -49,9 +51,7 @@ export default function Footer() {
             <div style={{
               fontFamily: "'Orbitron', monospace", fontWeight: 900, fontSize: 20, color: B.amber,
               textShadow: `0 0 15px ${B.amber}30`, marginBottom: 6,
-            }}>
-              SNEAKERS FEST '26
-            </div>
+            }}>SNEAKERS FEST '26</div>
             <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.smoke, letterSpacing: "0.3em", marginBottom: 6 }}>
               THE SOLE EXHIBITION — LAGOS, NIGERIA
             </div>
@@ -74,15 +74,13 @@ export default function Footer() {
                   style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: B.smoke, textDecoration: "none", transition: "color 0.2s" }}
                   onMouseEnter={e => e.target.style.color = B.amber}
                   onMouseLeave={e => e.target.style.color = B.smoke}
-                >
-                  {label}
-                </a>
+                >{label}</a>
               ))}
             </div>
           </div>
 
           {/* Social platforms */}
-          <div style={{ flex: "1 1 260px" }}>
+          <div style={{ flex: "1 1 280px" }}>
             <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.neonCyan, letterSpacing: "0.3em", marginBottom: 18 }}>
               CONNECT ON EVERY PLATFORM
             </div>
@@ -136,24 +134,19 @@ export default function Footer() {
               fontFamily: "'Space Mono', monospace", fontSize: 9, fontWeight: 700, letterSpacing: "0.15em",
               textDecoration: "none", borderRadius: 2, textAlign: "center",
               boxShadow: `0 0 25px ${B.amber}20`, marginBottom: 8,
-            }}>
-              GET TICKETS
-            </a>
+            }}>GET TICKETS</a>
             <a href="#community" style={{
               display: "block", padding: "11px 20px",
               border: `1px solid ${B.neonLime}50`, color: B.neonLime,
               fontFamily: "'Space Mono', monospace", fontSize: 9, fontWeight: 700, letterSpacing: "0.15em",
               textDecoration: "none", borderRadius: 2, textAlign: "center", marginBottom: 16,
-            }}>
-              JOIN COMMUNITY
-            </a>
+            }}>JOIN COMMUNITY</a>
             <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 11, color: B.smoke, lineHeight: 1.7 }}>
-              Online first. Lagos July 18. Five platforms. One community.
+              Online first. Lagos July 18. Six platforms. One community.
             </div>
           </div>
         </div>
 
-        {/* Bottom bar */}
         <div style={{
           borderTop: `1px solid ${B.gunmetal}`, paddingTop: 20,
           display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8,
