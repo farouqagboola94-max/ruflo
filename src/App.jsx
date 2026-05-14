@@ -1,5 +1,6 @@
 import { B, FONTS } from './tokens'
 import Navbar from './components/Navbar'
+import SocialDock from './components/SocialDock'
 import Hero from './sections/Hero'
 import About from './sections/About'
 import Highlights from './sections/Highlights'
@@ -24,6 +25,7 @@ export default function App() {
         @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
       `}</style>
       <Navbar />
+      <SocialDock />
       <Hero />
       <About />
       <Highlights />
