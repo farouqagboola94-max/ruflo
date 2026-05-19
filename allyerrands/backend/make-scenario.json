@@ -1,0 +1,81 @@
+{
+  "_comment": "Za.allyErrands — Make.com Scenario Template",
+  "_instructions": [
+    "1. Go to Make.com > Create a new scenario",
+    "2. Click the three-dot menu > Import blueprint",
+    "3. Paste this JSON file",
+    "4. Replace all REPLACE_ME placeholders with your real values",
+    "5. Activate the scenario"
+  ],
+  "name": "Za.allyErrands — Dispatch Loop",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "label": "Receive Errand Request",
+      "_note": "Make.com generates a unique URL for this trigger. Paste it into your MAKE_WEBHOOK_URL environment variable.",
+      "parameters": {
+        "hook": "REPLACE_ME_with_webhook_id_from_make",
+        "maxResults": 1
+      }
+    },
+    {
+      "id": 2,
+      "module": "router:Router",
+      "label": "Route to Admin + Client",
+      "routes": [
+        {
+          "label": "Admin Notification",
+          "flow": [
+            {
+              "id": 3,
+              "module": "whatsapp-business-cloud:SendMessage",
+              "label": "Ping Admin / Phalanx Group",
+              "_note": "Replace GROUP_ID with your WhatsApp group chat ID.",
+              "parameters": {
+                "connection": "REPLACE_ME_whatsapp_connection_id",
+                "to": "REPLACE_ME_admin_phone_or_group_id",
+                "messageType": "text",
+                "text": "⚡ *New Za.allyErrands Request*\n\n*ID:* {{1.request_id}}\n*Client:* {{1.client_name}} ({{1.client_phone}})\n*Pickup:* {{1.pickup}}\n*Drop-off:* {{1.dropoff}}\n*Item:* {{1.description}}\n*Time:* {{1.timestamp}}\n\nAssign a runner now."
+              }
+            }
+          ]
+        },
+        {
+          "label": "Client Confirmation",
+          "flow": [
+            {
+              "id": 4,
+              "module": "whatsapp-business-cloud:SendMessage",
+              "label": "WhatsApp Confirmation to Client",
+              "parameters": {
+                "connection": "REPLACE_ME_whatsapp_connection_id",
+                "to": "{{1.client_phone}}",
+                "messageType": "text",
+                "text": "⚡ *Za.allyErrands*\n\nYour request has been logged.\n\n*Job ID:* {{formatDate(now; 'YYYYMMDD')}}-{{substring(1.request_id; 0; 6)}}\n*Pickup:* {{1.pickup}}\n*Item:* {{1.description}}\n\nAn ally is reviewing your route. We’ll update you shortly.\nTrack live: portal.zallyerrands.com"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "module": "supabase:CreateRecord",
+      "label": "Log to Supabase (fallback)",
+      "_note": "Optional: only needed if the Edge Function is not handling the DB insert. Remove this module if using the Edge Function.",
+      "parameters": {
+        "connection": "REPLACE_ME_supabase_connection_id",
+        "table": "errand_requests",
+        "fields": {
+          "client_name":      "{{1.client_name}}",
+          "client_phone":     "{{1.client_phone}}",
+          "pickup_address":   "{{1.pickup}}",
+          "dropoff_address":  "{{1.dropoff}}",
+          "item_description": "{{1.description}}",
+          "status":           "Pending"
+        }
+      }
+    }
+  ]
+}

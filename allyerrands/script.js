@@ -1,8 +1,21 @@
-/* Za.allyErrands — Lagos Noir JS */
+/* Za.allyErrands — Lagos Noir JS
+   Wired to: Supabase Edge Function > Make.com > WhatsApp
+*/
 (function () {
   'use strict';
 
-  /* ── Cursor glow ── */
+  // ── CONFIG ──
+  // Replace these with your real Supabase project values.
+  // In production, bake them in via your build tool / Framer env vars.
+  const CONFIG = {
+    // Your Supabase Edge Function URL:
+    // https://YOUR_PROJECT_ID.supabase.co/functions/v1/dispatch
+    dispatchUrl: window.ZA_DISPATCH_URL || 'https://YOUR_PROJECT_ID.supabase.co/functions/v1/dispatch',
+    // Public anon key (safe to expose in frontend)
+    anonKey:     window.ZA_ANON_KEY    || 'YOUR_SUPABASE_ANON_KEY',
+  };
+
+  // ── Cursor glow ──
   const glow = document.getElementById('cursorGlow');
   if (glow && window.matchMedia('(pointer: fine)').matches) {
     document.addEventListener('mousemove', e => {
@@ -11,13 +24,13 @@
     }, { passive: true });
   }
 
-  /* ── Navbar scroll ── */
+  // ── Navbar scroll ──
   const navbar = document.getElementById('navbar');
   const onScroll = () => navbar.classList.toggle('scrolled', window.scrollY > 60);
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  /* ── Mobile menu ── */
+  // ── Mobile menu ──
   const hamburger = document.getElementById('hamburger');
   const navLinks  = document.getElementById('navLinks');
   hamburger.addEventListener('click', () => {
@@ -32,7 +45,7 @@
     })
   );
 
-  /* ── Smooth scroll ── */
+  // ── Smooth scroll ──
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
       const target = document.querySelector(a.getAttribute('href'));
@@ -43,7 +56,7 @@
     });
   });
 
-  /* ── Scroll-reveal ── */
+  // ── Scroll-reveal ──
   const revealObs = new IntersectionObserver((entries) => {
     entries.forEach((entry, i) => {
       if (!entry.isIntersecting) return;
@@ -53,7 +66,7 @@
   }, { threshold: 0.1 });
   document.querySelectorAll('[data-reveal]').forEach(el => revealObs.observe(el));
 
-  /* ── Modal ── */
+  // ── Modal open/close ──
   const modal         = document.getElementById('quoteModal');
   const modalClose    = document.getElementById('modalClose');
   const modalBackdrop = document.getElementById('modalBackdrop');
@@ -73,81 +86,92 @@
     if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
   });
 
-  /* Quote widget (hero) triggers modal */
+  // ── Hero quote widget ──
   const quoteForm  = document.getElementById('quoteForm');
   const quoteInput = document.getElementById('quoteInput');
   const qErrand    = document.getElementById('qErrand');
 
   quoteForm.addEventListener('submit', e => {
     e.preventDefault();
-    if (qErrand && quoteInput.value.trim()) {
-      qErrand.value = quoteInput.value.trim();
-    }
+    if (qErrand && quoteInput.value.trim()) qErrand.value = quoteInput.value.trim();
     openModal();
   });
 
-  /* Full quote form (modal) */
-  const fullForm      = document.getElementById('fullQuoteForm');
-  const modalSuccess  = document.getElementById('modalSuccess');
+  // ── Full quote form ──
+  const fullForm       = document.getElementById('fullQuoteForm');
+  const modalSuccess   = document.getElementById('modalSuccess');
   const modalSubmitBtn = document.getElementById('modalSubmitBtn');
 
-  function validateEmail(v) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-  }
-  function validatePhone(v) {
-    return /^[\+\d][\d\s\-]{6,}$/.test(v.trim());
-  }
-
-  fullForm.addEventListener('submit', e => {
+  fullForm.addEventListener('submit', async e => {
     e.preventDefault();
+
     const name     = fullForm.querySelector('#qName').value.trim();
     const phone    = fullForm.querySelector('#qPhone').value.trim();
     const location = fullForm.querySelector('#qLocation').value.trim();
     const errand   = fullForm.querySelector('#qErrand').value.trim();
 
-    if (!name || !validatePhone(phone) || !location || errand.length < 5) {
-      /* Simple shake on invalid */
-      fullForm.style.animation = 'none';
-      void fullForm.offsetHeight;
-      fullForm.style.animation = 'shake 0.35s ease';
+    if (!name || !phone || !location || errand.length < 5) {
+      shakeForm(fullForm);
       return;
     }
 
-    modalSubmitBtn.disabled = true;
-    modalSubmitBtn.querySelector('.btn-text').textContent = 'Sending...';
+    setSubmitState('loading');
 
-    setTimeout(() => {
+    try {
+      const res = await fetch(CONFIG.dispatchUrl, {
+        method:  'POST',
+        headers: {
+          'Content-Type':  'application/json',
+          'Authorization': `Bearer ${CONFIG.anonKey}`,
+        },
+        body: JSON.stringify({ name, phone, errand, location }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.error || 'Submission failed');
+
+      // Success — store job ID for portal
+      if (data.request_id) sessionStorage.setItem('za_last_request', data.request_id);
+      sessionStorage.setItem('za_phone', phone);
+
       fullForm.reset();
-      modalSubmitBtn.disabled = false;
-      modalSubmitBtn.querySelector('.btn-text').textContent = 'Send Request →';
+      setSubmitState('idle');
       modalSuccess.classList.add('visible');
+
       setTimeout(() => {
         modalSuccess.classList.remove('visible');
         closeModal();
-      }, 4000);
-    }, 1400);
+      }, 5000);
+
+    } catch (err) {
+      console.error('[dispatch]', err);
+      setSubmitState('error');
+      setTimeout(() => setSubmitState('idle'), 3000);
+    }
   });
 
-  /* ── Progress bar animation in mockup ── */
-  /* Already driven by CSS animation */
+  function setSubmitState(state) {
+    const btnText = modalSubmitBtn.querySelector('.btn-text');
+    modalSubmitBtn.disabled = state === 'loading';
+    if (state === 'loading') btnText.textContent = 'Dispatching...';
+    else if (state === 'error') btnText.textContent = 'Error — Try Again';
+    else btnText.textContent = 'Send Request →';
+  }
 
-  /* ── Ticker pause on hover ── */
+  // ── Ticker pause on hover ──
   const ticker = document.querySelector('.ticker__track');
   if (ticker) {
-    ticker.parentElement.addEventListener('mouseenter', () => {
-      ticker.style.animationPlayState = 'paused';
-    });
-    ticker.parentElement.addEventListener('mouseleave', () => {
-      ticker.style.animationPlayState = 'running';
-    });
+    ticker.parentElement.addEventListener('mouseenter', () => ticker.style.animationPlayState = 'paused');
+    ticker.parentElement.addEventListener('mouseleave', () => ticker.style.animationPlayState = 'running');
   }
 
 })();
 
-/* Shake keyframe injected */
-(function injectShake() {
-  const style = document.createElement('style');
-  style.textContent = `
+// Shake animation
+(function () {
+  const s = document.createElement('style');
+  s.textContent = `
     @keyframes shake {
       0%,100% { transform: translateX(0); }
       20%      { transform: translateX(-8px); }
@@ -156,5 +180,10 @@
       80%      { transform: translateX(6px); }
     }
   `;
-  document.head.appendChild(style);
+  document.head.appendChild(s);
+  window.shakeForm = (el) => {
+    el.style.animation = 'none';
+    void el.offsetHeight;
+    el.style.animation = 'shake 0.35s ease';
+  };
 })();
