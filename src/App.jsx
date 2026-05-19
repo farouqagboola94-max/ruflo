@@ -1,10 +1,13 @@
 import { B, FONTS } from './tokens'
 import Navbar from './components/Navbar'
 import SocialDock from './components/SocialDock'
+import AIChat from './components/AIChat'
 import Hero from './sections/Hero'
 import About from './sections/About'
 import Highlights from './sections/Highlights'
 import Community from './sections/Community'
+import PhotoTools from './sections/PhotoTools'
+import Newsletter from './sections/Newsletter'
 import Lineup from './sections/Lineup'
 import Tickets from './sections/Tickets'
 import FAQ from './sections/FAQ'
@@ -23,13 +26,18 @@ export default function App() {
         @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
         @keyframes flicker { 0%,100% { opacity: 1; } 92% { opacity: 1; } 93% { opacity: 0.8; } 94% { opacity: 1; } 96% { opacity: 0.9; } }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes chatSlideIn { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
       `}</style>
       <Navbar />
       <SocialDock />
+      <AIChat />
       <Hero />
       <About />
       <Highlights />
       <Community />
+      <PhotoTools />
+      <Newsletter />
       <Lineup />
       <Tickets />
       <FAQ />

@@ -1,0 +1,166 @@
+# Sneakers Fest — Full AI Stack
+# Run: docker compose up -d
+# Then pull a model: docker exec sneakers-ollama ollama pull llama3.2
+
+services:
+
+  # ─────────────────────────────────────────
+  # SNEAKERS FEST BACKEND (rembg + Whisper)
+  # http://localhost:8000
+  # ─────────────────────────────────────────
+  backend:
+    build: ./backend
+    container_name: sneakers-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - WHISPER_MODEL=base
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ─────────────────────────────────────────
+  # OLLAMA — Local LLM Runner
+  # http://localhost:11434
+  # After start: docker exec sneakers-ollama ollama pull llama3.2
+  # ─────────────────────────────────────────
+  ollama:
+    image: ollama/ollama:latest
+    container_name: sneakers-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    restart: unless-stopped
+    # GPU support (uncomment for NVIDIA):
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+
+  # ─────────────────────────────────────────
+  # OPEN WEBUI — Chat UI for Ollama
+  # http://localhost:3000
+  # ─────────────────────────────────────────
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: sneakers-webui
+    ports:
+      - "3000:8080"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+    volumes:
+      - open-webui-data:/app/backend/data
+    depends_on:
+      - ollama
+    restart: unless-stopped
+
+  # ─────────────────────────────────────────
+  # LISTMONK — Community Newsletter
+  # http://localhost:9000
+  # Admin: http://localhost:9000/admin  (admin/admin on first run)
+  # ─────────────────────────────────────────
+  listmonk:
+    image: listmonk/listmonk:latest
+    container_name: sneakers-listmonk
+    ports:
+      - "9000:9000"
+    command: ["./listmonk", "--install", "--idempotent", "&&", "./listmonk"]
+    environment:
+      - LISTMONK_app__address=0.0.0.0:9000
+      - LISTMONK_app__admin_username=admin
+      - LISTMONK_app__admin_password=sneakersfest2026
+      - LISTMONK_db__host=listmonk-db
+      - LISTMONK_db__port=5432
+      - LISTMONK_db__user=listmonk
+      - LISTMONK_db__password=listmonk_secret
+      - LISTMONK_db__database=listmonk
+    depends_on:
+      - listmonk-db
+    restart: unless-stopped
+
+  listmonk-db:
+    image: postgres:16-alpine
+    container_name: sneakers-listmonk-db
+    environment:
+      - POSTGRES_USER=listmonk
+      - POSTGRES_PASSWORD=listmonk_secret
+      - POSTGRES_DB=listmonk
+    volumes:
+      - listmonk-db-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  # ─────────────────────────────────────────
+  # ACTIVEPIECES — Workflow Automation
+  # http://localhost:8080
+  # Automate: social posting, email triggers, new subscriber welcome flows
+  # ─────────────────────────────────────────
+  activepieces:
+    image: activepieces/activepieces:latest
+    container_name: sneakers-activepieces
+    ports:
+      - "8080:80"
+    environment:
+      - AP_FRONTEND_URL=http://localhost:8080
+      - AP_EXECUTION_MODE=UNSANDBOXED
+      - AP_POSTGRES_DATABASE=activepieces
+      - AP_POSTGRES_HOST=activepieces-db
+      - AP_POSTGRES_PORT=5432
+      - AP_POSTGRES_USERNAME=activepieces
+      - AP_POSTGRES_PASSWORD=activepieces_secret
+      - AP_REDIS_HOST=activepieces-redis
+      - AP_REDIS_PORT=6379
+    depends_on:
+      - activepieces-db
+      - activepieces-redis
+    restart: unless-stopped
+
+  activepieces-db:
+    image: postgres:16-alpine
+    container_name: sneakers-ap-db
+    environment:
+      - POSTGRES_USER=activepieces
+      - POSTGRES_PASSWORD=activepieces_secret
+      - POSTGRES_DB=activepieces
+    volumes:
+      - activepieces-db-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  activepieces-redis:
+    image: redis:7-alpine
+    container_name: sneakers-ap-redis
+    restart: unless-stopped
+
+  # ─────────────────────────────────────────
+  # ANYTHINGLLM — RAG Chatbot
+  # http://localhost:3001
+  # Upload Sneakers Fest docs → chat with them
+  # ─────────────────────────────────────────
+  anythingllm:
+    image: mintplexlabs/anythingllm:latest
+    container_name: sneakers-anythingllm
+    ports:
+      - "3001:3001"
+    environment:
+      - STORAGE_DIR=/app/server/storage
+      - OLLAMA_BASE_PATH=http://ollama:11434
+      - LLM_PROVIDER=ollama
+      - OLLAMA_MODEL_PREF=llama3.2
+    volumes:
+      - anythingllm-data:/app/server/storage
+    depends_on:
+      - ollama
+    restart: unless-stopped
+
+volumes:
+  ollama-data:
+  open-webui-data:
+  listmonk-db-data:
+  activepieces-db-data:
+  anythingllm-data:
