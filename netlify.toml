@@ -1,5 +1,4 @@
 # Netlify build & routing config for Sneakers Fest
-# Docs: https://docs.netlify.com/configure-builds/file-based-configuration/
 
 [build]
   command = "npm run build"
@@ -8,9 +7,10 @@
 [build.environment]
   NODE_VERSION = "22"
   NPM_FLAGS = "--legacy-peer-deps"
+  # Safety net: if pnpm is somehow detected, don't enforce frozen lockfile
+  PNPM_FLAGS = "--no-frozen-lockfile"
 
-# SPA routing: every path falls back to index.html
-# Required so React Router / anchor links work on direct URL loads
+# SPA routing: every URL falls back to index.html
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -25,7 +25,7 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
 
-# Cache static assets aggressively
+# Cache Vite-built assets aggressively (they have content hashes in filenames)
 [[headers]]
   for = "/assets/*"
   [headers.values]
