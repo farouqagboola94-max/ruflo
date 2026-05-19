@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { B } from '../tokens'
 
-const API = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
+const API = import.meta.env.VITE_BACKEND_URL || ''
 
 function DropZone({ label, sub, accept, file, onFile, color, icon }) {
   const ref = useRef()
@@ -41,6 +41,7 @@ export default function PhotoTools() {
 
   async function removeBg() {
     if (!bgFile) return
+    if (!API) { setBgResult('error'); return }
     setBgLoading(true); setBgResult(null)
     const fd = new FormData()
     fd.append('file', bgFile)
@@ -54,6 +55,7 @@ export default function PhotoTools() {
 
   async function transcribe() {
     if (!audioFile) return
+    if (!API) { setTranscript('Error: Set VITE_BACKEND_URL in Netlify environment variables.'); return }
     setAudioLoading(true); setTranscript('')
     const fd = new FormData()
     fd.append('file', audioFile)
@@ -61,7 +63,7 @@ export default function PhotoTools() {
       const res = await fetch(`${API}/api/transcribe`, { method:'POST', body:fd })
       const data = await res.json()
       setTranscript(data.text)
-    } catch { setTranscript('Error: run docker compose up backend') }
+    } catch { setTranscript('Error: Backend offline. Set VITE_BACKEND_URL in Netlify environment variables.') }
     setAudioLoading(false)
   }
 
@@ -92,7 +94,6 @@ export default function PhotoTools() {
       <div style={{ position:'absolute', bottom:'10%', left:'0%', width:350, height:350, borderRadius:'50%', background:`radial-gradient(circle, rgba(0,240,255,0.05), transparent 70%)`, filter:'blur(60px)', pointerEvents:'none' }} />
 
       <div style={{ maxWidth:960, margin:'0 auto', position:'relative', zIndex:1 }}>
-        {/* Header */}
         <div style={{ textAlign:'center', marginBottom:56 }}>
           <div style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'6px 18px', borderRadius:20, border:`1px solid rgba(0,240,255,0.25)`, background:'rgba(0,240,255,0.04)', marginBottom:24 }}>
             <span style={{ color:B.neonCyan, fontFamily:'Orbitron,sans-serif', fontSize:10, letterSpacing:3, fontWeight:700 }}>AI CREATOR TOOLS</span>
@@ -101,8 +102,13 @@ export default function PhotoTools() {
             COMMUNITY{' '}<span style={{ color:B.neonCyan, textShadow:`0 0 30px ${B.neonCyan}50` }}>CREATOR STUDIO</span>
           </h2>
           <p style={{ color:B.smoke, fontFamily:'Space Mono,monospace', fontSize:13, lineHeight:1.9, maxWidth:520, margin:'0 auto' }}>
-            AI-powered tools for the Sneakers Fest content community. Drop photos, remove backgrounds, transcribe interviews — all in your browser.
+            AI-powered tools for the Sneakers Fest content community. Drop photos, remove backgrounds, transcribe interviews.
           </p>
+          {!API && (
+            <p style={{ color:B.amber, fontFamily:'Space Mono,monospace', fontSize:11, marginTop:12, opacity:0.7 }}>
+              Tools activate when backend is running. See SETUP.md.
+            </p>
+          )}
         </div>
 
         <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(380px, 1fr))', gap:24 }}>
@@ -117,37 +123,28 @@ export default function PhotoTools() {
                 <p style={{ color:'#555', fontFamily:'Space Mono,monospace', fontSize:10 }}>Powered by rembg · Open Source</p>
               </div>
             </div>
-
             <DropZone
               label="Drop sneaker photo here" sub="PNG, JPG, WEBP"
               accept="image/*" file={bgFile} onFile={f => { setBgFile(f); setBgResult(null) }}
               color={B.neonCyan}
               icon={<svg width="32" height="32" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.5"/><circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" strokeWidth="1.5"/><path d="M21 15l-5-5L5 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>}
             />
-
             {bgFile && (
               <button onClick={removeBg} disabled={bgLoading} style={btn(B.neonCyan, bgLoading)}>
-                {bgLoading ? (
-                  <span style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
-                    <span style={{ width:10, height:10, border:`2px solid ${B.neonCyan}`, borderTopColor:'transparent', borderRadius:'50%', display:'inline-block', animation:'spin 0.8s linear infinite' }} />
-                    PROCESSING...
-                  </span>
-                ) : 'REMOVE BACKGROUND →'}
+                {bgLoading
+                  ? <span style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}><span style={{ width:10, height:10, border:`2px solid ${B.neonCyan}`, borderTopColor:'transparent', borderRadius:'50%', display:'inline-block', animation:'spin 0.8s linear infinite' }} />PROCESSING...</span>
+                  : 'REMOVE BACKGROUND →'}
               </button>
             )}
-
             {bgResult && bgResult !== 'error' && (
               <div style={{ marginTop:16 }}>
                 <div style={{ position:'relative', borderRadius:10, overflow:'hidden', border:`1px solid rgba(255,255,255,0.08)`, background:'repeating-conic-gradient(#1a1a1a 0% 25%, #111 0% 50%) 0 0/16px 16px' }}>
-                  <img src={bgResult} alt="No background result" style={{ width:'100%', display:'block' }} />
+                  <img src={bgResult} alt="Background removed" style={{ width:'100%', display:'block' }} />
                 </div>
-                <a
-                  href={bgResult} download="sneaker-nobg.png"
-                  style={{ display:'block', marginTop:10, textAlign:'center', color:B.amber, fontFamily:'Space Mono,monospace', fontSize:11, textDecoration:'none', padding:'10px', border:`1px solid rgba(245,166,35,0.25)`, borderRadius:8 }}
-                >↓ DOWNLOAD PNG</a>
+                <a href={bgResult} download="sneaker-nobg.png" style={{ display:'block', marginTop:10, textAlign:'center', color:B.amber, fontFamily:'Space Mono,monospace', fontSize:11, textDecoration:'none', padding:'10px', border:`1px solid rgba(245,166,35,0.25)`, borderRadius:8 }}>↓ DOWNLOAD PNG</a>
               </div>
             )}
-            {bgResult === 'error' && <p style={{ color:B.neonMagenta, fontFamily:'Space Mono,monospace', fontSize:11, marginTop:10 }}>Error: run docker compose up backend</p>}
+            {bgResult === 'error' && <p style={{ color:B.neonMagenta, fontFamily:'Space Mono,monospace', fontSize:11, marginTop:10 }}>Backend offline. Set VITE_BACKEND_URL and run docker compose up backend.</p>}
           </div>
 
           {/* Transcriber */}
@@ -161,39 +158,29 @@ export default function PhotoTools() {
                 <p style={{ color:'#555', fontFamily:'Space Mono,monospace', fontSize:10 }}>Powered by Whisper · Open Source</p>
               </div>
             </div>
-
             <DropZone
               label="Drop interview audio or video" sub="MP3, MP4, WAV, M4A"
               accept="audio/*,video/*" file={audioFile} onFile={f => { setAudioFile(f); setTranscript('') }}
               color={B.amber}
               icon={<svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M9 18V5l12-2v13M9 18a3 3 0 01-3 3H4a2 2 0 01-2-2v-1a2 2 0 012-2h2a3 3 0 013 3zm12-3a3 3 0 01-3 3h-2a2 2 0 01-2-2v-1a2 2 0 012-2h2a3 3 0 013 3z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>}
             />
-
             {audioFile && (
               <button onClick={transcribe} disabled={audioLoading} style={btn(B.amber, audioLoading)}>
-                {audioLoading ? (
-                  <span style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
-                    <span style={{ width:10, height:10, border:`2px solid ${B.amber}`, borderTopColor:'transparent', borderRadius:'50%', display:'inline-block', animation:'spin 0.8s linear infinite' }} />
-                    TRANSCRIBING...
-                  </span>
-                ) : 'TRANSCRIBE AUDIO →'}
+                {audioLoading
+                  ? <span style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}><span style={{ width:10, height:10, border:`2px solid ${B.amber}`, borderTopColor:'transparent', borderRadius:'50%', display:'inline-block', animation:'spin 0.8s linear infinite' }} />TRANSCRIBING...</span>
+                  : 'TRANSCRIBE AUDIO →'}
               </button>
             )}
-
             {transcript && (
               <div style={{ marginTop:16, padding:16, background:'rgba(255,255,255,0.03)', border:`1px solid rgba(255,255,255,0.07)`, borderRadius:10 }}>
                 <p style={{ color:'#555', fontFamily:'Space Mono,monospace', fontSize:9, letterSpacing:3, marginBottom:10 }}>TRANSCRIPT</p>
                 <p style={{ color:B.white, fontFamily:'Space Mono,monospace', fontSize:12, lineHeight:1.85, whiteSpace:'pre-wrap', maxHeight:180, overflowY:'auto' }}>{transcript}</p>
-                <button
-                  onClick={() => navigator.clipboard.writeText(transcript)}
-                  style={{ marginTop:12, padding:'8px 16px', background:'transparent', border:`1px solid rgba(245,166,35,0.25)`, borderRadius:8, color:B.amber, fontFamily:'Space Mono,monospace', fontSize:10, cursor:'pointer' }}
-                >COPY TEXT</button>
+                <button onClick={() => navigator.clipboard.writeText(transcript)} style={{ marginTop:12, padding:'8px 16px', background:'transparent', border:`1px solid rgba(245,166,35,0.25)`, borderRadius:8, color:B.amber, fontFamily:'Space Mono,monospace', fontSize:10, cursor:'pointer' }}>COPY TEXT</button>
               </div>
             )}
           </div>
         </div>
 
-        {/* Powered by strip */}
         <div style={{ marginTop:40, display:'flex', justifyContent:'center', gap:32, flexWrap:'wrap', alignItems:'center' }}>
           {[['rembg','BG Removal',B.neonCyan],['Whisper','Transcription',B.amber],['Ollama','AI Chat',B.neonMagenta],['Listmonk','Newsletter',B.neonLime],['Activepieces','Automation','#a78bfa']].map(([name,role,color]) => (
             <div key={name} style={{ display:'flex', alignItems:'center', gap:8 }}>

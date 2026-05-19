@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { B } from '../tokens'
 
-const API_URL = import.meta.env.VITE_OLLAMA_URL || 'http://localhost:11434'
+const API_URL = import.meta.env.VITE_OLLAMA_URL || ''
 const MODEL = import.meta.env.VITE_OLLAMA_MODEL || 'llama3.2'
 
 const SYSTEM = `You are the Sneakers Fest AI assistant — Lagos, Nigeria's premier sneaker culture event and community. Be knowledgeable, enthusiastic, and speak in a friendly urban tone. Key facts: Event date July 18 2026, Lagos Nigeria. Tickets: General ₦15,000 · VIP ₦35,000 · Ultra VIP ₦75,000. Headliner: DJ Spinall. Community: 10,000+ members across TikTok, YouTube, Twitter, Instagram, Snapchat, WhatsApp.`
@@ -23,6 +23,13 @@ export default function AIChat() {
     setInput('')
     setMessages(prev => [...prev, { role: 'user', content: text }])
     setLoading(true)
+
+    if (!API_URL) {
+      setMessages(prev => [...prev, { role: 'assistant', content: 'AI chat needs Ollama running. Set VITE_OLLAMA_URL in your environment and run: docker compose up ollama && docker exec sneakers-ollama ollama pull llama3.2' }])
+      setLoading(false)
+      return
+    }
+
     try {
       const res = await fetch(`${API_URL}/api/chat`, {
         method: 'POST',
@@ -38,9 +45,9 @@ export default function AIChat() {
         })
       })
       const data = await res.json()
-      setMessages(prev => [...prev, { role: 'assistant', content: data.message?.content || 'No response.' }])
+      setMessages(prev => [...prev, { role: 'assistant', content: data.message?.content || 'No response received.' }])
     } catch {
-      setMessages(prev => [...prev, { role: 'assistant', content: '⚠️ AI offline. Run: docker compose up ollama && docker exec sneakers-ollama ollama pull llama3.2' }])
+      setMessages(prev => [...prev, { role: 'assistant', content: 'AI offline — make sure Ollama is running and VITE_OLLAMA_URL is set in Netlify environment variables.' }])
     }
     setLoading(false)
   }
@@ -89,9 +96,9 @@ export default function AIChat() {
             background: `linear-gradient(90deg, rgba(245,166,35,0.08), rgba(0,240,255,0.04))`,
             display: 'flex', alignItems: 'center', gap: 8,
           }}>
-            <div style={{ width: 7, height: 7, borderRadius: '50%', background: B.neonLime, boxShadow: `0 0 8px ${B.neonLime}`, animation: 'pulse 2s infinite' }} />
+            <div style={{ width: 7, height: 7, borderRadius: '50%', background: API_URL ? B.neonLime : B.smoke, boxShadow: API_URL ? `0 0 8px ${B.neonLime}` : 'none', animation: API_URL ? 'pulse 2s infinite' : 'none' }} />
             <span style={{ color: B.amber, fontFamily: 'Orbitron,sans-serif', fontSize: 10, fontWeight: 700, letterSpacing: 2 }}>SNEAKERS FEST AI</span>
-            <span style={{ color: '#444', fontSize: 9, fontFamily: 'Space Mono,monospace', marginLeft: 'auto' }}>Ollama · {MODEL}</span>
+            <span style={{ color: '#444', fontSize: 9, fontFamily: 'Space Mono,monospace', marginLeft: 'auto' }}>{API_URL ? `Ollama · ${MODEL}` : 'offline'}</span>
           </div>
 
           {/* Messages */}

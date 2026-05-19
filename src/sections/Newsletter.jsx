@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 
-const LISTMONK_URL = import.meta.env.VITE_LISTMONK_URL || 'http://localhost:9000'
+const LISTMONK_URL = import.meta.env.VITE_LISTMONK_URL || ''
 const LIST_UUID = import.meta.env.VITE_LISTMONK_LIST_UUID || ''
 
 export default function Newsletter() {
@@ -15,6 +15,13 @@ export default function Newsletter() {
     if (!email) return
     setStatus('loading')
     setErr('')
+
+    if (!LISTMONK_URL) {
+      setStatus('error')
+      setErr('Newsletter not configured yet. Set VITE_LISTMONK_URL in Netlify dashboard.')
+      return
+    }
+
     try {
       const res = await fetch(`${LISTMONK_URL}/api/public/subscription`, {
         method: 'POST',
@@ -33,9 +40,9 @@ export default function Newsletter() {
       } else {
         throw new Error(await res.text())
       }
-    } catch (e) {
+    } catch {
       setStatus('error')
-      setErr('Start Listmonk: docker compose up listmonk')
+      setErr('Could not subscribe. Make sure Listmonk is running and VITE_LISTMONK_URL is set.')
     }
   }
 
@@ -61,7 +68,7 @@ export default function Newsletter() {
           <span style={{ color:B.amber, textShadow:`0 0 40px ${B.amber}70` }}>INNER CIRCLE</span>
         </h2>
 
-        <p style={{ color:B.smoke, fontFamily:'Space Mono,monospace', fontSize:13, lineHeight:1.9, marginBottom:44, maxWidth:500, margin:'0 auto 44px' }}>
+        <p style={{ color:B.smoke, fontFamily:'Space Mono,monospace', fontSize:13, lineHeight:1.9, margin:'0 auto 44px', maxWidth:500 }}>
           Exclusive drops, early ticket access, community challenges, and event updates. 10,000+ sneakerheads already in.
         </p>
 
