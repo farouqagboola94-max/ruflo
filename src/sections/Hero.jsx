@@ -26,25 +26,46 @@ function useCountdown(target) {
 
 const CountBox = ({ value, label }) => (
   <div style={{ textAlign: "center" }}>
+    {/* Glassmorphism countdown box */}
     <div style={{
-      width: 72, height: 84, display: "flex", alignItems: "center", justifyContent: "center",
-      background: B.charcoal, border: `1px solid ${B.amber}30`, borderRadius: 4,
+      width: 78, height: 90,
+      display: "flex", alignItems: "center", justifyContent: "center",
+      background: "rgba(255,255,255,0.06)",
+      backdropFilter: "blur(20px) saturate(180%)",
+      WebkitBackdropFilter: "blur(20px) saturate(180%)",
+      border: `1px solid rgba(255,255,255,0.12)`,
+      borderRadius: 8,
       position: "relative", overflow: "hidden",
+      boxShadow: `0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.12)`,
     }}>
+      {/* Inner sheen */}
+      <div style={{
+        position: "absolute", top: 0, left: 0, right: 0, height: 1,
+        background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)",
+      }} />
+      {/* Flip line */}
+      <div style={{
+        position: "absolute", top: "50%", left: 0, right: 0, height: 1,
+        background: "rgba(0,0,0,0.4)",
+      }} />
+      {/* Upper half tint */}
       <div style={{
         position: "absolute", top: 0, left: 0, right: 0, height: "50%",
-        background: "rgba(255,255,255,0.02)", borderBottom: `1px solid ${B.gunmetal}`,
+        background: "rgba(255,255,255,0.03)",
       }} />
       <span style={{
-        fontFamily: "'Orbitron', monospace", fontSize: 34, fontWeight: 900, color: B.amber,
-        textShadow: `0 0 15px ${B.amber}50`, position: "relative", zIndex: 1,
+        fontFamily: "'Orbitron', monospace", fontSize: 36, fontWeight: 900,
+        color: B.amber,
+        textShadow: `0 0 20px ${B.amber}60, 0 0 40px ${B.amber}20`,
+        position: "relative", zIndex: 1,
       }}>
         {String(value).padStart(2, '0')}
       </span>
     </div>
-    <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, marginTop: 8, letterSpacing: "0.3em" }}>
-      {label}
-    </div>
+    <div style={{
+      fontFamily: "'Space Mono', monospace", fontSize: 7,
+      color: B.smoke, marginTop: 8, letterSpacing: "0.35em",
+    }}>{label}</div>
   </div>
 )
 
@@ -54,50 +75,88 @@ export default function Hero() {
   return (
     <section style={{
       minHeight: "100vh", position: "relative", overflow: "hidden",
-      background: `linear-gradient(180deg, ${B.void} 0%, ${B.black} 60%, ${B.charcoal}30 100%)`,
-      display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+      /* Enhanced background: deep void with subtle purple tint (cyberpunk noir) */
+      background: `
+        radial-gradient(ellipse 80% 60% at 70% 30%, ${B.amber}08 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 20% 70%, ${B.neonCyan}06 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 50% 0%, #1a0a2e18 0%, transparent 60%),
+        linear-gradient(180deg, #050508 0%, ${B.void} 40%, ${B.black} 100%)
+      `,
+      display: "flex", flexDirection: "column",
+      alignItems: "center", justifyContent: "center",
       padding: "100px 24px 80px",
     }}>
       <GrainOverlay />
       <ScanLines opacity={0.05} />
-      <AmberGlow top="20%" left="75%" size={450} />
-      <AmberGlow top="70%" left="15%" size={300} />
 
-      {/* Subtle grid */}
+      {/* Layered amber glow — multiple passes for depth */}
       <div style={{
-        position: "absolute", inset: 0, opacity: 0.025,
-        backgroundImage: `linear-gradient(${B.amber} 1px, transparent 1px), linear-gradient(90deg, ${B.amber} 1px, transparent 1px)`,
+        position: "absolute", top: "15%", right: "12%",
+        width: 500, height: 500,
+        background: `radial-gradient(circle, ${B.amber}18 0%, ${B.amber}06 40%, transparent 70%)`,
+        filter: "blur(40px)", pointerEvents: "none",
+      }} />
+      <div style={{
+        position: "absolute", top: "20%", right: "18%",
+        width: 280, height: 280,
+        background: `radial-gradient(circle, ${B.amber}22 0%, transparent 60%)`,
+        filter: "blur(20px)", pointerEvents: "none",
+      }} />
+      <div style={{
+        position: "absolute", bottom: "30%", left: "8%",
+        width: 350, height: 350,
+        background: `radial-gradient(circle, ${B.neonCyan}10 0%, transparent 65%)`,
+        filter: "blur(50px)", pointerEvents: "none",
+      }} />
+
+      {/* Animated grid */}
+      <div style={{
+        position: "absolute", inset: 0,
+        opacity: 0.025,
+        backgroundImage: `linear-gradient(${B.neonCyan} 1px, transparent 1px), linear-gradient(90deg, ${B.neonCyan} 1px, transparent 1px)`,
         backgroundSize: "60px 60px",
       }} />
 
-      {/* Diagonal neon streak */}
+      {/* Primary diagonal streak */}
       <div style={{
         position: "absolute", top: "-5%", left: "-5%", width: "65%", height: 1,
-        background: `linear-gradient(90deg, transparent, ${B.neonCyan}50, transparent)`,
+        background: `linear-gradient(90deg, transparent, ${B.neonCyan}60, ${B.neonMagenta}40, transparent)`,
         transform: "rotate(-18deg)", filter: "blur(1px)",
+      }} />
+      {/* Secondary diagonal streak */}
+      <div style={{
+        position: "absolute", bottom: "20%", right: "-5%", width: "50%", height: 1,
+        background: `linear-gradient(90deg, transparent, ${B.amber}40, transparent)`,
+        transform: "rotate(-8deg)",
       }} />
 
       {/* Corner brackets */}
-      <div style={{ position: "absolute", top: 80, left: 24, width: 44, height: 44, borderTop: `2px solid ${B.neonCyan}40`, borderLeft: `2px solid ${B.neonCyan}40` }} />
-      <div style={{ position: "absolute", top: 80, right: 24, width: 44, height: 44, borderTop: `2px solid ${B.neonCyan}40`, borderRight: `2px solid ${B.neonCyan}40` }} />
+      <div style={{ position: "absolute", top: 80, left: 24, width: 44, height: 44, borderTop: `2px solid ${B.neonCyan}50`, borderLeft: `2px solid ${B.neonCyan}50` }} />
+      <div style={{ position: "absolute", top: 80, right: 24, width: 44, height: 44, borderTop: `2px solid ${B.neonCyan}50`, borderRight: `2px solid ${B.neonCyan}50` }} />
 
-      <div style={{ position: "relative", zIndex: 10, textAlign: "center", maxWidth: 900, animation: "fadeUp 0.8s ease both" }}>
+      <div style={{ position: "relative", zIndex: 10, textAlign: "center", maxWidth: 940, animation: "fadeUp 0.8s ease both" }}>
         {/* Location pill */}
         <div style={{
           display: "inline-flex", alignItems: "center", gap: 8, marginBottom: 28,
-          padding: "5px 16px", border: `1px solid ${B.neonCyan}40`, borderRadius: 2,
+          padding: "5px 16px",
+          background: "rgba(255,255,255,0.05)",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
+          border: `1px solid ${B.neonCyan}40`, borderRadius: 20,
         }}>
-          <div style={{ width: 5, height: 5, borderRadius: "50%", background: B.neonLime, animation: "pulse 2s infinite" }} />
+          <div style={{ width: 5, height: 5, borderRadius: "50%", background: B.neonLime, animation: "pulse 2s infinite", boxShadow: `0 0 6px ${B.neonLime}` }} />
           <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.neonCyan, letterSpacing: "0.4em" }}>
             LAGOS, NIGERIA — EKO ATLANTIC
           </span>
         </div>
 
-        {/* Hero title */}
+        {/* Hero title — enhanced glow stack */}
         <div style={{
           fontFamily: "'Bebas Neue', sans-serif",
           fontSize: "clamp(72px, 15vw, 150px)",
-          color: B.white, lineHeight: 0.85, letterSpacing: "0.02em",
+          color: B.white, lineHeight: 0.85,
+          letterSpacing: "0.02em",
+          textShadow: `0 0 80px rgba(240,237,230,0.08), 0 2px 0 rgba(0,0,0,0.8)`,
           animation: "flicker 10s infinite",
         }}>
           SNEAKERS
@@ -106,14 +165,19 @@ export default function Hero() {
           fontFamily: "'Orbitron', monospace", fontWeight: 900,
           fontSize: "clamp(54px, 11vw, 116px)",
           color: B.amber, lineHeight: 1, letterSpacing: "0.08em",
-          textShadow: `0 0 40px ${B.amber}50, 0 0 100px ${B.amber}20`,
+          textShadow: `
+            0 0 20px ${B.amber}80,
+            0 0 50px ${B.amber}40,
+            0 0 100px ${B.amber}20,
+            0 2px 0 rgba(0,0,0,0.8)
+          `,
         }}>
           FEST '26
         </div>
 
         <div style={{
           width: "100%", height: 1, margin: "22px 0",
-          background: `linear-gradient(90deg, transparent, ${B.neonCyan}80, transparent)`,
+          background: `linear-gradient(90deg, transparent, ${B.neonCyan}80, ${B.amber}60, transparent)`,
         }} />
 
         <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "clamp(9px, 1.2vw, 13px)", color: B.smoke, letterSpacing: "0.55em", marginBottom: 10 }}>
@@ -127,18 +191,20 @@ export default function Hero() {
           <span style={{ color: B.amber }}>Lagos has never seen anything like this.</span>
         </div>
 
-        {/* Countdown */}
+        {/* Countdown — glass boxes */}
         <div style={{ marginBottom: 44 }}>
-          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.neonMagenta, letterSpacing: "0.45em", marginBottom: 18 }}>
+          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.neonMagenta, letterSpacing: "0.45em", marginBottom: 18,
+            textShadow: `0 0 10px ${B.neonMagenta}40`,
+          }}>
             DROPS IN
           </div>
           <div style={{ display: "flex", gap: 10, justifyContent: "center", alignItems: "flex-start" }}>
             <CountBox value={time.days} label="DAYS" />
-            <div style={{ fontFamily: "'Orbitron', monospace", fontSize: 30, color: B.amber, opacity: 0.5, marginTop: 18 }}>:</div>
+            <div style={{ fontFamily: "'Orbitron', monospace", fontSize: 28, color: B.amber, opacity: 0.4, marginTop: 22 }}>:</div>
             <CountBox value={time.hours} label="HRS" />
-            <div style={{ fontFamily: "'Orbitron', monospace", fontSize: 30, color: B.amber, opacity: 0.5, marginTop: 18 }}>:</div>
+            <div style={{ fontFamily: "'Orbitron', monospace", fontSize: 28, color: B.amber, opacity: 0.4, marginTop: 22 }}>:</div>
             <CountBox value={time.minutes} label="MIN" />
-            <div style={{ fontFamily: "'Orbitron', monospace", fontSize: 30, color: B.amber, opacity: 0.5, marginTop: 18 }}>:</div>
+            <div style={{ fontFamily: "'Orbitron', monospace", fontSize: 28, color: B.amber, opacity: 0.4, marginTop: 22 }}>:</div>
             <CountBox value={time.seconds} label="SEC" />
           </div>
           <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.smoke, marginTop: 14, letterSpacing: "0.25em" }}>
@@ -153,8 +219,8 @@ export default function Hero() {
             style={{
               padding: "15px 38px", background: B.amber, color: B.black,
               fontFamily: "'Space Mono', monospace", fontSize: 10, fontWeight: 700, letterSpacing: "0.2em",
-              textDecoration: "none", borderRadius: 2,
-              boxShadow: `0 0 30px ${B.amber}30`,
+              textDecoration: "none", borderRadius: 4,
+              boxShadow: `0 0 40px ${B.amber}35, 0 4px 16px rgba(0,0,0,0.5)`,
             }}
           >
             GET TICKETS →
@@ -162,9 +228,15 @@ export default function Hero() {
           <a
             href="#about"
             style={{
-              padding: "15px 38px", background: "transparent", color: B.white,
+              padding: "15px 38px",
+              background: "rgba(255,255,255,0.06)",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+              color: B.white,
               fontFamily: "'Space Mono', monospace", fontSize: 10, letterSpacing: "0.2em",
-              textDecoration: "none", borderRadius: 2, border: `1px solid ${B.gunmetal}`,
+              textDecoration: "none", borderRadius: 4,
+              border: `1px solid rgba(255,255,255,0.15)`,
+              boxShadow: `inset 0 1px 0 rgba(255,255,255,0.1)`,
             }}
           >
             LEARN MORE
