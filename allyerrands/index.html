@@ -1,397 +1,458 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="noir">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Za.allyErrands — Your trusted on-demand errand service. Grocery shopping, pharmacy pickups, package delivery and more." />
-  <title>Za.allyErrands — Your Trusted Errand Partner</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="Za.allyErrands — Lagos' autonomous errand dispatch. You request, we move. Day or night." />
+  <title>Za.allyErrands — Move Fast. No Excuses.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-  <!-- NAVBAR -->
+  <!-- ═══ CURSOR GLOW ═══ -->
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- ═══ NAV ═══ -->
   <nav class="nav" id="navbar">
-    <div class="nav__container">
-      <a href="#home" class="nav__logo">Za.<span>ally</span>Errands</a>
+    <div class="nav__inner">
+      <a href="#drop" class="nav__logo">
+        <span class="logo-za">Za.</span><span class="logo-ally">ally</span><span class="logo-rest">Errands</span>
+      </a>
       <ul class="nav__links" id="navLinks">
-        <li><a href="#services">Services</a></li>
-        <li><a href="#how-it-works">How It Works</a></li>
-        <li><a href="#pricing">Pricing</a></li>
-        <li><a href="#testimonials">Reviews</a></li>
-        <li><a href="#contact" class="btn btn--nav">Book Now</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#services">Fleet</a></li>
+        <li><a href="#pricing">Rates</a></li>
+        <li><a href="#portal" class="nav__portal">Client Login</a></li>
+        <li><a href="#drop" class="nav__cta">Request Now</a></li>
       </ul>
-      <button class="nav__hamburger" id="hamburger" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span>
       </button>
     </div>
   </nav>
 
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero__bg-shapes">
-      <div class="shape shape--1"></div>
-      <div class="shape shape--2"></div>
-      <div class="shape shape--3"></div>
-    </div>
-    <div class="container hero__content">
-      <div class="hero__badge">&#9889; Fast. Reliable. Trusted.</div>
-      <h1 class="hero__title">
-        Your Personal<br />
-        <span>Errand Runner</span><br />
-        On Demand
+  <!-- ═══ THE DROP — HERO ═══ -->
+  <section class="drop" id="drop">
+    <div class="drop__grid-overlay"></div>
+    <div class="drop__scanline"></div>
+
+    <div class="drop__inner">
+      <div class="drop__eyebrow">
+        <span class="pulse-dot"></span>
+        <span>SYSTEM ONLINE &mdash; LAGOS, NG</span>
+      </div>
+
+      <h1 class="drop__headline">
+        What needs<br />
+        <em>moving?</em>
       </h1>
-      <p class="hero__subtitle">
-        From grocery runs to pharmacy pickups — Za.allyErrands handles
-        your to-do list so you can focus on what truly matters.
+
+      <p class="drop__sub">
+        You tell us. We dispatch. It moves. No friction, no follow-ups, no missed pickups.
+        Za.allyErrands is Lagos' autonomous errand machine.
       </p>
-      <div class="hero__cta">
-        <a href="#contact" class="btn btn--primary">Book an Errand</a>
-        <a href="#how-it-works" class="btn btn--outline">See How It Works</a>
+
+      <!-- QUOTE WIDGET -->
+      <form class="quote-widget" id="quoteForm" novalidate>
+        <div class="quote-widget__input-wrap">
+          <span class="quote-widget__prefix">&rsaquo;&rsaquo;</span>
+          <input
+            type="text"
+            id="quoteInput"
+            name="errand"
+            placeholder="Groceries at Shoprite, pick up drugs at Reddington..."
+            autocomplete="off"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn--hazard">Get Instant Quote</button>
+      </form>
+
+      <div class="drop__meta">
+        <span class="meta-tag">&#9650; 500+ runs completed</span>
+        <span class="meta-divider">|</span>
+        <span class="meta-tag">Avg dispatch: 8 min</span>
+        <span class="meta-divider">|</span>
+        <span class="meta-tag">Lagos &middot; Abuja &middot; PH</span>
       </div>
-      <div class="hero__stats">
-        <div class="stat">
-          <span class="stat__number" data-target="500">0</span><span class="stat__suffix">+</span>
-          <span class="stat__label">Happy Clients</span>
+    </div>
+
+    <div class="drop__ticker" aria-hidden="true">
+      <div class="ticker__track">
+        <span>GROCERY PICKUP &mdash;</span>
+        <span>PHARMACY RUN &mdash;</span>
+        <span>PACKAGE DELIVERY &mdash;</span>
+        <span>DRY CLEANING &mdash;</span>
+        <span>RESTAURANT PICKUP &mdash;</span>
+        <span>CUSTOM ERRAND &mdash;</span>
+        <span>GROCERY PICKUP &mdash;</span>
+        <span>PHARMACY RUN &mdash;</span>
+        <span>PACKAGE DELIVERY &mdash;</span>
+        <span>DRY CLEANING &mdash;</span>
+        <span>RESTAURANT PICKUP &mdash;</span>
+        <span>CUSTOM ERRAND &mdash;</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ THE PROCESS ═══ -->
+  <section class="process" id="process">
+    <div class="section-label">// DISPATCH PROTOCOL</div>
+    <div class="process__inner">
+      <header class="process__header">
+        <h2>Three steps.<br /><span>Zero babysitting.</span></h2>
+        <p>The system runs itself. Here's exactly what happens the moment you submit a request.</p>
+      </header>
+
+      <div class="process__steps">
+        <div class="p-step" data-reveal>
+          <div class="p-step__num">01</div>
+          <div class="p-step__body">
+            <div class="p-step__icon">&#9997;&#65039;</div>
+            <h3>You Request</h3>
+            <p>Drop your errand details into the form. Pickup location, destination, what's being moved. That's it.</p>
+            <div class="p-step__tech">TRIGGER &rarr; WEBHOOK FIRED</div>
+          </div>
         </div>
-        <div class="stat__divider"></div>
-        <div class="stat">
-          <span class="stat__number" data-target="98">0</span><span class="stat__suffix">%</span>
-          <span class="stat__label">Satisfaction Rate</span>
+        <div class="p-step__arrow" aria-hidden="true">&darr;</div>
+        <div class="p-step" data-reveal>
+          <div class="p-step__num">02</div>
+          <div class="p-step__body">
+            <div class="p-step__icon">&#9889;</div>
+            <h3>We Dispatch</h3>
+            <p>Our AI routes your job to the nearest available runner. You get a WhatsApp confirmation within minutes, not hours.</p>
+            <div class="p-step__tech">MAKE.COM &rarr; WHATSAPP API</div>
+          </div>
         </div>
-        <div class="stat__divider"></div>
-        <div class="stat">
-          <span class="stat__number" data-target="2">0</span><span class="stat__suffix">hr</span>
-          <span class="stat__label">Avg. Turnaround</span>
+        <div class="p-step__arrow" aria-hidden="true">&darr;</div>
+        <div class="p-step" data-reveal>
+          <div class="p-step__num">03</div>
+          <div class="p-step__body">
+            <div class="p-step__icon">&#9989;</div>
+            <h3>Ally Delivers</h3>
+            <p>Your runner moves. You track in real-time via your client portal. Job closed. You never lifted a finger.</p>
+            <div class="p-step__tech">SUPABASE &rarr; REAL-TIME SYNC</div>
+          </div>
         </div>
       </div>
     </div>
-    <a href="#services" class="hero__scroll" aria-label="Scroll down">
-      <div class="scroll-dot"></div>
-    </a>
   </section>
 
-  <!-- SERVICES -->
+  <!-- ═══ SERVICES / FLEET ═══ -->
   <section class="services" id="services">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag">What We Do</span>
-        <h2>Errands We Handle <span>For You</span></h2>
-        <p>We take care of the daily tasks that eat up your time. Whatever you need done, we've got it covered.</p>
-      </div>
+    <div class="section-label">// WHAT WE MOVE</div>
+    <div class="services__inner">
+      <header class="services__header">
+        <h2>The Fleet</h2>
+        <p>Every category. Every neighbourhood. Day or night.</p>
+      </header>
       <div class="services__grid">
-        <div class="service-card" data-aos>
-          <div class="service-card__icon">&#128722;</div>
-          <h3>Grocery Shopping</h3>
-          <p>We shop your list at your preferred store and deliver fresh produce straight to your door.</p>
+        <div class="s-card" data-reveal>
+          <div class="s-card__top">
+            <span class="s-card__num">01</span>
+            <span class="s-card__icon">&#128722;</span>
+          </div>
+          <h3>Grocery Run</h3>
+          <p>Shoprite, Market Square, Spar — we shop your list and deliver fresh.</p>
+          <div class="s-card__tag">AVG 90MIN</div>
         </div>
-        <div class="service-card" data-aos>
-          <div class="service-card__icon">&#128138;</div>
-          <h3>Pharmacy Pickups</h3>
-          <p>Prescription ready? We'll collect it and deliver safely — no waiting in queues for you.</p>
+        <div class="s-card" data-reveal>
+          <div class="s-card__top">
+            <span class="s-card__num">02</span>
+            <span class="s-card__icon">&#128138;</span>
+          </div>
+          <h3>Pharmacy Pickup</h3>
+          <p>Prescription collected. Delivered sealed, documented, direct to your door.</p>
+          <div class="s-card__tag">AVG 45MIN</div>
         </div>
-        <div class="service-card" data-aos>
-          <div class="service-card__icon">&#128230;</div>
+        <div class="s-card" data-reveal>
+          <div class="s-card__top">
+            <span class="s-card__num">03</span>
+            <span class="s-card__icon">&#128230;</span>
+          </div>
           <h3>Package &amp; Post</h3>
-          <p>Mail packages, collect parcels, or drop off documents. We handle all your logistics.</p>
+          <p>NIPOST, courier drops, parcel pickups. We queue so you don't have to.</p>
+          <div class="s-card__tag">SAME DAY</div>
         </div>
-        <div class="service-card" data-aos>
-          <div class="service-card__icon">&#128092;</div>
+        <div class="s-card" data-reveal>
+          <div class="s-card__top">
+            <span class="s-card__num">04</span>
+            <span class="s-card__icon">&#127828;</span>
+          </div>
+          <h3>Restaurant Pickup</h3>
+          <p>Your order, straight from the kitchen. No cold deliveries, no wrong bags.</p>
+          <div class="s-card__tag">AVG 30MIN</div>
+        </div>
+        <div class="s-card" data-reveal>
+          <div class="s-card__top">
+            <span class="s-card__num">05</span>
+            <span class="s-card__icon">&#128092;</span>
+          </div>
           <h3>Dry Cleaning</h3>
-          <p>Drop-off and pick-up of your dry cleaning done on your schedule, not theirs.</p>
+          <p>Drop-off and collection handled back-to-back. Your wardrobe stays clean.</p>
+          <div class="s-card__tag">SCHEDULED</div>
         </div>
-        <div class="service-card" data-aos>
-          <div class="service-card__icon">&#127828;</div>
-          <h3>Food Pickup</h3>
-          <p>Order from your favourite restaurant — we'll grab it hot and bring it straight to you.</p>
-        </div>
-        <div class="service-card" data-aos>
-          <div class="service-card__icon">&#128295;</div>
-          <h3>Custom Errands</h3>
-          <p>Have something unique in mind? Just ask! We handle all kinds of bespoke requests.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- HOW IT WORKS -->
-  <section class="how-it-works" id="how-it-works">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag">Simple Process</span>
-        <h2>How It Works</h2>
-        <p>Getting started takes under two minutes. We handle everything from booking to delivery.</p>
-      </div>
-      <div class="steps">
-        <div class="step" data-aos>
-          <div class="step__number">01</div>
-          <div class="step__icon">&#128203;</div>
-          <h3>Tell Us What You Need</h3>
-          <p>Fill out our quick booking form with your errand details, location, and preferred time.</p>
-        </div>
-        <div class="step__connector"></div>
-        <div class="step" data-aos>
-          <div class="step__number">02</div>
-          <div class="step__icon">&#129309;</div>
-          <h3>We Confirm &amp; Assign</h3>
-          <p>We confirm your booking within minutes and assign a trusted errand runner to your task.</p>
-        </div>
-        <div class="step__connector"></div>
-        <div class="step" data-aos>
-          <div class="step__number">03</div>
-          <div class="step__icon">&#9989;</div>
-          <h3>Sit Back &amp; Relax</h3>
-          <p>Your errand gets done and you receive a completion confirmation. Simple as that!</p>
+        <div class="s-card s-card--open" data-reveal>
+          <div class="s-card__top">
+            <span class="s-card__num">06</span>
+            <span class="s-card__icon">&#10133;</span>
+          </div>
+          <h3>Custom Request</h3>
+          <p>Can't find it on the list? We'll handle it. Tell us what you need moved.</p>
+          <a href="#drop" class="s-card__link">Make a Request &rarr;</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- PRICING -->
+  <!-- ═══ PRICING / RATES ═══ -->
   <section class="pricing" id="pricing">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag">Transparent Pricing</span>
-        <h2>Simple, Fair <span>Pricing</span></h2>
-        <p>No hidden fees. Pay only for what you need. Choose a plan that works for you.</p>
-      </div>
+    <div class="section-label">// RATES</div>
+    <div class="pricing__inner">
+      <header class="pricing__header">
+        <h2>Flat rates.<br /><span>No surprises.</span></h2>
+        <p>Pay for what you use. Or lock in a plan and never think about it again.</p>
+      </header>
       <div class="pricing__grid">
-        <div class="pricing-card" data-aos>
-          <div class="pricing-card__header">
-            <h3>Single Run</h3>
-            <p class="pricing-card__tagline">Pay as you go</p>
+        <div class="rate-card" data-reveal>
+          <div class="rate-card__label">PAY-AS-YOU-GO</div>
+          <div class="rate-card__price">
+            <span class="rate-currency">&#8358;</span>1,500
           </div>
-          <div class="pricing-card__price">
-            <span class="price__currency">&#8358;</span>
-            <span class="price__amount">1,500</span>
-            <span class="price__period">/ errand</span>
-          </div>
-          <ul class="pricing-card__features">
-            <li class="included">One errand per booking</li>
-            <li class="included">Up to 5km radius</li>
-            <li class="included">2-hour turnaround</li>
-            <li class="included">Real-time status updates</li>
-            <li class="excluded">Priority scheduling</li>
-            <li class="excluded">Dedicated runner</li>
+          <div class="rate-card__period">per errand</div>
+          <ul class="rate-card__list">
+            <li>Single errand</li>
+            <li>Up to 5km radius</li>
+            <li>2hr turnaround</li>
+            <li>WhatsApp confirmation</li>
           </ul>
-          <a href="#contact" class="btn btn--outline btn--full">Get Started</a>
+          <a href="#drop" class="btn btn--ghost btn--full">Request Now</a>
         </div>
-        <div class="pricing-card pricing-card--featured" data-aos>
-          <div class="pricing-card__badge">Most Popular</div>
-          <div class="pricing-card__header">
-            <h3>Weekly Bundle</h3>
-            <p class="pricing-card__tagline">Best value</p>
+
+        <div class="rate-card rate-card--featured" data-reveal>
+          <div class="rate-card__badge">MOST DEPLOYED</div>
+          <div class="rate-card__label">WEEKLY BUNDLE</div>
+          <div class="rate-card__price">
+            <span class="rate-currency">&#8358;</span>8,000
           </div>
-          <div class="pricing-card__price">
-            <span class="price__currency">&#8358;</span>
-            <span class="price__amount">8,000</span>
-            <span class="price__period">/ week</span>
-          </div>
-          <ul class="pricing-card__features">
-            <li class="included">7 errands per week</li>
-            <li class="included">Up to 10km radius</li>
-            <li class="included">1-hour turnaround</li>
-            <li class="included">Real-time status updates</li>
-            <li class="included">Priority scheduling</li>
-            <li class="excluded">Dedicated runner</li>
+          <div class="rate-card__period">per week</div>
+          <ul class="rate-card__list">
+            <li>7 errands per week</li>
+            <li>Up to 10km radius</li>
+            <li>1hr turnaround</li>
+            <li>Priority dispatch</li>
+            <li>Real-time portal access</li>
           </ul>
-          <a href="#contact" class="btn btn--primary btn--full">Get Started</a>
+          <a href="#drop" class="btn btn--hazard btn--full">Request Now</a>
         </div>
-        <div class="pricing-card" data-aos>
-          <div class="pricing-card__header">
-            <h3>Monthly Plan</h3>
-            <p class="pricing-card__tagline">For power users</p>
+
+        <div class="rate-card" data-reveal>
+          <div class="rate-card__label">MONTHLY PLAN</div>
+          <div class="rate-card__price">
+            <span class="rate-currency">&#8358;</span>25,000
           </div>
-          <div class="pricing-card__price">
-            <span class="price__currency">&#8358;</span>
-            <span class="price__amount">25,000</span>
-            <span class="price__period">/ month</span>
-          </div>
-          <ul class="pricing-card__features">
-            <li class="included">Unlimited errands</li>
-            <li class="included">No distance limit</li>
-            <li class="included">45-min turnaround</li>
-            <li class="included">Real-time status updates</li>
-            <li class="included">Priority scheduling</li>
-            <li class="included">Dedicated runner</li>
+          <div class="rate-card__period">per month</div>
+          <ul class="rate-card__list">
+            <li>Unlimited errands</li>
+            <li>No distance cap</li>
+            <li>45-min dispatch</li>
+            <li>Dedicated runner</li>
+            <li>Full portal + analytics</li>
           </ul>
-          <a href="#contact" class="btn btn--outline btn--full">Get Started</a>
+          <a href="#drop" class="btn btn--ghost btn--full">Request Now</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- TESTIMONIALS -->
-  <section class="testimonials" id="testimonials">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag">Happy Clients</span>
-        <h2>What People <span>Are Saying</span></h2>
+  <!-- ═══ CLIENT PORTAL ═══ -->
+  <section class="portal" id="portal">
+    <div class="portal__inner">
+      <div class="portal__copy">
+        <div class="section-label">// CLIENT PORTAL</div>
+        <h2>Track every run.<br /><span>In real time.</span></h2>
+        <p>
+          Once you're onboarded, your dedicated portal shows every errand: in-queue,
+          dispatched, en-route, delivered. Powered by Supabase live sync.
+          No refresh required.
+        </p>
+        <ul class="portal__features">
+          <li><span class="feat-dot"></span> Live runner location</li>
+          <li><span class="feat-dot"></span> Order history &amp; receipts</li>
+          <li><span class="feat-dot"></span> WhatsApp notifications</li>
+          <li><span class="feat-dot"></span> Recurring errand scheduler</li>
+        </ul>
+        <a href="#drop" class="btn btn--hazard">Get Access &rarr;</a>
       </div>
-      <div class="testimonials__grid">
-        <div class="testimonial-card" data-aos>
-          <div class="testimonial-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p>&ldquo;Za.allyErrands has been a lifesaver! I work from home with two kids and they handle all my grocery runs without fail. Absolutely worth every naira!&rdquo;</p>
-          <div class="testimonial-card__author">
-            <div class="author-avatar">AM</div>
-            <div>
-              <strong>Amara M.</strong>
-              <span>Lagos, Nigeria</span>
+      <div class="portal__mockup" aria-hidden="true">
+        <div class="mockup-window">
+          <div class="mockup-bar">
+            <span class="mockup-dot"></span>
+            <span class="mockup-dot"></span>
+            <span class="mockup-dot mockup-dot--orange"></span>
+            <span class="mockup-url">portal.zallyerrands.com</span>
+          </div>
+          <div class="mockup-body">
+            <div class="mockup-row mockup-row--heading">
+              <span>Active Runs</span>
+              <span class="badge-live">&#9679; LIVE</span>
+            </div>
+            <div class="mockup-errand mockup-errand--active">
+              <div class="errand-status">EN ROUTE</div>
+              <div class="errand-info">
+                <strong>Grocery Run</strong>
+                <span>Shoprite VI &rarr; Ikoyi</span>
+              </div>
+              <div class="errand-eta">12 MIN</div>
+            </div>
+            <div class="mockup-errand">
+              <div class="errand-status errand-status--queue">QUEUED</div>
+              <div class="errand-info">
+                <strong>Pharmacy Pickup</strong>
+                <span>Reddington Hospital</span>
+              </div>
+              <div class="errand-eta">~45M</div>
+            </div>
+            <div class="mockup-errand mockup-errand--done">
+              <div class="errand-status errand-status--done">DONE</div>
+              <div class="errand-info">
+                <strong>Package Drop</strong>
+                <span>DHL Lekki Phase 1</span>
+              </div>
+              <div class="errand-eta">&#10003;</div>
+            </div>
+            <div class="mockup-progress">
+              <div class="progress-bar"></div>
             </div>
           </div>
         </div>
-        <div class="testimonial-card testimonial-card--featured" data-aos>
-          <div class="testimonial-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p>&ldquo;Reliable, professional, and always on time. I&rsquo;ve been on the monthly plan for 3 months and it&rsquo;s completely transformed how I manage my week. Highly recommended!&rdquo;</p>
-          <div class="testimonial-card__author">
-            <div class="author-avatar">TK</div>
-            <div>
-              <strong>Tunde K.</strong>
-              <span>Abuja, Nigeria</span>
-            </div>
-          </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SOCIAL PROOF ═══ -->
+  <section class="proof" id="proof">
+    <div class="section-label">// FIELD REPORTS</div>
+    <div class="proof__inner">
+      <h2>From the clients</h2>
+      <div class="proof__grid">
+        <div class="proof-card" data-reveal>
+          <div class="proof-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p>&ldquo;Runs like a machine. I booked a pharmacy pickup at 11pm and got a WhatsApp update in 7 minutes. Nothing else in Lagos moves this fast.&rdquo;</p>
+          <div class="proof-card__author">Tunde K. &mdash; <em>Abuja</em></div>
         </div>
-        <div class="testimonial-card" data-aos>
-          <div class="testimonial-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p>&ldquo;Picked up my prescription and groceries in under 90 minutes while I was in back-to-back meetings. This service is genuinely game-changing for busy professionals.&rdquo;</p>
-          <div class="testimonial-card__author">
-            <div class="author-avatar">CF</div>
-            <div>
-              <strong>Chisom F.</strong>
-              <span>Port Harcourt, Nigeria</span>
-            </div>
-          </div>
+        <div class="proof-card proof-card--accent" data-reveal>
+          <div class="proof-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p>&ldquo;I&rsquo;m on the monthly plan. I haven&rsquo;t personally run a single errand since March. Za.allyErrands is the best business decision I&rsquo;ve made all year.&rdquo;</p>
+          <div class="proof-card__author">Amara M. &mdash; <em>Lagos</em></div>
+        </div>
+        <div class="proof-card" data-reveal>
+          <div class="proof-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p>&ldquo;The portal is clean, the runners are reliable, and the WhatsApp updates keep me in the loop without needing to call anyone. Exactly what I needed.&rdquo;</p>
+          <div class="proof-card__author">Chisom F. &mdash; <em>Port Harcourt</em></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CONTACT / BOOK -->
-  <section class="contact" id="contact">
-    <div class="container">
-      <div class="contact__inner">
-        <div class="contact__info">
-          <span class="section-tag">Book an Errand</span>
-          <h2>Ready to Get <span>Started?</span></h2>
-          <p>Fill in your details and describe what you need. We&rsquo;ll confirm your booking within 15 minutes.</p>
-          <div class="contact__details">
-            <div class="contact-item">
-              <span class="contact-item__icon">&#128222;</span>
-              <span>+234 800 000 0000</span>
-            </div>
-            <div class="contact-item">
-              <span class="contact-item__icon">&#128231;</span>
-              <span>hello@zallyerrands.com</span>
-            </div>
-            <div class="contact-item">
-              <span class="contact-item__icon">&#128205;</span>
-              <span>Lagos &middot; Abuja &middot; Port Harcourt</span>
-            </div>
-          </div>
-          <div class="contact__trust">
-            <div class="trust-badge">&#128274; Secure &amp; Confidential</div>
-            <div class="trust-badge">&#9200; 15-min Response</div>
-            <div class="trust-badge">&#11088; Vetted Runners</div>
-          </div>
-        </div>
-        <form class="contact__form" id="bookingForm" novalidate>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="name">Full Name</label>
-              <input type="text" id="name" name="name" placeholder="Your full name" required />
-              <span class="form-error">Please enter your name.</span>
-            </div>
-            <div class="form-group">
-              <label for="phone">Phone Number</label>
-              <input type="tel" id="phone" name="phone" placeholder="+234 800 000 0000" required />
-              <span class="form-error">Please enter your phone number.</span>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" placeholder="your@email.com" required />
-            <span class="form-error">Please enter a valid email address.</span>
-          </div>
-          <div class="form-group">
-            <label for="service">Service Type</label>
-            <select id="service" name="service" required>
-              <option value="">Select a service...</option>
-              <option value="grocery">Grocery Shopping</option>
-              <option value="pharmacy">Pharmacy Pickup</option>
-              <option value="package">Package &amp; Post</option>
-              <option value="drycleaning">Dry Cleaning</option>
-              <option value="food">Food Pickup</option>
-              <option value="custom">Custom Errand</option>
-            </select>
-            <span class="form-error">Please select a service.</span>
-          </div>
-          <div class="form-group">
-            <label for="details">Errand Details</label>
-            <textarea id="details" name="details" rows="4" placeholder="Describe your errand — the more detail, the better!" required></textarea>
-            <span class="form-error">Please describe your errand.</span>
-          </div>
-          <button type="submit" class="btn btn--primary btn--full" id="submitBtn">
-            <span class="btn-text">Book My Errand &#8594;</span>
-          </button>
-          <div class="form-success" id="formSuccess">
-            <span>&#127881;</span> Thanks! We&rsquo;ll confirm your booking within 15 minutes.
-          </div>
-        </form>
-      </div>
+  <!-- ═══ FINAL CTA ═══ -->
+  <section class="final-cta">
+    <div class="final-cta__inner">
+      <p class="final-cta__label">READY TO MOVE?</p>
+      <h2>Stop doing it yourself.</h2>
+      <a href="#drop" class="btn btn--hazard btn--xl">Request Your First Errand &rarr;</a>
+      <p class="final-cta__note">No account needed to start. First response in under 15 minutes.</p>
     </div>
   </section>
 
-  <!-- FOOTER -->
+  <!-- ═══ FOOTER ═══ -->
   <footer class="footer">
-    <div class="container">
-      <div class="footer__top">
-        <div class="footer__brand">
-          <a href="#home" class="nav__logo">Za.<span>ally</span>Errands</a>
-          <p>Your trusted partner for everyday errands. We save you time so you can live your best life.</p>
-          <div class="footer__social">
-            <a href="#" aria-label="Instagram" class="social-link">IG</a>
-            <a href="#" aria-label="Twitter / X" class="social-link">&#120143;</a>
-            <a href="#" aria-label="WhatsApp" class="social-link">WA</a>
-            <a href="#" aria-label="Facebook" class="social-link">FB</a>
-          </div>
-        </div>
-        <div class="footer__links">
-          <h4>Services</h4>
-          <ul>
-            <li><a href="#services">Grocery Shopping</a></li>
-            <li><a href="#services">Pharmacy Pickups</a></li>
-            <li><a href="#services">Package &amp; Post</a></li>
-            <li><a href="#services">Dry Cleaning</a></li>
-            <li><a href="#services">Food Pickup</a></li>
-          </ul>
-        </div>
-        <div class="footer__links">
-          <h4>Company</h4>
-          <ul>
-            <li><a href="#how-it-works">How It Works</a></li>
-            <li><a href="#pricing">Pricing</a></li>
-            <li><a href="#testimonials">Reviews</a></li>
-            <li><a href="#contact">Book Now</a></li>
-          </ul>
-        </div>
-        <div class="footer__links">
-          <h4>Support</h4>
-          <ul>
-            <li><a href="#">FAQ</a></li>
-            <li><a href="#">Terms of Service</a></li>
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#contact">Contact Us</a></li>
-          </ul>
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <a href="#drop" class="nav__logo">
+          <span class="logo-za">Za.</span><span class="logo-ally">ally</span><span class="logo-rest">Errands</span>
+        </a>
+        <p>Lagos&rsquo; autonomous errand dispatch. Built for people who value their time above everything.</p>
+        <div class="footer__socials">
+          <a href="#" class="social" aria-label="Instagram">IG</a>
+          <a href="#" class="social" aria-label="X / Twitter">&#120143;</a>
+          <a href="#" class="social" aria-label="WhatsApp">WA</a>
         </div>
       </div>
-      <div class="footer__bottom">
-        <p>&copy; 2026 Za.allyErrands. All rights reserved.</p>
-        <p>Made with &#10084;&#65039; for busy people everywhere.</p>
+      <div class="footer__col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#services">Grocery Run</a></li>
+          <li><a href="#services">Pharmacy Pickup</a></li>
+          <li><a href="#services">Package &amp; Post</a></li>
+          <li><a href="#services">Restaurant Pickup</a></li>
+          <li><a href="#services">Dry Cleaning</a></li>
+        </ul>
       </div>
+      <div class="footer__col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#process">How It Works</a></li>
+          <li><a href="#pricing">Rates</a></li>
+          <li><a href="#portal">Client Portal</a></li>
+          <li><a href="#drop">Book Now</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="#">WhatsApp Us</a></li>
+          <li><a href="#">hello@zallyerrands.com</a></li>
+          <li><a href="#">+234 800 000 0000</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>&copy; 2026 Za.allyErrands. All rights reserved.</span>
+      <span class="footer__status"><span class="pulse-dot"></span> All systems operational</span>
     </div>
   </footer>
+
+  <!-- ═══ QUOTE MODAL ═══ -->
+  <div class="modal" id="quoteModal" role="dialog" aria-modal="true" aria-label="Instant Quote">
+    <div class="modal__backdrop" id="modalBackdrop"></div>
+    <div class="modal__box">
+      <button class="modal__close" id="modalClose" aria-label="Close">&times;</button>
+      <div class="modal__icon">&#9889;</div>
+      <h3>Get Your Quote</h3>
+      <p>Fill in the details below. We&rsquo;ll confirm your price and runner via WhatsApp within 15 minutes.</p>
+      <form id="fullQuoteForm" novalidate>
+        <div class="form-group">
+          <label for="qErrand">Errand Description</label>
+          <textarea id="qErrand" name="errand" rows="3" placeholder="Describe what needs to be picked up or dropped off..." required></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="qName">Your Name</label>
+            <input type="text" id="qName" name="name" placeholder="Tunde K." required />
+          </div>
+          <div class="form-group">
+            <label for="qPhone">WhatsApp Number</label>
+            <input type="tel" id="qPhone" name="phone" placeholder="+234 800 000 0000" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="qLocation">Pickup Location</label>
+          <input type="text" id="qLocation" name="location" placeholder="e.g. Shoprite Lekki Phase 1" required />
+        </div>
+        <button type="submit" class="btn btn--hazard btn--full" id="modalSubmitBtn">
+          <span class="btn-text">Send Request &rarr;</span>
+        </button>
+        <div class="form-success" id="modalSuccess">
+          &#9989; Request received. Expect a WhatsApp message in under 15 minutes.
+        </div>
+      </form>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
