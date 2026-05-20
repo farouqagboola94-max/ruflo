@@ -9,12 +9,15 @@ const SOCIALS = [
   { platform: 'INSTAGRAM',   handle: '@SNEAKERSFEST',  href: SOCIAL_LINKS.instagram,  color: '#E1306C',     icon: 'IG', tip: 'Drops & Culture' },
   { platform: 'SNAPCHAT',    handle: 'SNEAKERSFEST',   href: SOCIAL_LINKS.snapchat,   color: B.amber,       icon: 'SC', tip: 'Stories & BTS' },
   { platform: 'WHATSAPP',    handle: 'JOIN COMMUNITY', href: SOCIAL_LINKS.whatsapp,   color: B.neonLime,    icon: 'WA', tip: 'Inner Circle' },
+  { platform: 'SUBSTACK',    handle: '@CATALYST00555', href: 'https://substack.com/@catalyst00555', color: '#FF6719', icon: 'SS', tip: 'Read the Culture' },
 ]
 
 const NAV = [
   ['About', '#about'],
   ['Community', '#community'],
+  ['Comics', '#comics'],
   ['Gallery', '#gallery'],
+  ['Substack', '#substack'],
   ['Lineup', '#lineup'],
   ['Merch', '#merch'],
   ['Tickets', '#tickets'],
@@ -26,7 +29,7 @@ export default function Footer() {
   return (
     <footer style={{ position: 'relative', overflow: 'hidden', background: B.black, borderTop: `1px solid ${B.gunmetal}`, padding: '64px 24px 28px' }}>
       <GrainOverlay />
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, #69C9D0, ${B.neonMagenta}, #E1306C, ${B.neonCyan}, ${B.amber}, ${B.neonLime})` }} />
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, #69C9D0, ${B.neonMagenta}, #E1306C, ${B.neonCyan}, ${B.amber}, ${B.neonLime}, #FF6719)` }} />
 
       <div style={{ position: 'relative', zIndex: 10, maxWidth: 1100, margin: '0 auto' }}>
         <div style={{ display: 'flex', gap: 60, flexWrap: 'wrap', marginBottom: 52 }}>
@@ -35,12 +38,13 @@ export default function Footer() {
           <div style={{ flex: '1 1 240px' }}>
             <div style={{ fontFamily: "'Orbitron', monospace", fontWeight: 900, fontSize: 20, color: B.amber, textShadow: `0 0 15px ${B.amber}30`, marginBottom: 6 }}>SNEAKERS FEST '26</div>
             <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.smoke, letterSpacing: '0.3em', marginBottom: 6 }}>THE SOLE EXHIBITION — LAGOS, NIGERIA</div>
-            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.neonCyan, letterSpacing: '0.25em', marginBottom: 18 }}>ONLINE COMMUNITY. PHYSICAL PRESENCE.</div>
+            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.neonCyan, letterSpacing: '0.25em', marginBottom: 6 }}>ONLINE COMMUNITY. PHYSICAL PRESENCE.</div>
+            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: '#FF6719', letterSpacing: '0.2em', marginBottom: 16 }}>CATALYST UNIVERSE · SUBSTACK</div>
             <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: B.smoke, lineHeight: 1.75, maxWidth: 260 }}>West Africa's premier sneaker culture community. Online every day. In person December 12, 2026.</div>
           </div>
 
           {/* Navigate */}
-          <div style={{ flex: '0 1 130px' }}>
+          <div style={{ flex: '0 1 140px' }}>
             <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.neonCyan, letterSpacing: '0.3em', marginBottom: 18 }}>NAVIGATE</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {NAV.map(([label, href]) => (
@@ -79,6 +83,7 @@ export default function Footer() {
           <div style={{ flex: '0 1 180px' }}>
             <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.neonCyan, letterSpacing: '0.3em', marginBottom: 18 }}>JOIN NOW</div>
             <a href="#tickets" style={{ display: 'block', padding: '14px 20px', background: B.amber, color: B.black, fontFamily: "'Space Mono', monospace", fontSize: 9, fontWeight: 700, letterSpacing: '0.15em', textDecoration: 'none', borderRadius: 2, textAlign: 'center', boxShadow: `0 0 25px ${B.amber}20`, marginBottom: 8 }}>GET TICKETS</a>
+            <a href="https://substack.com/@catalyst00555" target="_blank" rel="noopener noreferrer" style={{ display: 'block', padding: '11px 20px', border: `1px solid #FF671950`, color: '#FF6719', fontFamily: "'Space Mono', monospace", fontSize: 9, fontWeight: 700, letterSpacing: '0.15em', textDecoration: 'none', borderRadius: 2, textAlign: 'center', marginBottom: 8 }}>READ SUBSTACK</a>
             <a href="#vendors" style={{ display: 'block', padding: '11px 20px', border: `1px solid ${B.neonCyan}50`, color: B.neonCyan, fontFamily: "'Space Mono', monospace", fontSize: 9, fontWeight: 700, letterSpacing: '0.15em', textDecoration: 'none', borderRadius: 2, textAlign: 'center', marginBottom: 8 }}>VENDOR APPLY</a>
             <a href="#community" style={{ display: 'block', padding: '11px 20px', border: `1px solid ${B.neonLime}50`, color: B.neonLime, fontFamily: "'Space Mono', monospace", fontSize: 9, fontWeight: 700, letterSpacing: '0.15em', textDecoration: 'none', borderRadius: 2, textAlign: 'center', marginBottom: 16 }}>JOIN COMMUNITY</a>
             <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 11, color: B.smoke, lineHeight: 1.7 }}>Online first. Lagos December 12. Six platforms. One community.</div>
@@ -86,7 +91,7 @@ export default function Footer() {
         </div>
 
         <div style={{ borderTop: `1px solid ${B.gunmetal}`, paddingTop: 20, display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, letterSpacing: '0.18em' }}>
-          <span>© 2026 SNEAKERS FEST. ALL RIGHTS RESERVED.</span>
+          <span>© 2026 SNEAKERS FEST · CATALYST UNIVERSE. ALL RIGHTS RESERVED.</span>
           <span>ONLINE COMMUNITY. PHYSICAL PRESENCE. LAGOS NOIR.</span>
         </div>
       </div>

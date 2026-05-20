@@ -11,8 +11,10 @@ import Press from './sections/Press'
 import Highlights from './sections/Highlights'
 import Community from './sections/Community'
 import Testimonials from './sections/Testimonials'
+import Comics from './sections/Comics'
 import Gallery from './sections/Gallery'
 import PhotoTools from './sections/PhotoTools'
+import SubstackSection from './sections/SubstackSection'
 import Newsletter from './sections/Newsletter'
 import Lineup from './sections/Lineup'
 import Schedule from './sections/Schedule'
@@ -28,7 +30,9 @@ const SECTION_TITLES = [
   { id: 'highlights',   title: "Experience | Sneakers Fest '26" },
   { id: 'community',    title: "Community | Sneakers Fest '26" },
   { id: 'testimonials', title: "Stories | Sneakers Fest '26" },
+  { id: 'comics',       title: "Catalyst Universe | Sneakers Fest '26" },
   { id: 'gallery',      title: "Gallery | Sneakers Fest '26" },
+  { id: 'substack',     title: "Substack | Sneakers Fest '26" },
   { id: 'lineup',       title: "Lineup | Sneakers Fest '26" },
   { id: 'schedule',     title: "Schedule | Sneakers Fest '26" },
   { id: 'merch',        title: "Merch | Sneakers Fest '26" },
@@ -85,8 +89,10 @@ export default function App() {
       <Highlights />
       <Community />
       <Testimonials />
+      <Comics />
       <Gallery />
       <PhotoTools />
+      <SubstackSection />
       <Newsletter />
       <Lineup />
       <Schedule />
