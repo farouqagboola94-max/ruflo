@@ -25,6 +25,10 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <!-- Payment SDKs (loaded early so they are ready when user clicks Buy) -->
+    <script async src="https://js.paystack.co/v1/inline.js"></script>
+    <script async src="https://checkout.flutterwave.com/v3.js"></script>
   </head>
   <body style="margin:0;background:#0A0A0A;">
     <div id="root"></div>
