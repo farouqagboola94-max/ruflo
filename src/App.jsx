@@ -11,6 +11,7 @@ import Gallery from './sections/Gallery'
 import PhotoTools from './sections/PhotoTools'
 import Newsletter from './sections/Newsletter'
 import Lineup from './sections/Lineup'
+import Schedule from './sections/Schedule'
 import Merch from './sections/Merch'
 import Tickets from './sections/Tickets'
 import VendorReg from './sections/VendorReg'
@@ -46,6 +47,7 @@ export default function App() {
       <PhotoTools />
       <Newsletter />
       <Lineup />
+      <Schedule />
       <Merch />
       <Tickets />
       <VendorReg />
