@@ -8,6 +8,7 @@ import SplashScreen from './components/SplashScreen'
 import Hero from './sections/Hero'
 import About from './sections/About'
 import Press from './sections/Press'
+import Sponsors from './sections/Sponsors'
 import Highlights from './sections/Highlights'
 import Community from './sections/Community'
 import Testimonials from './sections/Testimonials'
@@ -18,6 +19,7 @@ import SubstackSection from './sections/SubstackSection'
 import Newsletter from './sections/Newsletter'
 import Lineup from './sections/Lineup'
 import Schedule from './sections/Schedule'
+import Venue from './sections/Venue'
 import Merch from './sections/Merch'
 import Tickets from './sections/Tickets'
 import VendorReg from './sections/VendorReg'
@@ -27,6 +29,7 @@ import Footer from './sections/Footer'
 const SECTION_TITLES = [
   { id: 'about',        title: "About | Sneakers Fest '26" },
   { id: 'press',        title: "Press | Sneakers Fest '26" },
+  { id: 'sponsors',     title: "Sponsors | Sneakers Fest '26" },
   { id: 'highlights',   title: "Experience | Sneakers Fest '26" },
   { id: 'community',    title: "Community | Sneakers Fest '26" },
   { id: 'testimonials', title: "Stories | Sneakers Fest '26" },
@@ -35,6 +38,7 @@ const SECTION_TITLES = [
   { id: 'substack',     title: "Substack | Sneakers Fest '26" },
   { id: 'lineup',       title: "Lineup | Sneakers Fest '26" },
   { id: 'schedule',     title: "Schedule | Sneakers Fest '26" },
+  { id: 'venue',        title: "Venue | Sneakers Fest '26" },
   { id: 'merch',        title: "Merch | Sneakers Fest '26" },
   { id: 'tickets',      title: "Tickets | Sneakers Fest '26" },
   { id: 'vendors',      title: "Vendors | Sneakers Fest '26" },
@@ -86,6 +90,7 @@ export default function App() {
       <Hero />
       <About />
       <Press />
+      <Sponsors />
       <Highlights />
       <Community />
       <Testimonials />
@@ -96,6 +101,7 @@ export default function App() {
       <Newsletter />
       <Lineup />
       <Schedule />
+      <Venue />
       <Merch />
       <Tickets />
       <VendorReg />
