@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /backend/
+Disallow: /.env*
+
+Sitemap: https://zallyerrands.com/sitemap.xml

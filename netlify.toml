@@ -3,6 +3,7 @@
 [build]
   publish = "allyerrands"
 
+# Clean URLs
 [[redirects]]
   from = "/portal"
   to   = "/portal/index.html"
@@ -13,13 +14,39 @@
   to   = "/admin/index.html"
   status = 200
 
-# Block direct access to backend source files in production
-[[headers]]
-  for = "/backend/*"
-  [headers.values]
-    X-Robots-Tag = "noindex"
+[[redirects]]
+  from = "/runner"
+  to   = "/runner/index.html"
+  status = 200
 
-# Security headers
+[[redirects]]
+  from = "/success"
+  to   = "/success/index.html"
+  status = 200
+
+# Block backend source files from being served publicly
+[[redirects]]
+  from   = "/backend/*"
+  to     = "/404.html"
+  status = 404
+
+# Cache static assets aggressively
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# Security headers on all pages
 [[headers]]
   for = "/*"
   [headers.values]
@@ -27,4 +54,4 @@
     X-Content-Type-Options   = "nosniff"
     Referrer-Policy          = "strict-origin-when-cross-origin"
     Permissions-Policy       = "camera=(), microphone=(), geolocation=()"
-    Content-Security-Policy  = "default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co https://hook.*.make.com https://graph.facebook.com;"
+    Content-Security-Policy  = "default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co https://hook.*.make.com https://graph.facebook.com https://api.flutterwave.com; img-src 'self' data:;"
