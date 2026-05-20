@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Za.allyErrands — Admin Node</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="admin.css" />
+
+  <!-- Replace with your real Supabase credentials -->
+  <script>
+    window.ZA_SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
+    window.ZA_SERVICE_KEY  = 'YOUR_SUPABASE_ANON_KEY'; // use service_role key server-side only; anon ok here if RLS allows
+  </script>
+</head>
+<body>
+
+  <!-- PIN GATE -->
+  <section class="pin-gate" id="pinGate">
+    <div class="pin-box">
+      <div class="pin-icon">&#128274;</div>
+      <h1>Admin Node</h1>
+      <p>Za.allyErrands operations control. Enter your access PIN.</p>
+      <form id="pinForm">
+        <input
+          type="password"
+          id="pinInput"
+          class="pin-input"
+          maxlength="8"
+          placeholder="— — — — — —"
+          autocomplete="current-password"
+          required
+        />
+        <button type="submit" class="btn btn--hazard btn--full">Access System</button>
+        <p class="pin-hint">Default PIN: <code>za2026</code> &mdash; change in admin.js before deploying.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ADMIN DASHBOARD -->
+  <div class="admin" id="adminDash" hidden>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <a href="../index.html" class="sidebar__logo">
+        <span class="logo-za">Za.</span><span class="logo-ally">ally</span><br />
+        <span class="logo-rest">Admin Node</span>
+      </a>
+      <nav class="sidebar__nav">
+        <a href="#" class="sidebar__link sidebar__link--active" data-view="queue">&#9889; Queue</a>
+        <a href="#" class="sidebar__link" data-view="all">&#9776; All Requests</a>
+        <a href="#" class="sidebar__link" data-view="runners">&#128694; Runners</a>
+        <a href="#" class="sidebar__link" data-view="stats">&#9650; Stats</a>
+      </nav>
+      <div class="sidebar__status">
+        <span class="pulse-dot"></span>
+        <span id="sidebarStatus">Connecting...</span>
+      </div>
+      <button class="sidebar__logout" id="adminLogout">Log Out</button>
+    </aside>
+
+    <!-- Main content -->
+    <main class="admin__main">
+
+      <!-- Stats bar -->
+      <div class="stats-bar" id="statsBar">
+        <div class="stat-chip">
+          <span class="stat-chip__num" id="statPending">0</span>
+          <span class="stat-chip__label">PENDING</span>
+        </div>
+        <div class="stat-chip stat-chip--orange">
+          <span class="stat-chip__num" id="statActive">0</span>
+          <span class="stat-chip__label">ACTIVE</span>
+        </div>
+        <div class="stat-chip stat-chip--green">
+          <span class="stat-chip__num" id="statDone">0</span>
+          <span class="stat-chip__label">DONE TODAY</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-chip__num" id="statTotal">0</span>
+          <span class="stat-chip__label">TOTAL</span>
+        </div>
+        <div class="stats-bar__live">
+          <span class="pulse-dot"></span> LIVE
+        </div>
+      </div>
+
+      <!-- Views -->
+      <div id="viewQueue" class="view">
+        <div class="view__header">
+          <h2>Live Queue</h2>
+          <span class="view__sub">Pending &amp; Active requests requiring action</span>
+        </div>
+        <div class="request-list" id="queueList">
+          <div class="empty-state">No pending requests. System is clear.</div>
+        </div>
+      </div>
+
+      <div id="viewAll" class="view" hidden>
+        <div class="view__header">
+          <h2>All Requests</h2>
+          <div class="view__filters">
+            <select id="filterStatus" class="a-select">
+              <option value="">All statuses</option>
+              <option value="Pending">Pending</option>
+              <option value="Active">Active</option>
+              <option value="En Route">En Route</option>
+              <option value="Completed">Completed</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+        </div>
+        <div class="request-list" id="allList">
+          <div class="empty-state">Loading...</div>
+        </div>
+      </div>
+
+      <div id="viewRunners" class="view" hidden>
+        <div class="view__header">
+          <h2>Runners</h2>
+          <button class="btn btn--hazard btn--sm" id="addRunnerBtn">+ Add Runner</button>
+        </div>
+        <div class="runner-list" id="runnerList">
+          <div class="empty-state">No runners registered yet.</div>
+        </div>
+        <!-- Add runner form -->
+        <div class="runner-form" id="runnerForm" hidden>
+          <h3>New Runner</h3>
+          <div class="form-row">
+            <div class="form-group"><label>Name</label><input type="text" id="rName" placeholder="Runner name" /></div>
+            <div class="form-group"><label>Phone</label><input type="tel" id="rPhone" placeholder="+234 800 000 0000" /></div>
+          </div>
+          <div class="form-group"><label>Zone</label><input type="text" id="rZone" placeholder="e.g. Lagos Island" /></div>
+          <div class="form-row">
+            <button class="btn btn--hazard" id="saveRunner">Save Runner</button>
+            <button class="btn btn--ghost" id="cancelRunner">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="viewStats" class="view" hidden>
+        <div class="view__header"><h2>Stats</h2></div>
+        <div class="stats-grid" id="statsGrid">
+          <div class="empty-state">Loading analytics...</div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

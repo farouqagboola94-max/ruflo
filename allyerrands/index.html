@@ -9,6 +9,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+
+  <!-- ═══ CONFIGURATION ═══
+       Replace these two values with your real Supabase credentials.
+       Get them from: Supabase Dashboard > Project Settings > API
+  ══════════════════ -->
+  <script>
+    window.ZA_DISPATCH_URL = 'https://YOUR_PROJECT_ID.supabase.co/functions/v1/dispatch';
+    window.ZA_ANON_KEY     = 'YOUR_SUPABASE_ANON_KEY';
+  </script>
 </head>
 <body>
 
@@ -25,7 +34,7 @@
         <li><a href="#process">Process</a></li>
         <li><a href="#services">Fleet</a></li>
         <li><a href="#pricing">Rates</a></li>
-        <li><a href="#portal" class="nav__portal">Client Login</a></li>
+        <li><a href="portal/index.html" class="nav__portal">Client Portal</a></li>
         <li><a href="#drop" class="nav__cta">Request Now</a></li>
       </ul>
       <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -38,24 +47,19 @@
   <section class="drop" id="drop">
     <div class="drop__grid-overlay"></div>
     <div class="drop__scanline"></div>
-
     <div class="drop__inner">
       <div class="drop__eyebrow">
         <span class="pulse-dot"></span>
         <span>SYSTEM ONLINE &mdash; LAGOS, NG</span>
       </div>
-
       <h1 class="drop__headline">
         What needs<br />
         <em>moving?</em>
       </h1>
-
       <p class="drop__sub">
         You tell us. We dispatch. It moves. No friction, no follow-ups, no missed pickups.
-        Za.allyErrands is Lagos' autonomous errand machine.
+        Za.allyErrands is Lagos’ autonomous errand machine.
       </p>
-
-      <!-- QUOTE WIDGET -->
       <form class="quote-widget" id="quoteForm" novalidate>
         <div class="quote-widget__input-wrap">
           <span class="quote-widget__prefix">&rsaquo;&rsaquo;</span>
@@ -68,9 +72,8 @@
             required
           />
         </div>
-        <button type="submit" class="btn btn--hazard">Get Instant Quote</button>
+        <button type="submit" class="btn btn--hazard">Request Ally</button>
       </form>
-
       <div class="drop__meta">
         <span class="meta-tag">&#9650; 500+ runs completed</span>
         <span class="meta-divider">|</span>
@@ -79,7 +82,6 @@
         <span class="meta-tag">Lagos &middot; Abuja &middot; PH</span>
       </div>
     </div>
-
     <div class="drop__ticker" aria-hidden="true">
       <div class="ticker__track">
         <span>GROCERY PICKUP &mdash;</span>
@@ -104,16 +106,15 @@
     <div class="process__inner">
       <header class="process__header">
         <h2>Three steps.<br /><span>Zero babysitting.</span></h2>
-        <p>The system runs itself. Here's exactly what happens the moment you submit a request.</p>
+        <p>The system runs itself. Here’s exactly what happens the moment you submit a request.</p>
       </header>
-
       <div class="process__steps">
         <div class="p-step" data-reveal>
           <div class="p-step__num">01</div>
           <div class="p-step__body">
             <div class="p-step__icon">&#9997;&#65039;</div>
             <h3>You Request</h3>
-            <p>Drop your errand details into the form. Pickup location, destination, what's being moved. That's it.</p>
+            <p>Drop your errand details into the form. Pickup location, destination, what’s being moved. That’s it.</p>
             <div class="p-step__tech">TRIGGER &rarr; WEBHOOK FIRED</div>
           </div>
         </div>
@@ -123,7 +124,7 @@
           <div class="p-step__body">
             <div class="p-step__icon">&#9889;</div>
             <h3>We Dispatch</h3>
-            <p>Our AI routes your job to the nearest available runner. You get a WhatsApp confirmation within minutes, not hours.</p>
+            <p>Our system routes your job to the nearest available runner. You get a WhatsApp confirmation within minutes, not hours.</p>
             <div class="p-step__tech">MAKE.COM &rarr; WHATSAPP API</div>
           </div>
         </div>
@@ -141,7 +142,7 @@
     </div>
   </section>
 
-  <!-- ═══ SERVICES / FLEET ═══ -->
+  <!-- ═══ SERVICES ═══ -->
   <section class="services" id="services">
     <div class="section-label">// WHAT WE MOVE</div>
     <div class="services__inner">
@@ -151,64 +152,46 @@
       </header>
       <div class="services__grid">
         <div class="s-card" data-reveal>
-          <div class="s-card__top">
-            <span class="s-card__num">01</span>
-            <span class="s-card__icon">&#128722;</span>
-          </div>
+          <div class="s-card__top"><span class="s-card__num">01</span><span class="s-card__icon">&#128722;</span></div>
           <h3>Grocery Run</h3>
           <p>Shoprite, Market Square, Spar — we shop your list and deliver fresh.</p>
           <div class="s-card__tag">AVG 90MIN</div>
         </div>
         <div class="s-card" data-reveal>
-          <div class="s-card__top">
-            <span class="s-card__num">02</span>
-            <span class="s-card__icon">&#128138;</span>
-          </div>
+          <div class="s-card__top"><span class="s-card__num">02</span><span class="s-card__icon">&#128138;</span></div>
           <h3>Pharmacy Pickup</h3>
           <p>Prescription collected. Delivered sealed, documented, direct to your door.</p>
           <div class="s-card__tag">AVG 45MIN</div>
         </div>
         <div class="s-card" data-reveal>
-          <div class="s-card__top">
-            <span class="s-card__num">03</span>
-            <span class="s-card__icon">&#128230;</span>
-          </div>
+          <div class="s-card__top"><span class="s-card__num">03</span><span class="s-card__icon">&#128230;</span></div>
           <h3>Package &amp; Post</h3>
-          <p>NIPOST, courier drops, parcel pickups. We queue so you don't have to.</p>
+          <p>NIPOST, courier drops, parcel pickups. We queue so you don’t have to.</p>
           <div class="s-card__tag">SAME DAY</div>
         </div>
         <div class="s-card" data-reveal>
-          <div class="s-card__top">
-            <span class="s-card__num">04</span>
-            <span class="s-card__icon">&#127828;</span>
-          </div>
+          <div class="s-card__top"><span class="s-card__num">04</span><span class="s-card__icon">&#127828;</span></div>
           <h3>Restaurant Pickup</h3>
           <p>Your order, straight from the kitchen. No cold deliveries, no wrong bags.</p>
           <div class="s-card__tag">AVG 30MIN</div>
         </div>
         <div class="s-card" data-reveal>
-          <div class="s-card__top">
-            <span class="s-card__num">05</span>
-            <span class="s-card__icon">&#128092;</span>
-          </div>
+          <div class="s-card__top"><span class="s-card__num">05</span><span class="s-card__icon">&#128092;</span></div>
           <h3>Dry Cleaning</h3>
           <p>Drop-off and collection handled back-to-back. Your wardrobe stays clean.</p>
           <div class="s-card__tag">SCHEDULED</div>
         </div>
         <div class="s-card s-card--open" data-reveal>
-          <div class="s-card__top">
-            <span class="s-card__num">06</span>
-            <span class="s-card__icon">&#10133;</span>
-          </div>
+          <div class="s-card__top"><span class="s-card__num">06</span><span class="s-card__icon">&#10133;</span></div>
           <h3>Custom Request</h3>
-          <p>Can't find it on the list? We'll handle it. Tell us what you need moved.</p>
+          <p>Can’t find it on the list? We’ll handle it. Tell us what you need moved.</p>
           <a href="#drop" class="s-card__link">Make a Request &rarr;</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══ PRICING / RATES ═══ -->
+  <!-- ═══ PRICING ═══ -->
   <section class="pricing" id="pricing">
     <div class="section-label">// RATES</div>
     <div class="pricing__inner">
@@ -219,9 +202,7 @@
       <div class="pricing__grid">
         <div class="rate-card" data-reveal>
           <div class="rate-card__label">PAY-AS-YOU-GO</div>
-          <div class="rate-card__price">
-            <span class="rate-currency">&#8358;</span>1,500
-          </div>
+          <div class="rate-card__price"><span class="rate-currency">&#8358;</span>1,500</div>
           <div class="rate-card__period">per errand</div>
           <ul class="rate-card__list">
             <li>Single errand</li>
@@ -231,13 +212,10 @@
           </ul>
           <a href="#drop" class="btn btn--ghost btn--full">Request Now</a>
         </div>
-
         <div class="rate-card rate-card--featured" data-reveal>
           <div class="rate-card__badge">MOST DEPLOYED</div>
           <div class="rate-card__label">WEEKLY BUNDLE</div>
-          <div class="rate-card__price">
-            <span class="rate-currency">&#8358;</span>8,000
-          </div>
+          <div class="rate-card__price"><span class="rate-currency">&#8358;</span>8,000</div>
           <div class="rate-card__period">per week</div>
           <ul class="rate-card__list">
             <li>7 errands per week</li>
@@ -248,12 +226,9 @@
           </ul>
           <a href="#drop" class="btn btn--hazard btn--full">Request Now</a>
         </div>
-
         <div class="rate-card" data-reveal>
           <div class="rate-card__label">MONTHLY PLAN</div>
-          <div class="rate-card__price">
-            <span class="rate-currency">&#8358;</span>25,000
-          </div>
+          <div class="rate-card__price"><span class="rate-currency">&#8358;</span>25,000</div>
           <div class="rate-card__period">per month</div>
           <ul class="rate-card__list">
             <li>Unlimited errands</li>
@@ -268,24 +243,20 @@
     </div>
   </section>
 
-  <!-- ═══ CLIENT PORTAL ═══ -->
+  <!-- ═══ CLIENT PORTAL PREVIEW ═══ -->
   <section class="portal" id="portal">
     <div class="portal__inner">
       <div class="portal__copy">
         <div class="section-label">// CLIENT PORTAL</div>
         <h2>Track every run.<br /><span>In real time.</span></h2>
-        <p>
-          Once you're onboarded, your dedicated portal shows every errand: in-queue,
-          dispatched, en-route, delivered. Powered by Supabase live sync.
-          No refresh required.
-        </p>
+        <p>Once you’re onboarded, your dedicated portal shows every errand: in-queue, dispatched, en-route, delivered. Powered by Supabase live sync. No refresh required.</p>
         <ul class="portal__features">
           <li><span class="feat-dot"></span> Live runner location</li>
           <li><span class="feat-dot"></span> Order history &amp; receipts</li>
           <li><span class="feat-dot"></span> WhatsApp notifications</li>
           <li><span class="feat-dot"></span> Recurring errand scheduler</li>
         </ul>
-        <a href="#drop" class="btn btn--hazard">Get Access &rarr;</a>
+        <a href="portal/index.html" class="btn btn--hazard">Open Portal &rarr;</a>
       </div>
       <div class="portal__mockup" aria-hidden="true">
         <div class="mockup-window">
@@ -302,31 +273,20 @@
             </div>
             <div class="mockup-errand mockup-errand--active">
               <div class="errand-status">EN ROUTE</div>
-              <div class="errand-info">
-                <strong>Grocery Run</strong>
-                <span>Shoprite VI &rarr; Ikoyi</span>
-              </div>
+              <div class="errand-info"><strong>Grocery Run</strong><span>Shoprite VI &rarr; Ikoyi</span></div>
               <div class="errand-eta">12 MIN</div>
             </div>
             <div class="mockup-errand">
               <div class="errand-status errand-status--queue">QUEUED</div>
-              <div class="errand-info">
-                <strong>Pharmacy Pickup</strong>
-                <span>Reddington Hospital</span>
-              </div>
+              <div class="errand-info"><strong>Pharmacy Pickup</strong><span>Reddington Hospital</span></div>
               <div class="errand-eta">~45M</div>
             </div>
             <div class="mockup-errand mockup-errand--done">
               <div class="errand-status errand-status--done">DONE</div>
-              <div class="errand-info">
-                <strong>Package Drop</strong>
-                <span>DHL Lekki Phase 1</span>
-              </div>
+              <div class="errand-info"><strong>Package Drop</strong><span>DHL Lekki Phase 1</span></div>
               <div class="errand-eta">&#10003;</div>
             </div>
-            <div class="mockup-progress">
-              <div class="progress-bar"></div>
-            </div>
+            <div class="mockup-progress"><div class="progress-bar"></div></div>
           </div>
         </div>
       </div>
@@ -346,7 +306,7 @@
         </div>
         <div class="proof-card proof-card--accent" data-reveal>
           <div class="proof-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p>&ldquo;I&rsquo;m on the monthly plan. I haven&rsquo;t personally run a single errand since March. Za.allyErrands is the best business decision I&rsquo;ve made all year.&rdquo;</p>
+          <p>&ldquo;I’m on the monthly plan. I haven’t personally run a single errand since March. Za.allyErrands is the best business decision I’ve made all year.&rdquo;</p>
           <div class="proof-card__author">Amara M. &mdash; <em>Lagos</em></div>
         </div>
         <div class="proof-card" data-reveal>
@@ -375,7 +335,7 @@
         <a href="#drop" class="nav__logo">
           <span class="logo-za">Za.</span><span class="logo-ally">ally</span><span class="logo-rest">Errands</span>
         </a>
-        <p>Lagos&rsquo; autonomous errand dispatch. Built for people who value their time above everything.</p>
+        <p>Lagos’ autonomous errand dispatch. Built for people who value their time above everything.</p>
         <div class="footer__socials">
           <a href="#" class="social" aria-label="Instagram">IG</a>
           <a href="#" class="social" aria-label="X / Twitter">&#120143;</a>
@@ -397,7 +357,7 @@
         <ul>
           <li><a href="#process">How It Works</a></li>
           <li><a href="#pricing">Rates</a></li>
-          <li><a href="#portal">Client Portal</a></li>
+          <li><a href="portal/index.html">Client Portal</a></li>
           <li><a href="#drop">Book Now</a></li>
         </ul>
       </div>
@@ -418,13 +378,13 @@
   </footer>
 
   <!-- ═══ QUOTE MODAL ═══ -->
-  <div class="modal" id="quoteModal" role="dialog" aria-modal="true" aria-label="Instant Quote">
+  <div class="modal" id="quoteModal" role="dialog" aria-modal="true" aria-label="Request an Ally">
     <div class="modal__backdrop" id="modalBackdrop"></div>
     <div class="modal__box">
       <button class="modal__close" id="modalClose" aria-label="Close">&times;</button>
       <div class="modal__icon">&#9889;</div>
-      <h3>Get Your Quote</h3>
-      <p>Fill in the details below. We&rsquo;ll confirm your price and runner via WhatsApp within 15 minutes.</p>
+      <h3>Request an Ally</h3>
+      <p>Fill in the details. We’ll confirm your price and runner via WhatsApp within 15 minutes.</p>
       <form id="fullQuoteForm" novalidate>
         <div class="form-group">
           <label for="qErrand">Errand Description</label>

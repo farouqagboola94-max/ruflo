@@ -1,0 +1,13 @@
+# Za.allyErrands — Vercel Deployment Config
+# Use this instead of netlify.toml if deploying to Vercel.
+{
+  "version": 2,
+  "builds": [
+    { "src": "allyerrands/**", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/portal",       "dest": "/allyerrands/portal/index.html" },
+    { "src": "/admin",        "dest": "/allyerrands/admin/index.html" },
+    { "src": "/(.*)",         "dest": "/allyerrands/$1" }
+  ]
+}
