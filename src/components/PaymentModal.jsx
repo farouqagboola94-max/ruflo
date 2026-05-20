@@ -176,7 +176,7 @@ export default function PaymentModal({ tier, onClose }) {
               <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke={B.neonLime} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </div>
             <p style={{ color: B.neonLime, fontFamily: 'Orbitron,sans-serif', fontSize: 11, letterSpacing: 3, marginBottom: 10, fontWeight: 700 }}>PAYMENT CONFIRMED</p>
-            <p style={{ color: B.white, fontFamily: 'Bebas Neue,sans-serif', fontSize: 32, letterSpacing: 2, lineHeight: 1, marginBottom: 20 }}>SEE YOU JULY 18!</p>
+            <p style={{ color: B.white, fontFamily: 'Bebas Neue,sans-serif', fontSize: 32, letterSpacing: 2, lineHeight: 1, marginBottom: 20 }}>SEE YOU DECEMBER 12!</p>
             <div style={{ padding: '14px 20px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, marginBottom: 20 }}>
               <p style={{ color: '#555', fontFamily: 'Space Mono,monospace', fontSize: 9, letterSpacing: 2, marginBottom: 6 }}>BOOKING REFERENCE</p>
               <p style={{ color: tier.color, fontFamily: 'Space Mono,monospace', fontSize: 12, wordBreak: 'break-all' }}>{success.ref}</p>
@@ -196,7 +196,7 @@ export default function PaymentModal({ tier, onClose }) {
             <div style={{ padding: '12px 16px', background: `${tier.color}08`, border: `1px solid ${tier.color}20`, borderRadius: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
                 <p style={{ color: '#555', fontFamily: 'Space Mono,monospace', fontSize: 9, letterSpacing: 1, marginBottom: 2 }}>1 × {tier.name} TICKET</p>
-                <p style={{ color: B.smoke, fontFamily: 'Space Mono,monospace', fontSize: 10 }}>The Sole Exhibition · July 18 2026</p>
+                <p style={{ color: B.smoke, fontFamily: 'Space Mono,monospace', fontSize: 10 }}>The Sole Exhibition · December 12 2026</p>
               </div>
               <p style={{ color: tier.color, fontFamily: 'Orbitron,sans-serif', fontSize: 20, fontWeight: 900, textShadow: `0 0 16px ${tier.color}60` }}>{tier.price}</p>
             </div>

@@ -4,7 +4,7 @@ import { B } from '../tokens'
 const API_URL = import.meta.env.VITE_OLLAMA_URL || ''
 const MODEL = import.meta.env.VITE_OLLAMA_MODEL || 'llama3.2'
 
-const SYSTEM = `You are the Sneakers Fest AI assistant — Lagos, Nigeria's premier sneaker culture event and community. Be knowledgeable, enthusiastic, and speak in a friendly urban tone. Key facts: Event date July 18 2026, Lagos Nigeria. Tickets: General ₦15,000 · VIP ₦35,000 · Ultra VIP ₦75,000. Headliner: DJ Spinall. Community: 10,000+ members across TikTok, YouTube, Twitter, Instagram, Snapchat, WhatsApp.`
+const SYSTEM = `You are the Sneakers Fest AI assistant — Lagos, Nigeria's premier sneaker culture event and community. Be knowledgeable, enthusiastic, and speak in a friendly urban tone. Key facts: Event date December 12 2026, Lagos Nigeria. Tickets: General ₦15,000 · VIP ₦35,000 · Ultra VIP ₦75,000. Headliner: DJ Spinall. Community: 10,000+ members across TikTok, YouTube, Twitter, Instagram, Snapchat, WhatsApp.`
 
 export default function AIChat() {
   const [open, setOpen] = useState(false)

@@ -38,7 +38,7 @@ export default function About() {
             </div>
             <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: B.smoke, lineHeight: 1.8, marginBottom: 18 }}>
               We create content daily across Instagram, Twitter, YouTube, Snapchat, and WhatsApp.
-              The community grows 365 days a year. July 18 is just the day we all meet in person.
+              The community grows 365 days a year. December 12 is just the day we all meet in person.
             </div>
             <div style={{
               fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.neonCyan,

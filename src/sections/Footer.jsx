@@ -59,7 +59,7 @@ export default function Footer() {
               ONLINE COMMUNITY. PHYSICAL PRESENCE.
             </div>
             <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: B.smoke, lineHeight: 1.75, maxWidth: 280 }}>
-              West Africa's premier sneaker culture community. Online every day. In person July 18, 2026.
+              West Africa's premier sneaker culture community. Online every day. In person December 12, 2026.
             </div>
           </div>
 
@@ -142,7 +142,7 @@ export default function Footer() {
               textDecoration: "none", borderRadius: 2, textAlign: "center", marginBottom: 16,
             }}>JOIN COMMUNITY</a>
             <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 11, color: B.smoke, lineHeight: 1.7 }}>
-              Online first. Lagos July 18. Six platforms. One community.
+              Online first. Lagos December 12. Six platforms. One community.
             </div>
           </div>
         </div>

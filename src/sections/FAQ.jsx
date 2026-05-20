@@ -3,12 +3,12 @@ import { B } from '../tokens'
 import { SectionTag } from '../components/Shared'
 
 const FAQS = [
-  { q: "When and where is Sneakers Fest 2026?", a: "July 18, 2026 at Eko Atlantic, Lagos, Nigeria. Doors open at 12:00 PM and the event runs until 10:00 PM." },
+  { q: "When and where is Sneakers Fest 2026?", a: "December 12, 2026 at Eko Atlantic, Lagos, Nigeria. Doors open at 12:00 PM and the event runs until 10:00 PM." },
   { q: "What is the minimum age for entry?", a: "Sneakers Fest is open to attendees aged 16 and above. Under-18s must be accompanied by a responsible adult." },
   { q: "Can I bring sneakers to sell?", a: "Yes! Register as a vendor. Limited booths are available on a first-come first-served basis. DM @SNEAKERSFEST or email info@sneakersfest.com to apply." },
   { q: "Is there parking on-site?", a: "Yes. Eko Atlantic has extensive parking facilities. Shuttle services will also run from key drop-off points on Lagos Island and Victoria Island." },
   { q: "Are refunds available?", a: "Tickets are non-refundable. However, you may transfer your ticket to another person up to 48 hours before the event by contacting us directly." },
-  { q: "What payment methods are accepted?", a: "We accept debit/credit cards, bank transfer, and USSD payments via Paystack. International cards are fully supported." },
+  { q: "What payment methods are accepted?", a: "We accept debit/credit cards, bank transfer, and USSD payments via Paystack and Flutterwave. International cards are fully supported." },
 ]
 
 export default function FAQ() {

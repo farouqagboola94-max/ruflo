@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, AmberGlow } from '../components/Shared'
 
-const EVENT_DATE = new Date('2026-07-18T12:00:00')
+const EVENT_DATE = new Date('2026-12-12T12:00:00')
 
 function useCountdown(target) {
   const [time, setTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
@@ -26,7 +26,6 @@ function useCountdown(target) {
 
 const CountBox = ({ value, label }) => (
   <div style={{ textAlign: "center" }}>
-    {/* Glassmorphism countdown box */}
     <div style={{
       width: 78, height: 90,
       display: "flex", alignItems: "center", justifyContent: "center",
@@ -38,17 +37,14 @@ const CountBox = ({ value, label }) => (
       position: "relative", overflow: "hidden",
       boxShadow: `0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.12)`,
     }}>
-      {/* Inner sheen */}
       <div style={{
         position: "absolute", top: 0, left: 0, right: 0, height: 1,
         background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)",
       }} />
-      {/* Flip line */}
       <div style={{
         position: "absolute", top: "50%", left: 0, right: 0, height: 1,
         background: "rgba(0,0,0,0.4)",
       }} />
-      {/* Upper half tint */}
       <div style={{
         position: "absolute", top: 0, left: 0, right: 0, height: "50%",
         background: "rgba(255,255,255,0.03)",
@@ -75,7 +71,6 @@ export default function Hero() {
   return (
     <section style={{
       minHeight: "100vh", position: "relative", overflow: "hidden",
-      /* Enhanced background: deep void with subtle purple tint (cyberpunk noir) */
       background: `
         radial-gradient(ellipse 80% 60% at 70% 30%, ${B.amber}08 0%, transparent 60%),
         radial-gradient(ellipse 60% 80% at 20% 70%, ${B.neonCyan}06 0%, transparent 60%),
@@ -89,7 +84,6 @@ export default function Hero() {
       <GrainOverlay />
       <ScanLines opacity={0.05} />
 
-      {/* Layered amber glow — multiple passes for depth */}
       <div style={{
         position: "absolute", top: "15%", right: "12%",
         width: 500, height: 500,
@@ -109,7 +103,6 @@ export default function Hero() {
         filter: "blur(50px)", pointerEvents: "none",
       }} />
 
-      {/* Animated grid */}
       <div style={{
         position: "absolute", inset: 0,
         opacity: 0.025,
@@ -117,25 +110,21 @@ export default function Hero() {
         backgroundSize: "60px 60px",
       }} />
 
-      {/* Primary diagonal streak */}
       <div style={{
         position: "absolute", top: "-5%", left: "-5%", width: "65%", height: 1,
         background: `linear-gradient(90deg, transparent, ${B.neonCyan}60, ${B.neonMagenta}40, transparent)`,
         transform: "rotate(-18deg)", filter: "blur(1px)",
       }} />
-      {/* Secondary diagonal streak */}
       <div style={{
         position: "absolute", bottom: "20%", right: "-5%", width: "50%", height: 1,
         background: `linear-gradient(90deg, transparent, ${B.amber}40, transparent)`,
         transform: "rotate(-8deg)",
       }} />
 
-      {/* Corner brackets */}
       <div style={{ position: "absolute", top: 80, left: 24, width: 44, height: 44, borderTop: `2px solid ${B.neonCyan}50`, borderLeft: `2px solid ${B.neonCyan}50` }} />
       <div style={{ position: "absolute", top: 80, right: 24, width: 44, height: 44, borderTop: `2px solid ${B.neonCyan}50`, borderRight: `2px solid ${B.neonCyan}50` }} />
 
       <div style={{ position: "relative", zIndex: 10, textAlign: "center", maxWidth: 940, animation: "fadeUp 0.8s ease both" }}>
-        {/* Location pill */}
         <div style={{
           display: "inline-flex", alignItems: "center", gap: 8, marginBottom: 28,
           padding: "5px 16px",
@@ -150,7 +139,6 @@ export default function Hero() {
           </span>
         </div>
 
-        {/* Hero title — enhanced glow stack */}
         <div style={{
           fontFamily: "'Bebas Neue', sans-serif",
           fontSize: "clamp(72px, 15vw, 150px)",
@@ -191,7 +179,6 @@ export default function Hero() {
           <span style={{ color: B.amber }}>Lagos has never seen anything like this.</span>
         </div>
 
-        {/* Countdown — glass boxes */}
         <div style={{ marginBottom: 44 }}>
           <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.neonMagenta, letterSpacing: "0.45em", marginBottom: 18,
             textShadow: `0 0 10px ${B.neonMagenta}40`,
@@ -208,11 +195,10 @@ export default function Hero() {
             <CountBox value={time.seconds} label="SEC" />
           </div>
           <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.smoke, marginTop: 14, letterSpacing: "0.25em" }}>
-            JULY 18, 2026 — DOORS 12:00 PM
+            DECEMBER 12, 2026 — DOORS 12:00 PM
           </div>
         </div>
 
-        {/* CTAs */}
         <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
           <a
             href="#tickets"
@@ -244,7 +230,6 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Scroll indicator */}
       <div style={{
         position: "absolute", bottom: 28, left: "50%", transform: "translateX(-50%)",
         display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
