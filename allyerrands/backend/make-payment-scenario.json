@@ -1,0 +1,41 @@
+{
+  "_comment": "Za.allyErrands — Make.com Scenario 2: Payment Confirmed → Dispatch Phalanx",
+  "_instructions": [
+    "Import this into Make.com as a SEPARATE scenario.",
+    "This fires when the Flutterwave webhook (Edge Function: flw-webhook)",
+    "pings MAKE_PAID_WEBHOOK_URL after a successful payment.",
+    "It sends the hard dispatch alert to the Phalanx group."
+  ],
+  "name": "Za.allyErrands — Payment Confirmed Dispatch",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "label": "Receive Payment Confirmed Event",
+      "parameters": { "hook": "REPLACE_ME_paid_webhook_id", "maxResults": 1 }
+    },
+    {
+      "id": 2,
+      "module": "whatsapp-business-cloud:SendMessage",
+      "label": "Phalanx: DISPATCH NOW",
+      "parameters": {
+        "connection": "REPLACE_ME_whatsapp_connection_id",
+        "to": "REPLACE_ME_phalanx_group_id",
+        "messageType": "text",
+        "text": "✅ *PAYMENT CONFIRMED — DISPATCH NOW*\n\n*Job ID:* {{1.request_id}}\n*TX Ref:* {{1.tx_ref}}\n*Client:* {{1.client_name}} | {{1.client_phone}}\n*Pickup:* {{1.pickup}}\n*Drop-off:* {{1.dropoff}}\n*Item:* {{1.description}}\n*Paid:* ₦{{formatNumber(1.amount; 2; '.'; ',')}}\n*Time:* {{formatDate(1.paid_at; 'DD MMM YYYY HH:mm')}}\n\n🔴 ASSIGN A RUNNER NOW. Client is watching the portal."
+      }
+    },
+    {
+      "id": 3,
+      "module": "whatsapp-business-cloud:SendMessage",
+      "label": "Client: Runner Being Assigned",
+      "_note": "Optional: send a second WhatsApp to the client. The Edge Function already sent one. Add this only if you want a follow-up after assignment.",
+      "parameters": {
+        "connection": "REPLACE_ME_whatsapp_connection_id",
+        "to": "{{1.client_phone}}",
+        "messageType": "text",
+        "text": "⚡ *Za.allyErrands Update*\n\nPayment received. ₦{{1.amount}} confirmed.\n\nA runner is being assigned to your job right now. You’ll get another update when they’re en route.\n\nTrack live: zallyerrands.com/portal"
+      }
+    }
+  ]
+}

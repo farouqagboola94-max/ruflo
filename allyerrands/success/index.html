@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Za.allyErrands — Payment Confirmed</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="success.css" />
+  <script>
+    window.ZA_SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
+    window.ZA_ANON_KEY     = 'YOUR_SUPABASE_ANON_KEY';
+  </script>
+</head>
+<body>
+
+  <div class="success-wrap">
+    <div class="success-box">
+
+      <div class="logo">
+        <a href="../index.html">
+          <span class="logo-za">Za.</span><span class="logo-ally">ally</span><span class="logo-rest">Errands</span>
+        </a>
+      </div>
+
+      <!-- Loading state -->
+      <div id="stateLoading" class="state">
+        <div class="spinner"></div>
+        <p>Verifying your payment...</p>
+      </div>
+
+      <!-- Success state -->
+      <div id="stateSuccess" class="state" hidden>
+        <div class="icon-wrap icon-wrap--green">&#10003;</div>
+        <h1>Payment Confirmed</h1>
+        <p class="lead">Your runner is being dispatched right now. You’ll receive a WhatsApp update within minutes.</p>
+        <div class="detail-block" id="jobDetail"></div>
+        <div class="actions">
+          <a href="../portal/index.html" class="btn btn--hazard">Track My Run &rarr;</a>
+          <a href="../index.html" class="btn btn--ghost">Back to Home</a>
+        </div>
+      </div>
+
+      <!-- Already processed -->
+      <div id="stateDuplicate" class="state" hidden>
+        <div class="icon-wrap icon-wrap--orange">&#9888;</div>
+        <h1>Already Processed</h1>
+        <p class="lead">This payment was already confirmed. Check your portal for the latest status.</p>
+        <div class="actions">
+          <a href="../portal/index.html" class="btn btn--hazard">Open Portal &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Error state -->
+      <div id="stateError" class="state" hidden>
+        <div class="icon-wrap icon-wrap--red">&#33;</div>
+        <h1>Something went wrong</h1>
+        <p class="lead">We couldn’t verify your payment automatically. Don’t worry — WhatsApp us and we’ll confirm manually.</p>
+        <div class="actions">
+          <a href="https://wa.me/2348000000000" class="btn btn--hazard">WhatsApp Support</a>
+          <a href="../index.html" class="btn btn--ghost">Back to Home</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="success.js"></script>
+</body>
+</html>
