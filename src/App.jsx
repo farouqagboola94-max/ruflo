@@ -4,7 +4,9 @@ import Navbar from './components/Navbar'
 import SocialDock from './components/SocialDock'
 import AIChat from './components/AIChat'
 import BackToTop from './components/BackToTop'
+import WhatsAppButton from './components/WhatsAppButton'
 import SplashScreen from './components/SplashScreen'
+import Reveal from './components/Reveal'
 import Hero from './sections/Hero'
 import About from './sections/About'
 import Press from './sections/Press'
@@ -87,26 +89,27 @@ export default function App() {
       <SocialDock />
       <AIChat />
       <BackToTop />
+      <WhatsAppButton />
       <Hero />
-      <About />
-      <Press />
-      <Sponsors />
-      <Highlights />
-      <Community />
-      <Testimonials />
-      <Comics />
-      <Gallery />
-      <PhotoTools />
-      <SubstackSection />
-      <Newsletter />
-      <Lineup />
-      <Schedule />
-      <Venue />
-      <Merch />
-      <Tickets />
-      <VendorReg />
-      <FAQ />
-      <Footer />
+      <Reveal><About /></Reveal>
+      <Reveal><Press /></Reveal>
+      <Reveal><Sponsors /></Reveal>
+      <Reveal><Highlights /></Reveal>
+      <Reveal><Community /></Reveal>
+      <Reveal><Testimonials /></Reveal>
+      <Reveal><Comics /></Reveal>
+      <Reveal><Gallery /></Reveal>
+      <Reveal><PhotoTools /></Reveal>
+      <Reveal><SubstackSection /></Reveal>
+      <Reveal><Newsletter /></Reveal>
+      <Reveal><Lineup /></Reveal>
+      <Reveal><Schedule /></Reveal>
+      <Reveal><Venue /></Reveal>
+      <Reveal><Merch /></Reveal>
+      <Reveal><Tickets /></Reveal>
+      <Reveal><VendorReg /></Reveal>
+      <Reveal><FAQ /></Reveal>
+      <Reveal><Footer /></Reveal>
     </div>
   )
 }
