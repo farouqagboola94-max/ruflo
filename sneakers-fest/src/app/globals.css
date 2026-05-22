@@ -3,8 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --orange: #FF5C00;
-  --yellow: #FFD600;
+  --orange: #FF6B2C;
+  --amber: #FFA500;
+  --neon: #39FF14;
 }
 
 * {
@@ -23,14 +24,14 @@ body {
 
 @layer utilities {
   .text-gradient {
-    background: linear-gradient(135deg, #FF5C00, #FFD600);
+    background: linear-gradient(135deg, #FF6B2C, #FFA500);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .border-gradient {
-    border-image: linear-gradient(135deg, #FF5C00, #FFD600) 1;
+    border-image: linear-gradient(135deg, #FF6B2C, #FFA500) 1;
   }
 
   .card-hover {
@@ -39,10 +40,14 @@ body {
 
   .card-hover:hover {
     transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(255, 92, 0, 0.2);
+    box-shadow: 0 20px 40px rgba(255, 107, 44, 0.2);
   }
 
   .glow-orange {
-    box-shadow: 0 0 30px rgba(255, 92, 0, 0.3);
+    box-shadow: 0 0 30px rgba(255, 107, 44, 0.3);
+  }
+
+  .glow-neon {
+    box-shadow: 0 0 20px rgba(57, 255, 20, 0.25);
   }
 }

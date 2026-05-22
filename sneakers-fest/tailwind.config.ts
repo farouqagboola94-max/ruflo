@@ -10,11 +10,14 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          orange: '#FF5C00',
-          yellow: '#FFD600',
-          dark: '#0A0A0A',
+          orange: '#FF6B2C',  // Forge Orange
+          amber: '#FFA500',   // Amber
+          neon: '#39FF14',    // Neon Green
+          steel: '#C0C0C0',  // Cold Steel
+          dark: '#0A0A0A',    // Void Black
           gray: '#1A1A1A',
           muted: '#2A2A2A',
+          yellow: '#FFD600',  // legacy alias
         }
       },
       fontFamily: {
