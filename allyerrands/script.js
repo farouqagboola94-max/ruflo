@@ -4,14 +4,8 @@
 (function () {
   'use strict';
 
-  // ── CONFIG ──
-  // Replace these with your real Supabase project values.
-  // In production, bake them in via your build tool / Framer env vars.
   const CONFIG = {
-    // Your Supabase Edge Function URL:
-    // https://YOUR_PROJECT_ID.supabase.co/functions/v1/dispatch
     dispatchUrl: window.ZA_DISPATCH_URL || 'https://YOUR_PROJECT_ID.supabase.co/functions/v1/dispatch',
-    // Public anon key (safe to expose in frontend)
     anonKey:     window.ZA_ANON_KEY    || 'YOUR_SUPABASE_ANON_KEY',
   };
 
@@ -128,10 +122,8 @@
       });
 
       const data = await res.json();
-
       if (!res.ok) throw new Error(data.error || 'Submission failed');
 
-      // Success — store job ID for portal
       if (data.request_id) sessionStorage.setItem('za_last_request', data.request_id);
       sessionStorage.setItem('za_phone', phone);
 
@@ -219,13 +211,11 @@
   }, { threshold: 0.5 });
   document.querySelectorAll('.counter-num[data-target]').forEach(el => counterObs.observe(el));
 
-  // ── Share count (grows from localStorage) ──
+  // ── Share count ──
   const shareCountEl = document.getElementById('shareCount');
   if (shareCountEl) {
     const stored = parseInt(localStorage.getItem('za_share_count') || '0', 10);
-    const base = 1247;
-    const count = base + stored;
-    shareCountEl.textContent = count.toLocaleString();
+    shareCountEl.textContent = (1247 + stored).toLocaleString();
   }
 
   // ── Copy link button ──
@@ -277,7 +267,6 @@
 
 })();
 
-// Shake animation
 (function () {
   const s = document.createElement('style');
   s.textContent = `

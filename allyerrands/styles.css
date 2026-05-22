@@ -17,7 +17,7 @@
   --gray-300:    #999999;
   --gray-100:    #CCCCCC;
   --white:       #F2F0EB;
-  --orange:      #FF4500;   /* hazard orange */
+  --orange:      #FF4500;
   --orange-dim:  #CC3700;
   --orange-glow: rgba(255, 69, 0, 0.18);
   --green:       #00FF88;
@@ -45,7 +45,7 @@ body {
   color: var(--white);
   line-height: 1.6;
   overflow-x: hidden;
-  cursor: none;   /* custom cursor on desktop */
+  cursor: none;
 }
 @media (pointer: coarse) { body { cursor: auto; } }
 
@@ -209,7 +209,6 @@ body {
 }
 .nav__cta:hover { background: var(--orange-dim); }
 
-/* Hamburger */
 .hamburger {
   display: none;
   flex-direction: column;
@@ -244,7 +243,6 @@ body {
   padding-top: 80px;
 }
 
-/* Grid overlay */
 .drop__grid-overlay {
   position: absolute;
   inset: 0;
@@ -255,7 +253,6 @@ body {
   pointer-events: none;
 }
 
-/* Scanline */
 .drop__scanline {
   position: absolute;
   inset: 0;
@@ -290,7 +287,6 @@ body {
   margin-bottom: 32px;
 }
 
-/* Pulse dot */
 .pulse-dot {
   display: inline-block;
   width: 8px;
@@ -328,7 +324,6 @@ body {
   margin-bottom: 48px;
 }
 
-/* Quote widget */
 .quote-widget {
   display: flex;
   align-items: stretch;
@@ -382,7 +377,6 @@ body {
 }
 .meta-divider { color: var(--gray-700); }
 
-/* Ticker */
 .drop__ticker {
   position: relative;
   z-index: 1;
@@ -723,7 +717,6 @@ body {
   flex-shrink: 0;
 }
 
-/* Mockup window */
 .portal__mockup { perspective: 800px; }
 .mockup-window {
   background: var(--gray-900);
@@ -843,9 +836,7 @@ body {
   transition: background var(--fast);
 }
 .proof-card:hover { background: var(--black-3); }
-.proof-card--accent {
-  background: var(--orange);
-}
+.proof-card--accent { background: var(--orange); }
 .proof-card--accent:hover { background: var(--orange-dim); }
 .proof-card__stars {
   font-size: 0.85rem;
@@ -1048,7 +1039,6 @@ body {
   margin-bottom: 32px;
 }
 
-/* Form elements (modal + shared) */
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
 .form-group label {
@@ -1203,7 +1193,6 @@ body {
   color: var(--gray-500);
 }
 @media (max-width: 768px) { .stats-bar__inner { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 480px) { .stats-bar__inner { grid-template-columns: 1fr 1fr; } }
 
 /* ============================================================
    SHARE / TELL YOUR CREW
@@ -1257,7 +1246,6 @@ body {
 .share-cta__copy > p { color: var(--gray-300); font-size: 1.05rem; }
 .share-cta__actions { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
 
-/* WhatsApp button */
 .btn--wa {
   background: #25D366;
   color: #000 !important;
@@ -1296,7 +1284,6 @@ body {
   padding: 12px 20px 16px;
   transform: translateY(100%);
   transition: transform 0.4s var(--ease);
-  safe-area-inset-bottom: env(safe-area-inset-bottom);
   padding-bottom: calc(16px + env(safe-area-inset-bottom));
 }
 .mobile-cta.visible { transform: translateY(0); }
