@@ -11,6 +11,8 @@ import MobileCTA from './components/MobileCTA'
 import SplashScreen from './components/SplashScreen'
 import Reveal from './components/Reveal'
 import EventTicker from './components/EventTicker'
+import StreakToast from './components/StreakToast'
+import KonamiCode from './components/KonamiCode'
 import Hero from './sections/Hero'
 import About from './sections/About'
 import Press from './sections/Press'
@@ -20,6 +22,8 @@ import Community from './sections/Community'
 import Testimonials from './sections/Testimonials'
 import SneakerDNA from './sections/SneakerDNA'
 import CommunityWall from './sections/CommunityWall'
+import SneakerTrivia from './sections/SneakerTrivia'
+import ShoeColorizer from './sections/ShoeColorizer'
 import Comics from './sections/Comics'
 import Gallery from './sections/Gallery'
 import PhotoTools from './sections/PhotoTools'
@@ -43,6 +47,8 @@ const SECTION_TITLES = [
   { id: 'testimonials', title: "Stories | Sneakers Fest '26" },
   { id: 'dna',          title: "Sneaker DNA | Sneakers Fest '26" },
   { id: 'wall',         title: "The Wall | Sneakers Fest '26" },
+  { id: 'trivia',       title: "Trivia | Sneakers Fest '26" },
+  { id: 'colorizer',    title: "Shoe Builder | Sneakers Fest '26" },
   { id: 'comics',       title: "Catalyst Universe | Sneakers Fest '26" },
   { id: 'gallery',      title: "Gallery | Sneakers Fest '26" },
   { id: 'substack',     title: "Substack | Sneakers Fest '26" },
@@ -103,6 +109,8 @@ export default function App() {
       <WhatsAppButton />
       <ShareButton />
       <MobileCTA />
+      <StreakToast />
+      <KonamiCode />
 
       <Hero />
       <EventTicker />
@@ -115,6 +123,8 @@ export default function App() {
       <Reveal><Testimonials /></Reveal>
       <Reveal><SneakerDNA /></Reveal>
       <Reveal><CommunityWall /></Reveal>
+      <Reveal><SneakerTrivia /></Reveal>
+      <Reveal><ShoeColorizer /></Reveal>
       <Reveal><Comics /></Reveal>
       <Reveal><Gallery /></Reveal>
       <Reveal><PhotoTools /></Reveal>
