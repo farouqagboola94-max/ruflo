@@ -29,6 +29,9 @@ import SpinWheel from './sections/SpinWheel'
 import BadgeMaker from './sections/BadgeMaker'
 import MysteryDrop from './sections/MysteryDrop'
 import SneakerWorth from './sections/SneakerWorth'
+import ArtistSpotlight from './sections/ArtistSpotlight'
+import DropsTimeline from './sections/DropsTimeline'
+import EarlyAccess from './sections/EarlyAccess'
 import Comics from './sections/Comics'
 import Gallery from './sections/Gallery'
 import PhotoTools from './sections/PhotoTools'
@@ -59,6 +62,9 @@ const SECTION_TITLES = [
   { id: 'badge',        title: "Badge Maker | Sneakers Fest '26" },
   { id: 'mystery',      title: "Mystery Drop | Sneakers Fest '26" },
   { id: 'worth',        title: "Collection Worth | Sneakers Fest '26" },
+  { id: 'artists',      title: "Artists | Sneakers Fest '26" },
+  { id: 'timeline',     title: "Drops Timeline | Sneakers Fest '26" },
+  { id: 'waitlist',     title: "Early Access | Sneakers Fest '26" },
   { id: 'comics',       title: "Catalyst Universe | Sneakers Fest '26" },
   { id: 'gallery',      title: "Gallery | Sneakers Fest '26" },
   { id: 'substack',     title: "Substack | Sneakers Fest '26" },
@@ -140,6 +146,9 @@ export default function App() {
       <Reveal><BadgeMaker /></Reveal>
       <Reveal><MysteryDrop /></Reveal>
       <Reveal><SneakerWorth /></Reveal>
+      <Reveal><ArtistSpotlight /></Reveal>
+      <Reveal><DropsTimeline /></Reveal>
+      <Reveal><EarlyAccess /></Reveal>
       <Reveal><Comics /></Reveal>
       <Reveal><Gallery /></Reveal>
       <Reveal><PhotoTools /></Reveal>

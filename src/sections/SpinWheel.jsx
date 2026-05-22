@@ -3,14 +3,14 @@ import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 
 const PRIZES = [
-  { label: '₦2,000 OFF',   sub: 'ticket discount',   color: '#F5A623', emoji: '💰' },
-  { label: 'MERCH RAFFLE',      sub: 'free entry to draw', color: '#00F0FF', emoji: '👕' },
-  { label: 'VIP UPGRADE',       sub: 'from GA to VIP',     color: '#FF2D7B', emoji: '⭐' },
-  { label: 'MEET & GREET',      sub: 'backstage pass',     color: '#B8FF00', emoji: '🤝' },
-  { label: 'EARLY ACCESS',      sub: '1hr before doors',   color: '#7B2FBE', emoji: '🚀' },
-  { label: 'MYSTERY DROP',      sub: 'revealed at event',  color: '#FF6B35', emoji: '\ud83c�' },
-  { label: 'TRY AGAIN',         sub: 'better luck next time', color: '#3A3A3A', emoji: '\ud83d�' },
-  { label: '₦5,000 OFF',   sub: 'any ticket tier',    color: '#FFD080', emoji: '\ud83c�' },
+  { label: '₦2,000 OFF',  sub: 'off any ticket tier',      color: '#F5A623', icon: '₦2K'  },
+  { label: 'MERCH RAFFLE',      sub: 'free draw entry',           color: '#00F0FF', icon: 'MERCH'   },
+  { label: 'VIP UPGRADE',       sub: 'GA ticket upgraded to VIP', color: '#FF2D7B', icon: 'VIP'    },
+  { label: 'MEET & GREET',      sub: 'backstage access pass',     color: '#B8FF00', icon: 'M&G'    },
+  { label: 'EARLY ACCESS',      sub: '1hr before doors open',     color: '#7B2FBE', icon: 'EARLY'  },
+  { label: 'MYSTERY DROP',      sub: 'secret collab at the event',color: '#FF6B35', icon: 'DROP'   },
+  { label: 'TRY AGAIN',         sub: 'better luck next time',     color: '#3A3A3A', icon: 'AGAIN'  },
+  { label: '₦5,000 OFF',  sub: 'off any ticket tier',       color: '#FFD080', icon: '₦5K'  },
 ]
 
 const N = PRIZES.length
@@ -27,8 +27,8 @@ function segPath(i) {
   return `M${CX} ${CY} L${x1} ${y1} A${R} ${R} 0 0 1 ${x2} ${y2}Z`
 }
 
-function textTransform(i) {
-  const mid = (i * EACH + EACH / 2 - 90)
+function labelTransform(i) {
+  const mid = i * EACH + EACH / 2 - 90
   const rad = mid * Math.PI / 180
   const tx = (CX + R * 0.62 * Math.cos(rad)).toFixed(1)
   const ty = (CY + R * 0.62 * Math.sin(rad)).toFixed(1)
@@ -51,12 +51,12 @@ export default function SpinWheel() {
     const winner = Math.floor(Math.random() * N)
     winnerRef.current = winner
 
+    // bring winning segment to pointer (top)
     const targetMod = ((360 - (winner * EACH + EACH / 2)) % 360 + 360) % 360
     const prevMod = rotation % 360
     let extra = targetMod - prevMod
     if (extra < 0) extra += 360
-    const totalAdditional = extra + 360 * (5 + Math.floor(Math.random() * 3))
-    const newRotation = rotation + totalAdditional
+    const newRotation = rotation + extra + 360 * (5 + Math.floor(Math.random() * 3))
     setRotation(newRotation)
 
     setTimeout(() => {
@@ -68,12 +68,16 @@ export default function SpinWheel() {
   const prize = result !== null ? PRIZES[result] : null
 
   return (
-    <section id="spin" style={{ background: B.charcoal, padding: '80px 20px', position: 'relative', overflow: 'hidden', textAlign: 'center' }}>
+    <section id="spin" style={{
+      background: B.charcoal, padding: '80px 20px',
+      position: 'relative', overflow: 'hidden', textAlign: 'center',
+    }}>
       <GrainOverlay /><ScanLines />
-
       <style>{`
-        @keyframes wheelGlow { 0%,100% { box-shadow: 0 0 40px ${B.amber}40; } 50% { box-shadow: 0 0 80px ${B.amber}70; } }
-        @keyframes winnerPop { from { opacity:0; transform:scale(0.7) rotate(-5deg); } to { opacity:1; transform:scale(1) rotate(0deg); } }
+        @keyframes winnerPop {
+          from { opacity: 0; transform: scale(0.7) rotate(-6deg); }
+          to   { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
       `}</style>
 
       <div style={{ maxWidth: 600, margin: '0 auto' }}>
@@ -81,82 +85,89 @@ export default function SpinWheel() {
         <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
           TEST YOUR LUCK
         </h2>
-        <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.78rem', marginBottom: 40 }}>
-          one spin per visit · prizes unlock at the event
+        <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.78rem', marginBottom: 44 }}>
+          8 prizes · one spin · claim at the gate
         </p>
 
-        {/* Pointer */}
+        {/* Pointer + Wheel */}
         <div style={{ position: 'relative', display: 'inline-block' }}>
+          {/* Pointer triangle */}
           <div style={{
-            position: 'absolute', top: -18, left: '50%', transform: 'translateX(-50%)',
+            position: 'absolute', top: -20, left: '50%',
+            transform: 'translateX(-50%)',
             width: 0, height: 0, zIndex: 20,
-            borderLeft: '12px solid transparent',
-            borderRight: '12px solid transparent',
-            borderTop: `28px solid ${B.amber}`,
-            filter: `drop-shadow(0 0 8px ${B.amber})`,
+            borderLeft: '13px solid transparent',
+            borderRight: '13px solid transparent',
+            borderTop: `32px solid ${B.amber}`,
+            filter: `drop-shadow(0 0 10px ${B.amber})`,
           }} />
 
-          {/* Wheel */}
+          {/* Wheel border glow */}
           <div style={{
-            width: 300, height: 300, borderRadius: '50%',
-            border: `4px solid ${B.amber}60`,
-            boxShadow: spinning ? `0 0 80px ${B.amber}50` : `0 0 40px ${B.amber}20`,
-            overflow: 'hidden', position: 'relative',
-            transition: 'box-shadow 0.3s',
+            width: 304, height: 304, borderRadius: '50%',
+            padding: 2,
+            background: `conic-gradient(${B.amber}, ${B.neonMagenta}, ${B.neonCyan}, ${B.amber})`,
+            boxShadow: spinning ? `0 0 60px ${B.amber}60` : `0 0 28px ${B.amber}20`,
+            transition: 'box-shadow 0.4s',
           }}>
-            <svg
-              viewBox="0 0 300 300"
-              width="300"
-              height="300"
-              style={{
-                transform: `rotate(${rotation}deg)`,
-                transition: spinning ? 'transform 5s cubic-bezier(0.05,0.75,0.18,1)' : 'none',
-                display: 'block',
-              }}
-            >
-              {PRIZES.map((p, i) => (
-                <g key={i}>
-                  <path d={segPath(i)} fill={p.color} stroke="#0A0A0A" strokeWidth="1.5" />
-                  <text
-                    transform={textTransform(i)}
-                    fill="rgba(0,0,0,0.85)"
-                    fontSize="18"
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    style={{ fontFamily: 'system-ui', userSelect: 'none' }}
-                  >
-                    {p.emoji}
-                  </text>
-                </g>
-              ))}
-              <circle cx={CX} cy={CY} r="22" fill="#0A0A0A" stroke={B.amber} strokeWidth="2" />
-              <text x={CX} y={CY} textAnchor="middle" dominantBaseline="middle" fontSize="10" fill={B.amber} style={{ fontFamily: 'monospace', fontWeight: 'bold' }}>SF</text>
-            </svg>
+            <div style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden' }}>
+              <svg
+                viewBox="0 0 300 300"
+                width="300" height="300"
+                style={{
+                  transform: `rotate(${rotation}deg)`,
+                  transition: spinning ? 'transform 5s cubic-bezier(0.05,0.72,0.18,1)' : 'none',
+                  display: 'block',
+                }}
+              >
+                {PRIZES.map((p, i) => (
+                  <g key={i}>
+                    <path d={segPath(i)} fill={p.color} stroke="#0A0A0A" strokeWidth="1.5" />
+                    <text
+                      transform={labelTransform(i)}
+                      fill="rgba(0,0,0,0.82)"
+                      fontSize="8.5"
+                      fontWeight="bold"
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      fontFamily="'Courier New', monospace"
+                    >
+                      {p.icon}
+                    </text>
+                  </g>
+                ))}
+                {/* Hub */}
+                <circle cx={CX} cy={CY} r="22" fill="#0A0A0A" stroke={B.amber} strokeWidth="2.5" />
+                <text
+                  x={CX} y={CY}
+                  textAnchor="middle" dominantBaseline="middle"
+                  fontSize="9" fontWeight="bold" fontFamily="monospace" fill={B.amber}
+                >SF26</text>
+              </svg>
+            </div>
           </div>
         </div>
 
-        <div style={{ marginTop: 36 }}>
-          {!spun || !spinning ? (
-            <button
-              onClick={spin}
-              disabled={spinning}
-              style={{
-                background: spinning ? B.gunmetal : B.amber,
-                color: spinning ? B.smoke : B.black,
-                border: 'none', padding: '14px 48px',
-                fontFamily: "'Bebas Neue'", fontSize: '1.5rem', letterSpacing: '0.1em',
-                cursor: spinning ? 'default' : 'pointer', borderRadius: 4,
-                boxShadow: spinning ? 'none' : `0 0 24px ${B.amber}60`,
-                transition: 'all 0.3s',
-              }}
-            >
-              {spinning ? 'SPINNING...' : spun ? 'SPIN AGAIN' : 'SPIN THE WHEEL'}
-            </button>
-          ) : null}
+        <div style={{ marginTop: 40 }}>
+          <button
+            onClick={spin}
+            disabled={spinning}
+            style={{
+              background: spinning ? B.gunmetal : B.amber,
+              color: spinning ? B.smoke : B.black,
+              border: 'none', padding: '14px 52px',
+              fontFamily: "'Bebas Neue'", fontSize: '1.5rem', letterSpacing: '0.1em',
+              cursor: spinning ? 'default' : 'pointer', borderRadius: 4,
+              boxShadow: spinning ? 'none' : `0 0 28px ${B.amber}60`,
+              transition: 'all 0.3s', minWidth: 220,
+            }}
+          >
+            {spinning ? 'SPINNING...' : spun ? 'SPIN AGAIN' : 'SPIN THE WHEEL'}
+          </button>
         </div>
 
-        <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.62rem', marginTop: 16 }}>
-          Prizes are redeemable at the event gate on Dec 12
+        <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.62rem', marginTop: 14 }}>
+          Prizes redeemable at the event gate · Dec 12, Eko Atlantic
         </p>
       </div>
 
@@ -166,37 +177,50 @@ export default function SpinWheel() {
           onClick={() => setResult(null)}
           style={{
             position: 'fixed', inset: 0, zIndex: 9999,
-            background: 'rgba(0,0,0,0.92)', backdropFilter: 'blur(6px)',
+            background: 'rgba(0,0,0,0.93)', backdropFilter: 'blur(8px)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}
         >
           <div
             onClick={e => e.stopPropagation()}
             style={{
-              background: B.charcoal, borderRadius: 12, padding: '48px 40px',
+              background: B.charcoal, borderRadius: 14, padding: '48px 40px',
               maxWidth: 420, width: '90%', textAlign: 'center',
               border: `2px solid ${prize.color}`,
-              boxShadow: `0 0 80px ${prize.color}50`,
-              animation: 'winnerPop 0.5s cubic-bezier(0.34,1.56,0.64,1)',
+              boxShadow: `0 0 80px ${prize.color}50, 0 0 200px ${prize.color}20`,
+              animation: 'winnerPop 0.55s cubic-bezier(0.34,1.56,0.64,1)',
             }}
           >
-            <div style={{ fontSize: '4rem', marginBottom: 16 }}>{prize.emoji}</div>
-            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', letterSpacing: '0.25em', color: prize.color, marginBottom: 12 }}>YOU WON</div>
-            <h3 style={{ fontFamily: "'Bebas Neue'", fontSize: '2.2rem', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
+            {/* Prize icon circle */}
+            <div style={{
+              width: 88, height: 88, borderRadius: '50%',
+              background: `${prize.color}25`, border: `2px solid ${prize.color}`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 24px',
+              fontFamily: "'Orbitron'", fontSize: '1.1rem', fontWeight: 900,
+              color: prize.color, letterSpacing: '0.05em',
+            }}>
+              {prize.icon}
+            </div>
+
+            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.58rem', letterSpacing: '0.3em', color: prize.color, marginBottom: 10 }}>YOU WON</div>
+            <h3 style={{ fontFamily: "'Bebas Neue'", fontSize: '2.4rem', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
               {prize.label}
             </h3>
-            <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.75rem', marginBottom: 28 }}>
+            <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.72rem', marginBottom: 28 }}>
               {prize.sub}
             </p>
+
             {prize.label !== 'TRY AGAIN' && (
               <div style={{
-                background: B.black, border: `1px solid ${prize.color}60`,
-                borderRadius: 6, padding: '10px 20px', marginBottom: 24,
-                fontFamily: "'Space Mono'", fontSize: '0.65rem', color: prize.color,
+                background: B.black, border: `1px solid ${prize.color}50`,
+                borderRadius: 6, padding: '12px 20px', marginBottom: 24,
+                fontFamily: "'Space Mono'", fontSize: '0.62rem', color: prize.color, lineHeight: 1.6,
               }}>
-                Show this screen at the event gate to claim
+                Screenshot this · show at the event gate on Dec 12 to claim
               </div>
             )}
+
             <button
               onClick={() => setResult(null)}
               style={{
