@@ -5,8 +5,12 @@ import SocialDock from './components/SocialDock'
 import AIChat from './components/AIChat'
 import BackToTop from './components/BackToTop'
 import WhatsAppButton from './components/WhatsAppButton'
+import ShareButton from './components/ShareButton'
+import ScrollProgress from './components/ScrollProgress'
+import MobileCTA from './components/MobileCTA'
 import SplashScreen from './components/SplashScreen'
 import Reveal from './components/Reveal'
+import EventTicker from './components/EventTicker'
 import Hero from './sections/Hero'
 import About from './sections/About'
 import Press from './sections/Press'
@@ -84,13 +88,20 @@ export default function App() {
         @keyframes chatSlideIn { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
         select option { background: #111; color: #fff; }
       `}</style>
+
+      <ScrollProgress />
       <SplashScreen />
       <Navbar />
       <SocialDock />
       <AIChat />
       <BackToTop />
       <WhatsAppButton />
+      <ShareButton />
+      <MobileCTA />
+
       <Hero />
+      <EventTicker />
+
       <Reveal><About /></Reveal>
       <Reveal><Press /></Reveal>
       <Reveal><Sponsors /></Reveal>
