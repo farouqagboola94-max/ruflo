@@ -2,24 +2,28 @@ import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 
 const DESKTOP_LINKS = [
-  { label: 'ABOUT',     href: '#about' },
-  { label: 'GALLERY',   href: '#gallery' },
-  { label: 'LINEUP',   href: '#lineup' },
-  { label: 'MERCH',    href: '#merch' },
-  { label: 'VENDORS',  href: '#vendors' },
-  { label: 'FAQ',      href: '#faq' },
+  { label: 'ABOUT',   href: '#about' },
+  { label: 'FNP',     href: '#fnp' },
+  { label: 'GALLERY', href: '#gallery' },
+  { label: 'LINEUP',  href: '#lineup' },
+  { label: 'MERCH',   href: '#merch' },
+  { label: 'VENDORS', href: '#vendors' },
+  { label: 'FAQ',     href: '#faq' },
 ]
 
 const MOBILE_LINKS = [
-  { label: 'ABOUT',     href: '#about' },
-  { label: 'COMMUNITY', href: '#community' },
-  { label: 'GALLERY',   href: '#gallery' },
-  { label: 'LINEUP',   href: '#lineup' },
-  { label: 'SCHEDULE', href: '#schedule' },
-  { label: 'MERCH',    href: '#merch' },
-  { label: 'TICKETS',  href: '#tickets' },
-  { label: 'VENDORS',  href: '#vendors' },
-  { label: 'FAQ',      href: '#faq' },
+  { label: 'ABOUT',           href: '#about' },
+  { label: 'FRIDAY PROTOCOL', href: '#fnp' },
+  { label: 'COMMUNITY',       href: '#community' },
+  { label: 'GALLERY',         href: '#gallery' },
+  { label: 'LINEUP',          href: '#lineup' },
+  { label: 'ARTISTS',         href: '#artists' },
+  { label: 'DROPS TIMELINE',  href: '#timeline' },
+  { label: 'SCHEDULE',        href: '#schedule' },
+  { label: 'MERCH',           href: '#merch' },
+  { label: 'EARLY ACCESS',    href: '#waitlist' },
+  { label: 'VENDORS',         href: '#vendors' },
+  { label: 'FAQ',             href: '#faq' },
 ]
 
 export default function Navbar() {
@@ -62,7 +66,7 @@ export default function Navbar() {
 
         {/* Desktop nav */}
         {!isMobile && (
-          <div style={{ display: 'flex', gap: 22, alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
             {DESKTOP_LINKS.map(link => (
               <a
                 key={link.label}
@@ -115,12 +119,12 @@ export default function Navbar() {
           <div style={{ position: 'absolute', top: '30%', left: '50%', transform: 'translate(-50%,-50%)', width: 400, height: 300, background: `radial-gradient(circle, ${B.amber}08 0%, transparent 70%)`, filter: 'blur(50px)', pointerEvents: 'none' }} />
 
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0, position: 'relative' }}>
-            {MOBILE_LINKS.map((link, i) => (
+            {MOBILE_LINKS.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
                 onClick={close}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 0', fontFamily: "'Bebas Neue', sans-serif", fontSize: 36, color: B.white, textDecoration: 'none', borderBottom: `1px solid ${B.gunmetal}`, letterSpacing: '0.04em', transition: 'color 0.2s, padding-left 0.2s' }}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 0', fontFamily: "'Bebas Neue', sans-serif", fontSize: 32, color: B.white, textDecoration: 'none', borderBottom: `1px solid ${B.gunmetal}`, letterSpacing: '0.04em', transition: 'color 0.2s, padding-left 0.2s' }}
                 onMouseEnter={e => { e.currentTarget.style.color = B.amber; e.currentTarget.style.paddingLeft = '8px' }}
                 onMouseLeave={e => { e.currentTarget.style.color = B.white; e.currentTarget.style.paddingLeft = '0' }}
               >
