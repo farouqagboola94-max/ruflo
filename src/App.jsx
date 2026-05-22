@@ -24,6 +24,11 @@ import SneakerDNA from './sections/SneakerDNA'
 import CommunityWall from './sections/CommunityWall'
 import SneakerTrivia from './sections/SneakerTrivia'
 import ShoeColorizer from './sections/ShoeColorizer'
+import HypeCounter from './sections/HypeCounter'
+import SpinWheel from './sections/SpinWheel'
+import BadgeMaker from './sections/BadgeMaker'
+import MysteryDrop from './sections/MysteryDrop'
+import SneakerWorth from './sections/SneakerWorth'
 import Comics from './sections/Comics'
 import Gallery from './sections/Gallery'
 import PhotoTools from './sections/PhotoTools'
@@ -49,6 +54,11 @@ const SECTION_TITLES = [
   { id: 'wall',         title: "The Wall | Sneakers Fest '26" },
   { id: 'trivia',       title: "Trivia | Sneakers Fest '26" },
   { id: 'colorizer',    title: "Shoe Builder | Sneakers Fest '26" },
+  { id: 'hype',         title: "Hype | Sneakers Fest '26" },
+  { id: 'spin',         title: "Spin to Win | Sneakers Fest '26" },
+  { id: 'badge',        title: "Badge Maker | Sneakers Fest '26" },
+  { id: 'mystery',      title: "Mystery Drop | Sneakers Fest '26" },
+  { id: 'worth',        title: "Collection Worth | Sneakers Fest '26" },
   { id: 'comics',       title: "Catalyst Universe | Sneakers Fest '26" },
   { id: 'gallery',      title: "Gallery | Sneakers Fest '26" },
   { id: 'substack',     title: "Substack | Sneakers Fest '26" },
@@ -125,6 +135,11 @@ export default function App() {
       <Reveal><CommunityWall /></Reveal>
       <Reveal><SneakerTrivia /></Reveal>
       <Reveal><ShoeColorizer /></Reveal>
+      <Reveal><HypeCounter /></Reveal>
+      <Reveal><SpinWheel /></Reveal>
+      <Reveal><BadgeMaker /></Reveal>
+      <Reveal><MysteryDrop /></Reveal>
+      <Reveal><SneakerWorth /></Reveal>
       <Reveal><Comics /></Reveal>
       <Reveal><Gallery /></Reveal>
       <Reveal><PhotoTools /></Reveal>

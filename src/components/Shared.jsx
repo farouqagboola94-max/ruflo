@@ -23,12 +23,12 @@ export const AmberGlow = ({ top = "10%", left = "80%", size = 200 }) => (
   }} />
 )
 
-export const SectionTag = ({ children, color }) => (
+export const SectionTag = ({ children, label, color }) => (
   <div style={{
     fontFamily: "'Space Mono', monospace", fontSize: 9,
     color: color || B.neonCyan,
     letterSpacing: "0.5em", marginBottom: 12, textTransform: "uppercase",
-  }}>{children}</div>
+  }}>{label || children}</div>
 )
 
 export const Divider = ({ color }) => (
