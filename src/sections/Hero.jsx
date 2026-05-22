@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { B } from '../tokens'
-import { GrainOverlay, ScanLines, AmberGlow } from '../components/Shared'
+import { GrainOverlay, ScanLines } from '../components/Shared'
 
 const EVENT_DATE = new Date('2026-12-12T12:00:00')
 
@@ -175,8 +175,8 @@ export default function Hero() {
           fontFamily: "'Syne', sans-serif", fontSize: "clamp(14px, 1.8vw, 18px)",
           color: B.white, lineHeight: 1.65, maxWidth: 540, margin: "0 auto 44px",
         }}>
-          200+ rare kicks. 50+ vendors. Live DJs. Custom art. Street food.<br />
-          <span style={{ color: B.amber }}>Lagos has never seen anything like this.</span>
+          Rare kicks. 30–50 curated vendors. Live DJs. Custom art. Street food.<br />
+          <span style={{ color: B.amber }}>Lagos' first dedicated sneaker culture festival.</span>
         </div>
 
         <div style={{ marginBottom: 44 }}>
@@ -212,7 +212,7 @@ export default function Hero() {
             GET TICKETS →
           </a>
           <a
-            href="#about"
+            href="#fnp"
             style={{
               padding: "15px 38px",
               background: "rgba(255,255,255,0.06)",
@@ -225,7 +225,7 @@ export default function Hero() {
               boxShadow: `inset 0 1px 0 rgba(255,255,255,0.1)`,
             }}
           >
-            LEARN MORE
+            FRIDAY PROTOCOL
           </a>
         </div>
       </div>
