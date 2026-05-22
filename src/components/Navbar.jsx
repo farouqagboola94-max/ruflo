@@ -3,6 +3,7 @@ import { B } from '../tokens'
 
 const DESKTOP_LINKS = [
   { label: 'ABOUT',   href: '#about' },
+  { label: 'ORIGIN',  href: '#origin' },
   { label: 'FNP',     href: '#fnp' },
   { label: 'GALLERY', href: '#gallery' },
   { label: 'LINEUP',  href: '#lineup' },
@@ -13,6 +14,7 @@ const DESKTOP_LINKS = [
 
 const MOBILE_LINKS = [
   { label: 'ABOUT',           href: '#about' },
+  { label: 'ORIGIN STORY',    href: '#origin' },
   { label: 'FRIDAY PROTOCOL', href: '#fnp' },
   { label: 'COMMUNITY',       href: '#community' },
   { label: 'GALLERY',         href: '#gallery' },
@@ -29,11 +31,11 @@ const MOBILE_LINKS = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 860)
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 900)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
-    const onResize = () => setIsMobile(window.innerWidth < 860)
+    const onResize = () => setIsMobile(window.innerWidth < 900)
     window.addEventListener('scroll', onScroll)
     window.addEventListener('resize', onResize)
     return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onResize) }
@@ -66,17 +68,17 @@ export default function Navbar() {
 
         {/* Desktop nav */}
         {!isMobile && (
-          <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: 18, alignItems: 'center' }}>
             {DESKTOP_LINKS.map(link => (
               <a
                 key={link.label}
                 href={link.href}
-                style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.smoke, textDecoration: 'none', letterSpacing: '0.2em', transition: 'color 0.2s' }}
+                style={{ fontFamily: "'Space Mono', monospace", fontSize: 7.5, color: B.smoke, textDecoration: 'none', letterSpacing: '0.18em', transition: 'color 0.2s' }}
                 onMouseEnter={e => e.target.style.color = B.amber}
                 onMouseLeave={e => e.target.style.color = B.smoke}
               >{link.label}</a>
             ))}
-            <a href="#tickets" style={{ padding: '8px 18px', background: B.amber, color: B.black, fontFamily: "'Space Mono', monospace", fontSize: 8, fontWeight: 700, letterSpacing: '0.15em', textDecoration: 'none', borderRadius: 2, boxShadow: `0 0 15px ${B.amber}20`, transition: 'box-shadow 0.2s' }}
+            <a href="#tickets" style={{ padding: '8px 16px', background: B.amber, color: B.black, fontFamily: "'Space Mono', monospace", fontSize: 7.5, fontWeight: 700, letterSpacing: '0.15em', textDecoration: 'none', borderRadius: 2, boxShadow: `0 0 15px ${B.amber}20`, transition: 'box-shadow 0.2s' }}
               onMouseEnter={e => e.currentTarget.style.boxShadow = `0 0 30px ${B.amber}50`}
               onMouseLeave={e => e.currentTarget.style.boxShadow = `0 0 15px ${B.amber}20`}
             >GET TICKETS</a>
@@ -115,7 +117,6 @@ export default function Navbar() {
           overflowY: 'auto',
           animation: 'fadeUp 0.2s ease',
         }}>
-          {/* Ambient glow */}
           <div style={{ position: 'absolute', top: '30%', left: '50%', transform: 'translate(-50%,-50%)', width: 400, height: 300, background: `radial-gradient(circle, ${B.amber}08 0%, transparent 70%)`, filter: 'blur(50px)', pointerEvents: 'none' }} />
 
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0, position: 'relative' }}>
@@ -124,7 +125,7 @@ export default function Navbar() {
                 key={link.label}
                 href={link.href}
                 onClick={close}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 0', fontFamily: "'Bebas Neue', sans-serif", fontSize: 32, color: B.white, textDecoration: 'none', borderBottom: `1px solid ${B.gunmetal}`, letterSpacing: '0.04em', transition: 'color 0.2s, padding-left 0.2s' }}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 0', fontFamily: "'Bebas Neue', sans-serif", fontSize: 30, color: B.white, textDecoration: 'none', borderBottom: `1px solid ${B.gunmetal}`, letterSpacing: '0.04em', transition: 'color 0.2s, padding-left 0.2s' }}
                 onMouseEnter={e => { e.currentTarget.style.color = B.amber; e.currentTarget.style.paddingLeft = '8px' }}
                 onMouseLeave={e => { e.currentTarget.style.color = B.white; e.currentTarget.style.paddingLeft = '0' }}
               >
