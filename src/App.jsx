@@ -15,6 +15,7 @@ import StreakToast from './components/StreakToast'
 import KonamiCode from './components/KonamiCode'
 import Hero from './sections/Hero'
 import About from './sections/About'
+import FridayNightProtocol from './sections/FridayNightProtocol'
 import Press from './sections/Press'
 import Sponsors from './sections/Sponsors'
 import Highlights from './sections/Highlights'
@@ -48,6 +49,7 @@ import Footer from './sections/Footer'
 
 const SECTION_TITLES = [
   { id: 'about',        title: "About | Sneakers Fest '26" },
+  { id: 'fnp',          title: "Friday Night Protocol | Sneakers Fest '26" },
   { id: 'press',        title: "Press | Sneakers Fest '26" },
   { id: 'sponsors',     title: "Sponsors | Sneakers Fest '26" },
   { id: 'highlights',   title: "Experience | Sneakers Fest '26" },
@@ -132,6 +134,7 @@ export default function App() {
       <EventTicker />
 
       <Reveal><About /></Reveal>
+      <Reveal><FridayNightProtocol /></Reveal>
       <Reveal><Press /></Reveal>
       <Reveal><Sponsors /></Reveal>
       <Reveal><Highlights /></Reveal>
