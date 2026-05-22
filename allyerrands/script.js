@@ -166,6 +166,115 @@
     ticker.parentElement.addEventListener('mouseleave', () => ticker.style.animationPlayState = 'running');
   }
 
+  // ── Live activity feed ──
+  const FEED_MESSAGES = [
+    "🏍 Runner dispatched — Chioma's grocery run, Lekki Phase 1 · just now",
+    "✅ Delivered — Emeka's pharmacy pickup, Victoria Island · 3 mins ago",
+    "🏍 En route — Tunde's package drop, Ikeja GRA · 5 mins ago",
+    "✅ Delivered — Adaeze's Shoprite run, Surulere · 8 mins ago",
+    "🏍 Runner dispatched — Femi's restaurant pickup, Ikoyi · just now",
+    "✅ Delivered — Kemi's dry cleaning, Lekki Phase 2 · 12 mins ago",
+    "🏍 En route — Chukwu's pharmacy pickup, Yaba · 2 mins ago",
+    "✅ Delivered — Sola's grocery run, Ajah · 15 mins ago",
+    "🏍 Runner dispatched — Ngozi's errand, Oniru Estate · just now",
+    "✅ Delivered — Dele's document pickup, VI · 6 mins ago",
+    "🏍 En route — Bola's package, Lekki Expressway · 4 mins ago",
+    "✅ Delivered — Tobi's Slot run, Ikeja · 18 mins ago",
+  ];
+  const feedText = document.getElementById('liveFeedText');
+  if (feedText) {
+    let feedIdx = 0;
+    setInterval(() => {
+      feedText.classList.add('fade');
+      setTimeout(() => {
+        feedIdx = (feedIdx + 1) % FEED_MESSAGES.length;
+        feedText.textContent = FEED_MESSAGES[feedIdx];
+        feedText.classList.remove('fade');
+      }, 380);
+    }, 4500);
+  }
+
+  // ── Animated counters ──
+  function animateCounter(el) {
+    const target = parseInt(el.dataset.target, 10);
+    if (!target) return;
+    const duration = 1800;
+    const start = performance.now();
+    const startVal = Math.max(0, target - Math.round(target * 0.15));
+    const step = (now) => {
+      const progress = Math.min((now - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      const current = Math.round(startVal + (target - startVal) * ease);
+      el.textContent = current >= 1000 ? current.toLocaleString() : current;
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+  const counterObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      animateCounter(entry.target);
+      counterObs.unobserve(entry.target);
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.counter-num[data-target]').forEach(el => counterObs.observe(el));
+
+  // ── Share count (grows from localStorage) ──
+  const shareCountEl = document.getElementById('shareCount');
+  if (shareCountEl) {
+    const stored = parseInt(localStorage.getItem('za_share_count') || '0', 10);
+    const base = 1247;
+    const count = base + stored;
+    shareCountEl.textContent = count.toLocaleString();
+  }
+
+  // ── Copy link button ──
+  const copyLinkBtn = document.getElementById('copyLinkBtn');
+  const copyLinkText = document.getElementById('copyLinkText');
+  if (copyLinkBtn) {
+    copyLinkBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText('https://za-allyerrands.netlify.app');
+        copyLinkText.textContent = 'Copied! ✓';
+        copyLinkBtn.style.borderColor = 'var(--green)';
+        copyLinkBtn.style.color = 'var(--green)';
+        setTimeout(() => {
+          copyLinkText.textContent = 'Copy Link';
+          copyLinkBtn.style.borderColor = '';
+          copyLinkBtn.style.color = '';
+        }, 2500);
+      } catch {
+        copyLinkText.textContent = 'Failed — try again';
+      }
+    });
+  }
+
+  // ── WhatsApp share — bump count ──
+  const waBtn = document.getElementById('waShareBtn');
+  if (waBtn) {
+    waBtn.addEventListener('click', () => {
+      const cur = parseInt(localStorage.getItem('za_share_count') || '0', 10);
+      localStorage.setItem('za_share_count', cur + 1);
+      if (shareCountEl) shareCountEl.textContent = (1247 + cur + 1).toLocaleString();
+    });
+  }
+
+  // ── Mobile sticky CTA ──
+  const mobileCta = document.getElementById('mobileCta');
+  if (mobileCta) {
+    let ctaVisible = false;
+    const heroSection = document.getElementById('drop');
+    const showCtaObs = new IntersectionObserver(([entry]) => {
+      const shouldShow = !entry.isIntersecting;
+      if (shouldShow !== ctaVisible) {
+        ctaVisible = shouldShow;
+        mobileCta.classList.toggle('visible', ctaVisible);
+        mobileCta.setAttribute('aria-hidden', !ctaVisible);
+      }
+    }, { threshold: 0.1 });
+    if (heroSection) showCtaObs.observe(heroSection);
+  }
+
 })();
 
 // Shake animation

@@ -3,8 +3,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Za.allyErrands — Lagos' autonomous errand dispatch. You request, we move. Day or night." />
-  <title>Za.allyErrands — Move Fast. No Excuses.</title>
+  <meta name="description" content="Request anything in Lagos. Dispatched in minutes, not hours. No calls, no follow-ups, no missed pickups. Za.allyErrands — Lagos' fastest errand machine." />
+  <title>Za.allyErrands — Lagos' Fastest Errand Machine</title>
+
+  <!-- ═══ SOCIAL / OG ═══ -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://za-allyerrands.netlify.app" />
+  <meta property="og:site_name" content="Za.allyErrands" />
+  <meta property="og:title" content="Za.allyErrands — Lagos' Fastest Errand Machine" />
+  <meta property="og:description" content="Request anything in Lagos. Dispatched in 8 minutes, not hours. Groceries, pharmacy, packages — no stress, no calls, just done. 1,200+ errands completed." />
+  <meta property="og:image" content="https://za-allyerrands.netlify.app/assets/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Za.allyErrands — Lagos Errand Dispatch" />
+  <meta property="og:locale" content="en_NG" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Za.allyErrands — Lagos' Fastest Errand Machine" />
+  <meta name="twitter:description" content="Request anything. Dispatched in 8 mins. Groceries, pharmacy, packages — done without you lifting a finger." />
+  <meta name="twitter:image" content="https://za-allyerrands.netlify.app/assets/og.png" />
+
+  <!-- ═══ PWA / MOBILE ═══ -->
+  <meta name="theme-color" content="#FF4500" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Za.Errands" />
+  <link rel="manifest" href="/manifest.json" />
+
+  <!-- ═══ SCHEMA ═══ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Za.allyErrands",
+    "description": "Lagos' autonomous errand dispatch service — groceries, pharmacy, packages, dry cleaning and more",
+    "url": "https://za-allyerrands.netlify.app",
+    "areaServed": [
+      { "@type": "City", "name": "Lagos" },
+      { "@type": "City", "name": "Abuja" },
+      { "@type": "City", "name": "Port Harcourt" }
+    ],
+    "serviceType": "Errand delivery and dispatch service",
+    "priceRange": "₦₦",
+    "openingHours": "Mo-Su 06:00-23:00",
+    "telephone": "+2348000000000"
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
@@ -58,7 +102,7 @@
       </h1>
       <p class="drop__sub">
         You tell us. We dispatch. It moves. No friction, no follow-ups, no missed pickups.
-        Za.allyErrands is Lagos’ autonomous errand machine.
+        Za.allyErrands is Lagos' autonomous errand machine.
       </p>
       <form class="quote-widget" id="quoteForm" novalidate>
         <div class="quote-widget__input-wrap">
@@ -75,11 +119,17 @@
         <button type="submit" class="btn btn--hazard">Request Ally</button>
       </form>
       <div class="drop__meta">
-        <span class="meta-tag">&#9650; 500+ runs completed</span>
+        <span class="meta-tag">&#9650; <span class="counter-num" data-target="1247">1,247</span>+ runs completed</span>
         <span class="meta-divider">|</span>
-        <span class="meta-tag">Avg dispatch: 8 min</span>
+        <span class="meta-tag">Avg dispatch: <strong style="color:var(--green)">8 min</strong></span>
         <span class="meta-divider">|</span>
         <span class="meta-tag">Lagos &middot; Abuja &middot; PH</span>
+      </div>
+
+      <!-- Live activity feed -->
+      <div class="live-feed" id="liveFeed">
+        <span class="live-feed__dot"></span>
+        <span class="live-feed__text" id="liveFeedText">Runner dispatched — Chioma's grocery run, Lekki Phase 1 &middot; just now</span>
       </div>
     </div>
     <div class="drop__ticker" aria-hidden="true">
@@ -100,13 +150,35 @@
     </div>
   </section>
 
+  <!-- ═══ STATS BAR ═══ -->
+  <section class="stats-bar">
+    <div class="stats-bar__inner">
+      <div class="stat-item" data-reveal>
+        <div class="stat-item__num"><span class="counter-num" data-target="1247">1,247</span><span>+</span></div>
+        <div class="stat-item__label">Errands Completed</div>
+      </div>
+      <div class="stat-item" data-reveal>
+        <div class="stat-item__num"><span class="counter-num" data-target="8">8</span><span style="color:var(--white)"> min</span></div>
+        <div class="stat-item__label">Avg Dispatch Time</div>
+      </div>
+      <div class="stat-item" data-reveal>
+        <div class="stat-item__num"><span class="counter-num" data-target="98">98</span><span>%</span></div>
+        <div class="stat-item__label">On-Time Delivery Rate</div>
+      </div>
+      <div class="stat-item" data-reveal>
+        <div class="stat-item__num"><span class="counter-num" data-target="24">24</span><span style="color:var(--white)">/7</span></div>
+        <div class="stat-item__label">Lagos. Day &amp; Night.</div>
+      </div>
+    </div>
+  </section>
+
   <!-- ═══ THE PROCESS ═══ -->
   <section class="process" id="process">
     <div class="section-label">// DISPATCH PROTOCOL</div>
     <div class="process__inner">
       <header class="process__header">
         <h2>Three steps.<br /><span>Zero babysitting.</span></h2>
-        <p>The system runs itself. Here’s exactly what happens the moment you submit a request.</p>
+        <p>The system runs itself. Here's exactly what happens the moment you submit a request.</p>
       </header>
       <div class="process__steps">
         <div class="p-step" data-reveal>
@@ -114,7 +186,7 @@
           <div class="p-step__body">
             <div class="p-step__icon">&#9997;&#65039;</div>
             <h3>You Request</h3>
-            <p>Drop your errand details into the form. Pickup location, destination, what’s being moved. That’s it.</p>
+            <p>Drop your errand details into the form. Pickup location, destination, what's being moved. That's it.</p>
             <div class="p-step__tech">TRIGGER &rarr; WEBHOOK FIRED</div>
           </div>
         </div>
@@ -166,7 +238,7 @@
         <div class="s-card" data-reveal>
           <div class="s-card__top"><span class="s-card__num">03</span><span class="s-card__icon">&#128230;</span></div>
           <h3>Package &amp; Post</h3>
-          <p>NIPOST, courier drops, parcel pickups. We queue so you don’t have to.</p>
+          <p>NIPOST, courier drops, parcel pickups. We queue so you don't have to.</p>
           <div class="s-card__tag">SAME DAY</div>
         </div>
         <div class="s-card" data-reveal>
@@ -184,7 +256,7 @@
         <div class="s-card s-card--open" data-reveal>
           <div class="s-card__top"><span class="s-card__num">06</span><span class="s-card__icon">&#10133;</span></div>
           <h3>Custom Request</h3>
-          <p>Can’t find it on the list? We’ll handle it. Tell us what you need moved.</p>
+          <p>Can't find it on the list? We'll handle it. Tell us what you need moved.</p>
           <a href="#drop" class="s-card__link">Make a Request &rarr;</a>
         </div>
       </div>
@@ -249,7 +321,7 @@
       <div class="portal__copy">
         <div class="section-label">// CLIENT PORTAL</div>
         <h2>Track every run.<br /><span>In real time.</span></h2>
-        <p>Once you’re onboarded, your dedicated portal shows every errand: in-queue, dispatched, en-route, delivered. Powered by Supabase live sync. No refresh required.</p>
+        <p>Once you're onboarded, your dedicated portal shows every errand: in-queue, dispatched, en-route, delivered. Powered by Supabase live sync. No refresh required.</p>
         <ul class="portal__features">
           <li><span class="feat-dot"></span> Live runner location</li>
           <li><span class="feat-dot"></span> Order history &amp; receipts</li>
@@ -306,7 +378,7 @@
         </div>
         <div class="proof-card proof-card--accent" data-reveal>
           <div class="proof-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p>&ldquo;I’m on the monthly plan. I haven’t personally run a single errand since March. Za.allyErrands is the best business decision I’ve made all year.&rdquo;</p>
+          <p>&ldquo;I'm on the monthly plan. I haven't personally run a single errand since March. Za.allyErrands is the best business decision I've made all year.&rdquo;</p>
           <div class="proof-card__author">Amara M. &mdash; <em>Lagos</em></div>
         </div>
         <div class="proof-card" data-reveal>
@@ -315,6 +387,29 @@
           <div class="proof-card__author">Chisom F. &mdash; <em>Port Harcourt</em></div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ═══ TELL YOUR CREW ═══ -->
+  <section class="share-cta" id="share">
+    <div class="share-cta__inner">
+      <div class="share-cta__copy">
+        <p class="share-cta__label">// SPREAD THE WORD</p>
+        <h2>Your mates still running<br /><em>their own errands?</em></h2>
+        <p>That's on you. Send them this. Takes 3 seconds.</p>
+      </div>
+      <div class="share-cta__actions">
+        <a id="waShareBtn" href="https://wa.me/?text=Guy%2C%20I%20just%20discovered%20Za.allyErrands%20%E2%80%94%20they%20run%20errands%20anywhere%20in%20Lagos%20in%20under%2030%20mins%20%F0%9F%94%A5%20Groceries%2C%20pharmacy%2C%20packages%2C%20anything.%20No%20stress%2C%20no%20calls%2C%20just%20done.%20Try%20them%3A%20https%3A%2F%2Fza-allyerrands.netlify.app" class="btn btn--wa" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          Share on WhatsApp
+        </a>
+        <button class="btn btn--ghost" id="copyLinkBtn">
+          <span id="copyLinkText">Copy Link</span>
+        </button>
+      </div>
+      <p class="share-cta__proof">
+        <span class="share-count" id="shareCount">1,247</span> Lagosians shared this week
+      </p>
     </div>
   </section>
 
@@ -335,7 +430,7 @@
         <a href="#drop" class="nav__logo">
           <span class="logo-za">Za.</span><span class="logo-ally">ally</span><span class="logo-rest">Errands</span>
         </a>
-        <p>Lagos’ autonomous errand dispatch. Built for people who value their time above everything.</p>
+        <p>Lagos' autonomous errand dispatch. Built for people who value their time above everything.</p>
         <div class="footer__socials">
           <a href="#" class="social" aria-label="Instagram">IG</a>
           <a href="#" class="social" aria-label="X / Twitter">&#120143;</a>
@@ -384,7 +479,7 @@
       <button class="modal__close" id="modalClose" aria-label="Close">&times;</button>
       <div class="modal__icon">&#9889;</div>
       <h3>Request an Ally</h3>
-      <p>Fill in the details. We’ll confirm your price and runner via WhatsApp within 15 minutes.</p>
+      <p>Fill in the details. We'll confirm your price and runner via WhatsApp within 15 minutes.</p>
       <form id="fullQuoteForm" novalidate>
         <div class="form-group">
           <label for="qErrand">Errand Description</label>
@@ -411,6 +506,17 @@
           &#9989; Request received. Expect a WhatsApp message in under 15 minutes.
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- ═══ MOBILE STICKY CTA ═══ -->
+  <div class="mobile-cta" id="mobileCta" aria-hidden="true">
+    <div class="mobile-cta__inner">
+      <div class="mobile-cta__info">
+        <span class="pulse-dot"></span>
+        <span>Runners available now</span>
+      </div>
+      <a href="#drop" class="btn btn--hazard mobile-cta__btn" onclick="document.getElementById('mobileCta').classList.remove('visible')">Request Now</a>
     </div>
   </div>
 
