@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Za.allyErrands — Setup Wizard</title>
+<style>
+  :root {
+    --black: #080808;
+    --gray: #111111;
+    --border: #222222;
+    --orange: #FF4500;
+    --green: #00FF88;
+    --white: #F2F0EB;
+    --muted: #666666;
+    --font: 'Space Grotesk', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: var(--black); color: var(--white); font-family: var(--font); }
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap');
+
+  body { max-width: 680px; margin: 0 auto; padding: 32px 20px 80px; }
+
+  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; margin-bottom: 8px; }
+  .logo span { color: var(--orange); }
+  .tagline { color: var(--muted); font-size: 13px; margin-bottom: 40px; }
+
+  h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 32px; line-height: 1.5; }
+
+  .progress { display: flex; gap: 0; margin-bottom: 40px; }
+  .step-tab { flex: 1; padding: 10px 4px; text-align: center; font-size: 11px; font-weight: 600;
+    letter-spacing: 1px; text-transform: uppercase; border-bottom: 2px solid var(--border);
+    color: var(--muted); cursor: pointer; transition: all .2s; }
+  .step-tab.active { color: var(--orange); border-bottom-color: var(--orange); }
+  .step-tab.done { color: var(--green); border-bottom-color: var(--green); }
+
+  .card { background: var(--gray); border: 1px solid var(--border); border-radius: 4px;
+    padding: 24px; margin-bottom: 16px; }
+  .card-title { font-size: 13px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--orange); margin-bottom: 16px; }
+
+  .field { margin-bottom: 18px; }
+  label { display: block; font-size: 12px; font-weight: 600; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+  input, select { width: 100%; background: #0d0d0d; border: 1px solid var(--border);
+    color: var(--white); font-family: var(--font); font-size: 14px; padding: 10px 12px;
+    border-radius: 3px; outline: none; transition: border .2s; }
+  input:focus { border-color: var(--orange); }
+  .hint { font-size: 11px; color: var(--muted); margin-top: 5px; line-height: 1.5; }
+  .hint a { color: var(--orange); text-decoration: none; }
+
+  .btn { display: inline-block; padding: 12px 24px; font-family: var(--font);
+    font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    cursor: pointer; border: none; border-radius: 3px; transition: all .2s; }
+  .btn-primary { background: var(--orange); color: #000; }
+  .btn-primary:hover { background: #ff6030; }
+  .btn-outline { background: transparent; color: var(--orange); border: 1px solid var(--orange); }
+  .btn-outline:hover { background: var(--orange); color: #000; }
+  .btn-green { background: var(--green); color: #000; }
+  .btn-row { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .steps-list { list-style: none; counter-reset: steps; }
+  .steps-list li { counter-increment: steps; display: flex; gap: 14px; margin-bottom: 16px; align-items: flex-start; }
+  .steps-list li::before { content: counter(steps); background: var(--orange); color: #000;
+    font-weight: 700; font-size: 11px; min-width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .steps-list li p { font-size: 14px; line-height: 1.6; color: var(--white); }
+  .steps-list li strong { color: var(--orange); }
+
+  code { background: #0d0d0d; border: 1px solid var(--border); border-radius: 3px;
+    padding: 2px 6px; font-family: monospace; font-size: 12px; color: var(--green); }
+  pre { background: #0d0d0d; border: 1px solid var(--border); border-radius: 3px;
+    padding: 16px; font-family: monospace; font-size: 12px; color: var(--green);
+    overflow-x: auto; white-space: pre; line-height: 1.6; margin: 12px 0; }
+
+  .output-box { position: relative; }
+  .output-box textarea { width: 100%; background: #0d0d0d; border: 1px solid var(--border);
+    border-radius: 3px; color: var(--green); font-family: monospace; font-size: 11px;
+    padding: 16px; line-height: 1.6; resize: vertical; min-height: 320px; outline: none; }
+  .copy-btn { position: absolute; top: 8px; right: 8px; padding: 5px 12px;
+    font-size: 11px; background: var(--border); color: var(--white); border: none;
+    border-radius: 3px; cursor: pointer; font-family: var(--font); }
+  .copy-btn:hover { background: var(--orange); color: #000; }
+  .copy-btn.copied { background: var(--green); color: #000; }
+
+  .summary-row { display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+  .summary-val { font-family: monospace; font-size: 12px; color: var(--white);
+    max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  .alert { padding: 12px 16px; border-radius: 3px; font-size: 13px; line-height: 1.5; margin-bottom: 16px; }
+  .alert-orange { background: #2a1a00; border: 1px solid #ff4500aa; color: var(--white); }
+  .alert-green { background: #002a15; border: 1px solid #00ff8855; color: var(--white); }
+
+  .scenario-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .scenario-tab { padding: 6px 16px; font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .5px; border: 1px solid var(--border); background: transparent;
+    color: var(--muted); cursor: pointer; border-radius: 3px; font-family: var(--font); }
+  .scenario-tab.active { border-color: var(--orange); color: var(--orange); }
+</style>
+</head>
+<body>
+
+<div class="logo"><span>Za.</span>allyErrands</div>
+<p class="tagline">Setup Wizard — Backend Configuration</p>
+
+<div class="progress">
+  <div class="step-tab active" onclick="goTo(0)">1 · Supabase</div>
+  <div class="step-tab" onclick="goTo(1)">2 · Flutterwave</div>
+  <div class="step-tab" onclick="goTo(2)">3 · WhatsApp</div>
+  <div class="step-tab" onclick="goTo(3)">4 · Make.com</div>
+  <div class="step-tab" onclick="goTo(4)">5 · Deploy</div>
+</div>
+
+<div class="section active" id="section-0">
+  <h1>Step 1 — Supabase</h1>
+  <p class="subtitle">Your database, realtime engine, and Edge Functions all live here.</p>
+  <div class="card">
+    <div class="card-title">Create Project</div>
+    <ol class="steps-list">
+      <li><p>Go to <a href="https://supabase.com" target="_blank" style="color:var(--orange)">supabase.com</a> → <strong>New Project</strong></p></li>
+      <li><p>Name it <code>za-allyerrands</code>. Choose a strong DB password.</p></li>
+      <li><p>Region: <strong>West EU (Ireland)</strong> or <strong>US East</strong> — closest to Nigeria.</p></li>
+      <li><p>Wait ~2 minutes for it to spin up.</p></li>
+    </ol>
+  </div>
+  <div class="card">
+    <div class="card-title">Get Your Credentials</div>
+    <ol class="steps-list">
+      <li><p><strong>Settings → General</strong> → copy <strong>Reference ID</strong></p></li>
+      <li><p><strong>Settings → API</strong> → copy <strong>anon public</strong> key</p></li>
+      <li><p>Same page → copy <strong>service_role</strong> key (keep secret!)</p></li>
+    </ol>
+  </div>
+  <div class="card">
+    <div class="card-title">Enter Credentials</div>
+    <div class="field">
+      <label>Project Reference ID</label>
+      <input type="text" id="supabase_id" placeholder="abcdefghijklm" oninput="save('supabase_id')" />
+      <p class="hint">Settings → General → Reference ID</p>
+    </div>
+    <div class="field">
+      <label>Anon Public Key</label>
+      <input type="text" id="supabase_anon" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." oninput="save('supabase_anon')" />
+      <p class="hint">Settings → API → anon public</p>
+    </div>
+    <div class="field">
+      <label>Service Role Key</label>
+      <input type="password" id="supabase_service" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." oninput="save('supabase_service')" />
+      <p class="hint">Settings → API → service_role (never share publicly)</p>
+    </div>
+    <div class="field">
+      <label>Admin PIN</label>
+      <input type="text" id="admin_pin" placeholder="e.g. za2026" oninput="save('admin_pin')" maxlength="20" />
+      <p class="hint">PIN to access the admin dashboard at /admin</p>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="next(0)">Next: Flutterwave →</button>
+  </div>
+</div>
+
+<div class="section" id="section-1">
+  <h1>Step 2 — Flutterwave</h1>
+  <p class="subtitle">Handles payment links and webhook confirmation when clients pay.</p>
+  <div class="card">
+    <div class="card-title">Get API Keys</div>
+    <ol class="steps-list">
+      <li><p>Go to <a href="https://dashboard.flutterwave.com" target="_blank" style="color:var(--orange)">dashboard.flutterwave.com</a> → log in</p></li>
+      <li><p><strong>Settings → API Keys</strong> → copy your <strong>Secret Key</strong></p></li>
+      <li><p>Start with <strong>Test mode</strong> — key starts with <code>FLWSECK_TEST-</code></p></li>
+    </ol>
+  </div>
+  <div class="card">
+    <div class="card-title">Set Webhook (after Step 5)</div>
+    <div class="alert alert-orange">⚡ Set this after running deploy.sh — you'll have the URL then.</div>
+    <ol class="steps-list">
+      <li><p><strong>Settings → Webhooks</strong> in Flutterwave</p></li>
+      <li><p>URL: <code>https://YOUR_PROJECT_ID.supabase.co/functions/v1/flw-webhook</code></p></li>
+      <li><p><strong>Secret Hash</strong> = whatever you set below as FLW Webhook Secret</p></li>
+    </ol>
+  </div>
+  <div class="card">
+    <div class="card-title">Enter Credentials</div>
+    <div class="field">
+      <label>Flutterwave Secret Key</label>
+      <input type="password" id="flw_secret" placeholder="FLWSECK_TEST-xxxxxxxxxxxxxxxxxxxx" oninput="save('flw_secret')" />
+    </div>
+    <div class="field">
+      <label>Flutterwave Webhook Secret</label>
+      <input type="text" id="flw_webhook_secret" placeholder="e.g. za_hook_2026" oninput="save('flw_webhook_secret')" />
+      <p class="hint">Make this up — use the same value in Flutterwave's webhook settings</p>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-outline" onclick="prev(1)">← Back</button>
+    <button class="btn btn-primary" onclick="next(1)">Next: WhatsApp →</button>
+  </div>
+</div>
+
+<div class="section" id="section-2">
+  <h1>Step 3 — WhatsApp Business API</h1>
+  <p class="subtitle">Sends automated messages to clients and Phalanx at every status change.</p>
+  <div class="card">
+    <div class="card-title">Option A — Meta (Official)</div>
+    <ol class="steps-list">
+      <li><p>Go to <a href="https://developers.facebook.com" target="_blank" style="color:var(--orange)">developers.facebook.com</a> → <strong>My Apps → Create App → Business</strong></p></li>
+      <li><p>Add <strong>WhatsApp</strong> product to the app</p></li>
+      <li><p><strong>WhatsApp → API Setup</strong>: copy <strong>Temporary Access Token</strong> + <strong>Phone Number ID</strong></p></li>
+      <li><p>For production: <strong>Business Settings → System Users</strong> → generate permanent token with <code>whatsapp_business_messaging</code></p></li>
+    </ol>
+  </div>
+  <div class="card">
+    <div class="card-title">Option B — WHAPI.cloud (Easier)</div>
+    <ol class="steps-list">
+      <li><p>Go to <a href="https://whapi.cloud" target="_blank" style="color:var(--orange)">whapi.cloud</a> → sign up → create a channel → scan QR</p></li>
+      <li><p>Get your <strong>API Token</strong> and <strong>Channel ID</strong></p></li>
+      <li><p>Note: using WHAPI needs a small Edge Function update — message me and I'll swap it.</p></li>
+    </ol>
+  </div>
+  <div class="card">
+    <div class="card-title">Enter Credentials</div>
+    <div class="field">
+      <label>WhatsApp Access Token</label>
+      <input type="password" id="wa_token" placeholder="EAAxxxxxxxxxxxxxxxxxxxxxxx" oninput="save('wa_token')" />
+    </div>
+    <div class="field">
+      <label>WhatsApp Phone Number ID</label>
+      <input type="text" id="wa_phone_id" placeholder="1234567890123456" oninput="save('wa_phone_id')" />
+      <p class="hint">Numeric Phone Number ID from Meta's WhatsApp API Setup page</p>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-outline" onclick="prev(2)">← Back</button>
+    <button class="btn btn-primary" onclick="next(2)">Next: Make.com →</button>
+  </div>
+</div>
+
+<div class="section" id="section-3">
+  <h1>Step 4 — Make.com Scenarios</h1>
+  <p class="subtitle">Two automated scenarios alert your Phalanx dispatcher via WhatsApp.</p>
+  <div class="card">
+    <div class="card-title">Scenario 1 — New Errand Request</div>
+    <ol class="steps-list">
+      <li><p>Go to <a href="https://make.com" target="_blank" style="color:var(--orange)">make.com</a> → <strong>Create a new Scenario</strong></p></li>
+      <li><p>Add: <strong>Webhooks → Custom Webhook → Create a webhook</strong> → copy URL</p></li>
+      <li><p>Add: <strong>WhatsApp Business Cloud → Send a Text Message</strong><br>Message: <code>🚨 NEW ERRAND — {{1.client_name}} needs {{1.item_description}} from {{1.pickup_address}}. Payment link sent. Standby.</code></p></li>
+      <li><p>Turn the scenario <strong>ON</strong> → paste URL below</p></li>
+    </ol>
+  </div>
+  <div class="card">
+    <div class="card-title">Scenario 2 — Payment Confirmed</div>
+    <ol class="steps-list">
+      <li><p>Create another scenario → <strong>Webhooks → Custom Webhook</strong> → copy URL</p></li>
+      <li><p>Add: <strong>WhatsApp Business Cloud → Send a Text Message</strong><br>Message: <code>✅ PAYMENT CONFIRMED — DISPATCH NOW\n{{1.client_name}} | {{1.pickup_address}} → {{1.dropoff_address}}</code></p></li>
+      <li><p>Turn <strong>ON</strong> → paste URL below</p></li>
+    </ol>
+  </div>
+  <div class="card">
+    <div class="card-title">Import Blueprints (Alternative)</div>
+    <p class="hint" style="margin-bottom:12px">Import these directly into Make.com via <strong>Import Blueprint</strong>.</p>
+    <div class="scenario-tabs">
+      <button class="scenario-tab active" onclick="showScenario(0, this)">Scenario 1</button>
+      <button class="scenario-tab" onclick="showScenario(1, this)">Scenario 2</button>
+    </div>
+    <div class="output-box">
+      <textarea id="scenario-json" readonly></textarea>
+      <button class="copy-btn" onclick="copyScenario()">Copy</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Enter Webhook URLs</div>
+    <div class="field">
+      <label>Webhook URL — New Request (Scenario 1)</label>
+      <input type="text" id="make_webhook" placeholder="https://hook.eu2.make.com/xxxxxxxxxxxxxxxx" oninput="save('make_webhook')" />
+    </div>
+    <div class="field">
+      <label>Webhook URL — Payment Confirmed (Scenario 2)</label>
+      <input type="text" id="make_paid_webhook" placeholder="https://hook.eu2.make.com/yyyyyyyyyyyyyyyy" oninput="save('make_paid_webhook')" />
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-outline" onclick="prev(3)">← Back</button>
+    <button class="btn btn-primary" onclick="next(3)">Generate deploy.sh →</button>
+  </div>
+</div>
+
+<div class="section" id="section-4">
+  <h1>Step 5 — Deploy</h1>
+  <p class="subtitle">Your filled <code>deploy.sh</code> is ready. Run it once on your machine.</p>
+  <div class="card">
+    <div class="card-title">Credential Summary</div>
+    <div id="summary"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Your deploy.sh</div>
+    <div class="output-box">
+      <textarea id="deploy-output" readonly></textarea>
+      <button class="copy-btn" id="copy-deploy-btn" onclick="copyDeploy()">Copy</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Run It</div>
+    <ol class="steps-list">
+      <li><p>Install Supabase CLI: <code>brew install supabase/tap/supabase</code> (Mac) or see <a href="https://supabase.com/docs/guides/cli" target="_blank" style="color:var(--orange)">supabase.com/docs/guides/cli</a></p></li>
+      <li><p>Save the script above as <code>deploy.sh</code> in your <code>allyerrands/</code> folder</p></li>
+      <li><p>Run:</p><pre>cd allyerrands\nbash deploy.sh</pre></li>
+      <li><p>Copy the printed <code>flw-webhook</code> URL → paste into Flutterwave → Settings → Webhooks</p></li>
+    </ol>
+    <hr class="divider">
+    <div class="alert alert-green">
+      ✅ After deploy.sh succeeds your site is fully live:<br><br>
+      🌐 <strong>za-allyerrands.netlify.app</strong> — landing page<br>
+      🗂 /portal — client order tracking<br>
+      🔐 /admin — operations dashboard<br>
+      🏍 /runner — runner mobile view
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-outline" onclick="prev(4)">← Back</button>
+    <button class="btn btn-green" onclick="copyDeploy()">Copy deploy.sh</button>
+  </div>
+</div>
+
+<script>
+const FIELDS = ['supabase_id','supabase_anon','supabase_service','admin_pin','flw_secret','flw_webhook_secret','wa_token','wa_phone_id','make_webhook','make_paid_webhook'];
+function save(id) { const el = document.getElementById(id); if (el) localStorage.setItem('za_'+id, el.value); }
+function load() { FIELDS.forEach(id => { const el = document.getElementById(id); const v = localStorage.getItem('za_'+id); if (el && v) el.value = v; }); }
+function get(id) { const el = document.getElementById(id); return el ? el.value.trim() : localStorage.getItem('za_'+id)||''; }
+
+let current = 0;
+const tabs = document.querySelectorAll('.step-tab');
+const sections = document.querySelectorAll('.section');
+function goTo(n) {
+  tabs[current].classList.remove('active'); sections[current].classList.remove('active');
+  current = n; tabs[current].classList.add('active'); sections[current].classList.add('active');
+  if (n===3) renderScenarios(); if (n===4) renderDeploy(); window.scrollTo(0,0);
+}
+function next(n) { goTo(n+1); }
+function prev(n) { goTo(n-1); }
+
+const SCENARIO_1 = {"name":"Za.allyErrands — New Request Alert","flow":[{"id":1,"module":"gateway:CustomWebHook","version":1,"parameters":{"hook":1,"maxResults":1},"mapper":{},"metadata":{"designer":{"x":0,"y":0}}},{"id":2,"module":"whatsapp-business-cloud:sendTextMessage","version":1,"parameters":{"phoneNumberId":"{{YOUR_PHONE_NUMBER_ID}}"},"mapper":{"to":"{{YOUR_PHALANX_WHATSAPP_NUMBER}}","text":"🚨 NEW ERRAND REQUEST\n\nClient: {{1.client_name}}\nPhone: {{1.client_phone}}\nPickup: {{1.pickup_address}}\nDrop-off: {{1.dropoff_address}}\nItem: {{1.item_description}}\n\nPayment link sent. Standby for DISPATCH NOW signal.","previewUrl":false},"metadata":{"designer":{"x":300,"y":0}}}],"metadata":{"version":1,"scenario":{"roundtrips":1,"maxErrors":3,"autoCommit":true,"autoCommitTriggerLast":true,"sequential":false,"slots":null,"confidential":false,"dataloss":false,"dlq":false,"freshVariables":false},"designer":{"orphans":[]},"zone":"eu2.make.com","notes":[]}};
+const SCENARIO_2 = {"name":"Za.allyErrands — Payment Confirmed DISPATCH","flow":[{"id":1,"module":"gateway:CustomWebHook","version":1,"parameters":{"hook":2,"maxResults":1},"mapper":{},"metadata":{"designer":{"x":0,"y":0}}},{"id":2,"module":"whatsapp-business-cloud:sendTextMessage","version":1,"parameters":{"phoneNumberId":"{{YOUR_PHONE_NUMBER_ID}}"},"mapper":{"to":"{{YOUR_PHALANX_WHATSAPP_NUMBER}}","text":"✅ PAYMENT CONFIRMED — DISPATCH NOW\n\nClient: {{1.client_name}}\nPhone: {{1.client_phone}}\nPickup: {{1.pickup_address}}\nDrop-off: {{1.dropoff_address}}\nItem: {{1.item_description}}\nAmount: ₦{{1.amount_ngn}}\n\nAssign a runner IMMEDIATELY.","previewUrl":false},"metadata":{"designer":{"x":300,"y":0}}}],"metadata":{"version":1,"scenario":{"roundtrips":1,"maxErrors":3,"autoCommit":true,"autoCommitTriggerLast":true,"sequential":false,"slots":null,"confidential":false,"dataloss":false,"dlq":false,"freshVariables":false},"designer":{"orphans":[]},"zone":"eu2.make.com","notes":[]}};
+
+let activeScenario = 0;
+function renderScenarios() { document.getElementById('scenario-json').value = JSON.stringify(activeScenario===0?SCENARIO_1:SCENARIO_2, null, 2); }
+function showScenario(n, el) { document.querySelectorAll('.scenario-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); activeScenario=n; renderScenarios(); }
+function copyScenario() { const ta=document.getElementById('scenario-json'); ta.select(); document.execCommand('copy'); const btn=document.querySelector('.copy-btn'); btn.textContent='Copied!'; btn.classList.add('copied'); setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},2000); }
+
+function renderDeploy() {
+  const id=get('supabase_id')||'YOUR_PROJECT_ID';
+  const anon=get('supabase_anon')||'YOUR_SUPABASE_ANON_KEY';
+  const svc=get('supabase_service')||'YOUR_SERVICE_ROLE_KEY';
+  const pin=get('admin_pin')||'CHANGE_ME';
+  const flwk=get('flw_secret')||'FLWSECK_TEST-xxxxxxxxxxxx';
+  const flwh=get('flw_webhook_secret')||'your_custom_secret_hash';
+  const wat=get('wa_token')||'EAAxxxxxxxxxxxxxxx';
+  const wap=get('wa_phone_id')||'1234567890';
+  const mkw=get('make_webhook')||'https://hook.eu2.make.com/SCENARIO1_TOKEN';
+  const mkp=get('make_paid_webhook')||'https://hook.eu2.make.com/SCENARIO2_TOKEN';
+  const script=`#!/usr/bin/env bash\n# Za.allyErrands — One-shot deploy\nset -e\n\nSUPABASE_PROJECT_ID="${id}"\nSUPABASE_ANON_KEY="${anon}"\nSUPABASE_SERVICE_ROLE_KEY="${svc}"\nFLW_SECRET_KEY="${flwk}"\nFLW_WEBHOOK_SECRET="${flwh}"\nWHATSAPP_TOKEN="${wat}"\nWHATSAPP_PHONE_NUMBER_ID="${wap}"\nMAKE_WEBHOOK_URL="${mkw}"\nMAKE_PAID_WEBHOOK_URL="${mkp}"\nSITE_URL="https://za-allyerrands.netlify.app"\nADMIN_PIN="${pin}"\n\nBOLD="\\033[1m" GREEN="\\033[32m" ORANGE="\\033[33m" RESET="\\033[0m"\nok() { echo -e "\${GREEN}✓ \$1\${RESET}"; }\nstep() { echo -e "\n\${BOLD}\${ORANGE}▶ \$1\${RESET}"; }\n\nstep "Injecting credentials"\nFILES=(index.html admin/index.html portal/index.html runner/index.html success/index.html script.js admin/admin.js portal/portal.js runner/runner.js success/success.js)\nfor f in "\${FILES[@]}"; do\n  sed -i -e "s|YOUR_PROJECT_ID|\${SUPABASE_PROJECT_ID}|g" -e "s|YOUR_SUPABASE_ANON_KEY|\${SUPABASE_ANON_KEY}|g" "\$f"\n  ok "\$f"\ndone\nsed -i "s|const ADMIN_PIN.*=.*'za2026'|const ADMIN_PIN = '\${ADMIN_PIN}'|g" admin/admin.js && ok "Admin PIN"\nsed -i -e "s|YOUR_PROJECT_ID|\${SUPABASE_PROJECT_ID}|g" -e "s|YOUR_SERVICE_ROLE_KEY|\${SUPABASE_SERVICE_ROLE_KEY}|g" backend/triggers.sql && ok "triggers.sql"\n\nstep "Linking Supabase"\nsupabase link --project-ref "\$SUPABASE_PROJECT_ID"\n\nstep "Pushing migrations"\nsupabase db push\n\nstep "Setting secrets"\nsupabase secrets set \\\n  SUPABASE_URL="https://\${SUPABASE_PROJECT_ID}.supabase.co" \\\n  SUPABASE_SERVICE_ROLE_KEY="\$SUPABASE_SERVICE_ROLE_KEY" \\\n  MAKE_WEBHOOK_URL="\$MAKE_WEBHOOK_URL" \\\n  MAKE_PAID_WEBHOOK_URL="\$MAKE_PAID_WEBHOOK_URL" \\\n  FLW_SECRET_KEY="\$FLW_SECRET_KEY" \\\n  FLW_WEBHOOK_SECRET="\$FLW_WEBHOOK_SECRET" \\\n  WHATSAPP_TOKEN="\$WHATSAPP_TOKEN" \\\n  WHATSAPP_PHONE_NUMBER_ID="\$WHATSAPP_PHONE_NUMBER_ID" \\\n  SITE_URL="\$SITE_URL"\n\nstep "Deploying Edge Functions"\nsupabase functions deploy dispatch      --no-verify-jwt\nsupabase functions deploy flw-webhook   --no-verify-jwt\nsupabase functions deploy status-notify --no-verify-jwt\n\nstep "Installing DB triggers"\nsupabase db execute --file backend/triggers.sql\n\necho ""\necho -e "\${BOLD}═══════════════════════════════════╗\${RESET}"\necho -e "\${GREEN}\${BOLD}  Za.allyErrands DEPLOYED ⚡\${RESET}"\necho -e "\${BOLD}═══════════════════════════════════╝\${RESET}"\necho "  flw-webhook → https://\${SUPABASE_PROJECT_ID}.supabase.co/functions/v1/flw-webhook"\necho "  ⚡ Paste this URL into Flutterwave → Settings → Webhooks"\necho ""`;
+  document.getElementById('deploy-output').value = script;
+  const rows=[['Supabase Project ID',id],['Anon Key',anon.length>20?anon.slice(0,20)+'…':anon],['Service Role Key',svc.length>20?'••••••••••••':'(empty)'],['Admin PIN',pin],['Flutterwave Secret',flwk.length>20?flwk.slice(0,20)+'…':flwk],['FLW Webhook Secret',flwh],['WhatsApp Token',wat.length>20?wat.slice(0,20)+'…':wat],['WhatsApp Phone ID',wap],['Make Webhook 1',mkw.includes('make.com')?'✅ set':'(empty)'],['Make Webhook 2',mkp.includes('make.com')?'✅ set':'(empty)']];
+  document.getElementById('summary').innerHTML=rows.map(([k,v])=>`<div class="summary-row"><span class="summary-label">${k}</span><span class="summary-val">${v}</span></div>`).join('');
+}
+function copyDeploy() { const ta=document.getElementById('deploy-output'); ta.select(); document.execCommand('copy'); const btn=document.getElementById('copy-deploy-btn'); btn.textContent='Copied!'; btn.classList.add('copied'); setTimeout(()=>{btn.textContent='Copy deploy.sh';btn.classList.remove('copied');},2000); }
+
+load(); renderScenarios();
+</script>
+</body>
+</html>
