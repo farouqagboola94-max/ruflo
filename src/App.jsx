@@ -18,6 +18,8 @@ import Sponsors from './sections/Sponsors'
 import Highlights from './sections/Highlights'
 import Community from './sections/Community'
 import Testimonials from './sections/Testimonials'
+import SneakerDNA from './sections/SneakerDNA'
+import CommunityWall from './sections/CommunityWall'
 import Comics from './sections/Comics'
 import Gallery from './sections/Gallery'
 import PhotoTools from './sections/PhotoTools'
@@ -39,6 +41,8 @@ const SECTION_TITLES = [
   { id: 'highlights',   title: "Experience | Sneakers Fest '26" },
   { id: 'community',    title: "Community | Sneakers Fest '26" },
   { id: 'testimonials', title: "Stories | Sneakers Fest '26" },
+  { id: 'dna',          title: "Sneaker DNA | Sneakers Fest '26" },
+  { id: 'wall',         title: "The Wall | Sneakers Fest '26" },
   { id: 'comics',       title: "Catalyst Universe | Sneakers Fest '26" },
   { id: 'gallery',      title: "Gallery | Sneakers Fest '26" },
   { id: 'substack',     title: "Substack | Sneakers Fest '26" },
@@ -87,6 +91,7 @@ export default function App() {
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes chatSlideIn { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
         select option { background: #111; color: #fff; }
+        input::placeholder { color: rgba(255,255,255,0.25); }
       `}</style>
 
       <ScrollProgress />
@@ -108,6 +113,8 @@ export default function App() {
       <Reveal><Highlights /></Reveal>
       <Reveal><Community /></Reveal>
       <Reveal><Testimonials /></Reveal>
+      <Reveal><SneakerDNA /></Reveal>
+      <Reveal><CommunityWall /></Reveal>
       <Reveal><Comics /></Reveal>
       <Reveal><Gallery /></Reveal>
       <Reveal><PhotoTools /></Reveal>
