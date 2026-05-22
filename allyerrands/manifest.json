@@ -36,7 +36,7 @@
       "short_name": "Track",
       "description": "Track your active errands",
       "url": "/portal",
-      "icons": [{ "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect width='96' height='96' fill='%23141414'/><text x='8' y='68' font-family='Impact' font-size='56' fill='%23FF4500'>▶</text></svg>", "sizes": "96x96" }]
+      "icons": [{ "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect width='96' height='96' fill='%23141414'/><text x='8' y='68' font-family='Impact' font-size='56' fill='%23FF4500'>&#9658;</text></svg>", "sizes": "96x96" }]
     }
   ]
 }
