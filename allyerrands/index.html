@@ -54,10 +54,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 
-  <!-- ═══ CONFIGURATION ═══
-       Replace these two values with your real Supabase credentials.
-       Get them from: Supabase Dashboard > Project Settings > API
-  ══════════════════ -->
   <script>
     window.ZA_DISPATCH_URL = 'https://YOUR_PROJECT_ID.supabase.co/functions/v1/dispatch';
     window.ZA_ANON_KEY     = 'YOUR_SUPABASE_ANON_KEY';
@@ -65,10 +61,8 @@
 </head>
 <body>
 
-  <!-- ═══ CURSOR GLOW ═══ -->
   <div class="cursor-glow" id="cursorGlow"></div>
 
-  <!-- ═══ NAV ═══ -->
   <nav class="nav" id="navbar">
     <div class="nav__inner">
       <a href="#drop" class="nav__logo">
@@ -87,7 +81,6 @@
     </div>
   </nav>
 
-  <!-- ═══ THE DROP — HERO ═══ -->
   <section class="drop" id="drop">
     <div class="drop__grid-overlay"></div>
     <div class="drop__scanline"></div>
@@ -125,8 +118,6 @@
         <span class="meta-divider">|</span>
         <span class="meta-tag">Lagos &middot; Abuja &middot; PH</span>
       </div>
-
-      <!-- Live activity feed -->
       <div class="live-feed" id="liveFeed">
         <span class="live-feed__dot"></span>
         <span class="live-feed__text" id="liveFeedText">Runner dispatched — Chioma's grocery run, Lekki Phase 1 &middot; just now</span>
@@ -150,7 +141,6 @@
     </div>
   </section>
 
-  <!-- ═══ STATS BAR ═══ -->
   <section class="stats-bar">
     <div class="stats-bar__inner">
       <div class="stat-item" data-reveal>
@@ -172,7 +162,6 @@
     </div>
   </section>
 
-  <!-- ═══ THE PROCESS ═══ -->
   <section class="process" id="process">
     <div class="section-label">// DISPATCH PROTOCOL</div>
     <div class="process__inner">
@@ -214,7 +203,6 @@
     </div>
   </section>
 
-  <!-- ═══ SERVICES ═══ -->
   <section class="services" id="services">
     <div class="section-label">// WHAT WE MOVE</div>
     <div class="services__inner">
@@ -263,7 +251,6 @@
     </div>
   </section>
 
-  <!-- ═══ PRICING ═══ -->
   <section class="pricing" id="pricing">
     <div class="section-label">// RATES</div>
     <div class="pricing__inner">
@@ -315,7 +302,6 @@
     </div>
   </section>
 
-  <!-- ═══ CLIENT PORTAL PREVIEW ═══ -->
   <section class="portal" id="portal">
     <div class="portal__inner">
       <div class="portal__copy">
@@ -365,7 +351,6 @@
     </div>
   </section>
 
-  <!-- ═══ SOCIAL PROOF ═══ -->
   <section class="proof" id="proof">
     <div class="section-label">// FIELD REPORTS</div>
     <div class="proof__inner">
@@ -390,7 +375,6 @@
     </div>
   </section>
 
-  <!-- ═══ TELL YOUR CREW ═══ -->
   <section class="share-cta" id="share">
     <div class="share-cta__inner">
       <div class="share-cta__copy">
@@ -413,7 +397,6 @@
     </div>
   </section>
 
-  <!-- ═══ FINAL CTA ═══ -->
   <section class="final-cta">
     <div class="final-cta__inner">
       <p class="final-cta__label">READY TO MOVE?</p>
@@ -423,7 +406,6 @@
     </div>
   </section>
 
-  <!-- ═══ FOOTER ═══ -->
   <footer class="footer">
     <div class="footer__inner">
       <div class="footer__brand">
@@ -434,7 +416,7 @@
         <div class="footer__socials">
           <a href="#" class="social" aria-label="Instagram">IG</a>
           <a href="#" class="social" aria-label="X / Twitter">&#120143;</a>
-          <a href="#" class="social" aria-label="WhatsApp">WA</a>
+          <a href="https://wa.me/?text=Check%20out%20Za.allyErrands%20%E2%80%94%20Lagos'%20fastest%20errand%20dispatch%3A%20https%3A%2F%2Fza-allyerrands.netlify.app" class="social" aria-label="WhatsApp" target="_blank" rel="noopener">WA</a>
         </div>
       </div>
       <div class="footer__col">
@@ -459,9 +441,9 @@
       <div class="footer__col">
         <h4>Contact</h4>
         <ul>
-          <li><a href="#">WhatsApp Us</a></li>
-          <li><a href="#">hello@zallyerrands.com</a></li>
-          <li><a href="#">+234 800 000 0000</a></li>
+          <li><a href="https://wa.me/2348000000000" target="_blank" rel="noopener">WhatsApp Us</a></li>
+          <li><a href="mailto:hello@zallyerrands.com">hello@zallyerrands.com</a></li>
+          <li><a href="tel:+2348000000000">+234 800 000 0000</a></li>
           <li><a href="#">Privacy Policy</a></li>
         </ul>
       </div>
@@ -472,7 +454,6 @@
     </div>
   </footer>
 
-  <!-- ═══ QUOTE MODAL ═══ -->
   <div class="modal" id="quoteModal" role="dialog" aria-modal="true" aria-label="Request an Ally">
     <div class="modal__backdrop" id="modalBackdrop"></div>
     <div class="modal__box">
@@ -509,7 +490,6 @@
     </div>
   </div>
 
-  <!-- ═══ MOBILE STICKY CTA ═══ -->
   <div class="mobile-cta" id="mobileCta" aria-hidden="true">
     <div class="mobile-cta__inner">
       <div class="mobile-cta__info">
