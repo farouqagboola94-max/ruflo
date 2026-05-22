@@ -1,22 +1,21 @@
 import { B } from '../tokens'
-import { GrainOverlay, ScanLines, AmberGlow, SectionTag } from '../components/Shared'
+import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
+import { SOCIAL_LINKS } from '../config'
 
-// ─── REPLACE WITH YOUR REAL LINKS ─────────────────────────────────────────
 const LINKS = {
-  tiktok:    "https://tiktok.com/@sneakersfest",
-  youtube:   "https://youtube.com/@sneakersfest",
-  twitter:   "https://twitter.com/sneakersfest",
-  instagram: "https://instagram.com/sneakersfest",
-  snapchat:  "https://snapchat.com/add/sneakersfest",
-  whatsapp:  "https://chat.whatsapp.com/YOUR_GROUP_LINK_HERE",
+  tiktok:    SOCIAL_LINKS.tiktok,
+  youtube:   SOCIAL_LINKS.youtube,
+  twitter:   SOCIAL_LINKS.twitter,
+  instagram: SOCIAL_LINKS.instagram,
+  snapchat:  SOCIAL_LINKS.snapchat,
+  whatsapp:  SOCIAL_LINKS.whatsapp,
 }
-// ──────────────────────────────────────────────────────────────────────────
 
 const COMMUNITY_STATS = [
-  { value: "10K+", label: "COMMUNITY MEMBERS" },
-  { value: "6",    label: "ACTIVE PLATFORMS" },
-  { value: "365",  label: "DAYS A YEAR" },
-  { value: "LIVE", label: "RIGHT NOW", pulse: true },
+  { value: "5,000+", label: "COMMUNITY TARGET" },
+  { value: "6",     label: "ACTIVE PLATFORMS" },
+  { value: "365",   label: "DAYS A YEAR" },
+  { value: "LIVE",  label: "RIGHT NOW", pulse: true },
 ]
 
 const PLATFORMS = [
@@ -30,7 +29,7 @@ const PLATFORMS = [
     desc: "Daily challenges, sneaker reveals, community games, and viral moments.",
     tags: ["CHALLENGES", "GAMES", "VIRAL", "COMMUNITY"],
     cta: "FOLLOW",
-    activity: "3.2K posts",
+    activity: "2-3x per week",
   },
   {
     name: "YOUTUBE",
@@ -43,7 +42,7 @@ const PLATFORMS = [
     tags: ["DOCS", "INTERVIEWS", "SERIES"],
     cta: "SUBSCRIBE",
     featured: true,
-    activity: "48 videos",
+    activity: "Monthly drops",
   },
   {
     name: "TWITTER / X",
@@ -52,8 +51,8 @@ const PLATFORMS = [
     href: LINKS.twitter,
     icon: "X",
     headline: "LIVE UPDATES & DEBATES",
-    desc: "First-look announcements, community debates, giveaways, live coverage.",
-    tags: ["LIVE", "GIVEAWAYS", "Q&A"],
+    desc: "First-look announcements, community debates, giveaways, FNP live sessions.",
+    tags: ["LIVE", "GIVEAWAYS", "Q&A", "FNP"],
     cta: "FOLLOW",
     activity: "Daily posts",
   },
@@ -64,10 +63,10 @@ const PLATFORMS = [
     href: LINKS.instagram,
     icon: "IG",
     headline: "DROPS, REELS & CULTURE",
-    desc: "Daily drops, vendor spotlights, event reels, and culture content.",
-    tags: ["REELS", "DROPS", "CULTURE"],
+    desc: "Daily drops, vendor spotlights, event reels, FNP polls and challenge submissions.",
+    tags: ["REELS", "DROPS", "CULTURE", "FNP"],
     cta: "FOLLOW",
-    activity: "Daily reels",
+    activity: "3-4x per week",
   },
   {
     name: "SNAPCHAT",
@@ -87,9 +86,9 @@ const PLATFORMS = [
     color: B.neonLime,
     href: LINKS.whatsapp,
     icon: "WA",
-    headline: "COMMUNITY GAMES & EARLY ACCESS",
-    desc: "Direct drops, early alerts, community polls, games, and challenges for the inner circle.",
-    tags: ["EARLY ACCESS", "GAMES", "DIRECT"],
+    headline: "FNP ALERTS & EARLY ACCESS",
+    desc: "Friday Night Protocol reminders, drop alerts, exclusive info, community polls for the inner circle.",
+    tags: ["EARLY ACCESS", "FNP", "ALERTS", "DIRECT"],
     cta: "JOIN NOW",
     featured: true,
     activity: "Active now",
@@ -108,7 +107,6 @@ function PlatformCard({ p }) {
       <div
         style={{
           flex: 1,
-          /* Glassmorphism on community cards too */
           background: p.featured
             ? `rgba(255,255,255,0.08)`
             : `rgba(255,255,255,0.04)`,
@@ -157,7 +155,6 @@ function PlatformCard({ p }) {
               </div>
             </div>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
-              {/* Icon */}
               <div style={{
                 width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center",
                 background: p.color + "15",
@@ -167,7 +164,6 @@ function PlatformCard({ p }) {
                   {p.icon}
                 </span>
               </div>
-              {/* Activity indicator */}
               <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
                 <div style={{
                   width: 5, height: 5, borderRadius: "50%",
@@ -233,7 +229,6 @@ export default function Community() {
       <GrainOverlay />
       <ScanLines opacity={0.04} />
 
-      {/* Background blobs for glass effect */}
       <div style={{
         position: "absolute", top: "20%", left: "5%", width: 300, height: 300,
         background: `radial-gradient(circle, ${B.neonMagenta}08, transparent 70%)`,
@@ -257,11 +252,11 @@ export default function Community() {
         </div>
 
         <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: B.smoke, lineHeight: 1.8, maxWidth: 600, marginBottom: 36 }}>
-          One community, six platforms. Click any card to open the app directly and join the movement —
-          games, interviews, challenges, stories, and documentaries are waiting.
+          One community, six platforms. Every Friday night the community activates via the Friday Night Protocol.
+          Join whichever platform fits your flow — games, drops, culture debates, and early access are waiting.
         </div>
 
-        {/* Community stats strip — glass */}
+        {/* Community stats strip */}
         <div style={{
           display: "flex", gap: 2, flexWrap: "wrap", marginBottom: 52,
           background: "rgba(255,255,255,0.04)",
@@ -295,7 +290,7 @@ export default function Community() {
           {PLATFORMS.map((p, i) => <PlatformCard key={i} p={p} />)}
         </div>
 
-        {/* Manifesto banner — glass */}
+        {/* Manifesto banner */}
         <div style={{
           padding: "28px 32px",
           background: "rgba(255,255,255,0.04)",
@@ -310,18 +305,18 @@ export default function Community() {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 20 }}>
             <div>
               <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 30, color: B.white, lineHeight: 1, marginBottom: 6 }}>
-                CONTENT IS THE CULTURE.
+                THE RITUAL RUNS EVERY FRIDAY.
               </div>
               <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.smoke, letterSpacing: "0.22em" }}>
-                GAMES · INTERVIEWS · CHALLENGES · STORIES · DOCUMENTARIES
+                DROP DISCUSSION · CHALLENGE · CONVERSATION · GAME
               </div>
             </div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               {[
-                { label: "DAILY CONTENT", color: "#69C9D0" },
+                { label: "EVERY FRIDAY", color: "#69C9D0" },
                 { label: "6 PLATFORMS", color: B.amber },
                 { label: "ONLINE FIRST", color: "#E1306C" },
-                { label: "YOUR IP", color: B.neonLime },
+                { label: "FNP YEAR-ROUND", color: B.neonLime },
               ].map((tag, i) => (
                 <span key={i} style={{
                   padding: "5px 12px",

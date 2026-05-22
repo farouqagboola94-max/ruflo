@@ -2,12 +2,12 @@ import { B } from '../tokens'
 import { GrainOverlay, AmberGlow, SectionTag } from '../components/Shared'
 
 const FEATURES = [
-  { icon: "👟", title: "RARE KICKS", desc: "200+ exclusive pairs from collectors across Africa and beyond. Find your grails here.", color: B.amber },
-  { icon: "🏪", title: "50+ VENDORS", desc: "Curated vendors bringing heat, vintage, customs, and everything in between.", color: B.neonCyan },
-  { icon: "🎵", title: "LIVE DJs", desc: "The best DJs in Lagos keep energy alive from doors open to the very last drop.", color: B.neonMagenta },
-  { icon: "🎨", title: "CUSTOM ART", desc: "On-site artists transforming your kicks into one-of-a-kind masterpieces.", color: B.neonLime },
-  { icon: "🍜", title: "STREET FOOD", desc: "Lagos' finest street food vendors. Eat well, stay long, vibe harder.", color: B.amber },
-  { icon: "⚡", title: "EXCLUSIVE DROPS", desc: "Limited edition releases you won't find anywhere else. Be there or miss out forever.", color: B.neonCyan },
+  { label: 'GRAIL PAIRS', title: 'RARE KICKS', desc: '200+ exclusive pairs from collectors across Africa and beyond. Find your grails, see the heat up close.', color: B.amber },
+  { label: '30–50 VENDORS', title: 'CURATED VENDORS', desc: 'Invitation-curated vendors bringing heat, vintage, customs, and everything in between. Year 1 first cohort.', color: B.neonCyan },
+  { label: 'LIVE SETS', title: 'LIVE DJs', desc: 'The best DJs in Lagos keep energy alive from doors open to the very last drop.', color: B.neonMagenta },
+  { label: 'ON-SITE', title: 'CUSTOM ART', desc: 'On-site artists transforming your kicks into one-of-a-kind masterpieces in real time.', color: B.neonLime },
+  { label: 'ALL DAY', title: 'STREET FOOD', desc: "Lagos' finest street food vendors. Eat well, stay long, vibe harder.", color: B.amber },
+  { label: 'LIMITED', title: 'EXCLUSIVE DROPS', desc: "Limited edition releases you won't find anywhere else. First announced in the Friday Night Protocol community.", color: B.neonCyan },
 ]
 
 export default function Highlights() {
@@ -40,13 +40,13 @@ export default function Highlights() {
               style={{
                 padding: 28, background: B.charcoal,
                 border: `1px solid ${B.gunmetal}`, borderRadius: 6,
-                position: "relative", overflow: "hidden", transition: "border-color 0.3s",
+                position: "relative", overflow: "hidden", transition: "border-color 0.3s, transform 0.3s",
               }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = f.color + "70"}
-              onMouseLeave={e => e.currentTarget.style.borderColor = B.gunmetal}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = f.color + "70"; e.currentTarget.style.transform = "translateY(-3px)" }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = B.gunmetal; e.currentTarget.style.transform = "translateY(0)" }}
             >
               <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, ${f.color}, transparent)`, opacity: 0.5 }} />
-              <div style={{ fontSize: 34, marginBottom: 14 }}>{f.icon}</div>
+              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: f.color, letterSpacing: "0.2em", marginBottom: 10 }}>{f.label}</div>
               <div style={{ fontFamily: "'Orbitron', monospace", fontWeight: 700, fontSize: 12, color: f.color, letterSpacing: "0.1em", marginBottom: 10 }}>
                 {f.title}
               </div>
