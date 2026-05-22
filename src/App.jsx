@@ -15,6 +15,7 @@ import StreakToast from './components/StreakToast'
 import KonamiCode from './components/KonamiCode'
 import Hero from './sections/Hero'
 import About from './sections/About'
+import OriginStory from './sections/OriginStory'
 import MarketContext from './sections/MarketContext'
 import FridayNightProtocol from './sections/FridayNightProtocol'
 import Press from './sections/Press'
@@ -50,6 +51,7 @@ import Footer from './sections/Footer'
 
 const SECTION_TITLES = [
   { id: 'about',        title: "About | Sneakers Fest '26" },
+  { id: 'origin',       title: "The Origin | Sneakers Fest '26" },
   { id: 'market',       title: "The Market | Sneakers Fest '26" },
   { id: 'fnp',          title: "Friday Night Protocol | Sneakers Fest '26" },
   { id: 'press',        title: "Press | Sneakers Fest '26" },
@@ -136,6 +138,7 @@ export default function App() {
       <EventTicker />
 
       <Reveal><About /></Reveal>
+      <Reveal><OriginStory /></Reveal>
       <Reveal><MarketContext /></Reveal>
       <Reveal><FridayNightProtocol /></Reveal>
       <Reveal><Press /></Reveal>
