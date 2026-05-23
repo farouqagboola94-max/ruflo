@@ -20,10 +20,19 @@ export default function Footer() {
               Lagos' first dedicated sneaker festival. Physical exhibition, year-round online platform, community engine.
             </p>
             <p className="text-gray-500 text-sm mt-3">June 14–15, 2026 · Lagos, Nigeria</p>
-            <p className="text-gray-600 text-xs mt-4">
-              Founded by <span className="text-brand-steel">Oluwatobiloba — The Catalyst</span><br />
+            <div className="mt-4 text-xs text-gray-600 leading-relaxed">
+              Founded by{' '}
+              <a
+                href="https://instagram.com/Catalystggg"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-brand-steel hover:text-white transition-colors"
+              >
+                Oluwatobiloba — The Catalyst
+              </a>
+              <br />
               Catalyst Concepts · Lagos, Nigeria
-            </p>
+            </div>
           </div>
 
           <div>
