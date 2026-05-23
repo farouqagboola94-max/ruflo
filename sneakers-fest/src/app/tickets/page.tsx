@@ -63,7 +63,7 @@ export default function TicketsPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div className="text-center mb-14">
-        <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">June 14–15, 2026</p>
+        <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">December 12–13, 2026</p>
         <h1 className="font-display text-5xl sm:text-6xl text-white mb-4">GET YOUR TICKETS</h1>
         <p className="text-gray-400 text-lg max-w-xl mx-auto">Choose your pass. All tickets include 2-day access. Limited quantities available.</p>
       </div>
@@ -158,7 +158,7 @@ export default function TicketsPage() {
             <p className="text-gray-600 text-xs font-mono mb-8">Ref: {payRef}</p>
             <div className="bg-brand-dark rounded-2xl p-4 mb-6 border border-white/10">
               <p className="text-gray-500 text-sm">Venue confirmation coming soon</p>
-              <p className="text-white font-semibold">June 14–15, 2026 · Lagos, Nigeria</p>
+              <p className="text-white font-semibold">December 12–13, 2026 · Lagos, Nigeria</p>
             </div>
             {user && <p className="text-brand-orange text-sm mb-4">Saved to your profile ✓</p>}
             <button onClick={() => { setSubmitted(false); setSelected(null); setPayRef('') }}

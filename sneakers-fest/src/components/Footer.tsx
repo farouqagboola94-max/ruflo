@@ -19,7 +19,7 @@ export default function Footer() {
             <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
               Lagos' first dedicated sneaker festival. Physical exhibition, year-round online platform, community engine.
             </p>
-            <p className="text-gray-500 text-sm mt-3">June 14–15, 2026 · Lagos, Nigeria</p>
+            <p className="text-gray-500 text-sm mt-3">December 12–13, 2026 · Lagos, Nigeria</p>
             <div className="mt-4 text-xs text-gray-600 leading-relaxed">
               Founded by{' '}
               <a

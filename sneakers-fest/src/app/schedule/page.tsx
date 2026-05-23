@@ -44,7 +44,7 @@ export default function SchedulePage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div className="mb-12">
-        <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">June 14–15, 2026</p>
+        <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">December 12–13, 2026</p>
         <h1 className="font-display text-5xl sm:text-6xl text-white mb-4">EVENT SCHEDULE</h1>
         <p className="text-gray-400 text-lg">Two days of panels, showcases, raffles, and vendor floors. Don't miss a moment.</p>
       </div>

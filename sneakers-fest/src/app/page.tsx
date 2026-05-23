@@ -33,7 +33,7 @@ export default function HomePage() {
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-orange/10 border border-brand-orange/30 text-brand-orange text-sm font-medium mb-8">
             <span className="w-2 h-2 rounded-full bg-brand-orange animate-pulse-slow" />
-            June 14–15, 2026 · Lagos, Nigeria
+            December 12–13, 2026 · Lagos, Nigeria
           </div>
           <h1 className="font-display text-6xl sm:text-8xl lg:text-9xl tracking-tight mb-6 leading-none">
             <span className="text-white">SNEAKERS</span><br />
@@ -130,7 +130,7 @@ export default function HomePage() {
                 The festival doesn't go dark between events. Every Friday, the Sneakers Fest community activates — drop discussions, challenges, live games, culture conversations.
               </p>
               <p className="text-gray-400 text-base leading-relaxed mb-8">
-                By the time June arrives, you won't be meeting strangers. You'll be in a room with people you've been building with for months.
+                By the time December arrives, you won't be meeting strangers. You'll be in a room with people you've been building with for months.
               </p>
               <div className="grid grid-cols-2 gap-4">
                 {FNP_WEEKS.map(({ week, title, desc }) => (
