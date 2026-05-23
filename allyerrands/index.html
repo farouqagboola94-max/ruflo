@@ -61,6 +61,16 @@
 </head>
 <body>
 
+  <div class="promo-banner" id="promoBanner">
+    <div class="promo-banner__inner">
+      <span class="promo-tag">LAUNCH OFFER</span>
+      First errand <strong>&#8358;500 off</strong> &mdash; code <strong class="promo-code">FIRST500</strong>
+      &nbsp;&mdash;&nbsp;ends in <span class="promo-timer" id="promoTimer">24:00:00</span>
+      <a href="#drop" class="promo-link" id="promoClaim">Claim &rarr;</a>
+    </div>
+    <button class="promo-close" id="promoBannerClose" aria-label="Dismiss">&times;</button>
+  </div>
+
   <div class="cursor-glow" id="cursorGlow"></div>
 
   <nav class="nav" id="navbar">
@@ -162,6 +172,30 @@
     </div>
   </section>
 
+  <div class="compare-strip">
+    <div class="compare-strip__inner">
+      <div class="compare-col compare-col--old">
+        <div class="compare-label">Without Za.</div>
+        <ul>
+          <li>Sit in Lagos traffic for 1+ hour</li>
+          <li>Queue at Shoprite yourself</li>
+          <li>Miss a meeting or appointment</li>
+          <li>Arrive home drained</li>
+        </ul>
+      </div>
+      <div class="compare-vs" aria-hidden="true">vs</div>
+      <div class="compare-col compare-col--new">
+        <div class="compare-label">Za.allyErrands</div>
+        <ul>
+          <li>Request in under 30 seconds</li>
+          <li>Runner dispatched in 8 min</li>
+          <li>Track live — stay at your desk</li>
+          <li>Done. You never moved.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
   <section class="process" id="process">
     <div class="section-label">// DISPATCH PROTOCOL</div>
     <div class="process__inner">
@@ -246,6 +280,45 @@
           <h3>Custom Request</h3>
           <p>Can't find it on the list? We'll handle it. Tell us what you need moved.</p>
           <a href="#drop" class="s-card__link">Make a Request &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="estimator" id="estimator">
+    <div class="estimator__inner">
+      <div class="section-label">// COST ESTIMATOR</div>
+      <div class="estimator__layout">
+        <div class="estimator__copy">
+          <h2>Know the cost<br /><span>before you ask.</span></h2>
+          <p>Pick your errand type and zone. Instant flat-rate estimate — no hidden charges, ever.</p>
+        </div>
+        <div class="estimator__widget">
+          <div class="est-group">
+            <div class="est-group__label">Errand Type</div>
+            <div class="est-pills" id="estType">
+              <button class="est-pill est-pill--active" data-base="1500">Grocery</button>
+              <button class="est-pill" data-base="1200">Pharmacy</button>
+              <button class="est-pill" data-base="1500">Package</button>
+              <button class="est-pill" data-base="1300">Restaurant</button>
+              <button class="est-pill" data-base="2500">Custom</button>
+            </div>
+          </div>
+          <div class="est-group">
+            <div class="est-group__label">Your Zone</div>
+            <div class="est-pills" id="estZone">
+              <button class="est-pill est-pill--active" data-mult="1.0">Lagos Island</button>
+              <button class="est-pill" data-mult="1.1">Mainland</button>
+              <button class="est-pill" data-mult="1.25">Outskirts</button>
+              <button class="est-pill" data-mult="1.4">Abuja / PH</button>
+            </div>
+          </div>
+          <div class="est-result">
+            <div class="est-result__label">Estimated Rate</div>
+            <div class="est-result__price" id="estPriceBox">&#8358;<span id="estPrice">1,500</span></div>
+            <div class="est-result__sub">Flat rate &middot; No surprises &middot; Confirmed via WhatsApp</div>
+            <a href="#drop" class="btn btn--hazard btn--full" style="margin-top:20px">Request at This Rate &rarr;</a>
+          </div>
         </div>
       </div>
     </div>
@@ -359,17 +432,106 @@
         <div class="proof-card" data-reveal>
           <div class="proof-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
           <p>&ldquo;Runs like a machine. I booked a pharmacy pickup at 11pm and got a WhatsApp update in 7 minutes. Nothing else in Lagos moves this fast.&rdquo;</p>
-          <div class="proof-card__author">Tunde K. &mdash; <em>Abuja</em></div>
+          <div class="proof-card__author">
+            <div class="proof-avatar" data-initials="TK" style="background:var(--orange)"></div>
+            <div class="proof-author-info"><strong>Tunde K.</strong><span>Abuja &middot; Monthly Plan</span></div>
+          </div>
         </div>
         <div class="proof-card proof-card--accent" data-reveal>
           <div class="proof-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p>&ldquo;I'm on the monthly plan. I haven't personally run a single errand since March. Za.allyErrands is the best business decision I've made all year.&rdquo;</p>
-          <div class="proof-card__author">Amara M. &mdash; <em>Lagos</em></div>
+          <p>&ldquo;I&rsquo;m on the monthly plan. I haven&rsquo;t personally run a single errand since March. Za.allyErrands is the best business decision I&rsquo;ve made all year.&rdquo;</p>
+          <div class="proof-card__author">
+            <div class="proof-avatar proof-avatar--dark" data-initials="AM"></div>
+            <div class="proof-author-info"><strong>Amara M.</strong><span>Lagos Island</span></div>
+          </div>
         </div>
         <div class="proof-card" data-reveal>
           <div class="proof-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p>&ldquo;The portal is clean, the runners are reliable, and the WhatsApp updates keep me in the loop without needing to call anyone. Exactly what I needed.&rdquo;</p>
-          <div class="proof-card__author">Chisom F. &mdash; <em>Port Harcourt</em></div>
+          <p>&ldquo;The portal is clean, runners are reliable, and WhatsApp updates keep me in the loop without needing to call anyone. Exactly what I needed.&rdquo;</p>
+          <div class="proof-card__author">
+            <div class="proof-avatar" data-initials="CF" style="background:var(--green);color:var(--black)"></div>
+            <div class="proof-author-info"><strong>Chisom F.</strong><span>Port Harcourt</span></div>
+          </div>
+        </div>
+        <div class="proof-card" data-reveal>
+          <div class="proof-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p>&ldquo;Grocery run, pharmacy, and a package drop — all in one day. One request each. They handled everything while I was in back-to-back meetings.&rdquo;</p>
+          <div class="proof-card__author">
+            <div class="proof-avatar" data-initials="SO" style="background:#9C6EF8"></div>
+            <div class="proof-author-info"><strong>Sola O.</strong><span>Lekki Phase 2</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="coverage">
+    <div class="coverage__inner">
+      <div class="section-label">// ACTIVE ZONES</div>
+      <div class="coverage__layout">
+        <div class="coverage__copy">
+          <h2>We run<br /><span>everywhere.</span></h2>
+          <p>20+ active zones across Lagos, Abuja, and Port Harcourt. New areas unlocking monthly.</p>
+          <div class="coverage__stat"><span class="counter-num" data-target="20">20</span>+ Zones Active</div>
+        </div>
+        <div class="coverage__zones">
+          <span class="zone zone--hot">Victoria Island</span>
+          <span class="zone zone--hot">Lekki Phase 1</span>
+          <span class="zone zone--hot">Ikoyi</span>
+          <span class="zone zone--active">Lekki Phase 2</span>
+          <span class="zone zone--active">Ikeja GRA</span>
+          <span class="zone zone--active">Surulere</span>
+          <span class="zone zone--active">Yaba</span>
+          <span class="zone zone--active">Oniru Estate</span>
+          <span class="zone zone--active">Ajah</span>
+          <span class="zone zone--active">Osapa London</span>
+          <span class="zone zone--active">Magodo</span>
+          <span class="zone zone--active">Maryland</span>
+          <span class="zone zone--active">Gbagada</span>
+          <span class="zone zone--active">Sangotedo</span>
+          <span class="zone zone--mid">Badagry</span>
+          <span class="zone zone--mid">Epe</span>
+          <span class="zone zone--coming">Abuja &mdash; Maitama</span>
+          <span class="zone zone--coming">Abuja &mdash; Wuse 2</span>
+          <span class="zone zone--coming">Port Harcourt GRA</span>
+          <span class="zone zone--coming">Ibadan CBD</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq" id="faq">
+    <div class="faq__inner">
+      <div class="section-label">// QUESTIONS</div>
+      <div class="faq__layout">
+        <div class="faq__copy">
+          <h2>Got questions.<br /><span>We answer them.</span></h2>
+        </div>
+        <div class="faq__list">
+          <div class="faq-item" data-reveal>
+            <button class="faq-q">How quickly will my runner be dispatched?<span class="faq-icon">+</span></button>
+            <div class="faq-a"><p>Average dispatch is 8 minutes. You&rsquo;ll get a WhatsApp message the moment a runner accepts your job. During peak hours (7&ndash;9am, 5&ndash;8pm) allow up to 15 minutes.</p></div>
+          </div>
+          <div class="faq-item" data-reveal>
+            <button class="faq-q">How do I pay?<span class="faq-icon">+</span></button>
+            <div class="faq-a"><p>Payment is via Flutterwave &mdash; card, bank transfer, or USSD. You pay after we confirm your quote via WhatsApp. No card data is ever stored on our end.</p></div>
+          </div>
+          <div class="faq-item" data-reveal>
+            <button class="faq-q">Which areas do you cover?<span class="faq-icon">+</span></button>
+            <div class="faq-a"><p>Currently 20+ zones across Lagos (Island, Mainland, Outskirts), Abuja, and Port Harcourt. See the zone map above, or WhatsApp us to confirm your street.</p></div>
+          </div>
+          <div class="faq-item" data-reveal>
+            <button class="faq-q">What if something goes wrong with my errand?<span class="faq-icon">+</span></button>
+            <div class="faq-a"><p>All errands are photo-documented at pickup and delivery. If there&rsquo;s ever an issue, WhatsApp us and we resolve it within 2 hours. We stand behind every run.</p></div>
+          </div>
+          <div class="faq-item" data-reveal>
+            <button class="faq-q">Do I need to create an account?<span class="faq-icon">+</span></button>
+            <div class="faq-a"><p>No account needed for your first request. Returning clients get a dedicated portal for tracking, history, and scheduling recurring errands.</p></div>
+          </div>
+          <div class="faq-item" data-reveal>
+            <button class="faq-q">Can I schedule recurring errands?<span class="faq-icon">+</span></button>
+            <div class="faq-a"><p>Yes &mdash; weekly and monthly plan clients get a recurring scheduler in their portal. Set it once, we handle it every time. Or message us directly on WhatsApp.</p></div>
+          </div>
         </div>
       </div>
     </div>
@@ -499,6 +661,11 @@
       <a href="#drop" class="btn btn--hazard mobile-cta__btn" onclick="document.getElementById('mobileCta').classList.remove('visible')">Request Now</a>
     </div>
   </div>
+
+  <a href="https://wa.me/2348000000000?text=Hi%20Za.allyErrands%2C%20I%27d%20like%20to%20request%20an%20errand" class="wa-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+    <span class="wa-float__tip">Chat with us</span>
+  </a>
 
   <script src="script.js"></script>
 </body>

@@ -285,3 +285,83 @@
     el.style.animation = 'shake 0.35s ease';
   };
 })();
+
+// ── Promo banner countdown ──
+(function () {
+  const banner = document.getElementById('promoBanner');
+  const timerEl = document.getElementById('promoTimer');
+  const closeBtn = document.getElementById('promoBannerClose');
+  if (!banner || !timerEl) return;
+
+  if (sessionStorage.getItem('za_promo_dismissed')) {
+    banner.classList.add('hidden');
+    return;
+  }
+
+  const KEY = 'za_promo_expiry';
+  const DURATION = 24 * 3600 * 1000;
+  let expiry = parseInt(localStorage.getItem(KEY) || '0', 10);
+  if (!expiry || expiry < Date.now()) {
+    expiry = Date.now() + DURATION;
+    localStorage.setItem(KEY, expiry);
+  }
+
+  function tick() {
+    const rem = Math.max(0, expiry - Date.now());
+    if (rem === 0) { banner.classList.add('hidden'); return; }
+    const h = String(Math.floor(rem / 3600000)).padStart(2, '0');
+    const m = String(Math.floor((rem % 3600000) / 60000)).padStart(2, '0');
+    const s = String(Math.floor((rem % 60000) / 1000)).padStart(2, '0');
+    timerEl.textContent = `${h}:${m}:${s}`;
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  closeBtn.addEventListener('click', () => {
+    banner.classList.add('hidden');
+    sessionStorage.setItem('za_promo_dismissed', '1');
+  });
+})();
+
+// ── FAQ accordion ──
+document.querySelectorAll('.faq-q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+
+// ── Price estimator ──
+(function () {
+  const priceEl = document.getElementById('estPrice');
+  const priceBox = document.getElementById('estPriceBox');
+  if (!priceEl) return;
+
+  let base = 1500;
+  let mult = 1.0;
+
+  function update() {
+    const total = Math.round(base * mult / 100) * 100;
+    priceEl.textContent = total.toLocaleString();
+    priceBox.classList.add('pop');
+    setTimeout(() => priceBox.classList.remove('pop'), 280);
+  }
+
+  function bindPills(groupId, prop) {
+    document.getElementById(groupId)?.querySelectorAll('.est-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.getElementById(groupId).querySelectorAll('.est-pill')
+          .forEach(p => p.classList.remove('est-pill--active'));
+        pill.classList.add('est-pill--active');
+        if (prop === 'base') base = parseInt(pill.dataset.base, 10);
+        else mult = parseFloat(pill.dataset.mult);
+        update();
+      });
+    });
+  }
+
+  bindPills('estType', 'base');
+  bindPills('estZone', 'mult');
+})();
