@@ -3,6 +3,7 @@ import Link from 'next/link'
 const SOCIAL_LINKS = [
   { label: 'Twitter / X', href: 'https://x.com/Catalyst188' },
   { label: 'Instagram', href: 'https://instagram.com/sneakersfest' },
+  { label: 'YouTube', href: 'https://youtube.com/@catalyst00555' },
   { label: 'TikTok', href: 'https://tiktok.com/@sneakersfest' },
 ]
 
