@@ -1,5 +1,11 @@
 import Link from 'next/link'
 
+const SOCIAL_LINKS = [
+  { label: 'Twitter / X', href: 'https://x.com/Catalyst188' },
+  { label: 'Instagram', href: 'https://instagram.com/sneakersfest' },
+  { label: 'TikTok', href: 'https://tiktok.com/@sneakersfest' },
+]
+
 export default function Footer() {
   return (
     <footer className="border-t border-white/10 bg-brand-dark mt-20">
@@ -23,7 +29,7 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Navigate</h4>
             <ul className="space-y-2">
-              {[['/', 'Home'], ['/schedule', 'Schedule'], ['/catalog', 'Catalog'], ['/marketplace', 'Marketplace'], ['/tickets', 'Tickets'], ['/contact', 'Contact']].map(([href, label]) => (
+              {[['/', 'Home'], ['/schedule', 'Schedule'], ['/catalog', 'Catalog'], ['/marketplace', 'Marketplace'], ['/fnp', 'FNP'], ['/tickets', 'Tickets'], ['/contact', 'Contact']].map(([href, label]) => (
                 <li key={href}>
                   <Link href={href} className="text-gray-400 hover:text-brand-orange text-sm transition-colors">{label}</Link>
                 </li>
@@ -32,23 +38,32 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Contact</h4>
-            <ul className="space-y-2 text-gray-400 text-sm">
-              <li>info@sneakersfest.com</li>
-              <li>Lagos, Nigeria</li>
-              <li className="pt-2">
-                <span className="text-gray-500 text-xs uppercase tracking-wider block mb-1">Friday Night Protocol</span>
-                Every Friday · IG · X · TikTok · WA
-              </li>
+            <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Find Us</h4>
+            <ul className="space-y-3">
+              {SOCIAL_LINKS.map(({ label, href }) => (
+                <li key={label}>
+                  <a href={href} target="_blank" rel="noopener noreferrer"
+                    className="text-gray-400 hover:text-brand-orange text-sm transition-colors">
+                    {label}
+                  </a>
+                </li>
+              ))}
             </ul>
+            <div className="mt-4 pt-4 border-t border-white/5">
+              <p className="text-gray-600 text-xs uppercase tracking-wider mb-1">Friday Night Protocol</p>
+              <p className="text-gray-500 text-xs">Every Friday · IG · X · TikTok · WA</p>
+            </div>
           </div>
         </div>
 
         <div className="border-t border-white/10 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-gray-500 text-xs">© 2026 Sneakers Fest · Catalyst Concepts · All rights reserved.</p>
           <div className="flex gap-4">
-            {['Twitter / X', 'Instagram', 'TikTok'].map(s => (
-              <span key={s} className="text-gray-500 hover:text-brand-orange text-xs cursor-pointer transition-colors">{s}</span>
+            {SOCIAL_LINKS.map(({ label, href }) => (
+              <a key={label} href={href} target="_blank" rel="noopener noreferrer"
+                className="text-gray-500 hover:text-brand-orange text-xs transition-colors">
+                {label}
+              </a>
             ))}
           </div>
         </div>
