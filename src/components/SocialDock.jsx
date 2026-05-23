@@ -3,12 +3,12 @@ import { B } from '../tokens'
 import { SOCIAL_LINKS } from '../config'
 
 const PLATFORMS = [
-  { id: 'tiktok',     label: 'TIKTOK',     abbr: 'TK', color: '#69C9D0',     href: SOCIAL_LINKS.tiktok,     tip: 'Challenges & Clips' },
-  { id: 'youtube',   label: 'YOUTUBE',    abbr: 'YT', color: B.neonMagenta, href: SOCIAL_LINKS.youtube,    tip: 'Docs & Interviews' },
-  { id: 'twitter',   label: 'TWITTER',    abbr: 'X',  color: B.neonCyan,    href: SOCIAL_LINKS.twitter,    tip: 'Live Updates' },
-  { id: 'instagram', label: 'INSTAGRAM',  abbr: 'IG', color: '#E1306C',     href: SOCIAL_LINKS.instagram,  tip: 'Drops & Culture' },
-  { id: 'snapchat',  label: 'SNAPCHAT',   abbr: 'SC', color: B.amber,       href: SOCIAL_LINKS.snapchat,   tip: 'Stories & BTS' },
-  { id: 'whatsapp',  label: 'WHATSAPP',   abbr: 'WA', color: B.neonLime,    href: SOCIAL_LINKS.whatsapp,   tip: 'Join Community' },
+  { id: 'tiktok',     label: 'TIKTOK',     abbr: 'TK', color: '#69C9D0',     href: SOCIAL_LINKS.tiktok,             tip: 'Challenges & Clips' },
+  { id: 'youtube',   label: 'YOUTUBE',    abbr: 'YT', color: B.neonMagenta, href: SOCIAL_LINKS.youtube,            tip: 'Docs & Interviews' },
+  { id: 'twitter',   label: 'TWITTER',    abbr: 'X',  color: B.neonCyan,    href: SOCIAL_LINKS.twitter,            tip: '@Catalyst188' },
+  { id: 'instagram', label: 'INSTAGRAM',  abbr: 'IG', color: '#E1306C',     href: SOCIAL_LINKS.instagramPersonal,  tip: '@Catalystggg' },
+  { id: 'snapchat',  label: 'SNAPCHAT',   abbr: 'SC', color: B.amber,       href: SOCIAL_LINKS.snapchat,           tip: 'Stories & BTS' },
+  { id: 'whatsapp',  label: 'WHATSAPP',   abbr: 'WA', color: B.neonLime,    href: SOCIAL_LINKS.whatsapp,           tip: 'Join Community' },
 ]
 
 export default function SocialDock() {
