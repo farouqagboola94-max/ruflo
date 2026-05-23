@@ -29,13 +29,12 @@ export default function MarketplacePage() {
         </div>
         <button
           onClick={() => { setShowListForm(true); setSubmitted(false) }}
-          className="flex-shrink-0 px-6 py-3 rounded-full bg-gradient-to-r from-brand-orange to-brand-yellow text-black font-bold hover:opacity-90 transition-opacity"
+          className="flex-shrink-0 px-6 py-3 rounded-full bg-gradient-to-r from-brand-orange to-brand-amber text-black font-bold hover:opacity-90 transition-opacity"
         >
           + List Your Sneakers
         </button>
       </div>
 
-      {/* Listing Type Tabs */}
       <div className="flex gap-2 mb-8">
         {LISTING_TYPES.map(type => (
           <button
@@ -50,12 +49,10 @@ export default function MarketplacePage() {
         ))}
       </div>
 
-      {/* Listings Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
         {marketplaceItems.map(s => <SneakerCard key={s.id} sneaker={s} showSeller />)}
       </div>
 
-      {/* How it works */}
       <div className="bg-brand-gray rounded-3xl p-8 mb-16 border border-white/5">
         <h2 className="font-display text-3xl text-white mb-8 text-center">HOW IT WORKS</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -73,7 +70,6 @@ export default function MarketplacePage() {
         </div>
       </div>
 
-      {/* List Form Modal */}
       {showListForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
           <div className="bg-brand-gray rounded-3xl p-8 w-full max-w-lg border border-white/10 max-h-[90vh] overflow-y-auto">
@@ -88,7 +84,7 @@ export default function MarketplacePage() {
               <div className="text-center py-8">
                 <div className="text-5xl mb-4">✅</div>
                 <h4 className="text-white font-bold text-xl mb-2">Listing Submitted!</h4>
-                <p className="text-gray-400">We’ll confirm your vendor slot via email before the event.</p>
+                <p className="text-gray-400">We'll confirm your vendor slot via email before the event.</p>
                 <button onClick={() => setShowListForm(false)} className="mt-6 px-6 py-3 rounded-full bg-brand-orange text-black font-bold">Close</button>
               </div>
             ) : (
@@ -97,7 +93,7 @@ export default function MarketplacePage() {
                   { label: 'Sneaker Name', key: 'name', placeholder: 'e.g. Air Jordan 1 Chicago' },
                   { label: 'Brand', key: 'brand', placeholder: 'e.g. Nike, Jordan, Adidas' },
                   { label: 'Size (US)', key: 'size', placeholder: 'e.g. 10' },
-                  { label: 'Asking Price ($)', key: 'price', placeholder: 'e.g. 250' },
+                  { label: 'Asking Price (₦ NGN)', key: 'price', placeholder: 'e.g. 250,000' },
                   { label: 'Contact (Email or IG)', key: 'contact', placeholder: '@handle or email' },
                 ].map(({ label, key, placeholder }) => (
                   <div key={key}>
@@ -126,7 +122,7 @@ export default function MarketplacePage() {
                     </select>
                   </div>
                 </div>
-                <button type="submit" className="w-full py-4 rounded-xl bg-gradient-to-r from-brand-orange to-brand-yellow text-black font-bold text-lg hover:opacity-90 transition-opacity mt-2">
+                <button type="submit" className="w-full py-4 rounded-xl bg-gradient-to-r from-brand-orange to-brand-amber text-black font-bold text-lg hover:opacity-90 transition-opacity mt-2">
                   Submit Listing
                 </button>
               </form>

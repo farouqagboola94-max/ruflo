@@ -76,7 +76,7 @@ export default function TicketsPage() {
             }`}>
             {t.badge && (
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-                <span className="px-4 py-1 rounded-full bg-gradient-to-r from-brand-orange to-brand-yellow text-black text-xs font-bold">{t.badge}</span>
+                <span className="px-4 py-1 rounded-full bg-gradient-to-r from-brand-orange to-brand-amber text-black text-xs font-bold">{t.badge}</span>
               </div>
             )}
             <div className="rounded-3xl bg-brand-gray p-6 h-full flex flex-col">
@@ -143,7 +143,7 @@ export default function TicketsPage() {
                 </div>
               )}
               <button type="submit" disabled={!tier || processing}
-                className="w-full py-4 rounded-xl bg-gradient-to-r from-brand-orange to-brand-yellow text-black font-bold text-lg hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed">
+                className="w-full py-4 rounded-xl bg-gradient-to-r from-brand-orange to-brand-amber text-black font-bold text-lg hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed">
                 {processing ? 'Opening payment…' : tier ? `Pay ₦${total.toLocaleString()}` : 'Select a Ticket First'}
               </button>
               <p className="text-center text-gray-500 text-xs">Secured by Paystack · SSL encrypted</p>
@@ -152,13 +152,13 @@ export default function TicketsPage() {
         ) : (
           <div className="bg-brand-gray rounded-3xl p-12 border border-brand-orange/20 text-center">
             <div className="text-6xl mb-6">👟</div>
-            <h3 className="font-display text-3xl text-white mb-3">YOU’RE IN!</h3>
+            <h3 className="font-display text-3xl text-white mb-3">YOU'RE IN!</h3>
             <p className="text-gray-400 mb-2">Confirmation sent to <span className="text-white">{form.email}</span></p>
             <p className="text-gray-500 text-sm mb-2">{form.quantity} × {tier?.name} · ₦{total.toLocaleString()}</p>
             <p className="text-gray-600 text-xs font-mono mb-8">Ref: {payRef}</p>
             <div className="bg-brand-dark rounded-2xl p-4 mb-6 border border-white/10">
-              <p className="text-gray-400 text-sm">Lagos Convention Centre</p>
-              <p className="text-white font-semibold">June 14–15, 2026 · Victoria Island</p>
+              <p className="text-gray-500 text-sm">Venue confirmation coming soon</p>
+              <p className="text-white font-semibold">June 14–15, 2026 · Lagos, Nigeria</p>
             </div>
             {user && <p className="text-brand-orange text-sm mb-4">Saved to your profile ✓</p>}
             <button onClick={() => { setSubmitted(false); setSelected(null); setPayRef('') }}

@@ -33,7 +33,7 @@ function EventRow({ event }: { event: ScheduleEvent }) {
         <p className="text-gray-400 text-sm leading-relaxed">{event.description}</p>
         <div className="flex flex-wrap gap-4 mt-3 text-sm">
           <span className="text-gray-500">📍 {event.location}</span>
-          {event.speaker && <span className="text-brand-yellow">🎤 {event.speaker}</span>}
+          {event.speaker && <span className="text-brand-amber">🎤 {event.speaker}</span>}
         </div>
       </div>
     </div>
@@ -44,9 +44,9 @@ export default function SchedulePage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div className="mb-12">
-        <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">June 14–15, 2025</p>
+        <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">June 14–15, 2026</p>
         <h1 className="font-display text-5xl sm:text-6xl text-white mb-4">EVENT SCHEDULE</h1>
-        <p className="text-gray-400 text-lg">Two days of panels, showcases, raffles, and vendor floors. Don’t miss a moment.</p>
+        <p className="text-gray-400 text-lg">Two days of panels, showcases, raffles, and vendor floors. Don't miss a moment.</p>
       </div>
 
       <div className="flex flex-wrap gap-3 mb-12">
@@ -60,7 +60,7 @@ export default function SchedulePage() {
       {SCHEDULE.map(day => (
         <div key={day.day} className="mb-16">
           <div className="flex items-center gap-4 mb-8">
-            <div className="bg-gradient-to-r from-brand-orange to-brand-yellow p-px rounded-xl">
+            <div className="bg-gradient-to-r from-brand-orange to-brand-amber p-px rounded-xl">
               <div className="bg-brand-dark px-5 py-2 rounded-xl">
                 <p className="font-display text-brand-orange text-sm">{day.day}</p>
                 <p className="text-white font-bold">{day.date}</p>

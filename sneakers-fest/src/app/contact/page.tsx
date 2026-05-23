@@ -13,7 +13,7 @@ export default function ContactPage() {
       <div className="text-center mb-14">
         <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">Get in Touch</p>
         <h1 className="font-display text-5xl sm:text-6xl text-white mb-4">CONTACT & FAQ</h1>
-        <p className="text-gray-400 text-lg max-w-xl mx-auto">Got questions? We&apos;ve got answers. Drop us a message and we&apos;ll reply within 24 hours.</p>
+        <p className="text-gray-400 text-lg max-w-xl mx-auto">Got questions? Drop us a message and we'll reply within 24 hours.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-20">
@@ -23,7 +23,7 @@ export default function ContactPage() {
             <div className="text-center py-10">
               <div className="text-5xl mb-4">✉️</div>
               <h3 className="text-white font-bold text-xl mb-2">Message Sent!</h3>
-              <p className="text-gray-400">We&apos;ll get back to you at <span className="text-white">{form.email}</span> within 24 hours.</p>
+              <p className="text-gray-400">We'll get back to you at <span className="text-white">{form.email}</span> within 24 hours.</p>
               <button onClick={() => { setSubmitted(false); setForm({ name: '', email: '', subject: '', message: '' }) }} className="mt-6 text-brand-orange text-sm hover:underline">Send another</button>
             </div>
           ) : (
@@ -42,17 +42,17 @@ export default function ContactPage() {
                   onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
                   className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand-orange text-sm resize-none" />
               </div>
-              <button type="submit" className="w-full py-3 rounded-xl bg-gradient-to-r from-brand-orange to-brand-yellow text-black font-bold hover:opacity-90">Send Message</button>
+              <button type="submit" className="w-full py-3 rounded-xl bg-gradient-to-r from-brand-orange to-brand-amber text-black font-bold hover:opacity-90">Send Message</button>
             </form>
           )}
         </div>
 
         <div className="space-y-4">
           {[
-            { icon: '📍', label: 'Address', value: 'Lagos Convention Centre, 1 Ozumba Mbadiwe Ave, Victoria Island, Lagos' },
+            { icon: '📍', label: 'Location', value: 'Victoria Island, Lagos · Venue announcement coming soon' },
             { icon: '📧', label: 'Email', value: 'info@sneakersfest.com' },
-            { icon: '📞', label: 'Phone', value: '+234 800 SNEAKERS' },
-            { icon: '🕐', label: 'Support Hours', value: 'Mon – Fri, 9am – 6pm WAT' },
+            { icon: '🟢', label: 'Friday Night Protocol', value: 'Every Friday · IG · Twitter / X · TikTok · WhatsApp' },
+            { icon: '🔐', label: 'Support Hours', value: 'Mon to Fri, 9am to 6pm WAT' },
           ].map(({ icon, label, value }) => (
             <div key={label} className="flex gap-4 p-5 bg-brand-gray rounded-2xl border border-white/5">
               <span className="text-2xl">{icon}</span>
