@@ -47,7 +47,7 @@ export default function MobileCTA() {
           SNEAKERS FEST '26
         </div>
         <div style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 20, color: B.amber, letterSpacing: 1, lineHeight: 1.1, marginTop: 2 }}>
-          DEC 12 · EKO ATLANTIC
+          DEC 12 · LAGOS, NIGERIA
         </div>
       </div>
       <a

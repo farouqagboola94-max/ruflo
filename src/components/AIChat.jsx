@@ -83,9 +83,15 @@ export default function AIChat() {
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768)
   const endRef = useRef(null)
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages, loading])
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
 
   function send() {
     if (!input.trim() || loading) return
@@ -111,7 +117,7 @@ export default function AIChat() {
         onClick={() => setOpen(o => !o)}
         aria-label={open ? 'Close chat' : 'Open chat'}
         style={{
-          position: 'fixed', bottom: 28, left: 28, zIndex: 1001,
+          position: 'fixed', bottom: isMobile ? 90 : 28, left: 28, zIndex: 1001,
           width: 54, height: 54, borderRadius: '50%',
           background: `linear-gradient(135deg, ${B.amber}, ${B.neonCyan})`,
           border: 'none', cursor: 'pointer',
@@ -131,7 +137,7 @@ export default function AIChat() {
       {/* Chat panel */}
       {open && (
         <div style={{
-          position: 'fixed', bottom: 94, left: 28, zIndex: 1000,
+          position: 'fixed', bottom: isMobile ? 156 : 94, left: 28, zIndex: 1000,
           width: 340, height: 490,
           borderRadius: 18,
           background: 'rgba(8,8,12,0.96)',

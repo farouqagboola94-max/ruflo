@@ -15,7 +15,7 @@ export default function ShareButton() {
   const handleShare = async () => {
     const data = {
       title: "Sneakers Fest '26 — The Sole Exhibition",
-      text: "West Africa's premier sneaker culture event. December 12, 2026 · Eko Atlantic, Lagos.",
+      text: "West Africa's premier sneaker culture event. December 12, 2026 · Lagos, Nigeria.",
       url: window.location.href,
     }
     if (navigator.share && navigator.canShare && navigator.canShare(data)) {

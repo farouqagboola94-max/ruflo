@@ -5,11 +5,17 @@ export default function WhatsAppButton() {
   const [visible, setVisible] = useState(false)
   const [hovered, setHovered] = useState(false)
   const [expanded, setExpanded] = useState(false)
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768)
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 400)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
   }, [])
 
   const contacts = [
@@ -21,7 +27,7 @@ export default function WhatsAppButton() {
     <div
       style={{
         position: 'fixed',
-        bottom: 160,
+        bottom: isMobile ? 156 : 160,
         right: 24,
         zIndex: 900,
         display: 'flex',
