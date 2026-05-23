@@ -44,7 +44,7 @@ const QA = [
   },
   {
     keys: ['interview', 'documentary', 'video', 'youtube', 'watch'],
-    answer: 'Event docs and collector interviews will drop on our YouTube channel. Subscribe @SNEAKERSFEST on YouTube to get notified.'
+    answer: 'Event docs and collector interviews drop on the YouTube channel. Subscribe @catalyst00555 on YouTube to get notified.'
   },
   {
     keys: ['whatsapp', 'community', 'join', 'inner circle', 'group'],

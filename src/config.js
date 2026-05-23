@@ -1,7 +1,7 @@
 // ── UPDATE THESE WITH YOUR REAL SOCIAL LINKS ─────────────────────────────
 export const SOCIAL_LINKS = {
   tiktok:            'https://tiktok.com/@sneakersfest',
-  youtube:           'https://youtube.com/@sneakersfest',
+  youtube:           'https://youtube.com/@catalyst00555',
   twitter:           'https://twitter.com/Catalyst188',
   instagram:         'https://instagram.com/sneakersfest',
   instagramPersonal: 'https://instagram.com/catalystggg',

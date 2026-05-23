@@ -33,7 +33,7 @@ const PLATFORMS = [
   },
   {
     name: "YOUTUBE",
-    handle: "@SNEAKERSFEST",
+    handle: "@catalyst00555",
     color: B.neonMagenta,
     href: LINKS.youtube,
     icon: "YT",
