@@ -107,7 +107,7 @@ class MockSecurityScanTool {
       owasp: 'A02:2021',
       file: 'src/config.ts',
       line: 12,
-      code: 'const API_KEY = "sk-1234567890abcdef"',
+      code: 'const API_KEY = "test-key-placeholder-1234567890abcdef"',
       remediation: 'Move secrets to environment variables',
       confidence: 0.99,
     },
