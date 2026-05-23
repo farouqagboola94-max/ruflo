@@ -294,7 +294,7 @@ describe('GuidanceHookProvider', () => {
 
       const ctx = makeHookContext({
         event: HookEvent.PreCommand,
-        command: { raw: 'export API_KEY="sk-abc123456789012345678901234567890"' },
+        command: { raw: 'export API_KEY="test-key-abc123456789012345678901234567890"' },
       });
 
       const result = await handler(ctx);

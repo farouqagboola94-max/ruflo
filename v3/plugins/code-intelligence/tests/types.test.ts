@@ -511,7 +511,7 @@ describe('Code Intelligence Types', () => {
 
   describe('maskSecrets', () => {
     it('should mask API keys', () => {
-      const code = 'const apiKey = "sk-live-abcdefghijklmnopqrstuvwx"';
+      const code = 'const apiKey = "test-key-live-abcdefghijklmnopqrstuvwx"';
       const masked = maskSecrets(code);
       expect(masked).toContain('[REDACTED]');
     });

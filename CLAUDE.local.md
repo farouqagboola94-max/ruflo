@@ -43,3 +43,5 @@ npx claude-flow@v3alpha hooks worker list
 4-step pipeline: RETRIEVE (HNSW) → JUDGE (verdicts) → DISTILL (LoRA) → CONSOLIDATE (EWC++)
 
 Components: SONA (<0.05ms), MoE (8 experts), HNSW (150x-12,500x), Flash Attention (2.49x-7.47x)
+
+@AGENTS.md

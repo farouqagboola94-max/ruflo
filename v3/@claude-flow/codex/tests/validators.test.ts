@@ -123,7 +123,7 @@ Some content`;
 
 ## Setup
 
-api_key = "sk-1234567890abcdefghijklmnopqrstuvwxyz1234"
+api_key = "test-key-1234567890abcdefghijklmnopqrstuvwxyz"
 
 ## Code Standards
 
