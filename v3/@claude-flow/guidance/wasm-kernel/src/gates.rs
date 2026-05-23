@@ -90,7 +90,7 @@ mod tests {
 
     #[test]
     fn test_scan_secrets_api_key() {
-        let content = r#"api_key = "sk-abcdefghij1234567890""#;
+        let content = r#"api_key = "test-key-placeholder-abcdef1234567890""#;
         let matches = scan_secrets(content);
         assert!(!matches.is_empty());
         // Should be redacted

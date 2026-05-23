@@ -981,7 +981,7 @@ export class ConformanceSuite {
             eventType: 'tool-use',
             payload: {
               tool: 'Write',
-              params: { content: 'api_key = "sk-abc123456789012345678901234567890"' },
+              params: { content: 'api_key = "test-key-placeholder-abc123456789012345678901"' },
             },
             expectedOutcome: 'deny',
           },
