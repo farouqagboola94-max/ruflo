@@ -1,15 +1,85 @@
 import { useState, useRef, useEffect } from 'react'
 import { B } from '../tokens'
 
-const API_URL = import.meta.env.VITE_OLLAMA_URL || ''
-const MODEL = import.meta.env.VITE_OLLAMA_MODEL || 'llama3.2'
+const QA = [
+  {
+    keys: ['ticket', 'price', 'cost', 'how much', 'buy', 'get ticket', 'purchase'],
+    answer: 'Tickets: General ₦15,000 · VIP ₦35,000 · Ultra VIP ₦75,000. Head to the Tickets section to grab yours. Early access members get first dibs.'
+  },
+  {
+    keys: ['date', 'when', 'time', 'december', 'day'],
+    answer: 'December 12, 2026. Doors open 12:00 PM. Mark your calendar.'
+  },
+  {
+    keys: ['venue', 'location', 'where', 'eko', 'atlantic', 'address'],
+    answer: 'Eko Atlantic, Lagos, Nigeria. One of the most iconic event spaces in West Africa.'
+  },
+  {
+    keys: ['lineup', 'dj', 'artist', 'spinall', 'music', 'perform', 'headliner'],
+    answer: 'DJ Spinall is headlining. Full lineup details are in the Lineup section — scroll down or tap the nav.'
+  },
+  {
+    keys: ['vip', 'ultra', 'experience', 'lounge', 'meet'],
+    answer: 'VIP (₦35K): Priority entry + exclusive lounge. Ultra VIP (₦75K): Everything VIP plus private area, meet & greet access, and a dedicated host.'
+  },
+  {
+    keys: ['vendor', 'sell', 'stall', 'booth', 'apply', 'brand'],
+    answer: 'Vendor spots are invitation-curated — 30 to 50 stalls, Year 1 first cohort. Fill the application in the Vendors section. We review within 3 business days.'
+  },
+  {
+    keys: ['sponsor', 'partner', 'sponsorship'],
+    answer: 'Packages from ₦250K (Community) to ₦5M+ (Headline). FNP session sponsorships also available from ₦100K. Email sponsors@sneakersfest.com or check the Sponsors section.'
+  },
+  {
+    keys: ['fnp', 'friday', 'protocol', 'weekly', 'challenge', 'game', 'conversation'],
+    answer: 'The Friday Night Protocol runs every Friday — a weekly community session with drop discussions, challenges, live conversations, and games. Join via WhatsApp to get alerts.'
+  },
+  {
+    keys: ['drop', 'exclusive', 'release', 'cop', 'pair', 'kicks', 'sneaker', 'grail'],
+    answer: 'Exclusive drops get announced first in the Friday Night Protocol community. Follow on WhatsApp and Twitter (@Catalyst188) — those are the first to know.'
+  },
+  {
+    keys: ['early access', 'waitlist', 'queue', 'first'],
+    answer: 'Sign up for early access in the Early Access section. You get a queue position and first shot at tickets, vendor spots, and exclusive drop announcements.'
+  },
+  {
+    keys: ['interview', 'documentary', 'video', 'youtube', 'watch'],
+    answer: 'Event docs and collector interviews will drop on our YouTube channel. Subscribe @SNEAKERSFEST on YouTube to get notified.'
+  },
+  {
+    keys: ['whatsapp', 'community', 'join', 'inner circle', 'group'],
+    answer: 'Join the community via the WhatsApp button on the site. Inner circle members get early access, FNP alerts, and direct drop announcements.'
+  },
+  {
+    keys: ['contact', 'reach', 'email', 'talk', 'message', 'hello', 'hi'],
+    answer: 'Tap the WhatsApp button (bottom right) for fastest response. For press: press@sneakersfest.com. For sponsors: sponsors@sneakersfest.com.'
+  },
+  {
+    keys: ['catalyst', 'founder', 'oluwatobiloba', 'who', 'about'],
+    answer: 'Sneakers Fest is built by Oluwatobiloba — The Catalyst, principal of Catalyst Concepts, Lagos. Read the full origin story in the Origin Story section.'
+  },
+  {
+    keys: ['merch', 'shirt', 'hoodie', 'clothing', 'wear', 'apparel'],
+    answer: 'Merch is in the Merch section. Lagos Noir aesthetic — the same visual language as the festival itself.'
+  },
+  {
+    keys: ['substack', 'newsletter', 'read', 'essay', 'culture'],
+    answer: 'The Catalyst Substack (@catalyst00555) covers sneaker culture, Lagos streetwear, event docs, and community stories. Subscribe free — check the Substack section.'
+  },
+]
 
-const SYSTEM = `You are the Sneakers Fest AI assistant — Lagos, Nigeria's premier sneaker culture event and community. Be knowledgeable, enthusiastic, and speak in a friendly urban tone. Key facts: Event date December 12 2026, Lagos Nigeria. Tickets: General ₦15,000 · VIP ₦35,000 · Ultra VIP ₦75,000. Headliner: DJ Spinall. Community: 10,000+ members across TikTok, YouTube, Twitter, Instagram, Snapchat, WhatsApp.`
+function getReply(text) {
+  const q = text.toLowerCase()
+  for (const qa of QA) {
+    if (qa.keys.some(k => q.includes(k))) return qa.answer
+  }
+  return null
+}
 
 export default function AIChat() {
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: "Yo! I'm the Sneakers Fest AI. Ask me anything about the event, kicks, lineup, or tickets." }
+    { role: 'assistant', content: "What's good. I'm the Sneakers Fest AI. Ask me anything — tickets, lineup, vendors, the Friday Protocol, drops, or what this whole thing is about." }
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -17,39 +87,21 @@ export default function AIChat() {
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages, loading])
 
-  async function send() {
+  function send() {
     if (!input.trim() || loading) return
     const text = input.trim()
     setInput('')
     setMessages(prev => [...prev, { role: 'user', content: text }])
     setLoading(true)
 
-    if (!API_URL) {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'AI chat needs Ollama running. Set VITE_OLLAMA_URL in your environment and run: docker compose up ollama && docker exec sneakers-ollama ollama pull llama3.2' }])
+    setTimeout(() => {
+      const reply = getReply(text)
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: reply || "That one's better answered by the team directly. Tap the WhatsApp button (bottom right) and they'll get back to you fast."
+      }])
       setLoading(false)
-      return
-    }
-
-    try {
-      const res = await fetch(`${API_URL}/api/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: MODEL,
-          messages: [
-            { role: 'system', content: SYSTEM },
-            ...messages.map(m => ({ role: m.role, content: m.content })),
-            { role: 'user', content: text }
-          ],
-          stream: false
-        })
-      })
-      const data = await res.json()
-      setMessages(prev => [...prev, { role: 'assistant', content: data.message?.content || 'No response received.' }])
-    } catch {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'AI offline — make sure Ollama is running and VITE_OLLAMA_URL is set in Netlify environment variables.' }])
-    }
-    setLoading(false)
+    }, 620)
   }
 
   return (
@@ -57,7 +109,7 @@ export default function AIChat() {
       {/* Trigger button */}
       <button
         onClick={() => setOpen(o => !o)}
-        aria-label={open ? 'Close AI chat' : 'Open AI chat'}
+        aria-label={open ? 'Close chat' : 'Open chat'}
         style={{
           position: 'fixed', bottom: 28, left: 28, zIndex: 1001,
           width: 54, height: 54, borderRadius: '50%',
@@ -82,7 +134,7 @@ export default function AIChat() {
           position: 'fixed', bottom: 94, left: 28, zIndex: 1000,
           width: 340, height: 490,
           borderRadius: 18,
-          background: 'rgba(8,8,12,0.94)',
+          background: 'rgba(8,8,12,0.96)',
           backdropFilter: 'blur(24px) saturate(180%)',
           border: `1px solid rgba(245,166,35,0.25)`,
           boxShadow: `0 0 60px rgba(245,166,35,0.08), 0 24px 80px rgba(0,0,0,0.9)`,
@@ -96,9 +148,9 @@ export default function AIChat() {
             background: `linear-gradient(90deg, rgba(245,166,35,0.08), rgba(0,240,255,0.04))`,
             display: 'flex', alignItems: 'center', gap: 8,
           }}>
-            <div style={{ width: 7, height: 7, borderRadius: '50%', background: API_URL ? B.neonLime : B.smoke, boxShadow: API_URL ? `0 0 8px ${B.neonLime}` : 'none', animation: API_URL ? 'pulse 2s infinite' : 'none' }} />
+            <div style={{ width: 7, height: 7, borderRadius: '50%', background: B.neonLime, boxShadow: `0 0 8px ${B.neonLime}`, animation: 'pulse 2s infinite' }} />
             <span style={{ color: B.amber, fontFamily: 'Orbitron,sans-serif', fontSize: 10, fontWeight: 700, letterSpacing: 2 }}>SNEAKERS FEST AI</span>
-            <span style={{ color: '#444', fontSize: 9, fontFamily: 'Space Mono,monospace', marginLeft: 'auto' }}>{API_URL ? `Ollama · ${MODEL}` : 'offline'}</span>
+            <span style={{ color: '#555', fontSize: 9, fontFamily: 'Space Mono,monospace', marginLeft: 'auto' }}>online</span>
           </div>
 
           {/* Messages */}
@@ -111,7 +163,7 @@ export default function AIChat() {
                 borderRadius: m.role === 'user' ? '14px 14px 3px 14px' : '14px 14px 14px 3px',
                 background: m.role === 'user' ? `rgba(245,166,35,0.18)` : 'rgba(255,255,255,0.05)',
                 border: `1px solid ${m.role === 'user' ? 'rgba(245,166,35,0.28)' : 'rgba(255,255,255,0.07)'}`,
-                color: B.white, fontSize: 12.5, lineHeight: 1.55,
+                color: B.white, fontSize: 12.5, lineHeight: 1.6,
                 fontFamily: 'Space Mono,monospace',
               }}>{m.content}</div>
             ))}
@@ -122,6 +174,19 @@ export default function AIChat() {
             )}
             <div ref={endRef} />
           </div>
+
+          {/* Suggested prompts (shown when only greeting visible) */}
+          {messages.length === 1 && (
+            <div style={{ padding: '0 12px 10px', display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+              {['Ticket prices', 'Vendor spots', 'What is FNP?', 'Date & venue'].map(q => (
+                <button key={q} onClick={() => { setInput(q); setTimeout(send, 0) }}
+                  style={{ padding: '5px 10px', background: `${B.amber}14`, border: `1px solid ${B.amber}30`, borderRadius: 20, color: B.amber, fontSize: 9, fontFamily: 'Space Mono,monospace', cursor: 'pointer', letterSpacing: '0.08em' }}
+                  onMouseEnter={e => e.currentTarget.style.background = `${B.amber}25`}
+                  onMouseLeave={e => e.currentTarget.style.background = `${B.amber}14`}
+                >{q}</button>
+              ))}
+            </div>
+          )}
 
           {/* Input */}
           <div style={{ padding: '10px 12px 14px', borderTop: `1px solid rgba(255,255,255,0.07)`, display: 'flex', gap: 8 }}>
