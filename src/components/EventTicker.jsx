@@ -3,17 +3,17 @@ import { B } from '../tokens'
 const ITEMS = [
   "SNEAKERS FEST '26",
   'DECEMBER 12 · 2026',
-  'EKO ATLANTIC CITY',
-  'LAGOS · NIGERIA',
+  'LAGOS · NIGERIA',
   '200+ RARE PAIRS',
-  '50+ VENDORS',
+  '30–50 CURATED VENDORS',
   'DJ SPINALL',
   'SARZ',
   'ODUNSI',
-  '3,000+ ATTENDEES',
+  '1K–2.5K YEAR ONE',
   'LIVE DROPS',
   'CUSTOM ART',
   'STREET FOOD',
+  'VENUE INCOMING',
   'GET TICKETS NOW',
 ]
 

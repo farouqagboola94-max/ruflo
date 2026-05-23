@@ -11,8 +11,8 @@ const QA = [
     answer: 'December 12, 2026. Doors open 12:00 PM. Mark your calendar.'
   },
   {
-    keys: ['venue', 'location', 'where', 'eko', 'atlantic', 'address'],
-    answer: 'Eko Atlantic, Lagos, Nigeria. One of the most iconic event spaces in West Africa.'
+    keys: ['venue', 'location', 'where', 'address'],
+    answer: "The exact venue will be announced soon — the city is Lagos, Nigeria, and the date is locked: December 12, 2026. Join the WhatsApp channel to be first to know when the venue drops."
   },
   {
     keys: ['lineup', 'dj', 'artist', 'spinall', 'music', 'perform', 'headliner'],

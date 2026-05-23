@@ -135,7 +135,7 @@ export default function Hero() {
         }}>
           <div style={{ width: 5, height: 5, borderRadius: "50%", background: B.neonLime, animation: "pulse 2s infinite", boxShadow: `0 0 6px ${B.neonLime}` }} />
           <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.neonCyan, letterSpacing: "0.4em" }}>
-            LAGOS, NIGERIA — EKO ATLANTIC
+            DECEMBER 12 · LAGOS, NIGERIA
           </span>
         </div>
 

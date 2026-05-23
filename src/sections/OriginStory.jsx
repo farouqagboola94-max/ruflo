@@ -171,7 +171,7 @@ export default function OriginStory() {
             THE TEMPERING IS DONE.<br />
             <span style={{ color: B.amber }}>THE METAL IS READY.</span>
           </div>
-          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.smoke, letterSpacing: '0.25em', marginBottom: 32 }}>DECEMBER 12, 2026 · EKO ATLANTIC, LAGOS</div>
+          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.smoke, letterSpacing: '0.25em', marginBottom: 32 }}>DECEMBER 12, 2026 · LAGOS, NIGERIA</div>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
             <a href="#fnp" style={{ padding: '12px 28px', background: B.amber, color: B.black, fontFamily: "'Space Mono', monospace", fontSize: 9, fontWeight: 700, letterSpacing: '0.18em', textDecoration: 'none', borderRadius: 4 }}>JOIN THE COMMUNITY →</a>
             <a href="https://substack.com/@catalyst00555" target="_blank" rel="noopener noreferrer" style={{ padding: '12px 24px', border: `1px solid #FF671950`, color: '#FF6719', fontFamily: "'Space Mono', monospace", fontSize: 9, letterSpacing: '0.18em', textDecoration: 'none', borderRadius: 4 }}>READ ON SUBSTACK →</a>

@@ -140,7 +140,7 @@ export default function Navbar() {
             onClick={close}
             style={{ display: 'block', marginTop: 32, padding: '18px', background: B.amber, color: B.black, fontFamily: "'Space Mono', monospace", fontSize: 12, fontWeight: 700, letterSpacing: '0.2em', textDecoration: 'none', borderRadius: 4, textAlign: 'center', boxShadow: `0 0 40px ${B.amber}25` }}
           >GET TICKETS →</a>
-          <div style={{ marginTop: 20, fontFamily: "'Space Mono', monospace", fontSize: 7, color: '#333', letterSpacing: '0.25em', textAlign: 'center' }}>DECEMBER 12, 2026 · EKO ATLANTIC, LAGOS</div>
+          <div style={{ marginTop: 20, fontFamily: "'Space Mono', monospace", fontSize: 7, color: '#333', letterSpacing: '0.25em', textAlign: 'center' }}>DECEMBER 12, 2026 · LAGOS, NIGERIA</div>
         </div>
       )}
     </>
