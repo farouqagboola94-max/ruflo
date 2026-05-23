@@ -68,7 +68,7 @@ export default function TicketsPage() {
         <p className="text-gray-400 text-lg max-w-xl mx-auto">Choose your pass. All tickets include 2-day access. Limited quantities available.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-14">
         {TICKET_TIERS.map(t => (
           <div key={t.id} onClick={() => setSelected(t.id)}
             className={`relative rounded-3xl p-px cursor-pointer transition-all ${
@@ -76,7 +76,9 @@ export default function TicketsPage() {
             }`}>
             {t.badge && (
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-                <span className="px-4 py-1 rounded-full bg-gradient-to-r from-brand-orange to-brand-amber text-black text-xs font-bold">{t.badge}</span>
+                <span className={`px-4 py-1 rounded-full text-black text-xs font-bold bg-gradient-to-r ${
+                  t.id === 'phalanx' ? 'from-lime-400 to-green-500' : 'from-brand-orange to-brand-amber'
+                }`}>{t.badge}</span>
               </div>
             )}
             <div className="rounded-3xl bg-brand-gray p-6 h-full flex flex-col">
@@ -89,7 +91,9 @@ export default function TicketsPage() {
               <ul className="space-y-2.5 flex-1">
                 {t.perks.map(p => (
                   <li key={p} className="flex items-start gap-2 text-sm">
-                    <span className="text-brand-orange mt-0.5 flex-shrink-0">✓</span>
+                    <span className={`mt-0.5 flex-shrink-0 ${
+                      t.id === 'phalanx' ? 'text-lime-400' : 'text-brand-orange'
+                    }`}>✓</span>
                     <span className="text-gray-300">{p}</span>
                   </li>
                 ))}
