@@ -46,7 +46,7 @@ const PLATFORMS = [
   },
   {
     name: "TWITTER / X",
-    handle: "@SNEAKERSFEST",
+    handle: "@Catalyst188",
     color: B.neonCyan,
     href: LINKS.twitter,
     icon: "X",
@@ -135,16 +135,13 @@ function PlatformCard({ p }) {
             : `0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06)`
         }}
       >
-        {/* Glass sheen */}
         <div style={{
           position: "absolute", top: 0, left: 0, right: 0, height: 1,
           background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)",
         }} />
-        {/* Colour accent */}
         <div style={{ height: 3, background: `linear-gradient(90deg, ${p.color}, ${p.color}20)` }} />
 
         <div style={{ padding: "22px 20px", display: "flex", flexDirection: "column", flex: 1 }}>
-          {/* Header row */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
             <div>
               <div style={{ fontFamily: "'Orbitron', monospace", fontWeight: 900, fontSize: 11, color: p.color, letterSpacing: "0.12em", marginBottom: 3 }}>
@@ -185,7 +182,6 @@ function PlatformCard({ p }) {
             {p.desc}
           </div>
 
-          {/* Tags */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 16 }}>
             {p.tags.map((tag, i) => (
               <span key={i} style={{
@@ -198,7 +194,6 @@ function PlatformCard({ p }) {
             ))}
           </div>
 
-          {/* CTA */}
           <div style={{
             display: "inline-flex", alignItems: "center", gap: 6,
             padding: "8px 16px",
@@ -242,7 +237,6 @@ export default function Community() {
 
       <div style={{ position: "relative", zIndex: 10, maxWidth: 1200, margin: "0 auto" }}>
 
-        {/* Header */}
         <div style={{ marginBottom: 16 }}>
           <SectionTag>CONNECT EVERYWHERE</SectionTag>
           <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(40px, 6vw, 72px)", color: B.white, lineHeight: 0.88 }}>
@@ -256,7 +250,6 @@ export default function Community() {
           Join whichever platform fits your flow — games, drops, culture debates, and early access are waiting.
         </div>
 
-        {/* Community stats strip */}
         <div style={{
           display: "flex", gap: 2, flexWrap: "wrap", marginBottom: 52,
           background: "rgba(255,255,255,0.04)",
@@ -285,12 +278,10 @@ export default function Community() {
           ))}
         </div>
 
-        {/* Platform grid */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 14, marginBottom: 40 }}>
           {PLATFORMS.map((p, i) => <PlatformCard key={i} p={p} />)}
         </div>
 
-        {/* Manifesto banner */}
         <div style={{
           padding: "28px 32px",
           background: "rgba(255,255,255,0.04)",

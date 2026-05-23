@@ -5,7 +5,7 @@ import { SOCIAL_LINKS } from '../config'
 const SOCIALS = [
   { platform: 'TIKTOK',      handle: '@SNEAKERSFEST',  href: SOCIAL_LINKS.tiktok,     color: '#69C9D0',     icon: 'TK', tip: 'Challenges & Clips' },
   { platform: 'YOUTUBE',     handle: '@SNEAKERSFEST',  href: SOCIAL_LINKS.youtube,    color: B.neonMagenta, icon: 'YT', tip: 'Docs & Interviews' },
-  { platform: 'TWITTER / X', handle: '@SNEAKERSFEST',  href: SOCIAL_LINKS.twitter,    color: B.neonCyan,    icon: 'X',  tip: 'Live Updates' },
+  { platform: 'TWITTER / X', handle: '@Catalyst188',   href: SOCIAL_LINKS.twitter,    color: B.neonCyan,    icon: 'X',  tip: 'Live Updates' },
   { platform: 'INSTAGRAM',   handle: '@SNEAKERSFEST',  href: SOCIAL_LINKS.instagram,  color: '#E1306C',     icon: 'IG', tip: 'Drops & Culture' },
   { platform: 'SNAPCHAT',    handle: 'SNEAKERSFEST',   href: SOCIAL_LINKS.snapchat,   color: B.amber,       icon: 'SC', tip: 'Stories & BTS' },
   { platform: 'WHATSAPP',    handle: 'JOIN COMMUNITY', href: SOCIAL_LINKS.whatsapp,   color: B.neonLime,    icon: 'WA', tip: 'Inner Circle' },
