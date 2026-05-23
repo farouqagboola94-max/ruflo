@@ -4,7 +4,7 @@ import { B } from '../tokens'
 const QA = [
   {
     keys: ['ticket', 'price', 'cost', 'how much', 'buy', 'get ticket', 'purchase'],
-    answer: 'Tickets: General ₦15,000 · VIP ₦35,000 · Ultra VIP ₦75,000. Head to the Tickets section to grab yours. Early access members get first dibs.'
+    answer: 'Tickets: General ₦5,000 · VIP ₦10,000 · VVIP ₦25,000 · Phalanx ₦50,000. Head to the Tickets section to secure yours. Early access members get first dibs.'
   },
   {
     keys: ['date', 'when', 'time', 'december', 'day'],
@@ -19,8 +19,8 @@ const QA = [
     answer: 'DJ Spinall is headlining. Full lineup details are in the Lineup section — scroll down or tap the nav.'
   },
   {
-    keys: ['vip', 'ultra', 'experience', 'lounge', 'meet'],
-    answer: 'VIP (₦35K): Priority entry + exclusive lounge. Ultra VIP (₦75K): Everything VIP plus private area, meet & greet access, and a dedicated host.'
+    keys: ['vip', 'vvip', 'phalanx', 'ultra', 'experience', 'lounge', 'meet'],
+    answer: 'VIP (₦10K): Priority entry + exclusive lounge + merch bag. VVIP (₦25K): Everything VIP plus private collector room, artist access & signed merch. Phalanx (₦50K): Top tier — private lounge, dedicated concierge, exclusive badge + collectible box, early entry from 11 AM.'
   },
   {
     keys: ['vendor', 'sell', 'stall', 'booth', 'apply', 'brand'],

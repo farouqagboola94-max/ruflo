@@ -6,7 +6,7 @@ import PaymentModal from '../components/PaymentModal'
 const TIERS = [
   {
     name: 'GENERAL',
-    price: '₦15,000',
+    price: '₦5,000',
     tag: 'ENTRY',
     color: B.neonCyan,
     perks: [
@@ -20,7 +20,7 @@ const TIERS = [
   },
   {
     name: 'VIP',
-    price: '₦35,000',
+    price: '₦10,000',
     tag: 'MOST POPULAR',
     color: B.amber,
     perks: [
@@ -34,8 +34,8 @@ const TIERS = [
     featured: true,
   },
   {
-    name: 'ULTRA VIP',
-    price: '₦75,000',
+    name: 'VVIP',
+    price: '₦25,000',
     tag: 'EXCLUSIVE',
     color: B.neonMagenta,
     perks: [
@@ -43,10 +43,26 @@ const TIERS = [
       'Private collector room',
       'Artist studio access',
       'Signed memorabilia',
-      'Exclusive ultra badge',
+      'Exclusive VVIP badge',
       'Priority entry & exit',
     ],
-    cta: 'GO ULTRA',
+    cta: 'GO VVIP',
+    featured: false,
+  },
+  {
+    name: 'PHALANX',
+    price: '₦50,000',
+    tag: 'TOP TIER',
+    color: B.neonLime,
+    perks: [
+      'Everything in VVIP',
+      'Private Phalanx lounge',
+      'Dedicated concierge host',
+      'Early entry from 11:00 AM',
+      'Exclusive badge + collectible box',
+      'Founder-level floor access',
+    ],
+    cta: 'JOIN PHALANX',
     featured: false,
   },
 ]
@@ -64,8 +80,8 @@ function downloadCalendar() {
     'DTSTART:20261212T120000',
     'DTEND:20261212T220000',
     "SUMMARY:Sneakers Fest '26 — The Sole Exhibition",
-    "DESCRIPTION:West Africa's premier sneaker culture event. 200+ rare kicks\\, 50+ vendors\\, live DJs\\, custom art and street food. Featuring DJ Spinall\\, Sarz\\, Odunsi and more.",
-    'LOCATION:Eko Atlantic Event Centre\\, Ocean Drive\\, Eko Atlantic City\\, Lagos\\, Nigeria',
+    "DESCRIPTION:West Africa's premier sneaker culture event. 200+ rare kicks\\, 30-50 curated vendors\\, live DJs\\, custom art and street food. Featuring DJ Spinall\\, Sarz\\, Odunsi and more.",
+    'LOCATION:Lagos\\, Nigeria (Venue TBA)',
     'URL:https://sneakers-fest-26.netlify.app',
     'STATUS:CONFIRMED',
     'END:VEVENT',
@@ -98,9 +114,10 @@ export default function Tickets() {
       <div style={{ position:'absolute', top:'25%', left:'8%', width:320, height:320, background:`radial-gradient(circle, ${B.neonCyan}20, transparent 70%)`, filter:'blur(70px)', pointerEvents:'none' }} />
       <div style={{ position:'absolute', top:'15%', left:'42%', width:360, height:360, background:`radial-gradient(circle, ${B.amber}18, transparent 70%)`, filter:'blur(70px)', pointerEvents:'none' }} />
       <div style={{ position:'absolute', bottom:'20%', right:'8%', width:300, height:300, background:`radial-gradient(circle, ${B.neonMagenta}18, transparent 70%)`, filter:'blur(70px)', pointerEvents:'none' }} />
+      <div style={{ position:'absolute', top:'5%', right:'15%', width:240, height:240, background:`radial-gradient(circle, ${B.neonLime}12, transparent 70%)`, filter:'blur(60px)', pointerEvents:'none' }} />
       <div style={{ position:'absolute', bottom:0, left:'50%', transform:'translateX(-50%)', width:600, height:2, background:`linear-gradient(90deg, transparent, ${B.amber}30, transparent)` }} />
 
-      <div style={{ position:'relative', zIndex:10, maxWidth:1100, margin:'0 auto' }}>
+      <div style={{ position:'relative', zIndex:10, maxWidth:1200, margin:'0 auto' }}>
         <div style={{ textAlign:'center', marginBottom:64 }}>
           <SectionTag>SECURE YOUR SPOT</SectionTag>
           <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(40px, 6vw, 68px)', color:B.white, lineHeight:0.9 }}>
@@ -111,7 +128,7 @@ export default function Tickets() {
           </div>
         </div>
 
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(280px, 1fr))', gap:20, alignItems:'center' }}>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(260px, 1fr))', gap:20, alignItems:'center' }}>
           {TIERS.map((tier, i) => (
             <div
               key={i}
