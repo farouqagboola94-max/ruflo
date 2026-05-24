@@ -13,6 +13,7 @@ export default function Navbar() {
     { href: '/models', label: 'Models' },
     { href: '/services', label: 'Services' },
     { href: '/news', label: 'News' },
+    { href: '/press', label: 'Press' },
     { href: '/about', label: 'About' },
     { href: '/contact', label: 'Contact' },
   ]

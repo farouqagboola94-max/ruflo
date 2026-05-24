@@ -1,4 +1,10 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+  title: 'About Us | Catalyst Talents Lagos',
+  description: 'Learn the story behind Catalyst Talents Lagos — the full-service talent agency born to put Lagos on the world stage.',
+}
 
 const values = [
   {
