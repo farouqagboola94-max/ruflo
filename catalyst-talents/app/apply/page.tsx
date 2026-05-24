@@ -7,6 +7,7 @@ const genders = ['Female', 'Male', 'Non-binary', 'Prefer not to say']
 
 export default function ApplyPage() {
   const [submitted, setSubmitted] = useState(false)
+  const [sending, setSending] = useState(false)
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -29,8 +30,14 @@ export default function ApplyPage() {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setSending(true)
+    try {
+      const body = new URLSearchParams({ 'form-name': 'talent-application', ...form })
+      await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString() })
+    } catch (_) {}
+    setSending(false)
     setSubmitted(true)
   }
 
@@ -84,7 +91,13 @@ export default function ApplyPage() {
 
       {/* FORM */}
       <section className="py-16 px-4">
-        <form onSubmit={handleSubmit} className="max-w-3xl mx-auto space-y-12">
+        <form
+          name="talent-application"
+          data-netlify="true"
+          onSubmit={handleSubmit}
+          className="max-w-3xl mx-auto space-y-12"
+        >
+          <input type="hidden" name="form-name" value="talent-application" />
 
           {/* Personal Info */}
           <div>
@@ -320,14 +333,18 @@ export default function ApplyPage() {
 
           <div className="pt-4">
             <p className="text-white/25 text-xs mb-6">
-              By submitting this form you agree to our privacy policy and consent to Catalyst Talents Lagos
-              storing and processing your data for scouting purposes.
+              By submitting this form you agree to our{' '}
+              <a href="/privacy" className="text-gold/50 hover:text-gold underline underline-offset-2 transition-colors">
+                privacy policy
+              </a>{' '}
+              and consent to Catalyst Talents Lagos storing and processing your data for scouting purposes.
             </p>
             <button
               type="submit"
-              className="w-full sm:w-auto px-16 py-5 bg-gold text-black font-bold text-sm tracking-widest uppercase hover:bg-gold-light transition-colors duration-300"
+              disabled={sending}
+              className="w-full sm:w-auto px-16 py-5 bg-gold text-black font-bold text-sm tracking-widest uppercase hover:bg-gold-light transition-colors duration-300 disabled:opacity-60"
             >
-              Submit Application
+              {sending ? 'Submitting...' : 'Submit Application'}
             </button>
           </div>
         </form>

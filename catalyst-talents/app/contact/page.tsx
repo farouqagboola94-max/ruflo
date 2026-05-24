@@ -4,14 +4,21 @@ import { useState } from 'react'
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false)
+  const [sending, setSending] = useState(false)
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setSending(true)
+    try {
+      const body = new URLSearchParams({ 'form-name': 'contact', ...form })
+      await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString() })
+    } catch (_) {}
+    setSending(false)
     setSubmitted(true)
   }
 
@@ -30,7 +37,7 @@ export default function ContactPage() {
           <p className="text-gold text-xs tracking-[0.5em] uppercase mb-4">Get in Touch</p>
           <h1 className="font-playfair text-5xl sm:text-7xl font-bold text-white mb-4">Contact Us</h1>
           <p className="text-white/40 leading-relaxed">
-            For bookings, press enquiries, partnerships, or general questions — we'd love to hear from you.
+            For bookings, press enquiries, partnerships, or general questions — we&apos;d love to hear from you.
           </p>
         </div>
       </section>
@@ -106,7 +113,7 @@ export default function ContactPage() {
                 </div>
                 <h3 className="font-playfair text-2xl font-bold text-white mb-2">Message Sent</h3>
                 <p className="text-white/40 text-sm">
-                  Thank you for reaching out. We'll get back to you within 24–48 hours.
+                  Thank you for reaching out. We&apos;ll get back to you within 24–48 hours.
                 </p>
                 <button
                   onClick={() => setSubmitted(false)}
@@ -116,7 +123,13 @@ export default function ContactPage() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form
+                name="contact"
+                data-netlify="true"
+                onSubmit={handleSubmit}
+                className="space-y-6"
+              >
+                <input type="hidden" name="form-name" value="contact" />
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label className={labelClass}>Full Name *</label>
@@ -173,9 +186,10 @@ export default function ContactPage() {
                 </div>
                 <button
                   type="submit"
-                  className="w-full py-4 bg-gold text-black font-bold text-sm tracking-widest uppercase hover:bg-gold-light transition-colors duration-300"
+                  disabled={sending}
+                  className="w-full py-4 bg-gold text-black font-bold text-sm tracking-widest uppercase hover:bg-gold-light transition-colors duration-300 disabled:opacity-60"
                 >
-                  Send Message
+                  {sending ? 'Sending...' : 'Send Message'}
                 </button>
               </form>
             )}

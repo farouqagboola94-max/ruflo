@@ -43,6 +43,7 @@ export default function Footer() {
                 { href: '/services', label: 'Services' },
                 { href: '/about', label: 'About Us' },
                 { href: '/news', label: 'News & Stories' },
+                { href: '/press', label: 'Press & Media' },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
@@ -115,7 +116,10 @@ export default function Footer() {
           <p className="text-[10px] text-white/20">
             &copy; {year} Catalyst Talents Lagos. An extension of Catalyst Concepts.
           </p>
-          <p className="text-[10px] text-white/20">Lagos, Nigeria</p>
+          <div className="flex gap-6">
+            <Link href="/privacy" className="text-[10px] text-white/20 hover:text-white/40 transition-colors">Privacy Policy</Link>
+            <span className="text-[10px] text-white/20">Lagos, Nigeria</span>
+          </div>
         </div>
       </div>
     </footer>
