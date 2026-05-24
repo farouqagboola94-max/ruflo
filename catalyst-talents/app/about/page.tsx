@@ -17,7 +17,7 @@ const values = [
     icon: '✦',
     title: 'Community',
     description:
-      'Lagos is not just a location — it's an identity. We are proudly rooted in its culture, energy, and spirit.',
+      "Lagos is not just a location — it's an identity. We are proudly rooted in its culture, energy, and spirit.",
   },
   {
     icon: '◆',
@@ -51,11 +51,11 @@ export default function AboutPage() {
           style={{ background: 'radial-gradient(circle, #D4AF37, transparent 70%)' }}
         />
         <div className="max-w-4xl mx-auto relative z-10">
-          <p className="text-gold text-xs tracking-[0.5em] uppercase mb-4">Our Story</p>
+          <p className="text-[#D4AF37] text-[10px] tracking-[0.5em] uppercase mb-4">Our Story</p>
           <h1 className="font-playfair text-5xl sm:text-7xl font-bold text-white mb-8">
             About Catalyst
             <br />
-            <span className="italic text-gold/80">Talents Lagos</span>
+            <span className="italic text-[#D4AF37]/80">Talents Lagos</span>
           </h1>
           <p className="text-white/50 text-xl leading-relaxed max-w-2xl">
             We are the talent & modelling division of Catalyst Concepts — a creative agency
@@ -84,7 +84,17 @@ export default function AboutPage() {
             />
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
-                <span className="font-playfair text-6xl font-bold gold-text block">CTL</span>
+                <span
+                  className="font-playfair text-6xl font-bold block"
+                  style={{
+                    background: 'linear-gradient(135deg, #D4AF37, #F0D060)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                  }}
+                >
+                  CTL
+                </span>
                 <span className="text-white/20 text-xs tracking-[0.5em] uppercase mt-2 block">
                   Est. Lagos
                 </span>
@@ -99,7 +109,7 @@ export default function AboutPage() {
             <p className="text-white/50 leading-relaxed">
               Catalyst Concepts was founded with a singular vision: to create, connect, and
               amplify creative talent from Nigeria to the world. Through events, campaigns, and
-              brand partnerships, we built a reputation for excellence in Lagos' creative scene.
+              brand partnerships, we built a reputation for excellence in Lagos&apos; creative scene.
             </p>
             <p className="text-white/50 leading-relaxed">
               As our network of extraordinary individuals grew, we recognised a gap: Lagos had
@@ -108,13 +118,13 @@ export default function AboutPage() {
             </p>
             <p className="text-white/50 leading-relaxed">
               Catalyst Talents Lagos was born to fill that gap — a full-service talent division
-              dedicated to discovering, developing, and deploying Lagos' finest on the world's
+              dedicated to discovering, developing, and deploying Lagos&apos; finest on the world&apos;s
               biggest stages.
             </p>
             <div className="pt-4">
-              <div className="h-px w-16 bg-gold mb-4" />
-              <p className="text-gold font-playfair italic text-lg">
-                "Lagos has always had the talent. Now it has the platform."
+              <div className="h-px w-16 bg-[#D4AF37] mb-4" />
+              <p className="text-[#D4AF37] font-playfair italic text-lg">
+                &ldquo;Lagos has always had the talent. Now it has the platform.&rdquo;
               </p>
             </div>
           </div>
@@ -128,18 +138,19 @@ export default function AboutPage() {
       >
         <div className="max-w-7xl mx-auto">
           <div className="mb-16">
-            <p className="text-gold text-xs tracking-[0.4em] uppercase mb-3">What Drives Us</p>
-            <h2 className="font-playfair text-4xl sm:text-5xl font-bold text-white section-line">
+            <p className="text-[#D4AF37] text-[10px] tracking-[0.4em] uppercase mb-3">What Drives Us</p>
+            <h2 className="font-playfair text-4xl sm:text-5xl font-bold text-white">
               Our Values
+              <span className="block w-14 h-px bg-[#D4AF37] mt-4" />
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((v) => (
               <div
                 key={v.title}
-                className="p-8 border border-white/5 hover:border-gold/20 transition-colors duration-500"
+                className="p-8 border border-white/5 hover:border-[#D4AF37]/20 transition-colors duration-500"
               >
-                <span className="text-gold text-2xl block mb-4">{v.icon}</span>
+                <span className="text-[#D4AF37] text-2xl block mb-4">{v.icon}</span>
                 <h3 className="font-playfair text-xl font-bold text-white mb-3">{v.title}</h3>
                 <p className="text-white/40 text-sm leading-relaxed">{v.description}</p>
               </div>
@@ -153,11 +164,12 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             <div>
-              <p className="text-gold text-xs tracking-[0.4em] uppercase mb-3">What We Provide</p>
-              <h2 className="font-playfair text-4xl sm:text-5xl font-bold text-white mb-8 section-line">
+              <p className="text-[#D4AF37] text-[10px] tracking-[0.4em] uppercase mb-3">What We Provide</p>
+              <h2 className="font-playfair text-4xl sm:text-5xl font-bold text-white mb-8">
                 What We Offer
                 <br />
                 Our Talent
+                <span className="block w-14 h-px bg-[#D4AF37] mt-4" />
               </h2>
               <p className="text-white/50 leading-relaxed mb-6">
                 Signing with Catalyst Talents Lagos means joining a team that is as invested in
@@ -166,7 +178,7 @@ export default function AboutPage() {
               <ul className="space-y-3">
                 {offerings.map((item) => (
                   <li key={item} className="flex items-start gap-3 text-sm text-white/60">
-                    <span className="text-gold mt-0.5 flex-shrink-0">—</span>
+                    <span className="text-[#D4AF37] mt-0.5 flex-shrink-0">—</span>
                     {item}
                   </li>
                 ))}
@@ -181,7 +193,17 @@ export default function AboutPage() {
                 { number: '4', label: 'Talent Divisions' },
               ].map((stat) => (
                 <div key={stat.label} className="flex items-end gap-4">
-                  <span className="font-playfair text-5xl font-bold gold-text">{stat.number}</span>
+                  <span
+                    className="font-playfair text-5xl font-bold"
+                    style={{
+                      background: 'linear-gradient(135deg, #D4AF37, #F0D060)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundClip: 'text',
+                    }}
+                  >
+                    {stat.number}
+                  </span>
                   <span className="text-white/40 text-sm tracking-wider uppercase pb-2">{stat.label}</span>
                 </div>
               ))}
@@ -197,19 +219,19 @@ export default function AboutPage() {
             Be Part of the Story
           </h2>
           <p className="text-white/40 mb-8">
-            Whether you're a brand looking to book talent or a model ready to be represented —
+            Whether you&apos;re a brand looking to book talent or a model ready to be represented —
             Catalyst Talents Lagos is your home.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/apply"
-              className="px-10 py-4 bg-gold text-black font-semibold text-sm tracking-widest uppercase hover:bg-gold-light transition-colors"
+              className="px-10 py-4 bg-[#D4AF37] text-black font-semibold text-xs tracking-widest uppercase hover:bg-[#F0D060] transition-colors"
             >
               Apply to Join
             </Link>
             <Link
               href="/contact"
-              className="px-10 py-4 border border-gold/30 text-gold text-sm tracking-widest uppercase hover:border-gold hover:bg-gold/10 transition-all"
+              className="px-10 py-4 border border-[#D4AF37]/30 text-[#D4AF37] text-xs tracking-widest uppercase hover:border-[#D4AF37] hover:bg-[#D4AF37]/10 transition-all"
             >
               Book Talent
             </Link>

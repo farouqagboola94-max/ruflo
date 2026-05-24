@@ -1,0 +1,20 @@
+[build]
+  command = "npm run build"
+  publish = "out"
+  base = "catalyst-talents"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_VERSION = "10"
+
+[[redirects]]
+  from = "/*"
+  to = "/404/index.html"
+  status = 404
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
