@@ -13,9 +13,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: catalyst-talents
 
     steps:
       - name: Checkout
@@ -25,19 +22,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: catalyst-talents/package-lock.json
 
       - name: Install dependencies
-        run: npm ci
+        working-directory: catalyst-talents
+        run: npm install
 
       - name: Build
+        working-directory: catalyst-talents
         run: npm run build
 
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v3
         with:
-          publish-dir: catalyst-talents/out
+          publish-dir: ./catalyst-talents/out
           production-branch: main
           production-deploy: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
