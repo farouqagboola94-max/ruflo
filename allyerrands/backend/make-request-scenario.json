@@ -1,0 +1,30 @@
+{
+  "_comment": "Za.allyErrands — Make.com Scenario 1: New Request + Payment Link",
+  "_instructions": [
+    "Import this into Make.com (three-dot menu > Import blueprint).",
+    "This scenario fires when a new errand request hits the webhook.",
+    "It notifies admin that a request is pending payment.",
+    "The Edge Function handles Flutterwave and client WhatsApp directly.",
+    "Make.com here handles the ADMIN / PHALANX alert only."
+  ],
+  "name": "Za.allyErrands — New Request Alert",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "label": "Receive New Errand Request",
+      "parameters": { "hook": "REPLACE_ME_webhook_id", "maxResults": 1 }
+    },
+    {
+      "id": 2,
+      "module": "whatsapp-business-cloud:SendMessage",
+      "label": "Phalanx: New Request (Awaiting Payment)",
+      "parameters": {
+        "connection": "REPLACE_ME_whatsapp_connection_id",
+        "to": "REPLACE_ME_phalanx_group_id",
+        "messageType": "text",
+        "text": "📥 *NEW REQUEST — AWAITING PAYMENT*\n\n*ID:* {{1.request_id}}\n*Client:* {{1.client_name}} | {{1.client_phone}}\n*Pickup:* {{1.pickup}}\n*Drop-off:* {{1.dropoff}}\n*Item:* {{1.description}}\n*Amount:* ₦{{1.amount}}\n\n_Standby. Dispatch triggers automatically when payment clears._"
+      }
+    }
+  ]
+}

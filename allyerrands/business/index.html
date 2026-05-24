@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Za.allyErrands for Business — Lagos Dispatch Infrastructure</title>
+  <meta name="description" content="Plug your pharmacy, restaurant, or supermarket into Lagos' fastest dispatch network. REST API, webhooks, dedicated runners, SLA guarantees." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://za-allyerrands.netlify.app/business" />
+  <meta property="og:title" content="Za.allyErrands for Business — Lagos Dispatch Infrastructure" />
+  <meta property="og:description" content="Stop managing deliveries manually. Plug your business into Za.allyErrands' runner network and dispatch every order in minutes." />
+  <meta property="og:image" content="https://za-allyerrands.netlify.app/assets/og.png" />
+  <meta name="theme-color" content="#FF4500" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .biz-hero { background: var(--black); position: relative; min-height: 100vh; display: flex; align-items: center; overflow: hidden; padding-top: 80px; }
+    .biz-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 20% 50%, rgba(255,69,0,0.11) 0%, transparent 70%), radial-gradient(ellipse 50% 60% at 80% 20%, rgba(0,212,255,0.07) 0%, transparent 70%); pointer-events: none; }
+    .biz-hero__grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(0,212,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,255,.025) 1px, transparent 1px); background-size: 80px 80px; pointer-events: none; }
+    .biz-hero__inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 80px 24px 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .biz-hero__copy {}
+    .biz-hero__eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 0.7rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--blue); background: rgba(0,212,255,0.06); border: 1px solid rgba(0,212,255,0.18); padding: 6px 16px; border-radius: 100px; margin-bottom: 28px; }
+    .biz-hero__headline { font-family: var(--font-display); font-size: clamp(3.8rem, 7vw, 6.5rem); line-height: .93; letter-spacing: .01em; margin-bottom: 28px; }
+    .biz-hero__headline span { background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .biz-hero__sub { font-size: 1.05rem; line-height: 1.8; color: var(--gray-300); margin-bottom: 40px; max-width: 500px; }
+    .biz-hero__actions { display: flex; gap: 16px; flex-wrap: wrap; }
+    .biz-hero__visual { position: relative; }
+    .biz-code-card { background: var(--black-3); border: var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,.6); }
+    .biz-code-card__bar { background: rgba(255,255,255,0.03); padding: 12px 20px; display: flex; align-items: center; gap: 8px; border-bottom: var(--border); }
+    .biz-code-card__dot { width: 10px; height: 10px; border-radius: 50%; }
+    .biz-code-card__dot:nth-child(1) { background: #FF5F57; }
+    .biz-code-card__dot:nth-child(2) { background: #FEBC2E; }
+    .biz-code-card__dot:nth-child(3) { background: #28C840; }
+    .biz-code-card__label { font-size: 0.65rem; color: var(--gray-500); letter-spacing: .06em; margin-left: 8px; }
+    .biz-code-card__body { padding: 24px; font-family: 'Courier New', monospace; font-size: 0.82rem; line-height: 1.9; }
+    .c-method { color: #FF4500; }
+    .c-url { color: #A8B0CC; }
+    .c-key { color: #00D4FF; }
+    .c-str { color: #00FF88; }
+    .c-num { color: #F5A623; }
+    .c-bool { color: #F5A623; }
+    .c-dim { color: #6B7299; }
+    .c-response { margin-top: 16px; padding-top: 16px; border-top: var(--border); }
+    .c-response-label { font-size: 0.6rem; font-weight: 700; letter-spacing: .14em; color: var(--green); margin-bottom: 10px; }
+
+    .trust-bar { background: var(--black-2); border-top: var(--border); border-bottom: var(--border); }
+    .trust-bar__inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4,1fr); }
+    .trust-stat { padding: 36px 24px; text-align: center; border-right: var(--border); transition: background var(--fast); }
+    .trust-stat:last-child { border-right: none; }
+    .trust-stat:hover { background: var(--black-3); }
+    .trust-stat__num { font-family: var(--font-display); font-size: clamp(2rem, 3.5vw, 2.8rem); background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; margin-bottom: 6px; }
+    .trust-stat__label { font-size: 0.68rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--gray-500); }
+
+    .biz-how { padding: var(--section-pad) 0; background: var(--black-2); border-top: var(--border); }
+    .biz-how__inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .biz-how__header { max-width: 600px; margin-bottom: 64px; }
+    .biz-how__header h2 { font-family: var(--font-display); font-size: clamp(2.8rem, 5vw, 4.5rem); line-height: .95; margin-bottom: 16px; }
+    .biz-how__header h2 span { background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .biz-how__header p { color: var(--gray-300); font-size: 1rem; line-height: 1.8; }
+    .biz-how__steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+    .biz-how-step { background: rgba(255,255,255,0.025); border: var(--border); border-radius: var(--radius-lg); padding: 36px 28px; position: relative; overflow: hidden; transition: transform var(--fast), box-shadow var(--fast); }
+    .biz-how-step::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--grad-text); opacity: 0; transition: opacity var(--fast); }
+    .biz-how-step:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,.4); }
+    .biz-how-step:hover::before { opacity: 1; }
+    .biz-how-step__num { font-family: var(--font-display); font-size: 3.5rem; background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; margin-bottom: 20px; opacity: .6; }
+    .biz-how-step h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; }
+    .biz-how-step p { color: var(--gray-300); font-size: 0.9rem; line-height: 1.8; margin-bottom: 20px; }
+    .biz-how-step__tech { display: inline-block; font-size: 0.62rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--blue); border: 1px solid rgba(0,212,255,0.22); padding: 4px 12px; border-radius: 2px; background: rgba(0,212,255,0.04); }
+
+    .biz-industries { padding: var(--section-pad) 0; background: var(--black); border-top: var(--border); }
+    .biz-industries__inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .biz-industries__header { max-width: 600px; margin-bottom: 60px; }
+    .biz-industries__header h2 { font-family: var(--font-display); font-size: clamp(2.8rem, 5vw, 4.5rem); line-height: .95; margin-bottom: 16px; }
+    .biz-industries__header p { color: var(--gray-300); font-size: 1rem; line-height: 1.8; }
+    .biz-industries__grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+    .ind-card { background: rgba(255,255,255,0.025); border: var(--border); border-radius: var(--radius-lg); padding: 32px 24px; transition: border-color var(--fast), background var(--fast), transform var(--fast); }
+    .ind-card:hover { border-color: rgba(255,69,0,0.3); background: rgba(255,69,0,0.04); transform: translateY(-3px); }
+    .ind-card__icon { font-size: 2.2rem; margin-bottom: 16px; display: block; }
+    .ind-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 10px; color: var(--white); }
+    .ind-card p { color: var(--gray-400); font-size: 0.85rem; line-height: 1.7; }
+
+    .biz-features { padding: var(--section-pad) 0; background: var(--black-2); border-top: var(--border); }
+    .biz-features__inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .biz-features__header { margin-bottom: 60px; max-width: 600px; }
+    .biz-features__header h2 { font-family: var(--font-display); font-size: clamp(2.8rem, 5vw, 4.5rem); line-height: .95; margin-bottom: 16px; }
+    .biz-features__grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+    .feat-card { background: rgba(255,255,255,0.025); border: var(--border); border-radius: var(--radius-lg); padding: 28px 24px; transition: background var(--fast), border-color var(--fast); }
+    .feat-card:hover { background: rgba(255,255,255,0.04); border-color: rgba(0,212,255,0.2); }
+    .feat-card__icon { font-size: 1.6rem; margin-bottom: 14px; display: block; }
+    .feat-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; }
+    .feat-card p { color: var(--gray-400); font-size: 0.82rem; line-height: 1.7; }
+
+    .biz-api-preview { padding: var(--section-pad) 0; background: var(--black); border-top: var(--border); }
+    .biz-api-preview__inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px; align-items: start; }
+    .biz-api-preview__copy h2 { font-family: var(--font-display); font-size: clamp(2.8rem, 5vw, 4.5rem); line-height: .95; margin-bottom: 20px; }
+    .biz-api-preview__copy h2 span { background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .biz-api-preview__copy p { color: var(--gray-300); font-size: 1rem; line-height: 1.8; margin-bottom: 32px; }
+    .biz-api-preview__copy ul { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
+    .biz-api-preview__copy li { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: var(--gray-100); }
+    .biz-api-preview__copy li::before { content: '✓'; color: var(--green); font-weight: 900; flex-shrink: 0; }
+    .api-preview-block { background: #0A0F1E; border: var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+    .api-preview-block__bar { background: rgba(255,255,255,0.03); padding: 12px 20px; display: flex; align-items: center; gap: 8px; border-bottom: var(--border); }
+    .api-preview-block__method { font-size: 0.65rem; font-weight: 700; letter-spacing: .12em; background: rgba(255,69,0,0.15); color: var(--orange); padding: 2px 8px; border-radius: 2px; }
+    .api-preview-block__endpoint { font-family: 'Courier New', monospace; font-size: 0.75rem; color: var(--gray-300); }
+    .api-preview-block__body { padding: 24px; font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.9; }
+    .api-response { margin-top: 0; border-top: var(--border); }
+    .api-response__label { padding: 10px 24px; font-size: 0.6rem; font-weight: 700; letter-spacing: .14em; color: var(--green); background: rgba(0,255,136,0.04); border-bottom: var(--border); }
+    .api-response__body { padding: 24px; font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.9; }
+
+    .biz-pricing { padding: var(--section-pad) 0; background: var(--black-2); border-top: var(--border); }
+    .biz-pricing__inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .biz-pricing__header { max-width: 600px; margin-bottom: 64px; }
+    .biz-pricing__header h2 { font-family: var(--font-display); font-size: clamp(2.8rem, 5vw, 4.5rem); line-height: .95; margin-bottom: 16px; }
+    .biz-pricing__header h2 span { background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .biz-pricing__header p { color: var(--gray-300); font-size: 1rem; line-height: 1.8; }
+    .biz-pricing__grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+
+    .biz-testimonials { padding: var(--section-pad) 0; background: var(--black); border-top: var(--border); }
+    .biz-testimonials__inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .biz-testimonials__header { max-width: 600px; margin-bottom: 60px; }
+    .biz-testimonials__header h2 { font-family: var(--font-display); font-size: clamp(2.8rem, 5vw, 4.5rem); line-height: .95; }
+    .biz-testimonials__grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+    .biz-test-card { background: rgba(255,255,255,0.025); border: var(--border); border-radius: var(--radius-lg); padding: 36px 28px; position: relative; overflow: hidden; transition: transform var(--fast), box-shadow var(--fast); }
+    .biz-test-card::before { content: '\201C'; position: absolute; top: 16px; right: 24px; font-family: Georgia, serif; font-size: 6rem; color: rgba(255,69,0,0.08); line-height: 1; pointer-events: none; }
+    .biz-test-card:hover { transform: translateY(-3px); box-shadow: 0 16px 48px rgba(0,0,0,.4); }
+    .biz-test-card p { font-size: 0.95rem; line-height: 1.8; color: var(--gray-100); font-style: italic; margin-bottom: 28px; }
+    .biz-test-card__author { display: flex; align-items: center; gap: 12px; }
+    .biz-test-card__avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--grad-btn); color: #fff; font-size: 0.75rem; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .biz-test-card__info strong { display: block; font-size: 0.85rem; font-weight: 700; color: var(--white); }
+    .biz-test-card__info span { font-size: 0.72rem; color: var(--gray-500); letter-spacing: .04em; }
+
+    .biz-final { padding: 140px 0; background: var(--black-3); border-top: var(--border); text-align: center; position: relative; overflow: hidden; }
+    .biz-final::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(255,69,0,0.09) 0%, transparent 70%); pointer-events: none; }
+    .biz-final__inner { position: relative; z-index: 1; max-width: 740px; margin: 0 auto; padding: 0 24px; }
+    .biz-final__label { font-size: 0.7rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--blue); margin-bottom: 20px; }
+    .biz-final h2 { font-family: var(--font-display); font-size: clamp(3rem, 8vw, 6.5rem); line-height: .93; margin-bottom: 24px; }
+    .biz-final h2 span { background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .biz-final p { color: var(--gray-300); font-size: 1.05rem; margin-bottom: 48px; line-height: 1.8; }
+    .biz-final__actions { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+
+    @media (max-width: 1024px) {
+      .biz-hero__inner { grid-template-columns: 1fr; gap: 48px; }
+      .biz-hero__visual { display: none; }
+      .biz-how__steps { grid-template-columns: 1fr; }
+      .biz-industries__grid { grid-template-columns: repeat(2,1fr); }
+      .biz-features__grid { grid-template-columns: repeat(2,1fr); }
+      .biz-api-preview__inner { grid-template-columns: 1fr; gap: 48px; }
+      .biz-pricing__grid { grid-template-columns: 1fr; gap: 16px; }
+      .biz-testimonials__grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .trust-bar__inner { grid-template-columns: repeat(2,1fr); }
+      .biz-industries__grid { grid-template-columns: 1fr; }
+      .biz-features__grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="navbar">
+    <div class="nav__inner">
+      <a href="../" class="nav__logo">
+        <span class="logo-za">Za.</span><span class="logo-ally">ally</span><span class="logo-rest">Errands</span>
+      </a>
+      <ul class="nav__links" id="navLinks">
+        <li><a href="../">Home</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="../api">API Docs</a></li>
+        <li><a href="../business-portal" class="nav__portal">Dashboard</a></li>
+        <li><a href="#contact" class="nav__cta">Get Started</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="biz-hero" id="drop">
+    <div class="biz-hero__grid"></div>
+    <div class="biz-hero__inner">
+      <div class="biz-hero__copy">
+        <div class="biz-hero__eyebrow"><span class="pulse-dot"></span> FOR BUSINESSES — LAGOS</div>
+        <h1 class="biz-hero__headline">The dispatch<br />backbone<br /><span>Lagos runs on.</span></h1>
+        <p class="biz-hero__sub">Stop routing deliveries by hand. Plug your pharmacy, restaurant, or supermarket into Za.allyErrands' proven runner network. Every order dispatched in minutes — via API, webhook, or dashboard.</p>
+        <div class="biz-hero__actions">
+          <a href="#contact" class="btn btn--hazard">Get Business Account &rarr;</a>
+          <a href="../api" class="btn btn--ghost">See the API</a>
+        </div>
+      </div>
+      <div class="biz-hero__visual">
+        <div class="biz-code-card">
+          <div class="biz-code-card__bar">
+            <div class="biz-code-card__dot"></div>
+            <div class="biz-code-card__dot"></div>
+            <div class="biz-code-card__dot"></div>
+            <span class="biz-code-card__label">POST /v1/dispatch</span>
+          </div>
+          <div class="biz-code-card__body">
+            <div><span class="c-method">POST</span> <span class="c-url">https://api.za-allyerrands.com/v1/dispatch</span></div>
+            <div class="c-dim">Authorization: Bearer sk_live_xxxx</div>
+            <br/>
+            <div>{</div>
+            <div>&nbsp;&nbsp;<span class="c-key">"pickup"</span>: <span class="c-str">"Shoprite, Lekki Phase 1"</span>,</div>
+            <div>&nbsp;&nbsp;<span class="c-key">"dropoff"</span>: <span class="c-str">"15 Banana Island Rd, Ikoyi"</span>,</div>
+            <div>&nbsp;&nbsp;<span class="c-key">"item"</span>: <span class="c-str">"Grocery order #4521"</span>,</div>
+            <div>&nbsp;&nbsp;<span class="c-key">"notify_customer"</span>: <span class="c-bool">true</span></div>
+            <div>}</div>
+            <div class="c-response">
+              <div class="c-response-label">&#9679; 201 CREATED — 8 MIN ETA</div>
+              <div>{</div>
+              <div>&nbsp;&nbsp;<span class="c-key">"dispatch_id"</span>: <span class="c-str">"dsp_XkL9mNpQ2r"</span>,</div>
+              <div>&nbsp;&nbsp;<span class="c-key">"status"</span>: <span class="c-str">"queued"</span>,</div>
+              <div>&nbsp;&nbsp;<span class="c-key">"eta_minutes"</span>: <span class="c-num">8</span>,</div>
+              <div>&nbsp;&nbsp;<span class="c-key">"tracking_url"</span>: <span class="c-str">"https://track.za-..."</span></div>
+              <div>}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BAR -->
+  <div class="trust-bar">
+    <div class="trust-bar__inner">
+      <div class="trust-stat" data-reveal>
+        <div class="trust-stat__num"><span class="counter-num" data-target="1247">1,247</span>+</div>
+        <div class="trust-stat__label">Dispatches Proven</div>
+      </div>
+      <div class="trust-stat" data-reveal>
+        <div class="trust-stat__num">&lt;10 <span style="-webkit-text-fill-color:var(--white);font-size:1.2rem">min</span></div>
+        <div class="trust-stat__label">Avg Dispatch Time</div>
+      </div>
+      <div class="trust-stat" data-reveal>
+        <div class="trust-stat__num"><span class="counter-num" data-target="99">99</span><span style="-webkit-text-fill-color:var(--white);font-size:1.2rem">.2%</span></div>
+        <div class="trust-stat__label">On-Time Rate</div>
+      </div>
+      <div class="trust-stat" data-reveal>
+        <div class="trust-stat__num"><span class="counter-num" data-target="6">6</span></div>
+        <div class="trust-stat__label">Industries Served</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section class="biz-how" id="how-it-works">
+    <div class="biz-how__inner">
+      <div class="section-label">// INTEGRATION</div>
+      <div class="biz-how__header">
+        <h2>Three lines of code.<br /><span>Hundreds of deliveries.</span></h2>
+        <p>No driver fleet. No WhatsApp group coordination. No missed pickups. Just an API call and a runner at your door.</p>
+      </div>
+      <div class="biz-how__steps">
+        <div class="biz-how-step" data-reveal>
+          <div class="biz-how-step__num">01</div>
+          <h3>Connect</h3>
+          <p>Drop your API key into your POS or order management system. One afternoon of work. Zero infrastructure to maintain on your end.</p>
+          <span class="biz-how-step__tech">REST API — BEARER AUTH</span>
+        </div>
+        <div class="biz-how-step" data-reveal>
+          <div class="biz-how-step__num">02</div>
+          <h3>Dispatch</h3>
+          <p>POST a single JSON payload to <code style="color:var(--blue);font-size:0.85em">/v1/dispatch</code>. We route to the nearest available runner and confirm within 8 minutes.</p>
+          <span class="biz-how-step__tech">POST /V1/DISPATCH</span>
+        </div>
+        <div class="biz-how-step" data-reveal>
+          <div class="biz-how-step__num">03</div>
+          <h3>Track</h3>
+          <p>Your team sees every active run in the business dashboard. Your customers get WhatsApp updates automatically. Zero manual follow-up.</p>
+          <span class="biz-how-step__tech">WEBHOOKS — REAL-TIME</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INDUSTRIES -->
+  <section class="biz-industries">
+    <div class="biz-industries__inner">
+      <div class="section-label">// WHO WE SERVE</div>
+      <div class="biz-industries__header">
+        <h2>Built for every Lagos<br />business that moves.</h2>
+        <p>If your business makes deliveries across Lagos, Za.allyErrands is your last-mile layer.</p>
+      </div>
+      <div class="biz-industries__grid">
+        <div class="ind-card" data-reveal><span class="ind-card__icon">💊</span><h3>Pharmacies &amp; Clinics</h3><p>Prescription pickup, OTC delivery, lab sample courier. SLA-backed, photo-documented, zero missed doses.</p></div>
+        <div class="ind-card" data-reveal><span class="ind-card__icon">🍽️</span><h3>Restaurants &amp; Dark Kitchens</h3><p>Post-order dispatch straight from your kitchen. Customer gets it hot. Same-day, every day.</p></div>
+        <div class="ind-card" data-reveal><span class="ind-card__icon">🛒</span><h3>Supermarkets &amp; Grocers</h3><p>Cart checkout triggers dispatch. No driver fleet needed. We scale with your order volume.</p></div>
+        <div class="ind-card" data-reveal><span class="ind-card__icon">👗</span><h3>Fashion &amp; Apparel</h3><p>Same-day delivery for online orders. Instagram store to doorstep in under 90 minutes.</p></div>
+        <div class="ind-card" data-reveal><span class="ind-card__icon">👔</span><h3>Laundry Services</h3><p>Scheduled pickup and drop-off. Fully tracked, no-show eliminated, customer notified throughout.</p></div>
+        <div class="ind-card" data-reveal><span class="ind-card__icon">📦</span><h3>E-commerce Brands</h3><p>Paystack stores, WooCommerce, Instagram businesses — we fulfill the last mile so you can focus on selling.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="biz-features">
+    <div class="biz-features__inner">
+      <div class="section-label">// WHAT YOU GET</div>
+      <div class="biz-features__header">
+        <h2>Everything a dispatch system needs.</h2>
+      </div>
+      <div class="biz-features__grid">
+        <div class="feat-card" data-reveal><span class="feat-card__icon">⚡</span><h3>REST API + Webhooks</h3><p>Trigger dispatches and receive real-time event callbacks into your own system.</p></div>
+        <div class="feat-card" data-reveal><span class="feat-card__icon">📊</span><h3>Real-Time Dashboard</h3><p>Your ops team sees every active run — status, ETA, runner location — in a single view.</p></div>
+        <div class="feat-card" data-reveal><span class="feat-card__icon">🏍</span><h3>Dedicated Runner Pool</h3><p>Growth and Enterprise plans get runners reserved for your business, not shared with consumer jobs.</p></div>
+        <div class="feat-card" data-reveal><span class="feat-card__icon">📋</span><h3>Custom SLA Agreements</h3><p>Define your own dispatch windows. We enforce them. Missed SLA = credit, automatically.</p></div>
+        <div class="feat-card" data-reveal><span class="feat-card__icon">💬</span><h3>WhatsApp Customer Alerts</h3><p>Customers get dispatched, picked-up, and delivered notifications. No extra work from your team.</p></div>
+        <div class="feat-card" data-reveal><span class="feat-card__icon">📈</span><h3>Analytics &amp; Reporting</h3><p>Delivery volume, avg times, success rate, zone performance — daily and monthly exports.</p></div>
+        <div class="feat-card" data-reveal><span class="feat-card__icon">📁</span><h3>CSV Bulk Dispatch</h3><p>Upload a spreadsheet of orders each morning. All dispatched in one batch action.</p></div>
+        <div class="feat-card" data-reveal><span class="feat-card__icon">📍</span><h3>Multi-Location Support</h3><p>Multiple branches, one account. Set different runner pools per location.</p></div>
+        <div class="feat-card" data-reveal><span class="feat-card__icon">🤝</span><h3>Dedicated Account Manager</h3><p>Enterprise clients get a named contact. Not a ticket system — a person who answers.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- API PREVIEW -->
+  <section class="biz-api-preview">
+    <div class="biz-api-preview__inner">
+      <div class="biz-api-preview__copy">
+        <div class="section-label">// DEVELOPER READY</div>
+        <h2>One request.<br /><span>Runner dispatched.</span></h2>
+        <p>Our REST API is designed to be integrated in an afternoon. Clean docs, Node.js and Python SDKs, and full webhook support included from day one.</p>
+        <ul>
+          <li>Full OpenAPI 3.0 specification</li>
+          <li>Node.js and Python SDKs</li>
+          <li>Sandbox environment for testing</li>
+          <li>Idempotency keys for safe retries</li>
+          <li>Real-time webhook events</li>
+        </ul>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a href="../api" class="btn btn--hazard">Read the Docs &rarr;</a>
+          <a href="../business-portal" class="btn btn--ghost">Open Dashboard</a>
+        </div>
+      </div>
+      <div>
+        <div class="api-preview-block">
+          <div class="api-preview-block__bar">
+            <span class="api-preview-block__method">POST</span>
+            <span class="api-preview-block__endpoint">/v1/dispatch</span>
+          </div>
+          <div class="api-preview-block__body">
+            <div><span class="c-dim">// Request</span></div>
+            <div>{</div>
+            <div>&nbsp;&nbsp;<span class="c-key">"pickup"</span>: <span class="c-str">"Shoprite, Lekki Phase 1"</span>,</div>
+            <div>&nbsp;&nbsp;<span class="c-key">"dropoff"</span>: <span class="c-str">"15 Banana Island Rd, Ikoyi"</span>,</div>
+            <div>&nbsp;&nbsp;<span class="c-key">"item"</span>: <span class="c-str">"Grocery order #4521"</span>,</div>
+            <div>&nbsp;&nbsp;<span class="c-key">"customer_phone"</span>: <span class="c-str">"+2348100000000"</span>,</div>
+            <div>&nbsp;&nbsp;<span class="c-key">"notify_customer"</span>: <span class="c-bool">true</span>,</div>
+            <div>&nbsp;&nbsp;<span class="c-key">"priority"</span>: <span class="c-str">"express"</span></div>
+            <div>}</div>
+          </div>
+          <div class="api-response">
+            <div class="api-response__label">&#9679; 201 CREATED</div>
+            <div class="api-response__body">
+              <div>{</div>
+              <div>&nbsp;&nbsp;<span class="c-key">"dispatch_id"</span>: <span class="c-str">"dsp_XkL9mNpQ2r"</span>,</div>
+              <div>&nbsp;&nbsp;<span class="c-key">"status"</span>: <span class="c-str">"queued"</span>,</div>
+              <div>&nbsp;&nbsp;<span class="c-key">"eta_minutes"</span>: <span class="c-num">8</span>,</div>
+              <div>&nbsp;&nbsp;<span class="c-key">"runner"</span>: <span class="c-bool">null</span>,</div>
+              <div>&nbsp;&nbsp;<span class="c-key">"tracking_url"</span>: <span class="c-str">"https://track.za-allyerrands.com/dsp_XkL9mNpQ2r"</span>,</div>
+              <div>&nbsp;&nbsp;<span class="c-key">"created_at"</span>: <span class="c-str">"2026-05-24T08:45:00.000Z"</span></div>
+              <div>}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="biz-pricing" id="pricing">
+    <div class="biz-pricing__inner">
+      <div class="section-label">// PLANS</div>
+      <div class="biz-pricing__header">
+        <h2>Volume pricing.<br /><span>No per-errand surprises.</span></h2>
+        <p>Pick a plan that matches your dispatch volume. Scale up or down any month.</p>
+      </div>
+      <div class="biz-pricing__grid">
+        <div class="rate-card" data-reveal>
+          <div class="rate-card__label">STARTER</div>
+          <div class="rate-card__price"><span class="rate-currency">&#8358;</span>50,000</div>
+          <div class="rate-card__period">per month</div>
+          <ul class="rate-card__list">
+            <li>100 dispatches/month</li>
+            <li>Business dashboard</li>
+            <li>WhatsApp confirmations</li>
+            <li>Email &amp; chat support</li>
+            <li>Standard SLA (10 min)</li>
+          </ul>
+          <a href="#contact" class="btn btn--ghost btn--full">Get Started</a>
+        </div>
+        <div class="rate-card rate-card--featured" data-reveal>
+          <div class="rate-card__badge">MOST POPULAR</div>
+          <div class="rate-card__label">GROWTH</div>
+          <div class="rate-card__price"><span class="rate-currency">&#8358;</span>120,000</div>
+          <div class="rate-card__period">per month</div>
+          <ul class="rate-card__list">
+            <li>300 dispatches/month</li>
+            <li>Dedicated runner pool</li>
+            <li>Full API access + webhooks</li>
+            <li>Priority dispatch (&lt;5 min)</li>
+            <li>Analytics dashboard</li>
+            <li>Priority support</li>
+          </ul>
+          <a href="#contact" class="btn btn--hazard btn--full">Get Started</a>
+        </div>
+        <div class="rate-card" data-reveal>
+          <div class="rate-card__label">ENTERPRISE</div>
+          <div class="rate-card__price" style="font-size:3rem">Custom</div>
+          <div class="rate-card__period">tailored pricing</div>
+          <ul class="rate-card__list">
+            <li>Unlimited dispatches</li>
+            <li>White-label option</li>
+            <li>Custom SLA agreement</li>
+            <li>Dedicated account manager</li>
+            <li>On-site onboarding</li>
+            <li>24/7 phone support</li>
+          </ul>
+          <a href="mailto:business@zallyerrands.com" class="btn btn--ghost btn--full">Talk to Sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="biz-testimonials">
+    <div class="biz-testimonials__inner">
+      <div class="section-label">// WHAT BUSINESSES SAY</div>
+      <div class="biz-testimonials__header">
+        <h2>Lagos businesses already running.</h2>
+      </div>
+      <div class="biz-testimonials__grid">
+        <div class="biz-test-card" data-reveal>
+          <p>&ldquo;We integrated Za. into our pharmacy system in one afternoon. Now we dispatch 40+ prescriptions daily without a single phone call. It just works.&rdquo;</p>
+          <div class="biz-test-card__author">
+            <div class="biz-test-card__avatar">KO</div>
+            <div class="biz-test-card__info"><strong>Kalu O.</strong><span>Ops Manager, MedSwift Pharmacy</span></div>
+          </div>
+        </div>
+        <div class="biz-test-card" data-reveal>
+          <p>&ldquo;Our dark kitchen went from 3 botched deliveries a week to zero. Za. dispatch is the backbone of our fulfilment — I don't know how we managed without it.&rdquo;</p>
+          <div class="biz-test-card__author">
+            <div class="biz-test-card__avatar">DA</div>
+            <div class="biz-test-card__info"><strong>Dara A.</strong><span>Founder, Street Eats Lagos</span></div>
+          </div>
+        </div>
+        <div class="biz-test-card" data-reveal>
+          <p>&ldquo;The API docs are clean, the runners are reliable. We plugged in our WooCommerce store and had same-day delivery running by Friday. Exactly what Lagos needed.&rdquo;</p>
+          <div class="biz-test-card__author">
+            <div class="biz-test-card__avatar">TB</div>
+            <div class="biz-test-card__info"><strong>Tolu B.</strong><span>CTO, StyleHouse Lagos</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="biz-final" id="contact">
+    <div class="biz-final__inner">
+      <p class="biz-final__label">// READY TO SCALE</p>
+      <h2>Your competitors<br /><span>are already running.</span></h2>
+      <p>Don&rsquo;t let delivery logistics be the reason you lose customers. Get your business account set up in under 24 hours.</p>
+      <div class="biz-final__actions">
+        <a href="mailto:business@zallyerrands.com" class="btn btn--hazard btn--xl">Get Business Account &rarr;</a>
+        <a href="mailto:business@zallyerrands.com" class="btn btn--ghost">Book a Demo Call</a>
+      </div>
+      <p style="margin-top:24px;font-size:0.8rem;color:var(--gray-500)">Or email us directly: <a href="mailto:business@zallyerrands.com" style="color:var(--orange)">business@zallyerrands.com</a></p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <a href="../" class="nav__logo"><span class="logo-za">Za.</span><span class="logo-ally">ally</span><span class="logo-rest">Errands</span></a>
+        <p>Lagos&rsquo; autonomous errand dispatch &mdash; now powering businesses across the city.</p>
+        <div class="footer__socials">
+          <a href="#" class="social" aria-label="Instagram">IG</a>
+          <a href="#" class="social" aria-label="X">&#120143;</a>
+          <a href="https://wa.me/2348000000000" class="social" aria-label="WhatsApp" target="_blank" rel="noopener">WA</a>
+        </div>
+      </div>
+      <div class="footer__col">
+        <h4>For Business</h4>
+        <ul>
+          <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="#pricing">Business Pricing</a></li>
+          <li><a href="../api">API Docs</a></li>
+          <li><a href="../business-portal">Business Portal</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="../">Consumer App</a></li>
+          <li><a href="../portal">Client Portal</a></li>
+          <li><a href="../api">REST API</a></li>
+          <li><a href="../#pricing">Consumer Rates</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:business@zallyerrands.com">business@zallyerrands.com</a></li>
+          <li><a href="https://wa.me/2348000000000" target="_blank" rel="noopener">WhatsApp Sales</a></li>
+          <li><a href="tel:+2348000000000">+234 800 000 0000</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>&copy; 2026 Za.allyErrands. All rights reserved.</span>
+      <span class="footer__status"><span class="pulse-dot"></span> All systems operational</span>
+    </div>
+  </footer>
+
+  <script>
+    // Nav scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 60), { passive: true });
+
+    // Hamburger
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('open');
+      hamburger.classList.toggle('active', open);
+    });
+    navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      hamburger.classList.remove('active');
+    }));
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (!target) return;
+        e.preventDefault();
+        window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
+      });
+    });
+
+    // Reveal
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (!e.isIntersecting) return;
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        obs.unobserve(e.target);
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('[data-reveal]').forEach(el => obs.observe(el));
+
+    // Counters
+    function animateCounter(el) {
+      const target = parseInt(el.dataset.target, 10);
+      if (!target) return;
+      const start = performance.now();
+      const from = Math.max(0, target - Math.round(target * 0.15));
+      const step = now => {
+        const p = Math.min((now - start) / 1800, 1);
+        const ease = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(from + (target - from) * ease).toLocaleString();
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+    const cObs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (!e.isIntersecting) return; animateCounter(e.target); cObs.unobserve(e.target); });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('.counter-num[data-target]').forEach(el => cObs.observe(el));
+  </script>
+</body>
+</html>

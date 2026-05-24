@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Za.allyErrands — Runner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="runner.css" />
+  <script>
+    window.ZA_SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
+    window.ZA_ANON_KEY     = 'YOUR_SUPABASE_ANON_KEY';
+  </script>
+</head>
+<body>
+
+  <!-- LOGIN -->
+  <section class="r-login" id="loginScreen">
+    <div class="r-login__box">
+      <div class="r-brand">
+        <span class="logo-za">Za.</span><span class="logo-ally">ally</span><br />
+        <span class="logo-runner">Runner Node</span>
+      </div>
+      <p>Enter your registered WhatsApp number to access your jobs.</p>
+      <form id="loginForm" novalidate>
+        <div class="r-field">
+          <label for="runnerPhone">Your WhatsApp Number</label>
+          <input type="tel" id="runnerPhone" placeholder="+234 800 000 0000" required autocomplete="tel" />
+        </div>
+        <button type="submit" class="btn btn--hazard btn--full" id="loginBtn">
+          <span class="btn-text">Access Jobs &rarr;</span>
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- RUNNER DASHBOARD -->
+  <div class="r-dash" id="runnerDash" hidden>
+
+    <!-- Header -->
+    <header class="r-header">
+      <div class="r-header__brand">
+        <span class="logo-za">Za.</span><span class="logo-ally">ally</span>
+        <span class="r-header__role">Runner</span>
+      </div>
+      <div class="r-header__meta">
+        <span class="r-live">
+          <span class="pulse-dot"></span> LIVE
+        </span>
+        <button class="r-logout" id="logoutBtn">Out</button>
+      </div>
+    </header>
+
+    <!-- Runner info strip -->
+    <div class="r-info-strip" id="runnerStrip">
+      <span id="runnerName">Loading...</span>
+      <span id="runnerZone" class="r-zone"></span>
+      <span id="runnerActiveStatus" class="r-tag">ACTIVE</span>
+    </div>
+
+    <!-- Toggle active/offline -->
+    <div class="r-toggle-wrap">
+      <span>I am currently:</span>
+      <button class="r-toggle" id="activeToggle" data-active="true">ACTIVE</button>
+    </div>
+
+    <!-- Current jobs -->
+    <div class="r-section">
+      <div class="r-section__label">MY JOBS</div>
+      <div class="r-jobs" id="jobList">
+        <div class="r-empty">No jobs assigned yet. Stand by.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="runner.js"></script>
+</body>
+</html>

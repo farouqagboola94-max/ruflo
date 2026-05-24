@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Za.allyErrands — Full System Diagram</title>
+  <meta name="description" content="How Za.allyErrands works — the full three-sided marketplace connecting customers, errand handlers, and riders through a WhatsApp AI agent." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #06080F;
+      --bg-2:      #090C18;
+      --bg-3:      #0D1020;
+      --border:    rgba(255,255,255,0.07);
+      --white:     #FFFFFF;
+      --muted:     rgba(255,255,255,0.45);
+
+      /* Role colours */
+      --customer:  #00D4FF;
+      --wai:       #00FF88;
+      --platform:  #FF4500;
+      --handler:   #9C6EF8;
+      --rider:     #F5A623;
+      --money:     #FFD60A;
+
+      --font-body:    'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-mono:    'JetBrains Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--white);
+      overflow-x: hidden;
+      line-height: 1.55;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+    /* ────────────────────────────────── HEADER ── */
+    .header {
+      text-align: center;
+      padding: 60px 24px 48px;
+      position: relative;
+      background: radial-gradient(ellipse 90% 55% at 50% 0%,
+        rgba(255,69,0,0.07) 0%, transparent 70%);
+    }
+    .header__badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,69,0,0.08);
+      border: 1px solid rgba(255,69,0,0.22);
+      color: var(--platform); font-size: 11px;
+      font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; padding: 5px 16px;
+      border-radius: 20px; margin-bottom: 22px;
+    }
+    .dot-live { width: 6px; height: 6px; border-radius: 50%; background: var(--wai); animation: blink 1.5s ease infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    .header h1 {
+      font-family: var(--font-display);
+      font-size: clamp(40px, 7vw, 80px);
+      letter-spacing: 2px; line-height: 1;
+      margin-bottom: 14px;
+    }
+    .brand-em {
+      background: linear-gradient(135deg, var(--platform) 0%, var(--rider) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .header__sub {
+      font-size: 16px; color: var(--muted);
+      max-width: 540px; margin: 0 auto 32px;
+    }
+
+    /* Role legend */
+    .role-legend {
+      display: flex; justify-content: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .role-pill {
+      display: flex; align-items: center; gap: 7px;
+      padding: 6px 14px; border-radius: 20px;
+      font-size: 12px; font-weight: 700;
+      border: 1px solid; cursor: default;
+      transition: transform .2s;
+    }
+    .role-pill:hover { transform: translateY(-2px); }
+    .role-pill .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    /* ────────────────────────────────── SECTION WRAP ── */
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+
+    /* ────────────────────────────────── PARTY NODES ── */
+    .parties-section {
+      padding: 48px 0;
+    }
+    .parties-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    @media (max-width: 900px) { .parties-grid { grid-template-columns: repeat(3,1fr); } }
+    @media (max-width: 560px) { .parties-grid { grid-template-columns: 1fr 1fr; } }
+
+    .party-card {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px 16px;
+      text-align: center;
+      transition: transform .22s, box-shadow .22s;
+      position: relative; overflow: hidden;
+    }
+    .party-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: var(--role-color);
+    }
+    .party-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+    }
+    .party-icon {
+      font-size: 32px; margin-bottom: 10px; display: block;
+    }
+    .party-name {
+      font-size: 13px; font-weight: 800; letter-spacing: .5px;
+      margin-bottom: 6px; color: var(--role-color);
+    }
+    .party-desc {
+      font-size: 12px; color: var(--muted); line-height: 1.5;
+    }
+    .party-tag {
+      display: inline-block; margin-top: 8px;
+      font-size: 10px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; padding: 2px 8px; border-radius: 4px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--muted);
+    }
+
+    /* ────────────────────────────────── MAIN DIAGRAM ── */
+    .diagram-section {
+      padding: 24px 0 48px;
+    }
+    .diagram-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--platform);
+      text-align: center; margin-bottom: 28px;
+    }
+
+    .diagram-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Main SVG diagram */
+    .main-diagram-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* ── Animated dashed path ── */
+    .flow-path {
+      fill: none;
+      stroke-width: 2;
+      stroke-dasharray: 10 6;
+      stroke-linecap: round;
+    }
+    .flow-path--task   { stroke: var(--customer); animation: dash 2s linear infinite; }
+    .flow-path--ai     { stroke: var(--wai);      animation: dash 2.4s linear infinite; }
+    .flow-path--assign { stroke: var(--handler);  animation: dash 2.8s linear infinite; }
+    .flow-path--rider  { stroke: var(--rider);    animation: dash 3s linear infinite; }
+    .flow-path--money  { stroke: var(--money);    animation: dash 1.8s linear infinite reverse; stroke-dasharray: 6 10; }
+    .flow-path--comm   { stroke: var(--platform); animation: dash 2.2s linear infinite; }
+
+    @keyframes dash { to { stroke-dashoffset: -32; } }
+
+    /* Node circles in SVG */
+    .node-glow { filter: url(#blur); }
+
+    /* Floating label boxes on SVG */
+    .svg-label {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px; font-weight: 700;
+    }
+    .svg-sub {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 10px;
+    }
+
+    /* ────────────────────────────────── FLOW LEGEND ── */
+    .flow-legend {
+      display: flex; justify-content: center;
+      flex-wrap: wrap; gap: 16px; margin: 20px 0;
+    }
+    .fl-item {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 12px; color: rgba(255,255,255,0.6);
+    }
+    .fl-line {
+      width: 28px; height: 2px; border-radius: 1px;
+      background: repeating-linear-gradient(90deg, var(--c) 0, var(--c) 6px, transparent 6px, transparent 12px);
+    }
+    .fl-line--solid { background: var(--c); }
+
+    /* ────────────────────────────────── TASK LIFECYCLE ── */
+    .lifecycle-section { padding: 48px 0; }
+    .section-title {
+      font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--platform);
+      margin-bottom: 8px;
+    }
+    .section-h2 {
+      font-size: clamp(22px,3vw,30px); font-weight: 700;
+      margin-bottom: 28px;
+    }
+
+    .lifecycle-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 3px;
+      position: relative;
+    }
+
+    .lc-step {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 18px 16px;
+      position: relative;
+      transition: background .2s;
+    }
+    .lc-step:hover { background: rgba(255,255,255,0.04); }
+    .lc-step__num {
+      font-family: var(--font-display);
+      font-size: 36px; line-height: 1;
+      opacity: .12; margin-bottom: 10px;
+    }
+    .lc-step__icon { font-size: 20px; margin-bottom: 8px; }
+    .lc-step__title {
+      font-size: 13px; font-weight: 700; margin-bottom: 5px;
+    }
+    .lc-step__body {
+      font-size: 12px; color: var(--muted); line-height: 1.55;
+    }
+    .lc-step__who {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 10px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; margin-top: 8px;
+      padding: 2px 7px; border-radius: 4px;
+    }
+
+    /* Step connector arrow */
+    .lc-arrow {
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; color: rgba(255,255,255,0.15);
+      padding: 0 4px; align-self: center;
+    }
+    @media (max-width: 700px) { .lc-arrow { display: none; } }
+
+    /* ────────────────────────────────── MONEY FLOW ── */
+    .money-section { padding: 48px 0; }
+    .money-diagram {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0; flex-wrap: wrap;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 16px; padding: 32px;
+      max-width: 800px; margin: 0 auto;
+    }
+    .money-node {
+      text-align: center; padding: 16px;
+      min-width: 130px;
+    }
+    .money-node__icon {
+      width: 56px; height: 56px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin: 0 auto 10px;
+      border: 2px solid;
+    }
+    .money-node__name {
+      font-size: 12px; font-weight: 700; margin-bottom: 4px;
+    }
+    .money-node__amount {
+      font-family: var(--font-mono);
+      font-size: 18px; font-weight: 700;
+      color: var(--money);
+    }
+    .money-node__pct {
+      font-size: 11px; color: var(--muted);
+    }
+    .money-arrow {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 4px; padding: 0 8px;
+    }
+    .money-arrow__line {
+      width: 40px; height: 2px;
+      background: repeating-linear-gradient(90deg, var(--money) 0, var(--money) 5px, transparent 5px, transparent 10px);
+    }
+    .money-arrow__label {
+      font-size: 9px; font-weight: 600; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--money); opacity: .6;
+    }
+
+    /* Commission bar */
+    .commission-bar {
+      max-width: 640px; margin: 24px auto 0;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 20px;
+    }
+    .comm-bar__title {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 12px; text-align: center;
+    }
+    .comm-bar__track {
+      height: 28px; border-radius: 6px; overflow: hidden;
+      display: flex; margin-bottom: 12px;
+    }
+    .comm-segment {
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: rgba(0,0,0,0.7);
+      transition: flex .8s ease;
+    }
+    .comm-legend {
+      display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;
+    }
+    .comm-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: rgba(255,255,255,0.65);
+    }
+    .comm-dot { width: 10px; height: 10px; border-radius: 2px; }
+
+    /* Bonus cards */
+    .bonus-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px,1fr));
+      gap: 10px; margin-top: 24px;
+    }
+    .bonus-card {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border); border-radius: 10px;
+      padding: 14px 16px;
+      transition: all .2s;
+    }
+    .bonus-card:hover { background: rgba(255,255,255,0.05); }
+    .bonus-card__type {
+      font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--money); margin-bottom: 5px;
+    }
+    .bonus-card__title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .bonus-card__amt {
+      font-family: var(--font-mono);
+      font-size: 13px; color: var(--money);
+    }
+
+    /* ────────────────────────────────── WHATSAPP AI SPEC ── */
+    .wai-section { padding: 48px 0; }
+    .wai-flow {
+      display: grid;
+      grid-template-columns: 1fr 60px 1fr;
+      gap: 0; align-items: start;
+      max-width: 800px; margin: 0 auto;
+    }
+    @media (max-width: 600px) { .wai-flow { grid-template-columns: 1fr; } .wai-mid { display: none; } }
+    .wai-col { display: flex; flex-direction: column; gap: 8px; }
+    .wai-mid {
+      display: flex; align-items: center; justify-content: center;
+      padding-top: 40px;
+      font-size: 22px; color: var(--wai); opacity: .5;
+    }
+    .wai-msg {
+      border-radius: 12px; padding: 12px 14px;
+      font-size: 13px; line-height: 1.5; max-width: 300px;
+    }
+    .wai-msg--customer {
+      background: rgba(0,212,255,0.08);
+      border: 1px solid rgba(0,212,255,0.2);
+      border-radius: 12px 12px 2px 12px;
+      align-self: flex-end;
+    }
+    .wai-msg--ai {
+      background: rgba(0,255,136,0.06);
+      border: 1px solid rgba(0,255,136,0.18);
+      border-radius: 12px 12px 12px 2px;
+    }
+    .wai-msg__from {
+      font-size: 10px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 5px;
+    }
+    .wai-msg__text { color: rgba(255,255,255,0.8); }
+
+    /* ────────────────────────────────── CHECKLIST ── */
+    .checklist-section { padding: 48px 0 64px; }
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px,1fr));
+      gap: 12px;
+    }
+    .check-group {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px;
+    }
+    .check-group__title {
+      font-size: 12px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 14px;
+    }
+    .check-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      margin-bottom: 10px; font-size: 13.5px;
+      color: rgba(255,255,255,0.75);
+    }
+    .check-item:last-child { margin-bottom: 0; }
+    .check-box {
+      width: 18px; height: 18px; border-radius: 4px;
+      flex-shrink: 0; display: flex; align-items: center;
+      justify-content: center; margin-top: 1px;
+      font-size: 10px; font-weight: 700;
+    }
+    .check-box--done {
+      background: rgba(0,255,136,0.12);
+      border: 1px solid rgba(0,255,136,0.3);
+      color: var(--wai);
+    }
+    .check-box--pending {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: transparent;
+    }
+    .check-box--active {
+      background: rgba(255,69,0,0.1);
+      border: 1px solid rgba(255,69,0,0.3);
+      color: var(--platform);
+    }
+
+    /* ────────────────────────────────── FOOTER ── */
+    .wf-footer {
+      text-align: center; padding: 28px 24px;
+      border-top: 1px solid var(--border);
+      font-size: 13px; color: var(--muted);
+      display: flex; justify-content: center; align-items: center;
+      gap: 20px; flex-wrap: wrap;
+    }
+    .wf-footer a { color: var(--platform); text-decoration: none; font-weight: 600; }
+    .wf-footer a:hover { text-decoration: underline; }
+
+    /* ── Reveal ── */
+    [data-reveal] { opacity: 0; transform: translateY(18px); transition: opacity .5s, transform .5s; }
+    [data-reveal].visible { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header__badge"><span class="dot-live"></span> SYSTEM DIAGRAM · ZA.ALLERRANDS</div>
+  <h1><span class="brand-em">Za.allyErrands</span><br/>Full System Map</h1>
+  <p class="header__sub">Every party, every flow, every naira — the complete three-sided marketplace at a glance.</p>
+  <div class="role-legend">
+    <div class="role-pill" style="color:var(--customer);border-color:rgba(0,212,255,0.3);background:rgba(0,212,255,0.06)">
+      <span class="dot" style="background:var(--customer)"></span> Customer
+    </div>
+    <div class="role-pill" style="color:var(--wai);border-color:rgba(0,255,136,0.3);background:rgba(0,255,136,0.06)">
+      <span class="dot" style="background:var(--wai)"></span> WhatsApp AI
+    </div>
+    <div class="role-pill" style="color:var(--platform);border-color:rgba(255,69,0,0.3);background:rgba(255,69,0,0.06)">
+      <span class="dot" style="background:var(--platform)"></span> Platform
+    </div>
+    <div class="role-pill" style="color:var(--handler);border-color:rgba(156,110,248,0.3);background:rgba(156,110,248,0.06)">
+      <span class="dot" style="background:var(--handler)"></span> Handler
+    </div>
+    <div class="role-pill" style="color:var(--rider);border-color:rgba(245,166,35,0.3);background:rgba(245,166,35,0.06)">
+      <span class="dot" style="background:var(--rider)"></span> Rider
+    </div>
+  </div>
+</header>
+
+<!-- ─── PARTY CARDS ─── -->
+<div class="wrap">
+  <div class="parties-section" data-reveal>
+    <div class="parties-grid">
+      <div class="party-card" style="--role-color:var(--customer)">
+        <span class="party-icon">🙋</span>
+        <div class="party-name">Customer</div>
+        <div class="party-desc">Places task requests, pays the full fee, receives the completed errand.</div>
+        <span class="party-tag">Payer</span>
+      </div>
+      <div class="party-card" style="--role-color:var(--wai)">
+        <span class="party-icon">🤖</span>
+        <div class="party-name">WhatsApp AI</div>
+        <div class="party-desc">Collects task info, confirms bookings, sends updates, and handles basic payments via chat.</div>
+        <span class="party-tag">Front Door</span>
+      </div>
+      <div class="party-card" style="--role-color:var(--platform)" style="border-color:rgba(255,69,0,0.25)">
+        <span class="party-icon">⚙️</span>
+        <div class="party-name">Za.allyErrands Platform</div>
+        <div class="party-desc">Routes tasks, takes commission, manages payments, dispatches handlers and riders.</div>
+        <span class="party-tag">Orchestrator</span>
+      </div>
+      <div class="party-card" style="--role-color:var(--handler)">
+        <span class="party-icon">🧑‍💼</span>
+        <div class="party-name">Errand Handler</div>
+        <div class="party-desc">Executes the actual task — buys items, waits in queues, handles complex errands on the ground.</div>
+        <span class="party-tag">Task Executor</span>
+      </div>
+      <div class="party-card" style="--role-color:var(--rider)">
+        <span class="party-icon">🏍️</span>
+        <div class="party-name">Rider</div>
+        <div class="party-desc">Transports items between pickup and drop-off points. Paid by distance, time, and urgency.</div>
+        <span class="party-tag">Transporter</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MAIN SVG DIAGRAM ─── -->
+<div class="wrap">
+  <div class="diagram-section" data-reveal>
+    <div class="diagram-label">// LIVE CONNECTION MAP</div>
+
+    <div class="diagram-wrap">
+      <svg class="main-diagram-svg" viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Glow filters -->
+          <filter id="glow-blue" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="8" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="glow-green" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="8" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="glow-orange" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="10" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="glow-purple" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="8" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="glow-gold" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="8" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+
+          <!-- Arrow markers -->
+          <marker id="arr-blue" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M1,1 L7,4 L1,7 Z" fill="#00D4FF" opacity=".8"/>
+          </marker>
+          <marker id="arr-green" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M1,1 L7,4 L1,7 Z" fill="#00FF88" opacity=".8"/>
+          </marker>
+          <marker id="arr-orange" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M1,1 L7,4 L1,7 Z" fill="#FF4500" opacity=".8"/>
+          </marker>
+          <marker id="arr-purple" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M1,1 L7,4 L1,7 Z" fill="#9C6EF8" opacity=".8"/>
+          </marker>
+          <marker id="arr-gold" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M1,1 L7,4 L1,7 Z" fill="#F5A623" opacity=".8"/>
+          </marker>
+          <marker id="arr-money" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M1,1 L7,4 L1,7 Z" fill="#FFD60A" opacity=".9"/>
+          </marker>
+          <marker id="arr-money-rev" markerWidth="8" markerHeight="8" refX="1" refY="4" orient="auto">
+            <path d="M7,1 L1,4 L7,7 Z" fill="#FFD60A" opacity=".9"/>
+          </marker>
+        </defs>
+
+        <!-- ═══ BACKGROUND GRID ═══ -->
+        <rect width="900" height="560" fill="rgba(0,0,0,0)" rx="16"/>
+        <!-- subtle grid -->
+        <g stroke="rgba(255,255,255,0.03)" stroke-width="1">
+          <line x1="0" y1="140" x2="900" y2="140"/>
+          <line x1="0" y1="280" x2="900" y2="280"/>
+          <line x1="0" y1="420" x2="900" y2="420"/>
+          <line x1="180" y1="0" x2="180" y2="560"/>
+          <line x1="360" y1="0" x2="360" y2="560"/>
+          <line x1="540" y1="0" x2="540" y2="560"/>
+          <line x1="720" y1="0" x2="720" y2="560"/>
+        </g>
+
+        <!-- ═══ FLOW PATHS ═══ -->
+
+        <!-- Customer → WhatsApp AI (task request) -->
+        <path class="flow-path flow-path--task"
+          d="M 150,200 C 200,200 210,180 250,180"
+          marker-end="url(#arr-blue)"/>
+
+        <!-- WhatsApp AI → Platform (processed request) -->
+        <path class="flow-path flow-path--ai"
+          d="M 330,180 C 370,180 380,200 420,200"
+          marker-end="url(#arr-green)"/>
+
+        <!-- Platform → Handler (assignment) -->
+        <path class="flow-path flow-path--assign"
+          d="M 530,190 C 570,175 600,165 640,160"
+          marker-end="url(#arr-purple)"/>
+
+        <!-- Platform → Rider (dispatch) -->
+        <path class="flow-path flow-path--rider"
+          d="M 530,220 C 570,240 600,360 640,380"
+          marker-end="url(#arr-gold)"/>
+
+        <!-- Handler ↔ Rider coordination -->
+        <path class="flow-path" style="stroke:rgba(255,255,255,0.15)"
+          d="M 700,200 C 730,280 730,320 700,380"
+          stroke-dasharray="4 8"/>
+
+        <!-- Customer → Platform (payment) — money flow -->
+        <path class="flow-path flow-path--money"
+          d="M 150,240 C 200,300 380,320 420,260"
+          marker-end="url(#arr-money)" stroke-width="2.5"/>
+
+        <!-- Platform → Handler (cut) -->
+        <path class="flow-path flow-path--money"
+          d="M 530,250 C 570,250 600,200 640,185"
+          marker-end="url(#arr-money)" stroke-width="2"/>
+
+        <!-- Platform → Rider (cut) -->
+        <path class="flow-path flow-path--money"
+          d="M 530,265 C 570,310 600,380 640,400"
+          marker-end="url(#arr-money)" stroke-width="2"/>
+
+        <!-- WhatsApp ↔ Customer (updates) -->
+        <path class="flow-path flow-path--ai"
+          d="M 250,220 C 220,260 180,260 155,260"
+          marker-end="url(#arr-green)" opacity=".5"/>
+
+        <!-- ═══ NODE: CUSTOMER ═══ -->
+        <g transform="translate(90, 170)" filter="url(#glow-blue)">
+          <!-- glow ring -->
+          <circle cx="60" cy="60" r="52" fill="rgba(0,212,255,0.04)" stroke="rgba(0,212,255,0.15)" stroke-width="1.5" stroke-dasharray="4 6"/>
+          <!-- main circle -->
+          <circle cx="60" cy="60" r="42" fill="rgba(0,212,255,0.1)" stroke="rgba(0,212,255,0.5)" stroke-width="2"/>
+          <!-- icon -->
+          <text x="60" y="70" text-anchor="middle" font-size="28">🙋</text>
+        </g>
+        <text x="150" y="320" text-anchor="middle" class="svg-label" fill="#00D4FF">Customer</text>
+        <text x="150" y="336" text-anchor="middle" class="svg-sub" fill="rgba(255,255,255,0.4)">Places task</text>
+        <text x="150" y="349" text-anchor="middle" class="svg-sub" fill="rgba(255,255,255,0.4)">Pays full fee</text>
+
+        <!-- ═══ NODE: WHATSAPP AI ═══ -->
+        <g transform="translate(240, 140)" filter="url(#glow-green)">
+          <circle cx="50" cy="50" r="44" fill="rgba(0,255,136,0.04)" stroke="rgba(0,255,136,0.15)" stroke-width="1.5" stroke-dasharray="4 6"/>
+          <circle cx="50" cy="50" r="36" fill="rgba(0,255,136,0.08)" stroke="rgba(0,255,136,0.45)" stroke-width="2"/>
+          <text x="50" y="60" text-anchor="middle" font-size="22">🤖</text>
+          <!-- animated pulse -->
+          <circle cx="50" cy="50" r="36" fill="none" stroke="rgba(0,255,136,0.3)" stroke-width="1">
+            <animate attributeName="r" values="36;48;36" dur="2.5s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.3;0;0.3" dur="2.5s" repeatCount="indefinite"/>
+          </circle>
+        </g>
+        <text x="290" y="290" text-anchor="middle" class="svg-label" fill="#00FF88">WhatsApp AI</text>
+        <text x="290" y="305" text-anchor="middle" class="svg-sub" fill="rgba(255,255,255,0.4)">Collects info</text>
+        <text x="290" y="318" text-anchor="middle" class="svg-sub" fill="rgba(255,255,255,0.4)">Confirms tasks</text>
+
+        <!-- ═══ NODE: PLATFORM ═══ (center, large) -->
+        <g transform="translate(390, 148)" filter="url(#glow-orange)">
+          <!-- outer pulse ring -->
+          <circle cx="60" cy="60" r="56" fill="none" stroke="rgba(255,69,0,0.2)" stroke-width="1">
+            <animate attributeName="r" values="56;70;56" dur="3s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.2;0;0.2" dur="3s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="60" cy="60" r="56" fill="rgba(255,69,0,0.05)" stroke="rgba(255,69,0,0.2)" stroke-width="1.5" stroke-dasharray="4 6"/>
+          <circle cx="60" cy="60" r="46" fill="rgba(255,69,0,0.12)" stroke="rgba(255,69,0,0.6)" stroke-width="2.5"/>
+          <text x="60" y="52" text-anchor="middle" font-size="20" fill="rgba(255,69,0,0.95)" font-family="'Bebas Neue',sans-serif" letter-spacing="2">Za.</text>
+          <text x="60" y="70" text-anchor="middle" font-size="16" fill="rgba(255,255,255,0.9)" font-family="'Bebas Neue',sans-serif" letter-spacing="1">ally</text>
+          <text x="60" y="87" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.7)" font-family="'Bebas Neue',sans-serif" letter-spacing="1">Errands</text>
+        </g>
+        <text x="450" y="330" text-anchor="middle" class="svg-label" fill="#FF4500">Platform</text>
+        <text x="450" y="345" text-anchor="middle" class="svg-sub" fill="rgba(255,255,255,0.4)">Routes · Charges</text>
+        <text x="450" y="358" text-anchor="middle" class="svg-sub" fill="rgba(255,255,255,0.4)">Manages · Tracks</text>
+
+        <!-- Commission badge on platform -->
+        <rect x="400" y="366" width="100" height="20" rx="4" fill="rgba(255,214,10,0.1)" stroke="rgba(255,214,10,0.3)" stroke-width="1"/>
+        <text x="450" y="380" text-anchor="middle" class="svg-sub" fill="#FFD60A" font-weight="700" font-size="10">Takes commission</text>
+
+        <!-- ═══ NODE: HANDLER ═══ -->
+        <g transform="translate(614, 110)" filter="url(#glow-purple)">
+          <circle cx="48" cy="48" r="42" fill="rgba(156,110,248,0.05)" stroke="rgba(156,110,248,0.15)" stroke-width="1.5" stroke-dasharray="4 6"/>
+          <circle cx="48" cy="48" r="34" fill="rgba(156,110,248,0.1)" stroke="rgba(156,110,248,0.5)" stroke-width="2"/>
+          <text x="48" y="58" text-anchor="middle" font-size="22">🧑‍💼</text>
+        </g>
+        <text x="662" y="270" text-anchor="middle" class="svg-label" fill="#9C6EF8">Handler</text>
+        <text x="662" y="285" text-anchor="middle" class="svg-sub" fill="rgba(255,255,255,0.4)">Executes task</text>
+        <text x="662" y="298" text-anchor="middle" class="svg-sub" fill="rgba(255,255,255,0.4)">Earns % cut</text>
+
+        <!-- ═══ NODE: RIDER ═══ -->
+        <g transform="translate(614, 330)" filter="url(#glow-gold)">
+          <circle cx="48" cy="48" r="42" fill="rgba(245,166,35,0.05)" stroke="rgba(245,166,35,0.15)" stroke-width="1.5" stroke-dasharray="4 6"/>
+          <circle cx="48" cy="48" r="34" fill="rgba(245,166,35,0.1)" stroke="rgba(245,166,35,0.5)" stroke-width="2"/>
+          <text x="48" y="58" text-anchor="middle" font-size="22">🏍️</text>
+        </g>
+        <text x="662" y="490" text-anchor="middle" class="svg-label" fill="#F5A623">Rider</text>
+        <text x="662" y="505" text-anchor="middle" class="svg-sub" fill="rgba(255,255,255,0.4)">Transports item</text>
+        <text x="662" y="518" text-anchor="middle" class="svg-sub" fill="rgba(255,255,255,0.4)">Earns % + distance</text>
+
+        <!-- ═══ FLOW LABELS ═══ -->
+        <!-- Task request label -->
+        <rect x="162" y="162" width="84" height="18" rx="4" fill="rgba(0,212,255,0.08)" stroke="rgba(0,212,255,0.2)"/>
+        <text x="204" y="175" text-anchor="middle" font-size="9" fill="#00D4FF" font-family="'JetBrains Mono',monospace" font-weight="500">task request</text>
+
+        <!-- Processed request label -->
+        <rect x="336" y="162" width="88" height="18" rx="4" fill="rgba(0,255,136,0.08)" stroke="rgba(0,255,136,0.2)"/>
+        <text x="380" y="175" text-anchor="middle" font-size="9" fill="#00FF88" font-family="'JetBrains Mono',monospace" font-weight="500">processed req</text>
+
+        <!-- Assignment label -->
+        <rect x="552" y="148" width="80" height="18" rx="4" fill="rgba(156,110,248,0.08)" stroke="rgba(156,110,248,0.2)"/>
+        <text x="592" y="161" text-anchor="middle" font-size="9" fill="#9C6EF8" font-family="'JetBrains Mono',monospace" font-weight="500">assignment</text>
+
+        <!-- Dispatch label -->
+        <rect x="540" y="290" width="72" height="18" rx="4" fill="rgba(245,166,35,0.08)" stroke="rgba(245,166,35,0.2)"/>
+        <text x="576" y="303" text-anchor="middle" font-size="9" fill="#F5A623" font-family="'JetBrains Mono',monospace" font-weight="500">dispatch</text>
+
+        <!-- Money label -->
+        <rect x="248" y="286" width="72" height="18" rx="4" fill="rgba(255,214,10,0.08)" stroke="rgba(255,214,10,0.25)"/>
+        <text x="284" y="299" text-anchor="middle" font-size="9" fill="#FFD60A" font-family="'JetBrains Mono',monospace" font-weight="500">₦ payment</text>
+
+        <!-- Updates label -->
+        <rect x="172" y="250" width="62" height="18" rx="4" fill="rgba(0,255,136,0.08)" stroke="rgba(0,255,136,0.2)"/>
+        <text x="203" y="263" text-anchor="middle" font-size="9" fill="#00FF88" font-family="'JetBrains Mono',monospace" font-weight="500">updates</text>
+
+      </svg>
+    </div>
+
+    <!-- Flow legend -->
+    <div class="flow-legend">
+      <div class="fl-item"><div class="fl-line" style="--c:var(--customer)"></div>Task / Data flow</div>
+      <div class="fl-item"><div class="fl-line" style="--c:var(--wai)"></div>AI communication</div>
+      <div class="fl-item"><div class="fl-line" style="--c:var(--handler)"></div>Handler assignment</div>
+      <div class="fl-item"><div class="fl-line" style="--c:var(--rider)"></div>Rider dispatch</div>
+      <div class="fl-item"><div class="fl-line" style="--c:var(--money)"></div>Money flow (₦)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── TASK LIFECYCLE STEPS ─── -->
+<div class="wrap">
+  <div class="lifecycle-section" data-reveal>
+    <div class="section-title">// TASK LIFECYCLE</div>
+    <h2 class="section-h2">How a Task Moves Through the System</h2>
+
+    <div class="lifecycle-steps">
+      <div class="lc-step">
+        <div class="lc-step__num" style="color:var(--customer)">01</div>
+        <div class="lc-step__icon">💬</div>
+        <div class="lc-step__title">Request Sent</div>
+        <div class="lc-step__body">Customer messages the WhatsApp AI with their task — pickup location, dropoff, item, urgency, and any special instructions.</div>
+        <span class="lc-step__who" style="background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);color:var(--customer)">Customer</span>
+      </div>
+      <div class="lc-arrow">→</div>
+      <div class="lc-step">
+        <div class="lc-step__num" style="color:var(--wai)">02</div>
+        <div class="lc-step__icon">🤖</div>
+        <div class="lc-step__title">AI Collects Info</div>
+        <div class="lc-step__body">WhatsApp AI asks clarifying questions, confirms task details, generates a price quote, and sends it to the customer for approval.</div>
+        <span class="lc-step__who" style="background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);color:var(--wai)">WhatsApp AI</span>
+      </div>
+      <div class="lc-arrow">→</div>
+      <div class="lc-step">
+        <div class="lc-step__num" style="color:var(--customer)">03</div>
+        <div class="lc-step__icon">✅</div>
+        <div class="lc-step__title">Customer Confirms</div>
+        <div class="lc-step__body">Customer approves the quote and pays via the AI-integrated payment link (Flutterwave). Payment confirmed before any assignment.</div>
+        <span class="lc-step__who" style="background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);color:var(--customer)">Customer + AI</span>
+      </div>
+      <div class="lc-arrow">→</div>
+      <div class="lc-step">
+        <div class="lc-step__num" style="color:var(--platform)">04</div>
+        <div class="lc-step__icon">⚙️</div>
+        <div class="lc-step__title">Platform Routes</div>
+        <div class="lc-step__body">Platform receives payment, deducts commission, and auto-assigns the nearest available handler and rider based on task type and location.</div>
+        <span class="lc-step__who" style="background:rgba(255,69,0,0.08);border:1px solid rgba(255,69,0,0.2);color:var(--platform)">Platform</span>
+      </div>
+      <div class="lc-arrow">→</div>
+      <div class="lc-step">
+        <div class="lc-step__num" style="color:var(--handler)">05</div>
+        <div class="lc-step__icon">🧑‍💼</div>
+        <div class="lc-step__title">Handler Executes</div>
+        <div class="lc-step__body">Handler accepts the job, goes to the task location (store, office, queue), completes the errand, and notifies the rider for pickup.</div>
+        <span class="lc-step__who" style="background:rgba(156,110,248,0.08);border:1px solid rgba(156,110,248,0.2);color:var(--handler)">Handler</span>
+      </div>
+      <div class="lc-arrow">→</div>
+      <div class="lc-step">
+        <div class="lc-step__num" style="color:var(--rider)">06</div>
+        <div class="lc-step__icon">🏍️</div>
+        <div class="lc-step__title">Rider Transports</div>
+        <div class="lc-step__body">Rider collects item from handler (or pickup point), delivers to the customer. Real-time location shared via WhatsApp AI updates.</div>
+        <span class="lc-step__who" style="background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.2);color:var(--rider)">Rider</span>
+      </div>
+      <div class="lc-arrow">→</div>
+      <div class="lc-step">
+        <div class="lc-step__num" style="color:var(--wai)">07</div>
+        <div class="lc-step__icon">📸</div>
+        <div class="lc-step__title">Delivered &amp; Closed</div>
+        <div class="lc-step__body">Rider takes proof photo, task marked delivered. WhatsApp AI sends receipt + rating request. Handler and rider cuts auto-paid to their wallets.</div>
+        <span class="lc-step__who" style="background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);color:var(--wai)">System</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MONEY FLOW ─── -->
+<div class="wrap">
+  <div class="money-section" data-reveal>
+    <div class="section-title">// PAYMENT FLOW</div>
+    <h2 class="section-h2">How Every Naira Splits</h2>
+
+    <div class="money-diagram">
+      <div class="money-node">
+        <div class="money-node__icon" style="background:rgba(0,212,255,0.08);border-color:rgba(0,212,255,0.4)">🙋</div>
+        <div class="money-node__name" style="color:var(--customer)">Customer Pays</div>
+        <div class="money-node__amount">₦ 100%</div>
+        <div class="money-node__pct">Full task fee</div>
+      </div>
+      <div class="money-arrow">
+        <div class="money-arrow__line"></div>
+        <div class="money-arrow__label">→</div>
+      </div>
+      <div class="money-node">
+        <div class="money-node__icon" style="background:rgba(255,69,0,0.1);border-color:rgba(255,69,0,0.5)">⚙️</div>
+        <div class="money-node__name" style="color:var(--platform)">Platform Keeps</div>
+        <div class="money-node__amount">15–20%</div>
+        <div class="money-node__pct">Commission + overhead</div>
+      </div>
+      <div class="money-arrow">
+        <div class="money-arrow__line"></div>
+        <div class="money-arrow__label">→</div>
+      </div>
+      <div class="money-node">
+        <div class="money-node__icon" style="background:rgba(156,110,248,0.1);border-color:rgba(156,110,248,0.5)">🧑‍💼</div>
+        <div class="money-node__name" style="color:var(--handler)">Handler Earns</div>
+        <div class="money-node__amount">40–50%</div>
+        <div class="money-node__pct">Task execution cut</div>
+      </div>
+      <div class="money-arrow">
+        <div class="money-arrow__line"></div>
+        <div class="money-arrow__label">+</div>
+      </div>
+      <div class="money-node">
+        <div class="money-node__icon" style="background:rgba(245,166,35,0.1);border-color:rgba(245,166,35,0.5)">🏍️</div>
+        <div class="money-node__name" style="color:var(--rider)">Rider Earns</div>
+        <div class="money-node__amount">30–40%</div>
+        <div class="money-node__pct">Distance + time + urgency</div>
+      </div>
+    </div>
+
+    <!-- Commission bar -->
+    <div class="commission-bar">
+      <div class="comm-bar__title">Example: ₦10,000 Task Breakdown</div>
+      <div class="comm-bar__track" id="commBar">
+        <div class="comm-segment" id="seg-platform" style="flex:0;background:#FF4500;transition:flex 1.2s ease">15%</div>
+        <div class="comm-segment" id="seg-handler"  style="flex:0;background:#9C6EF8;transition:flex 1.2s ease 0.2s">45%</div>
+        <div class="comm-segment" id="seg-rider"    style="flex:0;background:#F5A623;transition:flex 1.2s ease 0.4s">35%</div>
+        <div class="comm-segment" id="seg-bonus"    style="flex:0;background:#FFD60A;transition:flex 1.2s ease 0.6s;color:rgba(0,0,0,0.8)">5%</div>
+      </div>
+      <div class="comm-legend">
+        <div class="comm-item"><span class="comm-dot" style="background:#FF4500"></span>Platform ₦1,500</div>
+        <div class="comm-item"><span class="comm-dot" style="background:#9C6EF8"></span>Handler ₦4,500</div>
+        <div class="comm-item"><span class="comm-dot" style="background:#F5A623"></span>Rider ₦3,500</div>
+        <div class="comm-item"><span class="comm-dot" style="background:#FFD60A"></span>Bonus pool ₦500</div>
+      </div>
+    </div>
+
+    <!-- Bonus cards -->
+    <div style="margin-top:32px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--money);margin-bottom:12px;">// BONUS TRIGGERS</div>
+      <div class="bonus-grid">
+        <div class="bonus-card">
+          <div class="bonus-card__type">Urgency</div>
+          <div class="bonus-card__title">Same-Day / Express</div>
+          <div class="bonus-card__amt">+₦2,000–₦8,000</div>
+        </div>
+        <div class="bonus-card">
+          <div class="bonus-card__type">Complexity</div>
+          <div class="bonus-card__title">Multi-stop / Custom</div>
+          <div class="bonus-card__amt">+₦2,000–₦5,000</div>
+        </div>
+        <div class="bonus-card">
+          <div class="bonus-card__type">Rating</div>
+          <div class="bonus-card__title">5-Star Review</div>
+          <div class="bonus-card__amt">+₦500–₦1,000</div>
+        </div>
+        <div class="bonus-card">
+          <div class="bonus-card__type">Night</div>
+          <div class="bonus-card__title">After-Hours Delivery</div>
+          <div class="bonus-card__amt">+₦2,400</div>
+        </div>
+        <div class="bonus-card">
+          <div class="bonus-card__type">Volume</div>
+          <div class="bonus-card__title">Handler: 10+ tasks/wk</div>
+          <div class="bonus-card__amt">+5% base multiplier</div>
+        </div>
+        <div class="bonus-card">
+          <div class="bonus-card__type">Distance</div>
+          <div class="bonus-card__title">Rider: 30+ km</div>
+          <div class="bonus-card__amt">+₦4,000 distance top-up</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── WHATSAPP AI CONVERSATION FLOW ─── -->
+<div class="wrap">
+  <div class="wai-section" data-reveal>
+    <div class="section-title">// WHATSAPP AI AGENT</div>
+    <h2 class="section-h2">Sample Conversation Flow</h2>
+
+    <div class="wai-flow">
+      <div class="wai-col">
+        <div class="wai-msg wai-msg--customer">
+          <div class="wai-msg__from" style="color:var(--customer)">Customer</div>
+          <div class="wai-msg__text">Hey, I need someone to pick up my prescription from Reddington Hospital and bring it to my office in VI.</div>
+        </div>
+        <div class="wai-msg wai-msg--customer">
+          <div class="wai-msg__from" style="color:var(--customer)">Customer</div>
+          <div class="wai-msg__text">Standard, no rush. Office closes at 5pm though.</div>
+        </div>
+        <div class="wai-msg wai-msg--customer">
+          <div class="wai-msg__from" style="color:var(--customer)">Customer</div>
+          <div class="wai-msg__text">Yes confirm. I'll pay now.</div>
+        </div>
+        <div class="wai-msg wai-msg--customer">
+          <div class="wai-msg__from" style="color:var(--customer)">Customer</div>
+          <div class="wai-msg__text" style="color:var(--wai)">✅ Payment confirmed via Flutterwave.</div>
+        </div>
+      </div>
+      <div class="wai-mid">⇄</div>
+      <div class="wai-col">
+        <div class="wai-msg wai-msg--ai">
+          <div class="wai-msg__from" style="color:var(--wai)">Za.allyErrands AI</div>
+          <div class="wai-msg__text">Got it! 🙌 Quick questions: <br/>1. Your full name?<br/>2. Pickup person's name at Reddington?<br/>3. Your office address?</div>
+        </div>
+        <div class="wai-msg wai-msg--ai">
+          <div class="wai-msg__from" style="color:var(--wai)">Za.allyErrands AI</div>
+          <div class="wai-msg__text">Perfect. Here's your quote:<br/>📍 Reddington → 14 Adeola Odeku, VI<br/>🏃 Standard delivery<br/>💰 <strong>Total: ₦7,200</strong><br/><br/>Confirm to proceed?</div>
+        </div>
+        <div class="wai-msg wai-msg--ai">
+          <div class="wai-msg__from" style="color:var(--wai)">Za.allyErrands AI</div>
+          <div class="wai-msg__text">🔗 Pay securely here: za-allyerrands.netlify.app/pay/TXN-0044<br/>Valid for 10 minutes.</div>
+        </div>
+        <div class="wai-msg wai-msg--ai">
+          <div class="wai-msg__from" style="color:var(--wai)">Za.allyErrands AI</div>
+          <div class="wai-msg__text">✅ Booking confirmed! #ZAE-20260524-044<br/>🧑‍💼 Handler: Emeka O. assigned<br/>🏍️ Rider: Taiwo K. on standby<br/>ETA to your office: <strong>~45 mins</strong><br/><br/>You'll get updates here. 🔔</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── LAUNCH CHECKLIST ─── -->
+<div class="wrap">
+  <div class="checklist-section" data-reveal>
+    <div class="section-title">// LAUNCH CHECKLIST</div>
+    <h2 class="section-h2">Before Going Live</h2>
+
+    <div class="checklist-grid">
+      <div class="check-group">
+        <div class="check-group__title" style="color:var(--wai)">WhatsApp AI System</div>
+        <div class="check-item">
+          <div class="check-box check-box--done">✓</div>
+          <span>WhatsApp AI agent configured</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--active">→</div>
+          <span>Apply WhatsApp Business API key</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span>Test dry runs with real task flows</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span>Connect payment gateway (Flutterwave)</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span>Configure auto-notifications &amp; receipts</span>
+        </div>
+      </div>
+
+      <div class="check-group">
+        <div class="check-group__title" style="color:var(--customer)">Landing Page</div>
+        <div class="check-item">
+          <div class="check-box check-box--done">✓</div>
+          <span>Hero section with WhatsApp CTA</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--done">✓</div>
+          <span>How It Works (3-step process)</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--done">✓</div>
+          <span>Pricing tiers displayed</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span>Early access email signup wired</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span>Social proof / testimonials added</span>
+        </div>
+      </div>
+
+      <div class="check-group">
+        <div class="check-group__title" style="color:var(--platform)">Operations</div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span>Recruit first 5 handlers (local network)</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span>Onboard 3–5 riders with contracts</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span>Set up handler/rider payment wallets</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span>Define service zones (start: Lagos Island)</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span>Admin dashboard operational</span>
+        </div>
+      </div>
+
+      <div class="check-group">
+        <div class="check-group__title" style="color:var(--handler)">Marketing</div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span>Social accounts created &amp; branded</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span>Launch teaser content posted</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span>First Facebook/Instagram ad live</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span>Referral program activated</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span>Local WhatsApp groups targeted</span>
+        </div>
+      </div>
+
+      <div class="check-group">
+        <div class="check-group__title" style="color:var(--rider)">Hybrid Launch Phases</div>
+        <div class="check-item">
+          <div class="check-box check-box--active">→</div>
+          <span><strong>Phase 1:</strong> WhatsApp AI live, manual dispatch</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span><strong>Phase 2:</strong> Landing page + ad campaigns</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span><strong>Phase 3:</strong> Collect feedback, iterate pricing</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span><strong>Phase 4:</strong> Build full app MVP in parallel</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span><strong>Phase 5:</strong> Migrate WhatsApp users to app</span>
+        </div>
+      </div>
+
+      <div class="check-group">
+        <div class="check-group__title" style="color:var(--money)">Full App MVP Features</div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span>User signup / login</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span>Task creation + real-time tracking</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span>Handler &amp; rider mobile app</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span>Auto-dispatch routing engine</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box check-box--pending"></div>
+          <span>Rating, analytics, admin panel</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:20px;padding:12px 16px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:8px;">
+      <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)">
+        <span style="width:16px;height:16px;border-radius:3px;background:rgba(0,255,136,0.12);border:1px solid rgba(0,255,136,0.3);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--wai);">✓</span> Done
+      </div>
+      <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)">
+        <span style="width:16px;height:16px;border-radius:3px;background:rgba(255,69,0,0.1);border:1px solid rgba(255,69,0,0.3);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--platform);">→</span> In progress
+      </div>
+      <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)">
+        <span style="width:16px;height:16px;border-radius:3px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);display:inline-block;"></span> Pending
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="wf-footer">
+  <span>Za.allyErrands — Full System Diagram</span>
+  <a href="../index.html">← Za.allyErrands Home</a>
+  <a href="../workflow/index.html">Workflow Map</a>
+  <a href="../business/index.html">Business Plans</a>
+  <a href="../api/index.html">API Reference</a>
+</footer>
+
+<script>
+  // ── Reveal on scroll ──
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+
+  // ── Animate commission bar when visible ──
+  let barDone = false;
+  const barIo = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting && !barDone) {
+        barDone = true;
+        setTimeout(() => {
+          document.getElementById('seg-platform').style.flex = '15';
+          document.getElementById('seg-handler').style.flex  = '45';
+          document.getElementById('seg-rider').style.flex    = '35';
+          document.getElementById('seg-bonus').style.flex    = '5';
+        }, 300);
+      }
+    });
+  }, { threshold: 0.4 });
+  const bar = document.getElementById('commBar');
+  if (bar) barIo.observe(bar);
+</script>
+</body>
+</html>

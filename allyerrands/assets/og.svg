@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M 80 0 L 0 0 0 80" fill="none" stroke="rgba(255,69,0,0.06)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#080808"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <ellipse cx="0" cy="315" rx="400" ry="300" fill="rgba(255,69,0,0.08)"/>
+  <rect x="0" y="0" width="6" height="630" fill="#FF4500"/>
+  <text x="80" y="200" font-family="Impact, Arial Black, sans-serif" font-size="120" font-weight="900" letter-spacing="2" fill="#FF4500">Za.</text>
+  <text x="268" y="200" font-family="Impact, Arial Black, sans-serif" font-size="120" font-weight="900" letter-spacing="2" fill="#F2F0EB">allyErrands</text>
+  <text x="80" y="280" font-family="Arial, sans-serif" font-size="32" font-weight="400" fill="#999999" letter-spacing="2">LAGOS&#x27; FASTEST ERRAND MACHINE</text>
+  <line x1="80" y1="316" x2="1120" y2="316" stroke="#222222" stroke-width="1"/>
+  <text x="80" y="390" font-family="Impact, Arial Black, sans-serif" font-size="64" fill="#F2F0EB">1,247+</text>
+  <text x="80" y="425" font-family="Arial, sans-serif" font-size="18" fill="#666666" letter-spacing="2">ERRANDS COMPLETED</text>
+  <text x="440" y="390" font-family="Impact, Arial Black, sans-serif" font-size="64" fill="#FF4500">8 MIN</text>
+  <text x="440" y="425" font-family="Arial, sans-serif" font-size="18" fill="#666666" letter-spacing="2">AVG DISPATCH</text>
+  <text x="760" y="390" font-family="Impact, Arial Black, sans-serif" font-size="64" fill="#F2F0EB">24/7</text>
+  <text x="760" y="425" font-family="Arial, sans-serif" font-size="18" fill="#666666" letter-spacing="2">LAGOS, NIGERIA</text>
+  <rect x="80" y="480" width="220" height="44" fill="#FF4500"/>
+  <text x="90" y="510" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#000000" letter-spacing="3">REQUEST NOW &#x2192;</text>
+  <text x="80" y="590" font-family="Arial Mono, monospace" font-size="20" fill="#444444">za-allyerrands.netlify.app</text>
+  <circle cx="1100" cy="80" r="12" fill="#00FF88"/>
+  <text x="1060" y="120" font-family="Arial, sans-serif" font-size="14" fill="#00FF88" letter-spacing="2">ONLINE</text>
+</svg>

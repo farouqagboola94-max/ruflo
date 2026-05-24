@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Za.allyErrands — Client Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="portal.css" />
+</head>
+<body>
+
+  <nav class="p-nav">
+    <a href="../index.html" class="p-nav__logo">
+      <span class="logo-za">Za.</span><span class="logo-ally">ally</span><span class="logo-rest">Errands</span>
+    </a>
+    <span class="p-nav__tag">Client Portal</span>
+  </nav>
+
+  <!-- LOGIN SCREEN -->
+  <section class="p-login" id="loginScreen">
+    <div class="p-login__box">
+      <div class="p-login__icon">⚡</div>
+      <h1>Track Your Runs</h1>
+      <p>Enter the WhatsApp number you used when booking. We’ll show you every active and completed errand in real time.</p>
+      <form id="loginForm" novalidate>
+        <div class="p-form-group">
+          <label for="loginPhone">WhatsApp Number</label>
+          <input
+            type="tel"
+            id="loginPhone"
+            placeholder="+234 800 000 0000"
+            required
+            autocomplete="tel"
+          />
+        </div>
+        <button type="submit" class="btn btn--hazard btn--full" id="loginBtn">
+          <span class="btn-text">Access My Runs →</span>
+        </button>
+        <p class="p-login__note">No password. No app. Just your number.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- DASHBOARD -->
+  <section class="p-dashboard" id="dashboard" hidden>
+    <div class="p-dashboard__header">
+      <div>
+        <h2 id="dashGreeting">Your Runs</h2>
+        <p class="p-dashboard__phone" id="dashPhone"></p>
+      </div>
+      <div class="p-dashboard__actions">
+        <span class="badge-live" id="liveIndicator">● LIVE</span>
+        <a href="../index.html" class="btn btn--ghost btn--sm">New Request</a>
+        <button class="btn btn--ghost btn--sm" id="logoutBtn">Log Out</button>
+      </div>
+    </div>
+
+    <!-- Active runs -->
+    <div class="p-section">
+      <div class="p-section__label">ACTIVE</div>
+      <div class="p-runs" id="activeRuns">
+        <div class="p-empty" id="activeEmpty">No active runs right now.</div>
+      </div>
+    </div>
+
+    <!-- Completed runs -->
+    <div class="p-section">
+      <div class="p-section__label">COMPLETED</div>
+      <div class="p-runs" id="completedRuns">
+        <div class="p-empty" id="completedEmpty">No completed runs yet.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Supabase JS (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="portal.js"></script>
+</body>
+</html>
