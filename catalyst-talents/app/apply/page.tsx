@@ -219,7 +219,7 @@ export default function ApplyPage() {
                   name="height"
                   value={form.height}
                   onChange={handleChange}
-                  placeholder='5\' 9"'
+                  placeholder={`5' 9"`}
                   className={inputClass}
                 />
               </div>
