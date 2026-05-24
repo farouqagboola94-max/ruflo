@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Za.allyErrands — System Workflow Map</title>
+  <meta name="description" content="Full system workflow map: customer request → task completion → repeat business." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #07091A;
+      --black-2: #0A0D20;
+      --black-3: #0F1228;
+      --orange:  #FF4500;
+      --gold:    #F5A623;
+      --blue:    #00D4FF;
+      --green:   #00FF88;
+      --purple:  #9C6EF8;
+      --red:     #FF3B5C;
+      --white:   #FFFFFF;
+      --muted:   rgba(255,255,255,0.45);
+      --border:  rgba(255,255,255,0.07);
+
+      --phase-1: #FF4500;
+      --phase-2: #F5A623;
+      --phase-3: #00D4FF;
+      --phase-4: #9C6EF8;
+      --phase-5: #00FF88;
+      --phase-6: #FF6B9D;
+
+      --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-display: 'Bebas Neue', sans-serif;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--black);
+      color: var(--white);
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* ── HEADER ── */
+    .wf-header {
+      position: relative; z-index: 10;
+      padding: 56px 24px 40px;
+      text-align: center;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,69,0,0.08) 0%, transparent 70%);
+      border-bottom: 1px solid var(--border);
+    }
+    .wf-header__eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--orange);
+      background: rgba(255,69,0,0.08); border: 1px solid rgba(255,69,0,0.2);
+      padding: 5px 14px; border-radius: 20px; margin-bottom: 20px;
+    }
+    .pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 1.5s ease infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
+
+    .wf-header h1 {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 6vw, 72px);
+      letter-spacing: 2px; line-height: 1;
+      margin-bottom: 12px;
+    }
+    .wf-header h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, #FF4500 0%, #F5A623 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .wf-header__sub {
+      font-size: 16px; color: var(--muted); max-width: 520px; margin: 0 auto 28px;
+    }
+    .phase-legend {
+      display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;
+      margin-top: 4px;
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.6);
+    }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    /* ── MAIN CANVAS ── */
+    .wf-canvas {
+      position: relative;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    /* ── PHASE LABEL ── */
+    .phase-track {
+      display: flex; flex-direction: column; gap: 0;
+    }
+
+    .phase-row {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 0;
+      position: relative;
+      margin-bottom: 0;
+    }
+
+    .phase-label-col {
+      display: flex; align-items: flex-start; justify-content: flex-end;
+      padding: 28px 24px 28px 0;
+      position: relative;
+    }
+    .phase-label {
+      text-align: right;
+    }
+    .phase-label__num {
+      font-family: var(--font-display);
+      font-size: 48px; line-height: 1;
+      opacity: .15;
+    }
+    .phase-label__name {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; margin-top: 2px;
+    }
+
+    /* Vertical spine */
+    .phase-spine {
+      position: absolute;
+      right: 0; top: 0; bottom: 0;
+      width: 2px;
+    }
+    .phase-spine::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 28px; bottom: 28px;
+      width: 2px; border-radius: 1px;
+      background: currentColor;
+      opacity: .25;
+    }
+    .phase-spine::after {
+      content: '';
+      position: absolute;
+      left: -5px; top: 38px;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: .6;
+    }
+
+    /* ── CARDS COLUMN ── */
+    .phase-cards {
+      padding: 20px 0 20px 32px;
+      display: flex; flex-direction: column; gap: 12px;
+      border-left: 2px solid var(--border);
+      position: relative;
+    }
+
+    /* Connector dot on left border */
+    .phase-cards::before {
+      content: '';
+      position: absolute;
+      left: -7px; top: 38px;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--node-color, var(--orange));
+      box-shadow: 0 0 12px var(--node-color, var(--orange));
+    }
+
+    /* ── NODE CARD ── */
+    .node-row {
+      display: flex; gap: 12px; align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .node {
+      flex: 1; min-width: 200px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      cursor: default;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .node::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--node-color, var(--orange));
+      opacity: 0; transition: opacity .2s;
+    }
+    .node:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.4); border-color: rgba(255,255,255,0.12); }
+    .node:hover::before { opacity: 1; }
+
+    .node--wide { flex: 2; }
+    .node--accent {
+      background: rgba(255,69,0,0.04);
+      border-color: rgba(255,69,0,0.2);
+    }
+
+    .node__icon {
+      font-size: 22px; margin-bottom: 8px; display: block;
+    }
+    .node__label {
+      font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; margin-bottom: 4px;
+      color: var(--node-color, var(--orange));
+    }
+    .node__title {
+      font-size: 15px; font-weight: 700; margin-bottom: 6px;
+    }
+    .node__body {
+      font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.6;
+    }
+    .node__tags {
+      display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px;
+    }
+    .tag {
+      font-size: 10px; font-weight: 600; padding: 2px 7px;
+      border-radius: 4px; border: 1px solid;
+    }
+
+    /* ── ARROW BETWEEN PHASES ── */
+    .phase-connector {
+      display: flex; align-items: center; justify-content: center;
+      padding: 4px 0 4px 32px; position: relative;
+    }
+    .phase-connector::before {
+      content: '';
+      position: absolute; left: 30px; top: 0; bottom: 0;
+      width: 2px; background: var(--border);
+    }
+    .connector-arrow {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--black-3);
+      border: 1px solid var(--border);
+      border-radius: 20px; padding: 5px 14px;
+      font-size: 11px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--muted);
+      z-index: 1;
+    }
+    .arrow-line {
+      width: 24px; height: 1px;
+      background: linear-gradient(90deg, var(--phase-a,var(--orange)), var(--phase-b,var(--gold)));
+    }
+
+    /* ── PRICING GRID ── */
+    .pricing-mini {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 8px; margin-top: 10px;
+    }
+    .price-cell {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 8px; padding: 10px 12px;
+    }
+    .price-cell__type { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+    .price-cell__val { font-family: var(--font-mono); font-size: 14px; font-weight: 700; color: var(--gold); }
+
+    /* ── FLOW METRICS BAR ── */
+    .metrics-strip {
+      display: flex; gap: 0;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+      margin: 40px 0 8px;
+    }
+    .metric-cell {
+      flex: 1; padding: 20px 18px; text-align: center;
+      border-right: 1px solid var(--border);
+      transition: background .2s;
+    }
+    .metric-cell:last-child { border-right: none; }
+    .metric-cell:hover { background: rgba(255,255,255,0.04); }
+    .metric-cell__val {
+      font-family: var(--font-display);
+      font-size: 32px; letter-spacing: 1px;
+      background: linear-gradient(135deg, #FF4500, #F5A623);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .metric-cell__label { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
+
+    /* ── LIFECYCLE LOOP ── */
+    .lifecycle {
+      margin: 48px 0;
+      position: relative;
+    }
+    .lifecycle__title {
+      font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--orange);
+      text-align: center; margin-bottom: 32px;
+    }
+    .lifecycle__ring {
+      position: relative;
+      width: 520px; max-width: 100%;
+      height: 520px; max-height: 100vw;
+      margin: 0 auto;
+    }
+
+    /* SVG ring */
+    .ring-svg {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+    }
+
+    /* Center badge */
+    .ring-center {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      pointer-events: none;
+    }
+    .ring-center__logo {
+      font-family: var(--font-display);
+      font-size: 22px; letter-spacing: 1px;
+      line-height: 1; margin-bottom: 4px;
+    }
+    .ring-center__logo .za { color: var(--orange); }
+    .ring-center__sub {
+      font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--muted);
+    }
+
+    /* Ring nodes */
+    .ring-node {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      text-align: center; cursor: default;
+    }
+    .ring-node__bubble {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      border: 2px solid;
+      transition: transform .25s, box-shadow .25s;
+      margin: 0 auto 8px;
+    }
+    .ring-node:hover .ring-node__bubble {
+      transform: scale(1.1);
+    }
+    .ring-node__label {
+      font-size: 11px; font-weight: 700; width: 90px;
+      line-height: 1.3; margin: 0 auto;
+    }
+    .ring-node__num {
+      font-family: var(--font-mono);
+      font-size: 10px; color: var(--muted); margin-top: 2px;
+    }
+
+    /* ── MARKETING CHANNELS ── */
+    .channel-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 10px; margin-top: 10px;
+    }
+    .channel-card {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px;
+      display: flex; align-items: center; gap: 12px;
+      transition: all .2s;
+    }
+    .channel-card:hover { background: rgba(255,255,255,0.05); transform: translateX(3px); }
+    .channel-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .channel-name { font-size: 13px; font-weight: 600; }
+    .channel-type { font-size: 11px; color: var(--muted); }
+
+    /* ── GOAL TRACK ── */
+    .goal-track {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px;
+      margin-top: 10px;
+    }
+    .goal-row {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 14px;
+    }
+    .goal-row:last-child { margin-bottom: 0; }
+    .goal-num {
+      font-family: var(--font-mono); font-size: 13px; color: var(--muted);
+      flex-shrink: 0; width: 20px;
+    }
+    .goal-bar-wrap {
+      flex: 1; background: rgba(255,255,255,0.06);
+      border-radius: 4px; height: 8px; overflow: hidden;
+    }
+    .goal-bar { height: 100%; border-radius: 4px; }
+    .goal-label { font-size: 13px; color: rgba(255,255,255,0.7); min-width: 180px; }
+    .goal-val { font-family: var(--font-mono); font-size: 12px; color: var(--gold); flex-shrink: 0; }
+
+    /* ── FOOTER ── */
+    .wf-footer {
+      text-align: center; padding: 32px 24px;
+      border-top: 1px solid var(--border);
+      font-size: 13px; color: var(--muted);
+      display: flex; justify-content: center; align-items: center; gap: 20px;
+      flex-wrap: wrap;
+    }
+    .wf-footer a {
+      color: var(--orange); text-decoration: none; font-weight: 600;
+    }
+    .wf-footer a:hover { text-decoration: underline; }
+
+    /* ── ANIMATED PARTICLES ── */
+    .particle-canvas {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .35;
+    }
+
+    /* ── SECTION WRAPPER ── */
+    .section-wrap {
+      max-width: 1300px; margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      .phase-row { grid-template-columns: 80px 1fr; }
+      .phase-label__num { font-size: 30px; }
+      .metrics-strip { flex-direction: column; }
+      .metric-cell { border-right: none; border-bottom: 1px solid var(--border); }
+      .metric-cell:last-child { border-bottom: none; }
+      .lifecycle__ring { width: 340px; height: 340px; }
+    }
+
+    /* ── REVEAL ANIMATION ── */
+    [data-reveal] { opacity: 0; transform: translateY(20px); transition: opacity .5s, transform .5s; }
+    [data-reveal].visible { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+
+<canvas class="particle-canvas" id="particles"></canvas>
+
+<!-- HEADER -->
+<header class="wf-header">
+  <div class="wf-header__eyebrow">
+    <span class="pulse"></span>
+    SYSTEM MAP — ZA.ALLERRANDS
+  </div>
+  <h1>The Full <em>Workflow.</em></h1>
+  <p class="wf-header__sub">From the first WhatsApp message to a repeat business customer — every node, every decision, every loop.</p>
+  <div class="phase-legend">
+    <div class="legend-item"><span class="legend-dot" style="background:var(--phase-1)"></span>Discovery</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--phase-2)"></span>Request</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--phase-3)"></span>Booking</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--phase-4)"></span>Execution</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--phase-5)"></span>Completion</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--phase-6)"></span>Retention</div>
+  </div>
+</header>
+
+<!-- METRICS BAR -->
+<div class="section-wrap">
+  <div class="metrics-strip" data-reveal>
+    <div class="metric-cell">
+      <div class="metric-cell__val" id="cnt-tasks">0</div>
+      <div class="metric-cell__label">Tasks / Week (Target)</div>
+    </div>
+    <div class="metric-cell">
+      <div class="metric-cell__val" id="cnt-dispatch">0</div>
+      <div class="metric-cell__label">Avg Dispatch (min)</div>
+    </div>
+    <div class="metric-cell">
+      <div class="metric-cell__val" id="cnt-base">₦0k</div>
+      <div class="metric-cell__label">Base Price / Task</div>
+    </div>
+    <div class="metric-cell">
+      <div class="metric-cell__val" id="cnt-plans">0</div>
+      <div class="metric-cell__label">Monthly Plan Tiers</div>
+    </div>
+    <div class="metric-cell">
+      <div class="metric-cell__val" id="cnt-channels">0</div>
+      <div class="metric-cell__label">Marketing Channels</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!--  PHASE TRACK                                                 -->
+<!-- ============================================================ -->
+<div class="wf-canvas">
+
+  <!-- ── PHASE 1: DISCOVERY & ACQUISITION ── -->
+  <div class="phase-row" data-reveal>
+    <div class="phase-label-col" style="--node-color:var(--phase-1)">
+      <div class="phase-label">
+        <div class="phase-label__num" style="color:var(--phase-1)">01</div>
+        <div class="phase-label__name" style="color:var(--phase-1)">Discovery</div>
+      </div>
+      <div class="phase-spine" style="color:var(--phase-1)"></div>
+    </div>
+    <div class="phase-cards" style="--node-color:var(--phase-1)">
+      <div class="node-row">
+        <div class="node">
+          <span class="node__icon">📱</span>
+          <div class="node__label">Organic</div>
+          <div class="node__title">Social Media</div>
+          <div class="node__body">Instagram, Facebook, LinkedIn, X (Twitter), TikTok. Daily content — task timelapses, testimonials, behind-the-scenes, promos.</div>
+          <div class="node__tags">
+            <span class="tag" style="color:var(--phase-1);border-color:rgba(255,69,0,0.3);background:rgba(255,69,0,0.06)">Instagram</span>
+            <span class="tag" style="color:var(--phase-1);border-color:rgba(255,69,0,0.3);background:rgba(255,69,0,0.06)">Facebook</span>
+            <span class="tag" style="color:var(--phase-1);border-color:rgba(255,69,0,0.3);background:rgba(255,69,0,0.06)">TikTok</span>
+            <span class="tag" style="color:var(--phase-1);border-color:rgba(255,69,0,0.3);background:rgba(255,69,0,0.06)">LinkedIn</span>
+          </div>
+        </div>
+        <div class="node">
+          <span class="node__icon">🎯</span>
+          <div class="node__label">Paid</div>
+          <div class="node__title">Facebook &amp; Instagram Ads</div>
+          <div class="node__body">Lead-gen and conversion campaigns. Small daily budget. Targeting: Lagos, 22–45, busy professionals and small business owners.</div>
+          <div class="node__tags">
+            <span class="tag" style="color:var(--gold);border-color:rgba(245,166,35,0.3);background:rgba(245,166,35,0.06)">Lead Gen</span>
+            <span class="tag" style="color:var(--gold);border-color:rgba(245,166,35,0.3);background:rgba(245,166,35,0.06)">Conversion</span>
+            <span class="tag" style="color:var(--gold);border-color:rgba(245,166,35,0.3);background:rgba(245,166,35,0.06)">Retargeting</span>
+          </div>
+        </div>
+        <div class="node">
+          <span class="node__icon">🤝</span>
+          <div class="node__label">Community</div>
+          <div class="node__title">Referrals &amp; Partners</div>
+          <div class="node__body">Local business partnerships (handle staff errands). Influencer collabs. Referral bonuses. Freelance platforms: Upwork, Fiverr, TaskRabbit.</div>
+          <div class="node__tags">
+            <span class="tag" style="color:var(--green);border-color:rgba(0,255,136,0.3);background:rgba(0,255,136,0.05)">Referral Program</span>
+            <span class="tag" style="color:var(--green);border-color:rgba(0,255,136,0.3);background:rgba(0,255,136,0.05)">B2B Partnerships</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Channel breakdown -->
+      <div class="channel-grid">
+        <div class="channel-card">
+          <div class="channel-icon" style="background:rgba(255,69,0,0.1)">📢</div>
+          <div><div class="channel-name">Landing Page</div><div class="channel-type">Primary CTA hub</div></div>
+        </div>
+        <div class="channel-card">
+          <div class="channel-icon" style="background:rgba(37,211,102,0.1)">💬</div>
+          <div><div class="channel-name">WhatsApp</div><div class="channel-type">Direct booking link</div></div>
+        </div>
+        <div class="channel-card">
+          <div class="channel-icon" style="background:rgba(245,166,35,0.1)">🌐</div>
+          <div><div class="channel-name">Local Groups</div><div class="channel-type">Lagos community boards</div></div>
+        </div>
+        <div class="channel-card">
+          <div class="channel-icon" style="background:rgba(156,110,248,0.1)">⭐</div>
+          <div><div class="channel-name">Word of Mouth</div><div class="channel-type">Fastest growth channel</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONNECTOR -->
+  <div class="phase-connector">
+    <div class="connector-arrow" style="--phase-a:var(--phase-1);--phase-b:var(--phase-2)">
+      <div class="arrow-line"></div>
+      Customer lands on site or WhatsApp
+      <div class="arrow-line" style="transform:scaleX(-1)"></div>
+    </div>
+  </div>
+
+  <!-- ── PHASE 2: CUSTOMER REQUEST ── -->
+  <div class="phase-row" data-reveal>
+    <div class="phase-label-col">
+      <div class="phase-label">
+        <div class="phase-label__num" style="color:var(--phase-2)">02</div>
+        <div class="phase-label__name" style="color:var(--phase-2)">Request</div>
+      </div>
+      <div class="phase-spine" style="color:var(--phase-2)"></div>
+    </div>
+    <div class="phase-cards" style="--node-color:var(--phase-2)">
+      <div class="node-row">
+        <div class="node node--wide">
+          <span class="node__icon">💬</span>
+          <div class="node__label" style="color:var(--phase-2)">Entry Point</div>
+          <div class="node__title">WhatsApp Agent</div>
+          <div class="node__body">Customer sends task request. Automated or live agent responds within minutes. Gathers: task type, pickup/dropoff location, urgency, item details, preferred time.</div>
+          <div class="node__tags">
+            <span class="tag" style="color:var(--phase-2);border-color:rgba(245,166,35,0.3);background:rgba(245,166,35,0.06)">Instant Response</span>
+            <span class="tag" style="color:var(--phase-2);border-color:rgba(245,166,35,0.3);background:rgba(245,166,35,0.06)">Auto-Reply Bot</span>
+            <span class="tag" style="color:var(--phase-2);border-color:rgba(245,166,35,0.3);background:rgba(245,166,35,0.06)">Live Agent Fallback</span>
+          </div>
+        </div>
+        <div class="node">
+          <span class="node__icon">📋</span>
+          <div class="node__label" style="color:var(--phase-2)">Task Types</div>
+          <div class="node__title">What We Run</div>
+          <div class="node__body">
+            🛒 Grocery runs<br/>
+            💊 Pharmacy pickups<br/>
+            📦 Package delivery<br/>
+            🍽️ Restaurant pickup<br/>
+            👔 Dry cleaning<br/>
+            🏢 Business errands<br/>
+            ✨ Custom requests
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONNECTOR -->
+  <div class="phase-connector">
+    <div class="connector-arrow" style="--phase-a:var(--phase-2);--phase-b:var(--phase-3)">
+      <div class="arrow-line" style="background:linear-gradient(90deg,var(--phase-2),var(--phase-3))"></div>
+      Task details confirmed
+      <div class="arrow-line" style="background:linear-gradient(90deg,var(--phase-2),var(--phase-3));transform:scaleX(-1)"></div>
+    </div>
+  </div>
+
+  <!-- ── PHASE 3: BOOKING & PRICING ── -->
+  <div class="phase-row" data-reveal>
+    <div class="phase-label-col">
+      <div class="phase-label">
+        <div class="phase-label__num" style="color:var(--phase-3)">03</div>
+        <div class="phase-label__name" style="color:var(--phase-3)">Booking</div>
+      </div>
+      <div class="phase-spine" style="color:var(--phase-3)"></div>
+    </div>
+    <div class="phase-cards" style="--node-color:var(--phase-3)">
+      <div class="node-row">
+        <div class="node">
+          <span class="node__icon">🧮</span>
+          <div class="node__label" style="color:var(--phase-3)">Pricing Engine</div>
+          <div class="node__title">Quote Generated</div>
+          <div class="node__body">Price calculated from base rate + size + distance + time surcharges. Quote sent via WhatsApp. Customer confirms.</div>
+        </div>
+        <div class="node">
+          <span class="node__icon">💳</span>
+          <div class="node__label" style="color:var(--phase-3)">Payment</div>
+          <div class="node__title">Flutterwave</div>
+          <div class="node__body">Card, bank transfer, or USSD. Payment confirmed before runner assignment. No card data stored.</div>
+          <div class="node__tags">
+            <span class="tag" style="color:var(--phase-3);border-color:rgba(0,212,255,0.3);background:rgba(0,212,255,0.06)">Card</span>
+            <span class="tag" style="color:var(--phase-3);border-color:rgba(0,212,255,0.3);background:rgba(0,212,255,0.06)">Bank Transfer</span>
+            <span class="tag" style="color:var(--phase-3);border-color:rgba(0,212,255,0.3);background:rgba(0,212,255,0.06)">USSD</span>
+          </div>
+        </div>
+        <div class="node">
+          <span class="node__icon">✅</span>
+          <div class="node__label" style="color:var(--phase-3)">Confirmation</div>
+          <div class="node__title">Booking Confirmed</div>
+          <div class="node__body">WhatsApp confirmation with order ID, estimated pickup time, and runner details once assigned.</div>
+        </div>
+      </div>
+
+      <!-- Pricing breakdown -->
+      <div class="node" style="border-color:rgba(0,212,255,0.15);background:rgba(0,212,255,0.03)">
+        <div class="node__label" style="color:var(--phase-3)">Pricing Structure</div>
+        <div class="node__title" style="margin-bottom:12px">Dynamic Fare Calculation</div>
+        <div class="pricing-mini">
+          <div class="price-cell"><div class="price-cell__type">Base</div><div class="price-cell__val">₦4,000</div></div>
+          <div class="price-cell"><div class="price-cell__type">Large item</div><div class="price-cell__val">₦8,000</div></div>
+          <div class="price-cell"><div class="price-cell__type">Oversized</div><div class="price-cell__val">₦12,000</div></div>
+          <div class="price-cell"><div class="price-cell__type">Local &lt;5mi</div><div class="price-cell__val">₦4,000</div></div>
+          <div class="price-cell"><div class="price-cell__type">Regional</div><div class="price-cell__val">₦8,000</div></div>
+          <div class="price-cell"><div class="price-cell__type">Extended</div><div class="price-cell__val">₦16,000</div></div>
+          <div class="price-cell"><div class="price-cell__type">Long 30mi+</div><div class="price-cell__val">₦24,000</div></div>
+          <div class="price-cell"><div class="price-cell__type">Express</div><div class="price-cell__val">+₦8,000</div></div>
+          <div class="price-cell"><div class="price-cell__type">Peak hours</div><div class="price-cell__val">+₦4,000</div></div>
+          <div class="price-cell"><div class="price-cell__type">Night</div><div class="price-cell__val">+₦2,400</div></div>
+          <div class="price-cell"><div class="price-cell__type">Weekend</div><div class="price-cell__val">+₦4,000</div></div>
+          <div class="price-cell"><div class="price-cell__type">Fragile</div><div class="price-cell__val">+₦2,400</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONNECTOR -->
+  <div class="phase-connector">
+    <div class="connector-arrow" style="--phase-a:var(--phase-3);--phase-b:var(--phase-4)">
+      <div class="arrow-line" style="background:linear-gradient(90deg,var(--phase-3),var(--phase-4))"></div>
+      Runner assigned — task starts
+      <div class="arrow-line" style="background:linear-gradient(90deg,var(--phase-3),var(--phase-4));transform:scaleX(-1)"></div>
+    </div>
+  </div>
+
+  <!-- ── PHASE 4: TASK EXECUTION ── -->
+  <div class="phase-row" data-reveal>
+    <div class="phase-label-col">
+      <div class="phase-label">
+        <div class="phase-label__num" style="color:var(--phase-4)">04</div>
+        <div class="phase-label__name" style="color:var(--phase-4)">Execution</div>
+      </div>
+      <div class="phase-spine" style="color:var(--phase-4)"></div>
+    </div>
+    <div class="phase-cards" style="--node-color:var(--phase-4)">
+      <div class="node-row">
+        <div class="node">
+          <span class="node__icon">🏃</span>
+          <div class="node__label" style="color:var(--phase-4)">Assignment</div>
+          <div class="node__title">Runner Dispatched</div>
+          <div class="node__body">Nearest available runner assigned. Customer notified via WhatsApp with runner name and estimated arrival. Average dispatch: <strong style="color:var(--green)">8 minutes</strong>.</div>
+        </div>
+        <div class="node">
+          <span class="node__icon">📍</span>
+          <div class="node__label" style="color:var(--phase-4)">Pickup</div>
+          <div class="node__title">Item Collected</div>
+          <div class="node__body">Runner picks up item. Photo documentation at pickup point. WhatsApp update sent to customer. Order status: <strong style="color:var(--phase-4)">EN ROUTE</strong>.</div>
+        </div>
+        <div class="node">
+          <span class="node__icon">🛵</span>
+          <div class="node__label" style="color:var(--phase-4)">In Transit</div>
+          <div class="node__title">Live Tracking</div>
+          <div class="node__body">Real-time status visible in the client portal. ETA updates every 5 minutes. Customer can contact runner directly if needed.</div>
+        </div>
+      </div>
+      <div class="node-row">
+        <div class="node node--accent">
+          <span class="node__icon">⚡</span>
+          <div class="node__label" style="color:var(--phase-4)">Operations</div>
+          <div class="node__title">Admin Dashboard</div>
+          <div class="node__body">Full dispatch queue, runner grid, KPI tracking, and live activity feed. All managed from the Business Portal. Automated notifications, follow-ups, and status updates.</div>
+          <div class="node__tags">
+            <span class="tag" style="color:var(--phase-4);border-color:rgba(156,110,248,0.3);background:rgba(156,110,248,0.06)">Live Queue</span>
+            <span class="tag" style="color:var(--phase-4);border-color:rgba(156,110,248,0.3);background:rgba(156,110,248,0.06)">Runner Tracking</span>
+            <span class="tag" style="color:var(--phase-4);border-color:rgba(156,110,248,0.3);background:rgba(156,110,248,0.06)">Automated Alerts</span>
+          </div>
+        </div>
+        <div class="node">
+          <span class="node__icon">🔄</span>
+          <div class="node__label" style="color:var(--phase-4)">Automation</div>
+          <div class="node__title">System Triggers</div>
+          <div class="node__body">
+            → Booking confirmed → WhatsApp ping<br/>
+            → Runner assigned → Customer alert<br/>
+            → Pickup done → Status update<br/>
+            → ETA &lt; 10min → Delivery heads-up<br/>
+            → Delivered → Feedback request
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONNECTOR -->
+  <div class="phase-connector">
+    <div class="connector-arrow" style="--phase-a:var(--phase-4);--phase-b:var(--phase-5)">
+      <div class="arrow-line" style="background:linear-gradient(90deg,var(--phase-4),var(--phase-5))"></div>
+      Item delivered &amp; confirmed
+      <div class="arrow-line" style="background:linear-gradient(90deg,var(--phase-4),var(--phase-5));transform:scaleX(-1)"></div>
+    </div>
+  </div>
+
+  <!-- ── PHASE 5: COMPLETION ── -->
+  <div class="phase-row" data-reveal>
+    <div class="phase-label-col">
+      <div class="phase-label">
+        <div class="phase-label__num" style="color:var(--phase-5)">05</div>
+        <div class="phase-label__name" style="color:var(--phase-5)">Completion</div>
+      </div>
+      <div class="phase-spine" style="color:var(--phase-5)"></div>
+    </div>
+    <div class="phase-cards" style="--node-color:var(--phase-5)">
+      <div class="node-row">
+        <div class="node">
+          <span class="node__icon">📸</span>
+          <div class="node__label" style="color:var(--phase-5)">Proof</div>
+          <div class="node__title">Delivery Documented</div>
+          <div class="node__body">Photo proof taken at delivery. Timestamp logged. Order marked <strong style="color:var(--phase-5)">DELIVERED</strong> in portal. Receipt generated automatically.</div>
+        </div>
+        <div class="node">
+          <span class="node__icon">⭐</span>
+          <div class="node__label" style="color:var(--phase-5)">Feedback</div>
+          <div class="node__title">Rating &amp; Review</div>
+          <div class="node__body">WhatsApp message prompts customer for quick 1-5 star rating. Feedback feeds into runner scoring and service improvement loop.</div>
+        </div>
+        <div class="node">
+          <span class="node__icon">📊</span>
+          <div class="node__label" style="color:var(--phase-5)">Analytics</div>
+          <div class="node__title">Data Captured</div>
+          <div class="node__body">Task completion time, runner performance, customer satisfaction, zone heatmap, and revenue metrics — all logged for optimisation.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONNECTOR -->
+  <div class="phase-connector">
+    <div class="connector-arrow" style="--phase-a:var(--phase-5);--phase-b:var(--phase-6)">
+      <div class="arrow-line" style="background:linear-gradient(90deg,var(--phase-5),var(--phase-6))"></div>
+      Happy customer — retention loop begins
+      <div class="arrow-line" style="background:linear-gradient(90deg,var(--phase-5),var(--phase-6));transform:scaleX(-1)"></div>
+    </div>
+  </div>
+
+  <!-- ── PHASE 6: RETENTION LOOP ── -->
+  <div class="phase-row" data-reveal>
+    <div class="phase-label-col">
+      <div class="phase-label">
+        <div class="phase-label__num" style="color:var(--phase-6)">06</div>
+        <div class="phase-label__name" style="color:var(--phase-6)">Retention</div>
+      </div>
+      <div class="phase-spine" style="color:var(--phase-6)"></div>
+    </div>
+    <div class="phase-cards" style="--node-color:var(--phase-6)">
+      <div class="node-row">
+        <div class="node">
+          <span class="node__icon">🔁</span>
+          <div class="node__label" style="color:var(--phase-6)">Repeat</div>
+          <div class="node__title">Loyalty Program</div>
+          <div class="node__body">Returning customers get loyalty discounts, priority dispatch slots, and exclusive offers. Streak rewards for weekly usage.</div>
+        </div>
+        <div class="node">
+          <span class="node__icon">👥</span>
+          <div class="node__label" style="color:var(--phase-6)">Referrals</div>
+          <div class="node__title">Refer &amp; Earn</div>
+          <div class="node__body">Customers share a unique referral link. Both referrer and new user get a discount on the next task. Fastest growth mechanism.</div>
+        </div>
+        <div class="node">
+          <span class="node__icon">📅</span>
+          <div class="node__label" style="color:var(--phase-6)">Subscription</div>
+          <div class="node__title">Monthly Plans</div>
+          <div class="node__body">
+            <strong style="color:var(--gold)">Basic</strong> — ₦32,000/mo<br/>
+            <strong style="color:var(--gold)">Premium</strong> — ₦72,000/mo<br/>
+            <strong style="color:var(--gold)">Business</strong> — ₦120,000/mo<br/>
+            <span style="color:var(--muted);font-size:12px;">Unlimited or high-volume runs, dedicated runner, API access</span>
+          </div>
+        </div>
+      </div>
+      <div class="node-row">
+        <div class="node node--wide">
+          <span class="node__icon">🏢</span>
+          <div class="node__label" style="color:var(--phase-6)">B2B Expansion</div>
+          <div class="node__title">Business Accounts</div>
+          <div class="node__body">Local businesses (pharmacies, restaurants, fashion stores, law firms) plug Za.allyErrands into their daily operations via the REST API or Business Portal. Businesses get dedicated runners, volume pricing, webhook events, and a full analytics dashboard.</div>
+          <div class="node__tags">
+            <span class="tag" style="color:var(--phase-6);border-color:rgba(255,107,157,0.3);background:rgba(255,107,157,0.06)">REST API</span>
+            <span class="tag" style="color:var(--phase-6);border-color:rgba(255,107,157,0.3);background:rgba(255,107,157,0.06)">Business Portal</span>
+            <span class="tag" style="color:var(--phase-6);border-color:rgba(255,107,157,0.3);background:rgba(255,107,157,0.06)">Webhooks</span>
+            <span class="tag" style="color:var(--phase-6);border-color:rgba(255,107,157,0.3);background:rgba(255,107,157,0.06)">Volume Pricing</span>
+          </div>
+        </div>
+        <div class="node">
+          <span class="node__icon">📈</span>
+          <div class="node__label" style="color:var(--phase-6)">Growth</div>
+          <div class="node__title">Scaling Plan</div>
+          <div class="node__body">
+            Phase 1: 20 tasks/week<br/>
+            Phase 2: 100 tasks/week<br/>
+            Phase 3: Zone expansion<br/>
+            Phase 4: B2B API volume<br/>
+            Phase 5: City-wide coverage
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- END PHASE TRACK -->
+
+<!-- ============================================================ -->
+<!--  LIFECYCLE RING                                             -->
+<!-- ============================================================ -->
+<div class="section-wrap">
+  <div class="lifecycle" data-reveal>
+    <div class="lifecycle__title">// THE CUSTOMER LIFECYCLE — FULL LOOP</div>
+    <div class="lifecycle__ring" id="ring">
+
+      <svg class="ring-svg" viewBox="0 0 520 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Outer ring -->
+        <circle cx="260" cy="260" r="200" stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-dasharray="4 8"/>
+        <!-- Inner ring -->
+        <circle cx="260" cy="260" r="130" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+
+        <!-- Curved arrows between nodes (approximate arcs) -->
+        <defs>
+          <marker id="arr" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" fill="rgba(255,255,255,0.3)"/>
+          </marker>
+        </defs>
+
+        <!-- Animated dashed arc -->
+        <circle cx="260" cy="260" r="200" stroke="url(#ringGrad)" stroke-width="2"
+          stroke-dasharray="40 20" opacity="0.4">
+          <animateTransform attributeName="transform" type="rotate"
+            from="0 260 260" to="360 260 260" dur="30s" repeatCount="indefinite"/>
+        </circle>
+
+        <defs>
+          <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#FF4500"/>
+            <stop offset="30%" stop-color="#F5A623"/>
+            <stop offset="60%" stop-color="#00D4FF"/>
+            <stop offset="100%" stop-color="#FF6B9D"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Spoke lines -->
+        <line x1="260" y1="130" x2="260" y2="180" stroke="rgba(255,69,0,0.2)" stroke-width="1"/>
+        <line x1="373" y1="173" x2="336" y2="209" stroke="rgba(245,166,35,0.2)" stroke-width="1"/>
+        <line x1="390" y1="310" x2="352" y2="294" stroke="rgba(0,212,255,0.2)" stroke-width="1"/>
+        <line x1="310" y1="410" x2="291" y2="375" stroke="rgba(156,110,248,0.2)" stroke-width="1"/>
+        <line x1="170" y1="390" x2="196" y2="360" stroke="rgba(0,255,136,0.2)" stroke-width="1"/>
+        <line x1="120" y1="260" x2="166" y2="260" stroke="rgba(255,107,157,0.2)" stroke-width="1"/>
+      </svg>
+
+      <!-- Ring nodes — positioned via CSS top/left percentages -->
+      <!-- Node 1 — Discovery (top) -->
+      <div class="ring-node" style="top:8%;left:50%">
+        <div class="ring-node__bubble" style="background:rgba(255,69,0,0.1);border-color:rgba(255,69,0,0.4);box-shadow:0 0 20px rgba(255,69,0,0.2)">📢</div>
+        <div class="ring-node__label" style="color:var(--phase-1)">Discovery</div>
+        <div class="ring-node__num">Phase 01</div>
+      </div>
+      <!-- Node 2 — Request (top-right) -->
+      <div class="ring-node" style="top:22%;left:82%">
+        <div class="ring-node__bubble" style="background:rgba(245,166,35,0.1);border-color:rgba(245,166,35,0.4);box-shadow:0 0 20px rgba(245,166,35,0.2)">💬</div>
+        <div class="ring-node__label" style="color:var(--phase-2)">Request</div>
+        <div class="ring-node__num">Phase 02</div>
+      </div>
+      <!-- Node 3 — Booking (right) -->
+      <div class="ring-node" style="top:54%;left:90%">
+        <div class="ring-node__bubble" style="background:rgba(0,212,255,0.1);border-color:rgba(0,212,255,0.4);box-shadow:0 0 20px rgba(0,212,255,0.2)">🧮</div>
+        <div class="ring-node__label" style="color:var(--phase-3)">Booking</div>
+        <div class="ring-node__num">Phase 03</div>
+      </div>
+      <!-- Node 4 — Execution (bottom-right) -->
+      <div class="ring-node" style="top:77%;left:73%">
+        <div class="ring-node__bubble" style="background:rgba(156,110,248,0.1);border-color:rgba(156,110,248,0.4);box-shadow:0 0 20px rgba(156,110,248,0.2)">🛵</div>
+        <div class="ring-node__label" style="color:var(--phase-4)">Execution</div>
+        <div class="ring-node__num">Phase 04</div>
+      </div>
+      <!-- Node 5 — Completion (bottom-left) -->
+      <div class="ring-node" style="top:77%;left:27%">
+        <div class="ring-node__bubble" style="background:rgba(0,255,136,0.1);border-color:rgba(0,255,136,0.4);box-shadow:0 0 20px rgba(0,255,136,0.2)">✅</div>
+        <div class="ring-node__label" style="color:var(--phase-5)">Completion</div>
+        <div class="ring-node__num">Phase 05</div>
+      </div>
+      <!-- Node 6 — Retention (left) -->
+      <div class="ring-node" style="top:54%;left:10%">
+        <div class="ring-node__bubble" style="background:rgba(255,107,157,0.1);border-color:rgba(255,107,157,0.4);box-shadow:0 0 20px rgba(255,107,157,0.2)">🔁</div>
+        <div class="ring-node__label" style="color:var(--phase-6)">Retention</div>
+        <div class="ring-node__num">Phase 06</div>
+      </div>
+
+      <!-- Center -->
+      <div class="ring-center">
+        <div class="ring-center__logo"><span class="za">Za.</span>ally<br/>Errands</div>
+        <div class="ring-center__sub">Lagos, NG</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!--  GOALS SECTION                                              -->
+<!-- ============================================================ -->
+<div class="section-wrap">
+  <div style="margin:0 0 48px" data-reveal>
+    <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:12px;">// GROWTH TARGETS</div>
+    <h2 style="font-size:24px;font-weight:700;margin-bottom:20px;">Milestones &amp; KPIs</h2>
+    <div class="goal-track">
+      <div class="goal-row">
+        <div class="goal-num">01</div>
+        <div class="goal-label">Tasks per week (initial)</div>
+        <div class="goal-bar-wrap"><div class="goal-bar" style="width:20%;background:linear-gradient(90deg,var(--orange),var(--gold))"></div></div>
+        <div class="goal-val">20 / wk</div>
+      </div>
+      <div class="goal-row">
+        <div class="goal-num">02</div>
+        <div class="goal-label">Average dispatch time</div>
+        <div class="goal-bar-wrap"><div class="goal-bar" style="width:75%;background:linear-gradient(90deg,var(--gold),var(--blue))"></div></div>
+        <div class="goal-val">&lt; 8 min</div>
+      </div>
+      <div class="goal-row">
+        <div class="goal-num">03</div>
+        <div class="goal-label">On-time delivery rate</div>
+        <div class="goal-bar-wrap"><div class="goal-bar" style="width:98%;background:linear-gradient(90deg,var(--blue),var(--green))"></div></div>
+        <div class="goal-val">98%+</div>
+      </div>
+      <div class="goal-row">
+        <div class="goal-num">04</div>
+        <div class="goal-label">Monthly plan conversion</div>
+        <div class="goal-bar-wrap"><div class="goal-bar" style="width:30%;background:linear-gradient(90deg,var(--purple),var(--phase-6))"></div></div>
+        <div class="goal-val">30% target</div>
+      </div>
+      <div class="goal-row">
+        <div class="goal-num">05</div>
+        <div class="goal-label">Active Lagos zones</div>
+        <div class="goal-bar-wrap"><div class="goal-bar" style="width:40%;background:linear-gradient(90deg,var(--phase-6),var(--orange))"></div></div>
+        <div class="goal-val">20+ zones</div>
+      </div>
+      <div class="goal-row">
+        <div class="goal-num">06</div>
+        <div class="goal-label">B2B business clients</div>
+        <div class="goal-bar-wrap"><div class="goal-bar" style="width:10%;background:linear-gradient(90deg,var(--orange),var(--gold))"></div></div>
+        <div class="goal-val">Phase 2 target</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="wf-footer">
+  <span>Za.allyErrands Workflow Map · Built for clarity</span>
+  <a href="../index.html">← Back to Home</a>
+  <a href="../business/index.html">Business Plans</a>
+  <a href="../api/index.html">API Reference</a>
+  <a href="../business-portal/index.html">Operations Portal</a>
+</footer>
+
+<script>
+  // ── Particle background ──
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = document.body.scrollHeight;
+  }
+
+  const colors = ['#FF4500','#F5A623','#00D4FF','#9C6EF8','#00FF88','#FF6B9D'];
+  function spawn() {
+    return {
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.5 + 0.5,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      a: Math.random() * 0.4 + 0.1
+    };
+  }
+  for (let i = 0; i < 80; i++) particles.push(spawn());
+
+  function drawParticles() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = p.a;
+      ctx.fill();
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0 || p.x > W || p.y < 0 || p.y > H) { Object.assign(p, spawn()); }
+    });
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(drawParticles);
+  }
+  resize();
+  drawParticles();
+  window.addEventListener('resize', () => { resize(); particles = []; for(let i=0;i<80;i++) particles.push(spawn()); });
+
+  // ── Counter animation ──
+  function animateCounter(el, target, prefix, suffix, duration) {
+    let start = 0; const step = target / (duration / 16);
+    const timer = setInterval(() => {
+      start = Math.min(start + step, target);
+      el.textContent = prefix + Math.floor(start).toLocaleString() + suffix;
+      if (start >= target) clearInterval(timer);
+    }, 16);
+  }
+
+  // ── Intersection observer ──
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+
+  // ── Trigger counters when metrics strip is visible ──
+  let countersRun = false;
+  const metricsIo = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting && !countersRun) {
+        countersRun = true;
+        setTimeout(() => {
+          animateCounter(document.getElementById('cnt-tasks'), 20, '', '', 1200);
+          animateCounter(document.getElementById('cnt-dispatch'), 8, '', '', 1000);
+          document.getElementById('cnt-base').textContent = '₦4k';
+          animateCounter(document.getElementById('cnt-plans'), 3, '', '', 800);
+          animateCounter(document.getElementById('cnt-channels'), 5, '', '+', 900);
+        }, 200);
+      }
+    });
+  }, { threshold: 0.5 });
+  metricsIo.observe(document.querySelector('.metrics-strip'));
+</script>
+</body>
+</html>
