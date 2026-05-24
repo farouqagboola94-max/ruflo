@@ -81,6 +81,7 @@
         <li><a href="#services">Fleet</a></li>
         <li><a href="#pricing">Rates</a></li>
         <li><a href="portal/index.html" class="nav__portal">Client Portal</a></li>
+        <li><a href="business/index.html" class="nav__portal" style="background:rgba(0,212,255,0.1);border-color:rgba(0,212,255,0.3);color:#00D4FF;">For Businesses</a></li>
         <li><a href="#drop" class="nav__cta">Request Now</a></li>
       </ul>
       <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -557,6 +558,67 @@
     </div>
   </section>
 
+  <!-- B2B TEASER -->
+  <section style="background:linear-gradient(135deg,#0A0D20 0%,#0F1228 100%);border-top:1px solid rgba(255,255,255,0.07);border-bottom:1px solid rgba(255,255,255,0.07);padding:72px 0;">
+    <div style="max-width:1100px;margin:0 auto;padding:0 24px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;">
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#00D4FF;margin-bottom:12px;">// FOR BUSINESSES</div>
+          <h2 style="font-size:clamp(28px,4vw,42px);font-weight:700;line-height:1.15;margin-bottom:16px;">
+            Plug your business into<br /><span style="background:linear-gradient(135deg,#00D4FF,#0080FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Lagos dispatch.</span>
+          </h2>
+          <p style="color:rgba(255,255,255,0.65);font-size:16px;line-height:1.7;margin-bottom:24px;">
+            Za.allyErrands is more than a consumer service. It's the dispatch backbone local businesses plug into for their daily deliveries — with a full API, real-time dashboard, and zero logistics headache.
+          </p>
+          <ul style="list-style:none;padding:0;margin-bottom:28px;">
+            <li style="display:flex;align-items:center;gap:10px;margin-bottom:10px;color:rgba(255,255,255,0.75);font-size:15px;">
+              <span style="width:20px;height:20px;background:rgba(0,212,255,0.12);border:1px solid rgba(0,212,255,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#00D4FF;flex-shrink:0;">&#10003;</span>
+              REST API — dispatch from your own system
+            </li>
+            <li style="display:flex;align-items:center;gap:10px;margin-bottom:10px;color:rgba(255,255,255,0.75);font-size:15px;">
+              <span style="width:20px;height:20px;background:rgba(0,212,255,0.12);border:1px solid rgba(0,212,255,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#00D4FF;flex-shrink:0;">&#10003;</span>
+              Live operations dashboard with runner tracking
+            </li>
+            <li style="display:flex;align-items:center;gap:10px;margin-bottom:10px;color:rgba(255,255,255,0.75);font-size:15px;">
+              <span style="width:20px;height:20px;background:rgba(0,212,255,0.12);border:1px solid rgba(0,212,255,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#00D4FF;flex-shrink:0;">&#10003;</span>
+              Webhook events for every delivery milestone
+            </li>
+            <li style="display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.75);font-size:15px;">
+              <span style="width:20px;height:20px;background:rgba(0,212,255,0.12);border:1px solid rgba(0,212,255,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#00D4FF;flex-shrink:0;">&#10003;</span>
+              Plans from &#8358;50,000/month — scales with your volume
+            </li>
+          </ul>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <a href="business/index.html" style="display:inline-block;background:linear-gradient(135deg,#00D4FF,#0080FF);color:#07091A;font-size:14px;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;">Explore Business Plans &rarr;</a>
+            <a href="api/index.html" style="display:inline-block;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.8);font-size:14px;font-weight:600;padding:12px 24px;border-radius:8px;text-decoration:none;">API Reference</a>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.025);border:1px solid rgba(0,212,255,0.15);border-radius:14px;padding:28px;font-family:'JetBrains Mono','Courier New',monospace;font-size:13px;line-height:1.8;">
+          <div style="display:flex;gap:6px;margin-bottom:16px;">
+            <span style="width:10px;height:10px;border-radius:50%;background:#FF3B5C;display:inline-block;"></span>
+            <span style="width:10px;height:10px;border-radius:50%;background:#FFD60A;display:inline-block;"></span>
+            <span style="width:10px;height:10px;border-radius:50%;background:#00FF88;display:inline-block;"></span>
+            <span style="color:rgba(255,255,255,0.3);font-size:11px;margin-left:8px;">POST /v1/dispatch</span>
+          </div>
+          <div style="color:#8B949E;">// Fire and forget. We handle the rest.</div>
+          <div><span style="color:#FF7B72;">const</span> <span style="color:#FFA657;">run</span> <span style="color:rgba(255,255,255,0.5);">=</span> <span style="color:#FF7B72;">await</span> client<span style="color:rgba(255,255,255,0.5);">.</span><span style="color:#D2A8FF;">dispatch</span><span style="color:rgba(255,255,255,0.5);">.</span><span style="color:#79C0FF;">create</span><span style="color:rgba(255,255,255,0.5);">({</span></div>
+          <div style="padding-left:16px;"><span style="color:#79C0FF;">pickupAddress</span><span style="color:rgba(255,255,255,0.5);">:</span> <span style="color:#A5D6FF;">'14 Adeola Odeku, VI'</span><span style="color:rgba(255,255,255,0.5);">,</span></div>
+          <div style="padding-left:16px;"><span style="color:#79C0FF;">dropoffAddress</span><span style="color:rgba(255,255,255,0.5);">:</span> <span style="color:#A5D6FF;">'42 Admiralty Way, Lekki'</span><span style="color:rgba(255,255,255,0.5);">,</span></div>
+          <div style="padding-left:16px;"><span style="color:#79C0FF;">priority</span><span style="color:rgba(255,255,255,0.5);">:</span> <span style="color:#A5D6FF;">'express'</span></div>
+          <div><span style="color:rgba(255,255,255,0.5);">});</span></div>
+          <div style="margin-top:10px;color:#8B949E;">// &#x2713; Runner dispatched in 6 min</div>
+          <div style="color:#8B949E;">// &#x2713; Webhook fired: dispatch.delivered</div>
+          <div style="color:#8B949E;">// &#x2713; Proof photo attached</div>
+          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.25);color:#00FF88;font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;font-family:var(--font-body,sans-serif);">Node.js</span>
+            <span style="background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.25);color:#00FF88;font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;font-family:var(--font-body,sans-serif);">Python</span>
+            <span style="background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.25);color:#00FF88;font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;font-family:var(--font-body,sans-serif);">REST</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="final-cta">
     <div class="final-cta__inner">
       <p class="final-cta__label">READY TO MOVE?</p>
@@ -595,6 +657,8 @@
           <li><a href="#process">How It Works</a></li>
           <li><a href="#pricing">Rates</a></li>
           <li><a href="portal/index.html">Client Portal</a></li>
+          <li><a href="business/index.html">For Businesses</a></li>
+          <li><a href="api/index.html">API Docs</a></li>
           <li><a href="#drop">Book Now</a></li>
         </ul>
       </div>

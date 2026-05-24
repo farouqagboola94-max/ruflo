@@ -27,6 +27,21 @@
   status = 200
 
 [[redirects]]
+  from = "/business"
+  to = "/business/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/business-portal"
+  to = "/business-portal/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/api"
+  to = "/api/index.html"
+  status = 200
+
+[[redirects]]
   from = "/backend/*"
   to = "/404.html"
   status = 404

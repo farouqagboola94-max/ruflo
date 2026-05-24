@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Za.allyErrands API — Developer Reference</title>
+  <meta name="description" content="Za.allyErrands Dispatch API — integrate same-day Lagos delivery into your business. REST endpoints, webhooks, SDKs." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:    #07091A;
+      --black-2:  #0A0D20;
+      --black-3:  #0F1228;
+      --panel:    #111425;
+      --orange:   #FF4500;
+      --gold:     #F5A623;
+      --blue:     #00D4FF;
+      --green:    #00FF88;
+      --red:      #FF3B5C;
+      --yellow:   #FFD60A;
+      --white:    #FFFFFF;
+      --muted:    rgba(255,255,255,0.45);
+      --border:   rgba(255,255,255,0.07);
+      --grad-text: linear-gradient(135deg, #FF4500 0%, #F5A623 100%);
+      --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+      --sidebar-w: 260px;
+      --header-h:  60px;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .docs-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: var(--header-h);
+      background: rgba(7,9,26,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 24px;
+      gap: 24px;
+    }
+    .docs-header__logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px; letter-spacing: 1px;
+      text-decoration: none; color: var(--white);
+      display: flex; align-items: center; gap: 6px;
+      flex-shrink: 0;
+    }
+    .docs-header__logo .logo-za { color: var(--orange); }
+    .docs-header__badge {
+      background: rgba(255,69,0,0.15);
+      border: 1px solid rgba(255,69,0,0.3);
+      color: var(--orange); font-size: 11px; font-weight: 600;
+      padding: 2px 8px; border-radius: 4px; letter-spacing: 1px;
+    }
+    .docs-header__right {
+      margin-left: auto; display: flex; align-items: center; gap: 12px;
+    }
+    .docs-header__version {
+      font-family: var(--font-mono);
+      font-size: 12px; color: var(--muted);
+    }
+    .btn-small {
+      background: linear-gradient(135deg, #FF4500, #FF6B00);
+      color: #fff; font-size: 13px; font-weight: 600;
+      padding: 6px 16px; border-radius: 6px;
+      text-decoration: none; transition: opacity .2s;
+    }
+    .btn-small:hover { opacity: .85; }
+
+    /* ── LAYOUT ── */
+    .docs-layout {
+      display: flex;
+      padding-top: var(--header-h);
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .docs-sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      position: fixed;
+      top: var(--header-h); bottom: 0; left: 0;
+      overflow-y: auto;
+      background: var(--black-2);
+      border-right: 1px solid var(--border);
+      padding: 24px 0;
+    }
+    .docs-sidebar::-webkit-scrollbar { width: 4px; }
+    .docs-sidebar::-webkit-scrollbar-track { background: transparent; }
+    .docs-sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .sidebar-section { margin-bottom: 8px; }
+    .sidebar-section__title {
+      font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+      color: var(--muted); text-transform: uppercase;
+      padding: 8px 20px 4px;
+    }
+    .sidebar-link {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 20px;
+      font-size: 13.5px; color: rgba(255,255,255,0.7);
+      text-decoration: none; border-left: 2px solid transparent;
+      transition: all .15s;
+    }
+    .sidebar-link:hover { color: var(--white); background: rgba(255,255,255,0.04); }
+    .sidebar-link.active {
+      color: var(--orange); border-left-color: var(--orange);
+      background: rgba(255,69,0,0.06);
+    }
+    .sidebar-link .method {
+      font-family: var(--font-mono);
+      font-size: 10px; font-weight: 600; padding: 1px 5px;
+      border-radius: 3px; flex-shrink: 0;
+    }
+    .method--post { background: rgba(0,212,255,0.15); color: var(--blue); }
+    .method--get  { background: rgba(0,255,136,0.12); color: var(--green); }
+    .method--del  { background: rgba(255,59,92,0.15);  color: var(--red); }
+
+    /* ── MAIN CONTENT ── */
+    .docs-main {
+      flex: 1;
+      margin-left: var(--sidebar-w);
+      max-width: 900px;
+      padding: 48px 40px 96px;
+    }
+
+    /* ── SECTION HEADINGS ── */
+    .docs-section { margin-bottom: 72px; }
+    .docs-section__label {
+      font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--orange);
+      margin-bottom: 8px;
+    }
+    .docs-section h2 {
+      font-size: 28px; font-weight: 700; margin-bottom: 12px;
+    }
+    .docs-section h3 {
+      font-size: 18px; font-weight: 600; margin-bottom: 10px;
+      margin-top: 32px;
+    }
+    .docs-section p {
+      color: rgba(255,255,255,0.75); margin-bottom: 16px; font-size: 15px;
+    }
+    .docs-section ul {
+      padding-left: 20px; color: rgba(255,255,255,0.7);
+      font-size: 15px; margin-bottom: 16px;
+    }
+    .docs-section ul li { margin-bottom: 6px; }
+
+    /* ── ENDPOINT CARD ── */
+    .endpoint-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+    .endpoint-card__head {
+      display: flex; align-items: center; gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+    .endpoint-card__method {
+      font-family: var(--font-mono);
+      font-size: 12px; font-weight: 700;
+      padding: 3px 10px; border-radius: 5px; flex-shrink: 0;
+    }
+    .endpoint-card__method--post { background: rgba(0,212,255,0.15); color: var(--blue); }
+    .endpoint-card__method--get  { background: rgba(0,255,136,0.12); color: var(--green); }
+    .endpoint-card__method--del  { background: rgba(255,59,92,0.15);  color: var(--red); }
+    .endpoint-card__path {
+      font-family: var(--font-mono);
+      font-size: 14px; color: var(--white);
+    }
+    .endpoint-card__desc {
+      font-size: 13px; color: var(--muted); margin-left: auto;
+    }
+    .endpoint-card__body { padding: 20px; }
+
+    /* ── CODE BLOCK ── */
+    .code-tabs {
+      display: flex; gap: 0; margin-bottom: 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .code-tab {
+      font-family: var(--font-mono);
+      font-size: 12px; font-weight: 500;
+      padding: 8px 16px; cursor: pointer;
+      color: var(--muted); border-bottom: 2px solid transparent;
+      background: none; border-top: none; border-left: none; border-right: none;
+      transition: all .15s;
+    }
+    .code-tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+    .code-tab:hover { color: var(--white); }
+
+    .code-block-wrap {
+      background: #0B0D1C;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 12px 0 16px;
+    }
+    .code-block-wrap--tabbed {
+      border-radius: 0 0 8px 8px;
+      border-top: none;
+    }
+    .code-block-wrap__header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+    .code-block-wrap__label {
+      font-family: var(--font-mono); font-size: 11px;
+      color: var(--muted); text-transform: uppercase; letter-spacing: 1px;
+    }
+    .copy-btn {
+      font-family: var(--font-mono); font-size: 11px;
+      padding: 3px 10px; border-radius: 4px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: var(--muted); cursor: pointer;
+      transition: all .15s;
+    }
+    .copy-btn:hover { background: rgba(255,255,255,0.12); color: var(--white); }
+    .copy-btn.copied { color: var(--green); border-color: var(--green); }
+    pre {
+      padding: 20px;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    pre::-webkit-scrollbar { height: 4px; }
+    pre::-webkit-scrollbar-track { background: transparent; }
+    pre::-webkit-scrollbar-thumb { background: var(--border); }
+
+    /* Syntax colours */
+    .t-key   { color: #79C0FF; }
+    .t-str   { color: #A5D6FF; }
+    .t-num   { color: #F2CC60; }
+    .t-bool  { color: #FF7B72; }
+    .t-cmt   { color: #8B949E; font-style: italic; }
+    .t-fn    { color: #D2A8FF; }
+    .t-kw    { color: #FF7B72; }
+    .t-url   { color: #79C0FF; }
+    .t-mtd   { color: #7EE787; }
+    .t-var   { color: #FFA657; }
+    .t-punc  { color: rgba(255,255,255,0.5); }
+
+    /* ── PARAMS TABLE ── */
+    .params-table {
+      width: 100%; border-collapse: collapse; margin: 12px 0 20px;
+      font-size: 13.5px;
+    }
+    .params-table th {
+      text-align: left; padding: 8px 12px;
+      font-size: 11px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .params-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: top;
+    }
+    .params-table tr:last-child td { border-bottom: none; }
+    .param-name {
+      font-family: var(--font-mono); font-size: 13px;
+      color: var(--blue);
+    }
+    .param-type {
+      font-family: var(--font-mono); font-size: 12px;
+      color: var(--gold); background: rgba(245,166,35,0.1);
+      padding: 1px 6px; border-radius: 3px;
+    }
+    .param-req {
+      font-size: 10px; font-weight: 700; letter-spacing: 1px;
+      color: var(--orange); text-transform: uppercase;
+    }
+    .param-opt { color: var(--muted); }
+    .param-desc { color: rgba(255,255,255,0.65); }
+
+    /* ── STATUS BADGES ── */
+    .status-badge {
+      display: inline-block; font-size: 11px; font-weight: 600;
+      padding: 2px 8px; border-radius: 4px;
+    }
+    .s-200 { background: rgba(0,255,136,0.12); color: var(--green); }
+    .s-400 { background: rgba(255,214,10,0.12); color: var(--yellow); }
+    .s-401 { background: rgba(255,166,0,0.12); color: var(--gold); }
+    .s-429 { background: rgba(255,69,0,0.15); color: var(--orange); }
+    .s-500 { background: rgba(255,59,92,0.15); color: var(--red); }
+
+    /* ── ALERT BOXES ── */
+    .alert {
+      padding: 14px 18px;
+      border-radius: 8px; margin: 16px 0;
+      border-left: 3px solid;
+      font-size: 14px;
+    }
+    .alert--info {
+      background: rgba(0,212,255,0.06);
+      border-color: var(--blue); color: rgba(255,255,255,0.8);
+    }
+    .alert--warn {
+      background: rgba(255,214,10,0.06);
+      border-color: var(--yellow); color: rgba(255,255,255,0.8);
+    }
+    .alert--tip {
+      background: rgba(0,255,136,0.06);
+      border-color: var(--green); color: rgba(255,255,255,0.8);
+    }
+    .alert strong { font-weight: 700; }
+
+    /* ── ERROR TABLE ── */
+    .error-grid {
+      display: grid;
+      grid-template-columns: 80px 1fr 2fr;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px; overflow: hidden;
+    }
+    .error-grid__row {
+      display: contents;
+    }
+    .error-grid__row > div {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13.5px;
+    }
+    .error-grid__row:last-child > div { border-bottom: none; }
+    .error-grid__head > div {
+      font-size: 11px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--muted);
+      background: rgba(255,255,255,0.02);
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .e-code { font-family: var(--font-mono); }
+
+    /* ── WEBHOOK EVENT CARD ── */
+    .event-card {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px; margin-bottom: 12px;
+    }
+    .event-card__name {
+      font-family: var(--font-mono); font-size: 13px;
+      color: var(--gold); margin-bottom: 6px;
+    }
+    .event-card__desc { font-size: 13.5px; color: rgba(255,255,255,0.65); }
+
+    /* ── SDK TABS ── */
+    .sdk-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .sdk-tab {
+      font-size: 13px; font-weight: 600;
+      padding: 6px 16px; border-radius: 6px; cursor: pointer;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--muted); transition: all .15s;
+    }
+    .sdk-tab.active {
+      background: rgba(255,69,0,0.12);
+      border-color: rgba(255,69,0,0.3);
+      color: var(--orange);
+    }
+    .sdk-tab:hover { color: var(--white); }
+
+    /* ── RATE LIMIT METER ── */
+    .rate-meter {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 20px;
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 16px;
+      margin: 16px 0;
+    }
+    .rate-item__label {
+      font-size: 11px; font-weight: 600; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+    }
+    .rate-item__val {
+      font-family: var(--font-mono); font-size: 22px; font-weight: 700;
+      color: var(--white);
+    }
+    .rate-item__val span { font-size: 13px; color: var(--muted); }
+
+    /* ── QUICK START STEPS ── */
+    .qs-steps { counter-reset: qs; }
+    .qs-step {
+      display: flex; gap: 16px; margin-bottom: 28px;
+    }
+    .qs-step__num {
+      width: 32px; height: 32px; flex-shrink: 0;
+      border-radius: 50%; background: rgba(255,69,0,0.12);
+      border: 1px solid rgba(255,69,0,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-mono); font-size: 13px;
+      font-weight: 700; color: var(--orange);
+      counter-increment: qs;
+    }
+    .qs-step__body { flex: 1; padding-top: 4px; }
+    .qs-step__title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .qs-step__desc { font-size: 14px; color: rgba(255,255,255,0.65); }
+
+    /* ── INLINE CODE ── */
+    code {
+      font-family: var(--font-mono); font-size: 12.5px;
+      background: rgba(255,255,255,0.07);
+      padding: 1px 6px; border-radius: 3px; color: var(--blue);
+    }
+
+    /* ── BASE URL BANNER ── */
+    .base-url-banner {
+      background: rgba(0,212,255,0.06);
+      border: 1px solid rgba(0,212,255,0.2);
+      border-radius: 8px; padding: 14px 20px;
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 24px;
+    }
+    .base-url-banner__label {
+      font-size: 11px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--blue); flex-shrink: 0;
+    }
+    .base-url-banner__url {
+      font-family: var(--font-mono); font-size: 14px; color: var(--white);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 840px) {
+      .docs-sidebar { display: none; }
+      .docs-main { margin-left: 0; padding: 24px 20px 64px; }
+      .error-grid { grid-template-columns: 70px 1fr; }
+      .error-grid .param-desc-col { display: none; }
+      .rate-meter { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── HIDDEN PANEL ── */
+    .code-panel { display: none; }
+    .code-panel.active { display: block; }
+
+    /* ── RESPONSE BLOCK ── */
+    .response-row {
+      display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px;
+    }
+    .response-row .status-badge { flex-shrink: 0; }
+    .response-label { font-size: 13px; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="docs-header">
+    <a href="../index.html" class="docs-header__logo">
+      <span class="logo-za">Za.</span>allyErrands
+    </a>
+    <span class="docs-header__badge">API</span>
+    <nav style="display:flex;gap:16px;margin-left:16px;">
+      <a href="../index.html" style="font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;">Home</a>
+      <a href="../business/index.html" style="font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;">For Business</a>
+      <a href="../business-portal/index.html" style="font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;">Portal</a>
+    </nav>
+    <div class="docs-header__right">
+      <span class="docs-header__version">v1.0</span>
+      <a href="../business/index.html#pricing" class="btn-small">Get API Key</a>
+    </div>
+  </header>
+
+  <div class="docs-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="docs-sidebar" id="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section__title">Getting Started</div>
+        <a href="#overview" class="sidebar-link active">Overview</a>
+        <a href="#authentication" class="sidebar-link">Authentication</a>
+        <a href="#quickstart" class="sidebar-link">Quick Start</a>
+        <a href="#base-url" class="sidebar-link">Base URL</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section__title">Endpoints</div>
+        <a href="#dispatch-create" class="sidebar-link">
+          <span class="method method--post">POST</span> Create Dispatch
+        </a>
+        <a href="#dispatch-get" class="sidebar-link">
+          <span class="method method--get">GET</span> Get Dispatch
+        </a>
+        <a href="#dispatch-list" class="sidebar-link">
+          <span class="method method--get">GET</span> List Dispatches
+        </a>
+        <a href="#dispatch-cancel" class="sidebar-link">
+          <span class="method method--del">DEL</span> Cancel Dispatch
+        </a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section__title">Webhooks</div>
+        <a href="#webhooks" class="sidebar-link">Webhook Events</a>
+        <a href="#webhook-verify" class="sidebar-link">Verifying Payloads</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section__title">SDKs</div>
+        <a href="#sdk-node" class="sidebar-link">Node.js SDK</a>
+        <a href="#sdk-python" class="sidebar-link">Python SDK</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section__title">Reference</div>
+        <a href="#rate-limits" class="sidebar-link">Rate Limits</a>
+        <a href="#errors" class="sidebar-link">Error Codes</a>
+        <a href="#changelog" class="sidebar-link">Changelog</a>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="docs-main">
+
+      <!-- OVERVIEW -->
+      <section class="docs-section" id="overview">
+        <div class="docs-section__label">// GETTING STARTED</div>
+        <h2>Za.allyErrands Dispatch API</h2>
+        <p>The Za.allyErrands Dispatch API lets your business programmatically create and track same-day deliveries across Lagos. Integrate it into your e-commerce checkout, ERP, or ops dashboard — and our runner network handles the rest.</p>
+        <p>All requests use HTTPS. Responses are JSON. Authentication uses Bearer tokens issued per business account.</p>
+        <div class="alert alert--info">
+          <strong>Base URL:</strong> All API requests should be made to <code>https://api.zallyerrands.com/v1</code>
+        </div>
+        <div class="alert alert--warn">
+          <strong>Beta notice:</strong> The API is currently in closed beta. Sign up for the <a href="../business/index.html" style="color:var(--orange)">Business Plan</a> to receive API access.
+        </div>
+      </section>
+
+      <!-- AUTHENTICATION -->
+      <section class="docs-section" id="authentication">
+        <div class="docs-section__label">// AUTHENTICATION</div>
+        <h2>Authentication</h2>
+        <p>The API uses Bearer token authentication. Include your API key in the <code>Authorization</code> header of every request.</p>
+        <div class="code-block-wrap">
+          <div class="code-block-wrap__header">
+            <span class="code-block-wrap__label">Header</span>
+            <button class="copy-btn" data-copy="Authorization: Bearer za_live_sk_xxxxxxxxxxxxxxxxxxxx">Copy</button>
+          </div>
+          <pre><span class="t-key">Authorization</span><span class="t-punc">: </span><span class="t-str">Bearer za_live_sk_xxxxxxxxxxxxxxxxxxxx</span></pre>
+        </div>
+        <p>Keys are prefixed with <code>za_live_sk_</code> for production and <code>za_test_sk_</code> for sandbox. Test keys never trigger real dispatches or charges.</p>
+        <div class="alert alert--tip">
+          <strong>Tip:</strong> Rotate your API keys anytime from the <a href="../business-portal/index.html" style="color:var(--green)">Business Portal → API Keys</a> tab.
+        </div>
+      </section>
+
+      <!-- QUICK START -->
+      <section class="docs-section" id="quickstart">
+        <div class="docs-section__label">// QUICK START</div>
+        <h2>Quick Start</h2>
+        <p>Send your first dispatch in under 5 minutes.</p>
+        <div class="qs-steps">
+          <div class="qs-step">
+            <div class="qs-step__num">1</div>
+            <div class="qs-step__body">
+              <div class="qs-step__title">Get your API key</div>
+              <div class="qs-step__desc">Sign up for a Business or Enterprise plan. Your key is available immediately in the Portal under <strong>API Keys</strong>.</div>
+            </div>
+          </div>
+          <div class="qs-step">
+            <div class="qs-step__num">2</div>
+            <div class="qs-step__body">
+              <div class="qs-step__title">Create a test dispatch</div>
+              <div class="qs-step__desc">Use your <code>za_test_sk_</code> key. Test dispatches return realistic responses without triggering a real runner.</div>
+            </div>
+          </div>
+          <div class="qs-step">
+            <div class="qs-step__num">3</div>
+            <div class="qs-step__body">
+              <div class="qs-step__title">Register a webhook</div>
+              <div class="qs-step__desc">Point a webhook URL at your server to receive real-time status updates as your dispatch moves through its lifecycle.</div>
+            </div>
+          </div>
+          <div class="qs-step">
+            <div class="qs-step__num">4</div>
+            <div class="qs-step__body">
+              <div class="qs-step__title">Go live</div>
+              <div class="qs-step__desc">Swap to your <code>za_live_sk_</code> key. That's it — the same code runs in production.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- BASE URL -->
+      <section class="docs-section" id="base-url">
+        <div class="docs-section__label">// BASE URL</div>
+        <h2>Base URL</h2>
+        <div class="base-url-banner">
+          <span class="base-url-banner__label">PROD</span>
+          <span class="base-url-banner__url">https://api.zallyerrands.com/v1</span>
+        </div>
+        <div class="base-url-banner" style="background:rgba(0,255,136,0.05);border-color:rgba(0,255,136,0.2);">
+          <span class="base-url-banner__label" style="color:var(--green);">TEST</span>
+          <span class="base-url-banner__url">https://sandbox.zallyerrands.com/v1</span>
+        </div>
+      </section>
+
+      <!-- POST /v1/dispatch -->
+      <section class="docs-section" id="dispatch-create">
+        <div class="docs-section__label">// ENDPOINTS</div>
+        <h2>Create a Dispatch</h2>
+        <p>Creates a new dispatch request. A runner will be assigned and notified within seconds of receiving the request during operating hours.</p>
+
+        <div class="endpoint-card">
+          <div class="endpoint-card__head">
+            <span class="endpoint-card__method endpoint-card__method--post">POST</span>
+            <span class="endpoint-card__path">/v1/dispatch</span>
+            <span class="endpoint-card__desc">Creates a new dispatch</span>
+          </div>
+          <div class="endpoint-card__body">
+
+            <h3>Request Body</h3>
+            <table class="params-table">
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Type</th>
+                  <th>Required</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="param-name">pickup_address</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-req">Required</span></td>
+                  <td class="param-desc">Full street address for pickup. Include LGA or landmark for accuracy.</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">dropoff_address</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-req">Required</span></td>
+                  <td class="param-desc">Full street address for delivery.</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">item_description</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-req">Required</span></td>
+                  <td class="param-desc">What is being dispatched. Max 500 chars.</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">recipient_name</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-req">Required</span></td>
+                  <td class="param-desc">Name of the person receiving the delivery.</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">recipient_phone</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-req">Required</span></td>
+                  <td class="param-desc">Recipient's phone number (E.164 format, e.g. +2348012345678).</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">priority</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-opt">Optional</span></td>
+                  <td class="param-desc"><code>standard</code> (default) or <code>express</code>. Express guarantees dispatch within 10 minutes.</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">scheduled_at</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-opt">Optional</span></td>
+                  <td class="param-desc">ISO 8601 timestamp. Omit for immediate dispatch.</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">reference</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-opt">Optional</span></td>
+                  <td class="param-desc">Your internal order ID or reference. Returned on all events for reconciliation.</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">notes</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-opt">Optional</span></td>
+                  <td class="param-desc">Instructions for the runner. Max 200 chars.</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="code-tabs" id="tabs-create">
+              <button class="code-tab active" data-panel="create-curl">cURL</button>
+              <button class="code-tab" data-panel="create-js">Node.js</button>
+              <button class="code-tab" data-panel="create-py">Python</button>
+            </div>
+            <div class="code-block-wrap code-block-wrap--tabbed">
+              <div class="code-block-wrap__header">
+                <span class="code-block-wrap__label" id="label-create">cURL</span>
+                <button class="copy-btn" id="copy-create">Copy</button>
+              </div>
+              <div class="code-panel active" id="create-curl">
+<pre><span class="t-fn">curl</span> <span class="t-kw">-X</span> POST <span class="t-str">https://api.zallyerrands.com/v1/dispatch</span> \
+  <span class="t-kw">-H</span> <span class="t-str">"Authorization: Bearer za_live_sk_xxxx"</span> \
+  <span class="t-kw">-H</span> <span class="t-str">"Content-Type: application/json"</span> \
+  <span class="t-kw">-d</span> <span class="t-str">'{
+    "pickup_address": "14 Adeola Odeku Street, Victoria Island, Lagos",
+    "dropoff_address": "42 Admiralty Way, Lekki Phase 1, Lagos",
+    "item_description": "3 bags of groceries from Shoprite",
+    "recipient_name": "Amara Okafor",
+    "recipient_phone": "+2348012345678",
+    "priority": "standard",
+    "reference": "ORD-20260524-001"
+  }'</span></pre>
+              </div>
+              <div class="code-panel" id="create-js">
+<pre><span class="t-kw">import</span> <span class="t-var">AllyErrands</span> <span class="t-kw">from</span> <span class="t-str">'@zallyerrands/sdk'</span><span class="t-punc">;</span>
+
+<span class="t-kw">const</span> <span class="t-var">client</span> <span class="t-punc">=</span> <span class="t-kw">new</span> <span class="t-fn">AllyErrands</span><span class="t-punc">({</span>
+  <span class="t-key">apiKey</span><span class="t-punc">:</span> <span class="t-str">'za_live_sk_xxxx'</span>
+<span class="t-punc">});</span>
+
+<span class="t-kw">const</span> <span class="t-var">dispatch</span> <span class="t-punc">=</span> <span class="t-kw">await</span> <span class="t-var">client</span><span class="t-punc">.</span><span class="t-fn">dispatch</span><span class="t-punc">.</span><span class="t-fn">create</span><span class="t-punc">({</span>
+  <span class="t-key">pickupAddress</span><span class="t-punc">:</span> <span class="t-str">'14 Adeola Odeku Street, Victoria Island, Lagos'</span><span class="t-punc">,</span>
+  <span class="t-key">dropoffAddress</span><span class="t-punc">:</span> <span class="t-str">'42 Admiralty Way, Lekki Phase 1, Lagos'</span><span class="t-punc">,</span>
+  <span class="t-key">itemDescription</span><span class="t-punc">:</span> <span class="t-str">'3 bags of groceries from Shoprite'</span><span class="t-punc">,</span>
+  <span class="t-key">recipientName</span><span class="t-punc">:</span> <span class="t-str">'Amara Okafor'</span><span class="t-punc">,</span>
+  <span class="t-key">recipientPhone</span><span class="t-punc">:</span> <span class="t-str">'+2348012345678'</span><span class="t-punc">,</span>
+  <span class="t-key">priority</span><span class="t-punc">:</span> <span class="t-str">'standard'</span><span class="t-punc">,</span>
+  <span class="t-key">reference</span><span class="t-punc">:</span> <span class="t-str">'ORD-20260524-001'</span>
+<span class="t-punc">});</span>
+
+<span class="t-var">console</span><span class="t-punc">.</span><span class="t-fn">log</span><span class="t-punc">(</span><span class="t-var">dispatch</span><span class="t-punc">.</span><span class="t-key">id</span><span class="t-punc">);</span> <span class="t-cmt">// dsp_01HX3K...</span></pre>
+              </div>
+              <div class="code-panel" id="create-py">
+<pre><span class="t-kw">import</span> <span class="t-var">zallyerrands</span>
+
+<span class="t-var">client</span> <span class="t-punc">=</span> <span class="t-fn">zallyerrands</span><span class="t-punc">.</span><span class="t-fn">Client</span><span class="t-punc">(</span><span class="t-key">api_key</span><span class="t-punc">=</span><span class="t-str">"za_live_sk_xxxx"</span><span class="t-punc">)</span>
+
+<span class="t-var">dispatch</span> <span class="t-punc">=</span> <span class="t-var">client</span><span class="t-punc">.</span><span class="t-fn">dispatch</span><span class="t-punc">.</span><span class="t-fn">create</span><span class="t-punc">(</span>
+  <span class="t-key">pickup_address</span><span class="t-punc">=</span><span class="t-str">"14 Adeola Odeku Street, Victoria Island, Lagos"</span><span class="t-punc">,</span>
+  <span class="t-key">dropoff_address</span><span class="t-punc">=</span><span class="t-str">"42 Admiralty Way, Lekki Phase 1, Lagos"</span><span class="t-punc">,</span>
+  <span class="t-key">item_description</span><span class="t-punc">=</span><span class="t-str">"3 bags of groceries from Shoprite"</span><span class="t-punc">,</span>
+  <span class="t-key">recipient_name</span><span class="t-punc">=</span><span class="t-str">"Amara Okafor"</span><span class="t-punc">,</span>
+  <span class="t-key">recipient_phone</span><span class="t-punc">=</span><span class="t-str">"+2348012345678"</span><span class="t-punc">,</span>
+  <span class="t-key">priority</span><span class="t-punc">=</span><span class="t-str">"standard"</span><span class="t-punc">,</span>
+  <span class="t-key">reference</span><span class="t-punc">=</span><span class="t-str">"ORD-20260524-001"</span>
+<span class="t-punc">)</span>
+
+<span class="t-fn">print</span><span class="t-punc">(</span><span class="t-var">dispatch</span><span class="t-punc">.</span><span class="t-key">id</span><span class="t-punc">)</span>  <span class="t-cmt"># dsp_01HX3K...</span></pre>
+              </div>
+            </div>
+
+            <h3>Response</h3>
+            <div class="response-row">
+              <span class="status-badge s-200">201 Created</span>
+              <span class="response-label">Dispatch created successfully</span>
+            </div>
+            <div class="code-block-wrap">
+              <div class="code-block-wrap__header">
+                <span class="code-block-wrap__label">JSON</span>
+                <button class="copy-btn" data-copy='{"id":"dsp_01HX3KPQRS","status":"queued","priority":"standard","pickup_address":"14 Adeola Odeku Street, Victoria Island, Lagos","dropoff_address":"42 Admiralty Way, Lekki Phase 1, Lagos","item_description":"3 bags of groceries from Shoprite","recipient_name":"Amara Okafor","recipient_phone":"+2348012345678","reference":"ORD-20260524-001","estimated_pickup":"2026-05-24T10:08:00Z","estimated_delivery":"2026-05-24T10:45:00Z","runner":null,"created_at":"2026-05-24T10:00:00Z"}'>Copy</button>
+              </div>
+<pre><span class="t-punc">{</span>
+  <span class="t-key">"id"</span><span class="t-punc">:</span> <span class="t-str">"dsp_01HX3KPQRS"</span><span class="t-punc">,</span>
+  <span class="t-key">"status"</span><span class="t-punc">:</span> <span class="t-str">"queued"</span><span class="t-punc">,</span>
+  <span class="t-key">"priority"</span><span class="t-punc">:</span> <span class="t-str">"standard"</span><span class="t-punc">,</span>
+  <span class="t-key">"pickup_address"</span><span class="t-punc">:</span> <span class="t-str">"14 Adeola Odeku Street, Victoria Island, Lagos"</span><span class="t-punc">,</span>
+  <span class="t-key">"dropoff_address"</span><span class="t-punc">:</span> <span class="t-str">"42 Admiralty Way, Lekki Phase 1, Lagos"</span><span class="t-punc">,</span>
+  <span class="t-key">"item_description"</span><span class="t-punc">:</span> <span class="t-str">"3 bags of groceries from Shoprite"</span><span class="t-punc">,</span>
+  <span class="t-key">"recipient_name"</span><span class="t-punc">:</span> <span class="t-str">"Amara Okafor"</span><span class="t-punc">,</span>
+  <span class="t-key">"recipient_phone"</span><span class="t-punc">:</span> <span class="t-str">"+2348012345678"</span><span class="t-punc">,</span>
+  <span class="t-key">"reference"</span><span class="t-punc">:</span> <span class="t-str">"ORD-20260524-001"</span><span class="t-punc">,</span>
+  <span class="t-key">"estimated_pickup"</span><span class="t-punc">:</span> <span class="t-str">"2026-05-24T10:08:00Z"</span><span class="t-punc">,</span>
+  <span class="t-key">"estimated_delivery"</span><span class="t-punc">:</span> <span class="t-str">"2026-05-24T10:45:00Z"</span><span class="t-punc">,</span>
+  <span class="t-key">"runner"</span><span class="t-punc">:</span> <span class="t-bool">null</span><span class="t-punc">,</span>
+  <span class="t-key">"created_at"</span><span class="t-punc">:</span> <span class="t-str">"2026-05-24T10:00:00Z"</span>
+<span class="t-punc">}</span></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- GET /v1/dispatch/:id -->
+      <section class="docs-section" id="dispatch-get">
+        <h2>Get a Dispatch</h2>
+        <p>Retrieves a single dispatch by its ID. Includes the assigned runner, current status, and live ETA.</p>
+
+        <div class="endpoint-card">
+          <div class="endpoint-card__head">
+            <span class="endpoint-card__method endpoint-card__method--get">GET</span>
+            <span class="endpoint-card__path">/v1/dispatch/:id</span>
+            <span class="endpoint-card__desc">Returns a single dispatch</span>
+          </div>
+          <div class="endpoint-card__body">
+
+            <h3>Path Parameters</h3>
+            <table class="params-table">
+              <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><span class="param-name">id</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-req">Required</span></td>
+                  <td class="param-desc">Dispatch ID returned from <code>POST /v1/dispatch</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="code-tabs" id="tabs-get">
+              <button class="code-tab active" data-panel="get-curl">cURL</button>
+              <button class="code-tab" data-panel="get-js">Node.js</button>
+              <button class="code-tab" data-panel="get-py">Python</button>
+            </div>
+            <div class="code-block-wrap code-block-wrap--tabbed">
+              <div class="code-block-wrap__header">
+                <span class="code-block-wrap__label" id="label-get">cURL</span>
+                <button class="copy-btn" id="copy-get">Copy</button>
+              </div>
+              <div class="code-panel active" id="get-curl">
+<pre><span class="t-fn">curl</span> <span class="t-str">https://api.zallyerrands.com/v1/dispatch/dsp_01HX3KPQRS</span> \
+  <span class="t-kw">-H</span> <span class="t-str">"Authorization: Bearer za_live_sk_xxxx"</span></pre>
+              </div>
+              <div class="code-panel" id="get-js">
+<pre><span class="t-kw">const</span> <span class="t-var">dispatch</span> <span class="t-punc">=</span> <span class="t-kw">await</span> <span class="t-var">client</span><span class="t-punc">.</span><span class="t-fn">dispatch</span><span class="t-punc">.</span><span class="t-fn">get</span><span class="t-punc">(</span><span class="t-str">'dsp_01HX3KPQRS'</span><span class="t-punc">);</span>
+<span class="t-var">console</span><span class="t-punc">.</span><span class="t-fn">log</span><span class="t-punc">(</span><span class="t-var">dispatch</span><span class="t-punc">.</span><span class="t-key">status</span><span class="t-punc">);</span> <span class="t-cmt">// "en_route"</span></pre>
+              </div>
+              <div class="code-panel" id="get-py">
+<pre><span class="t-var">dispatch</span> <span class="t-punc">=</span> <span class="t-var">client</span><span class="t-punc">.</span><span class="t-fn">dispatch</span><span class="t-punc">.</span><span class="t-fn">get</span><span class="t-punc">(</span><span class="t-str">"dsp_01HX3KPQRS"</span><span class="t-punc">)</span>
+<span class="t-fn">print</span><span class="t-punc">(</span><span class="t-var">dispatch</span><span class="t-punc">.</span><span class="t-key">status</span><span class="t-punc">)</span>  <span class="t-cmt"># "en_route"</span></pre>
+              </div>
+            </div>
+
+            <h3>Response</h3>
+            <div class="response-row">
+              <span class="status-badge s-200">200 OK</span>
+              <span class="response-label">Dispatch object with runner details and live ETA</span>
+            </div>
+            <div class="code-block-wrap">
+              <div class="code-block-wrap__header">
+                <span class="code-block-wrap__label">JSON</span>
+                <button class="copy-btn">Copy</button>
+              </div>
+<pre><span class="t-punc">{</span>
+  <span class="t-key">"id"</span><span class="t-punc">:</span> <span class="t-str">"dsp_01HX3KPQRS"</span><span class="t-punc">,</span>
+  <span class="t-key">"status"</span><span class="t-punc">:</span> <span class="t-str">"en_route"</span><span class="t-punc">,</span>
+  <span class="t-key">"runner"</span><span class="t-punc">: {</span>
+    <span class="t-key">"id"</span><span class="t-punc">:</span> <span class="t-str">"run_EMEKA04"</span><span class="t-punc">,</span>
+    <span class="t-key">"name"</span><span class="t-punc">:</span> <span class="t-str">"Emeka O."</span><span class="t-punc">,</span>
+    <span class="t-key">"phone"</span><span class="t-punc">:</span> <span class="t-str">"+2348055555555"</span><span class="t-punc">,</span>
+    <span class="t-key">"rating"</span><span class="t-punc">:</span> <span class="t-num">4.9</span>
+  <span class="t-punc">},</span>
+  <span class="t-key">"eta_minutes"</span><span class="t-punc">:</span> <span class="t-num">18</span><span class="t-punc">,</span>
+  <span class="t-key">"pickup_time"</span><span class="t-punc">:</span> <span class="t-str">"2026-05-24T10:07:43Z"</span><span class="t-punc">,</span>
+  <span class="t-key">"estimated_delivery"</span><span class="t-punc">:</span> <span class="t-str">"2026-05-24T10:42:00Z"</span><span class="t-punc">,</span>
+  <span class="t-key">"delivered_at"</span><span class="t-punc">:</span> <span class="t-bool">null</span><span class="t-punc">,</span>
+  <span class="t-key">"reference"</span><span class="t-punc">:</span> <span class="t-str">"ORD-20260524-001"</span>
+<span class="t-punc">}</span></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- GET /v1/dispatches -->
+      <section class="docs-section" id="dispatch-list">
+        <h2>List Dispatches</h2>
+        <p>Returns a paginated list of all dispatches for your account, ordered by creation time (newest first).</p>
+
+        <div class="endpoint-card">
+          <div class="endpoint-card__head">
+            <span class="endpoint-card__method endpoint-card__method--get">GET</span>
+            <span class="endpoint-card__path">/v1/dispatches</span>
+            <span class="endpoint-card__desc">Paginated list of dispatches</span>
+          </div>
+          <div class="endpoint-card__body">
+
+            <h3>Query Parameters</h3>
+            <table class="params-table">
+              <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><span class="param-name">limit</span></td>
+                  <td><span class="param-type">integer</span></td>
+                  <td><span class="param-opt">Optional</span></td>
+                  <td class="param-desc">Number of results per page. Default <code>20</code>, max <code>100</code>.</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">cursor</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-opt">Optional</span></td>
+                  <td class="param-desc">Cursor for pagination. Use <code>next_cursor</code> from the previous response.</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">status</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-opt">Optional</span></td>
+                  <td class="param-desc">Filter by status: <code>queued</code>, <code>dispatched</code>, <code>en_route</code>, <code>delivered</code>, <code>cancelled</code>, <code>failed</code>.</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">from</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-opt">Optional</span></td>
+                  <td class="param-desc">ISO 8601 date. Return dispatches created after this date.</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">to</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-opt">Optional</span></td>
+                  <td class="param-desc">ISO 8601 date. Return dispatches created before this date.</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="code-block-wrap">
+              <div class="code-block-wrap__header">
+                <span class="code-block-wrap__label">cURL</span>
+                <button class="copy-btn" data-copy='curl "https://api.zallyerrands.com/v1/dispatches?status=en_route&limit=10" -H "Authorization: Bearer za_live_sk_xxxx"'>Copy</button>
+              </div>
+<pre><span class="t-fn">curl</span> <span class="t-str">"https://api.zallyerrands.com/v1/dispatches?status=en_route&amp;limit=10"</span> \
+  <span class="t-kw">-H</span> <span class="t-str">"Authorization: Bearer za_live_sk_xxxx"</span></pre>
+            </div>
+
+            <h3>Response</h3>
+            <div class="code-block-wrap">
+              <div class="code-block-wrap__header">
+                <span class="code-block-wrap__label">JSON</span>
+                <button class="copy-btn">Copy</button>
+              </div>
+<pre><span class="t-punc">{</span>
+  <span class="t-key">"data"</span><span class="t-punc">: [</span>
+    <span class="t-punc">{ </span><span class="t-key">"id"</span><span class="t-punc">:</span> <span class="t-str">"dsp_01HX3KPQRS"</span><span class="t-punc">,</span> <span class="t-key">"status"</span><span class="t-punc">:</span> <span class="t-str">"en_route"</span><span class="t-punc">,</span> <span class="t-key">"eta_minutes"</span><span class="t-punc">:</span> <span class="t-num">18</span> <span class="t-punc">},</span>
+    <span class="t-punc">{ </span><span class="t-key">"id"</span><span class="t-punc">:</span> <span class="t-str">"dsp_01HX2MNOPQ"</span><span class="t-punc">,</span> <span class="t-key">"status"</span><span class="t-punc">:</span> <span class="t-str">"en_route"</span><span class="t-punc">,</span> <span class="t-key">"eta_minutes"</span><span class="t-punc">:</span> <span class="t-num">34</span> <span class="t-punc">}</span>
+  <span class="t-punc">],</span>
+  <span class="t-key">"count"</span><span class="t-punc">:</span> <span class="t-num">2</span><span class="t-punc">,</span>
+  <span class="t-key">"next_cursor"</span><span class="t-punc">:</span> <span class="t-bool">null</span><span class="t-punc">,</span>
+  <span class="t-key">"has_more"</span><span class="t-punc">:</span> <span class="t-bool">false</span>
+<span class="t-punc">}</span></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- DELETE /v1/dispatch/:id -->
+      <section class="docs-section" id="dispatch-cancel">
+        <h2>Cancel a Dispatch</h2>
+        <p>Cancels a dispatch that hasn't yet been picked up. Once a runner has confirmed pickup, cancellation is not possible via the API — contact support.</p>
+
+        <div class="endpoint-card">
+          <div class="endpoint-card__head">
+            <span class="endpoint-card__method endpoint-card__method--del">DEL</span>
+            <span class="endpoint-card__path">/v1/dispatch/:id</span>
+            <span class="endpoint-card__desc">Cancel a queued or dispatched run</span>
+          </div>
+          <div class="endpoint-card__body">
+            <div class="alert alert--warn">
+              <strong>Note:</strong> Cancellations on dispatches with status <code>en_route</code> or <code>delivered</code> will return a <code>409 Conflict</code> error.
+            </div>
+            <div class="code-block-wrap">
+              <div class="code-block-wrap__header">
+                <span class="code-block-wrap__label">cURL</span>
+                <button class="copy-btn" data-copy='curl -X DELETE https://api.zallyerrands.com/v1/dispatch/dsp_01HX3KPQRS -H "Authorization: Bearer za_live_sk_xxxx"'>Copy</button>
+              </div>
+<pre><span class="t-fn">curl</span> <span class="t-kw">-X</span> DELETE <span class="t-str">https://api.zallyerrands.com/v1/dispatch/dsp_01HX3KPQRS</span> \
+  <span class="t-kw">-H</span> <span class="t-str">"Authorization: Bearer za_live_sk_xxxx"</span></pre>
+            </div>
+            <div class="response-row"><span class="status-badge s-200">200 OK</span><span class="response-label">Returns the cancelled dispatch object with <code>status: "cancelled"</code></span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- WEBHOOKS -->
+      <section class="docs-section" id="webhooks">
+        <div class="docs-section__label">// WEBHOOKS</div>
+        <h2>Webhook Events</h2>
+        <p>Za.allyErrands sends <code>POST</code> requests to your registered webhook URL as a dispatch moves through its lifecycle. Register your URL in the <a href="../business-portal/index.html" style="color:var(--orange)">Business Portal → API Keys</a> tab.</p>
+
+        <div class="event-card">
+          <div class="event-card__name">dispatch.queued</div>
+          <div class="event-card__desc">Fired immediately after a dispatch is created and enters the queue.</div>
+        </div>
+        <div class="event-card">
+          <div class="event-card__name">dispatch.runner_assigned</div>
+          <div class="event-card__desc">A runner has accepted the job. Includes runner name and contact details.</div>
+        </div>
+        <div class="event-card">
+          <div class="event-card__name">dispatch.picked_up</div>
+          <div class="event-card__desc">Runner has collected the item. Photo proof attached as a signed URL.</div>
+        </div>
+        <div class="event-card">
+          <div class="event-card__name">dispatch.en_route</div>
+          <div class="event-card__desc">Dispatch is in transit. ETA is updated every 5 minutes.</div>
+        </div>
+        <div class="event-card">
+          <div class="event-card__name">dispatch.delivered</div>
+          <div class="event-card__desc">Delivery confirmed. Includes delivery timestamp and photo proof URL.</div>
+        </div>
+        <div class="event-card">
+          <div class="event-card__name">dispatch.failed</div>
+          <div class="event-card__desc">Delivery failed after 3 attempts. Includes failure reason and next steps.</div>
+        </div>
+        <div class="event-card">
+          <div class="event-card__name">dispatch.cancelled</div>
+          <div class="event-card__desc">Dispatch was cancelled. Triggered whether cancelled via API or by support.</div>
+        </div>
+
+        <h3>Webhook payload shape</h3>
+        <div class="code-block-wrap">
+          <div class="code-block-wrap__header">
+            <span class="code-block-wrap__label">JSON</span>
+            <button class="copy-btn">Copy</button>
+          </div>
+<pre><span class="t-punc">{</span>
+  <span class="t-key">"id"</span><span class="t-punc">:</span>          <span class="t-str">"evt_01HXAB12CD"</span><span class="t-punc">,</span>
+  <span class="t-key">"type"</span><span class="t-punc">:</span>        <span class="t-str">"dispatch.delivered"</span><span class="t-punc">,</span>
+  <span class="t-key">"created_at"</span><span class="t-punc">:</span>  <span class="t-str">"2026-05-24T10:44:51Z"</span><span class="t-punc">,</span>
+  <span class="t-key">"data"</span><span class="t-punc">: {</span>
+    <span class="t-key">"dispatch_id"</span><span class="t-punc">:</span> <span class="t-str">"dsp_01HX3KPQRS"</span><span class="t-punc">,</span>
+    <span class="t-key">"status"</span><span class="t-punc">:</span>      <span class="t-str">"delivered"</span><span class="t-punc">,</span>
+    <span class="t-key">"reference"</span><span class="t-punc">:</span>   <span class="t-str">"ORD-20260524-001"</span><span class="t-punc">,</span>
+    <span class="t-key">"delivered_at"</span><span class="t-punc">:</span><span class="t-str">"2026-05-24T10:44:51Z"</span><span class="t-punc">,</span>
+    <span class="t-key">"proof_url"</span><span class="t-punc">:</span>   <span class="t-str">"https://cdn.zallyerrands.com/proof/dsp_01HX3K..."</span>
+  <span class="t-punc">}</span>
+<span class="t-punc">}</span></pre>
+        </div>
+      </section>
+
+      <!-- WEBHOOK VERIFY -->
+      <section class="docs-section" id="webhook-verify">
+        <h2>Verifying Payloads</h2>
+        <p>Each webhook request includes a <code>Za-Signature</code> header — an HMAC-SHA256 hex digest of the raw request body, signed with your webhook secret. Always verify this before processing.</p>
+        <div class="code-tabs" id="tabs-verify">
+          <button class="code-tab active" data-panel="verify-js">Node.js</button>
+          <button class="code-tab" data-panel="verify-py">Python</button>
+        </div>
+        <div class="code-block-wrap code-block-wrap--tabbed">
+          <div class="code-block-wrap__header">
+            <span class="code-block-wrap__label" id="label-verify">Node.js</span>
+            <button class="copy-btn" id="copy-verify">Copy</button>
+          </div>
+          <div class="code-panel active" id="verify-js">
+<pre><span class="t-kw">import</span> <span class="t-var">crypto</span> <span class="t-kw">from</span> <span class="t-str">'node:crypto'</span><span class="t-punc">;</span>
+
+<span class="t-kw">function</span> <span class="t-fn">verifyWebhook</span><span class="t-punc">(</span><span class="t-var">rawBody</span><span class="t-punc">,</span> <span class="t-var">signature</span><span class="t-punc">,</span> <span class="t-var">secret</span><span class="t-punc">) {</span>
+  <span class="t-kw">const</span> <span class="t-var">expected</span> <span class="t-punc">=</span> <span class="t-var">crypto</span>
+    <span class="t-punc">.</span><span class="t-fn">createHmac</span><span class="t-punc">(</span><span class="t-str">'sha256'</span><span class="t-punc">,</span> <span class="t-var">secret</span><span class="t-punc">)</span>
+    <span class="t-punc">.</span><span class="t-fn">update</span><span class="t-punc">(</span><span class="t-var">rawBody</span><span class="t-punc">)</span>
+    <span class="t-punc">.</span><span class="t-fn">digest</span><span class="t-punc">(</span><span class="t-str">'hex'</span><span class="t-punc">);</span>
+  <span class="t-kw">return</span> <span class="t-var">crypto</span><span class="t-punc">.</span><span class="t-fn">timingSafeEqual</span><span class="t-punc">(</span>
+    <span class="t-var">Buffer</span><span class="t-punc">.</span><span class="t-fn">from</span><span class="t-punc">(</span><span class="t-var">expected</span><span class="t-punc">),</span>
+    <span class="t-var">Buffer</span><span class="t-punc">.</span><span class="t-fn">from</span><span class="t-punc">(</span><span class="t-var">signature</span><span class="t-punc">)</span>
+  <span class="t-punc">);</span>
+<span class="t-punc">}</span></pre>
+          </div>
+          <div class="code-panel" id="verify-py">
+<pre><span class="t-kw">import</span> <span class="t-var">hmac</span><span class="t-punc">,</span> <span class="t-var">hashlib</span>
+
+<span class="t-kw">def</span> <span class="t-fn">verify_webhook</span><span class="t-punc">(</span><span class="t-var">raw_body</span><span class="t-punc">:</span> <span class="t-fn">bytes</span><span class="t-punc">,</span> <span class="t-var">signature</span><span class="t-punc">:</span> <span class="t-fn">str</span><span class="t-punc">,</span> <span class="t-var">secret</span><span class="t-punc">:</span> <span class="t-fn">str</span><span class="t-punc">) -></span> <span class="t-fn">bool</span><span class="t-punc">:</span>
+  <span class="t-var">expected</span> <span class="t-punc">=</span> <span class="t-var">hmac</span><span class="t-punc">.</span><span class="t-fn">new</span><span class="t-punc">(</span>
+    <span class="t-var">secret</span><span class="t-punc">.</span><span class="t-fn">encode</span><span class="t-punc">(),</span> <span class="t-var">raw_body</span><span class="t-punc">,</span> <span class="t-var">hashlib</span><span class="t-punc">.</span><span class="t-var">sha256</span>
+  <span class="t-punc">).</span><span class="t-fn">hexdigest</span><span class="t-punc">()</span>
+  <span class="t-kw">return</span> <span class="t-var">hmac</span><span class="t-punc">.</span><span class="t-fn">compare_digest</span><span class="t-punc">(</span><span class="t-var">expected</span><span class="t-punc">,</span> <span class="t-var">signature</span><span class="t-punc">)</span></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- NODE SDK -->
+      <section class="docs-section" id="sdk-node">
+        <div class="docs-section__label">// SDKs</div>
+        <h2>Node.js SDK</h2>
+        <p>The official Node.js SDK wraps all API endpoints and webhook verification with TypeScript types.</p>
+        <div class="code-block-wrap">
+          <div class="code-block-wrap__header">
+            <span class="code-block-wrap__label">Install</span>
+            <button class="copy-btn" data-copy="npm install @zallyerrands/sdk">Copy</button>
+          </div>
+<pre><span class="t-fn">npm</span> install <span class="t-str">@zallyerrands/sdk</span></pre>
+        </div>
+        <div class="code-block-wrap">
+          <div class="code-block-wrap__header">
+            <span class="code-block-wrap__label">TypeScript</span>
+            <button class="copy-btn">Copy</button>
+          </div>
+<pre><span class="t-kw">import</span> <span class="t-var">AllyErrands</span><span class="t-punc">,</span> <span class="t-punc">{</span> <span class="t-var">Dispatch</span> <span class="t-punc">}</span> <span class="t-kw">from</span> <span class="t-str">'@zallyerrands/sdk'</span><span class="t-punc">;</span>
+
+<span class="t-kw">const</span> <span class="t-var">client</span> <span class="t-punc">=</span> <span class="t-kw">new</span> <span class="t-fn">AllyErrands</span><span class="t-punc">({</span>
+  <span class="t-key">apiKey</span><span class="t-punc">:</span> <span class="t-var">process</span><span class="t-punc">.</span><span class="t-var">env</span><span class="t-punc">.</span><span class="t-key">ZALLYERRANDS_API_KEY</span><span class="t-punc">!</span>
+<span class="t-punc">});</span>
+
+<span class="t-cmt">// Typed dispatch creation</span>
+<span class="t-kw">const</span> <span class="t-var">dispatch</span><span class="t-punc">:</span> <span class="t-var">Dispatch</span> <span class="t-punc">=</span> <span class="t-kw">await</span> <span class="t-var">client</span><span class="t-punc">.</span><span class="t-fn">dispatch</span><span class="t-punc">.</span><span class="t-fn">create</span><span class="t-punc">({</span>
+  <span class="t-key">pickupAddress</span><span class="t-punc">:</span>    <span class="t-str">'14 Adeola Odeku, VI'</span><span class="t-punc">,</span>
+  <span class="t-key">dropoffAddress</span><span class="t-punc">:</span>   <span class="t-str">'42 Admiralty Way, Lekki'</span><span class="t-punc">,</span>
+  <span class="t-key">itemDescription</span><span class="t-punc">:</span> <span class="t-str">'Documents'</span><span class="t-punc">,</span>
+  <span class="t-key">recipientName</span><span class="t-punc">:</span>   <span class="t-str">'Amara Okafor'</span><span class="t-punc">,</span>
+  <span class="t-key">recipientPhone</span><span class="t-punc">:</span>  <span class="t-str">'+2348012345678'</span>
+<span class="t-punc">});</span>
+
+<span class="t-cmt">// Iterate all active dispatches</span>
+<span class="t-kw">for await</span> <span class="t-punc">(</span><span class="t-kw">const</span> <span class="t-var">d</span> <span class="t-kw">of</span> <span class="t-var">client</span><span class="t-punc">.</span><span class="t-fn">dispatch</span><span class="t-punc">.</span><span class="t-fn">list</span><span class="t-punc">({</span> <span class="t-key">status</span><span class="t-punc">:</span> <span class="t-str">'en_route'</span> <span class="t-punc">})) {</span>
+  <span class="t-var">console</span><span class="t-punc">.</span><span class="t-fn">log</span><span class="t-punc">(</span><span class="t-var">d</span><span class="t-punc">.</span><span class="t-key">id</span><span class="t-punc">,</span> <span class="t-var">d</span><span class="t-punc">.</span><span class="t-key">eta_minutes</span><span class="t-punc">);</span>
+<span class="t-punc">}</span></pre>
+        </div>
+      </section>
+
+      <!-- PYTHON SDK -->
+      <section class="docs-section" id="sdk-python">
+        <h2>Python SDK</h2>
+        <p>The Python SDK supports both synchronous and async usage via <code>asyncio</code>.</p>
+        <div class="code-block-wrap">
+          <div class="code-block-wrap__header">
+            <span class="code-block-wrap__label">Install</span>
+            <button class="copy-btn" data-copy="pip install zallyerrands">Copy</button>
+          </div>
+<pre><span class="t-fn">pip</span> install <span class="t-str">zallyerrands</span></pre>
+        </div>
+        <div class="code-block-wrap">
+          <div class="code-block-wrap__header">
+            <span class="code-block-wrap__label">Python (async)</span>
+            <button class="copy-btn">Copy</button>
+          </div>
+<pre><span class="t-kw">import</span> <span class="t-var">asyncio</span>
+<span class="t-kw">import</span> <span class="t-var">zallyerrands</span>
+
+<span class="t-kw">async def</span> <span class="t-fn">main</span><span class="t-punc">():</span>
+  <span class="t-var">client</span> <span class="t-punc">=</span> <span class="t-fn">zallyerrands</span><span class="t-punc">.</span><span class="t-fn">AsyncClient</span><span class="t-punc">(</span><span class="t-key">api_key</span><span class="t-punc">=</span><span class="t-str">"za_live_sk_xxxx"</span><span class="t-punc">)</span>
+
+  <span class="t-var">dispatch</span> <span class="t-punc">=</span> <span class="t-kw">await</span> <span class="t-var">client</span><span class="t-punc">.</span><span class="t-fn">dispatch</span><span class="t-punc">.</span><span class="t-fn">create</span><span class="t-punc">(</span>
+    <span class="t-key">pickup_address</span><span class="t-punc">=</span>    <span class="t-str">"14 Adeola Odeku, VI"</span><span class="t-punc">,</span>
+    <span class="t-key">dropoff_address</span><span class="t-punc">=</span>   <span class="t-str">"42 Admiralty Way, Lekki"</span><span class="t-punc">,</span>
+    <span class="t-key">item_description</span><span class="t-punc">=</span> <span class="t-str">"Documents"</span><span class="t-punc">,</span>
+    <span class="t-key">recipient_name</span><span class="t-punc">=</span>   <span class="t-str">"Amara Okafor"</span><span class="t-punc">,</span>
+    <span class="t-key">recipient_phone</span><span class="t-punc">=</span>  <span class="t-str">"+2348012345678"</span>
+  <span class="t-punc">)</span>
+  <span class="t-fn">print</span><span class="t-punc">(</span><span class="t-var">dispatch</span><span class="t-punc">.</span><span class="t-key">id</span><span class="t-punc">)</span>
+
+<span class="t-var">asyncio</span><span class="t-punc">.</span><span class="t-fn">run</span><span class="t-punc">(</span><span class="t-fn">main</span><span class="t-punc">())</span></pre>
+        </div>
+      </section>
+
+      <!-- RATE LIMITS -->
+      <section class="docs-section" id="rate-limits">
+        <div class="docs-section__label">// REFERENCE</div>
+        <h2>Rate Limits</h2>
+        <p>Rate limits are enforced per API key per rolling 60-second window. Exceeding a limit returns <code>429 Too Many Requests</code>. Limits reset automatically.</p>
+        <div class="rate-meter">
+          <div class="rate-item">
+            <div class="rate-item__label">Business</div>
+            <div class="rate-item__val">120 <span>req/min</span></div>
+          </div>
+          <div class="rate-item">
+            <div class="rate-item__label">Enterprise</div>
+            <div class="rate-item__val">600 <span>req/min</span></div>
+          </div>
+          <div class="rate-item">
+            <div class="rate-item__label">Sandbox</div>
+            <div class="rate-item__val">30 <span>req/min</span></div>
+          </div>
+        </div>
+        <p>Rate limit headers are included on every response:</p>
+        <div class="code-block-wrap">
+          <div class="code-block-wrap__header">
+            <span class="code-block-wrap__label">Response Headers</span>
+            <button class="copy-btn">Copy</button>
+          </div>
+<pre><span class="t-key">X-RateLimit-Limit</span><span class="t-punc">:     </span><span class="t-num">120</span>
+<span class="t-key">X-RateLimit-Remaining</span><span class="t-punc">: </span><span class="t-num">87</span>
+<span class="t-key">X-RateLimit-Reset</span><span class="t-punc">:     </span><span class="t-num">1716545460</span></pre>
+        </div>
+      </section>
+
+      <!-- ERRORS -->
+      <section class="docs-section" id="errors">
+        <h2>Error Codes</h2>
+        <p>All errors return a JSON body with a machine-readable <code>code</code> and a human-readable <code>message</code>.</p>
+        <div class="code-block-wrap" style="margin-bottom:24px;">
+          <div class="code-block-wrap__header">
+            <span class="code-block-wrap__label">Error shape</span>
+            <button class="copy-btn">Copy</button>
+          </div>
+<pre><span class="t-punc">{</span>
+  <span class="t-key">"error"</span><span class="t-punc">: {</span>
+    <span class="t-key">"code"</span><span class="t-punc">:</span>    <span class="t-str">"DISPATCH_NOT_CANCELLABLE"</span><span class="t-punc">,</span>
+    <span class="t-key">"message"</span><span class="t-punc">:</span> <span class="t-str">"Cannot cancel a dispatch with status en_route."</span><span class="t-punc">,</span>
+    <span class="t-key">"status"</span><span class="t-punc">:</span>  <span class="t-num">409</span>
+  <span class="t-punc">}</span>
+<span class="t-punc">}</span></pre>
+        </div>
+        <div class="error-grid">
+          <div class="error-grid__row error-grid__head">
+            <div>HTTP</div>
+            <div>Code</div>
+            <div class="param-desc-col">Meaning</div>
+          </div>
+          <div class="error-grid__row">
+            <div><span class="status-badge s-400">400</span></div>
+            <div class="e-code">INVALID_REQUEST</div>
+            <div class="param-desc-col param-desc">Missing or malformed field in request body.</div>
+          </div>
+          <div class="error-grid__row">
+            <div><span class="status-badge s-401">401</span></div>
+            <div class="e-code">UNAUTHORIZED</div>
+            <div class="param-desc-col param-desc">API key is missing, expired, or invalid.</div>
+          </div>
+          <div class="error-grid__row">
+            <div><span class="status-badge s-400">404</span></div>
+            <div class="e-code">DISPATCH_NOT_FOUND</div>
+            <div class="param-desc-col param-desc">No dispatch with that ID exists under your account.</div>
+          </div>
+          <div class="error-grid__row">
+            <div><span class="status-badge s-400">409</span></div>
+            <div class="e-code">DISPATCH_NOT_CANCELLABLE</div>
+            <div class="param-desc-col param-desc">Dispatch is already en route or delivered.</div>
+          </div>
+          <div class="error-grid__row">
+            <div><span class="status-badge s-429">429</span></div>
+            <div class="e-code">RATE_LIMIT_EXCEEDED</div>
+            <div class="param-desc-col param-desc">Too many requests. See <code>X-RateLimit-Reset</code> header.</div>
+          </div>
+          <div class="error-grid__row">
+            <div><span class="status-badge s-400">422</span></div>
+            <div class="e-code">ZONE_NOT_SUPPORTED</div>
+            <div class="param-desc-col param-desc">Pickup or dropoff address is outside active service zones.</div>
+          </div>
+          <div class="error-grid__row">
+            <div><span class="status-badge s-500">500</span></div>
+            <div class="e-code">INTERNAL_ERROR</div>
+            <div class="param-desc-col param-desc">Something went wrong on our end. Retry with exponential backoff.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CHANGELOG -->
+      <section class="docs-section" id="changelog">
+        <h2>Changelog</h2>
+        <h3>v1.0 — May 2026</h3>
+        <ul>
+          <li>Initial public API release</li>
+          <li><code>POST /v1/dispatch</code> — create dispatch</li>
+          <li><code>GET /v1/dispatch/:id</code> — retrieve single dispatch</li>
+          <li><code>GET /v1/dispatches</code> — list dispatches with cursor pagination</li>
+          <li><code>DELETE /v1/dispatch/:id</code> — cancel dispatch</li>
+          <li>Webhook events: 7 lifecycle events with HMAC verification</li>
+          <li>Node.js and Python SDKs (closed beta)</li>
+        </ul>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // ── Tab switching ──
+    document.querySelectorAll('.code-tabs').forEach(tabGroup => {
+      const tabs = tabGroup.querySelectorAll('.code-tab');
+      const groupId = tabGroup.id;
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const panelId = tab.dataset.panel;
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const wrap = tabGroup.nextElementSibling;
+          wrap.querySelectorAll('.code-panel').forEach(p => p.classList.remove('active'));
+          const target = document.getElementById(panelId);
+          if (target) target.classList.add('active');
+          const label = wrap.querySelector('[id^="label-"]');
+          if (label) label.textContent = tab.textContent;
+        });
+      });
+    });
+
+    // ── Copy buttons ──
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        let text = btn.dataset.copy;
+        if (!text) {
+          // Find the nearest pre block
+          const wrap = btn.closest('.code-block-wrap');
+          const pre = wrap ? wrap.querySelector('pre') : null;
+          text = pre ? pre.innerText : '';
+        }
+        navigator.clipboard.writeText(text).then(() => {
+          const orig = btn.textContent;
+          btn.textContent = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 1500);
+        });
+      });
+    });
+
+    // ── Scroll-spy sidebar ──
+    const sidebarLinks = document.querySelectorAll('.sidebar-link');
+    const sections = document.querySelectorAll('.docs-section');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          sidebarLinks.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.sidebar-link[href="#${id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -60% 0px' });
+    sections.forEach(s => observer.observe(s));
+  </script>
+</body>
+</html>
