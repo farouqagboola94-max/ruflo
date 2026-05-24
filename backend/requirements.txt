@@ -1,0 +1,6 @@
+fastapi>=0.110.0
+uvicorn[standard]>=0.27.0
+python-multipart>=0.0.9
+rembg[gpu]>=2.0.56
+openai-whisper>=20231117
+numpy<2.0

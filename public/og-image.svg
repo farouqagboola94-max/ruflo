@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="glow1" cx="85%" cy="45%" r="45%">
+      <stop offset="0%" stop-color="#F5A623" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#0A0A0A" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="12%" cy="78%" r="38%">
+      <stop offset="0%" stop-color="#00F0FF" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#0A0A0A" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="accentBar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F5A623"/>
+      <stop offset="55%" stop-color="#FF2D7B"/>
+      <stop offset="100%" stop-color="#F5A623" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="festGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#F5A623"/>
+      <stop offset="100%" stop-color="#FF8C00"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#0A0A0A"/>
+
+  <!-- Subtle grid -->
+  <g stroke="#ffffff" stroke-opacity="0.04" stroke-width="1">
+    <line x1="0" y1="90" x2="1200" y2="90"/>
+    <line x1="0" y1="180" x2="1200" y2="180"/>
+    <line x1="0" y1="270" x2="1200" y2="270"/>
+    <line x1="0" y1="360" x2="1200" y2="360"/>
+    <line x1="0" y1="450" x2="1200" y2="450"/>
+    <line x1="0" y1="540" x2="1200" y2="540"/>
+    <line x1="150" y1="0" x2="150" y2="630"/>
+    <line x1="300" y1="0" x2="300" y2="630"/>
+    <line x1="450" y1="0" x2="450" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="750" y1="0" x2="750" y2="630"/>
+    <line x1="900" y1="0" x2="900" y2="630"/>
+    <line x1="1050" y1="0" x2="1050" y2="630"/>
+  </g>
+
+  <!-- Ambient glow blobs -->
+  <rect width="1200" height="630" fill="url(#glow1)"/>
+  <rect width="1200" height="630" fill="url(#glow2)"/>
+
+  <!-- Concentric target arcs (right side decoration) -->
+  <g transform="translate(1110,315)" fill="none">
+    <circle r="310" stroke="#F5A623" stroke-opacity="0.05" stroke-width="70"/>
+    <circle r="210" stroke="#F5A623" stroke-opacity="0.07" stroke-width="48"/>
+    <circle r="130" stroke="#F5A623" stroke-opacity="0.10" stroke-width="28"/>
+    <circle r="68"  stroke="#F5A623" stroke-opacity="0.14" stroke-width="14"/>
+    <circle r="24"  fill="#F5A623"   fill-opacity="0.22"/>
+  </g>
+
+  <!-- Left amber accent bar -->
+  <rect x="60" y="105" width="6" height="275" fill="url(#accentBar)" rx="3"/>
+
+  <!-- SNEAKERS -->
+  <text
+    x="92" y="245"
+    font-family="'Arial Black', Impact, 'Helvetica Neue', sans-serif"
+    font-size="132" font-weight="900" fill="#FFFFFF" letter-spacing="-3"
+  >SNEAKERS</text>
+
+  <!-- FEST '26 -->
+  <text
+    x="92" y="392"
+    font-family="'Arial Black', Impact, 'Helvetica Neue', sans-serif"
+    font-size="132" font-weight="900" fill="url(#festGrad)" letter-spacing="-3"
+  >FEST '26</text>
+
+  <!-- Divider -->
+  <rect x="92" y="418" width="660" height="2" fill="#F5A623" fill-opacity="0.28" rx="1"/>
+
+  <!-- THE SOLE EXHIBITION -->
+  <text
+    x="92" y="458"
+    font-family="Arial, 'Helvetica Neue', sans-serif"
+    font-size="20" fill="#FFFFFF" fill-opacity="0.50" letter-spacing="10"
+  >THE SOLE EXHIBITION</text>
+
+  <!-- Date chip -->
+  <rect x="92" y="476" width="328" height="44" fill="#F5A623" fill-opacity="0.10" rx="8" stroke="#F5A623" stroke-opacity="0.28" stroke-width="1"/>
+  <text
+    x="112" y="504"
+    font-family="'Arial Black', sans-serif"
+    font-size="18" font-weight="900" fill="#F5A623" letter-spacing="2"
+  >DECEMBER 12, 2026</text>
+
+  <!-- Venue -->
+  <text
+    x="92" y="552"
+    font-family="Arial, sans-serif"
+    font-size="17" fill="#FFFFFF" fill-opacity="0.42" letter-spacing="3"
+  >EKO ATLANTIC CITY · LAGOS, NIGERIA</text>
+
+  <!-- W.AFRICA badge (top right) -->
+  <rect x="944" y="46" width="210" height="38" rx="19" fill="#F5A623" fill-opacity="0.10" stroke="#F5A623" stroke-opacity="0.28" stroke-width="1"/>
+  <text
+    x="1049" y="71"
+    font-family="'Arial Black', sans-serif"
+    font-size="11" font-weight="900" fill="#F5A623" text-anchor="middle" letter-spacing="2"
+  >W.AFRICA PREMIER EVENT</text>
+
+  <!-- URL bottom right -->
+  <text
+    x="1148" y="600"
+    font-family="Arial, sans-serif"
+    font-size="14" fill="#FFFFFF" fill-opacity="0.28" text-anchor="end" letter-spacing="1"
+  >sneakers-fest-26.netlify.app</text>
+</svg>

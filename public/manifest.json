@@ -1,0 +1,34 @@
+{
+  "name": "Sneakers Fest '26",
+  "short_name": "SF'26",
+  "description": "West Africa's premier sneaker culture event. December 12, 2026 · Eko Atlantic, Lagos.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A0A0A",
+  "theme_color": "#F5A623",
+  "orientation": "portrait-primary",
+  "categories": ["entertainment", "events", "lifestyle"],
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/og-image.svg",
+      "type": "image/svg+xml",
+      "sizes": "1200x630",
+      "form_factor": "wide"
+    }
+  ]
+}
