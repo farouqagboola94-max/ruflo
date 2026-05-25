@@ -40,7 +40,7 @@ export default function HomePage() {
 
   return (
     <>
-      {/* ── HERO ── */}
+      {/* HERO */}
       <section
         className="relative min-h-screen flex items-center justify-center overflow-hidden"
         style={{ background: 'linear-gradient(135deg, #000000 0%, #0a0a0a 40%, #0d0d07 70%, #0a0a0a 100%)' }}
@@ -101,7 +101,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── FEATURED MODELS ── */}
+      {/* FEATURED MODELS */}
       <section className="py-24 px-4 max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-14">
           <div>
@@ -131,7 +131,7 @@ export default function HomePage() {
         <div className="h-px bg-gradient-to-r from-transparent via-[#D4AF37]/15 to-transparent" />
       </div>
 
-      {/* ── DIVISIONS ── */}
+      {/* DIVISIONS */}
       <section className="py-24 px-4 max-w-7xl mx-auto">
         <div className="mb-14">
           <p className="text-[#D4AF37] text-[10px] tracking-[0.4em] uppercase mb-3">What We Represent</p>
@@ -162,7 +162,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── SERVICES TEASER ── */}
+      {/* SERVICES TEASER */}
       <section
         className="py-24 px-4"
         style={{ background: 'linear-gradient(135deg, #0d0d0d 0%, #111108 100%)' }}
@@ -198,7 +198,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── ABOUT SNIPPET ── */}
+      {/* ABOUT SNIPPET */}
       <section className="py-24 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-[#D4AF37] text-[10px] tracking-[0.4em] uppercase mb-6">Our Story</p>
@@ -235,7 +235,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── BE FIRST CTA (replaces testimonials) ── */}
+      {/* BE FIRST CTA */}
       <section
         className="py-24 px-4"
         style={{ background: 'linear-gradient(180deg, #0a0a0a 0%, #111108 100%)' }}
@@ -267,7 +267,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── NEWS TEASER (coming soon) ── */}
+      {/* NEWS TEASER */}
       <section className="py-24 px-4 max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-14">
           <div>
@@ -289,7 +289,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── APPLY CTA BANNER ── */}
+      {/* APPLY CTA BANNER */}
       <section className="py-24 px-4 max-w-7xl mx-auto">
         <div
           className="relative overflow-hidden p-12 sm:p-20 text-center"
