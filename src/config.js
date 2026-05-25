@@ -11,6 +11,8 @@ export const SOCIAL_LINKS = {
   // Direct DM links for the floating contact button
   whatsappContact1:  'https://wa.me/2347084111516?text=Hi%21%20I%20have%20a%20question%20about%20Sneakers%20Fest%20%2726%20%28December%2012%2C%20Lagos%29',
   whatsappContact2:  'https://wa.me/2349052685799?text=Hi%21%20I%20have%20a%20question%20about%20Sneakers%20Fest%20%2726%20%28December%2012%2C%20Lagos%29',
+  // Catalyst Concepts brands
+  catalystTalents:   'https://catalyst-talents-lagos.netlify.app/',
 }
 // ──────────────────────────────────────────────────────────────────────────
 

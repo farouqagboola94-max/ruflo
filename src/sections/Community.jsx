@@ -3,17 +3,18 @@ import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import { SOCIAL_LINKS } from '../config'
 
 const LINKS = {
-  tiktok:    SOCIAL_LINKS.tiktok,
-  youtube:   SOCIAL_LINKS.youtube,
-  twitter:   SOCIAL_LINKS.twitter,
-  instagram: SOCIAL_LINKS.instagram,
-  snapchat:  SOCIAL_LINKS.snapchat,
-  whatsapp:  SOCIAL_LINKS.whatsapp,
+  tiktok:          SOCIAL_LINKS.tiktok,
+  youtube:         SOCIAL_LINKS.youtube,
+  twitter:         SOCIAL_LINKS.twitter,
+  instagram:       SOCIAL_LINKS.instagram,
+  snapchat:        SOCIAL_LINKS.snapchat,
+  whatsapp:        SOCIAL_LINKS.whatsapp,
+  catalystTalents: SOCIAL_LINKS.catalystTalents,
 }
 
 const COMMUNITY_STATS = [
   { value: "5,000+", label: "COMMUNITY TARGET" },
-  { value: "6",     label: "ACTIVE PLATFORMS" },
+  { value: "7",     label: "CHANNELS" },
   { value: "365",   label: "DAYS A YEAR" },
   { value: "LIVE",  label: "RIGHT NOW", pulse: true },
 ]
@@ -215,6 +216,115 @@ function PlatformCard({ p }) {
   )
 }
 
+function CatalystTalentsCard() {
+  const gold = '#D4A017'
+  return (
+    <a href={LINKS.catalystTalents} target="_blank" rel="noopener noreferrer"
+      style={{ textDecoration: 'none', display: 'block' }}>
+      <div
+        style={{
+          position: 'relative', overflow: 'hidden', borderRadius: 12,
+          background: 'linear-gradient(135deg, rgba(212,160,23,0.10) 0%, rgba(255,255,255,0.05) 50%, rgba(212,160,23,0.06) 100%)',
+          border: `1px solid ${gold}50`,
+          boxShadow: `0 8px 48px rgba(0,0,0,0.6), 0 0 0 1px ${gold}18, inset 0 1px 0 rgba(255,255,255,0.08)`,
+          transition: 'all 0.3s ease',
+        }}
+        onMouseEnter={e => {
+          e.currentTarget.style.transform = 'translateY(-4px)'
+          e.currentTarget.style.borderColor = gold + 'aa'
+          e.currentTarget.style.boxShadow = `0 24px 72px rgba(0,0,0,0.7), 0 0 60px ${gold}20, inset 0 1px 0 rgba(255,255,255,0.10)`
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.transform = 'translateY(0)'
+          e.currentTarget.style.borderColor = gold + '50'
+          e.currentTarget.style.boxShadow = `0 8px 48px rgba(0,0,0,0.6), 0 0 0 1px ${gold}18, inset 0 1px 0 rgba(255,255,255,0.08)`
+        }}
+      >
+        {/* Gold gradient top bar */}
+        <div style={{ height: 4, background: `linear-gradient(90deg, ${gold}00, ${gold}ff, #fff8dc, ${gold}ff, ${gold}00)` }} />
+
+        {/* Ambient glow */}
+        <div style={{ position:'absolute', top:'-30%', right:'-5%', width:400, height:400,
+          background:`radial-gradient(circle, ${gold}12, transparent 65%)`, pointerEvents:'none' }} />
+        <div style={{ position:'absolute', bottom:'-20%', left:'10%', width:300, height:300,
+          background:`radial-gradient(circle, ${gold}08, transparent 65%)`, pointerEvents:'none' }} />
+
+        <div style={{ padding:'32px 36px', display:'flex', alignItems:'center',
+          gap:32, flexWrap:'wrap', position:'relative', zIndex:1 }}>
+
+          {/* Left: badge + text */}
+          <div style={{ flex:'1 1 320px', minWidth:0 }}>
+            <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:14 }}>
+              <div style={{ padding:'4px 12px', background:gold+'20', border:`1px solid ${gold}50`,
+                borderRadius:3, display:'flex', alignItems:'center', gap:7 }}>
+                <span style={{ fontSize:10 }}>◆</span>
+                <span style={{ fontFamily:"'Orbitron',monospace", fontSize:8, fontWeight:700,
+                  color:gold, letterSpacing:3 }}>TALENT AGENCY</span>
+              </div>
+              <div style={{ padding:'3px 10px', background:B.neonLime+'18',
+                border:`1px solid ${B.neonLime}40`, borderRadius:3,
+                fontFamily:"'Space Mono',monospace", fontSize:7,
+                color:B.neonLime, letterSpacing:2 }}>NEW</div>
+            </div>
+
+            <h3 style={{ fontFamily:"'Bebas Neue',sans-serif",
+              fontSize:'clamp(28px,4vw,48px)', lineHeight:0.95, letterSpacing:3,
+              marginBottom:4, color:'transparent',
+              background:`linear-gradient(135deg, #fff 30%, ${gold} 70%)`,
+              WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>
+              CATALYST TALENTS LAGOS
+            </h3>
+            <p style={{ fontFamily:"'Orbitron',monospace", fontSize:9, fontWeight:700,
+              color:gold, letterSpacing:4, marginBottom:14 }}>
+              WHERE CREATIVES BECOME ICONS
+            </p>
+            <p style={{ fontFamily:"'Syne',sans-serif", fontSize:13, color:B.smoke,
+              lineHeight:1.8, maxWidth:520, marginBottom:18 }}>
+              The official talent agency behind the movement. The Catalyst drafts, develops, and elevates creatives and artists — giving them the visibility, infrastructure, and platform they need to reach elite-level stardom.
+            </p>
+
+            <div style={{ display:'flex', flexWrap:'wrap', gap:6, marginBottom:0 }}>
+              {['TALENT ROSTER', 'CREATIVES', 'ARTISTS', 'ELITE LEVEL', 'VISIBILITY', 'STARDOM'].map(tag => (
+                <span key={tag} style={{ padding:'3px 9px',
+                  background:gold+'12', border:`1px solid ${gold}30`, borderRadius:2,
+                  fontFamily:"'Space Mono',monospace", fontSize:6, color:gold, letterSpacing:2 }}>
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Right: CTA block */}
+          <div style={{ display:'flex', flexDirection:'column', alignItems:'flex-end', gap:12, flexShrink:0 }}>
+            <div style={{ width:64, height:64, display:'flex', alignItems:'center', justifyContent:'center',
+              background:`linear-gradient(135deg, ${gold}22, ${gold}08)`,
+              border:`1px solid ${gold}50`, borderRadius:8,
+              boxShadow:`0 0 32px ${gold}20` }}>
+              <span style={{ fontFamily:"'Orbitron',monospace", fontSize:13, fontWeight:900,
+                color:gold, letterSpacing:1 }}>CT</span>
+            </div>
+            <div style={{ padding:'12px 24px',
+              background:`linear-gradient(135deg, ${gold}, #c49010)`,
+              borderRadius:6, cursor:'pointer',
+              fontFamily:"'Bebas Neue',sans-serif", fontSize:16,
+              color:B.black, letterSpacing:3, whiteSpace:'nowrap',
+              boxShadow:`0 0 32px ${gold}40` }}>
+              DISCOVER THE ROSTER →
+            </div>
+            <div style={{ fontFamily:"'Space Mono',monospace", fontSize:8,
+              color:B.smoke, letterSpacing:2, textAlign:'right' }}>
+              catalyst-talents-lagos.netlify.app
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom gradient rule */}
+        <div style={{ height:2, background:`linear-gradient(90deg, transparent, ${gold}40, transparent)` }} />
+      </div>
+    </a>
+  )
+}
+
 export default function Community() {
   return (
     <section id="community" style={{
@@ -246,7 +356,7 @@ export default function Community() {
         </div>
 
         <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: B.smoke, lineHeight: 1.8, maxWidth: 600, marginBottom: 36 }}>
-          One community, six platforms. Every Friday night the community activates via the Friday Night Protocol.
+          One community, seven channels. Every Friday night the community activates via the Friday Night Protocol.
           Join whichever platform fits your flow — games, drops, culture debates, and early access are waiting.
         </div>
 
@@ -278,8 +388,13 @@ export default function Community() {
           ))}
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 14, marginBottom: 40 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 14, marginBottom: 20 }}>
           {PLATFORMS.map((p, i) => <PlatformCard key={i} p={p} />)}
+        </div>
+
+        {/* Catalyst Talents Lagos — brand partner card */}
+        <div style={{ marginBottom: 40 }}>
+          <CatalystTalentsCard />
         </div>
 
         <div style={{
@@ -305,7 +420,7 @@ export default function Community() {
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               {[
                 { label: "EVERY FRIDAY", color: "#69C9D0" },
-                { label: "6 PLATFORMS", color: B.amber },
+                { label: "7 CHANNELS", color: B.amber },
                 { label: "ONLINE FIRST", color: "#E1306C" },
                 { label: "FNP YEAR-ROUND", color: B.neonLime },
               ].map((tag, i) => (
