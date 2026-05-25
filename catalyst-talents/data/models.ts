@@ -256,7 +256,7 @@ export const models: Model[] = [
     id: '16',
     name: 'Uche Nwankwo',
     category: 'Influencer',
-    tagline: 'Men\'s Fashion Creator · 350K+',
+    tagline: "Men's Fashion Creator · 350K+",
     bio: "Uche is redefining what Nigerian men's style looks like online. His 350K following is built on sharp, editorial-quality photography and a point of view that blends Igbo cultural pride with contemporary global menswear. Brands approach him for his ability to make any product feel aspirational without losing authenticity.",
     height: "6'0\"",
     eyes: 'Dark Brown',
