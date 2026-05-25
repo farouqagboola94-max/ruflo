@@ -1,0 +1,33 @@
+name: Deploy Catalyst Talents Lagos
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'catalyst-talents/**'
+      - 'netlify.toml'
+      - '.github/workflows/deploy-catalyst.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: catalyst-talents
+
+      - name: Build
+        run: npm run build
+        working-directory: catalyst-talents
+
+      - name: Deploy to Netlify
+        run: npx netlify-cli@latest deploy --prod --dir out --site ${{ secrets.NETLIFY_SITE_ID }}
+        working-directory: catalyst-talents
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
