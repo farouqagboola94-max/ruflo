@@ -7,7 +7,7 @@ import ClientProviders from '@/components/ClientProviders'
 
 export const metadata: Metadata = {
   title: 'SneakersFest 2026 | Africa\'s Ultimate Sneaker Culture Event',
-  description: 'Join 10,000+ sneakerheads at Africa\'s biggest sneaker event. Buy, sell, trade, and celebrate sneaker culture. June 14–15, 2026 in Lagos.',
+  description: 'Join 10,000+ sneakerheads at Africa\'s biggest sneaker event. Buy, sell, trade, and celebrate sneaker culture. December 12–13, 2026 in Lagos.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
