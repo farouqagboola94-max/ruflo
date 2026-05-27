@@ -612,7 +612,7 @@ function generateRecommendations(
 function generateCodeSnippet(category: string): string {
   const snippets: Record<string, string> = {
     Injection: `const query = "SELECT * FROM users WHERE id = " + userId; // Vulnerable`,
-    'Sensitive Data Exposure': `const apiKey = "sk-12345-hardcoded"; // Vulnerable`,
+    'Sensitive Data Exposure': `const apiKey = "test-key-12345-hardcoded"; // Vulnerable`,
     'Input Validation': `const input = req.body.data; // No validation`,
     'Cryptographic Issues': `const hash = crypto.createHash('md5'); // Weak algorithm`,
   };
