@@ -1,29 +1,38 @@
-# Claude Code Configuration - Ruflo v3.5
+# Claude Code Configuration — Ruflo / claude-flow
 
-> **Ruflo v3.6** (2026-04-29) — Stable release with agent federation and comms-first coordination.
-> 6,000+ commits, 314 MCP tools, 16 agent roles + custom types, 19 AgentDB controllers, 21 native plugins.
-> Packages: `@claude-flow/cli@3.6.10`, `claude-flow@3.6.10`, `ruflo@3.6.10`
+> **Ruflo v3.6.27** (2026-05-20) — Stable release with agent federation and comms-first coordination.
+> 6,000+ commits, 314 MCP tools, 23 scoped packages, 15-agent swarm, 19 AgentDB controllers, 32 native plugins.
+> npm packages: `@claude-flow/cli@3.6.27`, `claude-flow@3.6.27`, `ruflo@3.6.27`
+
+> **For OpenAI Codex users:** Read `AGENTS.md` first — it re-frames all patterns below from the Codex perspective (LEDGER vs EXECUTOR roles).
+
+---
 
 ## Behavioral Rules (Always Enforced)
 
 - Do what has been asked; nothing more, nothing less
-- NEVER create files unless they're absolutely necessary for achieving your goal
+- NEVER create files unless absolutely necessary for achieving your goal
 - ALWAYS prefer editing an existing file to creating a new one
 - NEVER proactively create documentation files (*.md) or README files unless explicitly requested
 - NEVER save working files, text/mds, or tests to the root folder
 - Never continuously check status after spawning a swarm — wait for results
 - ALWAYS read a file before editing it
 - NEVER commit secrets, credentials, or .env files
+- NEVER hardcode API keys (PINATA_API_KEY, PINATA_API_SECRET, PINATA_API_JWT, OPENAI_API_KEY, etc.) — source from .env at runtime
+
+---
 
 ## File Organization
 
 - NEVER save to root folder — use the directories below
-- Use `/src` for source code files
-- Use `/tests` for test files
-- Use `/docs` for documentation and markdown files
-- Use `/config` for configuration files
-- Use `/scripts` for utility scripts
-- Use `/examples` for example code
+- `/src` — source code files
+- `/tests` — test files
+- `/docs` — documentation and markdown files (ADRs go in `docs/adr/`)
+- `/config` — configuration files
+- `/scripts` — utility scripts
+- `/examples` — example code
+
+---
 
 ## Project Architecture
 
@@ -34,25 +43,110 @@
 - Use event sourcing for state changes
 - Ensure input validation at system boundaries
 
-### Key Packages
+### Repository Layout
 
-| Package | Path | Purpose |
-|---------|------|---------|
-| `@claude-flow/cli` | `v3/@claude-flow/cli/` | CLI entry point (26 commands) |
-| `@claude-flow/codex` | `v3/@claude-flow/codex/` | Dual-mode Claude + Codex collaboration |
-| `@claude-flow/guidance` | `v3/@claude-flow/guidance/` | Governance control plane |
-| `@claude-flow/hooks` | `v3/@claude-flow/hooks/` | 17 hooks + 12 workers |
-| `@claude-flow/memory` | `v3/@claude-flow/memory/` | AgentDB + HNSW search |
-| `@claude-flow/security` | `v3/@claude-flow/security/` | Input validation, CVE remediation |
+```
+ruflo/                          # root (umbrella npm package — claude-flow + ruflo bins)
+├── v3/                         # V3 monorepo (TypeScript source, pnpm workspace)
+│   ├── @claude-flow/           # 23 scoped packages (see complete list below)
+│   ├── __tests__/              # integration tests (vitest)
+│   ├── agents/                 # agent type definitions
+│   ├── docs/                   # architecture docs + ADRs
+│   ├── goal_ui/                # GOAP goal planner UI (Vite + Supabase)
+│   ├── helpers/                # v3 helper scripts
+│   ├── implementation/         # implementation reference docs
+│   ├── mcp/                    # MCP server entry points
+│   ├── plugins/                # plugin implementations
+│   ├── scripts/                # build + publish scripts
+│   ├── src/                    # shared V3 source
+│   ├── .agentic-flow/          # agentic-flow integration config
+│   ├── bunfig.toml             # Bun runtime config
+│   ├── swarm.config.ts         # 15-agent swarm topology + role mapping
+│   ├── vitest.config.ts        # test runner config
+│   ├── tsconfig.json + tsconfig.base.json
+│   ├── pnpm-workspace.yaml     # workspace: ['@claude-flow/*']
+│   └── index.ts                # V3 public API entry (13KB)
+├── ruflo/                      # ruflo sub-package (web UI + thin CLI wrapper)
+│   ├── src/ruvocal/            # RuVocal — SvelteKit chat UI fork (multi-model + MCP)
+│   │   ├── mcp-bridge/         # per-group MCP JSON-RPC proxy (port 3001)
+│   │   └── nginx/              # brand-injecting reverse proxy
+│   ├── bin/                    # ruflo CLI entry
+│   ├── assets/                 # brand assets
+│   ├── docs/adr/               # ruflo-specific ADRs
+│   ├── docker-compose.yml      # full stack: mongo + mcp-bridge + nginx + chat-ui
+│   ├── rvf.manifest.json       # RVF package manifest (chat-ui-mcp v2.0)
+│   ├── .env.example            # env template (all secrets via env vars)
+│   └── package.json            # ruflo npm package
+├── catalyst-talents/           # Next.js site (Netlify deploy target)
+├── sneakers-fest/              # React design system / brand demo
+├── bin/                        # root CLI entry (claude-flow bin)
+├── agents/                     # top-level agent definitions
+├── plugins/                    # top-level plugin configs
+├── .claude/                    # Claude Code project settings
+│   ├── settings.json           # hooks, permissions, env, agent teams (7KB)
+│   ├── agents/                 # custom agent definitions
+│   ├── commands/               # slash command definitions (skills source)
+│   ├── helpers/
+│   │   ├── hook-handler.cjs    # universal hook dispatcher
+│   │   ├── auto-memory-hook.mjs  # AgentDB memory import/sync
+│   │   └── statusline.cjs      # status line renderer
+│   ├── skills/                 # skill definitions
+│   ├── statusline.sh (16KB), statusline.mjs (2.4KB), statusline-command.sh (6KB)
+│   └── mcp.json                # MCP server config
+├── .agents/                    # agent registry
+├── .claude-plugin/             # Claude Code plugin manifest
+├── .github/workflows/          # 9 CI/CD workflows (see CI section)
+├── scripts/                    # repo-level utility scripts
+├── tests/                      # root-level tests
+├── netlify.toml                # Netlify deploy: catalyst-talents/ → out/
+├── package.json                # root (name: claude-flow, version: 3.6.27)
+├── tsconfig.json
+├── CLAUDE.md                   # this file
+└── AGENTS.md                   # Codex-specific guide (21KB)
+```
+
+---
+
+## V3 Packages — Complete List (v3/@claude-flow)
+
+All 23 packages live in `v3/@claude-flow/` and are published as `@claude-flow/<name>`.
+
+| Package | Purpose |
+|---------|--------|
+| `agents` | Agent type registry and lifecycle management |
+| `aidefence` | Prompt injection detection, PII scanning (14 types), safety filters |
+| `browser` | Playwright headless browser automation |
+| `claims` | Claims-based authorization (check, grant, revoke, list) |
+| `cli` | CLI entry point — 26 commands, 140+ subcommands; **published to npm** |
+| `codex` | Dual-mode Claude + OpenAI Codex collaboration via shared memory |
+| `deployment` | Deployment management and rollback automation |
+| `embeddings` | 384-dim ONNX (all-MiniLM-L6-v2), sql.js WASM SQLite, HNSW; 75x faster with agentic-flow |
+| `guidance` | Governance control plane — compile, enforce, prove, evolve |
+| `hooks` | 17 hooks + 12 background workers (self-learning system) |
+| `integration` | agentic-flow bridge, token optimizer |
+| `mcp` | MCP server tools and routing (314 tools total) |
+| `memory` | AgentDB + HNSW vector search (150x–12,500x faster) |
+| `neural` | SONA, MoE routing, EWC++, Flash Attention |
+| `performance` | Performance profiling, benchmarking, metrics |
+| `plugin-agent-federation` | Zero-trust cross-machine agent federation |
+| `plugin-iot-cognitum` | IoT device management and trust scoring |
+| `plugins` | Plugin system core — manager, discovery, IPFS store |
+| `providers` | Multi-LLM provider abstraction (Claude, GPT, Gemini, Ollama) |
+| `security` | Input validation, path security, CVE remediation |
+| `shared` | Shared types, utilities, base interfaces |
+| `swarm` | Swarm coordination and topology strategies |
+| `testing` | Test intelligence and coverage gap analysis |
+
+---
 
 ## Concurrency: 1 MESSAGE = ALL RELATED OPERATIONS
 
 - All operations MUST be concurrent/parallel in a single message
-- Use Claude Code's Task tool for spawning agents, not just MCP
+- Use Claude Code's Task tool for spawning agents — MCP tools only coordinate
 
 **Mandatory patterns:**
 - ALWAYS batch ALL todos in ONE TodoWrite call (5-10+ minimum)
-- ALWAYS spawn ALL agents in ONE message with full instructions via Task tool
+- ALWAYS spawn ALL agents in ONE message via Task tool
 - ALWAYS batch ALL file reads/writes/edits in ONE message
 - ALWAYS batch ALL terminal operations in ONE Bash message
 - ALWAYS batch ALL memory store/retrieve operations in ONE message
@@ -61,7 +155,7 @@
 
 ## Swarm Orchestration
 
-- MUST initialize the swarm using MCP tools when starting complex tasks
+- MUST initialize swarm using MCP tools when starting complex tasks
 - MUST spawn concurrent agents using Claude Code's Task tool
 - Never use MCP tools alone for execution — Task tool agents do the actual work
 
@@ -74,233 +168,131 @@
 
 | Tier | Handler | Latency | Cost | Use Cases |
 |------|---------|---------|------|-----------|
-| **1** | Agent Booster (WASM) | <1ms | $0 | Simple transforms (var→const, add types, etc.) — **Skip LLM entirely** |
-| **2** | Haiku | ~500ms | $0.0002 | Simple tasks, low complexity (<30%) |
+| **1** | Agent Booster (WASM) | <1ms | $0 | Simple transforms — **skip LLM entirely** |
+| **2** | Haiku | ~500ms | $0.0002 | Simple tasks (<30% complexity) |
 | **3** | Sonnet/Opus | 2-5s | $0.003-0.015 | Complex reasoning, architecture, security (>30%) |
 
 - Always check for `[AGENT_BOOSTER_AVAILABLE]` or `[TASK_MODEL_RECOMMENDATION]` before spawning agents
 - Use Edit tool directly when `[AGENT_BOOSTER_AVAILABLE]` — intent types: `var-to-const`, `add-types`, `add-error-handling`, `async-await`, `add-logging`, `remove-console`
 
-## Swarm Configuration & Anti-Drift
+---
+
+## Swarm Configuration (v3/swarm.config.ts)
+
+The canonical swarm config is at `v3/swarm.config.ts`. Default: **15-agent hierarchical-mesh**.
+
+### 15-Agent Role Mapping
+
+| Agent ID | Role | Domain | Key Responsibilities |
+|----------|------|--------|-----------------------|
+| agent-1 | Queen Coordinator | core | Orchestrate all 15 agents, manage GitHub issues/milestones, cross-domain comms |
+| agent-2 | Security Architect | security | Threat modeling, security policy, architecture review |
+| agent-3 | Security Implementer | security | CVE fixes (CVE-1,2,3), input validation, security code |
+| agent-4 | Security Tester | security | TDD security harness, penetration testing, audit verification |
+| agent-5 | Core Architect | core | DDD architecture, bounded context definition |
+| agent-6 | Core Implementer | core | Type system modernization, config management |
+| agent-7 | Memory Specialist | core | AgentDB unification (150x-12500x), hybrid backend |
+| agent-8 | Swarm Specialist | core | Single SwarmCoordinator, merge 4 coordination systems |
+| agent-9 | MCP Specialist | core | MCP server optimization, tool registration |
+| agent-10 | Integration Architect | integration | agentic-flow@alpha integration, service layer design |
+| agent-11 | CLI/Hooks Developer | integration | CLI modernization, hooks system, command structure |
+| agent-12 | Neural/Learning Dev | integration | SONA learning (<0.05ms), pattern recognition |
+| agent-13 | TDD Test Engineer | quality | TDD London School, >90% coverage, mock-first |
+| agent-14 | Performance Engineer | performance | Flash Attention (2.49x-7.47x), memory optimization (50-75%) |
+| agent-15 | Release Engineer | deployment | CI/CD pipeline, deployment automation, release |
+
+### Development Phases
+
+| Phase | Weeks | Active Domains |
+|-------|-------|----------------|
+| Foundation | 1-2 | security, core |
+| Core Systems | 3-6 | core, quality |
+| Integration | 7-10 | integration, quality, performance |
+| Optimization & Release | 11-14 | all |
 
 ### Anti-Drift Coding Swarm (PREFERRED DEFAULT)
 
+```javascript
+mcp__ruv-swarm__swarm_init({
+  topology: "hierarchical",
+  maxAgents: 8,
+  strategy: "specialized"
+})
+```
+
 - ALWAYS use hierarchical topology for coding swarms
 - Keep maxAgents at 6-8 for tight coordination
-- Use specialized strategy for clear role boundaries
 - Use `raft` consensus for hive-mind (leader maintains authoritative state)
 - Run frequent checkpoints via `post-task` hooks
-- Keep shared memory namespace for all agents
-- Keep task cycles short with verification gates
 
-```javascript
-mcp__ruv-swarm__swarm_init({
-  topology: "hierarchical",
-  maxAgents: 8,
-  strategy: "specialized"
-})
-```
+---
 
-## Dual-Mode Collaboration (Claude Code + Codex)
+## Dual-Mode Collaboration (Claude Code 🔵 + Codex 🟢)
 
-This repository uses **dual-mode orchestration** to run Claude Code (🔵) and OpenAI Codex (🟢) workers in parallel with shared memory coordination. Both platforms collaborate on development tasks with cross-learning.
-
-### Why Dual-Mode?
-
-| Single Platform | Dual-Mode Collaboration |
-|----------------|------------------------|
-| One model's perspective | Two AI platforms cross-validating |
-| Limited reasoning styles | Complementary strengths |
-| No external verification | Built-in code review |
-| Sequential workflows | Parallel execution |
-
-### Dual-Mode Swarm Protocol
-
-For complex tasks, spawn both Claude and Codex workers in parallel:
-
-```javascript
-// STEP 1: Initialize dual-mode swarm
-mcp__ruv-swarm__swarm_init({
-  topology: "hierarchical",
-  maxAgents: 8,
-  strategy: "specialized"
-})
-
-// STEP 2: Spawn BOTH platforms in parallel via Task tool
-// 🔵 Claude Code workers (architecture, security, testing)
-Task("Architect", "Design the implementation. Store design in memory namespace 'collaboration'.", "system-architect")
-Task("Tester", "Write tests based on architect's design. Read from 'collaboration' namespace.", "tester")
-Task("Reviewer", "Review code quality and security. Store findings in 'collaboration'.", "reviewer")
-
-// 🟢 Codex workers (implementation, optimization)
-// Spawn via CLI for Codex platform
-Bash("npx claude-flow-codex dual run --worker 'codex:coder:Implement the solution based on architect design' --namespace collaboration")
-Bash("npx claude-flow-codex dual run --worker 'codex:optimizer:Optimize performance based on implementation' --namespace collaboration")
-
-// STEP 3: Coordinate via shared memory
-Bash("npx claude-flow@v3alpha memory store --namespace collaboration --key 'task-context' --value '[task description]'")
-```
-
-### Collaboration Templates (Pre-Built Pipelines)
-
-| Template | Workers | Pipeline |
-|----------|---------|----------|
-| `feature` | 🔵 Architect → 🟢 Coder → 🔵 Tester → 🟢 Reviewer | Full feature development |
-| `security` | 🔵 Analyst → 🟢 Scanner → 🔵 Reporter | Security audit workflow |
-| `refactor` | 🔵 Architect → 🟢 Refactorer → 🔵 Tester | Code modernization |
-| `bugfix` | 🔵 Researcher → 🟢 Coder → 🔵 Tester | Bug investigation & fix |
+Dual-mode orchestration runs Claude Code (🔵) and OpenAI Codex (🟢) workers in parallel with shared memory via `@claude-flow/codex`.
 
 ### Dual-Mode CLI Commands
 
 ```bash
-# Run a collaboration template
 npx claude-flow-codex dual run feature --task "Add user authentication with OAuth"
 npx claude-flow-codex dual run security --target "./src"
 npx claude-flow-codex dual run refactor --target "./src/legacy"
-
-# Custom multi-platform swarm
-npx claude-flow-codex dual run \
-  --worker "claude:architect:Design the API structure" \
-  --worker "codex:coder:Implement REST endpoints" \
-  --worker "claude:tester:Write integration tests" \
-  --worker "codex:reviewer:Review code quality" \
-  --namespace "api-feature"
-
-# Check collaboration status
 npx claude-flow-codex dual status
-
-# List available templates
 npx claude-flow-codex dual templates
 ```
 
-### Shared Memory Coordination
+### Collaboration Templates
 
-All workers share state via the `collaboration` namespace:
-
-```bash
-# Store context for cross-platform sharing
-npx claude-flow@v3alpha memory store --namespace collaboration --key "design-decisions" --value "..."
-
-# Search for patterns across all workers
-npx claude-flow@v3alpha memory search --namespace collaboration --query "authentication patterns"
-
-# Retrieve specific findings
-npx claude-flow@v3alpha memory retrieve --namespace collaboration --key "security-findings"
-```
-
-### Cross-Platform Learning
-
-Both platforms learn from each other's outputs:
-
-```bash
-# After successful collaboration, train patterns
-npx claude-flow@v3alpha hooks post-task --task-id "dual-[id]" --success true --train-neural true
-
-# Store successful collaboration patterns
-npx claude-flow@v3alpha memory store --namespace patterns --key "dual-mode-[pattern]" --value "[what worked]"
-
-# Transfer learnings to both platforms
-npx claude-flow@v3alpha hooks transfer store --pattern "dual-collab-success"
-```
-
-### Worker Dependency Levels
-
-Workers execute in dependency order:
-
-```
-Level 0: [🔵 Architect]           # No dependencies - runs first
-Level 1: [🟢 Coder, 🔵 Tester]    # Depends on Architect
-Level 2: [🔵 Reviewer]            # Depends on Coder + Tester
-Level 3: [🟢 Optimizer]           # Depends on Reviewer approval
-```
+| Template | Pipeline |
+|----------|----------|
+| `feature` | 🔵 Architect → 🟢 Coder → 🔵 Tester → 🟢 Reviewer |
+| `security` | 🔵 Analyst → 🟢 Scanner → 🔵 Reporter |
+| `refactor` | 🔵 Architect → 🟢 Refactorer → 🔵 Tester |
+| `bugfix` | 🔵 Researcher → 🟢 Coder → 🔵 Tester |
 
 ### Platform Strengths
 
-| Task Type | Preferred Platform | Reason |
-|-----------|-------------------|--------|
-| Architecture & Design | 🔵 Claude | Strong reasoning, system thinking |
-| Implementation | 🟢 Codex | Fast code generation |
-| Security Review | 🔵 Claude | Careful analysis, threat modeling |
-| Performance Optimization | 🟢 Codex | Code-level optimizations |
-| Testing Strategy | 🔵 Claude | Coverage analysis, edge cases |
-| Refactoring | 🟢 Codex | Bulk code transformations |
-
-### Programmatic API
-
-```typescript
-import { DualModeOrchestrator, CollaborationTemplates } from '@claude-flow/codex';
-
-const orchestrator = new DualModeOrchestrator({
-  namespace: 'my-feature',
-  memoryBackend: 'hybrid'
-});
-
-// Use pre-built template
-const workers = CollaborationTemplates.featureDevelopment('Add OAuth login');
-
-// Run collaboration
-const results = await orchestrator.runCollaboration(workers, 'Implement OAuth feature');
-
-// Access shared memory
-const designDocs = await orchestrator.getMemory('design-decisions');
-```
+| Task Type | Preferred |
+|-----------|----------|
+| Architecture & Design | 🔵 Claude |
+| Implementation | 🟢 Codex |
+| Security Review | 🔵 Claude |
+| Performance Optimization | 🟢 Codex |
+| Testing Strategy | 🔵 Claude |
+| Refactoring | 🟢 Codex |
 
 ---
 
-## Swarm Protocols & Routing
+## Auto-Start Swarm Protocol
 
-### Auto-Start Swarm Protocol
-
-When the user requests a complex task (multi-file changes, feature implementation, refactoring), **immediately execute this pattern in a SINGLE message:**
+When the user requests a complex task, **execute this in a SINGLE message:**
 
 ```javascript
-// STEP 1: Initialize swarm coordination via MCP
-mcp__ruv-swarm__swarm_init({
-  topology: "hierarchical",
-  maxAgents: 8,
-  strategy: "specialized"
-})
+// STEP 1: Initialize swarm
+mcp__ruv-swarm__swarm_init({ topology: "hierarchical", maxAgents: 8, strategy: "specialized" })
 
-// STEP 2: Spawn NAMED agents concurrently — all in ONE message
-// Each agent knows WHO to message next in the pipeline
-Task({
-  prompt: "Research requirements and codebase. SendMessage findings to 'architect' when done.",
-  subagent_type: "researcher", name: "researcher", run_in_background: true
-})
-Task({
-  prompt: "Wait for research from 'researcher'. Design implementation. SendMessage design to 'coder'.",
-  subagent_type: "system-architect", name: "architect", run_in_background: true
-})
-Task({
-  prompt: "Wait for design from 'architect'. Implement the solution. SendMessage code paths to 'tester'.",
-  subagent_type: "coder", name: "coder", run_in_background: true
-})
-Task({
-  prompt: "Wait for implementation from 'coder'. Write tests. SendMessage results to 'reviewer'.",
-  subagent_type: "tester", name: "tester", run_in_background: true
-})
-Task({
-  prompt: "Wait for test results from 'tester'. Review code quality and security. Report findings.",
-  subagent_type: "reviewer", name: "reviewer", run_in_background: true
-})
+// STEP 2: Spawn NAMED agents concurrently
+Task({ prompt: "Research requirements. SendMessage to 'architect' when done.", subagent_type: "researcher", name: "researcher", run_in_background: true })
+Task({ prompt: "Wait for research. Design implementation. SendMessage to 'coder'.", subagent_type: "system-architect", name: "architect", run_in_background: true })
+Task({ prompt: "Wait for design. Implement solution. SendMessage to 'tester'.", subagent_type: "coder", name: "coder", run_in_background: true })
+Task({ prompt: "Wait for code. Write tests. SendMessage to 'reviewer'.", subagent_type: "tester", name: "tester", run_in_background: true })
+Task({ prompt: "Wait for tests. Review quality and security.", subagent_type: "reviewer", name: "reviewer", run_in_background: true })
 
 // STEP 3: Kick off the pipeline
-SendMessage({ to: "researcher", summary: "Start research", message: "[task description and context]" })
-
-// STEP 4: Batch todos
-TodoWrite({ todos: [
-  {content: "Research and analyze requirements", status: "in_progress", activeForm: "Researching"},
-  {content: "Design architecture", status: "pending", activeForm: "Designing"},
-  {content: "Implement solution", status: "pending", activeForm: "Implementing"},
-  {content: "Write tests", status: "pending", activeForm: "Testing"},
-  {content: "Review and finalize", status: "pending", activeForm: "Reviewing"}
-]})
-
-// Pipeline flow via SendMessage:
-// researcher ──→ architect ──→ coder ──→ tester ──→ reviewer
+SendMessage({ to: "researcher", summary: "Start", message: "[task description]" })
 ```
 
-### Agent Routing (Anti-Drift)
+### Task Complexity Detection
+
+**AUTO-INVOKE SWARM when task involves:**
+- Multiple files (3+), new feature, refactoring across modules
+- API changes with tests, security changes, performance optimization
+- Database schema changes
+
+**SKIP SWARM for:**
+- Single file edits, simple bug fixes (1-2 lines), documentation updates, config changes
+
+### Agent Routing Table
 
 | Code | Task | Agents |
 |------|------|--------|
@@ -312,36 +304,81 @@ TodoWrite({ todos: [
 | 11 | Memory | coordinator, memory-specialist, perf-engineer |
 | 13 | Docs | researcher, api-docs |
 
-**Codes 1-11: hierarchical/specialized (anti-drift). Code 13: mesh/balanced**
+**Codes 1-11: hierarchical/specialized. Code 13: mesh/balanced**
 
-### Task Complexity Detection
+---
 
-**AUTO-INVOKE SWARM when task involves:**
-- Multiple files (3+)
-- New feature implementation
-- Refactoring across modules
-- API changes with tests
-- Security-related changes
-- Performance optimization
-- Database schema changes
+## Project Configuration (.claude/settings.json)
 
-**SKIP SWARM for:**
-- Single file edits
-- Simple bug fixes (1-2 lines)
-- Documentation updates
-- Configuration changes
-- Quick questions/exploration
+Full settings at `.claude/settings.json` (7KB). Key sections:
 
-## Project Configuration
+```json
+{
+  "model": "claude-opus-4-7",
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_FLOW_V3_ENABLED": "true",
+    "CLAUDE_FLOW_HOOKS_ENABLED": "true"
+  },
+  "claudeFlow": {
+    "version": "3.6.11",
+    "swarm": { "topology": "hierarchical-mesh", "maxAgents": 15 },
+    "memory": { "backend": "hybrid", "enableHNSW": true, "memoryGraph": { "enabled": true } },
+    "neural": { "enabled": true },
+    "agentTeams": {
+      "enabled": true, "teammateMode": "auto",
+      "coordination": {
+        "autoAssignOnIdle": true, "trainPatternsOnComplete": true,
+        "notifyLeadOnComplete": true, "sharedMemoryNamespace": "agent-teams"
+      }
+    },
+    "daemon": { "autoStart": true, "workers": ["map","audit","optimize","consolidate","testgaps","ultralearn","deepdive","document","refactor","benchmark"] },
+    "learning": { "enabled": true, "autoTrain": true, "retention": { "shortTerm": "24h", "longTerm": "30d" } },
+    "security": { "autoScan": true, "scanOnEdit": true, "cveCheck": true, "threatModel": true },
+    "adr": { "autoGenerate": true, "directory": "/docs/adr", "template": "madr" }
+  },
+  "attribution": {
+    "commit": "Co-Authored-By: RuFlo <ruv@ruv.net>",
+    "pr": "Generated with RuFlo"
+  }
+}
+```
 
-This project is configured with Claude Flow V3 (Anti-Drift Defaults):
-- **Topology**: hierarchical (prevents drift via central coordination)
-- **Max Agents**: 8 (smaller team = less drift)
-- **Strategy**: specialized (clear roles, no overlap)
-- **Consensus**: raft (leader maintains authoritative state)
-- **Memory Backend**: hybrid (SQLite + AgentDB)
-- **HNSW Indexing**: Enabled (150x-12,500x faster)
-- **Neural Learning**: Enabled (SONA)
+### Hooks (complete — from settings.json)
+
+| Hook | Trigger | Handler |
+|------|---------|--------|
+| `PreToolUse[Bash]` | Before every Bash call | `hook-handler.cjs pre-bash` |
+| `PostToolUse[Write\|Edit\|MultiEdit]` | After file writes | `hook-handler.cjs post-edit` |
+| `UserPromptSubmit` | Every user message | `hook-handler.cjs route` |
+| `SessionStart` | Session open | `hook-handler.cjs session-restore` + `auto-memory-hook.mjs import` |
+| `SessionEnd` | Session close | `hook-handler.cjs session-end` |
+| `Stop` | After Claude stops | `auto-memory-hook.mjs sync` |
+| `PreCompact[manual]` | Manual /compact | `hook-handler.cjs compact-manual` → `session-end` |
+| `PreCompact[auto]` | Auto-compact | `hook-handler.cjs compact-auto` → `session-end` |
+| `SubagentStop` | After each subagent | `hook-handler.cjs post-task` |
+
+### Denied Permissions
+
+```
+Read(./.env)      # secrets never readable by Claude Code
+Read(./.env.*)    # all .env variants blocked
+Bash(rm -rf /)    # destructive filesystem ops blocked
+```
+
+### Background Workers (daemon, 10 workers)
+
+| Worker | Interval | Priority |
+|--------|----------|----------|
+| `audit` | 1h | critical |
+| `optimize` | 30m | high |
+| `document` | 1h | normal |
+| `ultralearn` | 1h | normal |
+| `deepdive` | 4h | normal |
+| `consolidate` | 2h | low |
+| `map`, `testgaps`, `refactor`, `benchmark` | on-demand | normal |
+
+---
 
 ## V3 CLI Commands (26 Commands, 140+ Subcommands)
 
@@ -351,798 +388,568 @@ This project is configured with Claude Flow V3 (Anti-Drift Defaults):
 |---------|-------------|-------------|
 | `init` | 4 | Project initialization with wizard, presets, skills, hooks |
 | `agent` | 8 | Agent lifecycle (spawn, list, status, stop, metrics, pool, health, logs) |
-| `swarm` | 6 | Multi-agent swarm coordination and orchestration |
-| `memory` | 11 | AgentDB memory with vector search (150x-12,500x faster) |
-| `mcp` | 9 | MCP server management and tool execution |
-| `task` | 6 | Task creation, assignment, and lifecycle |
-| `session` | 7 | Session state management and persistence |
-| `config` | 7 | Configuration management and provider setup |
-| `status` | 3 | System status monitoring with watch mode |
-| `start` | 3 | Service startup and quick launch |
-| `workflow` | 6 | Workflow execution and template management |
+| `swarm` | 6 | Multi-agent swarm coordination |
+| `memory` | 11 | AgentDB memory with vector search |
+| `mcp` | 9 | MCP server management |
+| `task` | 6 | Task creation, assignment, lifecycle |
+| `session` | 7 | Session state management |
+| `config` | 7 | Configuration and provider setup |
+| `status` | 3 | System status monitoring |
+| `start` | 3 | Service startup |
+| `workflow` | 6 | Workflow execution and templates |
 | `hooks` | 17 | Self-learning hooks + 12 background workers |
 | `hive-mind` | 6 | Queen-led Byzantine fault-tolerant consensus |
 
 ### Advanced Commands
 
-| Command | Subcommands | Description |
-|---------|-------------|-------------|
-| `daemon` | 5 | Background worker daemon (start, stop, status, trigger, enable) |
-| `neural` | 5 | Neural pattern training (train, status, patterns, predict, optimize) |
-| `security` | 6 | Security scanning (scan, audit, cve, threats, validate, report) |
-| `performance` | 5 | Performance profiling (benchmark, profile, metrics, optimize, report) |
-| `providers` | 5 | AI providers (list, add, remove, test, configure) |
-| `plugins` | 5 | Plugin management (list, install, uninstall, enable, disable) |
-| `deployment` | 5 | Deployment management (deploy, rollback, status, environments, release) |
-| `embeddings` | 4 | Vector embeddings (embed, batch, search, init) - 75x faster with agentic-flow |
-| `claims` | 4 | Claims-based authorization (check, grant, revoke, list) |
-| `migrate` | 5 | V2 to V3 migration with rollback support |
-| `process` | 4 | Background process management |
-| `doctor` | 1 | System diagnostics with health checks |
-| `completions` | 4 | Shell completions (bash, zsh, fish, powershell) |
+| Command | Description |
+|---------|-------------|
+| `daemon` | Background worker daemon (start, stop, status, trigger, enable) |
+| `neural` | Neural pattern training (SONA, MoE, EWC++) |
+| `security` | Security scanning (scan, audit, cve, threats, validate, report) |
+| `performance` | Performance profiling (benchmark, profile, metrics, optimize) |
+| `providers` | AI providers (list, add, remove, test, configure) |
+| `plugins` | Plugin management (list, install, uninstall, enable, disable) |
+| `deployment` | Deployment management (deploy, rollback, status, environments) |
+| `embeddings` | Vector embeddings — 75x faster with agentic-flow |
+| `claims` | Claims-based authorization (check, grant, revoke, list) |
+| `migrate` | V2→V3 migration with rollback support |
+| `doctor` | System diagnostics with health checks |
+| `federation` | Zero-trust cross-machine agent federation |
 
 ### Quick CLI Examples
 
 ```bash
-# Initialize project
-npx claude-flow@v3alpha init --wizard
-
-# Start daemon with background workers
-npx claude-flow@v3alpha daemon start
-
-# Spawn an agent
-npx claude-flow@v3alpha agent spawn -t coder --name my-coder
-
-# Initialize swarm
-npx claude-flow@v3alpha swarm init --v3-mode
-
-# Search memory (HNSW-indexed)
-npx claude-flow@v3alpha memory search -q "authentication patterns"
-
-# System diagnostics
-npx claude-flow@v3alpha doctor --fix
-
-# Security scan
-npx claude-flow@v3alpha security scan --depth full
-
-# Performance benchmark
-npx claude-flow@v3alpha performance benchmark --suite all
+npx ruflo@latest init --wizard
+npx ruflo@latest daemon start
+npx ruflo@latest agent spawn -t coder --name my-coder
+npx ruflo@latest swarm init --v3-mode
+npx ruflo@latest memory search -q "authentication patterns"
+npx ruflo@latest doctor --fix
+npx ruflo@latest security scan --depth full
+npx ruflo@latest federation init
 ```
 
-## Headless Background Instances (claude -p)
-
-Use `claude -p` (print/pipe mode) to spawn headless Claude instances for parallel background work. These run non-interactively and return results to stdout.
-
-### Basic Usage
-
-```bash
-# Single headless task
-claude -p "Analyze the authentication module for security issues"
-
-# With model selection
-claude -p --model haiku "Format this config file"
-claude -p --model opus "Design the database schema for user management"
-
-# With output format
-claude -p --output-format json "List all TODO comments in src/"
-claude -p --output-format stream-json "Refactor the error handling in api.ts"
-
-# With budget limits
-claude -p --max-budget-usd 0.50 "Run comprehensive security audit"
-
-# With specific tools allowed
-claude -p --allowedTools "Read,Grep,Glob" "Find all files that import the auth module"
-
-# Skip permissions (sandboxed environments only)
-claude -p --dangerously-skip-permissions "Fix all lint errors in src/"
-```
-
-### Parallel Background Execution
-
-```bash
-# Spawn multiple headless instances in parallel
-claude -p "Analyze src/auth/ for vulnerabilities" &
-claude -p "Write tests for src/api/endpoints.ts" &
-claude -p "Review src/models/ for performance issues" &
-wait  # Wait for all to complete
-
-# With results captured
-SECURITY=$(claude -p "Security audit of auth module" &)
-TESTS=$(claude -p "Generate test coverage report" &)
-PERF=$(claude -p "Profile memory usage in workers" &)
-wait
-echo "$SECURITY" "$TESTS" "$PERF"
-```
-
-### Session Continuation
-
-```bash
-# Start a task, resume later
-claude -p --session-id "abc-123" "Start analyzing the codebase"
-claude -p --resume "abc-123" "Continue with the test files"
-
-# Fork a session for parallel exploration
-claude -p --resume "abc-123" --fork-session "Try approach A: event sourcing"
-claude -p --resume "abc-123" --fork-session "Try approach B: CQRS pattern"
-```
-
-### Key Flags
-
-| Flag | Purpose |
-|------|---------|
-| `-p, --print` | Non-interactive mode, print and exit |
-| `--model <model>` | Select model (haiku, sonnet, opus) |
-| `--output-format <fmt>` | Output: text, json, stream-json |
-| `--max-budget-usd <amt>` | Spending cap per invocation |
-| `--allowedTools <tools>` | Restrict available tools |
-| `--append-system-prompt` | Add custom instructions |
-| `--resume <id>` | Continue a previous session |
-| `--fork-session` | Branch from resumed session |
-| `--fallback-model <model>` | Auto-fallback if primary overloaded |
-| `--permission-mode <mode>` | acceptEdits, bypassPermissions, plan, etc. |
-| `--mcp-config <json>` | Load MCP servers from JSON |
+---
 
 ## Available Agents (60+ Types)
 
 ### Core Development
 `coder`, `reviewer`, `tester`, `planner`, `researcher`
 
-### V3 Specialized Agents
+### V3 Specialized
 `security-architect`, `security-auditor`, `memory-specialist`, `performance-engineer`
 
-### @claude-flow/security Module
-CVE remediation, input validation, path security:
-- `InputValidator` — Zod-based validation at boundaries
-- `PathValidator` — Path traversal prevention
-- `SafeExecutor` — Command injection protection
-- `PasswordHasher` — bcrypt hashing
-- `TokenGenerator` — Secure token generation
-
-### Token Optimizer (Agent Booster)
-Integrates agentic-flow optimizations for 30-50% token reduction:
-```typescript
-import { getTokenOptimizer } from '@claude-flow/integration';
-const optimizer = await getTokenOptimizer();
-
-// Compact context (32% fewer tokens)
-const ctx = await optimizer.getCompactContext("auth patterns");
-
-// 352x faster edits = fewer retries
-await optimizer.optimizedEdit(file, old, new, "typescript");
-
-// Optimal config (100% success rate)
-const config = optimizer.getOptimalConfig(agentCount);
-```
-| Feature | Token Savings |
-|---------|---------------|
-| ReasoningBank retrieval | -32% |
-| Agent Booster edits | -15% |
-| Cache (95% hit rate) | -10% |
-| Optimal batch size | -20% |
-
 ### Swarm Coordination
-`hierarchical-coordinator`, `mesh-coordinator`, `adaptive-coordinator`, `collective-intelligence-coordinator`, `swarm-memory-manager`
+`hierarchical-coordinator`, `mesh-coordinator`, `adaptive-coordinator`,
+`collective-intelligence-coordinator`, `swarm-memory-manager`
 
 ### Consensus & Distributed
-`byzantine-coordinator`, `raft-manager`, `gossip-coordinator`, `consensus-builder`, `crdt-synchronizer`, `quorum-manager`, `security-manager`
-
-### Performance & Optimization
-`perf-analyzer`, `performance-benchmarker`, `task-orchestrator`, `memory-coordinator`, `smart-agent`
+`byzantine-coordinator`, `raft-manager`, `gossip-coordinator`,
+`consensus-builder`, `crdt-synchronizer`, `quorum-manager`
 
 ### GitHub & Repository
-`github-modes`, `pr-manager`, `code-review-swarm`, `issue-tracker`, `release-manager`, `workflow-automation`, `project-board-sync`, `repo-architect`, `multi-repo-swarm`
+`github-modes`, `pr-manager`, `code-review-swarm`, `issue-tracker`,
+`release-manager`, `workflow-automation`, `multi-repo-swarm`
 
 ### SPARC Methodology
 `sparc-coord`, `sparc-coder`, `specification`, `pseudocode`, `architecture`, `refinement`
 
-### Specialized Development
-`backend-dev`, `mobile-dev`, `ml-developer`, `cicd-engineer`, `api-docs`, `system-architect`, `code-analyzer`, `base-template-generator`
-
-### Testing & Validation
-`tdd-london-swarm`, `production-validator`
+---
 
 ## Agent Teams & Comms System
 
-Agent Teams turns Claude Code into a multi-agent system where named agents communicate in real-time via `SendMessage`. The comms system is the primary coordination mechanism — agents talk to each other, not just to the lead.
-
-### Architecture
-
-```
-Team Lead (you)
-  ├── SendMessage ←→ architect (named agent)
-  ├── SendMessage ←→ developer (named agent)
-  ├── SendMessage ←→ tester (named agent)
-  └── SendMessage ←→ reviewer (named agent)
-       ↕ agents can message each other by name
-```
-
 ### Core Principle: Named Agents + SendMessage
 
-Every agent MUST have a `name` so it's addressable. Communication happens via `SendMessage`, not polling or shared memory.
+Every agent MUST have a `name` so it's addressable. Communication happens via `SendMessage`.
 
 ```javascript
-// STEP 1: Spawn named agents (all in ONE message, background)
-Task({
-  prompt: "Design the API. When done, send your design to 'developer' via SendMessage.",
-  subagent_type: "system-architect",
-  name: "architect",
-  run_in_background: true
-})
-Task({
-  prompt: "Wait for architect's design via SendMessage. Then implement it. Send code to 'tester'.",
-  subagent_type: "coder",
-  name: "developer",
-  run_in_background: true
-})
-Task({
-  prompt: "Wait for developer's code via SendMessage. Write tests. Send results to 'reviewer'.",
-  subagent_type: "tester",
-  name: "tester",
-  run_in_background: true
-})
+// Spawn all named agents in ONE message
+Task({ prompt: "Design API. SendMessage design to 'developer'.", subagent_type: "system-architect", name: "architect", run_in_background: true })
+Task({ prompt: "Wait for design from 'architect'. Implement. SendMessage to 'tester'.", subagent_type: "coder", name: "developer", run_in_background: true })
+Task({ prompt: "Wait for code from 'developer'. Write tests.", subagent_type: "tester", name: "tester", run_in_background: true })
 
-// STEP 2: Kick off the pipeline by messaging the first agent
-SendMessage({
-  to: "architect",
-  summary: "Start API design",
-  message: "Design a REST API for user management with CRUD endpoints. Send the design to 'developer' when done."
-})
-```
-
-### SendMessage Protocol
-
-```javascript
-// Lead → Teammate: assign work
-SendMessage({ to: "developer", summary: "Implement auth", message: "Build OAuth2 flow..." })
-
-// Lead → Teammate: redirect priorities
-SendMessage({ to: "developer", summary: "Prioritize auth", message: "Auth endpoint is blocking tester, do it first." })
-
-// Lead → Teammate: provide context from another agent's results
-SendMessage({ to: "tester", summary: "Architect output", message: "The architect designed these endpoints: [details]. Write tests for them." })
-
-// Lead → Teammate: graceful shutdown
-SendMessage({ to: "developer", message: { type: "shutdown_request" } })
+// Kick off pipeline
+SendMessage({ to: "architect", summary: "Start", message: "Design a REST API for user management..." })
 ```
 
 ### Coordination Patterns
 
-**Pipeline (A → B → C)** — each agent messages the next when done:
-```
-architect ──SendMessage──→ developer ──SendMessage──→ tester ──SendMessage──→ reviewer
-```
-Tell each agent WHO to message next in their prompt.
-
-**Fan-out / Fan-in** — lead spawns parallel agents, collects results:
-```
-         ┌→ researcher-1 ──→┐
-lead ────┼→ researcher-2 ──→├──→ lead synthesizes
-         └→ researcher-3 ──→┘
-```
-Spawn with `run_in_background: true`. Results arrive as task completions.
-
-**Supervisor / Worker** — lead assigns, workers report back:
-```
-lead ←──SendMessage──→ worker-1
-lead ←──SendMessage──→ worker-2
-lead ←──SendMessage──→ worker-3
-```
-Lead sends tasks via SendMessage, workers respond with results.
-
-### Agent Prompt Template (Comms-Aware)
-
-When spawning agents that need to coordinate, include comms instructions:
-
-```javascript
-Task({
-  prompt: `You are the architect for this feature team.
-
-YOUR TASK: Design the database schema for user management.
-
-COMMS PROTOCOL:
-- When your design is ready, send it to "developer" via SendMessage
-- If you need clarification, message the team lead (just output text)
-- Include file paths and key decisions in your message
-
-DELIVERABLE: Schema design with entity relationships, indexes, and migration plan.`,
-  subagent_type: "system-architect",
-  name: "architect",
-  run_in_background: true
-})
-```
-
-### Full Team Spawn Example
-
-```javascript
-// Create shared task list first
-TaskCreate({ subject: "Design schema", description: "...", activeForm: "Designing" })
-TaskCreate({ subject: "Implement models", description: "...", activeForm: "Implementing" })
-TaskCreate({ subject: "Write tests", description: "...", activeForm: "Testing" })
-TaskCreate({ subject: "Security review", description: "...", activeForm: "Reviewing" })
-
-// Spawn ALL named agents in ONE message
-Task({
-  prompt: "Design the schema. SendMessage to 'developer' with your design when done. Update task #1.",
-  subagent_type: "system-architect", name: "architect", run_in_background: true
-})
-Task({
-  prompt: "Wait for schema from 'architect'. Implement models + endpoints. SendMessage to 'tester'. Update task #2.",
-  subagent_type: "coder", name: "developer", run_in_background: true
-})
-Task({
-  prompt: "Wait for code from 'developer'. Write integration tests. SendMessage results to 'security'. Update task #3.",
-  subagent_type: "tester", name: "tester", run_in_background: true
-})
-Task({
-  prompt: "Wait for test results from 'tester'. Review for vulnerabilities. Update task #4.",
-  subagent_type: "security-auditor", name: "security", run_in_background: true
-})
-```
-
-### Agent Teams Hooks
-
-| Hook | Trigger | Purpose |
-|------|---------|---------|
-| `TeammateIdle` | Teammate finishes turn | Auto-assign pending tasks via SendMessage |
-| `TaskCompleted` | Task marked complete | Train patterns, notify lead via SendMessage |
-
-```bash
-npx claude-flow@v3alpha hooks teammate-idle --auto-assign true
-npx claude-flow@v3alpha hooks task-completed -i task-123 --train-patterns true
-```
+- **Pipeline:** `architect → developer → tester → reviewer` (each SendMessage to next)
+- **Fan-out:** lead spawns parallel agents, collects results via task completions
+- **Supervisor/Worker:** lead assigns via SendMessage, workers report back
 
 ### Rules
+1. Always name agents (`name: "role-name"`)
+2. Comms over memory — SendMessage for real-time, memory for persistence
+3. Tell each agent WHO to message next in their prompt
+4. Spawn all at once with `run_in_background: true`
+5. Don't poll — wait for task completion notifications
+6. Lead synthesizes all results before responding to user
 
-1. **Always name agents** — use `name: "role-name"` so they're addressable
-2. **Comms over memory** — use SendMessage for real-time coordination, memory for persistence
-3. **Pipeline prompts** — tell each agent WHO to message next and WHAT to send
-4. **Spawn all at once** — all Task calls in ONE message with `run_in_background: true`
-5. **Don't poll** — agents message back when done; wait for task completion notifications
-6. **Graceful shutdown** — send `{ type: "shutdown_request" }` before TeamDelete
-7. **Lead synthesizes** — when agents complete, review ALL results before responding to user
+---
 
 ## V3 Hooks System (17 Hooks + 12 Workers)
 
 ### Hook Categories
 
-| Category | Hooks | Purpose |
-|----------|-------|---------|
-| **Core** | `pre-edit`, `post-edit`, `pre-command`, `post-command`, `pre-task`, `post-task` | Tool lifecycle |
-| **Session** | `session-start`, `session-end`, `session-restore`, `notify` | Context management |
-| **Intelligence** | `route`, `explain`, `pretrain`, `build-agents`, `transfer` | Neural learning |
-| **Learning** | `intelligence` (trajectory-start/step/end, pattern-store/search, stats, attention) | Reinforcement |
-| **Agent Teams** | `teammate-idle`, `task-completed` | Multi-agent coordination |
-
-### 12 Background Workers
-
-| Worker | Priority | Description |
-|--------|----------|-------------|
-| `ultralearn` | normal | Deep knowledge acquisition |
-| `optimize` | high | Performance optimization |
-| `consolidate` | low | Memory consolidation |
-| `predict` | normal | Predictive preloading |
-| `audit` | critical | Security analysis |
-| `map` | normal | Codebase mapping |
-| `preload` | low | Resource preloading |
-| `deepdive` | normal | Deep code analysis |
-| `document` | normal | Auto-documentation |
-| `refactor` | normal | Refactoring suggestions |
-| `benchmark` | normal | Performance benchmarking |
-| `testgaps` | normal | Test coverage analysis |
+| Category | Hooks |
+|----------|-------|
+| **Core** | `pre-edit`, `post-edit`, `pre-command`, `post-command`, `pre-task`, `post-task` |
+| **Session** | `session-start`, `session-end`, `session-restore`, `notify` |
+| **Intelligence** | `route`, `explain`, `pretrain`, `build-agents`, `transfer` |
+| **Learning** | `intelligence` (trajectory, pattern-store/search, attention) |
+| **Agent Teams** | `teammate-idle`, `task-completed` |
 
 ### Essential Hook Commands
 
 ```bash
-# Core hooks
-npx claude-flow@v3alpha hooks pre-task --description "[task]"
-npx claude-flow@v3alpha hooks post-task --task-id "[id]" --success true
-npx claude-flow@v3alpha hooks post-edit --file "[file]" --train-patterns
-
-# Session management
-npx claude-flow@v3alpha hooks session-start --session-id "[id]"
-npx claude-flow@v3alpha hooks session-end --export-metrics true
-npx claude-flow@v3alpha hooks session-restore --session-id "[id]"
-
-# Intelligence routing
-npx claude-flow@v3alpha hooks route --task "[task]"
-npx claude-flow@v3alpha hooks explain --topic "[topic]"
-
-# Neural learning
-npx claude-flow@v3alpha hooks pretrain --model-type moe --epochs 10
-npx claude-flow@v3alpha hooks build-agents --agent-types coder,tester
-
-# Background workers
-npx claude-flow@v3alpha hooks worker list
-npx claude-flow@v3alpha hooks worker dispatch --trigger audit
-npx claude-flow@v3alpha hooks worker status
+npx ruflo@latest hooks pre-task --description "[task]"
+npx ruflo@latest hooks post-task --task-id "[id]" --success true
+npx ruflo@latest hooks session-start --session-id "[id]"
+npx ruflo@latest hooks route --task "[task]"
+npx ruflo@latest hooks worker list
+npx ruflo@latest hooks worker dispatch --trigger audit
 ```
+
+---
 
 ## Intelligence System (RuVector)
 
-V3 includes the RuVector Intelligence System:
 - **SONA**: Self-Optimizing Neural Architecture (<0.05ms adaptation)
 - **MoE**: Mixture of Experts for specialized routing
-- **HNSW**: 150x-12,500x faster pattern search
-- **EWC++**: Elastic Weight Consolidation (prevents forgetting)
-- **Flash Attention**: 2.49x-7.47x speedup
+- **HNSW**: 150x–12,500x faster pattern search
+- **EWC++**: Elastic Weight Consolidation (prevents catastrophic forgetting)
+- **Flash Attention**: 2.49x–7.47x speedup
 
-The 4-step intelligence pipeline:
-1. **RETRIEVE** — Fetch relevant patterns via HNSW
-2. **JUDGE** — Evaluate with verdicts (success/failure)
-3. **DISTILL** — Extract key learnings via LoRA
-4. **CONSOLIDATE** — Prevent catastrophic forgetting via EWC++
+**4-step pipeline:** RETRIEVE (HNSW) → JUDGE (verdicts) → DISTILL (LoRA) → CONSOLIDATE (EWC++)
 
-## Embeddings Package (v3.0.0-alpha.12)
-
-Features:
-- **sql.js**: Cross-platform SQLite persistent cache (WASM, no native compilation)
-- **Document chunking**: Configurable overlap and size
-- **Normalization**: L2, L1, min-max, z-score
-- **Hyperbolic embeddings**: Poincare ball model for hierarchical data
-- **75x faster**: With agentic-flow ONNX integration
-- **Neural substrate**: Integration with RuVector
+---
 
 ## Hive-Mind Consensus
 
-### Topologies
-- `hierarchical` — Queen controls workers directly
-- `mesh` — Fully connected peer network
-- `hierarchical-mesh` — Hybrid (recommended)
-- `adaptive` — Dynamic based on load
+| Topology | Description |
+|----------|-------------|
+| `hierarchical` | Queen controls workers directly |
+| `mesh` | Fully connected peer network |
+| `hierarchical-mesh` | Hybrid (recommended default) |
+| `adaptive` | Dynamic based on load |
 
-### Consensus Strategies
-- `byzantine` — BFT (tolerates f < n/3 faulty)
-- `raft` — Leader-based (tolerates f < n/2)
-- `gossip` — Epidemic for eventual consistency
-- `crdt` — Conflict-free replicated data types
-- `quorum` — Configurable quorum-based
+| Strategy | Algorithm |
+|----------|----------|
+| `byzantine` | BFT (tolerates f < n/3 faulty) |
+| `raft` | Leader-based (tolerates f < n/2) |
+| `gossip` | Epidemic eventual consistency |
+| `crdt` | Conflict-free replicated data types |
+| `quorum` | Configurable quorum-based |
 
-## V3 Performance Targets
+---
 
-| Metric | Target | Status |
-|--------|--------|--------|
-| HNSW Search | 150x-12,500x faster | **Implemented** (persistent) |
-| Memory Reduction | 50-75% with quantization | **Implemented** (3.92x Int8) |
-| SONA Integration | Pattern learning | **Implemented** (ReasoningBank) |
-| Flash Attention | 2.49x-7.47x speedup | In progress |
-| MCP Response | <100ms | Achieved |
-| CLI Startup | <500ms | Achieved |
-| SONA Adaptation | <0.05ms | In progress |
+## Security (@claude-flow/security + AIDefence)
 
-## Environment Variables
-
-```bash
-# Configuration
-CLAUDE_FLOW_CONFIG=./claude-flow.config.json
-CLAUDE_FLOW_LOG_LEVEL=info
-
-# Provider API Keys
-ANTHROPIC_API_KEY=sk-ant-...
-OPENAI_API_KEY=sk-...
-GOOGLE_API_KEY=...
-
-# MCP Server
-CLAUDE_FLOW_MCP_PORT=3000
-CLAUDE_FLOW_MCP_HOST=localhost
-CLAUDE_FLOW_MCP_TRANSPORT=stdio
-
-# Memory
-CLAUDE_FLOW_MEMORY_BACKEND=hybrid
-CLAUDE_FLOW_MEMORY_PATH=./data/memory
+```typescript
+import { InputValidator, PathValidator, SafeExecutor, PasswordHasher, TokenGenerator } from '@claude-flow/security';
 ```
 
-## Doctor Health Checks
+- `InputValidator` — Zod-based validation at boundaries
+- `PathValidator` — Path traversal prevention
+- `SafeExecutor` — Command injection protection (SAFE_LANGUAGES whitelist)
+- `PasswordHasher` — bcrypt hashing
+- `TokenGenerator` — Secure token generation
+- `AIDefence` — Prompt injection detection, PII scanning (14 PII types), safety filters
 
-Run `npx claude-flow@v3alpha doctor` to check:
-- Node.js version (20+)
-- npm version (9+)
-- Git installation
-- Config file validity
-- Daemon status
-- Memory database
-- API keys
-- MCP servers
-- Disk space
-- TypeScript installation
-
-## Quick Setup
-
-```bash
-# Add MCP servers
-claude mcp add claude-flow npx claude-flow@v3alpha mcp start
-claude mcp add ruv-swarm npx ruv-swarm mcp start  # Optional
-claude mcp add flow-nexus npx flow-nexus@latest mcp start  # Optional
-
-# Start daemon
-npx claude-flow@v3alpha daemon start
-
-# Run doctor
-npx claude-flow@v3alpha doctor --fix
-```
-
-## Claude Code vs MCP Tools
-
-### Claude Code Handles ALL EXECUTION:
-- **Task tool**: Spawn and run agents concurrently
-- File operations (Read, Write, Edit, MultiEdit, Glob, Grep)
-- Code generation and programming
-- Bash commands and system operations
-- TodoWrite and task management
-- Git operations
-
-### MCP Tools ONLY COORDINATE:
-- Swarm initialization (topology setup)
-- Agent type definitions
-- Task orchestration
-- Memory management
-- Neural features
-- Performance tracking
-
-- Keep MCP for coordination strategy only — use Claude Code's Task tool for real execution
+---
 
 ## Claude Code ↔ AgentDB Memory Bridge
 
-Claude Code's auto-memory (`~/.claude/projects/*/memory/*.md`) is bridged to AgentDB with ONNX vector embeddings for semantic search.
-
-### MCP Tools
-
 | Tool | Description |
 |------|-------------|
-| `memory_import_claude` | Import Claude Code memories into AgentDB with 384-dim ONNX embeddings. Use `allProjects: true` to import from ALL projects. |
-| `memory_bridge_status` | Show bridge health — Claude files, AgentDB entries, SONA state, connection status |
-| `memory_search_unified` | Semantic search across ALL namespaces (claude-memories, auto-memory, patterns, tasks, feedback) |
-
-### Auto-Import on Session Start
-
-The `SessionStart` hook automatically imports current project's memories into AgentDB. For manual import of all projects:
+| `memory_import_claude` | Import Claude Code memories into AgentDB (384-dim ONNX) |
+| `memory_bridge_status` | Show bridge health |
+| `memory_search_unified` | Semantic search across ALL namespaces |
 
 ```bash
-# Via MCP tool (from Claude Code)
+# Auto-imports current project memories on SessionStart
+# For all projects:
 memory_import_claude({ allProjects: true })
-
-# Via helper hook (from terminal)
-node .claude/helpers/auto-memory-hook.mjs import-all
+memory_search_unified({ query: "authentication security", limit: 5 })
 ```
 
-### Unified Search
+---
 
-Search across both Claude Code memories and AgentDB entries:
+## Agent Federation — Zero-Trust Cross-Machine Collaboration
+
+Federation lets agents on different machines, orgs, or cloud regions discover, authenticate, and collaborate securely.
+
+```
+Your Agent → [Strip PII] → [Sign ed25519] → [mTLS channel]
+                                                    |
+Their Agent ← [Block injection] ← [Verify identity] ←┘
+                    Audit trail both sides. Trust scores auto-update.
+```
+
+### Trust Scoring Formula
+`0.4×success_rate + 0.2×uptime + 0.2×threat_score + 0.2×integrity`
+
+Trust upgrades require history; downgrades are instant. PII is stripped before any data leaves your node (14-type detection pipeline).
+
+### Federation CLI
 
 ```bash
-# Via MCP tool
-memory_search_unified({ query: "authentication security", limit: 5 })
-
-# Results include source attribution: claude-code, auto-memory, or agentdb
+npx ruflo@latest federation init          # generate keypair, start federation node
+npx ruflo@latest federation join wss://peer.example.com:8443
+npx ruflo@latest federation send --to team-b --type task-request --message "..."
+npx ruflo@latest federation status
 ```
 
-### Intelligence Pipeline
+---
 
-| Component | Status | Details |
-|-----------|--------|---------|
-| ONNX Embeddings | Active | all-MiniLM-L6-v2, 384 dimensions |
-| SONA Learning | Active | Pattern matching + trajectory recording |
-| ReasoningBank | Active | Pattern storage with file persistence |
-| AgentDB sql.js | Active | SQLite with vector_indexes table |
+## Ruflo Sub-Package (ruflo/)
+
+The `ruflo/` directory is a separate npm package (`name: "ruflo"`) that provides:
+- **`src/ruvocal/`** — Self-hostable SvelteKit chat UI (fork of HuggingFace Chat UI)
+- **`bin/`** — Thin CLI entry wrapping claude-flow
+
+### RVF Manifest (ruflo/rvf.manifest.json)
+
+Format: `rvf-package v2.0` — `chat-ui-mcp` package deploying white-label AI chat with grouped MCP endpoints.
+
+**Components (docker-compose.yml — 4 services):**
+
+| Service | Port | Description |
+|---------|------|-------------|
+| `mongodb` | 27017 | MongoDB 7 for conversation persistence |
+| `mcp-bridge` | 3001 | Per-group MCP JSON-RPC proxy + multi-provider AI chat proxy |
+| `nginx` | 3000 | Reverse proxy — brand injection, CORS, static assets |
+| `chat-ui` | internal | RuVocal SvelteKit UI (proxied through nginx) |
+
+**MCP Tool Groups (per-group endpoints at `/mcp/{group}`):**
+
+| Group | Default | Endpoint | Description |
+|-------|---------|----------|-------------|
+| `core` | on | `/mcp/core` | Built-in guidance, help, utilities |
+| `intelligence` | on | `/mcp/intelligence` | Hooks, learning, neural pattern tools |
+| `agents` | on | `/mcp/agents` | Agent spawn, swarm, hive-mind, task orchestration |
+| `memory` | on | `/mcp/memory` | Memory store/search, embeddings, session |
+| `devtools` | on | `/mcp/devtools` | Performance, security, deployment, config, doctor |
+| `security` | off | `/mcp/security` | Security scanning, CVE detection, threat analysis |
+| `browser` | off | `/mcp/browser` | Headless browser — navigate, click, fill, screenshot |
+| `neural` | off | `/mcp/neural` | Neural training, DAA autonomous agents |
+| `agentic-flow` | off | `/mcp/agentic-flow` | agentic-flow alpha integration |
+| `claude-code` | off | `/mcp/claude-code` | Claude Code CLI tools |
+| `gemini` | off | `/mcp/gemini` | Google Gemini native tools |
+| `codex` | off | `/mcp/codex` | OpenAI Codex tools |
+
+**Deployment platforms:** Google Cloud Run, Docker Compose, Kubernetes
+
+**Infrastructure targets:** mcp-bridge (512Mi / 1 CPU / 0-5 instances), chat-ui (2Gi / 2 CPU / 1-10 instances)
+
+### Self-Hosting
+
+```bash
+cd ruflo
+cp .env.example .env   # fill in API keys — never commit .env
+docker compose up -d
+# UI: http://localhost:3000   MCP Bridge: http://localhost:3001
+```
+
+**Brand customization:** `PUBLIC_APP_NAME` and `PUBLIC_APP_DESCRIPTION` env vars, plus `chat-ui/static/chatui/` overlay assets.
+
+**Hosted demo:** https://flo.ruv.io/
+
+---
+
+## Goal Planner UI (v3/goal_ui)
+
+GOAP A* planner: plain-English goals → executable agent plans.
+
+- **Source:** `v3/goal_ui/` (Vite + Supabase)
+- **Hosted:** https://goal.ruv.io/ · live agents: https://goal.ruv.io/agents
+- **Self-host:** `cd v3/goal_ui && npm install && npm run dev`
+
+---
+
+## Headless Background Instances (claude -p)
+
+```bash
+claude -p "Analyze the authentication module for security issues"
+claude -p --model haiku "Format this config file"
+claude -p --output-format json "List all TODO comments in src/"
+claude -p --max-budget-usd 0.50 "Run comprehensive security audit"
+
+# Parallel background execution
+claude -p "Analyze src/auth/ for vulnerabilities" &
+claude -p "Write tests for src/api/endpoints.ts" &
+wait
+```
+
+---
+
+## CI/CD Workflows (.github/workflows — 9 workflows)
+
+| Workflow file | Size | Description |
+|---------------|------|-------------|
+| `ci.yml` | 6KB | Main CI — lint, type-check, test, build on every push/PR |
+| `v3-ci.yml` | 3.6KB | V3 monorepo-specific CI (pnpm workspace, vitest) |
+| `integration-tests.yml` | 34KB | Extensive integration tests — all subsystems, MCP, swarm, memory |
+| `verification-pipeline.yml` | 13KB | Multi-stage verification — security scan, ADR compliance, benchmarks |
+| `rollback-manager.yml` | 26KB | Automated rollback pipeline with health checks and recovery |
+| `status-badges.yml` | 6KB | Update repo status badges after CI runs |
+| `deploy-catalyst.yml` | 800B | Deploy `catalyst-talents/` to Netlify on push to main |
+| `pages.yml` | 500B | GitHub Pages deployment for documentation site |
+| `validate-marketplace.yml` | 2.2KB | Validate IPFS plugin marketplace registry integrity |
+
+### Running CI Locally
+
+```bash
+cd v3
+pnpm install
+pnpm run build         # build all @claude-flow packages
+pnpm run test          # vitest
+pnpm run typecheck     # tsc --noEmit
+
+# Root level
+npm test
+npm run build
+```
+
+---
+
+## Netlify Deployment (netlify.toml)
+
+```toml
+[build]
+  base    = "catalyst-talents"
+  command = "npm run build"
+  publish = "out"
+
+[build.environment]
+  NODE_VERSION = "20"
+```
+
+- Source: `catalyst-talents/` (Next.js)
+- Triggered by: `.github/workflows/deploy-catalyst.yml` on push to `main`
+- Also triggered manually via Netlify dashboard
+
+---
 
 ## Publishing to npm
 
 ### Publishing Rules
 
-- MUST publish ALL THREE packages when publishing CLI changes: `@claude-flow/cli`, `claude-flow`, AND `ruflo`
-- MUST update ALL dist-tags for ALL THREE packages after publishing
-- Publish order: `@claude-flow/cli` first, then `claude-flow` (umbrella), then `ruflo` (alias umbrella)
-- MUST run verification for ALL THREE before telling user publishing is complete
+**MUST publish ALL THREE packages when publishing CLI changes.**
+Publish order: `@claude-flow/cli` first → `claude-flow` → `ruflo`
 
 ```bash
 # STEP 1: Build and publish CLI
 cd v3/@claude-flow/cli
-npm version 3.0.0-alpha.XXX --no-git-tag-version
+npm version 3.6.X --no-git-tag-version
 npm run build
-npm publish --tag alpha
-npm dist-tag add @claude-flow/cli@3.0.0-alpha.XXX latest
+npm publish --tag latest
+npm dist-tag add @claude-flow/cli@3.6.X alpha
 
-# STEP 2: Publish claude-flow umbrella
-cd /workspaces/claude-flow
-npm version 3.0.0-alpha.XXX --no-git-tag-version
-npm publish --tag v3alpha
+# STEP 2: Publish claude-flow umbrella (root)
+npm version 3.6.X --no-git-tag-version
+npm publish --tag latest
+npm dist-tag add claude-flow@3.6.X alpha
+npm dist-tag add claude-flow@3.6.X v3alpha
 
-# STEP 3: Update ALL claude-flow umbrella tags (CRITICAL - DON'T SKIP!)
-npm dist-tag add claude-flow@3.0.0-alpha.XXX latest
-npm dist-tag add claude-flow@3.0.0-alpha.XXX alpha
-
-# STEP 4: Publish ruflo umbrella (CRITICAL - DON'T FORGET!)
-cd /workspaces/claude-flow/ruflo
-npm version 3.0.0-alpha.XXX --no-git-tag-version
-npm publish --tag alpha
-npm dist-tag add ruflo@3.0.0-alpha.XXX latest
+# STEP 3: Publish ruflo umbrella
+cd ruflo
+npm version 3.6.X --no-git-tag-version
+npm publish --tag latest
+npm dist-tag add ruflo@3.6.X alpha
 ```
 
-**Verification (run before telling user):**
+**Verification (run before telling user publishing is complete):**
+
 ```bash
 npm view @claude-flow/cli dist-tags --json
 npm view claude-flow dist-tags --json
 npm view ruflo dist-tags --json
-# ALL THREE packages need: alpha AND latest pointing to newest version
+# ALL THREE need: latest AND alpha pointing to newest version
 ```
 
 ### All Tags That Must Be Updated
-| Package | Tag | Command Users Run |
-|---------|-----|-------------------|
-| `@claude-flow/cli` | `alpha` | `npx @claude-flow/cli@alpha` |
-| `@claude-flow/cli` | `latest` | `npx @claude-flow/cli@latest` |
-| `@claude-flow/cli` | `v3alpha` | `npx @claude-flow/cli@v3alpha` |
-| `claude-flow` | `alpha` | `npx claude-flow@alpha` — EASY TO FORGET |
-| `claude-flow` | `latest` | `npx claude-flow@latest` |
-| `claude-flow` | `v3alpha` | `npx claude-flow@v3alpha` |
-| `ruflo` | `alpha` | `npx ruflo@alpha` — EASY TO FORGET |
-| `ruflo` | `latest` | `npx ruflo@latest` |
 
-- Never forget the `ruflo` package — it's a thin wrapper users run via `npx ruflo@alpha`
-- Never forget the umbrella `alpha` tag — users run `npx claude-flow@alpha`
-- `ruflo` source is in `/ruflo/` — it depends on `@claude-flow/cli`
+| Package | Tags | User command |
+|---------|------|--------------|
+| `@claude-flow/cli` | `latest`, `alpha`, `v3alpha` | `npx @claude-flow/cli@latest` |
+| `claude-flow` | `latest`, `alpha`, `v3alpha` | `npx claude-flow@latest` |
+| `ruflo` | `latest`, `alpha` | `npx ruflo@latest` |
+
+> Since v3.5.0 (2026-02-27), the primary tag is `latest` (not `v3alpha`).
+> `ruflo` is the recommended user-facing package — never skip it.
+
+---
 
 ## Plugin Registry Maintenance (IPFS/Pinata)
 
-The plugin registry is stored on IPFS via Pinata for decentralized, immutable distribution.
+Registry CID stored in: `v3/@claude-flow/cli/src/plugins/store/discovery.ts`
 
-### Registry Location
-- **Current CID**: Stored in `v3/@claude-flow/cli/src/plugins/store/discovery.ts`
-- **Gateway**: `https://gateway.pinata.cloud/ipfs/{CID}`
-- **Format**: JSON with plugin metadata, categories, featured/trending lists
-
-### Required Environment Variables
-Add to `.env` (NEVER commit actual values):
 ```bash
-PINATA_API_KEY=your-api-key
-PINATA_API_SECRET=your-api-secret
-PINATA_API_JWT=your-jwt-token
-```
+# Fetch current registry
+curl -s "https://gateway.pinata.cloud/ipfs/$(grep LIVE_REGISTRY_CID v3/@claude-flow/cli/src/plugins/store/discovery.ts | cut -d\"'\" -f2)" > /tmp/registry.json
 
-## Plugin Registry Operations
-
-### Adding a New Plugin to Registry
-
-1. **Fetch current registry**:
-```bash
-curl -s "https://gateway.pinata.cloud/ipfs/$(grep LIVE_REGISTRY_CID v3/@claude-flow/cli/src/plugins/store/discovery.ts | cut -d"'" -f2)" > /tmp/registry.json
-```
-
-2. **Add plugin entry** to the `plugins` array:
-```json
-{
-  "id": "@claude-flow/your-plugin",
-  "name": "@claude-flow/your-plugin",
-  "displayName": "Your Plugin",
-  "description": "Plugin description",
-  "version": "1.0.0-alpha.1",
-  "size": 100000,
-  "checksum": "sha256:abc123",
-  "author": {"id": "claude-flow-team", "displayName": "Claude Flow Team", "verified": true},
-  "license": "MIT",
-  "categories": ["official"],
-  "tags": ["your", "tags"],
-  "downloads": 0,
-  "rating": 5,
-  "lastUpdated": "2026-01-25T00:00:00.000Z",
-  "minClaudeFlowVersion": "3.0.0",
-  "type": "integration",
-  "hooks": [],
-  "commands": [],
-  "permissions": ["memory"],
-  "exports": ["YourExport"],
-  "verified": true,
-  "trustLevel": "official"
-}
-```
-
-3. **Update counts and arrays**:
-   - Increment `totalPlugins`
-   - Add to `official` array
-   - Add to `featured`/`newest` if applicable
-   - Update category `pluginCount`
-
-4. **Upload to Pinata** (read credentials from .env):
-```bash
-# Source credentials from .env
-PINATA_JWT=$(grep "^PINATA_API_JWT=" .env | cut -d'=' -f2-)
-
-# Upload updated registry
+# Upload updated registry (ALWAYS source credentials from .env — NEVER hardcode)
+PINATA_JWT=$(grep '^PINATA_API_JWT=' .env | cut -d'=' -f2-)
 curl -X POST "https://api.pinata.cloud/pinning/pinJSONToIPFS" \
   -H "Authorization: Bearer $PINATA_JWT" \
   -H "Content-Type: application/json" \
   -d @/tmp/registry.json
 ```
 
-5. **Update discovery.ts** with new CID:
-```typescript
-export const LIVE_REGISTRY_CID = 'NEW_CID_FROM_PINATA';
-```
-
-6. **Also update demo registry** in discovery.ts `demoPluginRegistry` for offline fallback
-
-### Security Rules
-- NEVER hardcode API keys in scripts or source files
-- NEVER commit .env (already in .gitignore)
-- Always source credentials from environment at runtime
-- Always delete temporary scripts after one-time uploads
-
-### Verification
-```bash
-# Verify new registry is accessible
-curl -s "https://gateway.pinata.cloud/ipfs/{NEW_CID}" | jq '.totalPlugins'
-```
-
-## Optional Plugins (20 Available)
-
-Plugins are distributed via IPFS and can be installed with the CLI. Browse and install from the official registry:
-
-```bash
-# List all available plugins
-npx claude-flow@v3alpha plugins list
-
-# Install a plugin
-npx claude-flow@v3alpha plugins install @claude-flow/plugin-name
-
-# Enable/disable
-npx claude-flow@v3alpha plugins enable @claude-flow/plugin-name
-npx claude-flow@v3alpha plugins disable @claude-flow/plugin-name
-```
-
-### Core Plugins
-
-| Plugin | Version | Description |
-|--------|---------|-------------|
-| `@claude-flow/embeddings` | 3.0.0-alpha.1 | Vector embeddings with sql.js, HNSW, hyperbolic support |
-| `@claude-flow/security` | 3.0.0-alpha.1 | Input validation, path security, CVE remediation |
-| `@claude-flow/claims` | 3.0.0-alpha.8 | Claims-based authorization (check, grant, revoke, list) |
-| `@claude-flow/neural` | 3.0.0-alpha.7 | Neural pattern training (SONA, MoE, EWC++) |
-| `@claude-flow/plugins` | 3.0.0-alpha.1 | Plugin system core (manager, discovery, store) |
-| `@claude-flow/performance` | 3.0.0-alpha.1 | Performance profiling and benchmarking |
-
-### Integration Plugins
-
-| Plugin | Version | Description |
-|--------|---------|-------------|
-| `@claude-flow/plugin-agentic-qe` | 3.0.0-alpha.4 | Agentic quality engineering integration |
-| `@claude-flow/plugin-prime-radiant` | 0.1.5 | Prime Radiant intelligence integration |
-| `@claude-flow/plugin-gastown-bridge` | 3.0.0-alpha.1 | Gastown bridge protocol integration |
-| `@claude-flow/teammate-plugin` | 1.0.0-alpha.1 | Multi-agent teammate coordination |
-| `@claude-flow/plugin-code-intelligence` | 0.1.0 | Advanced code analysis and intelligence |
-| `@claude-flow/plugin-test-intelligence` | 0.1.0 | Intelligent test generation and gap analysis |
-| `@claude-flow/plugin-perf-optimizer` | 0.1.0 | Performance optimization automation |
-| `@claude-flow/plugin-neural-coordinator` | 0.1.0 | Neural network coordination across agents |
-| `@claude-flow/plugin-cognitive-kernel` | 0.1.0 | Core cognitive processing kernel |
-| `@claude-flow/plugin-quantum-optimizer` | 0.1.0 | Quantum-inspired optimization algorithms |
-| `@claude-flow/plugin-hyperbolic-reasoning` | 0.1.0 | Hyperbolic space reasoning for hierarchical data |
-
-### Domain-Specific Plugins
-
-| Plugin | Version | Description |
-|--------|---------|-------------|
-| `@claude-flow/plugin-healthcare-clinical` | 0.1.0 | Healthcare clinical workflow automation |
-| `@claude-flow/plugin-financial-risk` | 0.1.0 | Financial risk assessment and modeling |
-| `@claude-flow/plugin-legal-contracts` | 0.1.0 | Legal contract analysis and generation |
-
-### Plugin Development
-
-```bash
-# Create a new plugin from template
-npx claude-flow@v3alpha plugins create my-plugin
-
-# Test locally
-npx claude-flow@v3alpha plugins install ./path/to/my-plugin
-
-# Publish to registry (requires Pinata credentials)
-npx claude-flow@v3alpha plugins publish
-```
-
-Registry source: IPFS via Pinata (`QmXbfEAaR7D2Ujm4GAkbwcGZQMHqAMpwDoje4583uNP834`)
-
-## Support
-
-- Documentation: https://github.com/ruvnet/claude-flow
-- Issues: https://github.com/ruvnet/claude-flow/issues
+**Security:** NEVER hardcode PINATA_API_KEY, PINATA_API_SECRET, or PINATA_API_JWT. Source from `.env` at runtime. NEVER commit `.env`.
 
 ---
 
-Remember: **Claude Flow coordinates, Claude Code creates!**
+## Plugin Marketplace (32 native + 21 npm)
+
+```bash
+# Claude Code plugin install
+/plugin marketplace add ruvnet/ruflo
+/plugin install ruflo-core@ruflo
+/plugin install ruflo-swarm@ruflo
+/plugin install ruflo-federation@ruflo
+
+# Or via CLI
+npx ruflo@latest plugins install @claude-flow/plugin-name
+```
+
+### Plugin Categories
+
+| Category | Key Plugins |
+|----------|------------|
+| Core & Orchestration | `ruflo-core`, `ruflo-swarm`, `ruflo-autopilot`, `ruflo-federation` |
+| Memory & Knowledge | `ruflo-agentdb`, `ruflo-rag-memory`, `ruflo-ruvector`, `ruflo-knowledge-graph` |
+| Intelligence | `ruflo-intelligence`, `ruflo-daa`, `ruflo-ruvllm`, `ruflo-goals` |
+| Code Quality | `ruflo-testgen`, `ruflo-browser`, `ruflo-jujutsu`, `ruflo-docs` |
+| Security | `ruflo-security-audit`, `ruflo-aidefence` |
+| Architecture | `ruflo-adr`, `ruflo-ddd`, `ruflo-sparc` |
+| DevOps | `ruflo-migrations`, `ruflo-observability`, `ruflo-cost-tracker` |
+| Domain-Specific | `ruflo-iot-cognitum`, `ruflo-neural-trader`, `ruflo-market-data` |
+
+---
+
+## Environment Variables
+
+```bash
+# Core config
+CLAUDE_FLOW_CONFIG=./claude-flow.config.json
+CLAUDE_FLOW_LOG_LEVEL=info
+
+# Provider API Keys (NEVER commit)
+ANTHROPIC_API_KEY=sk-ant-...
+OPENAI_API_KEY=sk-...
+GOOGLE_API_KEY=...
+OPENROUTER_API_KEY=...
+
+# MCP Server
+CLAUDE_FLOW_MCP_PORT=3000
+CLAUDE_FLOW_MCP_TRANSPORT=stdio
+
+# Memory
+CLAUDE_FLOW_MEMORY_BACKEND=hybrid
+CLAUDE_FLOW_MEMORY_PATH=./data/memory
+
+# Plugin registry (NEVER commit values)
+PINATA_API_KEY=
+PINATA_API_SECRET=
+PINATA_API_JWT=
+
+# RuVocal / Chat UI
+MONGODB_URL=mongodb://localhost:27017
+MONGODB_DB_NAME=chat-db
+PUBLIC_APP_NAME=RuFlo
+BRAND_DESCRIPTION=Enterprise AI Agent Orchestration Platform
+
+# MCP Tool Group toggles (for docker-compose)
+MCP_GROUP_INTELLIGENCE=true
+MCP_GROUP_AGENTS=true
+MCP_GROUP_MEMORY=true
+MCP_GROUP_DEVTOOLS=true
+MCP_GROUP_SECURITY=false
+MCP_GROUP_BROWSER=false
+MCP_GROUP_NEURAL=false
+
+# Feature flags (set by settings.json)
+CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
+CLAUDE_FLOW_V3_ENABLED=true
+CLAUDE_FLOW_HOOKS_ENABLED=true
+```
+
+---
+
+## Quick Setup
+
+```bash
+# Add as MCP server in Claude Code
+claude mcp add ruflo -- npx -y ruflo@latest mcp start
+
+# Or one-line install
+curl -fsSL https://cdn.jsdelivr.net/gh/ruvnet/ruflo@main/scripts/install.sh | bash
+
+# Start daemon
+npx ruflo@latest daemon start
+
+# Run doctor
+npx ruflo@latest doctor --fix
+```
+
+---
+
+## Doctor Health Checks
+
+```bash
+npx ruflo@latest doctor --fix
+```
+
+Checks: Node.js 20+, npm 9+, git, config file, daemon status, memory DB, API keys, MCP servers, disk space, TypeScript, agentic-flow bridge.
+
+---
+
+## Claude Code vs MCP Tools
+
+### Claude Code Handles ALL EXECUTION
+- **Task tool**: Spawn and run agents concurrently
+- File operations (Read, Write, Edit, MultiEdit, Glob, Grep)
+- Code generation, Bash commands, git operations
+- TodoWrite and task management
+
+### MCP Tools ONLY COORDINATE
+- Swarm initialization (topology setup)
+- Agent type definitions and task orchestration
+- Memory management and neural features
+- Performance tracking
+
+> Keep MCP for coordination strategy — use Claude Code's Task tool for real execution.
+
+---
+
+## V3 Performance Targets
+
+| Metric | Target | Status |
+|--------|--------|--------|
+| HNSW Search | 150x–12,500x faster | **Implemented** |
+| Memory Reduction | 50-75% (Int8 quantization) | **Implemented** |
+| MCP Response | <100ms | **Achieved** |
+| CLI Startup | <500ms | **Achieved** |
+| Flash Attention | 2.49x–7.47x speedup | In progress |
+| SONA Adaptation | <0.05ms | In progress |
+
+---
+
+## Support
+
+| Resource | Link |
+|----------|------|
+| Documentation | [User Guide](docs/USERGUIDE.md) |
+| Issues | [GitHub Issues](https://github.com/ruvnet/claude-flow/issues) |
+| Enterprise | [ruv.io](https://ruv.io) |
+| Web UI | [flo.ruv.io](https://flo.ruv.io) |
+| Goal Planner | [goal.ruv.io](https://goal.ruv.io) |
+| Community | [Agentics Foundation Discord](https://discord.com/invite/dfxmpwkG2D) |
+
+---
+
+> **Remember: Claude Flow coordinates, Claude Code creates!**
