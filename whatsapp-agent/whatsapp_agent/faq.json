@@ -1,0 +1,44 @@
+{
+  "faqs": [
+    {
+      "question": "What services do you offer?",
+      "answer": "We offer a wide range of business services tailored to your needs. Contact us for a personalized consultation."
+    },
+    {
+      "question": "What are your business hours?",
+      "answer": "We are open Monday to Friday, 9 AM - 6 PM, and Saturday 10 AM - 4 PM."
+    },
+    {
+      "question": "How do I book an appointment?",
+      "answer": "Just tell me you'd like to book an appointment and I'll walk you through the process right here on WhatsApp!"
+    },
+    {
+      "question": "How much do your services cost?",
+      "answer": "Pricing depends on the specific service. Share what you need and I'll give you accurate pricing."
+    },
+    {
+      "question": "Do you offer refunds?",
+      "answer": "Yes — we stand behind our work. Please contact us within 48 hours of service for any concerns."
+    },
+    {
+      "question": "Where are you located?",
+      "answer": "We operate online and have a physical location. Message us for our current address."
+    },
+    {
+      "question": "How can I track my order?",
+      "answer": "Share your order number and I'll look it up for you right away!"
+    },
+    {
+      "question": "Do you offer delivery?",
+      "answer": "Yes — we offer delivery within our service area. Additional fees may apply based on distance."
+    },
+    {
+      "question": "How do I cancel an appointment?",
+      "answer": "Just tell me your appointment ID and I'll cancel it for you immediately."
+    },
+    {
+      "question": "Do you have a loyalty program?",
+      "answer": "Yes! Ask about our loyalty program when you book your first appointment."
+    }
+  ]
+}
