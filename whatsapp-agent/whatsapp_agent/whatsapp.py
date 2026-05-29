@@ -8,6 +8,7 @@ from . import config
 logger = logging.getLogger(__name__)
 
 _BASE_URL = "https://graph.facebook.com/v19.0"
+_WA_TEXT_MAX = 4096  # WhatsApp text message character limit
 
 
 def _headers() -> Dict[str, str]:
@@ -21,13 +22,19 @@ def _messages_url() -> str:
     return f"{_BASE_URL}/{config.WHATSAPP_PHONE_NUMBER_ID}/messages"
 
 
+def _truncate(text: str, limit: int = _WA_TEXT_MAX) -> str:
+    if len(text) <= limit:
+        return text
+    return text[: limit - 3] + "..."
+
+
 async def send_text_message(to: str, body: str) -> bool:
     payload = {
         "messaging_product": "whatsapp",
         "recipient_type": "individual",
         "to": to,
         "type": "text",
-        "text": {"preview_url": False, "body": body},
+        "text": {"preview_url": False, "body": _truncate(body)},
     }
     async with httpx.AsyncClient(timeout=30.0) as client:
         resp = await client.post(_messages_url(), json=payload, headers=_headers())
@@ -50,7 +57,7 @@ async def send_interactive_buttons(
         "type": "interactive",
         "interactive": {
             "type": "button",
-            "body": {"text": body_text},
+            "body": {"text": _truncate(body_text, 1024)},
             "action": {
                 "buttons": [
                     {
@@ -88,8 +95,8 @@ async def send_list_message(
         "type": "interactive",
         "interactive": {
             "type": "list",
-            "body": {"text": body_text},
-            "action": {"button": button_text, "sections": sections},
+            "body": {"text": _truncate(body_text, 1024)},
+            "action": {"button": button_text[:20], "sections": sections},
         },
     }
     async with httpx.AsyncClient(timeout=30.0) as client:
