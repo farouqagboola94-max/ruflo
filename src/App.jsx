@@ -24,6 +24,8 @@ import Highlights from './sections/Highlights'
 import Community from './sections/Community'
 import Testimonials from './sections/Testimonials'
 import SneakerDNA from './sections/SneakerDNA'
+import CultureHistory from './sections/CultureHistory'
+import CultureMuseum from './sections/CultureMuseum'
 import CommunityWall from './sections/CommunityWall'
 import SneakerTrivia from './sections/SneakerTrivia'
 import ShoeColorizer from './sections/ShoeColorizer'
@@ -60,6 +62,8 @@ const SECTION_TITLES = [
   { id: 'community',    title: "Community | Sneakers Fest '26" },
   { id: 'testimonials', title: "Stories | Sneakers Fest '26" },
   { id: 'dna',          title: "Sneaker DNA | Sneakers Fest '26" },
+  { id: 'culture-history', title: "Art & Culture | Sneakers Fest '26" },
+  { id: 'museum',       title: "The Museum | Sneakers Fest '26" },
   { id: 'wall',         title: "The Wall | Sneakers Fest '26" },
   { id: 'trivia',       title: "Trivia | Sneakers Fest '26" },
   { id: 'colorizer',    title: "Shoe Builder | Sneakers Fest '26" },
@@ -147,6 +151,8 @@ export default function App() {
       <Reveal><Community /></Reveal>
       <Reveal><Testimonials /></Reveal>
       <Reveal><SneakerDNA /></Reveal>
+      <Reveal><CultureHistory /></Reveal>
+      <Reveal><CultureMuseum /></Reveal>
       <Reveal><CommunityWall /></Reveal>
       <Reveal><SneakerTrivia /></Reveal>
       <Reveal><ShoeColorizer /></Reveal>
