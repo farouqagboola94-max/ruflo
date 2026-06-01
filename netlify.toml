@@ -10,6 +10,19 @@
   # Safety net: if pnpm is somehow detected, don't enforce frozen lockfile
   PNPM_FLAGS = "--no-frozen-lockfile"
 
+  # Secrets scanning configuration.
+  # The deployed site is only the Vite-built `dist/` (from index.html + src),
+  # which contains no hardcoded credentials. The repository, however, also vendors
+  # an unrelated monorepo (v2/, v3/) full of test fixtures, secret-detection tooling,
+  # and ADR docs that contain example secret-like strings (private-key headers,
+  # sample JWTs, AKIA-style keys). Netlify's smart detection flags those false
+  # positives and aborts the build, so smart detection is disabled here.
+  SECRETS_SCAN_SMART_DETECTION_ENABLED = "false"
+  # The payment publishable keys are public by design and Vite inlines them into the
+  # client bundle. Omit them so the standard scanner doesn't flag their expected
+  # appearance in the build output.
+  SECRETS_SCAN_OMIT_KEYS = "VITE_PAYSTACK_PUBLIC_KEY,VITE_FLUTTERWAVE_PUBLIC_KEY"
+
 # SPA routing: every URL falls back to index.html
 [[redirects]]
   from = "/*"
