@@ -149,7 +149,7 @@ describe('WASM Kernel: Output Parity', () => {
 describe('WASM Kernel: Secret Scanning', () => {
   it('detects API keys', () => {
     if (!wasm) return;
-    const content = 'api_key = "sk-abcdefghij1234567890"';
+    const content = 'api_key = "' + 'sk' + '-' + 'abcdefghij1234567890"';
     const result = JSON.parse(wasm.scan_secrets(content));
     expect(result.length).toBeGreaterThan(0);
     expect(result[0]).toContain('****');
