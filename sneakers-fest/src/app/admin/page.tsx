@@ -6,7 +6,6 @@ import { TICKET_TIERS } from '@/data/tickets'
 const ADMIN_PIN   = process.env.NEXT_PUBLIC_ADMIN_PIN || 'sf-admin-2026'
 const SESSION_KEY = 'sf_admin_session'
 
-// Raffle tickets included per pass by tier
 const RAFFLE_PER_TIER: Record<string, number> = { general: 1, vip: 3, vvip: 5, phalanx: 5 }
 const GUARANTEED_TIERS = new Set(['vvip', 'phalanx'])
 
@@ -24,14 +23,16 @@ type WaitlistRecord = {
   name: string; email: string; phone: string; joinedAt: string
 }
 type DrawRecord = {
-  id: string
-  prize: string
+  id: string; prize: string
   winner: { name: string; email: string; tier: string; tierId: string; ref: string; quantity: number }
-  drawnAt: string
-  claimed: boolean
+  drawnAt: string; claimed: boolean
+}
+type CheckinRecord = {
+  ref: string; name: string; email: string
+  tier: string; tierId: string; quantity: number; checkedInAt: string
 }
 
-type Tab = 'overview' | 'tickets' | 'vendors' | 'waitlist' | 'raffle'
+type Tab = 'overview' | 'tickets' | 'vendors' | 'waitlist' | 'raffle' | 'gate'
 
 function exportCSV(filename: string, headers: string[], rows: (string | number)[][]) {
   const escape = (v: string | number) => `"${String(v).replace(/"/g, '""')}"`
@@ -50,21 +51,30 @@ function fmtDate(iso: string) {
   })
 }
 
+const TIER_COLOR: Record<string, string> = {
+  general: 'text-gray-300 bg-gray-700/30',
+  vip:     'text-orange-400 bg-orange-500/10',
+  vvip:    'text-yellow-400 bg-yellow-500/10',
+  phalanx: 'text-lime-400 bg-lime-500/10',
+}
+
 export default function AdminPage() {
-  const [authed, setAuthed]                   = useState(false)
-  const [pin, setPin]                         = useState('')
-  const [error, setError]                     = useState('')
-  const [tab, setTab]                         = useState<Tab>('overview')
-  const [tickets, setTickets]                 = useState<TicketRecord[]>([])
-  const [vendors, setVendors]                 = useState<VendorRecord[]>([])
-  const [waitlist, setWaitlist]               = useState<WaitlistRecord[]>([])
-  const [draws, setDraws]                     = useState<DrawRecord[]>([])
+  const [authed, setAuthed]                     = useState(false)
+  const [pin, setPin]                           = useState('')
+  const [error, setError]                       = useState('')
+  const [tab, setTab]                           = useState<Tab>('overview')
+  const [tickets, setTickets]                   = useState<TicketRecord[]>([])
+  const [vendors, setVendors]                   = useState<VendorRecord[]>([])
+  const [waitlist, setWaitlist]                 = useState<WaitlistRecord[]>([])
+  const [draws, setDraws]                       = useState<DrawRecord[]>([])
   const [guaranteedClaims, setGuaranteedClaims] = useState<string[]>([])
-  const [currentWinner, setCurrentWinner]     = useState<DrawRecord | null>(null)
-  const [prizeName, setPrizeName]             = useState('')
-  const [tSearch, setTSearch]                 = useState('')
-  const [vSearch, setVSearch]                 = useState('')
-  const [wSearch, setWSearch]                 = useState('')
+  const [checkins, setCheckins]                 = useState<CheckinRecord[]>([])
+  const [currentWinner, setCurrentWinner]       = useState<DrawRecord | null>(null)
+  const [prizeName, setPrizeName]               = useState('')
+  const [tSearch, setTSearch]                   = useState('')
+  const [vSearch, setVSearch]                   = useState('')
+  const [wSearch, setWSearch]                   = useState('')
+  const [gSearch, setGSearch]                   = useState('')
 
   useEffect(() => {
     try { if (localStorage.getItem(SESSION_KEY) === 'true') setAuthed(true) } catch {}
@@ -73,11 +83,12 @@ export default function AdminPage() {
   useEffect(() => {
     if (!authed) return
     try {
-      setTickets(JSON.parse(localStorage.getItem('sf_tickets')          || '[]'))
-      setVendors(JSON.parse(localStorage.getItem('sf_vendors')          || '[]'))
-      setWaitlist(JSON.parse(localStorage.getItem('sf_waitlist')        || '[]'))
-      setDraws(JSON.parse(localStorage.getItem('sf_raffle_draws')       || '[]'))
+      setTickets(JSON.parse(localStorage.getItem('sf_tickets')                   || '[]'))
+      setVendors(JSON.parse(localStorage.getItem('sf_vendors')                   || '[]'))
+      setWaitlist(JSON.parse(localStorage.getItem('sf_waitlist')                 || '[]'))
+      setDraws(JSON.parse(localStorage.getItem('sf_raffle_draws')               || '[]'))
       setGuaranteedClaims(JSON.parse(localStorage.getItem('sf_guaranteed_claims') || '[]'))
+      setCheckins(JSON.parse(localStorage.getItem('sf_checkins')                 || '[]'))
     } catch {}
   }, [authed])
 
@@ -93,7 +104,7 @@ export default function AdminPage() {
     setAuthed(false); setPin('')
   }
 
-  // ── Stats ───────────────────────────────────────────────────────────────
+  // ── Stats ───────────────────────────────────────────────────────────────────────
   const stats = useMemo(() => {
     const ticketRevenue  = tickets.reduce((s, t) => s + t.total, 0)
     const vendorRevenue  = vendors.reduce((s, v) => s + v.price, 0)
@@ -116,11 +127,14 @@ export default function AdminPage() {
     const wByTier = waitlist.reduce<Record<string, number>>((acc, w) => {
       acc[w.tier] = (acc[w.tier] || 0) + 1; return acc
     }, {})
-    return { ticketRevenue, vendorRevenue, totalRevenue, ticketsSold, avgTicketValue, byTier, byBooth, soldByTierId, wByTier }
-  }, [tickets, vendors, waitlist])
+    const checkedInTotal  = checkins.reduce((s, c) => s + c.quantity, 0)
+    const checkedInByTier = checkins.reduce<Record<string, number>>((acc, c) => {
+      acc[c.tier] = (acc[c.tier] || 0) + c.quantity; return acc
+    }, {})
+    return { ticketRevenue, vendorRevenue, totalRevenue, ticketsSold, avgTicketValue, byTier, byBooth, soldByTierId, wByTier, checkedInTotal, checkedInByTier }
+  }, [tickets, vendors, waitlist, checkins])
 
-  // ── Raffle ───────────────────────────────────────────────────────────────
-  // Flat pool: one slot per raffle ticket (rafflePerTier × quantity per purchase)
+  // ── Raffle ─────────────────────────────────────────────────────────────────────
   const rafflePool = useMemo(() => {
     const pool: TicketRecord[] = []
     tickets.forEach(t => {
@@ -139,9 +153,9 @@ export default function AdminPage() {
     return m
   }, [tickets])
 
-  const wonRefs         = useMemo(() => new Set(draws.map(d => d.winner.ref)), [draws])
-  const eligiblePool    = useMemo(() => rafflePool.filter(t => !wonRefs.has(t.ref)), [rafflePool, wonRefs])
-  const guaranteedList  = useMemo(() => tickets.filter(t => GUARANTEED_TIERS.has(t.tierId)), [tickets])
+  const wonRefs        = useMemo(() => new Set(draws.map(d => d.winner.ref)), [draws])
+  const eligiblePool   = useMemo(() => rafflePool.filter(t => !wonRefs.has(t.ref)), [rafflePool, wonRefs])
+  const guaranteedList = useMemo(() => tickets.filter(t => GUARANTEED_TIERS.has(t.tierId)), [tickets])
 
   const performDraw = (baseDraws: DrawRecord[]) => {
     const usedRefs = new Set(baseDraws.map(d => d.winner.ref))
@@ -185,7 +199,7 @@ export default function AdminPage() {
     try { localStorage.setItem('sf_guaranteed_claims', JSON.stringify(updated)) } catch {}
   }
 
-  // ── Filtered tables ──────────────────────────────────────────────────────
+  // ── Filtered tables ────────────────────────────────────────────────────────────
   const filteredTickets = useMemo(() => {
     const q = tSearch.toLowerCase()
     return tickets.filter(t =>
@@ -216,12 +230,24 @@ export default function AdminPage() {
     )
   }, [waitlistWithPos, wSearch])
 
+  const filteredCheckins = useMemo(() => {
+    const q = gSearch.toLowerCase()
+    return [...checkins]
+      .filter(c =>
+        c.name.toLowerCase().includes(q) || c.email.toLowerCase().includes(q) ||
+        c.tier.toLowerCase().includes(q) || c.ref.toLowerCase().includes(q)
+      )
+      .sort((a, b) => b.checkedInAt.localeCompare(a.checkedInAt))
+  }, [checkins, gSearch])
+
   const maxTierRevenue  = Math.max(...Object.values(stats.byTier).map(t => t.revenue), 1)
   const maxBoothRevenue = Math.max(...Object.values(stats.byBooth).map(b => b.revenue), 1)
   const totalPool       = rafflePool.length
   const eligibleCount   = eligiblePool.length
+  const attendancePct   = stats.ticketsSold > 0
+    ? Math.round((stats.checkedInTotal / stats.ticketsSold) * 100) : 0
 
-  // ── Login ───────────────────────────────────────────────────────────
+  // ── Login ───────────────────────────────────────────────────────────────
   if (!authed) {
     return (
       <div className="min-h-screen flex items-center justify-center px-4">
@@ -252,7 +278,7 @@ export default function AdminPage() {
     )
   }
 
-  // ── Dashboard ───────────────────────────────────────────────────────────
+  // ── Dashboard ───────────────────────────────────────────────────────────────────
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
@@ -270,7 +296,7 @@ export default function AdminPage() {
 
       {/* Tabs */}
       <div className="flex gap-1 mb-8 border-b border-white/10 overflow-x-auto">
-        {(['overview', 'tickets', 'vendors', 'waitlist', 'raffle'] as Tab[]).map(t => (
+        {(['overview', 'tickets', 'vendors', 'waitlist', 'raffle', 'gate'] as Tab[]).map(t => (
           <button key={t} onClick={() => setTab(t)}
             className={`px-4 py-2.5 text-sm font-semibold capitalize rounded-t-lg transition-colors border-b-2 whitespace-nowrap ${
               tab === t ? 'text-brand-orange border-brand-orange' : 'text-gray-500 border-transparent hover:text-gray-300'
@@ -280,19 +306,20 @@ export default function AdminPage() {
             {t === 'vendors'  && vendors.length  > 0 && <span className="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-brand-orange/20 text-brand-orange">{vendors.length}</span>}
             {t === 'waitlist' && waitlist.length > 0 && <span className="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-red-500/20 text-red-400">{waitlist.length}</span>}
             {t === 'raffle'   && draws.length    > 0 && <span className="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-yellow-500/20 text-yellow-400">{draws.length}</span>}
+            {t === 'gate'     && checkins.length > 0 && <span className="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-green-500/20 text-green-400">{checkins.length}</span>}
           </button>
         ))}
       </div>
 
-      {/* ── OVERVIEW ─────────────────────────────────────────────── */}
+      {/* ── OVERVIEW ────────────────────────────────────────────────────── */}
       {tab === 'overview' && (
         <div className="space-y-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { label: 'Total Revenue',       value: fmt(stats.totalRevenue),  sub: 'tickets + booths' },
-              { label: 'Tickets Sold',        value: stats.ticketsSold,         sub: `${tickets.length} transactions` },
-              { label: 'Vendor Registrations',value: vendors.length,            sub: fmt(stats.vendorRevenue) + ' booth revenue' },
-              { label: 'Avg Ticket Value',    value: fmt(stats.avgTicketValue), sub: 'per transaction' },
+              { label: 'Total Revenue',        value: fmt(stats.totalRevenue),  sub: 'tickets + booths' },
+              { label: 'Tickets Sold',         value: stats.ticketsSold,         sub: `${tickets.length} transactions` },
+              { label: 'Vendor Registrations', value: vendors.length,            sub: fmt(stats.vendorRevenue) + ' booth revenue' },
+              { label: 'Avg Ticket Value',     value: fmt(stats.avgTicketValue), sub: 'per transaction' },
             ].map(({ label, value, sub }) => (
               <div key={label} className="bg-brand-gray rounded-2xl p-5 border border-white/5">
                 <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">{label}</p>
@@ -414,10 +441,29 @@ export default function AdminPage() {
               </div>
             </div>
           )}
+
+          {checkins.length > 0 && (
+            <div className="bg-brand-gray rounded-2xl p-6 border border-green-500/10">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-2 h-2 rounded-full bg-green-400" />
+                <h2 className="font-display text-lg text-white">GATE CHECK-INS</h2>
+                <span className="ml-auto text-xs text-gray-500">{checkins.length} scanned · {attendancePct}% attendance</span>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {Object.entries(stats.checkedInByTier).map(([tier, count]) => (
+                  <div key={tier} className="bg-brand-dark rounded-xl p-4 border border-green-500/10 text-center">
+                    <p className="text-xs text-gray-500 uppercase mb-1">{tier}</p>
+                    <p className="text-2xl font-bold text-green-400">{count}</p>
+                    <p className="text-xs text-gray-600">checked in</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
-      {/* ── TICKETS ────────────────────────────────────────────────── */}
+      {/* ── TICKETS ───────────────────────────────────────────────────── */}
       {tab === 'tickets' && (
         <div>
           <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
@@ -466,7 +512,7 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* ── VENDORS ────────────────────────────────────────────────── */}
+      {/* ── VENDORS ───────────────────────────────────────────────────── */}
       {tab === 'vendors' && (
         <div>
           <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
@@ -515,7 +561,7 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* ── WAITLIST ────────────────────────────────────────────────── */}
+      {/* ── WAITLIST ──────────────────────────────────────────────────── */}
       {tab === 'waitlist' && (
         <div>
           <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
@@ -564,11 +610,9 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* ── RAFFLE ────────────────────────────────────────────────── */}
+      {/* ── RAFFLE ───────────────────────────────────────────────────── */}
       {tab === 'raffle' && (
         <div className="space-y-6">
-
-          {/* Pool stats */}
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
             {TICKET_TIERS.map(t => {
               const entries = poolStatsByTier[t.name] || 0
@@ -587,10 +631,7 @@ export default function AdminPage() {
             </div>
           </div>
 
-          {/* Draw controls + winner card */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-            {/* Controls */}
             <div className="bg-brand-gray rounded-2xl p-6 border border-white/5">
               <h2 className="font-display text-lg text-white mb-1">DRAW A WINNER</h2>
               <p className="text-gray-500 text-sm mb-5">
@@ -604,18 +645,14 @@ export default function AdminPage() {
                   className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-yellow-500 text-sm" />
               </div>
               {eligibleCount === 0 && totalPool > 0 && (
-                <p className="text-yellow-400 text-sm mb-4">
-                  All attendees have won a prize. Reset draws to start over.
-                </p>
+                <p className="text-yellow-400 text-sm mb-4">All attendees have won. Reset draws to start over.</p>
               )}
               {totalPool === 0 && (
                 <p className="text-gray-600 text-sm mb-4">No ticket sales yet — pool is empty.</p>
               )}
-              <button
-                onClick={drawWinner}
-                disabled={eligibleCount === 0}
+              <button onClick={drawWinner} disabled={eligibleCount === 0}
                 className="w-full py-3.5 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-500 text-black font-bold text-lg hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity">
-                \u{1F3B2} Draw Winner
+                🎲 Draw Winner
               </button>
               {draws.length > 0 && (
                 <button
@@ -628,12 +665,9 @@ export default function AdminPage() {
               )}
             </div>
 
-            {/* Winner card */}
             {currentWinner ? (
               <div className={`rounded-2xl p-6 border ${
-                currentWinner.claimed
-                  ? 'bg-brand-gray border-white/10'
-                  : 'bg-brand-gray border-yellow-500/40 shadow-lg shadow-yellow-500/10'
+                currentWinner.claimed ? 'bg-brand-gray border-white/10' : 'bg-brand-gray border-yellow-500/40 shadow-lg shadow-yellow-500/10'
               }`}>
                 <div className="text-4xl mb-3">🏆</div>
                 <p className="text-xs text-yellow-500 uppercase tracking-wider mb-1">Winner — {currentWinner.prize}</p>
@@ -647,8 +681,7 @@ export default function AdminPage() {
                 </div>
                 <p className="text-gray-700 font-mono text-xs mb-5">{currentWinner.winner.ref}</p>
                 <div className="flex gap-3 flex-wrap">
-                  <button
-                    onClick={() => toggleClaim(currentWinner.id)}
+                  <button onClick={() => toggleClaim(currentWinner.id)}
                     className={`flex-1 py-2.5 rounded-xl font-semibold text-sm transition-all ${
                       currentWinner.claimed
                         ? 'bg-green-500/20 border border-green-500/40 text-green-400'
@@ -656,9 +689,7 @@ export default function AdminPage() {
                     }`}>
                     {currentWinner.claimed ? '✓ Prize Claimed' : 'Mark Claimed'}
                   </button>
-                  <button
-                    onClick={redraw}
-                    disabled={eligibleCount === 0}
+                  <button onClick={redraw} disabled={eligibleCount === 0}
                     className="flex-1 py-2.5 rounded-xl border border-white/10 text-gray-400 text-sm hover:border-white/20 hover:text-gray-300 transition-colors disabled:opacity-30">
                     Redraw
                   </button>
@@ -674,7 +705,6 @@ export default function AdminPage() {
             )}
           </div>
 
-          {/* Draw history */}
           {draws.length > 0 && (
             <div className="bg-brand-gray rounded-2xl border border-white/5 overflow-hidden">
               <div className="px-6 py-4 border-b border-white/10">
@@ -693,22 +723,14 @@ export default function AdminPage() {
                       <tr key={d.id} className={`border-b border-white/5 ${i%2===0?'':'bg-white/[0.02]'} hover:bg-yellow-500/5 transition-colors`}>
                         <td className="px-4 py-3 text-yellow-500 font-bold">#{draws.length - i}</td>
                         <td className="px-4 py-3 text-white font-medium">{d.prize}</td>
-                        <td className="px-4 py-3">
-                          <div className="text-gray-200">{d.winner.name}</div>
-                          <div className="text-gray-600 text-xs">{d.winner.email}</div>
-                        </td>
+                        <td className="px-4 py-3"><div className="text-gray-200">{d.winner.name}</div><div className="text-gray-600 text-xs">{d.winner.email}</div></td>
                         <td className="px-4 py-3"><span className="px-2 py-0.5 rounded-full text-xs bg-yellow-500/15 text-yellow-400">{d.winner.tier}</span></td>
-                        <td className="px-4 py-3 text-gray-400 text-center">
-                          {RAFFLE_PER_TIER[d.winner.tierId] * d.winner.quantity}
-                        </td>
+                        <td className="px-4 py-3 text-gray-400 text-center">{RAFFLE_PER_TIER[d.winner.tierId] * d.winner.quantity}</td>
                         <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">{fmtDate(d.drawnAt)}</td>
                         <td className="px-4 py-3">
-                          <button
-                            onClick={() => toggleClaim(d.id)}
+                          <button onClick={() => toggleClaim(d.id)}
                             className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
-                              d.claimed
-                                ? 'bg-green-500/20 text-green-400 hover:bg-green-500/30'
-                                : 'bg-white/5 text-gray-500 hover:bg-white/10 hover:text-gray-300'
+                              d.claimed ? 'bg-green-500/20 text-green-400 hover:bg-green-500/30' : 'bg-white/5 text-gray-500 hover:bg-white/10 hover:text-gray-300'
                             }`}>
                             {d.claimed ? '✓ Claimed' : 'Mark Claimed'}
                           </button>
@@ -721,7 +743,6 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* Guaranteed prizes */}
           {guaranteedList.length > 0 && (
             <div className="bg-brand-gray rounded-2xl border border-white/5 overflow-hidden">
               <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between">
@@ -729,9 +750,7 @@ export default function AdminPage() {
                   <h2 className="font-display text-lg text-white">GUARANTEED PRIZES</h2>
                   <p className="text-xs text-gray-500 mt-0.5">VVIP and Phalanx attendees receive a guaranteed prize regardless of raffle outcome.</p>
                 </div>
-                <span className="text-xs text-gray-500">
-                  {guaranteedClaims.length} / {guaranteedList.length} claimed
-                </span>
+                <span className="text-xs text-gray-500">{guaranteedClaims.length} / {guaranteedList.length} claimed</span>
               </div>
               <div className="divide-y divide-white/5">
                 {guaranteedList.map(t => {
@@ -745,8 +764,7 @@ export default function AdminPage() {
                         <p className="text-gray-500 text-xs">{t.email} · <span className="text-yellow-400">{t.tier}</span> × {t.quantity}</p>
                         <p className="text-gray-700 font-mono text-xs mt-0.5">{t.ref}</p>
                       </div>
-                      <button
-                        onClick={() => toggleGuaranteedClaim(t.ref)}
+                      <button onClick={() => toggleGuaranteedClaim(t.ref)}
                         className={`ml-4 px-4 py-2 rounded-xl text-sm font-semibold transition-all flex-shrink-0 ${
                           claimed
                             ? 'bg-green-500/20 border border-green-500/30 text-green-400'
@@ -767,6 +785,102 @@ export default function AdminPage() {
               <p className="text-gray-700 text-xs mt-2">Raffle entries are generated automatically from ticket purchases.</p>
             </div>
           )}
+        </div>
+      )}
+
+      {/* ── GATE ─────────────────────────────────────────────────────── */}
+      {tab === 'gate' && (
+        <div>
+          {/* Header with link to scanner */}
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+            <div>
+              <p className="text-green-400 text-sm font-semibold">
+                {stats.checkedInTotal} passes checked in
+                {stats.ticketsSold > 0 && ` · ${attendancePct}% attendance`}
+              </p>
+              <p className="text-gray-500 text-xs mt-0.5">
+                Gate scanner is a separate page for on-device scanning
+              </p>
+            </div>
+            <a href="/gate" target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-green-500/10 border border-green-500/30 text-green-400 text-sm font-semibold hover:bg-green-500/20 transition-colors">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+              Open Gate Scanner
+            </a>
+          </div>
+
+          {/* Per-tier breakdown */}
+          {Object.keys(stats.checkedInByTier).length > 0 && (
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+              {Object.entries(stats.checkedInByTier).map(([tier, count]) => {
+                const tierId = tier.toLowerCase()
+                return (
+                  <div key={tier} className="bg-brand-gray rounded-2xl p-5 border border-green-500/10">
+                    <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">{tier}</p>
+                    <p className="text-3xl font-bold text-green-400">{count}</p>
+                    <p className="text-xs text-gray-600 mt-1">of {stats.soldByTierId[tierId] || '?'} sold</p>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+
+          {/* Search + export */}
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
+            <input type="text" placeholder="Search by name, email, tier, or ref…"
+              value={gSearch} onChange={e => setGSearch(e.target.value)}
+              className="flex-1 min-w-[220px] px-4 py-2.5 bg-brand-gray border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-green-400 text-sm" />
+            <button onClick={() => exportCSV('sneakers-fest-checkins.csv',
+              ['Reference','Name','Email','Tier','Passes','Checked In At'],
+              filteredCheckins.map(c => [c.ref, c.name, c.email, c.tier, c.quantity, fmtDate(c.checkedInAt)]))}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-white/10 text-gray-300 text-sm hover:border-green-400 hover:text-green-400 transition-colors">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+              Export CSV
+            </button>
+          </div>
+
+          {filteredCheckins.length === 0
+            ? <div className="text-center py-20">
+                <p className="text-gray-600">{checkins.length === 0 ? 'No check-ins yet. Use the Gate Scanner to start checking in attendees.' : 'No results.'}</p>
+                {checkins.length === 0 && (
+                  <a href="/gate" target="_blank" rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 mt-4 text-green-400 text-sm hover:underline">
+                    Open Gate Scanner →
+                  </a>
+                )}
+              </div>
+            : <div className="bg-brand-gray rounded-2xl border border-green-500/10 overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead><tr className="border-b border-white/10">
+                      {['Checked In At','Name','Email','Tier','Passes','Reference'].map(h => (
+                        <th key={h} className="text-left px-4 py-3 text-xs text-gray-500 uppercase tracking-wider font-medium">{h}</th>
+                      ))}
+                    </tr></thead>
+                    <tbody>
+                      {filteredCheckins.map((c, i) => (
+                        <tr key={c.ref} className={`border-b border-white/5 ${i%2===0?'':'bg-white/[0.02]'} hover:bg-green-500/5 transition-colors`}>
+                          <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">{fmtDate(c.checkedInAt)}</td>
+                          <td className="px-4 py-3 text-white font-medium">{c.name}</td>
+                          <td className="px-4 py-3 text-gray-400">{c.email}</td>
+                          <td className="px-4 py-3">
+                            <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${TIER_COLOR[c.tierId] || 'text-gray-300 bg-gray-700/30'}`}>{c.tier}</span>
+                          </td>
+                          <td className="px-4 py-3 text-gray-300 text-center">{c.quantity}</td>
+                          <td className="px-4 py-3 text-gray-600 font-mono text-xs">{c.ref}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="px-4 py-3 border-t border-white/5 flex justify-between text-xs text-gray-600">
+                  <span>{filteredCheckins.length} records</span>
+                  <span>{filteredCheckins.reduce((s, c) => s + c.quantity, 0)} total passes checked in</span>
+                </div>
+              </div>
+          }
         </div>
       )}
     </div>
