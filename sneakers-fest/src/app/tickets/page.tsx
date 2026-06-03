@@ -251,7 +251,7 @@ export default function TicketsPage() {
             </div>
           ) : (
             <div className="bg-brand-gray rounded-3xl p-10 border border-brand-orange/20 text-center">
-              <div className="text-5xl mb-5">&#128&#9;</div>
+              <div className="text-5xl mb-5">👟</div>
               <h3 className="font-display text-3xl text-white mb-1">YOU'RE IN!</h3>
               <p className="text-gray-400 text-sm mb-1">{form.quantity} × {tier?.name} · ₦{total.toLocaleString()}</p>
               <p className="text-gray-600 text-xs font-mono mb-6">Ref: {payRef}</p>
