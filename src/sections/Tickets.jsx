@@ -17,6 +17,8 @@ const TIERS = [
     ],
     cta: 'BUY NOW',
     featured: false,
+    avail: 820,
+    total: 1500,
   },
   {
     name: 'VIP',
@@ -32,6 +34,8 @@ const TIERS = [
     ],
     cta: 'GET VIP',
     featured: true,
+    avail: 143,
+    total: 400,
   },
   {
     name: 'VVIP',
@@ -48,6 +52,8 @@ const TIERS = [
     ],
     cta: 'GO VVIP',
     featured: false,
+    avail: 38,
+    total: 150,
   },
   {
     name: 'PHALANX',
@@ -64,7 +70,34 @@ const TIERS = [
     ],
     cta: 'JOIN PHALANX',
     featured: false,
+    avail: 12,
+    total: 50,
   },
+]
+
+const COMPARE_ROWS = [
+  { feature:'Event floor access',        tiers:[true, true, true, true] },
+  { feature:'Vendor floor entry',         tiers:[true, true, true, true] },
+  { feature:'Live DJ sets all day',       tiers:[true, true, true, true] },
+  { feature:'VIP lounge access',          tiers:[false,true, true, true] },
+  { feature:'SF\'26 merch bag',           tiers:[false,true, true, true] },
+  { feature:'Exclusive drop previews',    tiers:[false,true, true, true] },
+  { feature:'Meet & greet access',        tiers:[false,true, true, true] },
+  { feature:'Private collector room',     tiers:[false,false,true, true] },
+  { feature:'Artist studio access',       tiers:[false,false,true, true] },
+  { feature:'Signed memorabilia',         tiers:[false,false,true, true] },
+  { feature:'Private Phalanx lounge',     tiers:[false,false,false,true] },
+  { feature:'Early entry 11:00 AM',       tiers:[false,false,false,true] },
+  { feature:'Dedicated concierge',        tiers:[false,false,false,true] },
+  { feature:'Exclusive collectible box',  tiers:[false,false,false,true] },
+]
+
+const TICKET_FAQ = [
+  { q:'When does the event start?',                   a:'Doors open at 12:00 PM on December 12, 2026. Phalanx ticket holders get early entry from 11:00 AM.' },
+  { q:'Where is the venue?',                          a:'Lagos, Nigeria. Exact venue drops 30 days before the event — we\'ll notify you via email and the WhatsApp community.' },
+  { q:'Can I transfer or resell my ticket?',          a:"Tickets are non-transferable and non-refundable. All sales are final. Your ticket is linked to the name and email you register with." },
+  { q:'How do I get my ticket after purchase?',       a:'An e-ticket is sent to your email immediately. You can also view and download it from the MY TICKETS section on this page.' },
+  { q:'What\'s the age requirement?',                 a:'Ages 16 and above. Under-18s must be accompanied by an adult with a valid ticket.' },
 ]
 
 function downloadCalendar() {
@@ -173,10 +206,32 @@ export default function Tickets() {
 
                 <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:28, color:B.white, letterSpacing:'0.05em' }}>{tier.name}</div>
 
-                <div style={{ margin:'14px 0 20px', padding:'12px 16px', background:'rgba(255,255,255,0.05)', backdropFilter:'blur(10px)', WebkitBackdropFilter:'blur(10px)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:8, display:'inline-block' }}>
+                <div style={{ margin:'14px 0 16px', padding:'12px 16px', background:'rgba(255,255,255,0.05)', backdropFilter:'blur(10px)', WebkitBackdropFilter:'blur(10px)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:8, display:'inline-block' }}>
                   <div style={{ fontFamily:"'Orbitron', monospace", fontWeight:900, fontSize:32, color:tier.color, lineHeight:1, textShadow:`0 0 20px ${tier.color}50` }}>{tier.price}</div>
                   <div style={{ fontFamily:"'Space Mono', monospace", fontSize:7, color:B.smoke, letterSpacing:'0.2em', marginTop:4 }}>EARLY BIRD PRICE</div>
                 </div>
+
+                {/* availability */}
+                {(() => {
+                  const pct  = tier.avail / tier.total
+                  const sold = tier.total - tier.avail
+                  const urgColor = pct < 0.15 ? B.neonMagenta : pct < 0.4 ? B.amber : tier.color
+                  return (
+                    <div style={{ marginBottom:16 }}>
+                      <div style={{ display:'flex', justifyContent:'space-between', marginBottom:5 }}>
+                        <span style={{ fontFamily:"'Space Mono', monospace", fontSize:7, color:urgColor, letterSpacing:1 }}>
+                          {pct < 0.15 ? '⚡ ALMOST GONE' : pct < 0.4 ? 'SELLING FAST' : 'AVAILABLE'}
+                        </span>
+                        <span style={{ fontFamily:"'Space Mono', monospace", fontSize:7, color:'#555', letterSpacing:1 }}>
+                          {sold} / {tier.total} SOLD
+                        </span>
+                      </div>
+                      <div style={{ height:3, background:'rgba(255,255,255,0.06)', borderRadius:2, overflow:'hidden' }}>
+                        <div style={{ height:'100%', width:`${(sold/tier.total)*100}%`, background:urgColor, borderRadius:2, transition:'width 1s ease' }} />
+                      </div>
+                    </div>
+                  )
+                })()}
 
                 <div style={{ width:'100%', height:1, background:'rgba(255,255,255,0.08)', marginBottom:20 }} />
 
@@ -217,6 +272,63 @@ export default function Tickets() {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* comparison table */}
+        <div style={{ marginTop:52, overflowX:'auto' }}>
+          <div style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color:'#555', letterSpacing:3, marginBottom:20, textAlign:'center' }}>FULL TIER COMPARISON</div>
+          <table style={{ width:'100%', minWidth:520, borderCollapse:'collapse' }}>
+            <thead>
+              <tr>
+                <th style={{ padding:'10px 16px', fontFamily:"'Space Mono', monospace", fontSize:8, color:'#444', letterSpacing:2, textAlign:'left', borderBottom:'1px solid rgba(255,255,255,0.07)', width:'40%' }}>FEATURE</th>
+                {TIERS.map(t => (
+                  <th key={t.name} style={{ padding:'10px 12px', fontFamily:"'Space Mono', monospace", fontSize:9, color:t.color, letterSpacing:2, textAlign:'center', borderBottom:'1px solid rgba(255,255,255,0.07)' }}>{t.name}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {COMPARE_ROWS.map((row, i) => (
+                <tr key={i} style={{ background: i%2===0 ? 'rgba(255,255,255,0.015)' : 'transparent' }}>
+                  <td style={{ padding:'9px 16px', fontFamily:"'Syne', sans-serif", fontSize:12, color:B.smoke, borderBottom:'1px solid rgba(255,255,255,0.04)' }}>{row.feature}</td>
+                  {row.tiers.map((has, j) => (
+                    <td key={j} style={{ padding:'9px 12px', textAlign:'center', borderBottom:'1px solid rgba(255,255,255,0.04)' }}>
+                      {has
+                        ? <span style={{ color:TIERS[j].color, fontSize:13 }}>✓</span>
+                        : <span style={{ color:'#2a2a2a', fontSize:13 }}>—</span>}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+              <tr style={{ background:'rgba(255,255,255,0.02)' }}>
+                <td style={{ padding:'12px 16px', fontFamily:"'Space Mono', monospace", fontSize:9, color:'#555', letterSpacing:2 }}>PRICE</td>
+                {TIERS.map(t => (
+                  <td key={t.name} style={{ padding:'12px 12px', textAlign:'center', fontFamily:"'Orbitron', monospace", fontSize:11, fontWeight:900, color:t.color }}>{t.price}</td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        {/* ticket FAQ */}
+        <div style={{ marginTop:48 }}>
+          <div style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color:'#555', letterSpacing:3, marginBottom:20, textAlign:'center' }}>TICKET FAQ</div>
+          {(() => {
+            const [openIdx, setOpenIdx] = useState(null)
+            return TICKET_FAQ.map((f, i) => (
+              <div key={i} style={{ borderBottom:'1px solid rgba(255,255,255,0.07)', overflow:'hidden' }}>
+                <button onClick={() => setOpenIdx(openIdx===i ? null : i)}
+                  style={{ width:'100%', textAlign:'left', padding:'13px 0', background:'none', border:'none', cursor:'pointer', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                  <span style={{ fontFamily:"'Syne', sans-serif", fontSize:'0.85rem', color:B.white }}>{f.q}</span>
+                  <span style={{ color:B.amber, fontSize:'1.1rem', flexShrink:0, marginLeft:12 }}>{openIdx===i ? '−' : '+'}</span>
+                </button>
+                {openIdx === i && (
+                  <div style={{ paddingBottom:14 }}>
+                    <p style={{ fontFamily:"'Syne', sans-serif", fontSize:'0.82rem', color:B.smoke, lineHeight:1.7 }}>{f.a}</p>
+                  </div>
+                )}
+              </div>
+            ))
+          })()}
         </div>
 
         {/* Calendar + legal */}
