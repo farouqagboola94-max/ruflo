@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'
+import { TICKET_TIERS } from '@/data/tickets'
 
 const ADMIN_PIN = process.env.NEXT_PUBLIC_ADMIN_PIN || 'sf-admin-2026'
 const SESSION_KEY = 'sf_admin_session'
@@ -66,10 +67,7 @@ export default function AdminPage() {
     if (pin === ADMIN_PIN) {
       try { localStorage.setItem(SESSION_KEY, 'true') } catch {}
       setAuthed(true)
-    } else {
-      setError('Incorrect PIN. Try again.')
-      setPin('')
-    }
+    } else { setError('Incorrect PIN. Try again.'); setPin('') }
   }
 
   const logout = () => {
@@ -96,15 +94,20 @@ export default function AdminPage() {
       return acc
     }, {})
 
+    // Per-tier sold quantity (keyed by tierId)
+    const soldByTierId = tickets.reduce<Record<string, number>>((acc, t) => {
+      acc[t.tierId] = (acc[t.tierId] || 0) + t.quantity
+      return acc
+    }, {})
+
     const wByTier = waitlist.reduce<Record<string, number>>((acc, w) => {
       acc[w.tier] = (acc[w.tier] || 0) + 1
       return acc
     }, {})
 
-    return { ticketRevenue, vendorRevenue, totalRevenue, ticketsSold, avgTicketValue, byTier, byBooth, wByTier }
+    return { ticketRevenue, vendorRevenue, totalRevenue, ticketsSold, avgTicketValue, byTier, byBooth, soldByTierId, wByTier }
   }, [tickets, vendors, waitlist])
 
-  // Waitlist with position (position is index within same tier sorted by joinedAt)
   const waitlistWithPos = useMemo(() => {
     const sorted = [...waitlist].sort((a, b) => a.joinedAt.localeCompare(b.joinedAt))
     const tierCounts: Record<string, number> = {}
@@ -118,7 +121,7 @@ export default function AdminPage() {
     const q = tSearch.toLowerCase()
     return tickets.filter(t =>
       t.name.toLowerCase().includes(q) || t.email.toLowerCase().includes(q) ||
-      t.tier.toLowerCase().includes(q)  || t.ref.toLowerCase().includes(q)
+      t.tier.toLowerCase().includes(q) || t.ref.toLowerCase().includes(q)
     ).sort((a, b) => b.purchasedAt.localeCompare(a.purchasedAt))
   }, [tickets, tSearch])
 
@@ -135,14 +138,14 @@ export default function AdminPage() {
     const q = wSearch.toLowerCase()
     return waitlistWithPos.filter(w =>
       w.name.toLowerCase().includes(q) || w.email.toLowerCase().includes(q) ||
-      w.tier.toLowerCase().includes(q)  || w.ref.toLowerCase().includes(q)
+      w.tier.toLowerCase().includes(q) || w.ref.toLowerCase().includes(q)
     )
   }, [waitlistWithPos, wSearch])
 
   const maxTierRevenue  = Math.max(...Object.values(stats.byTier).map(t => t.revenue), 1)
   const maxBoothRevenue = Math.max(...Object.values(stats.byBooth).map(b => b.revenue), 1)
 
-  // ── Login ───────────────────────────────────────────────────────────────────
+  // ── Login ───────────────────────────────────────────────────────────
   if (!authed) {
     return (
       <div className="min-h-screen flex items-center justify-center px-4">
@@ -173,7 +176,7 @@ export default function AdminPage() {
     )
   }
 
-  // ── Dashboard ───────────────────────────────────────────────────────────────
+  // ── Dashboard ───────────────────────────────────────────────────────────
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
@@ -207,6 +210,8 @@ export default function AdminPage() {
       {/* ── OVERVIEW ────────────────────────────────────────────────── */}
       {tab === 'overview' && (
         <div className="space-y-6">
+
+          {/* Stat cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               { label: 'Total Revenue',       value: fmt(stats.totalRevenue),   sub: 'tickets + booths' },
@@ -222,6 +227,7 @@ export default function AdminPage() {
             ))}
           </div>
 
+          {/* Revenue charts */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="bg-brand-gray rounded-2xl p-6 border border-white/5">
               <h2 className="font-display text-lg text-white mb-5">TICKET REVENUE BY TIER</h2>
@@ -268,6 +274,55 @@ export default function AdminPage() {
             </div>
           </div>
 
+          {/* Ticket Inventory */}
+          <div className="bg-brand-gray rounded-2xl p-6 border border-white/5">
+            <h2 className="font-display text-lg text-white mb-5">TICKET INVENTORY</h2>
+            <div className="space-y-5">
+              {TICKET_TIERS.map(t => {
+                const sold      = stats.soldByTierId[t.id] || 0
+                const cap       = t.capacity || 0
+                const remaining = Math.max(0, cap - sold)
+                const pct       = cap ? Math.min(100, Math.round((sold / cap) * 100)) : 0
+                const isSoldOut = remaining === 0 && cap > 0
+                const isLow     = !isSoldOut && remaining > 0 && remaining <= 20
+                return (
+                  <div key={t.id}>
+                    <div className="flex justify-between items-center text-sm mb-2">
+                      <span className="text-gray-300 font-medium flex items-center gap-2">
+                        {t.name}
+                        {isSoldOut && (
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-red-500/20 text-red-400">SOLD OUT</span>
+                        )}
+                        {isLow && (
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400">Low stock</span>
+                        )}
+                      </span>
+                      <span className="text-gray-600 text-xs tabular-nums">
+                        {sold} sold ·{' '}
+                        <span className={isSoldOut ? 'text-red-400' : isLow ? 'text-orange-400' : 'text-gray-400'}>
+                          {remaining} left
+                        </span>
+                        {' '}· cap {cap}
+                      </span>
+                    </div>
+                    <div className="h-2 rounded-full bg-brand-dark overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all ${
+                          isSoldOut ? 'bg-red-500' : pct >= 80 ? 'bg-orange-500' : 'bg-gradient-to-r from-brand-orange to-brand-amber'
+                        }`}
+                        style={{ width: `${Math.max(pct > 0 ? 2 : 0, pct)}%` }}
+                      />
+                    </div>
+                    <p className={`text-right text-xs mt-1 ${
+                      isSoldOut ? 'text-red-400' : pct >= 80 ? 'text-orange-400' : 'text-gray-600'
+                    }`}>{pct}% filled</p>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* Revenue split */}
           <div className="bg-brand-gray rounded-2xl p-6 border border-white/5">
             <h2 className="font-display text-lg text-white mb-4">REVENUE SPLIT</h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
@@ -285,7 +340,7 @@ export default function AdminPage() {
             </div>
           </div>
 
-          {/* Waitlist overview — only shown if entries exist */}
+          {/* Waitlist activity */}
           {waitlist.length > 0 && (
             <div className="bg-brand-gray rounded-2xl p-6 border border-red-500/10">
               <div className="flex items-center gap-3 mb-4">
@@ -458,7 +513,6 @@ export default function AdminPage() {
               Export CSV
             </button>
           </div>
-
           {filteredWaitlist.length === 0 ? (
             <div className="text-center py-20">
               <p className="text-gray-600">{waitlist.length === 0 ? 'No waitlist sign-ups yet.' : 'No results match your search.'}</p>
@@ -484,12 +538,8 @@ export default function AdminPage() {
                         <td className="px-4 py-3 text-white font-medium">{w.name}</td>
                         <td className="px-4 py-3 text-gray-400">{w.email}</td>
                         <td className="px-4 py-3 text-gray-500">{w.phone || <span className="text-gray-700">—</span>}</td>
-                        <td className="px-4 py-3">
-                          <span className="px-2 py-0.5 rounded-full text-xs bg-red-500/15 text-red-400">{w.tier}</span>
-                        </td>
-                        <td className="px-4 py-3">
-                          <span className="text-white font-bold">#{w.position}</span>
-                        </td>
+                        <td className="px-4 py-3"><span className="px-2 py-0.5 rounded-full text-xs bg-red-500/15 text-red-400">{w.tier}</span></td>
+                        <td className="px-4 py-3"><span className="text-white font-bold">#{w.position}</span></td>
                         <td className="px-4 py-3 text-gray-600 font-mono text-xs">{w.ref}</td>
                       </tr>
                     ))}

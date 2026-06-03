@@ -33,28 +33,27 @@ export default function TicketsPage() {
   const { user, openAuth, addTicket } = useAuth()
 
   // Purchase state
-  const [selected, setSelected]           = useState<string | null>(null)
-  const [form, setForm]                   = useState({ name: user?.name || '', email: user?.email || '', phone: '', quantity: '1' })
-  const [submitted, setSubmitted]         = useState(false)
-  const [payRef, setPayRef]               = useState('')
-  const [purchasedAt, setPurchasedAt]     = useState('')
-  const [processing, setProcessing]       = useState(false)
-  const [qrDataUrl, setQrDataUrl]         = useState('')
-  const [emailSent, setEmailSent]         = useState<boolean | null>(null)
+  const [selected, setSelected]             = useState<string | null>(null)
+  const [form, setForm]                     = useState({ name: user?.name || '', email: user?.email || '', phone: '', quantity: '1' })
+  const [submitted, setSubmitted]           = useState(false)
+  const [payRef, setPayRef]                 = useState('')
+  const [purchasedAt, setPurchasedAt]       = useState('')
+  const [processing, setProcessing]         = useState(false)
+  const [qrDataUrl, setQrDataUrl]           = useState('')
+  const [emailSent, setEmailSent]           = useState<boolean | null>(null)
   const [invoiceLoading, setInvoiceLoading] = useState(false)
 
-  // Inventory state
+  // Inventory
   const [soldCounts, setSoldCounts] = useState<Record<string, number>>({})
 
-  // Waitlist state
-  const [waitlistTier, setWaitlistTier]   = useState<string | null>(null)
-  const [waitlistForm, setWaitlistForm]   = useState({ name: '', email: '', phone: '' })
-  const [waitlistDone, setWaitlistDone]   = useState(false)
-  const [waitlistPos, setWaitlistPos]     = useState(0)
+  // Waitlist
+  const [waitlistTier, setWaitlistTier]       = useState<string | null>(null)
+  const [waitlistForm, setWaitlistForm]       = useState({ name: '', email: '', phone: '' })
+  const [waitlistDone, setWaitlistDone]       = useState(false)
+  const [waitlistPos, setWaitlistPos]         = useState(0)
   const [waitlistLoading, setWaitlistLoading] = useState(false)
 
-  // Load sold counts on mount
-  useEffect(() => {
+  const refreshSoldCounts = () => {
     try {
       const records: { tierId: string; quantity: number }[] =
         JSON.parse(localStorage.getItem('sf_tickets') || '[]')
@@ -62,10 +61,30 @@ export default function TicketsPage() {
       records.forEach(r => { counts[r.tierId] = (counts[r.tierId] || 0) + r.quantity })
       setSoldCounts(counts)
     } catch {}
+  }
+
+  // Load on mount
+  useEffect(() => { refreshSoldCounts() }, [])
+
+  // Refresh when user returns to the tab
+  useEffect(() => {
+    const onVisible = () => { if (document.visibilityState === 'visible') refreshSoldCounts() }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => document.removeEventListener('visibilitychange', onVisible)
   }, [])
 
-  const tier  = TICKET_TIERS.find(t => t.id === selected)
-  const total = tier ? tier.price * parseInt(form.quantity) : 0
+  const tier       = TICKET_TIERS.find(t => t.id === selected)
+  const tierSold   = tier ? (soldCounts[tier.id] || 0) : 0
+  const tierCap    = tier?.capacity ?? Infinity
+  const tierRemain = isFinite(tierCap) ? Math.max(0, tierCap - tierSold) : Infinity
+  const maxQty     = isFinite(tierRemain) ? Math.min(5, Math.max(1, tierRemain)) : 5
+  const total      = tier ? tier.price * parseInt(form.quantity) : 0
+
+  // Clamp quantity when tier changes
+  useEffect(() => {
+    const q = parseInt(form.quantity)
+    if (q > maxQty) setForm(f => ({ ...f, quantity: String(maxQty) }))
+  }, [selected, maxQty]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const initiatePayment = (e: React.FormEvent) => {
     e.preventDefault()
@@ -74,6 +93,29 @@ export default function TicketsPage() {
       alert('Payment is loading, please try again in a moment.')
       return
     }
+
+    // Pre-payment inventory guard — re-read storage to catch concurrent purchases
+    const qty = parseInt(form.quantity)
+    if (isFinite(tier.capacity ?? Infinity)) {
+      try {
+        const fresh: { tierId: string; quantity: number }[] =
+          JSON.parse(localStorage.getItem('sf_tickets') || '[]')
+        const freshSold    = fresh.filter(r => r.tierId === tier.id).reduce((s, r) => s + r.quantity, 0)
+        const freshRemain  = (tier.capacity as number) - freshSold
+        if (freshRemain < qty) {
+          setSoldCounts(prev => ({ ...prev, [tier.id]: freshSold }))
+          if (freshRemain <= 0) {
+            alert(`${tier.name} is now sold out. Please join the waitlist.`)
+            setSelected(null)
+          } else {
+            alert(`Only ${freshRemain} spot${freshRemain !== 1 ? 's' : ''} remaining for ${tier.name}. Your quantity has been updated.`)
+            setForm(f => ({ ...f, quantity: String(freshRemain) }))
+          }
+          return
+        }
+      } catch {}
+    }
+
     setProcessing(true)
     const ref = `SF-${Date.now()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`
     window.PaystackPop.setup({
@@ -92,15 +134,12 @@ export default function TicketsPage() {
         setPayRef(response.reference)
         setPurchasedAt(now)
         addTicket({
-          tier: tier.name, quantity: parseInt(form.quantity),
+          tier: tier.name, quantity: qty,
           ref: response.reference,
           date: new Date().toLocaleDateString('en-NG', { day: 'numeric', month: 'long', year: 'numeric' }),
           total,
         })
-        // Update sold counts immediately
-        const qty = parseInt(form.quantity)
         setSoldCounts(prev => ({ ...prev, [tier.id]: (prev[tier.id] || 0) + qty }))
-        // Persist for admin
         try {
           const record = {
             ref: response.reference, name: form.name, email: form.email,
@@ -110,14 +149,12 @@ export default function TicketsPage() {
           const existing = JSON.parse(localStorage.getItem('sf_tickets') || '[]')
           localStorage.setItem('sf_tickets', JSON.stringify([...existing, record]))
         } catch {}
-        // Generate QR
         const qrPayload = JSON.stringify({
           event: 'Sneakers Fest 2026', ref: response.reference,
           tier: tier.name, qty, name: form.name, date: 'Dec 12-13, 2026',
         })
         const qr = await generateQR(qrPayload)
         setQrDataUrl(qr)
-        // Email (graceful)
         try {
           await sendTicketEmail({
             to_name: form.name, to_email: form.email, ticket_tier: tier.name,
@@ -143,9 +180,7 @@ export default function TicketsPage() {
         ref: `WL-${Date.now()}-${Math.random().toString(36).slice(2, 5).toUpperCase()}`,
         tierId: waitlistTier,
         tier: TICKET_TIERS.find(t => t.id === waitlistTier)?.name || '',
-        name: waitlistForm.name,
-        email: waitlistForm.email,
-        phone: waitlistForm.phone,
+        name: waitlistForm.name, email: waitlistForm.email, phone: waitlistForm.phone,
         joinedAt: new Date().toISOString(),
       }
       localStorage.setItem('sf_waitlist', JSON.stringify([...existing, record]))
@@ -191,9 +226,10 @@ export default function TicketsPage() {
           {TICKET_TIERS.map(t => {
             const sold      = soldCounts[t.id] || 0
             const cap       = t.capacity ?? Infinity
-            const remaining = cap - sold
+            const remaining = isFinite(cap) ? Math.max(0, cap - sold) : Infinity
             const isSoldOut = remaining <= 0
             const isLow     = !isSoldOut && isFinite(cap) && remaining <= 20
+            const pct       = isFinite(cap) && cap > 0 ? Math.min(100, Math.round((sold / cap) * 100)) : 0
             return (
               <div key={t.id}
                 onClick={() => { if (!isSoldOut) setSelected(t.id) }}
@@ -205,16 +241,11 @@ export default function TicketsPage() {
                     : 'bg-white/5 hover:bg-white/10 cursor-pointer'
                 }`}>
 
-                {/* Sold-out badge */}
                 {isSoldOut && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-                    <span className="px-4 py-1 rounded-full bg-red-950 border border-red-500/40 text-red-400 text-xs font-bold">
-                      SOLD OUT
-                    </span>
+                    <span className="px-4 py-1 rounded-full bg-red-950 border border-red-500/40 text-red-400 text-xs font-bold">SOLD OUT</span>
                   </div>
                 )}
-
-                {/* Regular badge (not shown when sold out) */}
                 {t.badge && !isSoldOut && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
                     <span className={`px-4 py-1 rounded-full text-black text-xs font-bold bg-gradient-to-r ${
@@ -234,14 +265,10 @@ export default function TicketsPage() {
                     <span className="text-gray-400 text-sm">/ person</span>
                   </div>
 
-                  {/* Availability indicator */}
-                  {isLow && (
-                    <p className="text-brand-orange text-xs font-semibold mb-2">
-                      Only {remaining} spot{remaining !== 1 ? 's' : ''} left!
-                    </p>
-                  )}
-                  {isSoldOut && (
-                    <p className="text-red-500 text-xs font-semibold mb-2">All spots are filled</p>
+                  {isSoldOut  && <p className="text-red-500 text-xs font-semibold mb-2">All spots are filled</p>}
+                  {isLow      && <p className="text-brand-orange text-xs font-semibold mb-2">Only {remaining} spot{remaining !== 1 ? 's' : ''} left!</p>}
+                  {!isSoldOut && !isLow && isFinite(cap) && (
+                    <p className="text-gray-600 text-xs mb-2">{remaining} of {cap} remaining</p>
                   )}
 
                   <p className="text-gray-400 text-sm mb-6 leading-relaxed">{t.description}</p>
@@ -256,11 +283,22 @@ export default function TicketsPage() {
                     ))}
                   </ul>
 
+                  {/* Capacity fill bar */}
+                  {isFinite(cap) && cap > 0 && (
+                    <div className="mt-4">
+                      <div className="h-1 rounded-full bg-brand-dark overflow-hidden">
+                        <div className={`h-full rounded-full transition-all ${
+                          isSoldOut ? 'bg-red-500' : isLow ? 'bg-orange-500' : 'bg-brand-orange'
+                        }`} style={{ width: `${Math.max(pct > 0 ? 2 : 0, pct)}%` }} />
+                      </div>
+                    </div>
+                  )}
+
                   <button
                     onClick={isSoldOut
                       ? (e) => { e.stopPropagation(); setWaitlistTier(t.id); setWaitlistDone(false); setWaitlistForm({ name: '', email: '', phone: '' }) }
                       : undefined}
-                    className={`mt-6 w-full py-3 rounded-xl font-bold text-sm transition-all ${
+                    className={`mt-4 w-full py-3 rounded-xl font-bold text-sm transition-all ${
                       isSoldOut
                         ? 'border border-red-500/30 text-red-400 hover:bg-red-500/10'
                         : selected === t.id
@@ -278,7 +316,7 @@ export default function TicketsPage() {
         {/* Form area */}
         <div className="max-w-xl mx-auto">
 
-          {/* ── Waitlist success ──────────────────────────────── */}
+          {/* Waitlist success */}
           {waitlistDone ? (
             <div className="bg-brand-gray rounded-3xl p-10 border border-white/10 text-center">
               <div className="text-5xl mb-5">📋</div>
@@ -288,31 +326,22 @@ export default function TicketsPage() {
                 <span className="text-brand-orange">{waitingForTier?.name}</span> waitlist.
               </p>
               <div className="bg-brand-dark rounded-2xl p-4 mb-6 border border-white/10 text-sm">
-                <p className="text-gray-400">
-                  We'll email <span className="text-white">{waitlistForm.email}</span> if a spot opens up.
-                </p>
+                <p className="text-gray-400">We'll email <span className="text-white">{waitlistForm.email}</span> if a spot opens up.</p>
               </div>
               <div className="bg-brand-dark rounded-2xl p-4 mb-8 border border-white/10 text-left space-y-2">
                 <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">What happens next</p>
-                {[
-                  'You will be notified by email in waitlist order',
-                  'You will have 48 hours to complete your purchase',
-                  'Spots may open from cancellations or tier expansion',
-                ].map(s => (
+                {['You will be notified by email in waitlist order', 'You will have 48 hours to complete your purchase', 'Spots may open from cancellations or tier expansion'].map(s => (
                   <div key={s} className="flex items-start gap-2 text-sm">
                     <span className="text-brand-orange mt-0.5 flex-shrink-0">→</span>
                     <span className="text-gray-300">{s}</span>
                   </div>
                 ))}
               </div>
-              <button
-                onClick={() => { setWaitlistTier(null); setWaitlistDone(false); setWaitlistForm({ name: '', email: '', phone: '' }) }}
-                className="text-gray-500 text-sm hover:text-gray-300 transition-colors">
-                Join another waitlist
-              </button>
+              <button onClick={() => { setWaitlistTier(null); setWaitlistDone(false); setWaitlistForm({ name: '', email: '', phone: '' }) }}
+                className="text-gray-500 text-sm hover:text-gray-300 transition-colors">Join another waitlist</button>
             </div>
 
-          /* ── Waitlist form ────────────────────────────────── */
+          /* Waitlist form */
           ) : waitlistTier ? (
             <div className="bg-brand-gray rounded-3xl p-8 border border-red-500/20">
               <div className="flex items-center gap-2 mb-3">
@@ -325,30 +354,26 @@ export default function TicketsPage() {
                 Add your details and we'll contact you first when a spot opens.
               </p>
               <form onSubmit={joinWaitlist} className="space-y-4">
-                <div>
-                  <label className="block text-sm text-gray-400 mb-1.5">Full Name</label>
-                  <input type="text" required placeholder="Your full name"
-                    value={waitlistForm.name}
-                    onChange={e => setWaitlistForm(f => ({ ...f, name: e.target.value }))}
-                    className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand-orange text-sm" />
-                </div>
-                <div>
-                  <label className="block text-sm text-gray-400 mb-1.5">Email Address</label>
-                  <input type="email" required placeholder="you@example.com"
-                    value={waitlistForm.email}
-                    onChange={e => setWaitlistForm(f => ({ ...f, email: e.target.value }))}
-                    className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand-orange text-sm" />
-                </div>
+                {([
+                  ['Full Name',    'name',  'text',  'Your full name'],
+                  ['Email Address','email', 'email', 'you@example.com'],
+                ] as [string, keyof typeof waitlistForm, string, string][]).map(([label, field, type, ph]) => (
+                  <div key={field}>
+                    <label className="block text-sm text-gray-400 mb-1.5">{label}</label>
+                    <input type={type} required placeholder={ph} value={waitlistForm[field]}
+                      onChange={e => setWaitlistForm(f => ({ ...f, [field]: e.target.value }))}
+                      className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand-orange text-sm" />
+                  </div>
+                ))}
                 <div>
                   <label className="block text-sm text-gray-400 mb-1.5">Phone <span className="text-gray-600">(optional)</span></label>
-                  <input type="tel" placeholder="+234 800 0000 000"
-                    value={waitlistForm.phone}
+                  <input type="tel" placeholder="+234 800 0000 000" value={waitlistForm.phone}
                     onChange={e => setWaitlistForm(f => ({ ...f, phone: e.target.value }))}
                     className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand-orange text-sm" />
                 </div>
                 <div className="bg-brand-dark rounded-xl p-4 border border-white/10">
                   <p className="text-xs text-gray-500">
-                    Joining the waitlist for: <span className="text-brand-orange font-semibold">{waitingForTier?.name}</span>
+                    Joining waitlist for: <span className="text-brand-orange font-semibold">{waitingForTier?.name}</span>
                     {' · '}₦{waitingForTier?.price.toLocaleString()} per person
                   </p>
                 </div>
@@ -356,22 +381,18 @@ export default function TicketsPage() {
                   className="w-full py-4 rounded-xl bg-gradient-to-r from-red-700 to-red-600 text-white font-bold text-lg hover:opacity-90 disabled:opacity-50 transition-opacity">
                   {waitlistLoading ? 'Joining…' : 'Join Waitlist'}
                 </button>
-                <button type="button"
-                  onClick={() => setWaitlistTier(null)}
-                  className="w-full text-center text-gray-500 text-sm hover:text-gray-300 transition-colors">
-                  Cancel
-                </button>
+                <button type="button" onClick={() => setWaitlistTier(null)}
+                  className="w-full text-center text-gray-500 text-sm hover:text-gray-300 transition-colors">Cancel</button>
               </form>
             </div>
 
-          /* ── Purchase success ─────────────────────────────── */
+          /* Purchase success */
           ) : submitted ? (
             <div className="bg-brand-gray rounded-3xl p-10 border border-brand-orange/20 text-center">
               <div className="text-5xl mb-5">👟</div>
               <h3 className="font-display text-3xl text-white mb-1">YOU'RE IN!</h3>
               <p className="text-gray-400 text-sm mb-1">{form.quantity} × {tier?.name} · ₦{total.toLocaleString()}</p>
               <p className="text-gray-600 text-xs font-mono mb-6">Ref: {payRef}</p>
-
               {qrDataUrl && (
                 <div className="mb-6">
                   <p className="text-xs text-gray-500 uppercase tracking-wider mb-3">Your Entry QR Code</p>
@@ -396,25 +417,21 @@ export default function TicketsPage() {
                   </div>
                 </div>
               )}
-
               <div className="bg-brand-dark rounded-2xl p-4 mb-6 border border-white/10 text-sm">
                 {emailSent === true  && <p className="text-brand-neon">✓ Confirmation sent to <span className="text-white">{form.email}</span></p>}
                 {emailSent === false && <p className="text-gray-400">Download your QR and invoice above — they are your entry and receipt.</p>}
                 {emailSent === null  && <p className="text-gray-500">Sending confirmation to <span className="text-white">{form.email}</span>…</p>}
               </div>
-
               <div className="bg-brand-dark rounded-2xl p-4 mb-6 border border-white/10">
                 <p className="text-gray-500 text-sm">Venue confirmation coming soon</p>
                 <p className="text-white font-semibold">December 12–13, 2026 · Lagos, Nigeria</p>
               </div>
-
               {user && <p className="text-brand-orange text-sm mb-4">Saved to your profile ✓</p>}
-              <button
-                onClick={() => { setSubmitted(false); setSelected(null); setPayRef(''); setQrDataUrl(''); setEmailSent(null); setPurchasedAt('') }}
+              <button onClick={() => { setSubmitted(false); setSelected(null); setPayRef(''); setQrDataUrl(''); setEmailSent(null); setPurchasedAt('') }}
                 className="text-gray-500 text-sm hover:text-gray-300">Buy another ticket</button>
             </div>
 
-          /* ── Checkout form ────────────────────────────────── */
+          /* Checkout form */
           ) : (
             <div className="bg-brand-gray rounded-3xl p-8 border border-white/5">
               <h2 className="font-display text-2xl text-white mb-2">COMPLETE YOUR ORDER</h2>
@@ -443,8 +460,15 @@ export default function TicketsPage() {
                   <label className="block text-sm text-gray-400 mb-1.5">Number of Tickets</label>
                   <select value={form.quantity} onChange={e => setForm(f => ({ ...f, quantity: e.target.value }))}
                     className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white focus:outline-none focus:border-brand-orange text-sm">
-                    {[1,2,3,4,5].map(n => <option key={n} value={n}>{n}</option>)}
+                    {Array.from({ length: maxQty }, (_, i) => i + 1).map(n => (
+                      <option key={n} value={n}>{n}</option>
+                    ))}
                   </select>
+                  {tier && isFinite(tierRemain) && tierRemain > 0 && tierRemain <= 20 && (
+                    <p className="text-xs text-brand-orange mt-1.5">
+                      Only {tierRemain} spot{tierRemain !== 1 ? 's' : ''} left · max {maxQty} per order
+                    </p>
+                  )}
                 </div>
                 {tier && (
                   <div className="bg-brand-dark rounded-xl p-4 border border-white/10">
@@ -458,7 +482,8 @@ export default function TicketsPage() {
                     </div>
                   </div>
                 )}
-                <button type="submit" disabled={!tier || processing}
+                <button type="submit"
+                  disabled={!tier || processing || (isFinite(tierRemain) && tierRemain <= 0)}
                   className="w-full py-4 rounded-xl bg-gradient-to-r from-brand-orange to-brand-amber text-black font-bold text-lg hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed">
                   {processing ? 'Opening payment…' : tier ? `Pay ₦${total.toLocaleString()}` : 'Select a Ticket First'}
                 </button>
