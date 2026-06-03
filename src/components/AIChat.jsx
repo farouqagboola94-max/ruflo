@@ -1,74 +1,32 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { B } from '../tokens'
 
+const API = import.meta.env.VITE_BACKEND_URL || ''
+
+// ── keyword fallback ──────────────────────────────────────────────────────────
 const QA = [
-  {
-    keys: ['ticket', 'price', 'cost', 'how much', 'buy', 'get ticket', 'purchase'],
-    answer: 'Tickets: General ₦5,000 · VIP ₦10,000 · VVIP ₦25,000 · Phalanx ₦50,000. Head to the Tickets section to secure yours. Early access members get first dibs.'
-  },
-  {
-    keys: ['date', 'when', 'time', 'december', 'day'],
-    answer: 'December 12, 2026. Doors open 12:00 PM. Mark your calendar.'
-  },
-  {
-    keys: ['venue', 'location', 'where', 'address'],
-    answer: "The exact venue will be announced soon — the city is Lagos, Nigeria, and the date is locked: December 12, 2026. Join the WhatsApp channel to be first to know when the venue drops."
-  },
-  {
-    keys: ['lineup', 'dj', 'artist', 'spinall', 'music', 'perform', 'headliner'],
-    answer: 'DJ Spinall is headlining. Full lineup details are in the Lineup section — scroll down or tap the nav.'
-  },
-  {
-    keys: ['vip', 'vvip', 'phalanx', 'ultra', 'experience', 'lounge', 'meet'],
-    answer: 'VIP (₦10K): Priority entry + exclusive lounge + merch bag. VVIP (₦25K): Everything VIP plus private collector room, artist access & signed merch. Phalanx (₦50K): Top tier — private lounge, dedicated concierge, exclusive badge + collectible box, early entry from 11 AM.'
-  },
-  {
-    keys: ['vendor', 'sell', 'stall', 'booth', 'apply', 'brand'],
-    answer: 'Vendor spots are invitation-curated — 30 to 50 stalls, Year 1 first cohort. Fill the application in the Vendors section. We review within 3 business days.'
-  },
-  {
-    keys: ['sponsor', 'partner', 'sponsorship'],
-    answer: 'Packages from ₦250K (Community) to ₦5M+ (Headline). FNP session sponsorships also available from ₦100K. Email sponsors@sneakersfest.com or check the Sponsors section.'
-  },
-  {
-    keys: ['fnp', 'friday', 'protocol', 'weekly', 'challenge', 'game', 'conversation'],
-    answer: 'The Friday Night Protocol runs every Friday — a weekly community session with drop discussions, challenges, live conversations, and games. Join via WhatsApp to get alerts.'
-  },
-  {
-    keys: ['drop', 'exclusive', 'release', 'cop', 'pair', 'kicks', 'sneaker', 'grail'],
-    answer: 'Exclusive drops get announced first in the Friday Night Protocol community. Follow on WhatsApp and Twitter (@Catalyst188) — those are the first to know.'
-  },
-  {
-    keys: ['early access', 'waitlist', 'queue', 'first'],
-    answer: 'Sign up for early access in the Early Access section. You get a queue position and first shot at tickets, vendor spots, and exclusive drop announcements.'
-  },
-  {
-    keys: ['interview', 'documentary', 'video', 'youtube', 'watch'],
-    answer: 'Event docs and collector interviews drop on the YouTube channel. Subscribe @catalyst00555 on YouTube to get notified.'
-  },
-  {
-    keys: ['whatsapp', 'community', 'join', 'inner circle', 'group'],
-    answer: 'Join the community via the WhatsApp button on the site. Inner circle members get early access, FNP alerts, and direct drop announcements.'
-  },
-  {
-    keys: ['contact', 'reach', 'email', 'talk', 'message', 'hello', 'hi'],
-    answer: 'Tap the WhatsApp button (bottom right) for fastest response. For press: press@sneakersfest.com. For sponsors: sponsors@sneakersfest.com.'
-  },
-  {
-    keys: ['catalyst', 'founder', 'oluwatobiloba', 'who', 'about'],
-    answer: 'Sneakers Fest is built by Oluwatobiloba — The Catalyst, principal of Catalyst Concepts, Lagos. Read the full origin story in the Origin Story section.'
-  },
-  {
-    keys: ['merch', 'shirt', 'hoodie', 'clothing', 'wear', 'apparel'],
-    answer: 'Merch is in the Merch section. Lagos Noir aesthetic — the same visual language as the festival itself.'
-  },
-  {
-    keys: ['substack', 'newsletter', 'read', 'essay', 'culture'],
-    answer: 'The Catalyst Substack (@catalyst00555) covers sneaker culture, Lagos streetwear, event docs, and community stories. Subscribe free — check the Substack section.'
-  },
+  { keys: ['ticket','price','cost','how much','buy','purchase'], answer: 'Tickets: General ₦5,000 · VIP ₦10,000 · VVIP ₦25,000 · Phalanx ₦50,000. Head to the Tickets section to grab yours.' },
+  { keys: ['date','when','time','december'], answer: 'December 12, 2026. Doors open 12 PM; Phalanx holders from 11 AM. Mark your calendar.' },
+  { keys: ['venue','location','where','address'], answer: 'City: Lagos, Nigeria. Exact venue drops soon — join the WhatsApp community to get the notice first.' },
+  { keys: ['lineup','dj','artist','spinall','music','perform'], answer: 'DJ Spinall is headlining. Full lineup is in the Lineup section.' },
+  { keys: ['vip','vvip','phalanx'], answer: 'VIP (₦10K): Priority entry + lounge + merch bag. VVIP (₦25K): + collector room + artist access. Phalanx (₦50K): private lounge, concierge, badge + collectible box, 11 AM entry.' },
+  { keys: ['vendor','sell','stall','booth','apply'], answer: '30–50 stalls, invitation-curated first cohort. Apply in the Vendors section — reviewed in 3 business days.' },
+  { keys: ['sponsor','partner','sponsorship'], answer: 'Packages from ₦250K to ₦5M+. FNP from ₦100K. Email sponsors@sneakersfest.com.' },
+  { keys: ['fnp','friday','protocol','weekly'], answer: 'Friday Night Protocol is a weekly community session — drop discussions, challenges, games. Join WhatsApp for alerts.' },
+  { keys: ['drop','exclusive','release','grail','kicks','sneaker'], answer: 'Exclusive drop intel goes to the FNP community first. Follow WhatsApp and @Catalyst188 on Twitter.' },
+  { keys: ['early access','waitlist','queue'], answer: 'Sign up in the Early Access section — queue position + first shot at tickets, vendor spots, and drop intel.' },
+  { keys: ['raffle','win','giveaway'], answer: 'Enter raffles in the Raffle section. Live draws at the event. Enter early.' },
+  { keys: ['gallery','photo','upload'], answer: 'Upload in the Gallery section. Community votes with heat — top photos rank on the leaderboard.' },
+  { keys: ['trade','swap'], answer: 'Browse and post on the Trade Board. WhatsApp deep-link makes reaching sellers easy.' },
+  { keys: ['museum','art','bid','artwork'], answer: 'Eight artworks up for bid — Lagos at Dawn, Sole Supremacy, Grail Keeper, and more. Bid in the Museum section.' },
+  { keys: ['whatsapp','community','join','group'], answer: 'Tap the WhatsApp button (bottom right). Inner circle gets early access, FNP alerts, and direct drop announcements.' },
+  { keys: ['contact','reach','email','hello','hi'], answer: 'WhatsApp (bottom right) is fastest. press@sneakersfest.com for media. sponsors@sneakersfest.com for brands.' },
+  { keys: ['merch','shirt','hoodie','clothing'], answer: 'Merch in the Merch section. Lagos Noir aesthetic, limited runs.' },
+  { keys: ['catalyst','founder','who','about'], answer: "Built by Oluwatobiloba — The Catalyst, principal of Catalyst Concepts, Lagos. Full story in Origin Story." },
+  { keys: ['substack','newsletter','read'], answer: 'The Catalyst Substack (@catalyst00555) covers sneaker culture, Lagos drops, and event docs. Subscribe free.' },
 ]
 
-function getReply(text) {
+function keywordReply(text) {
   const q = text.toLowerCase()
   for (const qa of QA) {
     if (qa.keys.some(k => q.includes(k))) return qa.answer
@@ -76,57 +34,79 @@ function getReply(text) {
   return null
 }
 
+const SUGGESTIONS = [
+  ['Ticket prices', 'Vendor spots', 'What is FNP?', 'Date & venue'],
+  ['VIP perks', 'How do raffles work?', 'Who is headlining?', 'Sponsorships'],
+]
+
+// ── component ─────────────────────────────────────────────────────────────────
 export default function AIChat() {
-  const [open, setOpen] = useState(false)
-  const [messages, setMessages] = useState([
-    { role: 'assistant', content: "What's good. I'm the Sneakers Fest AI. Ask me anything — tickets, lineup, vendors, the Friday Protocol, drops, or what this whole thing is about." }
+  const [open,       setOpen]       = useState(false)
+  const [messages,   setMessages]   = useState([
+    { role: 'assistant', content: "What's good. I'm the Sneakers Fest AI — ask me anything about tickets, lineup, vendors, the Friday Protocol, drops, or the event." }
   ])
-  const [input, setInput] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768)
+  const [input,      setInput]      = useState('')
+  const [loading,    setLoading]    = useState(false)
+  const [claude,     setClaude]     = useState(false)
+  const [suggSet,    setSuggSet]    = useState(0)
+  const [mobile,     setMobile]     = useState(() => window.innerWidth < 768)
   const endRef = useRef(null)
+  const msgsRef = useRef(messages)
+  msgsRef.current = messages
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages, loading])
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768)
-    window.addEventListener('resize', check)
-    return () => window.removeEventListener('resize', check)
+    const fn = () => setMobile(window.innerWidth < 768)
+    window.addEventListener('resize', fn)
+    return () => window.removeEventListener('resize', fn)
   }, [])
 
-  function send() {
-    if (!input.trim() || loading) return
-    const text = input.trim()
-    setInput('')
-    setMessages(prev => [...prev, { role: 'user', content: text }])
+  const sendText = useCallback(async (text) => {
+    if (!text.trim() || loading) return
+    const history = [...msgsRef.current, { role: 'user', content: text }]
+    setMessages(history)
     setLoading(true)
 
-    setTimeout(() => {
-      const reply = getReply(text)
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: reply || "That one's better answered by the team directly. Tap the WhatsApp button (bottom right) and they'll get back to you fast."
-      }])
-      setLoading(false)
-    }, 620)
+    let reply = null
+    if (API) {
+      try {
+        const res = await fetch(`${API}/api/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: history.map(m => ({ role: m.role, content: m.content })) }),
+        })
+        if (res.ok) { reply = (await res.json()).reply; setClaude(true) }
+      } catch { /* fall through */ }
+    }
+
+    if (!reply) {
+      await new Promise(r => setTimeout(r, 480))
+      reply = keywordReply(text) || "That's best answered directly by the team — tap the WhatsApp button (bottom right) for a fast reply."
+    }
+
+    setMessages(prev => [...prev, { role: 'assistant', content: reply }])
+    setLoading(false)
+    if (history.length >= 3) setSuggSet(1)
+  }, [loading])
+
+  function send() { sendText(input.trim()); setInput('') }
+  function clearChat() {
+    setMessages([{ role: 'assistant', content: "What's good. I'm the Sneakers Fest AI — ask me anything about tickets, lineup, vendors, the Friday Protocol, drops, or the event." }])
+    setSuggSet(0); setClaude(false)
   }
+
+  const accent     = claude ? B.neonCyan : B.amber
+  const showSuggs  = !loading && messages.length <= 2 || (!loading && suggSet === 1 && messages.length === 3)
 
   return (
     <>
-      {/* Trigger button */}
+      {/* ── trigger ────────────────────────────────────────────────────── */}
       <button
         onClick={() => setOpen(o => !o)}
         aria-label={open ? 'Close chat' : 'Open chat'}
-        style={{
-          position: 'fixed', bottom: isMobile ? 90 : 28, left: 28, zIndex: 1001,
-          width: 54, height: 54, borderRadius: '50%',
-          background: `linear-gradient(135deg, ${B.amber}, ${B.neonCyan})`,
-          border: 'none', cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: `0 0 24px ${B.amber}50, 0 4px 20px rgba(0,0,0,0.6)`,
-          transition: 'transform 0.2s, box-shadow 0.2s',
-        }}
-        onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.08)' }}
-        onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)' }}
+        style={{ position: 'fixed', bottom: mobile ? 90 : 28, left: 28, zIndex: 1001, width: 54, height: 54, borderRadius: '50%', background: `linear-gradient(135deg, ${B.amber}, ${B.neonCyan})`, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 0 24px ${B.amber}50, 0 4px 20px rgba(0,0,0,0.6)`, transition: 'transform 0.2s' }}
+        onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.08)'}
+        onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
       >
         {open
           ? <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke={B.black} strokeWidth="2.5" strokeLinecap="round"/></svg>
@@ -134,92 +114,62 @@ export default function AIChat() {
         }
       </button>
 
-      {/* Chat panel */}
+      {/* ── panel ──────────────────────────────────────────────────────── */}
       {open && (
-        <div style={{
-          position: 'fixed', bottom: isMobile ? 156 : 94, left: 28, zIndex: 1000,
-          width: 340, height: 490,
-          borderRadius: 18,
-          background: 'rgba(8,8,12,0.96)',
-          backdropFilter: 'blur(24px) saturate(180%)',
-          border: `1px solid rgba(245,166,35,0.25)`,
-          boxShadow: `0 0 60px rgba(245,166,35,0.08), 0 24px 80px rgba(0,0,0,0.9)`,
-          display: 'flex', flexDirection: 'column', overflow: 'hidden',
-          animation: 'chatSlideIn 0.25s ease',
-        }}>
-          {/* Header */}
-          <div style={{
-            padding: '13px 16px',
-            borderBottom: `1px solid rgba(255,255,255,0.07)`,
-            background: `linear-gradient(90deg, rgba(245,166,35,0.08), rgba(0,240,255,0.04))`,
-            display: 'flex', alignItems: 'center', gap: 8,
-          }}>
-            <div style={{ width: 7, height: 7, borderRadius: '50%', background: B.neonLime, boxShadow: `0 0 8px ${B.neonLime}`, animation: 'pulse 2s infinite' }} />
-            <span style={{ color: B.amber, fontFamily: 'Orbitron,sans-serif', fontSize: 10, fontWeight: 700, letterSpacing: 2 }}>SNEAKERS FEST AI</span>
-            <span style={{ color: '#555', fontSize: 9, fontFamily: 'Space Mono,monospace', marginLeft: 'auto' }}>online</span>
+        <div style={{ position: 'fixed', bottom: mobile ? 156 : 94, left: 28, zIndex: 1000, width: mobile ? 'calc(100vw - 56px)' : 358, height: 502, borderRadius: 18, background: 'rgba(8,8,12,0.97)', backdropFilter: 'blur(28px) saturate(180%)', border: `1px solid ${accent}30`, boxShadow: `0 0 60px ${accent}08, 0 24px 80px rgba(0,0,0,0.9)`, display: 'flex', flexDirection: 'column', overflow: 'hidden', animation: 'chatSlideIn 0.25s ease', transition: 'border-color 0.4s' }}>
+
+          {/* header */}
+          <div style={{ padding: '11px 14px', borderBottom: '1px solid rgba(255,255,255,0.07)', background: `linear-gradient(90deg, ${accent}10, transparent)`, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ width: 7, height: 7, borderRadius: '50%', background: loading ? B.amber : accent, boxShadow: `0 0 8px ${loading ? B.amber : accent}`, animation: 'pulse 2s infinite', flexShrink: 0 }} />
+            <span style={{ color: accent, fontFamily: 'Orbitron,sans-serif', fontSize: 9, fontWeight: 700, letterSpacing: 2 }}>
+              {claude ? 'CLAUDE AI' : 'SNEAKERS FEST AI'}
+            </span>
+            {claude && <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 7, color: `${B.neonCyan}55` }}>claude-haiku</span>}
+            <button onClick={clearChat} title="Clear chat" style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#333', cursor: 'pointer', fontSize: 14, padding: '1px 4px', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#888'} onMouseLeave={e => e.currentTarget.style.color = '#333'}>↺</button>
           </div>
 
-          {/* Messages */}
+          {/* messages */}
           <div style={{ flex: 1, overflowY: 'auto', padding: '12px 12px 8px', display: 'flex', flexDirection: 'column', gap: 10 }}>
             {messages.map((m, i) => (
-              <div key={i} style={{
-                alignSelf: m.role === 'user' ? 'flex-end' : 'flex-start',
-                maxWidth: '82%',
-                padding: '9px 13px',
-                borderRadius: m.role === 'user' ? '14px 14px 3px 14px' : '14px 14px 14px 3px',
-                background: m.role === 'user' ? `rgba(245,166,35,0.18)` : 'rgba(255,255,255,0.05)',
-                border: `1px solid ${m.role === 'user' ? 'rgba(245,166,35,0.28)' : 'rgba(255,255,255,0.07)'}`,
-                color: B.white, fontSize: 12.5, lineHeight: 1.6,
-                fontFamily: 'Space Mono,monospace',
-              }}>{m.content}</div>
+              <div key={i} style={{ alignSelf: m.role === 'user' ? 'flex-end' : 'flex-start', maxWidth: '84%', padding: '9px 13px', borderRadius: m.role === 'user' ? '14px 14px 3px 14px' : '14px 14px 14px 3px', background: m.role === 'user' ? `rgba(245,166,35,0.15)` : 'rgba(255,255,255,0.05)', border: `1px solid ${m.role === 'user' ? 'rgba(245,166,35,0.25)' : 'rgba(255,255,255,0.07)'}`, color: B.white, fontSize: 12, lineHeight: 1.65, fontFamily: 'Space Mono,monospace' }}>
+                {m.content}
+              </div>
             ))}
             {loading && (
               <div style={{ alignSelf: 'flex-start', display: 'flex', gap: 5, padding: '10px 14px', background: 'rgba(255,255,255,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.07)' }}>
-                {[0,1,2].map(i => <div key={i} style={{ width: 6, height: 6, borderRadius: '50%', background: B.amber, animation: `pulse 1.2s ${i*0.2}s infinite` }} />)}
+                {[0,1,2].map(i => <div key={i} style={{ width: 6, height: 6, borderRadius: '50%', background: accent, animation: `pulse 1.2s ${i*0.2}s infinite` }} />)}
               </div>
             )}
             <div ref={endRef} />
           </div>
 
-          {/* Suggested prompts (shown when only greeting visible) */}
-          {messages.length === 1 && (
-            <div style={{ padding: '0 12px 10px', display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-              {['Ticket prices', 'Vendor spots', 'What is FNP?', 'Date & venue'].map(q => (
-                <button key={q} onClick={() => { setInput(q); setTimeout(send, 0) }}
-                  style={{ padding: '5px 10px', background: `${B.amber}14`, border: `1px solid ${B.amber}30`, borderRadius: 20, color: B.amber, fontSize: 9, fontFamily: 'Space Mono,monospace', cursor: 'pointer', letterSpacing: '0.08em' }}
-                  onMouseEnter={e => e.currentTarget.style.background = `${B.amber}25`}
-                  onMouseLeave={e => e.currentTarget.style.background = `${B.amber}14`}
+          {/* suggestions */}
+          {showSuggs && (
+            <div style={{ padding: '0 12px 8px', display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+              {SUGGESTIONS[suggSet].map(q => (
+                <button key={q} onClick={() => sendText(q)}
+                  style={{ padding: '5px 10px', background: `${B.amber}12`, border: `1px solid ${B.amber}28`, borderRadius: 20, color: B.amber, fontSize: 9, fontFamily: 'Space Mono,monospace', cursor: 'pointer', letterSpacing: '0.06em', transition: 'background 0.15s' }}
+                  onMouseEnter={e => e.currentTarget.style.background = `${B.amber}22`}
+                  onMouseLeave={e => e.currentTarget.style.background = `${B.amber}12`}
                 >{q}</button>
               ))}
             </div>
           )}
 
-          {/* Input */}
-          <div style={{ padding: '10px 12px 14px', borderTop: `1px solid rgba(255,255,255,0.07)`, display: 'flex', gap: 8 }}>
+          {/* input */}
+          <div style={{ padding: '10px 12px 14px', borderTop: '1px solid rgba(255,255,255,0.07)', display: 'flex', gap: 8 }}>
             <input
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
               placeholder="Ask about Sneakers Fest..."
-              style={{
-                flex: 1, background: 'rgba(255,255,255,0.04)',
-                border: `1px solid rgba(245,166,35,0.18)`, borderRadius: 10,
-                color: B.white, padding: '9px 12px', fontSize: 12,
-                fontFamily: 'Space Mono,monospace', outline: 'none',
-              }}
+              style={{ flex: 1, background: 'rgba(255,255,255,0.04)', border: `1px solid rgba(245,166,35,0.18)`, borderRadius: 10, color: B.white, padding: '9px 12px', fontSize: 12, fontFamily: 'Space Mono,monospace', outline: 'none' }}
             />
-            <button
-              onClick={send} disabled={loading || !input.trim()}
-              style={{
-                background: loading || !input.trim() ? B.gunmetal : B.amber,
-                border: 'none', borderRadius: 10, padding: '9px 13px',
-                cursor: loading || !input.trim() ? 'not-allowed' : 'pointer',
-                color: B.black, fontFamily: 'Orbitron,sans-serif',
-                fontSize: 10, fontWeight: 700, letterSpacing: 1,
-                transition: 'background 0.2s',
-              }}
+            <button onClick={send} disabled={loading || !input.trim()}
+              style={{ background: loading || !input.trim() ? 'rgba(255,255,255,0.05)' : accent, border: 'none', borderRadius: 10, padding: '9px 14px', cursor: loading || !input.trim() ? 'not-allowed' : 'pointer', color: loading || !input.trim() ? '#333' : B.black, fontFamily: 'Orbitron,sans-serif', fontSize: 10, fontWeight: 700, letterSpacing: 1, transition: 'all 0.2s' }}
             >GO</button>
           </div>
+
         </div>
       )}
     </>
