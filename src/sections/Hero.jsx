@@ -69,7 +69,7 @@ export default function Hero() {
   const time = useCountdown(EVENT_DATE)
 
   return (
-    <section style={{
+    <section id="hero" style={{
       minHeight: "100vh", position: "relative", overflow: "hidden",
       background: `
         radial-gradient(ellipse 80% 60% at 70% 30%, ${B.amber}08 0%, transparent 60%),

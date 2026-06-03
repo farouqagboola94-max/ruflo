@@ -104,7 +104,7 @@ export default function AIChat() {
       <button
         onClick={() => setOpen(o => !o)}
         aria-label={open ? 'Close chat' : 'Open chat'}
-        style={{ position: 'fixed', bottom: mobile ? 90 : 28, left: 28, zIndex: 1001, width: 54, height: 54, borderRadius: '50%', background: `linear-gradient(135deg, ${B.amber}, ${B.neonCyan})`, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 0 24px ${B.amber}50, 0 4px 20px rgba(0,0,0,0.6)`, transition: 'transform 0.2s' }}
+        style={{ position: 'fixed', bottom: mobile ? 78 : 28, left: 28, zIndex: 1001, width: 54, height: 54, borderRadius: '50%', background: `linear-gradient(135deg, ${B.amber}, ${B.neonCyan})`, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 0 24px ${B.amber}50, 0 4px 20px rgba(0,0,0,0.6)`, transition: 'transform 0.2s' }}
         onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.08)'}
         onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
       >
@@ -116,7 +116,7 @@ export default function AIChat() {
 
       {/* ── panel ──────────────────────────────────────────────────────── */}
       {open && (
-        <div style={{ position: 'fixed', bottom: mobile ? 156 : 94, left: 28, zIndex: 1000, width: mobile ? 'calc(100vw - 56px)' : 358, height: 502, borderRadius: 18, background: 'rgba(8,8,12,0.97)', backdropFilter: 'blur(28px) saturate(180%)', border: `1px solid ${accent}30`, boxShadow: `0 0 60px ${accent}08, 0 24px 80px rgba(0,0,0,0.9)`, display: 'flex', flexDirection: 'column', overflow: 'hidden', animation: 'chatSlideIn 0.25s ease', transition: 'border-color 0.4s' }}>
+        <div style={{ position: 'fixed', bottom: mobile ? 148 : 94, left: 28, zIndex: 1000, width: mobile ? 'calc(100vw - 56px)' : 358, height: 502, borderRadius: 18, background: 'rgba(8,8,12,0.97)', backdropFilter: 'blur(28px) saturate(180%)', border: `1px solid ${accent}30`, boxShadow: `0 0 60px ${accent}08, 0 24px 80px rgba(0,0,0,0.9)`, display: 'flex', flexDirection: 'column', overflow: 'hidden', animation: 'chatSlideIn 0.25s ease', transition: 'border-color 0.4s' }}>
 
           {/* header */}
           <div style={{ padding: '11px 14px', borderBottom: '1px solid rgba(255,255,255,0.07)', background: `linear-gradient(90deg, ${accent}10, transparent)`, display: 'flex', alignItems: 'center', gap: 8 }}>
