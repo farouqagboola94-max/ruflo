@@ -192,7 +192,7 @@ function ListingCard({ listing, wanted, onWant, onContact, onRemove, isOwn }) {
         {listing.notes && <div style={{ fontFamily:'Syne,sans-serif', fontSize:11, color:'#666', lineHeight:1.5, display:'-webkit-box', WebkitLineClamp:2, WebkitBoxOrient:'vertical', overflow:'hidden' }}>{listing.notes}</div>}
         <div style={{ display:'flex', gap:6, marginTop:4 }}>
           <button onClick={() => onWant(listing.id)} style={{ flex:1, padding:'9px 6px', background: wanted ? `${B.neonLime}18` : 'rgba(255,255,255,0.04)', border:`1px solid ${wanted ? B.neonLime+'50' : 'rgba(255,255,255,0.1)'}`, borderRadius:6, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:9, color: wanted ? B.neonLime : '#666', letterSpacing:1 }}>
-            🔥 {listing.wants + (wanted ? 0 : 0)}{' '}WANT
+            🔥 {listing.wants} {wanted ? 'WANTED' : 'WANT'}
           </button>
           <button onClick={() => onContact(listing)} style={{ flex:1, padding:'9px 6px', background:`${B.amber}15`, border:`1px solid ${B.amber}40`, borderRadius:6, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:9, color:B.amber, letterSpacing:1 }}>
             CONTACT →
@@ -209,11 +209,13 @@ export default function TradeBoard() {
   const [listings,  setListings]  = useState(() => load() ?? SEEDS)
   const [wants,     setWants]     = useState(loadWants)
   const [mine,      setMine]      = useState(loadMine)
-  const [posting,   setPosting]   = useState(false)
-  const [contact,   setContact]   = useState(null)
-  const [cond,      setCond]      = useState('ALL')
-  const [query,     setQuery]     = useState('')
-  const [sort,      setSort]      = useState('NEWEST')
+  const [posting,     setPosting]     = useState(false)
+  const [contact,     setContact]     = useState(null)
+  const [cond,        setCond]        = useState('ALL')
+  const [brandFilter, setBrandFilter] = useState('')
+  const [sizeFilter,  setSizeFilter]  = useState('')
+  const [query,       setQuery]       = useState('')
+  const [sort,        setSort]        = useState('NEWEST')
 
   useEffect(() => { try { localStorage.setItem('sf26_trades', JSON.stringify(listings)) } catch {} }, [listings])
 
@@ -241,12 +243,18 @@ export default function TradeBoard() {
     setMine(m => { const nm = m.filter(i => i !== id); try { localStorage.setItem('sf26_my_trades', JSON.stringify(nm)) } catch {}; return nm })
   }
 
+  const allBrands = [...new Set(listings.map(l => l.brand).filter(Boolean))].sort()
+  const allSizes  = [...new Set(listings.map(l => l.size).filter(Boolean))].sort((a, b) => Number(a) - Number(b))
+
   const filtered = listings
     .filter(l => cond === 'ALL' || l.condition === cond)
+    .filter(l => !brandFilter || l.brand.toLowerCase() === brandFilter.toLowerCase())
+    .filter(l => !sizeFilter  || l.size === sizeFilter)
     .filter(l => !query || l.name.toLowerCase().includes(query.toLowerCase()) || l.brand.toLowerCase().includes(query.toLowerCase()))
     .sort((a, b) => sort === 'NEWEST' ? new Date(b.postedAt) - new Date(a.postedAt) : b.wants - a.wants)
 
-  const totalWants = listings.reduce((s, l) => s + l.wants, 0)
+  const totalWants  = listings.reduce((s, l) => s + l.wants, 0)
+  const activeFilters = [cond !== 'ALL', brandFilter, sizeFilter, query].filter(Boolean).length
 
   return (
     <section id="trades" style={{ position:'relative', background:`linear-gradient(180deg, ${B.black} 0%, ${B.void} 100%)`, padding:'100px 24px', overflow:'hidden' }}>
@@ -265,7 +273,7 @@ export default function TradeBoard() {
           </div>
           <div style={{ display:'flex', flexDirection:'column', alignItems:'flex-end', gap:12 }}>
             <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#444', letterSpacing:2 }}>
-              {listings.length} listings · 🔥 {totalWants} total interest
+              {activeFilters > 0 ? `${filtered.length} of ` : ''}{listings.length} listings · 🔥 {totalWants} total interest
             </div>
             <button onClick={() => setPosting(true)} style={{ padding:'13px 24px', background:`linear-gradient(90deg, ${B.neonCyan}, #00B8CC)`, border:'none', borderRadius:8, color:B.black, fontFamily:'Bebas Neue,sans-serif', fontSize:18, letterSpacing:3, cursor:'pointer', boxShadow:`0 0 28px ${B.neonCyan}30` }}>
               + POST A LISTING
@@ -275,13 +283,33 @@ export default function TradeBoard() {
 
         {/* filters */}
         <div style={{ display:'flex', gap:10, flexWrap:'wrap', alignItems:'center', marginBottom:32, padding:'16px 20px', background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.07)', borderRadius:10 }}>
-          <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search sneakers…" style={{ padding:'8px 13px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:6, color:B.white, fontFamily:'Space Mono,monospace', fontSize:11, outline:'none', minWidth:180, flex:'1 1 160px' }} />
+          <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search sneakers…" style={{ padding:'8px 13px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:6, color:B.white, fontFamily:'Space Mono,monospace', fontSize:11, outline:'none', minWidth:160, flex:'1 1 140px' }} />
+
+          <select value={brandFilter} onChange={e => setBrandFilter(e.target.value)}
+            style={{ padding:'8px 12px', background:'rgba(255,255,255,0.05)', border:`1px solid ${brandFilter ? B.neonCyan+'50' : 'rgba(255,255,255,0.1)'}`, borderRadius:6, color: brandFilter ? B.neonCyan : '#666', fontFamily:'Space Mono,monospace', fontSize:9, outline:'none', cursor:'pointer', minWidth:110 }}>
+            <option value="">ALL BRANDS</option>
+            {allBrands.map(b => <option key={b} value={b}>{b}</option>)}
+          </select>
+
+          <select value={sizeFilter} onChange={e => setSizeFilter(e.target.value)}
+            style={{ padding:'8px 12px', background:'rgba(255,255,255,0.05)', border:`1px solid ${sizeFilter ? B.neonCyan+'50' : 'rgba(255,255,255,0.1)'}`, borderRadius:6, color: sizeFilter ? B.neonCyan : '#666', fontFamily:'Space Mono,monospace', fontSize:9, outline:'none', cursor:'pointer', minWidth:100 }}>
+            <option value="">ALL SIZES</option>
+            {allSizes.map(s => <option key={s} value={s}>EU {s}</option>)}
+          </select>
+
           <div style={{ display:'flex', gap:4 }}>
             {['ALL', ...CONDITIONS].map(c => (
               <button key={c} onClick={() => setCond(c)} style={{ padding:'7px 12px', background: cond===c ? `${(COND_COLOR[c]||B.white)}22` : 'transparent', border:`1px solid ${cond===c ? (COND_COLOR[c]||B.white)+'60' : 'rgba(255,255,255,0.08)'}`, borderRadius:5, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:8, color: cond===c ? (COND_COLOR[c]||B.white) : '#555', letterSpacing:1 }}>{c}</button>
             ))}
           </div>
-          <div style={{ display:'flex', gap:4, marginLeft:'auto' }}>
+
+          <div style={{ display:'flex', gap:4, marginLeft:'auto', flexWrap:'wrap' }}>
+            {activeFilters > 0 && (
+              <button onClick={() => { setCond('ALL'); setBrandFilter(''); setSizeFilter(''); setQuery('') }}
+                style={{ padding:'7px 12px', background:`rgba(255,45,123,0.1)`, border:`1px solid ${B.neonMagenta}30`, borderRadius:5, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:8, color:B.neonMagenta, letterSpacing:1 }}>
+                CLEAR ALL ×
+              </button>
+            )}
             {['NEWEST','MOST WANTED'].map(s => (
               <button key={s} onClick={() => setSort(s)} style={{ padding:'7px 12px', background: sort===s ? `${B.amber}15` : 'transparent', border:`1px solid ${sort===s ? B.amber+'40' : 'rgba(255,255,255,0.08)'}`, borderRadius:5, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:8, color: sort===s ? B.amber : '#555', letterSpacing:1 }}>{s}</button>
             ))}
@@ -290,7 +318,10 @@ export default function TradeBoard() {
 
         {/* grid */}
         {filtered.length === 0
-          ? <div style={{ textAlign:'center', padding:'80px 0', fontFamily:'Space Mono,monospace', fontSize:12, color:'#333' }}>No listings match your filter</div>
+          ? <div style={{ textAlign:'center', padding:'80px 0' }}>
+              <div style={{ fontFamily:'Space Mono,monospace', fontSize:11, color:'#333', letterSpacing:2, marginBottom:12 }}>NO LISTINGS MATCH YOUR FILTERS</div>
+              {activeFilters > 0 && <button onClick={() => { setCond('ALL'); setBrandFilter(''); setSizeFilter(''); setQuery('') }} style={{ padding:'9px 18px', background:'transparent', border:`1px solid ${B.neonCyan}30`, borderRadius:6, color:B.neonCyan, fontFamily:'Space Mono,monospace', fontSize:9, cursor:'pointer', letterSpacing:2 }}>CLEAR FILTERS</button>}
+            </div>
           : <div style={{ columns:'auto 280px', columnGap:14 }}>
               {filtered.map(l => (
                 <ListingCard key={l.id} listing={l} wanted={!!wants[l.id]} isOwn={mine.includes(l.id)}
