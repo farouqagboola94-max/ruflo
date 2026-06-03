@@ -7,6 +7,7 @@ export interface TicketTier {
   available: boolean
   badge?: string
   color: string
+  capacity?: number
 }
 
 export const TICKET_TIERS: TicketTier[] = [
@@ -18,6 +19,7 @@ export const TICKET_TIERS: TicketTier[] = [
     perks: ['2-day vendor floor access', 'Main stage events', 'Sneaker showcase viewing', '1 raffle ticket included', 'Event wristband'],
     available: true,
     color: 'from-gray-700 to-gray-600',
+    capacity: 500,
   },
   {
     id: 'vip',
@@ -28,6 +30,7 @@ export const TICKET_TIERS: TicketTier[] = [
     available: true,
     badge: 'Most Popular',
     color: 'from-orange-600 to-amber-500',
+    capacity: 300,
   },
   {
     id: 'vvip',
@@ -37,6 +40,7 @@ export const TICKET_TIERS: TicketTier[] = [
     perks: ['Everything in VIP', 'Exclusive pre-show preview', '5 raffle tickets + guaranteed prize', 'Meet & greet with keynote speakers', 'Signed event poster', 'VVIP badge & lanyard'],
     available: true,
     color: 'from-yellow-500 to-amber-600',
+    capacity: 150,
   },
   {
     id: 'phalanx',
@@ -47,5 +51,6 @@ export const TICKET_TIERS: TicketTier[] = [
     available: true,
     badge: 'Exclusive',
     color: 'from-lime-400 to-green-600',
+    capacity: 25,
   },
 ]
