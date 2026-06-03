@@ -13,10 +13,26 @@ const LINKS = {
 }
 
 const COMMUNITY_STATS = [
-  { value: "5,000+", label: "COMMUNITY TARGET" },
-  { value: "7",     label: "CHANNELS" },
-  { value: "365",   label: "DAYS A YEAR" },
-  { value: "LIVE",  label: "RIGHT NOW", pulse: true },
+  { value: "4,200+", label: "MEMBERS JOINED"    },
+  { value: "7",      label: "PLATFORMS ACTIVE"  },
+  { value: "FNP",    label: "EVERY FRIDAY", pulse: true },
+  { value: "DEC 12", label: "EVENT DAY"         },
+]
+
+const FNP_SCHEDULE = [
+  { date:'JUN 06', theme:'SUMMER COLORWAYS',  color:B.neonCyan    },
+  { date:'JUN 13', theme:'RETRO ROUNDUP',     color:B.amber       },
+  { date:'JUN 20', theme:'COLLABS ONLY',      color:B.neonMagenta },
+  { date:'JUN 27', theme:'GRAIL DEBATE',      color:B.neonLime    },
+  { date:'JUL 04', theme:'INDEPENDENCE DRIP', color:B.amber       },
+]
+
+const SNAP_STORIES = [
+  { label:'EVENT BTS',   color:B.amber       },
+  { label:'UNBOXINGS',   color:B.neonCyan    },
+  { label:'FNP CLIPS',   color:B.neonMagenta },
+  { label:'VENDOR LIFE', color:B.neonLime    },
+  { label:'CULTURE',     color:'#E1306C'     },
 ]
 
 const PLATFORMS = [
@@ -392,48 +408,67 @@ export default function Community() {
           {PLATFORMS.map((p, i) => <PlatformCard key={i} p={p} />)}
         </div>
 
+        {/* Snapchat story highlights */}
+        <div style={{ marginBottom:16, padding:'14px 20px', background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:10, display:'flex', alignItems:'center', gap:16, flexWrap:'wrap' }}>
+          <div style={{ display:'flex', alignItems:'center', gap:8, flexShrink:0 }}>
+            <div style={{ width:36, height:36, borderRadius:'50%', background:`${B.amber}15`, border:`2px solid ${B.amber}60`, display:'flex', alignItems:'center', justifyContent:'center' }}>
+              <span style={{ fontFamily:'Orbitron,monospace', fontSize:7, fontWeight:900, color:B.amber }}>SC</span>
+            </div>
+            <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:'#444', letterSpacing:1, lineHeight:1.6 }}>SNAPCHAT<br/>HIGHLIGHTS</div>
+          </div>
+          <div style={{ display:'flex', gap:12, overflowX:'auto', paddingBottom:2 }}>
+            {SNAP_STORIES.map((s,i) => (
+              <a key={i} href={LINKS.snapchat} target="_blank" rel="noopener noreferrer" style={{ textDecoration:'none', flexShrink:0, display:'flex', flexDirection:'column', alignItems:'center', gap:5 }}>
+                <div style={{ width:46, height:46, borderRadius:'50%', background:`${s.color}12`, border:`2px solid ${s.color}80`, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 0 10px ${s.color}18` }}>
+                  <div style={{ width:34, height:34, borderRadius:'50%', background:`${s.color}10` }} />
+                </div>
+                <div style={{ fontFamily:'Space Mono,monospace', fontSize:6, color:'#444', letterSpacing:1, textAlign:'center', maxWidth:52 }}>{s.label}</div>
+              </a>
+            ))}
+          </div>
+          <a href={LINKS.snapchat} target="_blank" rel="noopener noreferrer" style={{ textDecoration:'none', marginLeft:'auto', flexShrink:0 }}>
+            <div style={{ padding:'8px 16px', background:`${B.amber}15`, border:`1px solid ${B.amber}40`, borderRadius:6, fontFamily:'Space Mono,monospace', fontSize:8, color:B.amber, letterSpacing:2, cursor:'pointer' }}>ADD US →</div>
+          </a>
+        </div>
+
         {/* Catalyst Talents Lagos — brand partner card */}
         <div style={{ marginBottom: 40 }}>
           <CatalystTalentsCard />
         </div>
 
-        <div style={{
-          padding: "28px 32px",
-          background: "rgba(255,255,255,0.04)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          border: "1px solid rgba(255,255,255,0.08)",
-          borderRadius: 8, position: "relative", overflow: "hidden",
-          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)",
-        }}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)" }} />
-          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, ${'#69C9D0'}, ${B.neonMagenta}, ${'#E1306C'}, ${B.neonCyan}, ${B.amber}, ${B.neonLime})` }} />
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 20 }}>
-            <div>
-              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 30, color: B.white, lineHeight: 1, marginBottom: 6 }}>
-                THE RITUAL RUNS EVERY FRIDAY.
-              </div>
-              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.smoke, letterSpacing: "0.22em" }}>
-                DROP DISCUSSION · CHALLENGE · CONVERSATION · GAME
-              </div>
-            </div>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              {[
-                { label: "EVERY FRIDAY", color: "#69C9D0" },
-                { label: "7 CHANNELS", color: B.amber },
-                { label: "ONLINE FIRST", color: "#E1306C" },
-                { label: "FNP YEAR-ROUND", color: B.neonLime },
-              ].map((tag, i) => (
-                <span key={i} style={{
-                  padding: "5px 12px",
-                  background: tag.color + "10",
-                  backdropFilter: "blur(8px)",
-                  border: `1px solid ${tag.color}40`,
-                  borderRadius: 2,
-                  fontFamily: "'Space Mono', monospace", fontSize: 7, color: tag.color, letterSpacing: "0.15em",
-                }}>{tag.label}</span>
+        <div style={{ display:'flex', gap:14, flexWrap:'wrap' }}>
+
+          {/* FNP schedule */}
+          <div style={{ flex:'1 1 300px', padding:'24px 28px', background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.07)', borderRadius:8, position:'relative', overflow:'hidden' }}>
+            <div style={{ position:'absolute', top:0, left:0, right:0, height:2, background:`linear-gradient(90deg, transparent, ${B.neonLime}, transparent)` }} />
+            <div style={{ fontFamily:"'Orbitron',monospace", fontSize:8, color:B.neonLime, letterSpacing:3, marginBottom:4 }}>FRIDAY NIGHT PROTOCOL</div>
+            <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:22, color:B.white, letterSpacing:2, marginBottom:14 }}>UPCOMING SESSIONS</div>
+            <div style={{ display:'flex', flexDirection:'column', gap:7 }}>
+              {FNP_SCHEDULE.map((s,i) => (
+                <div key={i} style={{ display:'flex', alignItems:'center', gap:12, padding:'8px 12px', background: i === 0 ? `${s.color}10` : 'transparent', border:`1px solid ${i === 0 ? s.color+'40' : 'rgba(255,255,255,0.04)'}`, borderRadius:6 }}>
+                  <div style={{ fontFamily:"'Orbitron',monospace", fontSize:9, color:s.color, fontWeight:700, minWidth:44 }}>{s.date}</div>
+                  <div style={{ width:1, height:12, background:'rgba(255,255,255,0.08)', flexShrink:0 }} />
+                  <div style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color: i === 0 ? B.white : '#555', letterSpacing:1 }}>{s.theme}</div>
+                  {i === 0 && <div style={{ marginLeft:'auto', fontFamily:"'Space Mono',monospace", fontSize:6, color:s.color, letterSpacing:2 }}>NEXT UP</div>}
+                </div>
               ))}
             </div>
+            <div style={{ fontFamily:"'Space Mono',monospace", fontSize:7, color:'#333', letterSpacing:1, marginTop:12 }}>EVERY FRIDAY · ALL PLATFORMS · YEAR-ROUND</div>
+          </div>
+
+          {/* WhatsApp CTA */}
+          <div style={{ flex:'0 0 auto', minWidth:200, padding:'24px', background:`${B.neonLime}08`, border:`1px solid ${B.neonLime}30`, borderRadius:8, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:12, textAlign:'center' }}>
+            <div style={{ width:52, height:52, borderRadius:'50%', background:`${B.neonLime}15`, border:`2px solid ${B.neonLime}`, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 0 24px ${B.neonLime}25`, animation:'pulse 2s infinite' }}>
+              <span style={{ fontFamily:"'Orbitron',monospace", fontSize:10, fontWeight:900, color:B.neonLime }}>WA</span>
+            </div>
+            <div>
+              <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:18, color:B.white, letterSpacing:2, lineHeight:1.1 }}>JOIN THE</div>
+              <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:18, color:B.neonLime, letterSpacing:2, lineHeight:1.1 }}>INNER CIRCLE</div>
+            </div>
+            <div style={{ fontFamily:"'Space Mono',monospace", fontSize:7, color:'#555', letterSpacing:1 }}>FNP alerts · drop access · polls</div>
+            <a href={LINKS.whatsapp} target="_blank" rel="noopener noreferrer" style={{ textDecoration:'none', width:'100%' }}>
+              <div style={{ padding:'12px', background:B.neonLime, borderRadius:6, fontFamily:"'Bebas Neue',sans-serif", fontSize:17, color:B.black, letterSpacing:2, cursor:'pointer', boxShadow:`0 0 24px ${B.neonLime}30` }}>JOIN NOW →</div>
+            </a>
           </div>
         </div>
       </div>
