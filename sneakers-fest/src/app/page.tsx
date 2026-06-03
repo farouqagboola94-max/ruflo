@@ -8,20 +8,20 @@ import { SCHEDULE } from '@/data/schedule'
 
 const STATS = [
   { value: '1K–2.5K', label: 'Year 1 Target' },
-  { value: '30–50', label: 'Vendors' },
-  { value: '2', label: 'Days' },
-  { value: '5K+', label: 'Community Goal' },
+  { value: '30–50',   label: 'Vendors' },
+  { value: '1',       label: 'Day' },
+  { value: '5K+',     label: 'Community Goal' },
 ]
 
 const FNP_WEEKS = [
   { week: 'Week 1', title: 'Drop Discussion', desc: 'Cop or pass. Community verdict every Friday.' },
-  { week: 'Week 2', title: 'The Challenge', desc: 'Best cop. Worst decision. Most creative pair.' },
-  { week: 'Week 3', title: 'The Conversation', desc: 'Lagos sneaker culture. No script, no filter.' },
-  { week: 'Week 4', title: 'The Game', desc: 'Trivia. Paid entry. Real prizes.' },
+  { week: 'Week 2', title: 'The Challenge',   desc: 'Best cop. Worst decision. Most creative pair.' },
+  { week: 'Week 3', title: 'The Conversation',desc: 'Lagos sneaker culture. No script, no filter.' },
+  { week: 'Week 4', title: 'The Game',        desc: 'Trivia. Paid entry. Real prizes.' },
 ]
 
 export default function HomePage() {
-  const featured = SNEAKERS.filter(s => s.featured)
+  const featured   = SNEAKERS.filter(s => s.featured)
   const highlights = SCHEDULE[0].events.filter(e => e.featured)
 
   return (
@@ -33,7 +33,7 @@ export default function HomePage() {
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-orange/10 border border-brand-orange/30 text-brand-orange text-sm font-medium mb-8">
             <span className="w-2 h-2 rounded-full bg-brand-orange animate-pulse-slow" />
-            December 12–13, 2026 · Lagos, Nigeria
+            December 12, 2026 · Lagos, Nigeria
           </div>
           <h1 className="font-display text-6xl sm:text-8xl lg:text-9xl tracking-tight mb-6 leading-none">
             <span className="text-white">SNEAKERS</span><br />
@@ -151,9 +151,9 @@ export default function HomePage() {
                 <div className="space-y-4">
                   {[
                     { label: 'Community target by Q3 2026', value: '5,000+' },
-                    { label: 'Weekly game entry', value: '₦500–₦2K' },
-                    { label: 'FNP session types', value: '4 rotating' },
-                    { label: 'Platforms', value: 'IG · X · TikTok · WA' },
+                    { label: 'Weekly game entry',           value: '₦500–₦2K' },
+                    { label: 'FNP session types',           value: '4 rotating' },
+                    { label: 'Platforms',                   value: 'IG · X · TikTok · WA' },
                   ].map(({ label, value }) => (
                     <div key={label} className="flex items-center justify-between border-b border-white/5 pb-3">
                       <span className="text-gray-400 text-sm">{label}</span>

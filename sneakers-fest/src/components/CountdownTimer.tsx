@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react'
 
-// WAT = UTC+1; event runs Dec 12 09:00 – Dec 13 23:59:59
+// WAT = UTC+1; event runs Dec 12 09:00 – 23:59:59
 const EVENT_START = new Date('2026-12-12T09:00:00+01:00')
-const EVENT_END   = new Date('2026-12-14T00:00:00+01:00')
+const EVENT_END   = new Date('2026-12-12T23:59:59+01:00')
 
 type TimeLeft = { days: number; hours: number; minutes: number; seconds: number }
 
@@ -41,7 +41,7 @@ export default function CountdownTimer() {
 
   const share = async () => {
     const url  = typeof window !== 'undefined' ? window.location.origin : ''
-    const text = `Lagos' first sneaker festival is happening Dec 12–13, 2026! Get your tickets:`
+    const text = `Lagos' first sneaker festival is happening Dec 12, 2026! Get your tickets:`
     try {
       if (navigator.share) {
         await navigator.share({ title: 'Sneakers Fest 2026 — Lagos', text, url })
@@ -63,7 +63,7 @@ export default function CountdownTimer() {
         <span className="font-display text-xl sm:text-2xl text-gradient tracking-wide">EVENT IS LIVE</span>
         <span className="w-2.5 h-2.5 rounded-full bg-brand-orange animate-pulse" />
       </div>
-      <p className="text-gray-400 text-sm mt-3">Dec 12–13 · Lagos, Nigeria · It&apos;s happening right now!</p>
+      <p className="text-gray-400 text-sm mt-3">Dec 12 · Lagos, Nigeria · It&apos;s happening right now!</p>
       <button onClick={share}
         className="mt-5 inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/15 text-gray-400 text-sm hover:text-white hover:border-white/30 transition-all">
         {copied ? (
