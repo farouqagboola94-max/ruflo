@@ -1,194 +1,410 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { B } from '../tokens'
+import { GrainOverlay, SectionTag } from '../components/Shared'
 
-const API = import.meta.env.VITE_BACKEND_URL || ''
+// ── presets map to adjust values ──────────────────────────────────────────────
+const PRESETS = [
+  { name: 'ORIGINAL',   vals: { brightness: 100, contrast: 100, saturation: 100, hue: 0,   blur: 0 } },
+  { name: 'NOIR',       vals: { brightness: 85,  contrast: 135, saturation: 0,   hue: 0,   blur: 0 } },
+  { name: 'LAGOS GLOW', vals: { brightness: 110, contrast: 108, saturation: 165, hue: 10,  blur: 0 } },
+  { name: 'VIVID',      vals: { brightness: 105, contrast: 120, saturation: 185, hue: 0,   blur: 0 } },
+  { name: 'FADE',       vals: { brightness: 118, contrast: 82,  saturation: 68,  hue: 0,   blur: 0 } },
+  { name: 'WARM',       vals: { brightness: 108, contrast: 103, saturation: 145, hue: 18,  blur: 0 } },
+  { name: 'COOL',       vals: { brightness: 105, contrast: 100, saturation: 85,  hue: 195, blur: 0 } },
+  { name: 'NEON',       vals: { brightness: 100, contrast: 130, saturation: 255, hue: 280, blur: 0 } },
+]
 
-function DropZone({ label, sub, accept, file, onFile, color, icon }) {
-  const ref = useRef()
-  return (
-    <div
-      onClick={() => ref.current?.click()}
-      onDragOver={e => e.preventDefault()}
-      onDrop={e => { e.preventDefault(); onFile(e.dataTransfer.files[0]) }}
-      style={{
-        border: `2px dashed ${file ? color : 'rgba(255,255,255,0.12)'}`,
-        borderRadius: 12, padding: '28px 20px', textAlign: 'center',
-        cursor: 'pointer', background: file ? `${color}08` : 'rgba(255,255,255,0.02)',
-        backdropFilter: 'blur(8px)', transition: 'all 0.2s',
-      }}
-    >
-      <input ref={ref} type="file" accept={accept} style={{ display:'none' }} onChange={e => onFile(e.target.files[0])} />
-      {file ? (
-        <p style={{ color, fontFamily:'Space Mono,monospace', fontSize:12, wordBreak:'break-all' }}>{file.name}</p>
-      ) : (
-        <>
-          <div style={{ color:'rgba(255,255,255,0.25)', marginBottom:10 }}>{icon}</div>
-          <p style={{ color:B.smoke, fontFamily:'Space Mono,monospace', fontSize:12 }}>{label}</p>
-          <p style={{ color:'#444', fontFamily:'Space Mono,monospace', fontSize:10, marginTop:4 }}>{sub}</p>
-        </>
-      )}
-    </div>
-  )
+const TABS = ['FILTERS', 'ADJUST', 'TEXT', 'STICKERS']
+
+const SLIDERS = [
+  { key: 'brightness', label: 'BRIGHTNESS', min: 50,   max: 160, def: 100, unit: '%',  color: B.amber },
+  { key: 'contrast',   label: 'CONTRAST',   min: 50,   max: 200, def: 100, unit: '%',  color: B.neonCyan },
+  { key: 'saturation', label: 'SATURATION', min: 0,    max: 255, def: 100, unit: '%',  color: B.neonMagenta },
+  { key: 'hue',        label: 'HUE SHIFT',  min: -180, max: 180, def: 0,   unit: '°',  color: B.neonLime },
+  { key: 'blur',       label: 'BLUR',       min: 0,    max: 10,  def: 0,   unit: 'px', color: '#a78bfa' },
+]
+
+const STICKERS = ['👟','🔥','💯','⚡','🏆','✨','💎','🎯','🌟','👑','🎪','🌀','💥','🎨','🦋','🌙','🔮','🎸','🕶️','🧿']
+
+const DEFAULT_ADJUSTS = { brightness: 100, contrast: 100, saturation: 100, hue: 0, blur: 0 }
+
+function buildFilter(a) {
+  return [
+    `brightness(${a.brightness}%)`,
+    `contrast(${a.contrast}%)`,
+    `saturate(${a.saturation}%)`,
+    `hue-rotate(${a.hue}deg)`,
+    a.blur > 0 ? `blur(${a.blur}px)` : '',
+  ].filter(Boolean).join(' ')
 }
 
+// ── main component ─────────────────────────────────────────────────────────────
 export default function PhotoTools() {
-  const [bgFile, setBgFile] = useState(null)
-  const [bgResult, setBgResult] = useState(null)
-  const [bgLoading, setBgLoading] = useState(false)
-  const [audioFile, setAudioFile] = useState(null)
-  const [transcript, setTranscript] = useState('')
-  const [audioLoading, setAudioLoading] = useState(false)
+  const [img,      setImg]      = useState(null)   // HTMLImageElement
+  const [imgSrc,   setImgSrc]   = useState(null)   // data URL for thumbnails
+  const [preset,   setPreset]   = useState(0)
+  const [adjusts,  setAdjusts]  = useState(DEFAULT_ADJUSTS)
+  const [texts,    setTexts]    = useState([])
+  const [tab,      setTab]      = useState('FILTERS')
+  const [textIn,   setTextIn]   = useState('')
+  const [textCol,  setTextCol]  = useState('#FFFFFF')
+  const [textSz,   setTextSz]   = useState(36)
+  const [dragging, setDragging] = useState(null)   // { idx, ox, oy }
+  const [shared,   setShared]   = useState(false)
+  const [copied,   setCopied]   = useState(false)
 
-  async function removeBg() {
-    if (!bgFile) return
-    if (!API) { setBgResult('error'); return }
-    setBgLoading(true); setBgResult(null)
-    const fd = new FormData()
-    fd.append('file', bgFile)
-    try {
-      const res = await fetch(`${API}/api/remove-bg`, { method:'POST', body:fd })
-      if (!res.ok) throw new Error()
-      setBgResult(URL.createObjectURL(await res.blob()))
-    } catch { setBgResult('error') }
-    setBgLoading(false)
+  const canvasRef = useRef()
+  const fileRef   = useRef()
+  const cssFilter = buildFilter(adjusts)
+
+  // ── draw canvas ──────────────────────────────────────────────────────────────
+  const redraw = useCallback(() => {
+    const canvas = canvasRef.current
+    if (!canvas || !img) return
+    const ctx = canvas.getContext('2d')
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    ctx.filter = cssFilter
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+    ctx.filter = 'none'
+    texts.forEach(t => {
+      ctx.font      = `bold ${t.size}px 'Bebas Neue', Impact, sans-serif`
+      ctx.fillStyle = t.color
+      ctx.shadowColor = 'rgba(0,0,0,0.75)'
+      ctx.shadowBlur  = 8
+      ctx.fillText(t.text, t.x, t.y)
+      ctx.shadowBlur = 0
+    })
+  }, [img, cssFilter, texts])
+
+  useEffect(() => { redraw() }, [redraw])
+
+  // ── load image file ──────────────────────────────────────────────────────────
+  function loadFile(file) {
+    if (!file || !file.type.startsWith('image/')) return
+    const reader = new FileReader()
+    reader.onload = e => {
+      const image = new Image()
+      image.onload = () => {
+        const maxW = 800, maxH = 560
+        let w = image.width, h = image.height
+        if (w > maxW) { h = Math.round(h * maxW / w); w = maxW }
+        if (h > maxH) { w = Math.round(w * maxH / h); h = maxH }
+        const canvas = canvasRef.current
+        if (canvas) { canvas.width = w; canvas.height = h }
+        setImg(image)
+        setImgSrc(e.target.result)
+        setTexts([])
+        setPreset(0)
+        setAdjusts(DEFAULT_ADJUSTS)
+      }
+      image.src = e.target.result
+    }
+    reader.readAsDataURL(file)
   }
 
-  async function transcribe() {
-    if (!audioFile) return
-    if (!API) { setTranscript('Error: Set VITE_BACKEND_URL in Netlify environment variables.'); return }
-    setAudioLoading(true); setTranscript('')
-    const fd = new FormData()
-    fd.append('file', audioFile)
-    try {
-      const res = await fetch(`${API}/api/transcribe`, { method:'POST', body:fd })
-      const data = await res.json()
-      setTranscript(data.text)
-    } catch { setTranscript('Error: Backend offline. Set VITE_BACKEND_URL in Netlify environment variables.') }
-    setAudioLoading(false)
+  // ── preset select ────────────────────────────────────────────────────────────
+  function applyPreset(i) {
+    setPreset(i)
+    setAdjusts(PRESETS[i].vals)
   }
 
-  const card = (accent) => ({
-    background: 'rgba(255,255,255,0.025)',
-    backdropFilter: 'blur(20px) saturate(150%)',
-    border: `1px solid ${accent}18`,
-    borderRadius: 20, padding: 28,
-    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05)',
-  })
+  // ── text helpers ─────────────────────────────────────────────────────────────
+  function addText(str) {
+    const t = str || textIn.trim()
+    if (!t) return
+    setTexts(prev => [...prev, { id: Date.now(), text: t, x: 30, y: 70, color: textCol, size: textSz }])
+    if (!str) setTextIn('')
+  }
 
-  const btn = (color, disabled) => ({
-    width:'100%', marginTop:12, padding:'13px',
-    background: disabled ? B.gunmetal : `${color}18`,
-    border: `1px solid ${disabled ? 'transparent' : color}`,
-    borderRadius:10, color: disabled ? B.smoke : color,
-    fontFamily:'Orbitron,sans-serif', fontSize:11, fontWeight:700,
-    letterSpacing:1, cursor: disabled ? 'not-allowed' : 'pointer',
-    transition:'all 0.2s',
-  })
+  function removeText(id) {
+    setTexts(prev => prev.filter(t => t.id !== id))
+  }
+
+  // ── canvas pointer drag ──────────────────────────────────────────────────────
+  function getCanvasPos(e) {
+    const canvas = canvasRef.current
+    const rect   = canvas.getBoundingClientRect()
+    const sx     = canvas.width  / rect.width
+    const sy     = canvas.height / rect.height
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY
+    return [(clientX - rect.left) * sx, (clientY - rect.top) * sy]
+  }
+
+  function onDown(e) {
+    if (tab !== 'TEXT' && tab !== 'STICKERS') return
+    const [mx, my] = getCanvasPos(e)
+    for (let i = texts.length - 1; i >= 0; i--) {
+      const t  = texts[i]
+      const tw = t.size * t.text.length * 0.55
+      if (mx >= t.x - 10 && mx <= t.x + tw && my >= t.y - t.size && my <= t.y + 10) {
+        setDragging({ idx: i, ox: mx - t.x, oy: my - t.y })
+        return
+      }
+    }
+  }
+
+  function onMove(e) {
+    if (dragging === null) return
+    e.preventDefault()
+    const [mx, my] = getCanvasPos(e)
+    setTexts(prev => prev.map((t, i) =>
+      i === dragging.idx ? { ...t, x: mx - dragging.ox, y: my - dragging.oy } : t
+    ))
+  }
+
+  function onUp() { setDragging(null) }
+
+  // ── export ───────────────────────────────────────────────────────────────────
+  function download() {
+    redraw()
+    const a = document.createElement('a')
+    a.href     = canvasRef.current.toDataURL('image/jpeg', 0.93)
+    a.download = 'sf26-edit.jpg'
+    a.click()
+  }
+
+  function shareToGallery() {
+    redraw()
+    const dataUrl = canvasRef.current.toDataURL('image/jpeg', 0.80)
+    const gallery = JSON.parse(localStorage.getItem('sf26_gallery') || '[]')
+    gallery.unshift({ id: Date.now(), imageData: dataUrl, name: 'Photo Studio', city: 'Lagos', heat: 0, uploadedAt: new Date().toISOString() })
+    localStorage.setItem('sf26_gallery', JSON.stringify(gallery.slice(0, 60)))
+    setShared(true)
+    setTimeout(() => setShared(false), 3500)
+  }
+
+  // ── styles ───────────────────────────────────────────────────────────────────
+  const panel = { background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 16, overflow: 'hidden' }
 
   return (
-    <section id="creator-tools" style={{
-      padding:'clamp(60px,8vw,100px) 24px',
-      background: B.void, position:'relative', overflow:'hidden',
-    }}>
-      <div style={{ position:'absolute', top:'20%', right:'3%', width:450, height:450, borderRadius:'50%', background:`radial-gradient(circle, rgba(255,45,123,0.06), transparent 70%)`, filter:'blur(80px)', pointerEvents:'none' }} />
-      <div style={{ position:'absolute', bottom:'10%', left:'0%', width:350, height:350, borderRadius:'50%', background:`radial-gradient(circle, rgba(0,240,255,0.05), transparent 70%)`, filter:'blur(60px)', pointerEvents:'none' }} />
+    <section id="photo-tools" style={{ padding: 'clamp(60px,8vw,100px) 24px', background: `linear-gradient(180deg, ${B.void} 0%, ${B.black} 100%)`, position: 'relative', overflow: 'hidden' }}>
+      <GrainOverlay />
+      <div style={{ position: 'absolute', top: '20%', right: '5%', width: 500, height: 500, background: `radial-gradient(ellipse, ${B.neonMagenta}06 0%, transparent 70%)`, filter: 'blur(80px)', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', bottom: '10%', left: '0', width: 400, height: 400, background: `radial-gradient(ellipse, ${B.amber}05 0%, transparent 70%)`, filter: 'blur(60px)', pointerEvents: 'none' }} />
 
-      <div style={{ maxWidth:960, margin:'0 auto', position:'relative', zIndex:1 }}>
-        <div style={{ textAlign:'center', marginBottom:56 }}>
-          <div style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'6px 18px', borderRadius:20, border:`1px solid rgba(0,240,255,0.25)`, background:'rgba(0,240,255,0.04)', marginBottom:24 }}>
-            <span style={{ color:B.neonCyan, fontFamily:'Orbitron,sans-serif', fontSize:10, letterSpacing:3, fontWeight:700 }}>AI CREATOR TOOLS</span>
+      <div style={{ maxWidth: 1080, margin: '0 auto', position: 'relative', zIndex: 1 }}>
+
+        {/* header */}
+        <div style={{ textAlign: 'center', marginBottom: 48 }}>
+          <SectionTag>CREATOR STUDIO</SectionTag>
+          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(44px,8vw,80px)', color: B.white, lineHeight: 0.88, marginBottom: 12 }}>
+            SHOE<br /><span style={{ color: B.neonMagenta }}>PHOTO STUDIO</span>
           </div>
-          <h2 style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:'clamp(38px,6vw,72px)', color:B.white, lineHeight:1, letterSpacing:2, marginBottom:12 }}>
-            COMMUNITY{' '}<span style={{ color:B.neonCyan, textShadow:`0 0 30px ${B.neonCyan}50` }}>CREATOR STUDIO</span>
-          </h2>
-          <p style={{ color:B.smoke, fontFamily:'Space Mono,monospace', fontSize:13, lineHeight:1.9, maxWidth:520, margin:'0 auto' }}>
-            AI-powered tools for the Sneakers Fest content community. Drop photos, remove backgrounds, transcribe interviews.
+          <p style={{ color: '#666', fontFamily: 'Space Mono,monospace', fontSize: 12, maxWidth: 480, margin: '0 auto', lineHeight: 1.8 }}>
+            Drop a photo, apply filters, add text and stickers — then download or share to the community gallery.
           </p>
-          {!API && (
-            <p style={{ color:B.amber, fontFamily:'Space Mono,monospace', fontSize:11, marginTop:12, opacity:0.7 }}>
-              Tools activate when backend is running. See SETUP.md.
-            </p>
-          )}
         </div>
 
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(380px, 1fr))', gap:24 }}>
-          {/* BG Remover */}
-          <div style={card(B.neonCyan)}>
-            <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:22 }}>
-              <div style={{ width:40, height:40, borderRadius:10, background:`rgba(0,240,255,0.1)`, border:`1px solid rgba(0,240,255,0.2)`, display:'flex', alignItems:'center', justifyContent:'center' }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 4l4 4m8-4l-4 4m0 8l4 4m-8 0l-4-4" stroke={B.neonCyan} strokeWidth="1.5" strokeLinecap="round"/><rect x="7" y="7" width="10" height="10" rx="1" stroke={B.neonCyan} strokeWidth="1.5" strokeDasharray="3 2"/></svg>
+        {/* upload zone (when no image) */}
+        {!img && (
+          <div
+            onClick={() => fileRef.current?.click()}
+            onDragOver={e => e.preventDefault()}
+            onDrop={e => { e.preventDefault(); loadFile(e.dataTransfer.files[0]) }}
+            style={{ border: `2px dashed rgba(255,45,123,0.35)`, borderRadius: 20, padding: '90px 40px', textAlign: 'center', cursor: 'pointer', background: 'rgba(255,45,123,0.025)', maxWidth: 640, margin: '0 auto', transition: 'all 0.2s' }}
+          >
+            <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={e => loadFile(e.target.files[0])} />
+            <div style={{ fontSize: 56, marginBottom: 18, userSelect: 'none' }}>👟</div>
+            <div style={{ fontFamily: 'Bebas Neue,sans-serif', fontSize: 32, color: B.neonMagenta, letterSpacing: 3, marginBottom: 10 }}>DROP YOUR PHOTO HERE</div>
+            <div style={{ fontFamily: 'Space Mono,monospace', fontSize: 11, color: '#444' }}>or click to browse · JPG, PNG, WEBP</div>
+          </div>
+        )}
+
+        {/* editor layout */}
+        {img && (
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 24, alignItems: 'start' }}>
+
+            {/* ── canvas column ───────────────────────────────────────────── */}
+            <div>
+              {/* canvas */}
+              <div style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)', background: '#000', lineHeight: 0 }}>
+                <canvas
+                  ref={canvasRef}
+                  style={{ width: '100%', display: 'block', cursor: (tab === 'TEXT' || tab === 'STICKERS') ? 'crosshair' : 'default', touchAction: 'none', userSelect: 'none' }}
+                  onMouseDown={onDown}
+                  onMouseMove={onMove}
+                  onMouseUp={onUp}
+                  onMouseLeave={onUp}
+                  onTouchStart={onDown}
+                  onTouchMove={onMove}
+                  onTouchEnd={onUp}
+                />
               </div>
-              <div>
-                <p style={{ color:B.white, fontFamily:'Orbitron,sans-serif', fontSize:12, fontWeight:700, letterSpacing:1 }}>BG REMOVER</p>
-                <p style={{ color:'#555', fontFamily:'Space Mono,monospace', fontSize:10 }}>Powered by rembg · Open Source</p>
+
+              {/* action bar */}
+              <div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
+                <button onClick={download} style={{ flex: '1 1 130px', padding: '13px', background: `${B.neonLime}12`, border: `1px solid ${B.neonLime}50`, borderRadius: 10, color: B.neonLime, fontFamily: 'Orbitron,monospace', fontSize: 10, fontWeight: 700, cursor: 'pointer', letterSpacing: 1 }}>
+                  ↓ DOWNLOAD JPG
+                </button>
+                <button onClick={shareToGallery} style={{ flex: '1 1 130px', padding: '13px', background: shared ? `${B.neonCyan}18` : `${B.neonCyan}10`, border: `1px solid ${shared ? B.neonCyan : B.neonCyan + '40'}`, borderRadius: 10, color: B.neonCyan, fontFamily: 'Orbitron,monospace', fontSize: 10, fontWeight: 700, cursor: 'pointer', letterSpacing: 1, transition: 'all 0.2s' }}>
+                  {shared ? '✓ SHARED!' : '↑ SHARE TO GALLERY'}
+                </button>
+                <button onClick={() => { setImg(null); setImgSrc(null); fileRef.current && (fileRef.current.value = '') }} style={{ padding: '13px 18px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, color: '#555', fontFamily: 'Orbitron,monospace', fontSize: 10, cursor: 'pointer', letterSpacing: 1 }}>
+                  NEW
+                </button>
               </div>
-            </div>
-            <DropZone
-              label="Drop sneaker photo here" sub="PNG, JPG, WEBP"
-              accept="image/*" file={bgFile} onFile={f => { setBgFile(f); setBgResult(null) }}
-              color={B.neonCyan}
-              icon={<svg width="32" height="32" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.5"/><circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" strokeWidth="1.5"/><path d="M21 15l-5-5L5 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>}
-            />
-            {bgFile && (
-              <button onClick={removeBg} disabled={bgLoading} style={btn(B.neonCyan, bgLoading)}>
-                {bgLoading
-                  ? <span style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}><span style={{ width:10, height:10, border:`2px solid ${B.neonCyan}`, borderTopColor:'transparent', borderRadius:'50%', display:'inline-block', animation:'spin 0.8s linear infinite' }} />PROCESSING...</span>
-                  : 'REMOVE BACKGROUND →'}
-              </button>
-            )}
-            {bgResult && bgResult !== 'error' && (
-              <div style={{ marginTop:16 }}>
-                <div style={{ position:'relative', borderRadius:10, overflow:'hidden', border:`1px solid rgba(255,255,255,0.08)`, background:'repeating-conic-gradient(#1a1a1a 0% 25%, #111 0% 50%) 0 0/16px 16px' }}>
-                  <img src={bgResult} alt="Background removed" style={{ width:'100%', display:'block' }} />
+              {shared && <div style={{ marginTop: 8, textAlign: 'center', fontFamily: 'Space Mono,monospace', fontSize: 10, color: B.neonCyan }}>Added to community gallery — check the Gallery section!</div>}
+              {(tab === 'TEXT' || tab === 'STICKERS') && texts.length > 0 && (
+                <div style={{ marginTop: 8, textAlign: 'center', fontFamily: 'Space Mono,monospace', fontSize: 9, color: '#444' }}>
+                  Drag text on the canvas to reposition
                 </div>
-                <a href={bgResult} download="sneaker-nobg.png" style={{ display:'block', marginTop:10, textAlign:'center', color:B.amber, fontFamily:'Space Mono,monospace', fontSize:11, textDecoration:'none', padding:'10px', border:`1px solid rgba(245,166,35,0.25)`, borderRadius:8 }}>↓ DOWNLOAD PNG</a>
-              </div>
-            )}
-            {bgResult === 'error' && <p style={{ color:B.neonMagenta, fontFamily:'Space Mono,monospace', fontSize:11, marginTop:10 }}>Backend offline. Set VITE_BACKEND_URL and run docker compose up backend.</p>}
-          </div>
+              )}
+            </div>
 
-          {/* Transcriber */}
-          <div style={card(B.amber)}>
-            <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:22 }}>
-              <div style={{ width:40, height:40, borderRadius:10, background:`rgba(245,166,35,0.1)`, border:`1px solid rgba(245,166,35,0.2)`, display:'flex', alignItems:'center', justifyContent:'center' }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" stroke={B.amber} strokeWidth="1.5"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8" stroke={B.amber} strokeWidth="1.5" strokeLinecap="round"/></svg>
+            {/* ── controls column ─────────────────────────────────────────── */}
+            <div style={panel}>
+              {/* tab bar */}
+              <div style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                {TABS.map(t => (
+                  <button key={t} onClick={() => setTab(t)} style={{ flex: 1, padding: '13px 4px', background: tab === t ? 'rgba(255,45,123,0.1)' : 'transparent', border: 'none', color: tab === t ? B.neonMagenta : '#444', fontFamily: 'Orbitron,monospace', fontSize: 7, fontWeight: 700, cursor: 'pointer', letterSpacing: 1, borderBottom: tab === t ? `2px solid ${B.neonMagenta}` : '2px solid transparent', transition: 'all 0.2s' }}>
+                    {t}
+                  </button>
+                ))}
               </div>
-              <div>
-                <p style={{ color:B.white, fontFamily:'Orbitron,sans-serif', fontSize:12, fontWeight:700, letterSpacing:1 }}>TRANSCRIBER</p>
-                <p style={{ color:'#555', fontFamily:'Space Mono,monospace', fontSize:10 }}>Powered by Whisper · Open Source</p>
+
+              <div style={{ padding: 18, maxHeight: 520, overflowY: 'auto' }}>
+
+                {/* ── FILTERS tab ─────────────────────────────────────────── */}
+                {tab === 'FILTERS' && (
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                    {PRESETS.map((p, i) => (
+                      <button key={p.name} onClick={() => applyPreset(i)} style={{ padding: 0, background: preset === i ? 'rgba(255,45,123,0.12)' : 'rgba(255,255,255,0.02)', border: `1px solid ${preset === i ? B.neonMagenta + '60' : 'rgba(255,255,255,0.06)'}`, borderRadius: 8, cursor: 'pointer', overflow: 'hidden', textAlign: 'left' }}>
+                        <div style={{ height: 60, overflow: 'hidden', filter: buildFilter(p.vals), backgroundImage: imgSrc ? `url(${imgSrc})` : undefined, backgroundSize: 'cover', backgroundPosition: 'center', background: imgSrc ? undefined : 'rgba(255,255,255,0.05)' }}>
+                          {imgSrc && <img src={imgSrc} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: buildFilter(p.vals) }} />}
+                        </div>
+                        <div style={{ padding: '6px 8px', fontFamily: 'Orbitron,monospace', fontSize: 7, color: preset === i ? B.neonMagenta : '#666', letterSpacing: 1, fontWeight: 700 }}>{p.name}</div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* ── ADJUST tab ──────────────────────────────────────────── */}
+                {tab === 'ADJUST' && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                    {SLIDERS.map(s => (
+                      <div key={s.key}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                          <span style={{ fontFamily: 'Orbitron,monospace', fontSize: 7, color: s.color, letterSpacing: 2, fontWeight: 700 }}>{s.label}</span>
+                          <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: '#555' }}>{adjusts[s.key]}{s.unit}</span>
+                        </div>
+                        <input type="range" min={s.min} max={s.max} value={adjusts[s.key]}
+                          onChange={e => { setPreset(-1); setAdjusts(a => ({ ...a, [s.key]: Number(e.target.value) })) }}
+                          style={{ width: '100%', accentColor: s.color, cursor: 'pointer', height: 4 }}
+                        />
+                        {adjusts[s.key] !== s.def && (
+                          <button onClick={() => { setPreset(-1); setAdjusts(a => ({ ...a, [s.key]: s.def })) }}
+                            style={{ fontSize: 9, color: '#444', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Space Mono,monospace', padding: '2px 0', marginTop: 1 }}>
+                            reset
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                    <button onClick={() => { setPreset(0); setAdjusts(DEFAULT_ADJUSTS) }}
+                      style={{ padding: '10px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 8, color: '#555', fontFamily: 'Orbitron,monospace', fontSize: 8, cursor: 'pointer', letterSpacing: 1 }}>
+                      RESET ALL
+                    </button>
+                  </div>
+                )}
+
+                {/* ── TEXT tab ────────────────────────────────────────────── */}
+                {tab === 'TEXT' && (
+                  <div>
+                    <p style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: '#555', marginBottom: 14, lineHeight: 1.7 }}>Type text and add it to the photo. Drag to reposition.</p>
+                    <input
+                      value={textIn}
+                      onChange={e => setTextIn(e.target.value)}
+                      onKeyDown={e => e.key === 'Enter' && addText()}
+                      placeholder="Your text here..."
+                      style={{ width: '100%', padding: '10px 12px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: B.white, fontFamily: 'Space Mono,monospace', fontSize: 12, outline: 'none', boxSizing: 'border-box' }}
+                    />
+                    <div style={{ display: 'flex', gap: 12, marginTop: 12, alignItems: 'flex-end' }}>
+                      <div>
+                        <div style={{ fontFamily: 'Orbitron,monospace', fontSize: 7, color: '#555', marginBottom: 6, letterSpacing: 1 }}>COLOR</div>
+                        <input type="color" value={textCol} onChange={e => setTextCol(e.target.value)}
+                          style={{ width: 44, height: 34, border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6, background: 'transparent', cursor: 'pointer', padding: 2 }} />
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                          <span style={{ fontFamily: 'Orbitron,monospace', fontSize: 7, color: '#555', letterSpacing: 1 }}>SIZE</span>
+                          <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: '#555' }}>{textSz}px</span>
+                        </div>
+                        <input type="range" min={14} max={90} value={textSz} onChange={e => setTextSz(Number(e.target.value))}
+                          style={{ width: '100%', accentColor: B.neonMagenta }} />
+                      </div>
+                    </div>
+                    <button onClick={() => addText()} style={{ width: '100%', marginTop: 14, padding: '11px', background: `${B.neonMagenta}14`, border: `1px solid ${B.neonMagenta}50`, borderRadius: 9, color: B.neonMagenta, fontFamily: 'Orbitron,monospace', fontSize: 10, fontWeight: 700, cursor: 'pointer', letterSpacing: 1 }}>
+                      + ADD TEXT
+                    </button>
+
+                    {/* quick presets */}
+                    <div style={{ marginTop: 16 }}>
+                      <div style={{ fontFamily: 'Orbitron,monospace', fontSize: 7, color: '#444', letterSpacing: 2, marginBottom: 8 }}>QUICK ADD</div>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                        {["SF'26", 'LAGOS', 'THE GRAIL', 'SOLE ❤', 'ON GOD'].map(q => (
+                          <button key={q} onClick={() => addText(q)}
+                            style={{ padding: '5px 10px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 6, color: '#888', fontFamily: 'Space Mono,monospace', fontSize: 9, cursor: 'pointer' }}>
+                            {q}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* layers list */}
+                    {texts.length > 0 && (
+                      <div style={{ marginTop: 18 }}>
+                        <div style={{ fontFamily: 'Orbitron,monospace', fontSize: 7, color: '#444', letterSpacing: 2, marginBottom: 8 }}>LAYERS ({texts.length})</div>
+                        {texts.map(t => (
+                          <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                            <div style={{ width: 10, height: 10, borderRadius: 2, background: t.color, flexShrink: 0, border: '1px solid rgba(255,255,255,0.12)' }} />
+                            <span style={{ flex: 1, fontFamily: 'Space Mono,monospace', fontSize: 9, color: '#777', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{t.text}</span>
+                            <button onClick={() => removeText(t.id)} style={{ background: 'none', border: 'none', color: '#444', cursor: 'pointer', fontSize: 16, lineHeight: 1, padding: '0 4px' }}>×</button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* ── STICKERS tab ─────────────────────────────────────────── */}
+                {tab === 'STICKERS' && (
+                  <div>
+                    <p style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: '#555', marginBottom: 14, lineHeight: 1.7 }}>Tap an emoji to add it. Drag on canvas to reposition.</p>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 8 }}>
+                      {STICKERS.map(s => (
+                        <button key={s} onClick={() => { setTab('STICKERS'); setTexts(prev => [...prev, { id: Date.now(), text: s, x: 30 + Math.random() * 60, y: 70 + Math.random() * 40, color: '#fff', size: 42 }]) }}
+                          style={{ fontSize: 24, padding: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 8, cursor: 'pointer', transition: 'all 0.15s', userSelect: 'none' }}>
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+                    {texts.filter(t => STICKERS.includes(t.text)).length > 0 && (
+                      <div style={{ marginTop: 16 }}>
+                        <div style={{ fontFamily: 'Orbitron,monospace', fontSize: 7, color: '#444', letterSpacing: 2, marginBottom: 8 }}>ON CANVAS</div>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                          {texts.filter(t => STICKERS.includes(t.text)).map(t => (
+                            <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '4px 8px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 6 }}>
+                              <span style={{ fontSize: 14 }}>{t.text}</span>
+                              <button onClick={() => removeText(t.id)} style={{ background: 'none', border: 'none', color: '#444', cursor: 'pointer', fontSize: 13, lineHeight: 1, padding: 0 }}>×</button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
               </div>
             </div>
-            <DropZone
-              label="Drop interview audio or video" sub="MP3, MP4, WAV, M4A"
-              accept="audio/*,video/*" file={audioFile} onFile={f => { setAudioFile(f); setTranscript('') }}
-              color={B.amber}
-              icon={<svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M9 18V5l12-2v13M9 18a3 3 0 01-3 3H4a2 2 0 01-2-2v-1a2 2 0 012-2h2a3 3 0 013 3zm12-3a3 3 0 01-3 3h-2a2 2 0 01-2-2v-1a2 2 0 012-2h2a3 3 0 013 3z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>}
-            />
-            {audioFile && (
-              <button onClick={transcribe} disabled={audioLoading} style={btn(B.amber, audioLoading)}>
-                {audioLoading
-                  ? <span style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}><span style={{ width:10, height:10, border:`2px solid ${B.amber}`, borderTopColor:'transparent', borderRadius:'50%', display:'inline-block', animation:'spin 0.8s linear infinite' }} />TRANSCRIBING...</span>
-                  : 'TRANSCRIBE AUDIO →'}
-              </button>
-            )}
-            {transcript && (
-              <div style={{ marginTop:16, padding:16, background:'rgba(255,255,255,0.03)', border:`1px solid rgba(255,255,255,0.07)`, borderRadius:10 }}>
-                <p style={{ color:'#555', fontFamily:'Space Mono,monospace', fontSize:9, letterSpacing:3, marginBottom:10 }}>TRANSCRIPT</p>
-                <p style={{ color:B.white, fontFamily:'Space Mono,monospace', fontSize:12, lineHeight:1.85, whiteSpace:'pre-wrap', maxHeight:180, overflowY:'auto' }}>{transcript}</p>
-                <button onClick={() => navigator.clipboard.writeText(transcript)} style={{ marginTop:12, padding:'8px 16px', background:'transparent', border:`1px solid rgba(245,166,35,0.25)`, borderRadius:8, color:B.amber, fontFamily:'Space Mono,monospace', fontSize:10, cursor:'pointer' }}>COPY TEXT</button>
-              </div>
-            )}
+
           </div>
+        )}
+
+        {/* footer note */}
+        <div style={{ textAlign: 'center', marginTop: 40, fontFamily: 'Space Mono,monospace', fontSize: 8, color: '#2a2a2a', letterSpacing: 2 }}>
+          ALL EDITING RUNS IN YOUR BROWSER — NO UPLOAD, NO SERVER
         </div>
 
-        <div style={{ marginTop:40, display:'flex', justifyContent:'center', gap:32, flexWrap:'wrap', alignItems:'center' }}>
-          {[['rembg','BG Removal',B.neonCyan],['Whisper','Transcription',B.amber],['Ollama','AI Chat',B.neonMagenta],['Listmonk','Newsletter',B.neonLime],['Activepieces','Automation','#a78bfa']].map(([name,role,color]) => (
-            <div key={name} style={{ display:'flex', alignItems:'center', gap:8 }}>
-              <div style={{ width:6, height:6, borderRadius:'50%', background:color, boxShadow:`0 0 8px ${color}` }} />
-              <span style={{ color:B.smoke, fontFamily:'Space Mono,monospace', fontSize:10 }}><span style={{ color }}>{name}</span> · {role}</span>
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   )

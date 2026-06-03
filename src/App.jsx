@@ -83,6 +83,7 @@ const SECTION_TITLES = [
   { id: 'gallery',      title: "Gallery | Sneakers Fest '26" },
   { id: 'trades',       title: "Trade Board | Sneakers Fest '26" },
   { id: 'leaderboard',  title: "Rankings | Sneakers Fest '26" },
+  { id: 'photo-tools',  title: "Photo Studio | Sneakers Fest '26" },
   { id: 'substack',     title: "Substack | Sneakers Fest '26" },
   { id: 'lineup',       title: "Lineup | Sneakers Fest '26" },
   { id: 'schedule',     title: "Schedule | Sneakers Fest '26" },
