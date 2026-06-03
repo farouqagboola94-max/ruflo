@@ -45,6 +45,27 @@ const TICKER_MSGS = [
   '🎟️ 14 people entered the Jordan 4 raffle in the last hour',
 ]
 
+const COLLECTOR_SEEDS = [
+  { id:'c1',  name:'Tunde B.',  city:'Lagos',  pts:1240, delta:2,  badges:'🔥 STREAK 7 · 🥇 TOP BIDDER'     },
+  { id:'c2',  name:'Chisom O.', city:'Abuja',  pts:980,  delta:0,  badges:'📸 GALLERY ACE · 🎯 RAFFLE KING' },
+  { id:'c3',  name:'Adaeze N.', city:'PH',     pts:875,  delta:-1, badges:'👟 TRADE GOD'                     },
+  { id:'c4',  name:'Emeka C.',  city:'Enugu',  pts:720,  delta:3,  badges:'🔥 STREAK 3'                      },
+  { id:'c5',  name:'Zara I.',   city:'Lagos',  pts:645,  delta:1,  badges:''                                  },
+  { id:'c6',  name:'Femi A.',   city:'Ibadan', pts:520,  delta:-2, badges:'📸 GALLERY ACE'                   },
+  { id:'c7',  name:'Ngozi E.',  city:'Benin',  pts:415,  delta:0,  badges:'🎯 RAFFLE KING'                   },
+  { id:'c8',  name:'Dayo M.',   city:'Kano',   pts:380,  delta:1,  badges:'🔥 STREAK 3'                      },
+  { id:'c9',  name:'Kemi S.',   city:'Lagos',  pts:295,  delta:0,  badges:''                                  },
+  { id:'c10', name:'Bola T.',   city:'Abuja',  pts:210,  delta:-1, badges:''                                  },
+]
+
+function getWeeklyReset() {
+  const now = new Date()
+  const daysUntilMon = (8 - now.getDay()) % 7 || 7
+  const reset = new Date(now); reset.setDate(now.getDate() + daysUntilMon); reset.setHours(0,0,0,0)
+  const diff = reset - now
+  return `${Math.floor(diff/86400000)}d ${Math.floor((diff%86400000)/3600000)}h`
+}
+
 const fmt = n => '₦' + Number(n).toLocaleString('en-NG')
 const MEDAL = { 1:'🥇', 2:'🥈', 3:'🥉' }
 
@@ -166,10 +187,11 @@ function RankRow({ rank, label, sub, metric, metricSub, color, maxMetric, metric
 
 // ── tabs ───────────────────────────────────────────────────────────────────────
 const TABS = [
-  { id:'cities',  label:'CITIES',   emoji:'🏙️' },
-  { id:'gallery', label:'GALLERY',  emoji:'📸' },
-  { id:'traders', label:'TRADERS',  emoji:'👟' },
-  { id:'museum',  label:'MUSEUM',   emoji:'🏛️' },
+  { id:'collectors', label:'COLLECTORS', emoji:'👑' },
+  { id:'cities',     label:'CITIES',     emoji:'🏙️' },
+  { id:'gallery',    label:'GALLERY',    emoji:'📸' },
+  { id:'traders',    label:'TRADERS',    emoji:'👟' },
+  { id:'museum',     label:'MUSEUM',     emoji:'🏛️' },
 ]
 
 // ── main section ───────────────────────────────────────────────────────────────
@@ -205,9 +227,14 @@ export default function Leaderboard() {
 
   if (!data) return null
 
-  const tabColor = { cities:B.amber, gallery:B.neonCyan, traders:B.neonMagenta, museum:B.neonLime }
+  const tabColor = { collectors:'#C084FC', cities:B.amber, gallery:B.neonCyan, traders:B.neonMagenta, museum:B.neonLime }
 
   const buildRows = {
+    collectors: COLLECTOR_SEEDS.map((c, i) => ({
+      rank:i+1, label:c.name, sub:c.city + (c.badges ? ' · ' + c.badges : ''),
+      metric:`${c.pts.toLocaleString()} PTS`, metricSub:'points',
+      color:'#C084FC', metricRaw:c.pts, delta:c.delta,
+    })),
     cities: data.cities.map((c, i) => ({
       rank:i+1, label:c.city, sub:c.state,
       metric:c.count.toLocaleString(), metricSub:'RSVPs',
@@ -245,9 +272,9 @@ export default function Leaderboard() {
   const totalWants = data.trades.reduce((s, t) => s + (t.wants || 0), 0)
   const totalBids  = data.museum.reduce((s, m) => s + (m.amount || 0), 0)
 
-  const summaryVal = { cities:totalRSVPs.toLocaleString(), gallery:totalHeat || '—', traders:totalWants || '—', museum:totalBids ? fmt(totalBids) : '—' }
-  const summaryLbl = { cities:'total RSVPs', gallery:'total heat', traders:'total wants', museum:'total bid value' }
-  const emptyMsg   = { gallery:'Community photos will rank here once uploaded.', traders:'Trade listings will rank here once posted.', museum:'Museum bids will rank here once placed.', cities:'' }
+  const summaryVal = { collectors:COLLECTOR_SEEDS.reduce((s,c)=>s+c.pts,0).toLocaleString(), cities:totalRSVPs.toLocaleString(), gallery:totalHeat || '—', traders:totalWants || '—', museum:totalBids ? fmt(totalBids) : '—' }
+  const summaryLbl = { collectors:'total pts banked', cities:'total RSVPs', gallery:'total heat', traders:'total wants', museum:'total bid value' }
+  const emptyMsg   = { collectors:'Collectors rank here as community activity accumulates.', gallery:'Community photos will rank here once uploaded.', traders:'Trade listings will rank here once posted.', museum:'Museum bids will rank here once placed.', cities:'' }
 
   const accent = tabColor[tab]
 
@@ -293,6 +320,11 @@ export default function Leaderboard() {
               <span style={{ fontFamily:'Orbitron,monospace', fontSize:20, color:accent, fontWeight:900 }}>{summaryVal[tab]}</span>
               <span style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#444' }}>{summaryLbl[tab]}</span>
             </div>
+          </div>
+          {/* weekly reset */}
+          <div style={{ padding:'8px 12px', background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:6, flexShrink:0 }}>
+            <div style={{ fontFamily:'Space Mono,monospace', fontSize:6, color:'#333', letterSpacing:2 }}>RESETS IN</div>
+            <div style={{ fontFamily:'Orbitron,monospace', fontSize:10, color:'#555', fontWeight:700 }}>{getWeeklyReset()}</div>
           </div>
           {/* count filter pills */}
           <div style={{ display:'flex', gap:4 }}>
@@ -363,6 +395,43 @@ export default function Leaderboard() {
             </button>
           </div>
         )}
+
+        {/* MY RANK panel */}
+        {(() => {
+          try {
+            const entries = JSON.parse(localStorage.getItem('sf26_raffle_entries') || '{}')
+            const myName  = Object.values(entries)[0]?.name
+            const rafflePts = Object.values(entries).reduce((s,e) => s + (e.packCount||1)*50, 0)
+            const galleryItems = JSON.parse(localStorage.getItem('sf26_gallery') || '[]')
+            const galPts = galleryItems.length * 100
+            const bidsObj = JSON.parse(localStorage.getItem('sf26_museum_bids') || '{}')
+            const bidPts = Object.values(bidsObj).filter(b => b > 0).length * 200
+            const total = rafflePts + galPts + bidPts
+            if (!total && !myName) return null
+            const rank = COLLECTOR_SEEDS.filter(c => c.pts > total).length + 1
+            return (
+              <div style={{ marginTop:28, padding:'20px 24px', background:'rgba(255,255,255,0.02)', border:'1px solid #C084FC20', borderRadius:12 }}>
+                <div style={{ fontFamily:'Orbitron,monospace', fontSize:8, color:'#444', letterSpacing:3, marginBottom:12 }}>MY RANK</div>
+                <div style={{ display:'flex', alignItems:'center', gap:16, flexWrap:'wrap' }}>
+                  <div style={{ display:'flex', alignItems:'baseline', gap:6 }}>
+                    <span style={{ fontFamily:'Orbitron,monospace', fontSize:32, color:'#C084FC', fontWeight:900 }}>#{rank}</span>
+                    <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#444' }}>of {COLLECTOR_SEEDS.length + 1}</span>
+                  </div>
+                  <div style={{ flex:1, minWidth:120 }}>
+                    {myName && <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:18, color:B.white, letterSpacing:1 }}>{myName}</div>}
+                    <div style={{ fontFamily:'Orbitron,monospace', fontSize:14, color:'#C084FC', fontWeight:700 }}>{total.toLocaleString()} PTS</div>
+                  </div>
+                  <div style={{ display:'flex', gap:12, flexWrap:'wrap' }}>
+                    {rafflePts > 0 && <div style={{ textAlign:'center' }}><div style={{ fontFamily:'Orbitron,monospace', fontSize:11, color:B.amber }}>{rafflePts}</div><div style={{ fontFamily:'Space Mono,monospace', fontSize:6, color:'#444' }}>RAFFLE</div></div>}
+                    {galPts > 0 && <div style={{ textAlign:'center' }}><div style={{ fontFamily:'Orbitron,monospace', fontSize:11, color:B.neonCyan }}>{galPts}</div><div style={{ fontFamily:'Space Mono,monospace', fontSize:6, color:'#444' }}>GALLERY</div></div>}
+                    {bidPts > 0 && <div style={{ textAlign:'center' }}><div style={{ fontFamily:'Orbitron,monospace', fontSize:11, color:B.neonLime }}>{bidPts}</div><div style={{ fontFamily:'Space Mono,monospace', fontSize:6, color:'#444' }}>BIDS</div></div>}
+                  </div>
+                </div>
+                <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:'#2a2a2a', letterSpacing:1, marginTop:10 }}>RAFFLE=50pts/entry · GALLERY=100pts/upload · MUSEUM BID=200pts</div>
+              </div>
+            )
+          } catch { return null }
+        })()}
 
         <div style={{ textAlign:'center', marginTop:24, fontFamily:'Space Mono,monospace', fontSize:8, color:'#2a2a2a', letterSpacing:2 }}>
           RANKINGS UPDATE IN REAL TIME FROM COMMUNITY ACTIVITY
