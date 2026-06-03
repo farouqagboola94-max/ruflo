@@ -7,73 +7,90 @@ export interface BoothTier {
   perks: string[]
   badge?: string
   color: string
-  available: boolean
+  spots: number
 }
 
 export const BOOTH_TIERS: BoothTier[] = [
   {
     id: 'standard',
-    name: 'Standard',
-    price: 75000,
-    size: '6 × 6 ft',
-    description: 'A solid floor presence. Great for sneaker vendors, accessories, and indie brands making their first showing.',
+    name: 'Standard Booth',
+    price: 299,
+    size: '3m × 3m',
+    description: 'Perfect for solo vendors and small sellers. Includes everything you need to showcase your collection.',
     perks: [
-      '6×6 ft booth space',
-      'One 6ft table + 2 chairs',
-      'Name on official vendor floor map',
-      '2 vendor wristbands included',
-      'Setup day access (Dec 11)',
+      '3m × 3m floor space',
+      '1 table + 2 chairs',
+      'Standard placement on vendor floor',
+      '2 vendor passes included',
+      'Name listed in event program',
+      'Set-up from 7:00 AM',
     ],
-    color: 'from-gray-700 to-gray-600',
-    available: true,
+    color: 'from-gray-700 to-gray-800',
+    spots: 80,
   },
   {
-    id: 'double',
-    name: 'Double',
-    price: 140000,
-    size: '6 × 12 ft',
-    description: 'Double the floor, double the impact. Corner-adjacent placement with room for full product displays and racks.',
+    id: 'premium',
+    name: 'Premium Booth',
+    price: 599,
+    size: '4m × 4m',
+    description: 'More space, better placement, and built-in visibility for established sellers and boutiques.',
     perks: [
-      '6×12 ft booth space',
-      'Two 6ft tables + 4 chairs',
-      'Priority vendor map placement',
-      '4 vendor wristbands included',
-      'Setup day access (Dec 11)',
-      'Social media feature before event',
+      '4m × 4m floor space',
+      '2 tables + display rack + chairs',
+      'Featured placement (high-traffic zone)',
+      '4 vendor passes included',
+      'Logo in event program',
+      'Social media shoutout pre-event',
+      'Set-up from 6:30 AM',
     ],
-    badge: 'Most Popular',
-    color: 'from-orange-600 to-amber-500',
-    available: true,
+    badge: 'Best Value',
+    color: 'from-orange-600 to-yellow-500',
+    spots: 40,
   },
   {
-    id: 'anchor',
-    name: 'Anchor',
-    price: 250000,
-    size: '10 × 12 ft',
-    description: 'Full-zone ownership. Prime floor placement, complete branding rights, and a dedicated host for both event days.',
+    id: 'brand',
+    name: 'Brand Showcase',
+    price: 1200,
+    size: '6m × 6m',
+    description: 'Prime location and maximum exposure for brands, boutiques, and serious collectors.',
     perks: [
-      '10×12 ft booth space',
-      'Custom booth structure options',
-      'Prime floor placement — guaranteed',
-      '6 vendor wristbands included',
-      'Setup day access (Dec 11)',
-      'Branded on all event collateral',
-      'Dedicated vendor host · both days',
-      'Featured in event programme & social',
+      '6m × 6m prime floor space',
+      'Custom setup assistance',
+      'Prime location (main entrance zone)',
+      '8 vendor passes included',
+      'Featured in all event marketing',
+      'Stage mention during program',
+      'Meet & greet inclusion',
+      'Set-up from 6:00 AM',
     ],
-    badge: 'Best Placement',
+    badge: 'Limited — 10 Spots',
     color: 'from-yellow-500 to-amber-600',
-    available: true,
+    spots: 10,
   },
 ]
 
-export const PRODUCT_CATEGORIES = [
-  'Sneakers & Footwear',
-  'Apparel & Streetwear',
-  'Accessories & Jewellery',
-  'Art & Collectibles',
-  'Photography & Prints',
-  'Food & Beverages',
-  'Tech & Gadgets',
+export const VENDOR_CATEGORIES = [
+  'Sneakers',
+  'Streetwear',
+  'Accessories',
+  'Custom & Art',
+  'Collectibles',
   'Other',
 ]
+
+export interface VendorApplication {
+  id: string
+  businessName: string
+  contactName: string
+  email: string
+  phone: string
+  website?: string
+  instagram?: string
+  category: string
+  boothType: 'standard' | 'premium' | 'brand'
+  description: string
+  status: 'pending' | 'approved' | 'rejected'
+  ref: string
+  amount: number
+  createdAt: string
+}
