@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import PaymentModal from '../components/PaymentModal'
+import PaymentModal, { TicketCard, downloadTicketPNG } from '../components/PaymentModal'
 
 const TIERS = [
   {
@@ -100,7 +100,15 @@ function downloadCalendar() {
 }
 
 export default function Tickets() {
-  const [selectedTier, setSelectedTier] = useState(null)
+  const [selectedTier,  setSelectedTier]  = useState(null)
+  const [showMyTickets, setShowMyTickets] = useState(false)
+  const [orders,        setOrders]        = useState([])
+  const [dlRef,         setDlRef]         = useState(null)
+
+  function loadOrders() {
+    try { setOrders(JSON.parse(localStorage.getItem('sf26_orders') || '[]')) } catch { setOrders([]) }
+  }
+  useEffect(() => { loadOrders() }, [])
 
   return (
     <section id="tickets" style={{
@@ -242,6 +250,24 @@ export default function Tickets() {
             </svg>
             ADD TO CALENDAR
           </button>
+          {orders.length > 0 && (
+            <button
+              onClick={() => { loadOrders(); setShowMyTickets(true) }}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 10,
+                padding: '13px 28px',
+                background: 'rgba(255,255,255,0.04)',
+                border: `1px solid rgba(255,255,255,0.12)`,
+                borderRadius: 8, cursor: 'pointer',
+                fontFamily: "'Space Mono', monospace", fontSize: 10,
+                color: B.smoke, letterSpacing: '0.18em', transition: 'all 0.2s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = `rgba(255,255,255,0.25)`; e.currentTarget.style.color = B.white }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = `rgba(255,255,255,0.12)`; e.currentTarget.style.color = B.smoke }}
+            >
+              MY TICKETS ({orders.length})
+            </button>
+          )}
           <div style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color:B.smoke, letterSpacing:'0.2em' }}>
             ALL SALES FINAL · AGES 16+ · SECURE CHECKOUT VIA PAYSTACK & FLUTTERWAVE
           </div>
@@ -251,8 +277,55 @@ export default function Tickets() {
       {selectedTier && (
         <PaymentModal
           tier={selectedTier}
-          onClose={() => setSelectedTier(null)}
+          onClose={() => { setSelectedTier(null); loadOrders() }}
         />
+      )}
+
+      {showMyTickets && (
+        <div
+          style={{ position:'fixed', inset:0, zIndex:2000, background:'rgba(0,0,0,0.88)', backdropFilter:'blur(10px)', display:'flex', justifyContent:'flex-end', animation:'fadeUp 0.2s ease' }}
+          onClick={e => { if (e.target === e.currentTarget) setShowMyTickets(false) }}
+        >
+          <div style={{ width:'100%', maxWidth:480, background:'rgba(10,10,15,0.97)', borderLeft:'1px solid rgba(255,255,255,0.08)', overflowY:'auto', display:'flex', flexDirection:'column', animation:'slideFromRight 0.25s ease' }}>
+            <div style={{ padding:'18px 24px', borderBottom:'1px solid rgba(255,255,255,0.07)', display:'flex', alignItems:'center', justifyContent:'space-between', position:'sticky', top:0, background:'rgba(10,10,15,0.97)', zIndex:1 }}>
+              <div>
+                <p style={{ color:B.amber, fontFamily:"'Orbitron', monospace", fontSize:9, letterSpacing:3, fontWeight:700, marginBottom:4 }}>ORDER HISTORY</p>
+                <p style={{ color:B.white, fontFamily:"'Bebas Neue', sans-serif", fontSize:22, letterSpacing:2 }}>MY TICKETS</p>
+              </div>
+              <button onClick={() => setShowMyTickets(false)} style={{ background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:8, cursor:'pointer', color:B.smoke, width:34, height:34, display:'flex', alignItems:'center', justifyContent:'center' }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+              </button>
+            </div>
+
+            <div style={{ padding:24, display:'flex', flexDirection:'column', gap:32 }}>
+              {orders.map((order, i) => (
+                <div key={i}>
+                  <TicketCard
+                    name={order.name} tier={order.tier} tierColor={order.tierColor}
+                    ticketRef={order.ref} price={order.price}
+                    qrData={`SF26|${order.tier}|${order.ref}|${order.name}|DEC-12-2026|LAGOS`}
+                  />
+                  <div style={{ marginTop:12, display:'flex', flexDirection:'column', gap:8 }}>
+                    <button
+                      onClick={async () => {
+                        setDlRef(order.ref)
+                        await downloadTicketPNG({ name:order.name, email:order.email, tier:order.tier, tierColor:order.tierColor, ref:order.ref, price:order.price })
+                        setDlRef(null)
+                      }}
+                      disabled={dlRef === order.ref}
+                      style={{ width:'100%', padding:'12px', borderRadius:10, border:`1px solid ${order.tierColor}`, background:`${order.tierColor}15`, color:order.tierColor, fontFamily:"'Orbitron', monospace", fontSize:10, fontWeight:700, letterSpacing:2, cursor:dlRef === order.ref ? 'wait' : 'pointer', transition:'all 0.2s' }}
+                    >
+                      {dlRef === order.ref ? 'SAVING…' : 'DOWNLOAD TICKET PNG →'}
+                    </button>
+                    <p style={{ fontFamily:"'Space Mono', monospace", fontSize:9, color:'#333', textAlign:'center' }}>
+                      Purchased {new Date(order.purchasedAt).toLocaleDateString('en-NG')} via {order.gateway}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       )}
     </section>
   )

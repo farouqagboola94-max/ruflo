@@ -16,6 +16,14 @@ function ticketPayload(name, tier, ref) {
   return `SF26|${tier}|${ref}|${name}|DEC-12-2026|LAGOS`
 }
 
+function saveOrder(order) {
+  try {
+    const existing = JSON.parse(localStorage.getItem('sf26_orders') || '[]')
+    existing.unshift(order)
+    localStorage.setItem('sf26_orders', JSON.stringify(existing.slice(0, 20)))
+  } catch {}
+}
+
 async function sendTicketEmail({ name, email, tier, ref, price }) {
   if (!BACKEND_URL) return false
   try {
@@ -28,7 +36,7 @@ async function sendTicketEmail({ name, email, tier, ref, price }) {
   } catch { return false }
 }
 
-async function downloadTicketPNG({ name, email, tier, tierColor, ref, price }) {
+export async function downloadTicketPNG({ name, email, tier, tierColor, ref, price }) {
   const W = 600, H = 920
   const canvas = document.createElement('canvas')
   canvas.width = W; canvas.height = H
@@ -196,7 +204,7 @@ function payWithFlutterwave({ name, email, amount, tier, onSuccess, onError }) {
 }
 
 // ── TicketCard ────────────────────────────────────────────────────────────────
-function TicketCard({ name, tier, tierColor, ref: ticketRef, price, qrData }) {
+export function TicketCard({ name, tier, tierColor, ticketRef, price, qrData }) {
   const [imgLoaded, setImgLoaded] = useState(false)
   const src = qrUrl(qrData, tierColor)
 
@@ -284,7 +292,10 @@ export default function PaymentModal({ tier, onClose }) {
     const opts = {
       name: name.trim(), email: email.trim().toLowerCase(),
       amount, tier: tier.name,
-      onSuccess: (gateway, ref) => { setLoading(false); setSuccess({ gateway, ref }) },
+      onSuccess: (gateway, ref) => {
+        saveOrder({ name: name.trim(), email: email.trim().toLowerCase(), tier: tier.name, tierColor: tier.color, ref, price: tier.price, gateway, purchasedAt: Date.now() })
+        setLoading(false); setSuccess({ gateway, ref })
+      },
       onError:   (msg)          => { setLoading(false); setError(msg) },
     }
     if (method === 'paystack') { payWithPaystack(opts); setTimeout(() => setLoading(false), 800) }
@@ -339,7 +350,7 @@ export default function PaymentModal({ tier, onClose }) {
 
             <TicketCard
               name={name} tier={tier.name} tierColor={tier.color}
-              ref={success.ref} price={tier.price}
+              ticketRef={success.ref} price={tier.price}
               qrData={ticketPayload(name, tier.name, success.ref)}
             />
 
