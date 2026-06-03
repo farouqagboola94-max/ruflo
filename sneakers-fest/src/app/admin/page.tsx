@@ -104,7 +104,6 @@ export default function AdminPage() {
     setAuthed(false); setPin('')
   }
 
-  // ── Stats ───────────────────────────────────────────────────────────────────────
   const stats = useMemo(() => {
     const ticketRevenue  = tickets.reduce((s, t) => s + t.total, 0)
     const vendorRevenue  = vendors.reduce((s, v) => s + v.price, 0)
@@ -134,7 +133,6 @@ export default function AdminPage() {
     return { ticketRevenue, vendorRevenue, totalRevenue, ticketsSold, avgTicketValue, byTier, byBooth, soldByTierId, wByTier, checkedInTotal, checkedInByTier }
   }, [tickets, vendors, waitlist, checkins])
 
-  // ── Raffle ─────────────────────────────────────────────────────────────────────
   const rafflePool = useMemo(() => {
     const pool: TicketRecord[] = []
     tickets.forEach(t => {
@@ -199,7 +197,6 @@ export default function AdminPage() {
     try { localStorage.setItem('sf_guaranteed_claims', JSON.stringify(updated)) } catch {}
   }
 
-  // ── Filtered tables ────────────────────────────────────────────────────────────
   const filteredTickets = useMemo(() => {
     const q = tSearch.toLowerCase()
     return tickets.filter(t =>
@@ -247,7 +244,6 @@ export default function AdminPage() {
   const attendancePct   = stats.ticketsSold > 0
     ? Math.round((stats.checkedInTotal / stats.ticketsSold) * 100) : 0
 
-  // ── Login ───────────────────────────────────────────────────────────────
   if (!authed) {
     return (
       <div className="min-h-screen flex items-center justify-center px-4">
@@ -278,7 +274,6 @@ export default function AdminPage() {
     )
   }
 
-  // ── Dashboard ───────────────────────────────────────────────────────────────────
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
@@ -286,7 +281,7 @@ export default function AdminPage() {
         <div>
           <p className="text-brand-orange text-xs uppercase tracking-wider mb-1">Admin Dashboard</p>
           <h1 className="font-display text-4xl text-white">SNEAKERS FEST 2026</h1>
-          <p className="text-gray-500 text-sm mt-1">Dec 12–13 · Lagos · All times live from this device</p>
+          <p className="text-gray-500 text-sm mt-1">Dec 12 · Lagos · All times live from this device</p>
         </div>
         <button onClick={logout}
           className="text-gray-500 text-sm border border-white/10 px-4 py-2 rounded-lg hover:text-gray-300 hover:border-white/20 transition-colors">
@@ -311,7 +306,7 @@ export default function AdminPage() {
         ))}
       </div>
 
-      {/* ── OVERVIEW ────────────────────────────────────────────────────── */}
+      {/* OVERVIEW */}
       {tab === 'overview' && (
         <div className="space-y-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -463,7 +458,7 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* ── TICKETS ───────────────────────────────────────────────────── */}
+      {/* TICKETS */}
       {tab === 'tickets' && (
         <div>
           <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
@@ -512,7 +507,7 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* ── VENDORS ───────────────────────────────────────────────────── */}
+      {/* VENDORS */}
       {tab === 'vendors' && (
         <div>
           <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
@@ -561,7 +556,7 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* ── WAITLIST ──────────────────────────────────────────────────── */}
+      {/* WAITLIST */}
       {tab === 'waitlist' && (
         <div>
           <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
@@ -610,7 +605,7 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* ── RAFFLE ───────────────────────────────────────────────────── */}
+      {/* RAFFLE */}
       {tab === 'raffle' && (
         <div className="space-y-6">
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
@@ -788,10 +783,9 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* ── GATE ─────────────────────────────────────────────────────── */}
+      {/* GATE */}
       {tab === 'gate' && (
         <div>
-          {/* Header with link to scanner */}
           <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
             <div>
               <p className="text-green-400 text-sm font-semibold">
@@ -811,7 +805,6 @@ export default function AdminPage() {
             </a>
           </div>
 
-          {/* Per-tier breakdown */}
           {Object.keys(stats.checkedInByTier).length > 0 && (
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
               {Object.entries(stats.checkedInByTier).map(([tier, count]) => {
@@ -827,7 +820,6 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* Search + export */}
           <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
             <input type="text" placeholder="Search by name, email, tier, or ref…"
               value={gSearch} onChange={e => setGSearch(e.target.value)}
