@@ -39,6 +39,7 @@ import DropsTimeline from './sections/DropsTimeline'
 import EarlyAccess from './sections/EarlyAccess'
 import Comics from './sections/Comics'
 import Gallery from './sections/Gallery'
+import TradeBoard from './sections/TradeBoard'
 import PhotoTools from './sections/PhotoTools'
 import SubstackSection from './sections/SubstackSection'
 import Newsletter from './sections/Newsletter'
@@ -78,6 +79,7 @@ const SECTION_TITLES = [
   { id: 'waitlist',     title: "Early Access | Sneakers Fest '26" },
   { id: 'comics',       title: "Catalyst Universe | Sneakers Fest '26" },
   { id: 'gallery',      title: "Gallery | Sneakers Fest '26" },
+  { id: 'trades',       title: "Trade Board | Sneakers Fest '26" },
   { id: 'substack',     title: "Substack | Sneakers Fest '26" },
   { id: 'lineup',       title: "Lineup | Sneakers Fest '26" },
   { id: 'schedule',     title: "Schedule | Sneakers Fest '26" },
@@ -168,6 +170,7 @@ export default function App() {
       <Reveal><EarlyAccess /></Reveal>
       <Reveal><Comics /></Reveal>
       <Reveal><Gallery /></Reveal>
+      <Reveal><TradeBoard /></Reveal>
       <Reveal><PhotoTools /></Reveal>
       <Reveal><SubstackSection /></Reveal>
       <Reveal><Newsletter /></Reveal>
