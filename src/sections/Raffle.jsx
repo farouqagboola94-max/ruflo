@@ -45,6 +45,12 @@ const CONFETTI_DOTS = Array.from({ length: 18 }, (_, i) => ({
   delay: (i % 6) * 0.08,
 }))
 
+const PACKS = [
+  { id:'single',  label:'1 ENTRY',   count:1, badge:null        },
+  { id:'triple',  label:'3 ENTRIES', count:3, badge:'POPULAR'   },
+  { id:'maxout',  label:'5 ENTRIES', count:5, badge:'BEST ODDS' },
+]
+
 function loadEntries()  { try { return JSON.parse(localStorage.getItem('sf26_raffle_entries') || '{}') } catch { return {} } }
 function loadWinners()  { try { return JSON.parse(localStorage.getItem('sf26_raffle_draws')   || '{}') } catch { return {} } }
 function loadCounts()   { try { return JSON.parse(localStorage.getItem('sf26_raffle_counts')  || '{}') } catch { return {} } }
@@ -55,6 +61,7 @@ const entryNum = () => Math.floor(Math.random() * 899) + 100   // 3-digit, 100-9
 function EntryModal({ raffle, onEnter, onClose }) {
   const [form,      setForm]      = useState({ name:'', email:'', phone:'', city:'' })
   const [submitted, setSubmitted] = useState(null)
+  const [pack,      setPack]      = useState(PACKS[0])
   const inp  = k => e => setForm(f => ({ ...f, [k]: e.target.value }))
   const ok   = form.name.trim() && form.email.includes('@') && form.phone.trim() && form.city.trim()
   const is   = { width:'100%', padding:'11px 14px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:7, color:B.white, fontFamily:'Space Mono,monospace', fontSize:12, outline:'none', boxSizing:'border-box', transition:'border-color 0.2s' }
@@ -65,7 +72,7 @@ function EntryModal({ raffle, onEnter, onClose }) {
   function handleSubmit() {
     if (!ok) return
     const num   = Math.floor(Math.random() * 899) + 100
-    const entry = { name: form.name.trim(), city: form.city.trim(), email: form.email, phone: form.phone, entryNum: num, enteredAt: new Date().toISOString() }
+    const entry = { name: form.name.trim(), city: form.city.trim(), email: form.email, phone: form.phone, entryNum: num, packCount: pack.count, enteredAt: new Date().toISOString() }
     setSubmitted(entry)
     onEnter(entry)
   }
@@ -102,6 +109,7 @@ function EntryModal({ raffle, onEnter, onClose }) {
                 <div>
                   <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:raffle.color, letterSpacing:2, marginBottom:4 }}>YOUR ENTRY</div>
                   <div style={{ fontFamily:'Orbitron,monospace', fontSize:26, color:raffle.color, fontWeight:900, letterSpacing:3 }}>#{String(submitted.entryNum).padStart(4,'0')}</div>
+                  {submitted.packCount > 1 && <div style={{ fontFamily:'Orbitron,monospace', fontSize:8, color:raffle.color, letterSpacing:2, marginTop:3 }}>{submitted.packCount}× ENTRIES</div>}
                   <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', marginTop:5 }}>{submitted.name} · {submitted.city}</div>
                 </div>
                 <div style={{ borderLeft:'1px dashed rgba(255,255,255,0.08)', paddingLeft:16, display:'flex', flexDirection:'column', alignItems:'center', gap:1 }}>
@@ -124,7 +132,21 @@ function EntryModal({ raffle, onEnter, onClose }) {
           <div style={{ padding:'28px 28px 32px' }}>
             <div style={{ fontFamily:'Orbitron,monospace', fontSize:9, color:raffle.color, letterSpacing:3, marginBottom:6 }}>ENTER RAFFLE</div>
             <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:24, color:B.white, letterSpacing:2, marginBottom:4 }}>{raffle.name}</div>
-            <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#555', marginBottom:24 }}>{raffle.edition} · {raffle.value}</div>
+            <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#555', marginBottom:16 }}>{raffle.edition} · {raffle.value}</div>
+
+            {/* pack selector */}
+            <div style={{ marginBottom:20 }}>
+              <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#444', letterSpacing:2, marginBottom:8 }}>SELECT ENTRY PACK</div>
+              <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:6 }}>
+                {PACKS.map(p => (
+                  <button key={p.id} onClick={() => setPack(p)} style={{ position:'relative', padding:'10px 6px', background: pack.id === p.id ? `${raffle.color}18` : 'rgba(255,255,255,0.03)', border:`1px solid ${pack.id === p.id ? raffle.color : 'rgba(255,255,255,0.08)'}`, borderRadius:8, cursor:'pointer', textAlign:'center', transition:'all 0.15s' }}>
+                    {p.badge && <div style={{ position:'absolute', top:-7, right:4, background:raffle.color, color:B.black, fontFamily:'Orbitron,monospace', fontSize:6, fontWeight:700, padding:'2px 5px', borderRadius:3, letterSpacing:1 }}>{p.badge}</div>}
+                    <div style={{ fontFamily:'Orbitron,monospace', fontSize:11, color: pack.id === p.id ? raffle.color : '#555', fontWeight:700, letterSpacing:1 }}>{p.label}</div>
+                    <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color: pack.id === p.id ? `${raffle.color}80` : '#333', marginTop:3 }}>{p.count}× odds</div>
+                  </button>
+                ))}
+              </div>
+            </div>
 
             <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
@@ -136,9 +158,9 @@ function EntryModal({ raffle, onEnter, onClose }) {
             </div>
 
             <button onClick={handleSubmit} style={{ width:'100%', marginTop:18, padding:'14px', background: ok ? `linear-gradient(90deg, ${raffle.color}, ${raffle.color}BB)` : '#1a1a1a', border:'none', borderRadius:8, color: ok ? B.black : '#444', fontFamily:'Bebas Neue,sans-serif', fontSize:20, letterSpacing:3, cursor: ok ? 'pointer' : 'default', transition:'all 0.2s', boxShadow: ok ? `0 0 28px ${raffle.color}30` : 'none' }}>
-              ENTER RAFFLE →
+              ENTER WITH {pack.count} {pack.count === 1 ? 'ENTRY' : 'ENTRIES'} →
             </button>
-            <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#333', textAlign:'center', marginTop:10, letterSpacing:1 }}>One entry per person · Draw at Dec 12 event</div>
+            <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#333', textAlign:'center', marginTop:10, letterSpacing:1 }}>One pack per person · Draw live Dec 12</div>
           </div>
         )}
       </div>
@@ -190,6 +212,7 @@ function TicketStub({ raffle, entry }) {
         <div>
           <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:raffle.color, letterSpacing:2, marginBottom:3 }}>YOUR ENTRY</div>
           <div style={{ fontFamily:'Orbitron,monospace', fontSize:20, color:raffle.color, fontWeight:900, letterSpacing:2 }}>#{String(entry.entryNum).padStart(4,'0')}</div>
+          {(entry.packCount || 1) > 1 && <div style={{ display:'inline-block', background:`${raffle.color}20`, borderRadius:4, padding:'2px 7px', fontFamily:'Orbitron,monospace', fontSize:7, color:raffle.color, marginTop:3, letterSpacing:1 }}>{entry.packCount}× ENTRIES</div>}
           <div style={{ fontFamily:'Space Mono,monospace', fontSize:7.5, color:'#444', marginTop:3 }}>{entry.name}</div>
         </div>
         <div style={{ borderLeft:'1px dashed rgba(255,255,255,0.07)', paddingLeft:12, display:'flex', flexDirection:'column', alignItems:'center', gap:0 }}>
@@ -328,7 +351,7 @@ export default function Raffle() {
     setEntries(nextEntries)
     try { localStorage.setItem('sf26_raffle_entries', JSON.stringify(nextEntries)) } catch {}
 
-    const nextCounts = { ...counts, [raffle.id]: counts[raffle.id] + 1 }
+    const nextCounts = { ...counts, [raffle.id]: counts[raffle.id] + (entry.packCount || 1) }
     setCounts(nextCounts)
     try { localStorage.setItem('sf26_raffle_counts', JSON.stringify(nextCounts)) } catch {}
   }
@@ -394,7 +417,28 @@ export default function Raffle() {
           ))}
         </div>
 
-        <div style={{ textAlign:'center', marginTop:32, fontFamily:'Space Mono,monospace', fontSize:8, color:'#333', letterSpacing:2 }}>
+        {Object.keys(entries).length > 0 && (
+          <div style={{ marginTop:28, padding:'20px 24px', background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:12 }}>
+            <div style={{ fontFamily:'Orbitron,monospace', fontSize:8, color:'#444', letterSpacing:3, marginBottom:12 }}>MY ENTRIES</div>
+            <div style={{ display:'flex', flexWrap:'wrap', gap:8, marginBottom:12 }}>
+              {RAFFLES.filter(r => entries[r.id]).map(r => (
+                <div key={r.id} style={{ background:`${r.color}10`, border:`1px solid ${r.color}30`, borderRadius:8, padding:'8px 14px', display:'flex', alignItems:'center', gap:8 }}>
+                  <div style={{ fontFamily:'Orbitron,monospace', fontSize:9, color:r.color }}>#{String(entries[r.id].entryNum).padStart(4,'0')}</div>
+                  <div style={{ width:1, height:12, background:'rgba(255,255,255,0.08)' }} />
+                  <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:'#555' }}>{r.name.split(' ').slice(0,3).join(' ')}</div>
+                  {(entries[r.id].packCount || 1) > 1 && (
+                    <div style={{ background:`${r.color}25`, borderRadius:4, padding:'2px 6px', fontFamily:'Orbitron,monospace', fontSize:6, color:r.color }}>{entries[r.id].packCount}×</div>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#333', letterSpacing:1 }}>
+              {RAFFLES.filter(r => entries[r.id]).reduce((s,r) => s + (entries[r.id].packCount || 1), 0)} TOTAL ENTRIES · {Object.keys(entries).length} OF {RAFFLES.length} RAFFLES ENTERED
+            </div>
+          </div>
+        )}
+
+        <div style={{ textAlign:'center', marginTop:24, fontFamily:'Space Mono,monospace', fontSize:8, color:'#333', letterSpacing:2 }}>
           DRAWS CONDUCTED LIVE ON DEC 12 · WINNERS CONTACTED VIA EMAIL
         </div>
       </div>
