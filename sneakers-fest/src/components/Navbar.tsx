@@ -10,6 +10,7 @@ const NAV_LINKS = [
   { href: '/schedule', label: 'Schedule' },
   { href: '/catalog', label: 'Catalog' },
   { href: '/marketplace', label: 'Marketplace' },
+  { href: '/vendors', label: 'Vendors' },
   { href: '/fnp', label: 'FNP' },
   { href: '/contact', label: 'Contact' },
 ]
