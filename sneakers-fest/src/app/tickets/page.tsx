@@ -69,7 +69,24 @@ export default function TicketsPage() {
           total,
         })
 
-        // Generate QR code encoding the ticket payload
+        // Persist to sf_tickets for admin dashboard aggregation
+        try {
+          const record = {
+            ref:         response.reference,
+            name:        form.name,
+            email:       form.email,
+            phone:       form.phone,
+            tier:        tier.name,
+            tierId:      tier.id,
+            quantity:    parseInt(form.quantity),
+            total,
+            purchasedAt: new Date().toISOString(),
+          }
+          const existing = JSON.parse(localStorage.getItem('sf_tickets') || '[]')
+          localStorage.setItem('sf_tickets', JSON.stringify([...existing, record]))
+        } catch {}
+
+        // Generate QR code
         const qrPayload = JSON.stringify({
           event: 'Sneakers Fest 2026',
           ref:   response.reference,
@@ -172,9 +189,6 @@ export default function TicketsPage() {
                 </div>
               )}
               <form onSubmit={initiatePayment} className="space-y-4">
-                {(['Full Name', 'name', 'text', 'Your full name'] as const),
-                 (['Email', 'email', 'email', 'you@example.com'] as const),
-                 (['Phone Number', 'phone', 'tel', '+234 800 0000 000'] as const)].map ? null : null}
                 {([
                   ['Full Name',    'name',  'text',  'Your full name'],
                   ['Email',        'email', 'email', 'you@example.com'],
@@ -220,7 +234,6 @@ export default function TicketsPage() {
               <p className="text-gray-400 text-sm mb-1">{form.quantity} × {tier?.name} · ₦{total.toLocaleString()}</p>
               <p className="text-gray-600 text-xs font-mono mb-6">Ref: {payRef}</p>
 
-              {/* QR Code */}
               {qrDataUrl && (
                 <div className="mb-6">
                   <p className="text-xs text-gray-500 uppercase tracking-wider mb-3">Your Entry QR Code</p>
@@ -228,10 +241,8 @@ export default function TicketsPage() {
                     <img src={qrDataUrl} alt="Ticket QR Code" width={200} height={200} className="block" />
                   </div>
                   <div className="mt-3">
-                    <button
-                      onClick={downloadQR}
-                      className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-brand-orange/40 text-brand-orange text-sm font-semibold hover:bg-brand-orange/10 transition-colors"
-                    >
+                    <button onClick={downloadQR}
+                      className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-brand-orange/40 text-brand-orange text-sm font-semibold hover:bg-brand-orange/10 transition-colors">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                       </svg>
@@ -241,17 +252,10 @@ export default function TicketsPage() {
                 </div>
               )}
 
-              {/* Email status */}
               <div className="bg-brand-dark rounded-2xl p-4 mb-6 border border-white/10 text-sm">
-                {emailSent === true && (
-                  <p className="text-brand-neon">✓ Confirmation email sent to <span className="text-white">{form.email}</span></p>
-                )}
-                {emailSent === false && (
-                  <p className="text-gray-400">Screenshot or download your QR above — it’s your entry pass. Save it now.</p>
-                )}
-                {emailSent === null && (
-                  <p className="text-gray-500">Sending confirmation to <span className="text-white">{form.email}</span>…</p>
-                )}
+                {emailSent === true  && <p className="text-brand-neon">✓ Confirmation sent to <span className="text-white">{form.email}</span></p>}
+                {emailSent === false && <p className="text-gray-400">Download your QR above — it's your entry pass.</p>}
+                {emailSent === null  && <p className="text-gray-500">Sending confirmation to <span className="text-white">{form.email}</span>…</p>}
               </div>
 
               <div className="bg-brand-dark rounded-2xl p-4 mb-6 border border-white/10">
