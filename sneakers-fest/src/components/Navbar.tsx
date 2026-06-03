@@ -6,13 +6,13 @@ import { useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
 
 const NAV_LINKS = [
-  { href: '/', label: 'Home' },
-  { href: '/schedule', label: 'Schedule' },
-  { href: '/catalog', label: 'Catalog' },
+  { href: '/',            label: 'Home' },
+  { href: '/schedule',    label: 'Schedule' },
+  { href: '/catalog',     label: 'Catalog' },
   { href: '/marketplace', label: 'Marketplace' },
-  { href: '/vendors', label: 'Vendors' },
-  { href: '/fnp', label: 'FNP' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/vendors',     label: 'Vendors' },
+  { href: '/fnp',         label: 'FNP' },
+  { href: '/contact',     label: 'Contact' },
 ]
 
 export default function Navbar() {
@@ -54,6 +54,14 @@ export default function Navbar() {
             ) : (
               <button onClick={openAuth} className="text-sm text-gray-300 hover:text-white transition-colors">Sign In</button>
             )}
+            <Link href="/vendor-dashboard"
+              className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${
+                pathname === '/vendor-dashboard'
+                  ? 'border-brand-orange/40 text-brand-orange bg-brand-orange/10'
+                  : 'border-white/10 text-gray-500 hover:text-gray-300 hover:border-white/20'
+              }`}>
+              Vendor Portal
+            </Link>
             <Link href="/tickets" className="inline-flex items-center px-5 py-2 rounded-full bg-gradient-to-r from-brand-orange to-brand-amber text-black text-sm font-bold hover:opacity-90 transition-opacity">
               Get Tickets
             </Link>
@@ -80,6 +88,10 @@ export default function Navbar() {
               {label}
             </Link>
           ))}
+          <Link href="/vendor-dashboard" onClick={() => setOpen(false)}
+            className="block px-4 py-3 rounded-lg text-sm text-gray-500">
+            Vendor Portal
+          </Link>
           {user ? (
             <Link href="/profile" onClick={() => setOpen(false)} className="block px-4 py-3 rounded-lg text-sm text-gray-300">Profile ({user.name.split(' ')[0]})</Link>
           ) : (

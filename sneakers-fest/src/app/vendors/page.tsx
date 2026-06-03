@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import Script from 'next/script'
 import { BOOTH_TIERS, PRODUCT_CATEGORIES } from '@/data/vendors'
 
@@ -52,8 +53,9 @@ export default function VendorsPage() {
 
   const tier = BOOTH_TIERS.find(t => t.id === selected)
 
-  const set = (field: keyof Form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
-    setForm(f => ({ ...f, [field]: e.target.value }))
+  const set = (field: keyof Form) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
+      setForm(f => ({ ...f, [field]: e.target.value }))
 
   const initiatePayment = (e: React.FormEvent) => {
     e.preventDefault()
@@ -72,15 +74,37 @@ export default function VendorsPage() {
       ref,
       metadata: {
         custom_fields: [
-          { display_name: 'Business Name', variable_name: 'business_name', value: form.businessName },
-          { display_name: 'Booth Type', variable_name: 'booth_type', value: tier.name },
-          { display_name: 'Product Category', variable_name: 'category', value: form.category },
-          { display_name: 'Instagram', variable_name: 'instagram', value: form.instagram || 'N/A' },
+          { display_name: 'Business Name',   variable_name: 'business_name', value: form.businessName },
+          { display_name: 'Booth Type',      variable_name: 'booth_type',    value: tier.name },
+          { display_name: 'Product Category',variable_name: 'category',      value: form.category },
+          { display_name: 'Instagram',       variable_name: 'instagram',     value: form.instagram || 'N/A' },
         ],
       },
       callback: (response) => {
         setProcessing(false)
         setPayRef(response.reference)
+
+        // Save registration to localStorage for vendor dashboard access
+        const record = {
+          ref:          response.reference,
+          email:        form.email,
+          businessName: form.businessName,
+          contactName:  form.contactName,
+          phone:        form.phone,
+          instagram:    form.instagram,
+          category:     form.category,
+          description:  form.description,
+          tier:         tier.name,
+          tierId:       tier.id,
+          size:         tier.size,
+          price:        tier.price,
+          registeredAt: new Date().toISOString(),
+        }
+        try {
+          const existing = JSON.parse(localStorage.getItem('sf_vendors') || '[]')
+          localStorage.setItem('sf_vendors', JSON.stringify([...existing, record]))
+        } catch {}
+
         setSubmitted(true)
       },
       onClose: () => setProcessing(false),
@@ -92,8 +116,6 @@ export default function VendorsPage() {
       <Script src="https://js.paystack.co/v1/inline.js" strategy="lazyOnload" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-
-        {/* Header */}
         <div className="text-center mb-14">
           <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">December 12–13, 2026 · Lagos, Nigeria</p>
           <h1 className="font-display text-5xl sm:text-6xl text-white mb-4">VENDOR REGISTRATION</h1>
@@ -108,18 +130,14 @@ export default function VendorsPage() {
 
         {!submitted ? (
           <>
-            {/* Booth tier grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
               {BOOTH_TIERS.map(t => (
-                <div
-                  key={t.id}
-                  onClick={() => setSelected(t.id)}
+                <div key={t.id} onClick={() => setSelected(t.id)}
                   className={`relative rounded-3xl p-px cursor-pointer transition-all ${
                     selected === t.id
                       ? `bg-gradient-to-br ${t.color} shadow-xl shadow-orange-500/20`
                       : 'bg-white/5 hover:bg-white/10'
-                  }`}
-                >
+                  }`}>
                   {t.badge && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
                       <span className={`px-4 py-1 rounded-full text-black text-xs font-bold bg-gradient-to-r ${t.color}`}>
@@ -145,13 +163,11 @@ export default function VendorsPage() {
                         </li>
                       ))}
                     </ul>
-                    <button
-                      className={`mt-6 w-full py-3 rounded-xl font-bold text-sm transition-all ${
-                        selected === t.id
-                          ? `bg-gradient-to-r ${t.color} text-black`
-                          : 'border border-white/20 text-white hover:border-brand-orange hover:text-brand-orange'
-                      }`}
-                    >
+                    <button className={`mt-6 w-full py-3 rounded-xl font-bold text-sm transition-all ${
+                      selected === t.id
+                        ? `bg-gradient-to-r ${t.color} text-black`
+                        : 'border border-white/20 text-white hover:border-brand-orange hover:text-brand-orange'
+                    }`}>
                       {selected === t.id ? 'Selected ✓' : 'Select This Booth'}
                     </button>
                   </div>
@@ -159,7 +175,6 @@ export default function VendorsPage() {
               ))}
             </div>
 
-            {/* Registration form */}
             <div className="max-w-2xl mx-auto">
               <div className="bg-brand-gray rounded-3xl p-8 border border-white/5">
                 <h2 className="font-display text-2xl text-white mb-2">YOUR DETAILS</h2>
@@ -167,77 +182,57 @@ export default function VendorsPage() {
                   ? <p className="text-brand-orange text-sm mb-6">{tier.name} Booth · {tier.size} · ₦{tier.price.toLocaleString()}</p>
                   : <p className="text-gray-500 text-sm mb-6">Select a booth above, then complete your registration.</p>
                 }
-
                 <form onSubmit={initiatePayment} className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm text-gray-400 mb-1.5">Business / Brand Name *</label>
-                      <input
-                        type="text" required placeholder="e.g. Lagos Kicks"
+                      <input type="text" required placeholder="e.g. Lagos Kicks"
                         value={form.businessName} onChange={set('businessName')}
-                        className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand-orange text-sm"
-                      />
+                        className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand-orange text-sm" />
                     </div>
                     <div>
                       <label className="block text-sm text-gray-400 mb-1.5">Contact Name *</label>
-                      <input
-                        type="text" required placeholder="Your full name"
+                      <input type="text" required placeholder="Your full name"
                         value={form.contactName} onChange={set('contactName')}
-                        className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand-orange text-sm"
-                      />
+                        className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand-orange text-sm" />
                     </div>
                   </div>
-
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm text-gray-400 mb-1.5">Email Address *</label>
-                      <input
-                        type="email" required placeholder="you@brand.com"
+                      <input type="email" required placeholder="you@brand.com"
                         value={form.email} onChange={set('email')}
-                        className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand-orange text-sm"
-                      />
+                        className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand-orange text-sm" />
                     </div>
                     <div>
                       <label className="block text-sm text-gray-400 mb-1.5">Phone Number *</label>
-                      <input
-                        type="tel" required placeholder="+234 800 0000 000"
+                      <input type="tel" required placeholder="+234 800 0000 000"
                         value={form.phone} onChange={set('phone')}
-                        className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand-orange text-sm"
-                      />
+                        className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand-orange text-sm" />
                     </div>
                   </div>
-
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm text-gray-400 mb-1.5">Instagram Handle</label>
-                      <input
-                        type="text" placeholder="@yourbrand"
+                      <input type="text" placeholder="@yourbrand"
                         value={form.instagram} onChange={set('instagram')}
-                        className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand-orange text-sm"
-                      />
+                        className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand-orange text-sm" />
                     </div>
                     <div>
                       <label className="block text-sm text-gray-400 mb-1.5">Product Category *</label>
-                      <select
-                        required value={form.category} onChange={set('category')}
-                        className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white focus:outline-none focus:border-brand-orange text-sm"
-                      >
+                      <select required value={form.category} onChange={set('category')}
+                        className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white focus:outline-none focus:border-brand-orange text-sm">
                         <option value="" disabled>Select a category</option>
                         {PRODUCT_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                       </select>
                     </div>
                   </div>
-
                   <div>
                     <label className="block text-sm text-gray-400 mb-1.5">Tell us about your brand <span className="text-gray-600">(optional)</span></label>
-                    <textarea
-                      rows={3}
-                      placeholder="What you sell, your vibe, any special setup needs..."
+                    <textarea rows={3} placeholder="What you sell, your vibe, any special setup needs..."
                       value={form.description} onChange={set('description')}
-                      className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand-orange text-sm resize-none"
-                    />
+                      className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand-orange text-sm resize-none" />
                   </div>
-
                   {tier && (
                     <div className="bg-brand-dark rounded-xl p-4 border border-white/10">
                       <div className="flex justify-between text-sm text-gray-400 mb-1">
@@ -250,24 +245,19 @@ export default function VendorsPage() {
                       </div>
                     </div>
                   )}
-
-                  <button
-                    type="submit"
-                    disabled={!tier || processing}
-                    className="w-full py-4 rounded-xl bg-gradient-to-r from-brand-orange to-brand-amber text-black font-bold text-lg hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity"
-                  >
+                  <button type="submit" disabled={!tier || processing}
+                    className="w-full py-4 rounded-xl bg-gradient-to-r from-brand-orange to-brand-amber text-black font-bold text-lg hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity">
                     {processing ? 'Opening payment…' : tier ? `Pay ₦${tier.price.toLocaleString()} — Secure My Booth` : 'Select a Booth First'}
                   </button>
                   <p className="text-center text-gray-500 text-xs">Secured by Paystack · SSL encrypted · Full payment required to confirm spot</p>
                 </form>
               </div>
 
-              {/* Info strip */}
               <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
                 {[
-                  { icon: '📅', label: 'Setup Day', value: 'December 11, 2026' },
-                  { icon: '📍', label: 'Location', value: 'Lagos, Nigeria' },
-                  { icon: '📞', label: 'Vendor Enquiries', value: 'Contact us' },
+                  { icon: '📅', label: 'Setup Day',         value: 'December 11, 2026' },
+                  { icon: '📍', label: 'Location',          value: 'Lagos, Nigeria' },
+                  { icon: '📞', label: 'Vendor Enquiries',  value: 'Contact us' },
                 ].map(({ icon, label, value }) => (
                   <div key={label} className="bg-brand-gray rounded-2xl p-4 border border-white/5">
                     <div className="text-2xl mb-1">{icon}</div>
@@ -279,24 +269,24 @@ export default function VendorsPage() {
             </div>
           </>
         ) : (
-          /* Success state */
           <div className="max-w-xl mx-auto">
-            <div className="bg-brand-gray rounded-3xl p-12 border border-brand-orange/20 text-center">
-              <div className="text-6xl mb-6">🏪</div>
-              <h3 className="font-display text-3xl text-white mb-3">BOOTH SECURED!</h3>
-              <p className="text-gray-400 mb-2">
-                Confirmation sent to <span className="text-white">{form.email}</span>
-              </p>
-              <p className="text-gray-500 text-sm mb-2">
-                {form.businessName} · {tier?.name} Booth · ₦{tier?.price.toLocaleString()}
-              </p>
-              <p className="text-gray-600 text-xs font-mono mb-8">Ref: {payRef}</p>
+            <div className="bg-brand-gray rounded-3xl p-10 border border-brand-orange/20 text-center">
+              <div className="text-6xl mb-5">🏪</div>
+              <h3 className="font-display text-3xl text-white mb-1">BOOTH SECURED!</h3>
+              <p className="text-gray-400 text-sm mb-1">{form.businessName} · {tier?.name} Booth · ₦{tier?.price.toLocaleString()}</p>
+
+              {/* Reference — prominently displayed */}
+              <div className="my-6 bg-brand-dark rounded-2xl p-4 border border-brand-orange/30">
+                <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Your Booking Reference — Save This</p>
+                <p className="text-brand-orange font-mono font-bold text-lg">{payRef}</p>
+                <p className="text-gray-600 text-xs mt-1">You'll need this to access your Vendor Dashboard</p>
+              </div>
 
               <div className="bg-brand-dark rounded-2xl p-5 mb-6 border border-white/10 text-left space-y-2">
                 <p className="text-xs text-gray-500 uppercase tracking-wider mb-3">What happens next</p>
                 {[
-                  'You will receive a confirmation email within 24 hours',
-                  'Booth assignment and floor map sent by November 2026',
+                  'Confirmation email sent to ' + form.email,
+                  'Booth assignment and floor map released November 2026',
                   'Setup access from 8 AM on December 11, 2026',
                   'Vendor briefing pack shared 2 weeks before the event',
                 ].map(step => (
@@ -307,10 +297,12 @@ export default function VendorsPage() {
                 ))}
               </div>
 
-              <button
-                onClick={() => { setSubmitted(false); setSelected(null); setPayRef(''); setForm(EMPTY_FORM) }}
-                className="text-gray-500 text-sm hover:text-gray-300 transition-colors"
-              >
+              <Link href="/vendor-dashboard"
+                className="block w-full py-3 rounded-xl bg-gradient-to-r from-brand-orange to-brand-amber text-black font-bold text-sm mb-4 hover:opacity-90 transition-opacity">
+                Access Your Vendor Dashboard →
+              </Link>
+              <button onClick={() => { setSubmitted(false); setSelected(null); setPayRef(''); setForm(EMPTY_FORM) }}
+                className="text-gray-500 text-sm hover:text-gray-300 transition-colors">
                 Register another booth
               </button>
             </div>
