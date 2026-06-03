@@ -76,70 +76,74 @@ function BoothCard({ booth, selected, onSelect, taken }) {
   )
 }
 
+const STEPS = [
+  { label: 'BOOTH',      subtitle: 'Choose your space' },
+  { label: 'BRAND INFO', subtitle: 'Who are you?' },
+  { label: 'SOCIAL',     subtitle: 'Links & presence' },
+  { label: 'REVIEW',     subtitle: 'Confirm & submit' },
+]
+
 export default function VendorReg() {
-  const [form, setForm]     = useState({ business: '', contact: '', email: '', phone: '', booth: '', category: '', bio: '' })
-  const [status, setStatus] = useState('idle')
+  const [step,    setStep]    = useState(0)
+  const [form,    setForm]    = useState({ booth: '', business: '', contact: '', email: '', phone: '', category: '', instagram: '', twitter: '', website: '', bio: '' })
+  const [status,  setStatus]  = useState('idle')
   const [openFaq, setOpenFaq] = useState(null)
-  const [appId, setAppId]   = useState('')
-  const [taken, setTaken]   = useState({ standard: 8, double: 5, premium: 3, collab: 1 })
+  const [appId,   setAppId]   = useState('')
+  const [taken,   setTaken]   = useState({ standard: 8, double: 5, premium: 3, collab: 1 })
 
   useEffect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem('sf26_vendor_taken') || '{}')
       if (Object.keys(saved).length) setTaken(t => ({ ...t, ...saved }))
+      const draft = JSON.parse(localStorage.getItem('sf26_vendor_draft') || 'null')
+      if (draft) setForm(f => ({ ...f, ...draft }))
     } catch {}
   }, [])
 
+  useEffect(() => {
+    if (status !== 'success') {
+      try { localStorage.setItem('sf26_vendor_draft', JSON.stringify(form)) } catch {}
+    }
+  }, [form, status])
+
   const set = k => e => setForm(f => ({ ...f, [k]: e.target.value }))
 
-  async function submit(e) {
-    e.preventDefault()
-    if (!form.category) { alert('Please select a product category.'); return }
+  function canNext() {
+    if (step === 0) return !!form.booth
+    if (step === 1) return !!(form.business.trim() && form.contact.trim() && form.email.includes('@') && form.phone.trim() && form.category)
+    if (step === 2) return form.bio.trim().length >= 20
+    return true
+  }
+
+  async function submit() {
     const id = genAppId()
     setStatus('loading')
-
     const payload = { ...form, applicationId: id, _subject: `Vendor Application [${id}] — ${form.business}` }
-
     let ok = false
-
-    // 1. Try dedicated backend if configured
     if (BACKEND_URL) {
       try {
-        const r = await fetch(`${BACKEND_URL}/api/vendor-applications`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        })
+        const r = await fetch(`${BACKEND_URL}/api/vendor-applications`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
         ok = r.ok
       } catch {}
     }
-
-    // 2. Fall back to Formspree
     if (!ok && FORMSPREE) {
       try {
-        const r = await fetch(`https://formspree.io/f/${FORMSPREE}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify(payload),
-        })
+        const r = await fetch(`https://formspree.io/f/${FORMSPREE}`, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(payload) })
         ok = r.ok
       } catch {}
     }
-
     if (ok || (!BACKEND_URL && !FORMSPREE)) {
-      // increment local booth taken count
-      const boothKey = form.booth.split(' ')[0].toLowerCase()
-      const matched = BOOTHS.find(b => form.booth.toLowerCase().includes(b.id))
+      const matched = BOOTHS.find(b => form.booth === b.id)
       if (matched) {
         const next = { ...taken, [matched.id]: (taken[matched.id] || 0) + 1 }
         setTaken(next)
         try { localStorage.setItem('sf26_vendor_taken', JSON.stringify(next)) } catch {}
       }
-      // store application
       try {
         const apps = JSON.parse(localStorage.getItem('sf26_vendor_apps') || '[]')
         apps.push({ ...payload, submittedAt: new Date().toISOString() })
         localStorage.setItem('sf26_vendor_apps', JSON.stringify(apps))
+        localStorage.removeItem('sf26_vendor_draft')
       } catch {}
       setAppId(id)
       setStatus('success')
@@ -148,19 +152,12 @@ export default function VendorReg() {
     }
   }
 
-  const inputStyle = {
-    width: '100%', padding: '12px 14px',
-    background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)',
-    borderRadius: 8, color: B.white, fontFamily: 'Space Mono,monospace', fontSize: 13,
-    outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.2s',
-  }
-  const lbl = text => (
-    <label style={{ fontFamily: 'Space Mono,monospace', fontSize: 8, color: '#555', letterSpacing: '0.25em', display: 'block', marginBottom: 7 }}>
-      {text}
-    </label>
-  )
+  const inputStyle = { width: '100%', padding: '12px 14px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 8, color: B.white, fontFamily: 'Space Mono,monospace', fontSize: 13, outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.2s' }
+  const lbl = text => <label style={{ fontFamily: 'Space Mono,monospace', fontSize: 8, color: '#555', letterSpacing: '0.25em', display: 'block', marginBottom: 7 }}>{text}</label>
   const onFocus = e => e.target.style.borderColor = B.neonCyan + '60'
   const onBlur  = e => e.target.style.borderColor = 'rgba(255,255,255,0.09)'
+
+  const selectedBooth = BOOTHS.find(b => b.id === form.booth)
 
   return (
     <section id="vendors" style={{ position: 'relative', overflow: 'hidden', background: B.black, padding: '100px 24px' }}>
@@ -178,35 +175,15 @@ export default function VendorReg() {
           </div>
         </div>
 
-        {/* Stats */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 44 }}>
           {[
-            { n: '1K–2.5K', l: 'YEAR 1 ATTENDEES',      c: B.neonCyan },
-            { n: '30–50',   l: 'VENDOR SPOTS (YEAR 1)',  c: B.amber },
-            { n: 'DEC 12',  l: '2026 · LAGOS, NIGERIA',  c: B.neonMagenta },
+            { n: '1K–2.5K', l: 'YEAR 1 ATTENDEES',     c: B.neonCyan },
+            { n: '30–50',   l: 'VENDOR SPOTS (YEAR 1)', c: B.amber },
+            { n: 'DEC 12',  l: '2026 · LAGOS, NIGERIA', c: B.neonMagenta },
           ].map((s, i) => (
             <div key={i} style={{ padding: '18px 16px', background: B.charcoal, border: `1px solid ${s.c}28`, borderRadius: 8, textAlign: 'center' }}>
               <div style={{ fontFamily: "'Orbitron', monospace", fontWeight: 900, fontSize: 22, color: s.c, textShadow: `0 0 16px ${s.c}30` }}>{s.n}</div>
               <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, letterSpacing: '0.15em', marginTop: 6 }}>{s.l}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* FAQ */}
-        <div style={{ marginBottom: 40 }}>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, letterSpacing: '0.4em', color: B.smoke, marginBottom: 16 }}>VENDOR FAQ</div>
-          {FAQ.map((f, i) => (
-            <div key={i} style={{ borderBottom: `1px solid ${B.charcoal}`, overflow: 'hidden' }}>
-              <button onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                style={{ width: '100%', textAlign: 'left', padding: '14px 0', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontFamily: "'Syne'", fontSize: '0.85rem', color: B.white }}>{f.q}</span>
-                <span style={{ color: B.amber, fontSize: '1.1rem', flexShrink: 0, marginLeft: 12 }}>{openFaq === i ? '−' : '+'}</span>
-              </button>
-              {openFaq === i && (
-                <div style={{ paddingBottom: 14 }}>
-                  <p style={{ fontFamily: "'Syne'", fontSize: '0.82rem', color: B.smoke, lineHeight: 1.7 }}>{f.a}</p>
-                </div>
-              )}
             </div>
           ))}
         </div>
@@ -223,22 +200,18 @@ export default function VendorReg() {
                 Thanks, <span style={{ color: B.white }}>{form.business}</span>. Confirmation sent to <span style={{ color: B.amber }}>{form.email}</span>.
               </div>
             </div>
-
-            {/* Application ID */}
             <div style={{ background: `${B.amber}08`, border: `1px solid ${B.amber}30`, borderRadius: 8, padding: '16px 20px', textAlign: 'center', marginBottom: 28 }}>
               <div style={{ fontFamily: 'Space Mono,monospace', fontSize: 10, color: B.smoke, letterSpacing: 2, marginBottom: 6 }}>YOUR APPLICATION ID</div>
               <div style={{ fontFamily: 'Orbitron,monospace', fontSize: 24, color: B.amber, letterSpacing: 4, fontWeight: 700 }}>{appId}</div>
               <div style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: B.smoke, marginTop: 6 }}>Save this. Reference it in any follow-up communication.</div>
             </div>
-
-            {/* Next steps */}
             <div>
               <div style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: B.smoke, letterSpacing: 2, marginBottom: 14 }}>WHAT HAPPENS NEXT</div>
               {[
                 { step: '01', title: 'APPLICATION REVIEWED', desc: 'Our team reviews every application within 3 business days.', color: B.neonCyan },
-                { step: '02', title: 'SELECTION CONFIRMED', desc: 'Accepted vendors receive a detailed brief and invoice by email.', color: B.amber },
-                { step: '03', title: 'BOOTH DEPOSIT', desc: 'Secure your spot with a 50% deposit. Balance due 30 days before event.', color: B.neonLime },
-                { step: '04', title: 'EVENT DAY · DEC 12', desc: 'Setup begins at 8am. Doors open at 12pm. Lagos, Nigeria.', color: B.neonMagenta },
+                { step: '02', title: 'SELECTION CONFIRMED',  desc: 'Accepted vendors receive a detailed brief and invoice by email.', color: B.amber },
+                { step: '03', title: 'BOOTH DEPOSIT',        desc: 'Secure your spot with a 50% deposit. Balance due 30 days before event.', color: B.neonLime },
+                { step: '04', title: 'EVENT DAY · DEC 12',   desc: 'Setup begins at 8am. Doors open at 12pm. Lagos, Nigeria.', color: B.neonMagenta },
               ].map(s => (
                 <div key={s.step} style={{ display: 'flex', gap: 16, marginBottom: 14, alignItems: 'flex-start' }}>
                   <div style={{ fontFamily: 'Orbitron,monospace', fontSize: 11, color: s.color, minWidth: 28, marginTop: 2 }}>{s.step}</div>
@@ -251,69 +224,183 @@ export default function VendorReg() {
             </div>
           </div>
         ) : (
-          <form onSubmit={submit} style={{ background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, overflow: 'hidden' }}>
-            <div style={{ height: 3, background: `linear-gradient(90deg, ${B.neonCyan}, ${B.amber}, ${B.neonMagenta})` }} />
-            <div style={{ padding: 32, display: 'flex', flexDirection: 'column', gap: 24 }}>
-
-              {/* Booth selector */}
-              <div>
-                {lbl('SELECT BOOTH TYPE *')}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12 }}>
-                  {BOOTHS.map(b => (
-                    <BoothCard key={b.id} booth={b} selected={form.booth === b.id} taken={taken[b.id] || 0}
-                      onSelect={id => setForm(f => ({ ...f, booth: id }))} />
-                  ))}
+          <div>
+            {/* ── Step indicator ── */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 0, marginBottom: 32 }}>
+              {STEPS.map((s, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', flex: i < STEPS.length - 1 ? 1 : 0 }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}>
+                    <div style={{ width: 34, height: 34, borderRadius: '50%', background: i < step ? B.neonCyan : i === step ? B.amber : 'rgba(255,255,255,0.04)', border: `1.5px solid ${i < step ? B.neonCyan : i === step ? B.amber : 'rgba(255,255,255,0.1)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Orbitron,monospace', fontSize: 10, fontWeight: 700, color: i <= step ? B.black : '#444', transition: 'all 0.3s', flexShrink: 0 }}>
+                      {i < step ? '✓' : i + 1}
+                    </div>
+                    <div style={{ fontFamily: 'Space Mono,monospace', fontSize: 7, color: i === step ? B.amber : i < step ? B.neonCyan : '#444', letterSpacing: 1, whiteSpace: 'nowrap', transition: 'color 0.3s' }}>{s.label}</div>
+                  </div>
+                  {i < STEPS.length - 1 && (
+                    <div style={{ flex: 1, height: 1, background: i < step ? `${B.neonCyan}60` : 'rgba(255,255,255,0.07)', marginBottom: 18, marginLeft: 8, marginRight: 8, transition: 'background 0.3s' }} />
+                  )}
                 </div>
-              </div>
+              ))}
+            </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-                <div>{lbl('BUSINESS / BRAND NAME *')}<input value={form.business} onChange={set('business')} placeholder="e.g. Lagos Kicks Co." required style={inputStyle} onFocus={onFocus} onBlur={onBlur} /></div>
-                <div>{lbl('CONTACT PERSON *')}<input value={form.contact} onChange={set('contact')} placeholder="Your full name" required style={inputStyle} onFocus={onFocus} onBlur={onBlur} /></div>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-                <div>{lbl('EMAIL ADDRESS *')}<input type="email" value={form.email} onChange={set('email')} placeholder="your@email.com" required style={inputStyle} onFocus={onFocus} onBlur={onBlur} /></div>
-                <div>{lbl('PHONE NUMBER *')}<input type="tel" value={form.phone} onChange={set('phone')} placeholder="+234 800 000 0000" required style={inputStyle} onFocus={onFocus} onBlur={onBlur} /></div>
-              </div>
+            {/* ── Form card ── */}
+            <div style={{ background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, overflow: 'hidden' }}>
+              <div style={{ height: 3, background: `linear-gradient(90deg, ${B.neonCyan}, ${B.amber}, ${B.neonMagenta})` }} />
+              <div style={{ padding: 32, display: 'flex', flexDirection: 'column', gap: 24 }}>
 
-              <div>
-                {lbl('PRODUCT CATEGORY *')}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                  {CATEGORIES.map(c => (
-                    <button key={c} type="button" onClick={() => setForm(f => ({ ...f, category: c }))}
-                      style={{ padding: '6px 14px', background: form.category === c ? `${B.neonCyan}18` : 'rgba(255,255,255,0.04)', border: `1px solid ${form.category === c ? B.neonCyan : 'rgba(255,255,255,0.1)'}`, borderRadius: 4, cursor: 'pointer', fontFamily: 'Space Mono,monospace', fontSize: 9, color: form.category === c ? B.neonCyan : B.smoke, letterSpacing: '0.1em', transition: 'all 0.2s' }}>
-                      {c}
+                {/* Step 0 — Booth */}
+                {step === 0 && (
+                  <div>
+                    {lbl('SELECT BOOTH TYPE *')}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12 }}>
+                      {BOOTHS.map(b => (
+                        <BoothCard key={b.id} booth={b} selected={form.booth === b.id} taken={taken[b.id] || 0}
+                          onSelect={id => setForm(f => ({ ...f, booth: id }))} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Step 1 — Brand info */}
+                {step === 1 && (
+                  <>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                      <div>{lbl('BUSINESS / BRAND NAME *')}<input value={form.business} onChange={set('business')} placeholder="e.g. Lagos Kicks Co." style={inputStyle} onFocus={onFocus} onBlur={onBlur} /></div>
+                      <div>{lbl('CONTACT PERSON *')}<input value={form.contact} onChange={set('contact')} placeholder="Your full name" style={inputStyle} onFocus={onFocus} onBlur={onBlur} /></div>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                      <div>{lbl('EMAIL ADDRESS *')}<input type="email" value={form.email} onChange={set('email')} placeholder="your@email.com" style={inputStyle} onFocus={onFocus} onBlur={onBlur} /></div>
+                      <div>{lbl('PHONE NUMBER *')}<input type="tel" value={form.phone} onChange={set('phone')} placeholder="+234 800 000 0000" style={inputStyle} onFocus={onFocus} onBlur={onBlur} /></div>
+                    </div>
+                    <div>
+                      {lbl('PRODUCT CATEGORY *')}
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                        {CATEGORIES.map(c => (
+                          <button key={c} type="button" onClick={() => setForm(f => ({ ...f, category: c }))}
+                            style={{ padding: '6px 14px', background: form.category === c ? `${B.neonCyan}18` : 'rgba(255,255,255,0.04)', border: `1px solid ${form.category === c ? B.neonCyan : 'rgba(255,255,255,0.1)'}`, borderRadius: 4, cursor: 'pointer', fontFamily: 'Space Mono,monospace', fontSize: 9, color: form.category === c ? B.neonCyan : B.smoke, letterSpacing: '0.1em', transition: 'all 0.2s' }}>
+                            {c}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {/* Step 2 — Social + bio */}
+                {step === 2 && (
+                  <>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                      <div>{lbl('INSTAGRAM (optional)')}<input value={form.instagram} onChange={set('instagram')} placeholder="@yourhandle" style={inputStyle} onFocus={onFocus} onBlur={onBlur} /></div>
+                      <div>{lbl('TWITTER / X (optional)')}<input value={form.twitter} onChange={set('twitter')} placeholder="@yourhandle" style={inputStyle} onFocus={onFocus} onBlur={onBlur} /></div>
+                    </div>
+                    <div>{lbl('WEBSITE (optional)')}<input value={form.website} onChange={set('website')} placeholder="https://yourbrand.com" style={inputStyle} onFocus={onFocus} onBlur={onBlur} /></div>
+                    <div>
+                      {lbl(`ABOUT YOUR BRAND * (${form.bio.length}/300 · min 20)`)}
+                      <textarea value={form.bio} onChange={set('bio')} maxLength={300}
+                        placeholder="Describe what you sell, your experience, and why you want to be at Sneakers Fest '26..."
+                        rows={5} style={{ ...inputStyle, resize: 'vertical', lineHeight: 1.6 }}
+                        onFocus={e => e.target.style.borderColor = B.neonCyan + '50'} onBlur={onBlur} />
+                      {form.bio.length > 0 && form.bio.length < 20 && (
+                        <p style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: B.amber, marginTop: 6 }}>{20 - form.bio.length} more characters needed</p>
+                      )}
+                    </div>
+                  </>
+                )}
+
+                {/* Step 3 — Review */}
+                {step === 3 && (
+                  <>
+                    <div style={{ fontFamily: 'Orbitron,monospace', fontSize: 9, color: B.amber, letterSpacing: 3 }}>REVIEW YOUR APPLICATION</div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 0, background: 'rgba(255,255,255,0.02)', borderRadius: 8, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.06)' }}>
+                      {[
+                        { label: 'BOOTH',    value: selectedBooth?.label,  color: B.neonCyan },
+                        { label: 'SIZE',     value: selectedBooth?.size },
+                        { label: 'PRICE',    value: selectedBooth?.price ? `₦${selectedBooth.price.toLocaleString('en-NG')}` : 'Custom — contact required', color: B.amber },
+                        { label: 'BUSINESS', value: form.business },
+                        { label: 'CONTACT',  value: form.contact },
+                        { label: 'EMAIL',    value: form.email },
+                        { label: 'PHONE',    value: form.phone },
+                        { label: 'CATEGORY', value: form.category },
+                        form.instagram ? { label: 'INSTAGRAM', value: `@${form.instagram.replace('@', '')}` } : null,
+                        form.twitter   ? { label: 'TWITTER',   value: `@${form.twitter.replace('@', '')}` }   : null,
+                        form.website   ? { label: 'WEBSITE',   value: form.website } : null,
+                      ].filter(Boolean).map((item, i) => (
+                        <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 16px', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                          <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 8, color: '#555', letterSpacing: 2 }}>{item.label}</span>
+                          <span style={{ fontFamily: 'Syne,sans-serif', fontSize: 13, color: item.color || B.white, textAlign: 'right', maxWidth: '65%', wordBreak: 'break-all' }}>{item.value}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{ padding: '14px 16px', background: 'rgba(255,255,255,0.02)', borderRadius: 8, border: '1px solid rgba(255,255,255,0.06)' }}>
+                      <div style={{ fontFamily: 'Space Mono,monospace', fontSize: 8, color: '#555', letterSpacing: 2, marginBottom: 8 }}>BRAND BIO</div>
+                      <div style={{ fontFamily: 'Syne,sans-serif', fontSize: 12, color: B.smoke, lineHeight: 1.7 }}>{form.bio}</div>
+                    </div>
+                    <div style={{ padding: '10px 14px', background: `${B.neonCyan}08`, border: `1px solid ${B.neonCyan}20`, borderRadius: 8 }}>
+                      <p style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: B.neonCyan }}>A confirmation email will be sent to <span style={{ color: B.white }}>{form.email}</span> after submission.</p>
+                    </div>
+                    {status === 'error' && (
+                      <div style={{ padding: '12px 16px', background: `rgba(255,45,123,0.08)`, border: `1px solid ${B.neonMagenta}30`, borderRadius: 8 }}>
+                        <div style={{ fontFamily: 'Space Mono,monospace', fontSize: 10, color: B.neonMagenta }}>
+                          Submission failed. Email <span style={{ color: B.white }}>vendors@sneakersfest.com</span> with "Vendor Application — {form.business}"
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {/* ── Navigation ── */}
+                <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                  {step > 0 && (
+                    <button onClick={() => setStep(s => s - 1)}
+                      style={{ padding: '12px 22px', background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: B.smoke, fontFamily: 'Orbitron,monospace', fontSize: 10, letterSpacing: 2, cursor: 'pointer', transition: 'all 0.2s' }}
+                      onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)'; e.currentTarget.style.color = B.white }}
+                      onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = B.smoke }}
+                    >← BACK</button>
+                  )}
+                  <div style={{ flex: 1 }} />
+                  {step < 3 ? (
+                    <button onClick={() => canNext() && setStep(s => s + 1)} disabled={!canNext()}
+                      style={{ padding: '13px 28px', background: canNext() ? B.neonCyan : 'rgba(255,255,255,0.04)', border: 'none', borderRadius: 8, color: canNext() ? B.black : '#444', fontFamily: 'Orbitron,monospace', fontSize: 11, fontWeight: 700, letterSpacing: 2, cursor: canNext() ? 'pointer' : 'not-allowed', boxShadow: canNext() ? `0 0 24px ${B.neonCyan}35` : 'none', transition: 'all 0.2s' }}>
+                      NEXT →
                     </button>
-                  ))}
+                  ) : (
+                    <button onClick={submit} disabled={status === 'loading'}
+                      style={{ padding: '14px 32px', background: status === 'loading' ? 'rgba(255,255,255,0.04)' : B.neonCyan, border: 'none', borderRadius: 8, color: status === 'loading' ? '#444' : B.black, fontFamily: 'Orbitron,monospace', fontSize: 12, fontWeight: 700, letterSpacing: 2, cursor: status === 'loading' ? 'wait' : 'pointer', boxShadow: status === 'loading' ? 'none' : `0 0 30px ${B.neonCyan}35`, transition: 'all 0.2s' }}>
+                      {status === 'loading'
+                        ? <span style={{ display: 'flex', alignItems: 'center', gap: 10 }}><span style={{ width: 12, height: 12, border: `2px solid #555`, borderTopColor: B.neonCyan, borderRadius: '50%', display: 'inline-block', animation: 'spin 0.8s linear infinite' }} />SUBMITTING…</span>
+                        : 'SUBMIT APPLICATION →'}
+                    </button>
+                  )}
                 </div>
-              </div>
 
-              <div>
-                {lbl(`TELL US ABOUT YOUR BRAND * (${form.bio.length}/300)`)}
-                <textarea value={form.bio} onChange={set('bio')} maxLength={300}
-                  placeholder="Describe what you sell, your experience, and why you want to be at Sneakers Fest '26..."
-                  rows={4} required
-                  style={{ ...inputStyle, resize: 'vertical', lineHeight: 1.6 }}
-                  onFocus={e => e.target.style.borderColor = B.neonCyan + '50'} onBlur={onBlur} />
-              </div>
-
-              {status === 'error' && (
-                <div style={{ padding: '12px 16px', background: `rgba(255,45,123,0.08)`, border: `1px solid ${B.neonMagenta}30`, borderRadius: 8 }}>
-                  <div style={{ fontFamily: 'Space Mono,monospace', fontSize: 10, color: B.neonMagenta }}>
-                    Submission failed. Email your application to <span style={{ color: B.white }}>vendors@sneakersfest.com</span> with subject line "Vendor Application — {form.business}"
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ fontFamily: 'Space Mono,monospace', fontSize: 7, color: '#2a2a2a', letterSpacing: 1 }}>● DRAFT AUTO-SAVED</div>
+                  <div style={{ fontFamily: 'Space Mono,monospace', fontSize: 8, color: '#333', letterSpacing: '0.15em' }}>
+                    INVITATION-CURATED · REVIEWED IN 3 DAYS
                   </div>
                 </div>
-              )}
-
-              <button type="submit" disabled={status === 'loading' || !form.booth}
-                style={{ padding: '15px', borderRadius: 8, border: 'none', cursor: (status === 'loading' || !form.booth) ? 'not-allowed' : 'pointer', background: (status === 'loading' || !form.booth) ? B.charcoal : B.neonCyan, color: B.black, fontFamily: 'Orbitron,monospace', fontSize: 12, fontWeight: 700, letterSpacing: 2, boxShadow: (status === 'loading' || !form.booth) ? 'none' : `0 0 30px ${B.neonCyan}30`, transition: 'all 0.2s' }}>
-                {status === 'loading' ? 'SUBMITTING...' : 'APPLY FOR A BOOTH →'}
-              </button>
-              <div style={{ fontFamily: 'Space Mono,monospace', fontSize: 8, color: '#333', textAlign: 'center', letterSpacing: '0.15em' }}>
-                INVITATION-CURATED · YEAR 1 FIRST COHORT · REVIEWED WITHIN 3 BUSINESS DAYS
               </div>
             </div>
-          </form>
+          </div>
         )}
+
+        {/* FAQ */}
+        <div style={{ marginTop: 48 }}>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, letterSpacing: '0.4em', color: B.smoke, marginBottom: 16 }}>VENDOR FAQ</div>
+          {FAQ.map((f, i) => (
+            <div key={i} style={{ borderBottom: `1px solid ${B.charcoal}`, overflow: 'hidden' }}>
+              <button onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                style={{ width: '100%', textAlign: 'left', padding: '14px 0', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontFamily: "'Syne'", fontSize: '0.85rem', color: B.white }}>{f.q}</span>
+                <span style={{ color: B.amber, fontSize: '1.1rem', flexShrink: 0, marginLeft: 12 }}>{openFaq === i ? '−' : '+'}</span>
+              </button>
+              {openFaq === i && (
+                <div style={{ paddingBottom: 14 }}>
+                  <p style={{ fontFamily: "'Syne'", fontSize: '0.82rem', color: B.smoke, lineHeight: 1.7 }}>{f.a}</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   )
