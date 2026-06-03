@@ -180,7 +180,7 @@ export default function GatePage() {
         <div>
           <p className="text-brand-orange text-xs uppercase tracking-wider mb-1">Gate Operations</p>
           <h1 className="font-display text-4xl text-white">GATE SCANNER</h1>
-          <p className="text-gray-500 text-sm mt-1">Validate and check in attendees · Dec 12–13 2026</p>
+          <p className="text-gray-500 text-sm mt-1">Validate and check in attendees · Dec 12, 2026</p>
         </div>
         <button onClick={logout} className="text-gray-500 text-sm border border-white/10 px-4 py-2 rounded-lg hover:text-gray-300 hover:border-white/20 transition-colors">
           Sign Out

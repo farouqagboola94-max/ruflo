@@ -63,10 +63,8 @@ export default function TicketsPage() {
     } catch {}
   }
 
-  // Load on mount
   useEffect(() => { refreshSoldCounts() }, [])
 
-  // Refresh when user returns to the tab
   useEffect(() => {
     const onVisible = () => { if (document.visibilityState === 'visible') refreshSoldCounts() }
     document.addEventListener('visibilitychange', onVisible)
@@ -80,7 +78,6 @@ export default function TicketsPage() {
   const maxQty     = isFinite(tierRemain) ? Math.min(5, Math.max(1, tierRemain)) : 5
   const total      = tier ? tier.price * parseInt(form.quantity) : 0
 
-  // Clamp quantity when tier changes
   useEffect(() => {
     const q = parseInt(form.quantity)
     if (q > maxQty) setForm(f => ({ ...f, quantity: String(maxQty) }))
@@ -94,7 +91,6 @@ export default function TicketsPage() {
       return
     }
 
-    // Pre-payment inventory guard — re-read storage to catch concurrent purchases
     const qty = parseInt(form.quantity)
     if (isFinite(tier.capacity ?? Infinity)) {
       try {
@@ -151,7 +147,7 @@ export default function TicketsPage() {
         } catch {}
         const qrPayload = JSON.stringify({
           event: 'Sneakers Fest 2026', ref: response.reference,
-          tier: tier.name, qty, name: form.name, date: 'Dec 12-13, 2026',
+          tier: tier.name, qty, name: form.name, date: 'Dec 12, 2026',
         })
         const qr = await generateQR(qrPayload)
         setQrDataUrl(qr)
@@ -216,9 +212,9 @@ export default function TicketsPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-14">
-          <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">December 12–13, 2026</p>
+          <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">December 12, 2026</p>
           <h1 className="font-display text-5xl sm:text-6xl text-white mb-4">GET YOUR TICKETS</h1>
-          <p className="text-gray-400 text-lg max-w-xl mx-auto">Choose your pass. All tickets include 2-day access. Limited quantities available.</p>
+          <p className="text-gray-400 text-lg max-w-xl mx-auto">Choose your pass. Limited quantities available.</p>
         </div>
 
         {/* Tier grid */}
@@ -283,7 +279,6 @@ export default function TicketsPage() {
                     ))}
                   </ul>
 
-                  {/* Capacity fill bar */}
                   {isFinite(cap) && cap > 0 && (
                     <div className="mt-4">
                       <div className="h-1 rounded-full bg-brand-dark overflow-hidden">
@@ -316,7 +311,6 @@ export default function TicketsPage() {
         {/* Form area */}
         <div className="max-w-xl mx-auto">
 
-          {/* Waitlist success */}
           {waitlistDone ? (
             <div className="bg-brand-gray rounded-3xl p-10 border border-white/10 text-center">
               <div className="text-5xl mb-5">📋</div>
@@ -341,7 +335,6 @@ export default function TicketsPage() {
                 className="text-gray-500 text-sm hover:text-gray-300 transition-colors">Join another waitlist</button>
             </div>
 
-          /* Waitlist form */
           ) : waitlistTier ? (
             <div className="bg-brand-gray rounded-3xl p-8 border border-red-500/20">
               <div className="flex items-center gap-2 mb-3">
@@ -386,7 +379,6 @@ export default function TicketsPage() {
               </form>
             </div>
 
-          /* Purchase success */
           ) : submitted ? (
             <div className="bg-brand-gray rounded-3xl p-10 border border-brand-orange/20 text-center">
               <div className="text-5xl mb-5">👟</div>
@@ -424,14 +416,13 @@ export default function TicketsPage() {
               </div>
               <div className="bg-brand-dark rounded-2xl p-4 mb-6 border border-white/10">
                 <p className="text-gray-500 text-sm">Venue confirmation coming soon</p>
-                <p className="text-white font-semibold">December 12–13, 2026 · Lagos, Nigeria</p>
+                <p className="text-white font-semibold">December 12, 2026 · Lagos, Nigeria</p>
               </div>
               {user && <p className="text-brand-orange text-sm mb-4">Saved to your profile ✓</p>}
               <button onClick={() => { setSubmitted(false); setSelected(null); setPayRef(''); setQrDataUrl(''); setEmailSent(null); setPurchasedAt('') }}
                 className="text-gray-500 text-sm hover:text-gray-300">Buy another ticket</button>
             </div>
 
-          /* Checkout form */
           ) : (
             <div className="bg-brand-gray rounded-3xl p-8 border border-white/5">
               <h2 className="font-display text-2xl text-white mb-2">COMPLETE YOUR ORDER</h2>
