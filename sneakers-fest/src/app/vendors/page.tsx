@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Script from 'next/script'
 import { BOOTH_TIERS, PRODUCT_CATEGORIES } from '@/data/vendors'
+import { generateVendorInvoicePDF } from '@/lib/generateInvoicePDF'
 
 declare global {
   interface Window {
@@ -49,7 +50,9 @@ export default function VendorsPage() {
   const [form, setForm] = useState<Form>(EMPTY_FORM)
   const [submitted, setSubmitted] = useState(false)
   const [payRef, setPayRef] = useState('')
+  const [registeredAt, setRegisteredAt] = useState('')
   const [processing, setProcessing] = useState(false)
+  const [invoiceLoading, setInvoiceLoading] = useState(false)
 
   const tier = BOOTH_TIERS.find(t => t.id === selected)
 
@@ -74,17 +77,18 @@ export default function VendorsPage() {
       ref,
       metadata: {
         custom_fields: [
-          { display_name: 'Business Name',   variable_name: 'business_name', value: form.businessName },
-          { display_name: 'Booth Type',      variable_name: 'booth_type',    value: tier.name },
-          { display_name: 'Product Category',variable_name: 'category',      value: form.category },
-          { display_name: 'Instagram',       variable_name: 'instagram',     value: form.instagram || 'N/A' },
+          { display_name: 'Business Name',    variable_name: 'business_name', value: form.businessName },
+          { display_name: 'Booth Type',       variable_name: 'booth_type',    value: tier.name },
+          { display_name: 'Product Category', variable_name: 'category',      value: form.category },
+          { display_name: 'Instagram',        variable_name: 'instagram',     value: form.instagram || 'N/A' },
         ],
       },
       callback: (response) => {
         setProcessing(false)
+        const now = new Date().toISOString()
         setPayRef(response.reference)
+        setRegisteredAt(now)
 
-        // Save registration to localStorage for vendor dashboard access
         const record = {
           ref:          response.reference,
           email:        form.email,
@@ -98,7 +102,7 @@ export default function VendorsPage() {
           tierId:       tier.id,
           size:         tier.size,
           price:        tier.price,
-          registeredAt: new Date().toISOString(),
+          registeredAt: now,
         }
         try {
           const existing = JSON.parse(localStorage.getItem('sf_vendors') || '[]')
@@ -111,6 +115,26 @@ export default function VendorsPage() {
     }).openIframe()
   }
 
+  const downloadInvoice = async () => {
+    if (!tier) return
+    setInvoiceLoading(true)
+    try {
+      await generateVendorInvoicePDF({
+        ref:          payRef,
+        businessName: form.businessName,
+        contactName:  form.contactName,
+        email:        form.email,
+        phone:        form.phone,
+        tier:         tier.name,
+        size:         tier.size,
+        price:        tier.price,
+        registeredAt: registeredAt || new Date().toISOString(),
+      })
+    } finally {
+      setInvoiceLoading(false)
+    }
+  }
+
   return (
     <>
       <Script src="https://js.paystack.co/v1/inline.js" strategy="lazyOnload" />
@@ -120,7 +144,7 @@ export default function VendorsPage() {
           <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">December 12–13, 2026 · Lagos, Nigeria</p>
           <h1 className="font-display text-5xl sm:text-6xl text-white mb-4">VENDOR REGISTRATION</h1>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Secure your booth at Lagos' first dedicated sneaker festival. 30–50 vendor spots. Limited floor.
+            Secure your booth at Lagos’ first dedicated sneaker festival. 30–50 vendor spots. Limited floor.
           </p>
           <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-orange/10 border border-brand-orange/20">
             <span className="w-2 h-2 rounded-full bg-brand-orange animate-pulse" />
@@ -255,9 +279,9 @@ export default function VendorsPage() {
 
               <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
                 {[
-                  { icon: '📅', label: 'Setup Day',         value: 'December 11, 2026' },
-                  { icon: '📍', label: 'Location',          value: 'Lagos, Nigeria' },
-                  { icon: '📞', label: 'Vendor Enquiries',  value: 'Contact us' },
+                  { icon: '📅', label: 'Setup Day',        value: 'December 11, 2026' },
+                  { icon: '📍', label: 'Location',         value: 'Lagos, Nigeria' },
+                  { icon: '📞', label: 'Vendor Enquiries', value: 'Contact us' },
                 ].map(({ icon, label, value }) => (
                   <div key={label} className="bg-brand-gray rounded-2xl p-4 border border-white/5">
                     <div className="text-2xl mb-1">{icon}</div>
@@ -275,11 +299,21 @@ export default function VendorsPage() {
               <h3 className="font-display text-3xl text-white mb-1">BOOTH SECURED!</h3>
               <p className="text-gray-400 text-sm mb-1">{form.businessName} · {tier?.name} Booth · ₦{tier?.price.toLocaleString()}</p>
 
-              {/* Reference — prominently displayed */}
               <div className="my-6 bg-brand-dark rounded-2xl p-4 border border-brand-orange/30">
                 <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Your Booking Reference — Save This</p>
                 <p className="text-brand-orange font-mono font-bold text-lg">{payRef}</p>
                 <p className="text-gray-600 text-xs mt-1">You'll need this to access your Vendor Dashboard</p>
+              </div>
+
+              <div className="mb-6">
+                <button onClick={downloadInvoice} disabled={invoiceLoading}
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-brand-orange/10 border border-brand-orange/40 text-brand-orange text-sm font-semibold hover:bg-brand-orange/20 transition-colors disabled:opacity-50">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  {invoiceLoading ? 'Generating PDF…' : 'Download Invoice PDF'}
+                </button>
+                <p className="text-gray-600 text-xs mt-2">Official receipt for your records</p>
               </div>
 
               <div className="bg-brand-dark rounded-2xl p-5 mb-6 border border-white/10 text-left space-y-2">
@@ -301,7 +335,7 @@ export default function VendorsPage() {
                 className="block w-full py-3 rounded-xl bg-gradient-to-r from-brand-orange to-brand-amber text-black font-bold text-sm mb-4 hover:opacity-90 transition-opacity">
                 Access Your Vendor Dashboard →
               </Link>
-              <button onClick={() => { setSubmitted(false); setSelected(null); setPayRef(''); setForm(EMPTY_FORM) }}
+              <button onClick={() => { setSubmitted(false); setSelected(null); setPayRef(''); setForm(EMPTY_FORM); setRegisteredAt('') }}
                 className="text-gray-500 text-sm hover:text-gray-300 transition-colors">
                 Register another booth
               </button>

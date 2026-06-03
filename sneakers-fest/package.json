@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
+    "jspdf": "^2.5.1",
     "next": "14.2.5",
     "qrcode": "^1.5.4",
     "react": "^18",

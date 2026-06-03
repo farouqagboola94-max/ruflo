@@ -5,6 +5,7 @@ import Script from 'next/script'
 import { TICKET_TIERS } from '@/data/tickets'
 import { useAuth } from '@/context/AuthContext'
 import { sendTicketEmail } from '@/lib/sendTicketEmail'
+import { generateTicketInvoicePDF } from '@/lib/generateInvoicePDF'
 
 declare global {
   interface Window {
@@ -32,9 +33,11 @@ export default function TicketsPage() {
   const [form, setForm]             = useState({ name: user?.name || '', email: user?.email || '', phone: '', quantity: '1' })
   const [submitted, setSubmitted]   = useState(false)
   const [payRef, setPayRef]         = useState('')
+  const [purchasedAt, setPurchasedAt] = useState('')
   const [processing, setProcessing] = useState(false)
   const [qrDataUrl, setQrDataUrl]   = useState('')
   const [emailSent, setEmailSent]   = useState<boolean | null>(null)
+  const [invoiceLoading, setInvoiceLoading] = useState(false)
 
   const tier  = TICKET_TIERS.find(t => t.id === selected)
   const total = tier ? tier.price * parseInt(form.quantity) : 0
@@ -60,7 +63,9 @@ export default function TicketsPage() {
       ]},
       callback: async (response) => {
         setProcessing(false)
+        const now = new Date().toISOString()
         setPayRef(response.reference)
+        setPurchasedAt(now)
         addTicket({
           tier: tier.name,
           quantity: parseInt(form.quantity),
@@ -69,7 +74,6 @@ export default function TicketsPage() {
           total,
         })
 
-        // Persist to sf_tickets for admin dashboard aggregation
         try {
           const record = {
             ref:         response.reference,
@@ -80,13 +84,12 @@ export default function TicketsPage() {
             tierId:      tier.id,
             quantity:    parseInt(form.quantity),
             total,
-            purchasedAt: new Date().toISOString(),
+            purchasedAt: now,
           }
           const existing = JSON.parse(localStorage.getItem('sf_tickets') || '[]')
           localStorage.setItem('sf_tickets', JSON.stringify([...existing, record]))
         } catch {}
 
-        // Generate QR code
         const qrPayload = JSON.stringify({
           event: 'Sneakers Fest 2026',
           ref:   response.reference,
@@ -98,7 +101,6 @@ export default function TicketsPage() {
         const qr = await generateQR(qrPayload)
         setQrDataUrl(qr)
 
-        // Send confirmation email (graceful — no-ops if keys not set)
         try {
           await sendTicketEmail({
             to_name:     form.name,
@@ -125,6 +127,26 @@ export default function TicketsPage() {
     a.href = qrDataUrl
     a.download = `sneakers-fest-${payRef}.png`
     a.click()
+  }
+
+  const downloadInvoice = async () => {
+    if (!tier) return
+    setInvoiceLoading(true)
+    try {
+      await generateTicketInvoicePDF({
+        ref:         payRef,
+        name:        form.name,
+        email:       form.email,
+        phone:       form.phone,
+        tier:        tier.name,
+        quantity:    parseInt(form.quantity),
+        total,
+        qrDataUrl:   qrDataUrl || undefined,
+        purchasedAt: purchasedAt || new Date().toISOString(),
+      })
+    } finally {
+      setInvoiceLoading(false)
+    }
   }
 
   return (
@@ -229,7 +251,7 @@ export default function TicketsPage() {
             </div>
           ) : (
             <div className="bg-brand-gray rounded-3xl p-10 border border-brand-orange/20 text-center">
-              <div className="text-5xl mb-5">👟</div>
+              <div className="text-5xl mb-5">&#128&#9;</div>
               <h3 className="font-display text-3xl text-white mb-1">YOU'RE IN!</h3>
               <p className="text-gray-400 text-sm mb-1">{form.quantity} × {tier?.name} · ₦{total.toLocaleString()}</p>
               <p className="text-gray-600 text-xs font-mono mb-6">Ref: {payRef}</p>
@@ -240,7 +262,7 @@ export default function TicketsPage() {
                   <div className="inline-block p-3 bg-white rounded-2xl">
                     <img src={qrDataUrl} alt="Ticket QR Code" width={200} height={200} className="block" />
                   </div>
-                  <div className="mt-3">
+                  <div className="mt-3 flex items-center justify-center gap-3 flex-wrap">
                     <button onClick={downloadQR}
                       className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-brand-orange/40 text-brand-orange text-sm font-semibold hover:bg-brand-orange/10 transition-colors">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -248,13 +270,20 @@ export default function TicketsPage() {
                       </svg>
                       Download QR
                     </button>
+                    <button onClick={downloadInvoice} disabled={invoiceLoading}
+                      className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-brand-orange/10 border border-brand-orange/30 text-brand-orange text-sm font-semibold hover:bg-brand-orange/20 transition-colors disabled:opacity-50">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      {invoiceLoading ? 'Generating…' : 'Download Invoice PDF'}
+                    </button>
                   </div>
                 </div>
               )}
 
               <div className="bg-brand-dark rounded-2xl p-4 mb-6 border border-white/10 text-sm">
                 {emailSent === true  && <p className="text-brand-neon">✓ Confirmation sent to <span className="text-white">{form.email}</span></p>}
-                {emailSent === false && <p className="text-gray-400">Download your QR above — it's your entry pass.</p>}
+                {emailSent === false && <p className="text-gray-400">Download your QR and invoice above — they are your entry and receipt.</p>}
                 {emailSent === null  && <p className="text-gray-500">Sending confirmation to <span className="text-white">{form.email}</span>…</p>}
               </div>
 
@@ -264,7 +293,7 @@ export default function TicketsPage() {
               </div>
 
               {user && <p className="text-brand-orange text-sm mb-4">Saved to your profile ✓</p>}
-              <button onClick={() => { setSubmitted(false); setSelected(null); setPayRef(''); setQrDataUrl(''); setEmailSent(null) }}
+              <button onClick={() => { setSubmitted(false); setSelected(null); setPayRef(''); setQrDataUrl(''); setEmailSent(null); setPurchasedAt('') }}
                 className="text-gray-500 text-sm hover:text-gray-300">Buy another ticket</button>
             </div>
           )}
