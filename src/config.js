@@ -3,9 +3,9 @@ export const SOCIAL_LINKS = {
   tiktok:            'https://tiktok.com/@sneakersfest',
   youtube:           'https://youtube.com/@catalyst00555',
   twitter:           'https://twitter.com/Catalyst188',
-  instagram:         'https://instagram.com/sneakersfest',
+  instagram:         'https://instagram.com/sneakersfest5555',
   instagramPersonal: 'https://instagram.com/catalystggg',
-  snapchat:          'https://snapchat.com/add/sneakersfest',
+  snapchat:          'https://www.snapchat.com/add/sneakersfest?share_id=UpEUQSUErXw&locale=en-GB',
   // WhatsApp broadcast channel (SocialDock + Footer)
   whatsapp:          'https://whatsapp.com/channel/0029Vb83WHTJJhzXcdGwxr0r',
   // Direct DM links for the floating contact button

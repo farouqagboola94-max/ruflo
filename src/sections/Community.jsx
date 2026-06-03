@@ -59,7 +59,7 @@ const PLATFORMS = [
   },
   {
     name: "INSTAGRAM",
-    handle: "@SNEAKERSFEST",
+    handle: "@SNEAKERSFEST5555",
     color: "#E1306C",
     href: LINKS.instagram,
     icon: "IG",
