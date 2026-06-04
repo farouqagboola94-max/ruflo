@@ -65,6 +65,44 @@ function BoothCard({ booth, selected, onSelect, taken }) {
   )
 }
 
+const CONFIRMED_VENDORS = [
+  { name:'Sole Lagos',      cat:'Sneakers',   city:'Lagos', ig:'@solelagos',    color:B.amber },
+  { name:'Kicksurge NG',    cat:'Sneakers',   city:'Abuja', ig:'@kicksurgeng',  color:B.neonCyan },
+  { name:'Stitch and Sole', cat:'Custom Art', city:'Lagos', ig:'@stitchedsole', color:B.neonMagenta },
+  { name:'Lagos Drip Haus', cat:'Apparel',    city:'Lagos', ig:'@lagosdrip',    color:B.neonLime },
+]
+
+const MAP_ZONES = [
+  { id:'collab', label:'STAGE / COLLAB', hint:'Custom build' },
+  { id:'premium', label:'PREMIUM CORNER', hint:'4x4m corners' },
+  { id:'double', label:'DOUBLE BOOTH', hint:'6x3m wing' },
+  { id:'standard', label:'STANDARD FLOOR', hint:'3x3m rows' },
+]
+function BoothMap({ taken, selected, onSelect }) {
+  return (
+    <div style={{ marginBottom:16 }}>
+      <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:'#444', letterSpacing:2, marginBottom:8 }}>VENUE FLOOR PLAN</div>
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gridTemplateRows:'70px 90px', gap:4 }}>
+        {MAP_ZONES.map(z => {
+          const booth = BOOTHS.find(b => b.id === z.id)
+          const pct = (taken[z.id] || 0) / (booth ? booth.capacity : 1)
+          const col = pct >= 1 ? B.neonMagenta : pct >= 0.7 ? B.amber : B.neonCyan
+          const isSel = selected === z.id
+          return (
+            <div key={z.id} onClick={() => pct < 1 && onSelect(z.id)} style={{ padding:'8px 10px', borderRadius:6, cursor:pct >= 1 ? 'not-allowed' : 'pointer', background:isSel ? `${col}15` : 'rgba(255,255,255,0.02)', border:`1px solid ${isSel ? col : col + '35'}`, opacity:pct >= 1 ? 0.4 : 1, transition:'all 0.2s', display:'flex', flexDirection:'column', justifyContent:'space-between' }}>
+              <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:col, letterSpacing:1 }}>{z.label}</div>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-end' }}>
+                <div style={{ fontFamily:'Space Mono,monospace', fontSize:6, color:'#444' }}>{z.hint}</div>
+                <div style={{ fontFamily:'Orbitron,monospace', fontSize:8, color:isSel ? col : '#555' }}>{(booth ? booth.capacity : 0) - (taken[z.id] || 0)} LEFT</div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 const STEPS = [
   { label:'BOOTH',      subtitle:'Choose your space' },
   { label:'BRAND INFO', subtitle:'Who are you?' },
@@ -76,7 +114,7 @@ const STATUS_STEPS = [
   { num:'01', title:'RECEIVED',     desc:'In queue',        color:B.neonCyan,    done:true  },
   { num:'02', title:'UNDER REVIEW', desc:'3 biz days',      color:B.amber,       done:false },
   { num:'03', title:'SHORTLISTED',  desc:'If selected',     color:B.neonLime,    done:false },
-  { num:'04', title:'CONFIRMED',    desc:'Dec 12 · Lagos',  color:B.neonMagenta, done:false },
+  { num:'04', title:'CONFIRMED',    desc:'Dec 12, Lagos',   color:B.neonMagenta, done:false },
 ]
 
 export default function VendorReg() {
@@ -88,6 +126,7 @@ export default function VendorReg() {
   const [taken,        setTaken]       = useState({ standard:8, double:5, premium:3, collab:1 })
   const [existingApp,  setExistingApp] = useState(null)
   const [showPrevBanner, setShowPrevBanner] = useState(false)
+  const [showStatus, setShowStatus] = useState(false)
 
   useEffect(() => {
     try {
@@ -229,13 +268,34 @@ export default function VendorReg() {
           <div>
             {/* returning applicant banner */}
             {showPrevBanner && existingApp && (
-              <div style={{ marginBottom:24, padding:'14px 20px', background:`${B.amber}08`, border:`1px solid ${B.amber}30`, borderRadius:12, display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:12 }}>
-                <div>
-                  <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:B.amber, letterSpacing:2, marginBottom:4 }}>PREVIOUS APPLICATION FOUND</div>
-                  <div style={{ fontFamily:'Orbitron,monospace', fontSize:14, color:B.white, letterSpacing:2 }}>{existingApp.applicationId}</div>
-                  <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', marginTop:2 }}>{existingApp.business} · {existingApp.booth}</div>
+              <div style={{ marginBottom:24, background:`${B.amber}08`, border:`1px solid ${B.amber}30`, borderRadius:12, overflow:'hidden' }}>
+                <div style={{ padding:'14px 20px', display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:12 }}>
+                  <div>
+                    <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:B.amber, letterSpacing:2, marginBottom:4 }}>APPLICATION ON FILE</div>
+                    <div style={{ fontFamily:'Orbitron,monospace', fontSize:14, color:B.white, letterSpacing:2 }}>{existingApp.applicationId}</div>
+                    <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', marginTop:2 }}>{existingApp.business} / {existingApp.booth}</div>
+                  </div>
+                  <div style={{ display:'flex', gap:8 }}>
+                    <button onClick={() => setShowStatus(s => !s)} style={{ padding:'7px 14px', background:showStatus ? `${B.amber}20` : 'transparent', border:`1px solid ${B.amber}40`, borderRadius:6, color:B.amber, fontFamily:'Space Mono,monospace', fontSize:8, cursor:'pointer', letterSpacing:1 }}>
+                      {showStatus ? 'HIDE' : 'VIEW STATUS'}
+                    </button>
+                    <button onClick={() => setShowPrevBanner(false)} style={{ padding:'7px 14px', background:'transparent', border:'1px solid rgba(255,255,255,0.1)', borderRadius:6, color:'#666', fontFamily:'Space Mono,monospace', fontSize:8, cursor:'pointer', letterSpacing:1 }}>DISMISS</button>
+                  </div>
                 </div>
-                <button onClick={() => setShowPrevBanner(false)} style={{ padding:'7px 14px', background:'transparent', border:'1px solid rgba(255,255,255,0.1)', borderRadius:6, color:'#666', fontFamily:'Space Mono,monospace', fontSize:8, cursor:'pointer', letterSpacing:1 }}>DISMISS</button>
+                {showStatus && (
+                  <div style={{ borderTop:`1px solid ${B.amber}20`, padding:'16px 20px' }}>
+                    <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#555', letterSpacing:2, marginBottom:16 }}>APPLICATION STATUS</div>
+                    <div style={{ display:'flex', alignItems:'flex-start' }}>
+                      {STATUS_STEPS.map((s, i) => <div key={i} style={{ display:'flex', alignItems:'flex-start', flex: i < STATUS_STEPS.length-1 ? 1 : 0 }}>
+                        <div style={{ display:'flex', flexDirection:'column', alignItems:'center', minWidth:52 }}>
+                          <div style={{ width:30, height:30, borderRadius:'50%', background:s.done ? s.color : 'rgba(255,255,255,0.05)', border:`1.5px solid ${s.done ? s.color : 'rgba(255,255,255,0.1)'}`, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Orbitron,monospace', fontSize:8, color:s.done ? B.black : '#555', marginBottom:6 }}>{s.done ? 'OK' : s.num}</div>
+                          <div style={{ fontFamily:'Space Mono,monospace', fontSize:6, color:s.done ? s.color : '#444', letterSpacing:1, textAlign:'center', lineHeight:1.4 }}>{s.title}</div>
+                        </div>
+                        {i < STATUS_STEPS.length-1 && <div style={{ flex:1, height:1, background:s.done ? `${s.color}50` : 'rgba(255,255,255,0.06)', marginTop:15, marginLeft:4, marginRight:4 }} />}
+                      </div>)}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
@@ -265,6 +325,7 @@ export default function VendorReg() {
                 {step === 0 && (
                   <div>
                     {lbl('SELECT BOOTH TYPE *')}
+                    <BoothMap taken={taken} selected={form.booth} onSelect={id => setForm(f => ({ ...f, booth:id }))} />
                     <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(200px, 1fr))', gap:12 }}>
                       {BOOTHS.map(b => (
                         <BoothCard key={b.id} booth={b} selected={form.booth===b.id} taken={taken[b.id]||0}
@@ -400,28 +461,35 @@ export default function VendorReg() {
 
                 <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
                   <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:'#2a2a2a', letterSpacing:1 }}>● DRAFT AUTO-SAVED</div>
-                  <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#333', letterSpacing:'0.15em' }}>INVITATION-CURATED · REVIEWED IN 3 DAYS</div>
+                  <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#333', letterSpacing:'0.15em' }}>INVITATION-CURATED / REVIEWED IN 3 DAYS</div>
                 </div>
               </div>
             </div>
           </div>
         )}
+        <div style={{ marginTop:48 }}>
+          <div style={{ fontFamily:"'Space Mono'", fontSize:8, letterSpacing:'0.4em', color:B.smoke, marginBottom:16 }}>CONFIRMED VENDORS (PREVIEW)</div>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(180px, 1fr))', gap:12 }}>
+            {CONFIRMED_VENDORS.map((v, i) => (
+              <div key={i} style={{ padding:'16px', background:'rgba(255,255,255,0.03)', border:`1px solid ${v.color}30`, borderRadius:8 }}>
+                <div style={{ width:36, height:36, borderRadius:'50%', background:`${v.color}15`, border:`1.5px solid ${v.color}50`, marginBottom:10, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Bebas Neue,sans-serif', fontSize:16, color:v.color }}>{v.name[0]}</div>
+                <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:15, color:B.white }}>{v.name}</div>
+                <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:v.color, marginTop:2 }}>{v.cat} / {v.city} / {v.ig}</div>
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* FAQ */}
         <div style={{ marginTop:48 }}>
           <div style={{ fontFamily:"'Space Mono'", fontSize:8, letterSpacing:'0.4em', color:B.smoke, marginBottom:16 }}>VENDOR FAQ</div>
           {FAQ.map((f, i) => (
-            <div key={i} style={{ borderBottom:`1px solid ${B.charcoal}`, overflow:'hidden' }}>
-              <button onClick={() => setOpenFaq(openFaq===i ? null : i)}
-                style={{ width:'100%', textAlign:'left', padding:'14px 0', background:'none', border:'none', cursor:'pointer', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+            <div key={i} style={{ borderBottom:`1px solid ${B.charcoal}` }}>
+              <button onClick={() => setOpenFaq(openFaq===i ? null : i)} style={{ width:'100%', textAlign:'left', padding:'14px 0', background:'none', border:'none', cursor:'pointer', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
                 <span style={{ fontFamily:"'Syne'", fontSize:'0.85rem', color:B.white }}>{f.q}</span>
-                <span style={{ color:B.amber, fontSize:'1.1rem', flexShrink:0, marginLeft:12 }}>{openFaq===i ? '−' : '+'}</span>
+                <span style={{ color:B.amber, fontSize:'1.1rem', marginLeft:12 }}>{openFaq===i ? '-' : '+'}</span>
               </button>
-              {openFaq === i && (
-                <div style={{ paddingBottom:14 }}>
-                  <p style={{ fontFamily:"'Syne'", fontSize:'0.82rem', color:B.smoke, lineHeight:1.7 }}>{f.a}</p>
-                </div>
-              )}
+              {openFaq === i && <p style={{ fontFamily:"'Syne'", fontSize:'0.82rem', color:B.smoke, lineHeight:1.7, paddingBottom:14 }}>{f.a}</p>}
             </div>
           ))}
         </div>
