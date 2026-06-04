@@ -10,62 +10,67 @@ const QUESTIONS = [
   },
   {
     q: 'What does "DS" mean in sneaker culture?',
-    options: ['Deadstock', 'Double Sole', 'Designer Special', 'Direct Sale'],
-    a: 0,
+    options: ['Direct Sale', 'Designer Special', 'Double Sole', 'Deadstock'],
+    a: 3,
   },
   {
     q: 'Which brand invented the "Boost" foam sole technology?',
-    options: ['Adidas', 'Nike', 'New Balance', 'Puma'],
-    a: 0,
+    options: ['Nike', 'New Balance', 'Adidas', 'Puma'],
+    a: 2,
   },
   {
     q: 'What year was the original Air Jordan 1 first released?',
-    options: ['1985', '1982', '1988', '1991'],
-    a: 0,
+    options: ['1982', '1985', '1988', '1991'],
+    a: 1,
   },
   {
     q: 'The Nike Air Max 1 visible air unit was designed by which legend?',
-    options: ['Tinker Hatfield', 'Bill Bowerman', 'Mark Parker', 'Steven Smith'],
-    a: 0,
+    options: ['Bill Bowerman', 'Mark Parker', 'Steven Smith', 'Tinker Hatfield'],
+    a: 3,
   },
   {
     q: 'Which hip-hop artist had the first non-athlete Nike signature sneaker?',
-    options: ['Kanye West', 'Jay-Z', 'Drake', 'Travis Scott'],
-    a: 0,
+    options: ['Jay-Z', 'Drake', 'Kanye West', 'Travis Scott'],
+    a: 2,
   },
   {
     q: 'What does "GR" stand for in sneaker terminology?',
-    options: ['General Release', 'Gold Retail', 'Grade Release', 'Group Run'],
-    a: 0,
+    options: ['Gold Retail', 'General Release', 'Group Run', 'Grade Release'],
+    a: 1,
   },
   {
     q: 'The iconic Adidas Superstar was first released in which year?',
-    options: ['1969', '1975', '1983', '1991'],
-    a: 0,
+    options: ['1975', '1983', '1969', '1991'],
+    a: 2,
   },
   {
     q: 'Which colorway is generally considered the "Holy Grail" Air Jordan 1?',
-    options: ['Chicago', 'Royal Blue', 'Bred', 'Shadow'],
-    a: 0,
+    options: ['Royal Blue', 'Bred', 'Shadow', 'Chicago'],
+    a: 3,
   },
   {
     q: 'A shoe with original box, never worn, never tried on is called what?',
-    options: ['Deadstock', 'Player Exclusive', 'Factory Error', 'Quickstrike'],
-    a: 0,
+    options: ['Quickstrike', 'Deadstock', 'Player Exclusive', 'Factory Error'],
+    a: 1,
   },
 ]
+
+const getMultiplier = s => s >= 5 ? 3 : s >= 3 ? 2 : 1
 
 const TIMER_MAX = 25
 const MAX_LIVES = 3
 
 export default function SneakerTrivia() {
-  const [phase, setPhase] = useState('intro')
-  const [current, setCurrent] = useState(0)
-  const [lives, setLives] = useState(MAX_LIVES)
-  const [score, setScore] = useState(0)
-  const [timer, setTimer] = useState(TIMER_MAX)
-  const [chosen, setChosen] = useState(null)
-  const [feedback, setFeedback] = useState(null)
+  const [phase,     setPhase]     = useState('intro')
+  const [current,   setCurrent]   = useState(0)
+  const [lives,     setLives]     = useState(MAX_LIVES)
+  const [score,     setScore]     = useState(0)
+  const [points,    setPoints]    = useState(0)
+  const [streak,    setStreak]    = useState(0)
+  const [maxStreak, setMaxStreak] = useState(0)
+  const [timer,     setTimer]     = useState(TIMER_MAX)
+  const [chosen,    setChosen]    = useState(null)
+  const [feedback,  setFeedback]  = useState(null)
   const timerRef = useRef(null)
   const lockedRef = useRef(false)
 
@@ -91,6 +96,7 @@ export default function SneakerTrivia() {
     lockedRef.current = true
     setChosen(-1)
     setFeedback('timeout')
+    setStreak(0)
     setLives(l => {
       const next = l - 1
       scheduleNext(next, current)
@@ -106,9 +112,15 @@ export default function SneakerTrivia() {
     const correct = idx === QUESTIONS[current].a
     setFeedback(correct ? 'correct' : 'wrong')
     if (correct) {
+      const newStreak = streak + 1
+      const mult = getMultiplier(newStreak)
       setScore(s => s + 1)
+      setStreak(newStreak)
+      setMaxStreak(m => Math.max(m, newStreak))
+      setPoints(p => p + 100 * mult)
       scheduleNext(lives, current)
     } else {
+      setStreak(0)
       setLives(l => {
         const next = l - 1
         scheduleNext(next, current)
@@ -134,6 +146,9 @@ export default function SneakerTrivia() {
     setCurrent(0)
     setLives(MAX_LIVES)
     setScore(0)
+    setPoints(0)
+    setStreak(0)
+    setMaxStreak(0)
     setChosen(null)
     setFeedback(null)
     setPhase('intro')
@@ -156,12 +171,12 @@ export default function SneakerTrivia() {
       <GrainOverlay />
       <ScanLines />
       <div style={{ maxWidth: 680, margin: '0 auto' }}>
-        <SectionTag label="SNEAKER TRIVIA" />
+        <SectionTag>SNEAKER TRIVIA</SectionTag>
         <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
           TEST YOUR SOLE KNOWLEDGE
         </h2>
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.8rem', marginBottom: 40 }}>
-          10 questions · 3 lives · 25 seconds each
+          10 questions / 3 lives / 25 seconds each
         </p>
 
         {phase === 'intro' && (
@@ -193,9 +208,16 @@ export default function SneakerTrivia() {
                   <span key={i} style={{ fontSize: '1.3rem', filter: i < lives ? 'none' : 'grayscale(1) opacity(0.3)' }}>❤️</span>
                 ))}
               </div>
-              <span style={{ color: B.amber, fontFamily: "'Orbitron'", fontSize: '0.85rem' }}>
-                {current + 1} / {QUESTIONS.length}
-              </span>
+              {streak > 1 && (
+                <div style={{ display:'flex', alignItems:'center', gap:4, padding:'4px 10px', background:`${B.amber}20`, border:`1px solid ${B.amber}40`, borderRadius:20 }}>
+                  <span style={{ fontSize:12 }}>🔥</span>
+                  <span style={{ fontFamily:"'Orbitron',monospace", fontSize:8, color:B.amber, fontWeight:700 }}>{streak}x STREAK {getMultiplier(streak)}x PTS</span>
+                </div>
+              )}
+              <div style={{ textAlign:'right' }}>
+                <div style={{ fontFamily:"'Orbitron',monospace", fontSize:16, color:B.neonCyan, fontWeight:900 }}>{points}</div>
+                <div style={{ fontFamily:"'Space Mono',monospace", fontSize:7, color:'#555', letterSpacing:1 }}>{current + 1}/{QUESTIONS.length}</div>
+              </div>
             </div>
 
             <div style={{ height: 4, background: B.charcoal, borderRadius: 2, marginBottom: 6, overflow: 'hidden' }}>
@@ -255,7 +277,9 @@ export default function SneakerTrivia() {
                 color: feedback === 'correct' ? B.neonCyan : B.neonMagenta,
                 animation: 'fadeUp 0.3s ease',
               }}>
-                {feedback === 'correct' ? '✓ CORRECT!' : feedback === 'timeout' ? '⏱ TIME’S UP!' : '✗ WRONG!'}
+                {feedback === 'correct'
+                  ? '✓ +' + (100 * getMultiplier(streak)) + ' PTS' + (getMultiplier(streak) > 1 ? ' - ' + getMultiplier(streak) + 'x STREAK' : '')
+                  : feedback === 'timeout' ? "⏱ TIME'S UP!" : '✗ WRONG!'}
               </div>
             )}
           </div>
@@ -263,41 +287,50 @@ export default function SneakerTrivia() {
 
         {phase === 'result' && (
           <div style={{ textAlign: 'center', padding: '20px 0' }}>
-            <div style={{ fontSize: '4rem', marginBottom: 16 }}>
+            <div style={{ fontSize: '4rem', marginBottom: 12 }}>
               {score >= 7 ? '🏆' : score >= 5 ? '👟' : '💀'}
             </div>
-            <div style={{ fontFamily: "'Orbitron'", fontSize: '0.65rem', letterSpacing: '0.2em', color: rank.color, marginBottom: 8 }}>
+            <div style={{ fontFamily:"'Orbitron',monospace", fontSize: '0.65rem', letterSpacing: '0.2em', color: rank.color, marginBottom: 6 }}>
               {rank.title}
             </div>
-            <div style={{ fontFamily: "'Bebas Neue'", fontSize: '3.5rem', color: B.white, marginBottom: 8 }}>
-              {score} / {QUESTIONS.length}
+
+            {/* score card */}
+            <div style={{ background:'rgba(255,255,255,0.03)', border:`1px solid ${rank.color}30`, borderRadius:12, padding:'20px 24px', marginBottom:20, textAlign:'left' }}>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16, marginBottom: maxStreak > 0 ? 14 : 0 }}>
+                <div>
+                  <div style={{ fontFamily:"'Space Mono',monospace", fontSize:7, color:'#444', letterSpacing:2, marginBottom:4 }}>TOTAL POINTS</div>
+                  <div style={{ fontFamily:"'Orbitron',monospace", fontSize:28, color:rank.color, fontWeight:900, lineHeight:1 }}>{points}</div>
+                </div>
+                <div>
+                  <div style={{ fontFamily:"'Space Mono',monospace", fontSize:7, color:'#444', letterSpacing:2, marginBottom:4 }}>CORRECT</div>
+                  <div style={{ fontFamily:"'Orbitron',monospace", fontSize:28, color:B.white, fontWeight:900, lineHeight:1 }}>{score}/{QUESTIONS.length}</div>
+                </div>
+              </div>
+              {maxStreak > 0 && (
+                <div style={{ display:'flex', alignItems:'center', gap:10, padding:'10px 14px', background:`${B.amber}10`, border:`1px solid ${B.amber}20`, borderRadius:8 }}>
+                  <span style={{ fontSize:18 }}>🔥</span>
+                  <div>
+                    <div style={{ fontFamily:"'Orbitron',monospace", fontSize:10, color:B.amber, fontWeight:700 }}>BEST STREAK: {maxStreak}</div>
+                    <div style={{ fontFamily:"'Space Mono',monospace", fontSize:7, color:'#555' }}>{maxStreak >= 5 ? '3x BONUS UNLOCKED' : maxStreak >= 3 ? '2x BONUS UNLOCKED' : 'STREAK 3+ UNLOCKS BONUS POINTS'}</div>
+                  </div>
+                </div>
+              )}
             </div>
-            <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.75rem', marginBottom: 36 }}>
+
+            <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.75rem', marginBottom: 24 }}>
               {lives <= 0 ? 'Ran out of lives.' : 'All questions answered.'}
             </p>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <button
-                onClick={restart}
-                style={{
-                  background: B.amber, color: B.black, border: 'none', padding: '12px 32px',
-                  fontFamily: "'Bebas Neue'", fontSize: '1.2rem', letterSpacing: '0.1em',
-                  cursor: 'pointer', borderRadius: 4,
-                }}
-              >
+              <button onClick={restart} style={{ background: B.amber, color: B.black, border: 'none', padding: '12px 32px', fontFamily: "'Bebas Neue'", fontSize: '1.2rem', letterSpacing: '0.1em', cursor: 'pointer', borderRadius: 4 }}>
                 PLAY AGAIN
               </button>
               <button
                 onClick={() => {
-                  const text = `I scored ${score}/${QUESTIONS.length} on the Sneakers Fest '26 trivia as "${rank.title}"! Can you beat me? 👟`
+                  const text = `👟 Sneakers Fest '26 Trivia\n\n${rank.title}\n${points} PTS - ${score}/${QUESTIONS.length} CORRECT${maxStreak >= 3 ? ` - 🔥 ${maxStreak}x STREAK` : ''}\n\nCan you beat me? sneakersfest.com`
                   if (navigator.share) navigator.share({ text, url: window.location.href })
                   else navigator.clipboard.writeText(text)
                 }}
-                style={{
-                  background: 'transparent', color: B.neonCyan,
-                  border: `1px solid ${B.neonCyan}`, padding: '12px 32px',
-                  fontFamily: "'Bebas Neue'", fontSize: '1.2rem', letterSpacing: '0.1em',
-                  cursor: 'pointer', borderRadius: 4,
-                }}
+                style={{ background: 'transparent', color: B.neonCyan, border: `1px solid ${B.neonCyan}`, padding: '12px 32px', fontFamily: "'Bebas Neue'", fontSize: '1.2rem', letterSpacing: '0.1em', cursor: 'pointer', borderRadius: 4 }}
               >
                 SHARE SCORE
               </button>
