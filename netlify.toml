@@ -1,7 +1,13 @@
 [build]
   base    = "sneakers-fest"
-  command = "npm install && npm run build"
+  command = "npm run build"
   publish = "out"
 
 [build.environment]
-  NODE_VERSION = "20"
+  NODE_VERSION = "22"
+
+# 404 fallback for static export
+[[redirects]]
+  from   = "/*"
+  to     = "/404/index.html"
+  status = 404
