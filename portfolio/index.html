@@ -26,6 +26,10 @@
       --gold-dim:    rgba(200,151,26,0.12);
       --gold-border: rgba(200,151,26,0.28);
       --red:         #D42828;
+      --green:       #00E566;
+      --green-lt:    #2DFF80;
+      --green-dim:   rgba(0,229,102,0.1);
+      --green-bdr:   rgba(0,229,102,0.25);
       --text-1:      #F0ECE4;
       --text-2:      #8A857C;
       --text-3:      #3E3B38;
@@ -113,12 +117,9 @@
 
     #loader.out { opacity: 0; visibility: hidden; }
 
-    .ld-mark {
-      font-family: var(--fnt-display);
-      font-size: 72px;
-      letter-spacing: .25em;
-      color: var(--gold);
+    .ld-dragon {
       animation: flicker 2.4s steps(1) 0s 1 forwards;
+      filter: drop-shadow(0 0 22px rgba(200,151,26,0.35));
     }
 
     .ld-track {
@@ -204,11 +205,16 @@
     }
 
     .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 11px;
       font-family: var(--fnt-display);
       font-size: 1.4rem;
       letter-spacing: .18em;
       color: var(--gold);
     }
+
+    .logo-mark { flex-shrink: 0; }
 
     .nav-links {
       display: flex;
@@ -887,7 +893,17 @@
       color: var(--text-3);
       line-height: 1;
       letter-spacing: .04em;
-      margin-bottom: 36px;
+      margin-bottom: 8px;
+    }
+
+    .sf-name {
+      font-family: var(--fnt-ui);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.12);
+      margin-bottom: 28px;
     }
 
     .sf-desc {
@@ -1220,6 +1236,45 @@
     }
 
     /* ═══════════════════════════════════════════════════
+       SNEAKER FEST — GREEN IDENTITY OVERRIDES
+    ═══════════════════════════════════════════════════ */
+    .sf { background: #080A09; border-top: 1px solid rgba(0,229,102,0.12); }
+
+    .sf::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, var(--green) 38%, var(--green) 62%, transparent 100%);
+      opacity: .45;
+    }
+
+    .sf .sf-bg           { color: rgba(0,229,102,.028); }
+    .sf .eyebrow         { color: var(--green); }
+    .sf .eyebrow::before { background: var(--green); }
+    .sf .sf-date         { color: var(--green); text-shadow: 0 0 80px rgba(0,229,102,.3), 0 0 200px rgba(0,229,102,.15); }
+    .sf .sf-year         { color: rgba(0,229,102,.22); }
+    .sf .cd-num          { color: var(--green); }
+    .sf .cd-unit::after  { background: var(--green); }
+    .sf .cd-unit:hover   { border-color: var(--green-bdr); }
+    .sf .sf-icon         { color: var(--green); border-color: var(--green-bdr); }
+    .sf .btn-gold        { background: var(--green); }
+    .sf .btn-gold:hover  { background: var(--green-lt); }
+    .sf .sf-detail       { border-bottom-color: rgba(0,229,102,.1); }
+    .sf .sf-name         { color: rgba(0,229,102,.3); letter-spacing: .35em; }
+
+    .sf-glow {
+      position: absolute;
+      width: 800px; height: 800px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,229,102,.05) 0%, rgba(0,229,102,.02) 35%, transparent 65%);
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ═══════════════════════════════════════════════════
        RESPONSIVE
     ═══════════════════════════════════════════════════ */
     @media (max-width: 1100px) {
@@ -1267,7 +1322,29 @@
 
   <!-- Loader -->
   <div id="loader">
-    <div class="ld-mark">TC</div>
+    <svg class="ld-dragon" width="88" height="100" viewBox="0 0 80 90" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="The Catalyst">
+      <defs>
+        <linearGradient id="ld-c" x1="4" y1="4" x2="76" y2="86" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#E0E8F8"/>
+          <stop offset="44%" stop-color="#B4C0D6"/>
+          <stop offset="100%" stop-color="#6478A0"/>
+        </linearGradient>
+        <linearGradient id="ld-c2" x1="4" y1="4" x2="76" y2="86" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#C6D0E2"/>
+          <stop offset="100%" stop-color="#8292B6"/>
+        </linearGradient>
+      </defs>
+      <path d="M 68 17 A 27 27 0 1 0 68 73" stroke="url(#ld-c)" stroke-width="9.5" stroke-linecap="round" fill="none"/>
+      <path d="M64,14 L76,6 L84,12 L81,24 L67,26 Z" fill="url(#ld-c)"/>
+      <path d="M67,13 L62,2 L69,10" fill="url(#ld-c2)"/>
+      <path d="M75,7 L75,0 L80,7" fill="url(#ld-c2)"/>
+      <path d="M79,20 L89,18 L87,26 L78,24" fill="url(#ld-c2)"/>
+      <path d="M76,24 L84,30 L79,32 L71,27" fill="url(#ld-c2)" opacity=".82"/>
+      <circle cx="72" cy="15" r="4" fill="#C8971A"/>
+      <circle cx="72" cy="15" r="2" fill="#F2C840"/>
+      <circle cx="73" cy="14" r=".9" fill="white" opacity=".55"/>
+      <path d="M66,75 L74,86 L69,76 L76,82" fill="url(#ld-c2)"/>
+    </svg>
     <div class="ld-track"><div class="ld-fill"></div></div>
     <div class="ld-sub">Catalyst Concepts · Lagos</div>
   </div>
@@ -1286,7 +1363,40 @@
 
   <!-- Navigation -->
   <nav id="nav">
-    <a href="#home" class="nav-logo">THE CATALYST</a>
+    <a href="#home" class="nav-logo">
+      <svg class="logo-mark" width="28" height="32" viewBox="0 0 80 90" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="nav-c" x1="4" y1="4" x2="76" y2="86" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#DDE4F2"/>
+            <stop offset="44%" stop-color="#B0BCD4"/>
+            <stop offset="100%" stop-color="#627098"/>
+          </linearGradient>
+          <linearGradient id="nav-c2" x1="4" y1="4" x2="76" y2="86" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#C4CDE0"/>
+            <stop offset="100%" stop-color="#8090B4"/>
+          </linearGradient>
+        </defs>
+        <!-- Dragon body arc (C shape) -->
+        <path d="M 68 17 A 27 27 0 1 0 68 73" stroke="url(#nav-c)" stroke-width="9.5" stroke-linecap="round" fill="none"/>
+        <!-- Head mass -->
+        <path d="M64,14 L76,6 L84,12 L81,24 L67,26 Z" fill="url(#nav-c)"/>
+        <!-- Back horn -->
+        <path d="M67,13 L62,2 L69,10" fill="url(#nav-c2)"/>
+        <!-- Forward horn -->
+        <path d="M75,7 L75,0 L80,7" fill="url(#nav-c2)"/>
+        <!-- Snout -->
+        <path d="M79,20 L89,18 L87,26 L78,24" fill="url(#nav-c2)"/>
+        <!-- Lower jaw -->
+        <path d="M76,24 L84,30 L79,32 L71,27" fill="url(#nav-c2)" opacity=".82"/>
+        <!-- Gold eye -->
+        <circle cx="72" cy="15" r="3.3" fill="#C8971A"/>
+        <circle cx="72" cy="15" r="1.5" fill="#F0C040"/>
+        <circle cx="73" cy="14" r=".65" fill="white" opacity=".5"/>
+        <!-- Tail tip -->
+        <path d="M66,75 L74,86 L69,76 L76,82" fill="url(#nav-c2)"/>
+      </svg>
+      <span>THE CATALYST</span>
+    </a>
     <ul class="nav-links">
       <li><a href="#manifesto">Manifesto</a></li>
       <li><a href="#operations">Operations</a></li>
@@ -1317,7 +1427,7 @@
     <div class="hero-inner">
       <div class="hero-eyebrow">
         <span class="bar"></span>
-        <span class="txt">Catalyst Concepts · Ajah, Lagos · BN 9405192</span>
+        <span class="txt">Catalyst Concepts · Ajah, Lagos · Est. 2023</span>
       </div>
 
       <h1 class="hero-h1" aria-label="The Catalyst">
@@ -1488,13 +1598,15 @@
        SNEAKER FEST 2026
   ════════════════════════════════════ -->
   <section class="sf sec-pad" id="sf2026">
-    <div class="sf-bg" aria-hidden="true">SF26</div>
+    <div class="sf-glow" aria-hidden="true"></div>
+    <div class="sf-bg" aria-hidden="true">SF</div>
     <div class="wrap">
       <div class="sf-inner">
         <div class="sf-left">
           <div class="eyebrow rv">Flagship Event · Lagos Nigeria</div>
           <div class="sf-date rv d1">DEC 12</div>
           <div class="sf-year rv d2">2026</div>
+          <div class="sf-name rv d2">SNEAKERS FEST · LAGOS</div>
 
           <p class="sf-desc rv d3">
             Every operation over four years of execution has been convergence-point training for this moment. Sneaker Fest 2026 is the synthesis — where streetwear culture, corporate experiential partnerships, live brand reveals, and crowd-dynamics engineering collide under one roof on December 12th, Lagos.
