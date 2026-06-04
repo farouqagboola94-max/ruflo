@@ -7,6 +7,7 @@ import { useState } from 'react'
 const NAV_LINKS = [
   { href: '/', label: 'Home' },
   { href: '/schedule', label: 'Schedule' },
+  { href: '/raffle', label: 'Raffle' },
   { href: '/catalog', label: 'Catalog' },
   { href: '/marketplace', label: 'Marketplace' },
   { href: '/vendors', label: 'Vendors' },
@@ -28,12 +29,12 @@ export default function Navbar() {
             </span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1">
             {NAV_LINKS.map(({ href, label }) => (
               <Link
                 key={href}
                 href={href}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   pathname === href
                     ? 'text-brand-orange bg-brand-orange/10'
                     : 'text-gray-300 hover:text-white hover:bg-white/5'
@@ -46,14 +47,14 @@ export default function Navbar() {
 
           <Link
             href="/tickets"
-            className="hidden md:inline-flex items-center px-5 py-2 rounded-full bg-gradient-to-r from-brand-orange to-brand-yellow text-black text-sm font-bold hover:opacity-90 transition-opacity"
+            className="hidden lg:inline-flex items-center px-5 py-2 rounded-full bg-gradient-to-r from-brand-orange to-brand-yellow text-black text-sm font-bold hover:opacity-90 transition-opacity"
           >
             Get Tickets
           </Link>
 
           <button
             onClick={() => setOpen(!open)}
-            className="md:hidden p-2 rounded-lg text-gray-300 hover:text-white"
+            className="lg:hidden p-2 rounded-lg text-gray-300 hover:text-white"
             aria-label="Toggle menu"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -67,7 +68,7 @@ export default function Navbar() {
       </div>
 
       {open && (
-        <div className="md:hidden border-t border-white/10 bg-brand-dark/95 px-4 py-3 space-y-1">
+        <div className="lg:hidden border-t border-white/10 bg-brand-dark/95 px-4 py-3 space-y-1">
           {NAV_LINKS.map(({ href, label }) => (
             <Link
               key={href}
