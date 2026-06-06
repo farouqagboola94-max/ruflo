@@ -16,7 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ClientProviders>
           <Navbar />
-          <main className="pt-16 min-h-screen">{children}</main>
+          <main className="pt-[100px] min-h-screen">{children}</main>
           <Footer />
         </ClientProviders>
         <Script src="https://js.paystack.co/v1/inline.js" strategy="lazyOnload" />

@@ -9,8 +9,8 @@ import { SCHEDULE } from '@/data/schedule'
 const STATS = [
   { value: '1K–2.5K', label: 'Year 1 Target' },
   { value: '30–50',   label: 'Vendors' },
-  { value: '1',       label: 'Day' },
-  { value: '5K+',     label: 'Community Goal' },
+  { value: '2',           label: 'Days' },
+  { value: '5K+',         label: 'Community Goal' },
 ]
 
 const FNP_WEEKS = [
@@ -33,14 +33,14 @@ export default function HomePage() {
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-orange/10 border border-brand-orange/30 text-brand-orange text-sm font-medium mb-8">
             <span className="w-2 h-2 rounded-full bg-brand-orange animate-pulse-slow" />
-            December 12, 2026 · Lagos, Nigeria
+            December 12&#8211;13, 2026 &middot; Lagos, Nigeria
           </div>
           <h1 className="font-display text-6xl sm:text-8xl lg:text-9xl tracking-tight mb-6 leading-none">
             <span className="text-white">SNEAKERS</span><br />
             <span className="text-gradient">FEST</span>
           </h1>
           <p className="text-gray-300 text-xl sm:text-2xl max-w-2xl mx-auto mb-10 leading-relaxed">
-            Lagos' first dedicated sneaker festival. The culture already exists. This is where it gets a stage.
+            Lagos&apos; first dedicated sneaker festival. The culture already exists. This is where it gets a stage.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/tickets" className="px-8 py-4 rounded-full bg-gradient-to-r from-brand-orange to-brand-amber text-black font-bold text-lg hover:opacity-90 shadow-lg shadow-orange-500/30">
@@ -94,7 +94,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-10">
             <div>
-              <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">What's Happening</p>
+              <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">What&apos;s Happening</p>
               <h2 className="text-white font-display text-4xl sm:text-5xl">EVENT HIGHLIGHTS</h2>
             </div>
             <Link href="/schedule" className="text-brand-orange hover:text-brand-amber text-sm font-semibold">Full Schedule →</Link>
@@ -127,10 +127,10 @@ export default function HomePage() {
               <p className="text-brand-neon text-sm font-semibold uppercase tracking-wider mb-2">Every Friday Night</p>
               <h2 className="text-white font-display text-4xl sm:text-5xl mb-6">FRIDAY NIGHT<br />PROTOCOL</h2>
               <p className="text-gray-300 text-lg leading-relaxed mb-6">
-                The festival doesn't go dark between events. Every Friday, the Sneakers Fest community activates — drop discussions, challenges, live games, culture conversations.
+                The festival doesn&apos;t go dark between events. Every Friday, the Sneakers Fest community activates — drop discussions, challenges, live games, culture conversations.
               </p>
               <p className="text-gray-400 text-base leading-relaxed mb-8">
-                By the time December arrives, you won't be meeting strangers. You'll be in a room with people you've been building with for months.
+                By the time December arrives, you won&apos;t be meeting strangers. You&apos;ll be in a room with people you&apos;ve been building with for months.
               </p>
               <div className="grid grid-cols-2 gap-4">
                 {FNP_WEEKS.map(({ week, title, desc }) => (
@@ -151,7 +151,7 @@ export default function HomePage() {
                 <div className="space-y-4">
                   {[
                     { label: 'Community target by Q3 2026', value: '5,000+' },
-                    { label: 'Weekly game entry',           value: '₦500–₦2K' },
+                    { label: 'Weekly game entry',           value: '₦5,000–8,000' },
                     { label: 'FNP session types',           value: '4 rotating' },
                     { label: 'Platforms',                   value: 'IG · X · TikTok · WA' },
                   ].map(({ label, value }) => (
@@ -163,7 +163,7 @@ export default function HomePage() {
                 </div>
                 <div className="mt-6 p-4 rounded-xl bg-brand-neon/10 border border-brand-neon/20">
                   <p className="text-brand-neon text-sm font-medium">The ritual is the brand.</p>
-                  <p className="text-gray-400 text-xs mt-1">FNP doesn't pause. It doesn't skip weeks.</p>
+                  <p className="text-gray-400 text-xs mt-1">FNP doesn&apos;t pause. It doesn&apos;t skip weeks.</p>
                 </div>
               </div>
             </div>
