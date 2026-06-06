@@ -12,22 +12,22 @@ const WEEKS = [
     week: 'Week 2',
     title: 'The Challenge',
     platform: 'Instagram · TikTok / Reels',
-    desc: 'Best recent cop. Most creative lace swap. Oldest pair in your collection. Worst resale decision you\'ve made. Submissions open Friday, winner drops Sunday.',
-    revenue: '₦500–₦1,000 entry on paid weeks. Free entry to build the habit first.',
+    desc: 'Best recent cop. Most creative lace swap. Oldest pair in your collection. Worst resale decision you’ve made. Submissions open Friday, winner drops Sunday.',
+    revenue: '₦2,500–₦5,000 on paid weeks. Free entry to build the habit first.',
   },
   {
     week: 'Week 3',
     title: 'The Conversation',
     platform: 'Twitter / X Space · Instagram Live',
     desc: 'A topic from Lagos sneaker culture. Who set it. Why certain brands own the market here. The ethics of resale. The fake market problem. The import hustle. 45–60 minutes with a rotating guest.',
-    revenue: '₦1,000 for a guaranteed question slot.',
+    revenue: '₦2,500 for a guaranteed question slot.',
   },
   {
     week: 'Week 4',
     title: 'The Game',
     platform: 'Twitter / X · Telegram',
     desc: 'Sneaker trivia. Rapid-fire rounds. Themed categories — Air Max history, Nigerian streetwear brands, collab guessing game. Paid entry, real prize.',
-    revenue: '₦1,000–₦2,000 paid entry. Cash or exclusive access prize.',
+    revenue: '₦5,000–₦8,000 paid entry. Cash or exclusive access prize.',
   },
 ]
 
@@ -58,7 +58,7 @@ export default function FNPPage() {
           FRIDAY NIGHT<br /><span className="text-gradient">PROTOCOL</span>
         </h1>
         <p className="text-gray-300 text-xl max-w-2xl leading-relaxed">
-          The festival doesn't go dark between events. Every Friday, the Sneakers Fest community activates. By the time June arrives, you won't be meeting strangers.
+          The festival doesn&apos;t go dark between events. Every Friday, the Sneakers Fest community activates. By the time December arrives, you won&apos;t be meeting strangers.
         </p>
       </div>
 
@@ -67,7 +67,7 @@ export default function FNPPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {[
             { title: 'Weekly ritual', desc: 'Every Friday night, content goes out, conversations start, games run, drops get announced. The audience knows it\'s coming.' },
-            { title: 'Year-round brand', desc: 'Most Lagos events run for a day and go dark. FNP is why Sneakers Fest doesn\'t. The community lives here the other 364 days.' },
+            { title: 'Year-round brand', desc: 'Most Lagos events run for a day and go dark. FNP is why Sneakers Fest doesn\'t. The community lives here the other 363 days.' },
             { title: 'Revenue engine', desc: 'Free tier builds the audience. Paid challenges and games run before event day. Sponsors attach to specific sessions.' },
           ].map(({ title, desc }) => (
             <div key={title} className="bg-brand-dark rounded-2xl p-5 border border-white/5">
@@ -146,7 +146,7 @@ export default function FNPPage() {
           <span className="w-2 h-2 rounded-full bg-brand-neon animate-pulse" />
           The ritual is the brand.
         </div>
-        <p className="text-gray-300 mb-2 text-lg font-medium">FNP doesn't pause. It doesn't skip weeks.</p>
+        <p className="text-gray-300 mb-2 text-lg font-medium">FNP doesn&apos;t pause. It doesn&apos;t skip weeks.</p>
         <p className="text-gray-500 mb-8">Get in before the event fills up. Your festival ticket anchors you to the community.</p>
         <Link href="/tickets" className="inline-flex px-8 py-4 rounded-full bg-gradient-to-r from-brand-orange to-brand-amber text-black font-bold text-lg hover:opacity-90">
           Get Your Festival Ticket

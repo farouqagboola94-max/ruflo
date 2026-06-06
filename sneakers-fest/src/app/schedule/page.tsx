@@ -24,16 +24,29 @@ function timeToMins(t: string) {
 }
 
 export default function SchedulePage() {
-  const events = SCHEDULE[0].events
-  const [filter, setFilter] = useState<FilterType>('all')
-  const [nowId, setNowId]   = useState<string | null>(null)
-  const [nextId, setNextId] = useState<string | null>(null)
+  const [dayIndex, setDayIndex] = useState(0)
+  const [filter, setFilter]     = useState<FilterType>('all')
+  const [nowId, setNowId]       = useState<string | null>(null)
+  const [nextId, setNextId]     = useState<string | null>(null)
+
+  const events = SCHEDULE[dayIndex].events
+
+  useEffect(() => {
+    setFilter('all')
+    setNowId(null)
+    setNextId(null)
+  }, [dayIndex])
 
   useEffect(() => {
     const compute = () => {
-      const now        = new Date()
-      const isEventDay = now.getFullYear() === 2026 && now.getMonth() === 11 && now.getDate() === 12
+      const now = new Date()
+      const isEventDay =
+        now.getFullYear() === 2026 &&
+        now.getMonth() === 11 &&
+        (now.getDate() === 12 || now.getDate() === 13)
       if (!isEventDay) return
+      const eventDayIndex = now.getDate() === 12 ? 0 : 1
+      if (eventDayIndex !== dayIndex) return
       const nowMins = now.getHours() * 60 + now.getMinutes()
       let currentId: string | null = null
       let nextVal: string | null   = null
@@ -55,7 +68,7 @@ export default function SchedulePage() {
     compute()
     const t = setInterval(compute, 60000)
     return () => clearInterval(t)
-  }, [events])
+  }, [events, dayIndex])
 
   const counts = events.reduce<Record<string, number>>((acc, e) => {
     acc[e.type] = (acc[e.type] || 0) + 1
@@ -66,10 +79,32 @@ export default function SchedulePage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <div className="text-center mb-12">
-        <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">December 12, 2026</p>
+      <div className="text-center mb-10">
+        <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">December 12&#8211;13, 2026</p>
         <h1 className="font-display text-5xl sm:text-6xl text-white mb-4">EVENT SCHEDULE</h1>
-        <p className="text-gray-400 text-lg max-w-xl mx-auto">Lagos &middot; One day, everything on the table.</p>
+        <p className="text-gray-400 text-lg max-w-xl mx-auto">Lagos &middot; Two days. Everything on the table.</p>
+      </div>
+
+      {/* Day selector */}
+      <div className="flex gap-3 justify-center mb-8">
+        {SCHEDULE.map((schedDay, i) => (
+          <button
+            key={schedDay.day}
+            onClick={() => setDayIndex(i)}
+            className={`px-6 py-3 rounded-full font-bold text-sm transition-all ${
+              dayIndex === i
+                ? 'bg-brand-orange text-black shadow-lg shadow-orange-500/25'
+                : 'bg-brand-gray border border-white/10 text-gray-400 hover:text-white hover:border-white/20'
+            }`}
+          >
+            {schedDay.day}
+            <span className={`ml-2 text-xs font-normal ${
+              dayIndex === i ? 'text-black/60' : 'text-gray-600'
+            }`}>
+              {i === 0 ? 'Dec 12' : 'Dec 13'}
+            </span>
+          </button>
+        ))}
       </div>
 
       {/* Filter bar */}

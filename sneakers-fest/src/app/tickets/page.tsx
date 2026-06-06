@@ -53,11 +53,11 @@ export default function TicketsPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div className="text-center mb-14">
-        <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">December 12, 2026</p>
+        <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">December 12&#8211;13, 2026</p>
         <h1 className="font-display text-5xl sm:text-6xl text-white mb-4">GET YOUR TICKETS</h1>
         <p className="text-gray-400 text-lg max-w-xl mx-auto">Choose your pass. Limited quantities available.</p>
         <Link href="/my-tickets" className="text-brand-orange text-sm hover:underline mt-3 inline-block">
-          Already purchased? View my tickets →
+          Already purchased? View my tickets &rarr;
         </Link>
       </div>
 
@@ -113,7 +113,7 @@ export default function TicketsPage() {
           <div className="bg-brand-gray rounded-3xl p-8 border border-white/5">
             <h2 className="font-display text-2xl text-white mb-2">COMPLETE YOUR RSVP</h2>
             {selectedTier ? (
-              <p className="text-brand-orange text-sm mb-6">{selectedTier.name} · ${selectedTier.price} per person</p>
+              <p className="text-brand-orange text-sm mb-6">{selectedTier.name} &middot; ${selectedTier.price} per person</p>
             ) : (
               <p className="text-gray-500 text-sm mb-6">Select a ticket tier above, then fill in your details.</p>
             )}
@@ -139,7 +139,7 @@ export default function TicketsPage() {
               {selectedTier && (
                 <div className="bg-brand-dark rounded-xl p-4 border border-white/10">
                   <div className="flex justify-between text-sm text-gray-400 mb-1">
-                    <span>{selectedTier.name} × {form.quantity}</span>
+                    <span>{selectedTier.name} &times; {form.quantity}</span>
                     <span>${(selectedTier.price * parseInt(form.quantity)).toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between font-bold text-white">
@@ -160,15 +160,15 @@ export default function TicketsPage() {
         ) : (
           <div className="bg-brand-gray rounded-3xl p-12 border border-brand-orange/20 text-center">
             <div className="text-6xl mb-6">👟</div>
-            <h3 className="font-display text-3xl text-white mb-3">YOU'RE IN!</h3>
+            <h3 className="font-display text-3xl text-white mb-3">YOU&apos;RE IN!</h3>
             <p className="text-gray-400 mb-1">Confirmation sent to <span className="text-white">{form.email}</span></p>
             <p className="font-mono text-gray-500 text-sm mb-2">{ticketId}</p>
             <p className="text-gray-500 text-sm mb-8">
-              {form.quantity} × {selectedTier?.name} · ${((selectedTier?.price ?? 0) * parseInt(form.quantity)).toLocaleString()} total
+              {form.quantity} &times; {selectedTier?.name} &middot; ${((selectedTier?.price ?? 0) * parseInt(form.quantity)).toLocaleString()} total
             </p>
             <div className="bg-brand-dark rounded-2xl p-4 mb-6 border border-white/10">
               <p className="text-gray-400 text-sm">Lagos Convention Centre</p>
-              <p className="text-white font-semibold">December 12, 2026 · Lagos, Nigeria</p>
+              <p className="text-white font-semibold">December 12&#8211;13, 2026 &middot; Lagos, Nigeria</p>
             </div>
             <div className="flex flex-col items-center gap-3">
               <Link
