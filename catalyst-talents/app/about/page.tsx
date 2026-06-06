@@ -64,7 +64,7 @@ export default function AboutPage() {
             <span className="italic text-gold/80">Talents Lagos</span>
           </h1>
           <p className="text-white/50 text-xl leading-relaxed max-w-2xl">
-            We are the talent & modelling division of Catalyst Concepts — a creative agency
+            We are the talent &amp; modelling division of Catalyst Concepts — a creative agency
             built in Lagos to amplify African excellence on the world stage.
           </p>
         </div>
@@ -105,7 +105,7 @@ export default function AboutPage() {
             <p className="text-white/50 leading-relaxed">
               Catalyst Concepts was founded with a singular vision: to create, connect, and
               amplify creative talent from Nigeria to the world. Through events, campaigns, and
-              brand partnerships, we built a reputation for excellence in Lagos' creative scene.
+              brand partnerships, we built a reputation for excellence in Lagos&apos; creative scene.
             </p>
             <p className="text-white/50 leading-relaxed">
               As our network of extraordinary individuals grew, we recognised a gap: Lagos had
@@ -114,13 +114,13 @@ export default function AboutPage() {
             </p>
             <p className="text-white/50 leading-relaxed">
               Catalyst Talents Lagos was born to fill that gap — a full-service talent division
-              dedicated to discovering, developing, and deploying Lagos' finest on the world's
+              dedicated to discovering, developing, and deploying Lagos&apos; finest on the world&apos;s
               biggest stages.
             </p>
             <div className="pt-4">
               <div className="h-px w-16 bg-gold mb-4" />
               <p className="text-gold font-playfair italic text-lg">
-                "Lagos has always had the talent. Now it has the platform."
+                &ldquo;Lagos has always had the talent. Now it has the platform.&rdquo;
               </p>
             </div>
           </div>
@@ -181,7 +181,7 @@ export default function AboutPage() {
 
             <div className="flex flex-col justify-center space-y-8">
               {[
-                { number: '50+', label: 'Signed Talents' },
+                { number: '18+', label: 'Signed Talents' },
                 { number: '200+', label: 'Bookings Secured' },
                 { number: '30+', label: 'Brand Partners' },
                 { number: '4', label: 'Talent Divisions' },
@@ -203,7 +203,7 @@ export default function AboutPage() {
             Be Part of the Story
           </h2>
           <p className="text-white/40 mb-8">
-            Whether you're a brand looking to book talent or a model ready to be represented —
+            Whether you&apos;re a brand looking to book talent or a model ready to be represented —
             Catalyst Talents Lagos is your home.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
