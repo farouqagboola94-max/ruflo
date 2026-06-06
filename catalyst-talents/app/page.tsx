@@ -1,6 +1,9 @@
 import Link from 'next/link'
 import ModelCard from '@/components/ModelCard'
+import NewsCard from '@/components/NewsCard'
+import TestimonialsSection from '@/components/TestimonialsSection'
 import { models } from '@/data/models'
+import { news } from '@/data/news'
 import { services } from '@/data/services'
 
 const categories = [
@@ -34,13 +37,21 @@ const categories = [
   },
 ]
 
+const stats = [
+  { value: '18+', label: 'Signed Talents' },
+  { value: '4', label: 'Divisions' },
+  { value: '200+', label: 'Campaign Bookings' },
+  { value: '30+', label: 'Brand Partners' },
+]
+
 export default function HomePage() {
   const featured = models.filter((m) => m.featured)
+  const latestNews = news.slice(0, 3)
   const brandServices = services.filter((s) => s.forWho === 'brands').slice(0, 3)
 
   return (
     <>
-      {/* HERO */}
+      {/* ── HERO ── */}
       <section
         className="relative min-h-screen flex items-center justify-center overflow-hidden"
         style={{ background: 'linear-gradient(135deg, #000000 0%, #0a0a0a 40%, #0d0d07 70%, #0a0a0a 100%)' }}
@@ -101,7 +112,37 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* FEATURED MODELS */}
+      {/* ── STATS ── */}
+      <section
+        style={{
+          background: '#0d0d0d',
+          borderTop: '1px solid rgba(212,175,55,0.1)',
+          borderBottom: '1px solid rgba(212,175,55,0.1)',
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 text-center">
+            {stats.map(({ value, label }) => (
+              <div key={label}>
+                <div
+                  className="font-playfair text-4xl sm:text-5xl font-bold mb-2"
+                  style={{
+                    background: 'linear-gradient(135deg, #D4AF37 0%, #F0D060 50%, #D4AF37 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                  }}
+                >
+                  {value}
+                </div>
+                <div className="text-white/30 text-[9px] tracking-[0.4em] uppercase">{label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── FEATURED MODELS ── */}
       <section className="py-24 px-4 max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-14">
           <div>
@@ -131,7 +172,7 @@ export default function HomePage() {
         <div className="h-px bg-gradient-to-r from-transparent via-[#D4AF37]/15 to-transparent" />
       </div>
 
-      {/* DIVISIONS */}
+      {/* ── DIVISIONS ── */}
       <section className="py-24 px-4 max-w-7xl mx-auto">
         <div className="mb-14">
           <p className="text-[#D4AF37] text-[10px] tracking-[0.4em] uppercase mb-3">What We Represent</p>
@@ -162,7 +203,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SERVICES TEASER */}
+      {/* ── SERVICES TEASER ── */}
       <section
         className="py-24 px-4"
         style={{ background: 'linear-gradient(135deg, #0d0d0d 0%, #111108 100%)' }}
@@ -198,7 +239,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ABOUT SNIPPET */}
+      {/* ── ABOUT SNIPPET ── */}
       <section className="py-24 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-[#D4AF37] text-[10px] tracking-[0.4em] uppercase mb-6">Our Story</p>
@@ -235,39 +276,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* BE FIRST CTA */}
-      <section
-        className="py-24 px-4"
-        style={{ background: 'linear-gradient(180deg, #0a0a0a 0%, #111108 100%)' }}
-      >
-        <div className="max-w-2xl mx-auto text-center">
-          <p className="text-[#D4AF37] text-[10px] tracking-[0.4em] uppercase mb-6">Work With Us</p>
-          <h2 className="font-playfair text-4xl sm:text-5xl font-bold text-white mb-6">
-            Be Among the First
-          </h2>
-          <div className="h-px w-14 bg-[#D4AF37] mx-auto mb-8" />
-          <p className="text-white/50 text-lg leading-relaxed mb-10">
-            We are building something remarkable in Lagos. Partner with us, sign with us, or book
-            our talent — and be among the first to shape this story.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/contact"
-              className="px-10 py-4 bg-[#D4AF37] text-black font-bold text-xs tracking-widest uppercase hover:bg-[#F0D060] transition-colors"
-            >
-              Get in Touch
-            </Link>
-            <Link
-              href="/apply"
-              className="px-10 py-4 border border-[#D4AF37]/35 text-[#D4AF37] text-xs tracking-widest uppercase hover:border-[#D4AF37] hover:bg-[#D4AF37]/10 transition-all"
-            >
-              Apply to Join
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* ── TESTIMONIALS ── */}
+      <TestimonialsSection />
 
-      {/* NEWS TEASER */}
+      {/* ── NEWS PREVIEW ── */}
       <section className="py-24 px-4 max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-14">
           <div>
@@ -277,19 +289,21 @@ export default function HomePage() {
               <span className="block w-14 h-px bg-[#D4AF37] mt-4" />
             </h2>
           </div>
+          <Link
+            href="/news"
+            className="mt-8 sm:mt-0 text-[10px] tracking-widest uppercase text-[#D4AF37]/50 hover:text-[#D4AF37] transition-colors border-b border-[#D4AF37]/15 hover:border-[#D4AF37] pb-1"
+          >
+            All Stories →
+          </Link>
         </div>
-        <div
-          className="p-16 sm:p-24 border border-white/5 text-center"
-          style={{ background: 'linear-gradient(135deg, #0d0d0d 0%, #111111 100%)' }}
-        >
-          <p className="font-playfair text-2xl text-white/25 mb-3">Stories Coming Soon</p>
-          <p className="text-white/20 text-sm">
-            Our first articles, model features, and campaign stories are on the way.
-          </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {latestNews.map((article) => (
+            <NewsCard key={article.id} article={article} />
+          ))}
         </div>
       </section>
 
-      {/* APPLY CTA BANNER */}
+      {/* ── APPLY CTA BANNER ── */}
       <section className="py-24 px-4 max-w-7xl mx-auto">
         <div
           className="relative overflow-hidden p-12 sm:p-20 text-center"
