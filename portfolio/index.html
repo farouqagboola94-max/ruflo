@@ -1146,6 +1146,49 @@
     }
     .mc-link:hover { color: var(--gold-lt); border-color: var(--gold-lt); }
 
+    .mc-posts {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .mc-post-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--gold-border);
+      transition: border-color .2s, background .2s;
+      text-decoration: none;
+    }
+    .mc-post-item:hover {
+      border-color: var(--gold-border);
+      border-left-color: var(--gold);
+      background: var(--gold-dim);
+    }
+    .mc-post-tag {
+      font-family: var(--fnt-ui);
+      font-size: .6rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .mc-post-title {
+      font-family: var(--fnt-ui);
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--text-1);
+      letter-spacing: .01em;
+    }
+    .mc-post-sub {
+      font-family: var(--fnt-body);
+      font-size: .72rem;
+      color: var(--text-2);
+      font-style: italic;
+      line-height: 1.5;
+    }
+
     .mc-metric {
       font-family: var(--fnt-display);
       font-size: 3rem;
@@ -1809,15 +1852,27 @@
 
       <div class="media-grid">
         <div class="mc rv">
-          <div class="mc-type">Digital Platform</div>
+          <div class="mc-type">Digital Platform · Catalyst Node</div>
           <h3 class="mc-title">The Catalyst Codes</h3>
-          <p class="mc-desc">A growing digital ecosystem of deep-dive strategic essays. Designed to cultivate a hyper-focused core audience with elite long-form content retention. The <em>Catalyst Manifesto: Control vs. Respect</em> hit 338 views on a single post loop.</p>
+          <p class="mc-desc">Football decoded as psychology, power, and culture. New issues every Sunday — dispatched from Lagos, received everywhere that matters.</p>
+          <div class="mc-posts">
+            <a href="https://substack.com/@catalyst00555" target="_blank" rel="noopener" class="mc-post-item">
+              <span class="mc-post-tag">Jun 2026 · Manifesto</span>
+              <span class="mc-post-title">The Ultimate Game of Throne</span>
+              <span class="mc-post-sub">Five billion people are watching the pitch. The true match is happening in the dark.</span>
+            </a>
+            <a href="https://substack.com/@catalyst00555" target="_blank" rel="noopener" class="mc-post-item">
+              <span class="mc-post-tag">Mar 2027 · Special</span>
+              <span class="mc-post-title">The Biometric Ambush</span>
+              <span class="mc-post-sub">Personal Optimization vs. Behavioral Control. Become a sovereign strategist.</span>
+            </a>
+          </div>
           <a href="https://substack.com/@catalyst00555" target="_blank" rel="noopener" class="mc-link">
             Read on Substack
             <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 2H12M12 2V12M12 2L2 12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
           <div class="mc-metric">1,361</div>
-          <div class="mc-mlabel">Organic views · @catalyst00555</div>
+          <div class="mc-mlabel">Organic views · catalyst00555.substack.com</div>
         </div>
 
         <div class="mc rv d1">
