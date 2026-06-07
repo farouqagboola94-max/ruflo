@@ -13,7 +13,7 @@ export default function BookingCTA({
   title = 'Book This Talent',
   subtitle = 'Get in touch with our booking team for availability, rates, and casting packages.',
   primaryLabel = 'Send Booking Enquiry',
-  primaryHref = '/contact',
+  primaryHref = '/booking',
   secondaryLabel = 'View All Models',
   secondaryHref = '/models',
 }: BookingCTAProps) {

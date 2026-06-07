@@ -23,9 +23,9 @@ export default function Navbar() {
       {/* Announcement bar */}
       <div className="fixed top-0 left-0 right-0 z-[60] bg-[#D4AF37] h-[34px] flex items-center justify-center px-4">
         <p className="text-black text-[9px] sm:text-[10px] tracking-[0.3em] uppercase font-semibold text-center leading-none">
-          ✦ Now Accepting Applications &middot; 2025&#8211;2026 Intake Open &middot;{' '}
+          ✶ Now Accepting Applications &middot; 2025&#8211;2026 Intake Open &middot;{' '}
           <Link href="/apply" className="underline underline-offset-2 hover:opacity-70 transition-opacity">
-            Apply Today →
+            Apply Today &rarr;
           </Link>
         </p>
       </div>
@@ -57,6 +57,16 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ))}
+              <Link
+                href="/booking"
+                className={`text-[10px] tracking-widest uppercase transition-colors duration-300 ${
+                  pathname === '/booking'
+                    ? 'text-[#D4AF37]'
+                    : 'text-white/55 hover:text-[#D4AF37]'
+                }`}
+              >
+                Book Talent
+              </Link>
               <Link
                 href="/apply"
                 className="px-5 py-2.5 bg-[#D4AF37] text-black text-[10px] font-bold tracking-widest uppercase hover:bg-[#F0D060] transition-colors duration-300 whitespace-nowrap"
@@ -91,6 +101,15 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
+            <Link
+              href="/booking"
+              className={`block text-[10px] tracking-widest uppercase transition-colors ${
+                pathname === '/booking' ? 'text-[#D4AF37]' : 'text-white/55 hover:text-[#D4AF37]'
+              }`}
+              onClick={() => setIsOpen(false)}
+            >
+              Book Talent
+            </Link>
             <Link
               href="/apply"
               className="block text-center w-full px-6 py-3 bg-[#D4AF37] text-black text-[10px] font-bold tracking-widest uppercase"
