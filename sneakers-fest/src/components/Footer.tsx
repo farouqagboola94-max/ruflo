@@ -18,9 +18,9 @@ export default function Footer() {
               <span className="font-display text-xl tracking-wider text-gradient">SNEAKERS<span className="text-white">FEST</span></span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
-              Lagos' first dedicated sneaker festival. Physical exhibition, year-round online platform, community engine.
+              Lagos&apos; first dedicated sneaker festival. Physical exhibition, year-round online platform, community engine.
             </p>
-            <p className="text-gray-500 text-sm mt-3">December 12–13, 2026 · Lagos, Nigeria</p>
+            <p className="text-gray-500 text-sm mt-3">December 12, 2026 &middot; Lagos, Nigeria</p>
             <div className="mt-4 text-xs text-gray-600 leading-relaxed">
               Founded by{' '}
               <a
@@ -32,7 +32,7 @@ export default function Footer() {
                 Oluwatobiloba — The Catalyst
               </a>
               <br />
-              Catalyst Concepts · Lagos, Nigeria
+              Catalyst Concepts &middot; Lagos, Nigeria
             </div>
           </div>
 
@@ -59,15 +59,27 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
+            <div className="mt-6 pt-5 border-t border-white/5">
+              <p className="text-gray-600 text-xs uppercase tracking-wider mb-2">Talent & Models</p>
+              <a
+                href="https://catalyst-talents-lagos.netlify.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-brand-orange text-sm transition-colors block"
+              >
+                Catalyst Talents Lagos →
+              </a>
+              <p className="text-gray-600 text-xs mt-1">Official talent platform</p>
+            </div>
             <div className="mt-4 pt-4 border-t border-white/5">
               <p className="text-gray-600 text-xs uppercase tracking-wider mb-1">Friday Night Protocol</p>
-              <p className="text-gray-500 text-xs">Every Friday · IG · X · TikTok · WA</p>
+              <p className="text-gray-500 text-xs">Every Friday &middot; IG &middot; X &middot; TikTok &middot; WA</p>
             </div>
           </div>
         </div>
 
         <div className="border-t border-white/10 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-gray-500 text-xs">© 2026 Sneakers Fest · Catalyst Concepts · All rights reserved.</p>
+          <p className="text-gray-500 text-xs">&copy; 2026 Sneakers Fest &middot; Catalyst Concepts &middot; All rights reserved.</p>
           <div className="flex gap-4">
             {SOCIAL_LINKS.map(({ label, href }) => (
               <a key={label} href={href} target="_blank" rel="noopener noreferrer"

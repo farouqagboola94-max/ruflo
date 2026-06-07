@@ -53,7 +53,7 @@ export default function TicketsPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div className="text-center mb-14">
-        <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">December 12&#8211;13, 2026</p>
+        <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">December 12, 2026</p>
         <h1 className="font-display text-5xl sm:text-6xl text-white mb-4">GET YOUR TICKETS</h1>
         <p className="text-gray-400 text-lg max-w-xl mx-auto">Choose your pass. Limited quantities available.</p>
         <Link href="/my-tickets" className="text-brand-orange text-sm hover:underline mt-3 inline-block">
@@ -168,7 +168,7 @@ export default function TicketsPage() {
             </p>
             <div className="bg-brand-dark rounded-2xl p-4 mb-6 border border-white/10">
               <p className="text-gray-400 text-sm">Lagos Convention Centre</p>
-              <p className="text-white font-semibold">December 12&#8211;13, 2026 &middot; Lagos, Nigeria</p>
+              <p className="text-white font-semibold">December 12, 2026 &middot; Lagos, Nigeria</p>
             </div>
             <div className="flex flex-col items-center gap-3">
               <Link
