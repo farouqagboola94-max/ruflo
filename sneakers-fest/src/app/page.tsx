@@ -9,7 +9,7 @@ import { SCHEDULE } from '@/data/schedule'
 const STATS = [
   { value: '1K–2.5K', label: 'Year 1 Target' },
   { value: '30–50',   label: 'Vendors' },
-  { value: '2',           label: 'Days' },
+  { value: '1',           label: 'Day' },
   { value: '5K+',         label: 'Community Goal' },
 ]
 
@@ -33,7 +33,7 @@ export default function HomePage() {
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-orange/10 border border-brand-orange/30 text-brand-orange text-sm font-medium mb-8">
             <span className="w-2 h-2 rounded-full bg-brand-orange animate-pulse-slow" />
-            December 12&#8211;13, 2026 &middot; Lagos, Nigeria
+            December 12, 2026 &middot; Lagos, Nigeria
           </div>
           <h1 className="font-display text-6xl sm:text-8xl lg:text-9xl tracking-tight mb-6 leading-none">
             <span className="text-white">SNEAKERS</span><br />
@@ -81,7 +81,7 @@ export default function HomePage() {
               <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">Catalog Highlights</p>
               <h2 className="text-white font-display text-4xl sm:text-5xl">FEATURED KICKS</h2>
             </div>
-            <Link href="/catalog" className="text-brand-orange hover:text-brand-amber text-sm font-semibold">View All →</Link>
+            <Link href="/catalog" className="text-brand-orange hover:text-brand-amber text-sm font-semibold">View All &rarr;</Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {featured.map(s => <SneakerCard key={s.id} sneaker={s} />)}
@@ -97,7 +97,7 @@ export default function HomePage() {
               <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">What&apos;s Happening</p>
               <h2 className="text-white font-display text-4xl sm:text-5xl">EVENT HIGHLIGHTS</h2>
             </div>
-            <Link href="/schedule" className="text-brand-orange hover:text-brand-amber text-sm font-semibold">Full Schedule →</Link>
+            <Link href="/schedule" className="text-brand-orange hover:text-brand-amber text-sm font-semibold">Full Schedule &rarr;</Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {highlights.map(event => (
@@ -109,8 +109,8 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-white font-bold text-lg mb-2">{event.title}</h3>
                 <p className="text-gray-400 text-sm leading-relaxed mb-3">{event.description}</p>
-                {event.speaker && <p className="text-brand-amber text-xs">🎤 {event.speaker}</p>}
-                <p className="text-gray-500 text-xs mt-2">📍 {event.location}</p>
+                {event.speaker && <p className="text-brand-amber text-xs">&nbsp;{event.speaker}</p>}
+                <p className="text-gray-500 text-xs mt-2">{event.location}</p>
               </div>
             ))}
           </div>
@@ -127,7 +127,7 @@ export default function HomePage() {
               <p className="text-brand-neon text-sm font-semibold uppercase tracking-wider mb-2">Every Friday Night</p>
               <h2 className="text-white font-display text-4xl sm:text-5xl mb-6">FRIDAY NIGHT<br />PROTOCOL</h2>
               <p className="text-gray-300 text-lg leading-relaxed mb-6">
-                The festival doesn&apos;t go dark between events. Every Friday, the Sneakers Fest community activates — drop discussions, challenges, live games, culture conversations.
+                The festival doesn&apos;t go dark between events. Every Friday, the Sneakers Fest community activates &mdash; drop discussions, challenges, live games, culture conversations.
               </p>
               <p className="text-gray-400 text-base leading-relaxed mb-8">
                 By the time December arrives, you won&apos;t be meeting strangers. You&apos;ll be in a room with people you&apos;ve been building with for months.
@@ -151,7 +151,7 @@ export default function HomePage() {
                 <div className="space-y-4">
                   {[
                     { label: 'Community target by Q3 2026', value: '5,000+' },
-                    { label: 'Weekly game entry',           value: '₦5,000–8,000' },
+                    { label: 'Weekly game entry',           value: '₦1,000–2,000' },
                     { label: 'FNP session types',           value: '4 rotating' },
                     { label: 'Platforms',                   value: 'IG · X · TikTok · WA' },
                   ].map(({ label, value }) => (
