@@ -212,7 +212,7 @@ export default function Venue() {
 
         {/* Header */}
         <div style={{ textAlign:'center', marginBottom:52 }}>
-          <SectionTag>DECEMBER 12, 2026 · LAGOS</SectionTag>
+          <SectionTag>DEC 12, 2026 · MURI OKUNOLA PARK, V/I</SectionTag>
           <h2 style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(54px,9vw,100px)', color:B.white, lineHeight:0.88, letterSpacing:2, marginBottom:16 }}>
             EXPLORE<br /><span style={{ color:B.amber }}>THE VENUE</span>
           </h2>
@@ -224,10 +224,10 @@ export default function Venue() {
         {/* Event details strip */}
         <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(160px, 1fr))', gap:1, marginBottom:36, border:`1px solid rgba(255,255,255,0.07)`, borderRadius:12, overflow:'hidden' }}>
           {[
-            { label:'DATE',   value:'Saturday, December 12', color:B.amber },
-            { label:'DOORS',  value:'12:00 PM — 10:00 PM',  color:B.neonCyan },
-            { label:'CITY',   value:'Lagos, Nigeria',         color:B.neonLime },
-            { label:'VENUE',  value:'TBA — Announcement soon', color:'#555' },
+            { label:'DATE',    value:'Saturday, December 12',         color:B.amber },
+            { label:'DOORS',   value:'12:00 PM — 10:00 PM',           color:B.neonCyan },
+            { label:'VENUE',   value:'Muri Okunola Park, V/I',         color:B.neonLime },
+            { label:'DAY 1',   value:'Mobolaji Johnson Arena · Dec 11', color:B.neonMagenta },
           ].map(({ label, value, color }) => (
             <div key={label} style={{ padding:'18px 20px', background:'rgba(255,255,255,0.025)' }}>
               <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:'#444', letterSpacing:3, marginBottom:6 }}>{label}</div>
@@ -303,7 +303,7 @@ export default function Venue() {
 
         {/* CTAs */}
         <div style={{ marginTop:48, textAlign:'center' }}>
-          <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#444', letterSpacing:3, marginBottom:20 }}>BE FIRST TO KNOW THE VENUE</div>
+          <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#444', letterSpacing:3, marginBottom:20 }}>TWO NIGHTS. TWO VENUES. ONE MOVEMENT.</div>
           <div style={{ display:'flex', gap:14, justifyContent:'center', flexWrap:'wrap' }}>
             <a href={SOCIAL_LINKS.whatsapp} target="_blank" rel="noopener noreferrer"
               style={{ padding:'14px 32px', background:'#25D366', color:B.black, fontFamily:'Space Mono,monospace', fontSize:10, fontWeight:700, letterSpacing:'0.15em', textDecoration:'none', borderRadius:4, boxShadow:'0 0 28px rgba(37,211,102,0.25)' }}>
