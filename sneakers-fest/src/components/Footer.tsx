@@ -18,7 +18,7 @@ export default function Footer() {
               <span className="font-display text-xl tracking-wider text-gradient">SNEAKERS<span className="text-white">FEST</span></span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
-              Lagos&apos; first dedicated sneaker festival. Physical exhibition, year-round online platform, community engine.
+              Lagos’ first dedicated sneaker festival. Physical exhibition, year-round online platform, community engine.
             </p>
             <p className="text-gray-500 text-sm mt-3">December 12, 2026 &middot; Lagos, Nigeria</p>
             <div className="mt-4 text-xs text-gray-600 leading-relaxed">
@@ -29,7 +29,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="text-brand-steel hover:text-white transition-colors"
               >
-                Oluwatobiloba — The Catalyst
+                Oluwatobiloba &mdash; The Catalyst
               </a>
               <br />
               Catalyst Concepts &middot; Lagos, Nigeria
@@ -39,7 +39,7 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Navigate</h4>
             <ul className="space-y-2">
-              {[['/', 'Home'], ['/schedule', 'Schedule'], ['/catalog', 'Catalog'], ['/marketplace', 'Marketplace'], ['/fnp', 'FNP'], ['/tickets', 'Tickets'], ['/contact', 'Contact']].map(([href, label]) => (
+              {[['/', 'Home'], ['/schedule', 'Schedule'], ['/catalog', 'Catalog'], ['/marketplace', 'Marketplace'], ['/fnp', 'FNP'], ['/vendors', 'Vendors'], ['/tickets', 'Tickets'], ['/sponsors', 'Partners'], ['/contact', 'Contact']].map(([href, label]) => (
                 <li key={href}>
                   <Link href={href} className="text-gray-400 hover:text-brand-orange text-sm transition-colors">{label}</Link>
                 </li>
@@ -67,7 +67,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-brand-orange text-sm transition-colors block"
               >
-                Catalyst Talents Lagos →
+                Catalyst Talents Lagos &rarr;
               </a>
               <p className="text-gray-600 text-xs mt-1">Official talent platform</p>
             </div>

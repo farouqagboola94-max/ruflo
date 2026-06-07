@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { SPONSORS, TIER_LABELS } from '@/data/sponsors'
 
 const TIER_ORDER = ['title', 'gold', 'silver', 'media'] as const
@@ -33,6 +34,15 @@ export default function SponsorsSection() {
             </div>
           )
         })}
+        <div className="mt-12 text-center">
+          <p className="text-gray-500 text-sm mb-4">Want your brand at Lagos’ first sneaker festival?</p>
+          <Link
+            href="/sponsors"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-brand-orange/30 text-brand-orange text-sm font-semibold hover:bg-brand-orange/10 transition-colors"
+          >
+            Become a Partner &rarr;
+          </Link>
+        </div>
       </div>
     </section>
   )

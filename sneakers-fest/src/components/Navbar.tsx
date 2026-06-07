@@ -27,9 +27,9 @@ export default function Navbar() {
         style={{ background: 'linear-gradient(90deg, #FF6B2C, #FFA500)' }}
       >
         <p className="text-black text-[9px] sm:text-[10px] font-semibold tracking-[0.3em] uppercase text-center leading-none">
-          🔥 Early Bird Tickets Now Live &middot; December 12&#8211;13, 2026 &middot;{' '}
+          🔥 Early Bird Tickets Now Live &middot; December 12, 2026 &middot;{' '}
           <Link href="/tickets" className="underline underline-offset-2 hover:opacity-70 transition-opacity">
-            Get Yours →
+            Get Yours &rarr;
           </Link>
         </p>
       </div>
@@ -63,6 +63,16 @@ export default function Navbar() {
                   {label}
                 </Link>
               ))}
+              <Link
+                href="/sponsors"
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors border ${
+                  pathname === '/sponsors'
+                    ? 'text-brand-amber bg-brand-amber/10 border-brand-amber/40'
+                    : 'text-brand-amber/70 hover:text-brand-amber hover:bg-brand-amber/5 border-brand-amber/20'
+                }`}
+              >
+                Partner
+              </Link>
             </nav>
 
             <Link
@@ -103,6 +113,17 @@ export default function Navbar() {
                 {label}
               </Link>
             ))}
+            <Link
+              href="/sponsors"
+              onClick={() => setOpen(false)}
+              className={`block px-4 py-3 rounded-lg text-sm font-medium border ${
+                pathname === '/sponsors'
+                  ? 'text-brand-amber bg-brand-amber/10 border-brand-amber/40'
+                  : 'text-brand-amber/70 border-brand-amber/15'
+              }`}
+            >
+              Partner with Us
+            </Link>
             <Link
               href="/tickets"
               onClick={() => setOpen(false)}
