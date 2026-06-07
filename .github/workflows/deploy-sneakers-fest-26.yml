@@ -24,6 +24,14 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Stop Netlify git-integration auto-deploys
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: |
+          npx netlify-cli api updateSite \
+            --siteId bd236657-e156-4ec8-882d-6d3f393f7307 \
+            --data '{"repo":{"stop_builds":true}}'
+
       - name: Deploy to Netlify
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
