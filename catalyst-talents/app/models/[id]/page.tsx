@@ -67,7 +67,7 @@ export default function ModelProfilePage({ params }: { params: { id: string } })
             href="/models"
             className="inline-flex items-center gap-2 text-[10px] tracking-widest uppercase text-white/40 hover:text-[#D4AF37] transition-colors mb-8"
           >
-            <span>←</span> All Models
+            <span>&larr;</span> All Models
           </Link>
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div>
@@ -205,9 +205,9 @@ export default function ModelProfilePage({ params }: { params: { id: string } })
         <div className="max-w-3xl mx-auto">
           <BookingCTA
             title={`Book ${model.name.split(' ')[0]}`}
-            subtitle={`Enquire about ${model.name}'s availability for campaigns, editorials, events, and brand partnerships.`}
+            subtitle={`Enquire about ${model.name}’s availability for campaigns, editorials, events, and brand partnerships.`}
             primaryLabel="Send Booking Enquiry"
-            primaryHref="/contact"
+            primaryHref="/booking"
             secondaryLabel="View Full Roster"
             secondaryHref="/models"
           />
