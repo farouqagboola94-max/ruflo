@@ -9,8 +9,10 @@ const NAV_LINKS = [
   { href: '/schedule', label: 'Schedule' },
   { href: '/raffle', label: 'Raffle' },
   { href: '/catalog', label: 'Catalog' },
-  { href: '/marketplace', label: 'Marketplace' },
+  { href: '/marketplace', label: 'Market' },
   { href: '/vendors', label: 'Vendors' },
+  { href: '/bible', label: 'Bible' },
+  { href: '/tournament', label: 'Cup' },
   { href: '/fnp', label: 'FNP', neon: true },
   { href: '/tickets', label: 'Tickets' },
 ]
@@ -45,7 +47,7 @@ export default function Navbar() {
               </span>
             </Link>
 
-            <nav className="hidden lg:flex items-center gap-1">
+            <nav className="hidden xl:flex items-center gap-1">
               {NAV_LINKS.map(({ href, label, neon }) => (
                 <Link
                   key={href}
@@ -77,14 +79,14 @@ export default function Navbar() {
 
             <Link
               href="/tickets"
-              className="hidden lg:inline-flex items-center px-5 py-2 rounded-full bg-gradient-to-r from-brand-orange to-brand-yellow text-black text-sm font-bold hover:opacity-90 transition-opacity"
+              className="hidden xl:inline-flex items-center px-5 py-2 rounded-full bg-gradient-to-r from-brand-orange to-brand-yellow text-black text-sm font-bold hover:opacity-90 transition-opacity"
             >
               Get Tickets
             </Link>
 
             <button
               onClick={() => setOpen(!open)}
-              className="lg:hidden p-2 rounded-lg text-gray-300 hover:text-white"
+              className="xl:hidden p-2 rounded-lg text-gray-300 hover:text-white"
               aria-label="Toggle menu"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -98,7 +100,7 @@ export default function Navbar() {
         </div>
 
         {open && (
-          <div className="lg:hidden border-t border-white/10 bg-brand-dark/95 px-4 py-3 space-y-1">
+          <div className="xl:hidden border-t border-white/10 bg-brand-dark/95 px-4 py-3 space-y-1">
             {NAV_LINKS.map(({ href, label, neon }) => (
               <Link
                 key={href}
