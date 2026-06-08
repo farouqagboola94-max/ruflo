@@ -14,7 +14,7 @@ export const BOOTH_TIERS: BoothTier[] = [
   {
     id: 'standard',
     name: 'Standard Booth',
-    price: 299,
+    price: 80000,
     size: '3m × 3m',
     description: 'Perfect for solo vendors and small sellers. Includes everything you need to showcase your collection.',
     perks: [
@@ -31,7 +31,7 @@ export const BOOTH_TIERS: BoothTier[] = [
   {
     id: 'premium',
     name: 'Premium Booth',
-    price: 599,
+    price: 150000,
     size: '4m × 4m',
     description: 'More space, better placement, and built-in visibility for established sellers and boutiques.',
     perks: [
@@ -50,7 +50,7 @@ export const BOOTH_TIERS: BoothTier[] = [
   {
     id: 'brand',
     name: 'Brand Showcase',
-    price: 1200,
+    price: 350000,
     size: '6m × 6m',
     description: 'Prime location and maximum exposure for brands, boutiques, and serious collectors.',
     perks: [
