@@ -25,6 +25,7 @@ jobs:
         run: npm run build
 
       - name: Stop Netlify git-integration auto-deploys
+        continue-on-error: true
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         run: |
