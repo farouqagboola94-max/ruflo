@@ -2,6 +2,8 @@ import { B } from '../tokens'
 import { GrainOverlay } from '../components/Shared'
 import { SOCIAL_LINKS } from '../config'
 
+const CT_HREF = SOCIAL_LINKS.catalystTalents
+
 const SOCIALS = [
   { platform: 'TIKTOK',      handle: '@SNEAKERSFEST',  href: SOCIAL_LINKS.tiktok,             color: '#69C9D0',     icon: 'TK', tip: 'Challenges & Clips' },
   { platform: 'YOUTUBE',     handle: '@SNEAKERSFEST',  href: SOCIAL_LINKS.youtube,            color: B.neonMagenta, icon: 'YT', tip: 'Docs & Interviews' },
@@ -41,7 +43,17 @@ export default function Footer() {
             <div style={{ fontFamily: "'Orbitron', monospace", fontWeight: 900, fontSize: 20, color: B.amber, textShadow: `0 0 15px ${B.amber}30`, marginBottom: 6 }}>SNEAKERS FEST '26</div>
             <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.smoke, letterSpacing: '0.3em', marginBottom: 6 }}>THE SOLE EXHIBITION — LAGOS, NIGERIA</div>
             <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.neonCyan, letterSpacing: '0.25em', marginBottom: 4 }}>ONLINE COMMUNITY. PHYSICAL PRESENCE.</div>
-            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: '#FF6719', letterSpacing: '0.2em', marginBottom: 16 }}>A CATALYST CONCEPTS PROPERTY</div>
+            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: '#FF6719', letterSpacing: '0.2em', marginBottom: 10 }}>A CATALYST CONCEPTS PROPERTY</div>
+            <a href={CT_HREF} target="_blank" rel="noopener noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 7, textDecoration: 'none', marginBottom: 16,
+                padding: '5px 10px', border: '1px solid #D4A01728', borderRadius: 3,
+                background: '#D4A01708', transition: 'border-color 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = '#D4A01760'}
+              onMouseLeave={e => e.currentTarget.style.borderColor = '#D4A01728'}
+            >
+              <span style={{ fontFamily: "'Orbitron', monospace", fontSize: 9, fontWeight: 900, color: '#D4A017', letterSpacing: 1 }}>CT</span>
+              <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 6, color: B.smoke, letterSpacing: '0.18em' }}>CATALYST TALENTS ↗</span>
+            </a>
             <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: B.smoke, lineHeight: 1.75, maxWidth: 260, marginBottom: 16 }}>West Africa's premier sneaker culture festival. Online every Friday. In person December 12, 2026.</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, letterSpacing: '0.15em' }}>FOUNDED BY <span style={{ color: B.amberGlow }}>OLUWATOBILOBA</span></div>
