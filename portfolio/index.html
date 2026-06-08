@@ -1207,6 +1207,241 @@
     }
 
     /* ═══════════════════════════════════════════════════
+       PROOF OF WORK / CLIENT WINS
+    ═══════════════════════════════════════════════════ */
+    .proof {
+      background: var(--surface-1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .proof::before {
+      content: 'PROOF';
+      position: absolute;
+      font-family: var(--fnt-display);
+      font-size: clamp(7rem, 22vw, 20rem);
+      letter-spacing: .1em;
+      color: rgba(200,151,26,0.03);
+      top: 50%;
+      right: -4%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .proof-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 40px;
+      margin-bottom: 64px;
+    }
+
+    .proof-hero {
+      text-align: center;
+      padding: 56px 0;
+      margin-bottom: 72px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .proof-metric-hero {
+      font-family: var(--fnt-display);
+      font-size: clamp(7rem, 20vw, 20rem);
+      line-height: .85;
+      color: var(--gold);
+      letter-spacing: .02em;
+    }
+
+    .proof-metric-hero span { color: var(--gold-lt); }
+
+    .proof-metric-label {
+      font-family: var(--fnt-ui);
+      font-size: .76rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--text-2);
+      margin-top: 20px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .proof-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin-bottom: 64px;
+    }
+
+    .cw {
+      background: var(--surface-2);
+      padding: 48px 44px;
+      position: relative;
+    }
+
+    .cw-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+
+    .cw-num {
+      font-family: var(--fnt-display);
+      font-size: 4rem;
+      color: var(--text-3);
+      line-height: 1;
+    }
+
+    .cw-handle {
+      font-family: var(--fnt-ui);
+      font-size: .65rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: var(--gold-dim);
+      padding: 5px 12px;
+      border: 1px solid var(--gold-border);
+    }
+
+    .cw-rule {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 24px;
+    }
+
+    .cw-role {
+      font-family: var(--fnt-ui);
+      font-size: .63rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--text-2);
+      margin-bottom: 8px;
+    }
+
+    .cw-name {
+      font-family: var(--fnt-display);
+      font-size: 2.6rem;
+      letter-spacing: .04em;
+      color: var(--text-1);
+      margin-bottom: 18px;
+      line-height: 1.1;
+    }
+
+    .cw-desc {
+      font-size: .84rem;
+      color: var(--text-2);
+      line-height: 1.9;
+      margin-bottom: 28px;
+    }
+
+    .cw-platforms {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 36px;
+    }
+
+    .cw-plat {
+      font-family: var(--fnt-ui);
+      font-size: .58rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+    }
+
+    .cw-stat {
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+    }
+
+    .cw-stat-val {
+      font-family: var(--fnt-display);
+      font-size: 3.4rem;
+      color: var(--gold);
+      letter-spacing: .04em;
+      line-height: 1;
+    }
+
+    .cw-stat-lbl {
+      font-family: var(--fnt-ui);
+      font-size: .6rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-top: 6px;
+    }
+
+    .proof-edu {
+      border-left: 2px solid var(--gold);
+      padding: 32px 40px;
+      background: var(--gold-dim);
+      margin-bottom: 56px;
+    }
+
+    .proof-edu p {
+      font-family: var(--fnt-serif);
+      font-size: 1.15rem;
+      font-style: italic;
+      color: var(--text-1);
+      line-height: 1.9;
+      margin-bottom: 16px;
+    }
+
+    .proof-edu cite {
+      font-family: var(--fnt-ui);
+      font-size: .63rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    .proof-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+    }
+
+    .proof-tool {
+      flex: 1;
+      min-width: 120px;
+      padding: 20px 24px;
+      background: var(--surface-2);
+      border-bottom: 2px solid transparent;
+      transition: border-color .25s var(--ease);
+    }
+
+    .proof-tool:hover { border-bottom-color: var(--gold); }
+
+    .proof-tool-name {
+      font-family: var(--fnt-display);
+      font-size: 1.25rem;
+      letter-spacing: .06em;
+      color: var(--text-1);
+      margin-bottom: 4px;
+    }
+
+    .proof-tool-desc {
+      font-family: var(--fnt-ui);
+      font-size: .58rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+
+    @media (max-width: 700px) {
+      .proof-head { flex-direction: column; align-items: flex-start; }
+      .proof-grid { grid-template-columns: 1fr; }
+      .cw { padding: 36px 28px; }
+      .proof-edu { padding: 24px 28px; }
+      .proof-tools { gap: 1px; }
+      .proof-tool { min-width: 100px; padding: 16px 18px; }
+    }
+
+    /* ═══════════════════════════════════════════════════
        ALLIANCE CTA
     ═══════════════════════════════════════════════════ */
     .alliance {
@@ -1635,6 +1870,7 @@
     <ul class="nav-links">
       <li><a href="#manifesto">Manifesto</a></li>
       <li><a href="#operations">Operations</a></li>
+      <li><a href="#proof">Proof</a></li>
       <li><a href="#sf2026">Sneaker Fest</a></li>
       <li><a href="#arsenal">Arsenal</a></li>
       <li><a href="#cultpsych">Ethnos</a></li>
@@ -1650,6 +1886,7 @@
   <div class="mob-menu" id="mob">
     <a href="#manifesto" class="ml">Manifesto</a>
     <a href="#operations" class="ml">Operations</a>
+    <a href="#proof" class="ml">Proof</a>
     <a href="#sf2026" class="ml">Sneaker Fest</a>
     <a href="#arsenal" class="ml">Arsenal</a>
     <a href="#cultpsych" class="ml">Ethnos</a>
@@ -1675,7 +1912,7 @@
       </h1>
 
       <p class="hero-sub">
-        Strategic Alchemist. Events Architect. Asymmetric leverage over a city that rewards survival instincts. From LASU campus circuits to the flagship frequency: <em>Sneaker Fest 2026.</em>
+        Strategic Alchemist. Events Architect. Digital Content Strategist. Asymmetric leverage over a city that rewards survival instincts. From LASU campus circuits — 8,000+ organic followers grown — to the flagship frequency: <em>Sneaker Fest 2026.</em>
       </p>
 
       <div class="hero-actions">
@@ -1695,8 +1932,8 @@
         <div class="h-stat-lbl">Executed Operations</div>
       </div>
       <div class="h-stat">
-        <div class="h-stat-val">1,361</div>
-        <div class="h-stat-lbl">Organic Media Views</div>
+        <div class="h-stat-val">8K+</div>
+        <div class="h-stat-lbl">Organic Followers Grown</div>
       </div>
       <div class="h-stat">
         <div class="h-stat-val">DEC 12</div>
@@ -1938,6 +2175,102 @@
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════
+       PROOF OF WORK / CLIENT WINS
+  ════════════════════════════════════ -->
+  <section class="proof sec-pad" id="proof">
+    <div class="wrap">
+
+      <div class="proof-head">
+        <div>
+          <div class="eyebrow rv">Digital Content Strategist · 4 Years Active</div>
+          <h2 class="sec-title rv d1">PROOF OF<br/>WORK</h2>
+        </div>
+        <p class="sec-sub rv" style="text-align:right; max-width:340px;">
+          Organic growth. Not ads. Not bought followers. The algorithm moved because the content was engineered to move it.
+        </p>
+      </div>
+
+      <div class="proof-hero rv d2">
+        <div class="proof-metric-hero">8,000<span>+</span></div>
+        <div class="proof-metric-label">Organic followers grown across two flagship client accounts — zero paid amplification</div>
+      </div>
+
+      <div class="proof-grid">
+        <!-- Client 01 -->
+        <div class="cw rv">
+          <div class="cw-head">
+            <div class="cw-num">01</div>
+            <div class="cw-handle">@iamdrsavage</div>
+          </div>
+          <div class="cw-rule"></div>
+          <div class="cw-role">Social Media &amp; Growth Lead</div>
+          <h3 class="cw-name">Dr Savage</h3>
+          <p class="cw-desc">Managed Instagram + Facebook simultaneously from ground level. Engineered organic audience growth by decoding niche content psychology and building a consistent visual-narrative identity — no paid amplification. Pure algorithmic precision through disciplined content architecture and community-first engagement.</p>
+          <div class="cw-platforms">
+            <span class="cw-plat">Instagram</span>
+            <span class="cw-plat">Facebook</span>
+          </div>
+          <div class="cw-stat">
+            <div class="cw-stat-val">8,000+</div>
+            <div class="cw-stat-lbl">Organic Followers · Instagram &amp; Facebook</div>
+          </div>
+        </div>
+
+        <!-- Client 02 -->
+        <div class="cw rv d1">
+          <div class="cw-head">
+            <div class="cw-num">02</div>
+            <div class="cw-handle">@Blackcocoagirls</div>
+          </div>
+          <div class="cw-rule"></div>
+          <div class="cw-role">Digital Community Manager</div>
+          <h3 class="cw-name">Black Cocoa Girls</h3>
+          <p class="cw-desc">Built the digital presence and brand voice from the ground up. Managed content calendar, community engagement strategy, and platform consistency across Instagram + Facebook. Viral reels engineered to hit organic distribution loops — content designed to travel, not just perform. The result: a surge that no ad spend could have manufactured.</p>
+          <div class="cw-platforms">
+            <span class="cw-plat">Instagram</span>
+            <span class="cw-plat">Facebook</span>
+          </div>
+          <div class="cw-stat">
+            <div class="cw-stat-val">8,000+</div>
+            <div class="cw-stat-lbl">Follower Surge · Viral Reels · Organic</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Education Frame -->
+      <blockquote class="proof-edu rv d3">
+        <p>"Studying chemistry at LASU taught me how to break down complex, volatile elements and rebuild them into something powerful — a controlled reaction with a precise output. That is exactly how I approach social media algorithms and consumer behaviour today. Every piece of content is a compound reaction: the right ingredients, the right conditions, the right timing."</p>
+        <cite>— BSc Chemistry · Lagos State University (LASU) · Agboola Farouq Oluwatobiloba</cite>
+      </blockquote>
+
+      <!-- Tool Stack -->
+      <div class="proof-tools rv d4">
+        <div class="proof-tool">
+          <div class="proof-tool-name">CapCut</div>
+          <div class="proof-tool-desc">Video Editing &amp; Reels</div>
+        </div>
+        <div class="proof-tool">
+          <div class="proof-tool-name">Canva</div>
+          <div class="proof-tool-desc">Graphic Design</div>
+        </div>
+        <div class="proof-tool">
+          <div class="proof-tool-name">Instagram</div>
+          <div class="proof-tool-desc">Primary Platform</div>
+        </div>
+        <div class="proof-tool">
+          <div class="proof-tool-name">Facebook</div>
+          <div class="proof-tool-desc">Community Growth</div>
+        </div>
+        <div class="proof-tool">
+          <div class="proof-tool-name">TikTok</div>
+          <div class="proof-tool-desc">Short-Form Content</div>
+        </div>
+      </div>
+
     </div>
   </section>
 
