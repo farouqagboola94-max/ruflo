@@ -11,46 +11,28 @@ export const testimonials: Testimonial[] = [
   {
     id: '1',
     quote:
-      "Working with Catalyst Talents was seamless from brief to shoot day. They understood what our brand needed and delivered talent that exceeded our expectations. The professionalism is unlike anything we've experienced with Lagos agencies before.",
-    author: 'Chinyere Adichie',
-    role: 'Brand Marketing Director',
-    company: 'Paga Nigeria',
-    category: 'brand',
+      "We sign people, not assets. Your welfare, your professional limits, and your long-term trajectory come before any booking — always. If a deal is not right for you, we do not take it.",
+    author: 'Catalyst Talents Lagos',
+    role: 'Our Commitment to Talent',
+    company: 'catalysttalentslagos.com',
+    category: 'model',
   },
   {
     id: '2',
     quote:
-      'Catalyst Talents has changed my career. Before signing, I was piecing together gigs on my own with no real direction. Now I have a team, a strategy, and bookings that match my ambition. They genuinely care about where you\'re going, not just where you are.',
-    author: 'Adaeze Okafor',
-    role: 'Fashion Model',
-    company: 'Catalyst Talents Lagos',
-    category: 'model',
+      "We are a new agency, and we say so honestly. That means every talent we work with gets our full attention. There is no large roster for you to get lost in. We are building something from the ground up, carefully and correctly.",
+    author: 'Catalyst Talents Lagos',
+    role: 'Our Approach',
+    company: 'A Catalyst Concepts Company',
+    category: 'brand',
   },
   {
     id: '3',
     quote:
-      'For Lagos Fashion Week, I needed models who could do justice to the structural complexity of my pieces. Catalyst Talents sent me exactly the right people — technically excellent, visually stunning, and completely professional on set.',
-    author: 'Kola Oshalusi',
-    role: 'Creative Director',
-    company: 'Insignia',
-    category: 'designer',
-  },
-  {
-    id: '4',
-    quote:
-      'The influencer campaign Catalyst Talents coordinated for our product launch delivered a 3x better engagement rate than our previous campaigns. Their talent understood the brief and made our brand look world-class.',
-    author: 'Bisi Adekunle',
-    role: 'Head of Digital',
-    company: 'Moove Africa',
-    category: 'brand',
-  },
-  {
-    id: '5',
-    quote:
-      "I've cast for Nollywood and international co-productions alike. When I need talent from Lagos that can hold their own on any set, I call Catalyst Talents first. Their roster is curated, their people are prepared, and the process is painless.",
-    author: 'Ngozi Williams',
-    role: 'Casting Director',
-    company: 'FilmHouse Studios',
+      "Every brand we work with receives professional, prepared talent — on brief, on time, and worth every naira. We represent our talent seriously. We expect brands to work with them seriously too.",
+    author: 'Catalyst Talents Lagos',
+    role: 'Our Promise to Clients',
+    company: 'catalysttalentslagos.com',
     category: 'director',
   },
 ]

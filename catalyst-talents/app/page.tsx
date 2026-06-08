@@ -38,10 +38,10 @@ const categories = [
 ]
 
 const stats = [
-  { value: '18+', label: 'Signed Talents' },
-  { value: '4', label: 'Divisions' },
-  { value: '200+', label: 'Campaign Bookings' },
-  { value: '30+', label: 'Brand Partners' },
+  { value: '4', label: 'Talent Divisions' },
+  { value: 'Open', label: 'Registrations' },
+  { value: 'Open', label: 'Brand Deals' },
+  { value: 'Lagos', label: 'Founded Here' },
 ]
 
 export default function HomePage() {
@@ -88,8 +88,10 @@ export default function HomePage() {
             </span>
           </h1>
           <p className="text-white/50 text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed mb-10">
-            Catalyst Talents Lagos illuminates extraordinary models and talents — from the streets
-            of Lagos to international runways, screens, and campaigns.
+            Catalyst Talents Lagos is a new talent management agency representing models,
+            influencers, actors, and commercial talent across Nigeria. We are open for
+            registrations and brand partnerships — and we are building this from the ground up,
+            the right way.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
@@ -146,7 +148,7 @@ export default function HomePage() {
       <section className="py-24 px-4 max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-14">
           <div>
-            <p className="text-[#D4AF37] text-[10px] tracking-[0.4em] uppercase mb-3">Signed Talents</p>
+            <p className="text-[#D4AF37] text-[10px] tracking-[0.4em] uppercase mb-3">Our Roster</p>
             <h2 className="font-playfair text-4xl sm:text-5xl font-bold text-white">
               Featured Models
               <span className="block w-14 h-px bg-[#D4AF37] mt-4" />
@@ -242,7 +244,7 @@ export default function HomePage() {
       {/* ── ABOUT SNIPPET ── */}
       <section className="py-24 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="text-[#D4AF37] text-[10px] tracking-[0.4em] uppercase mb-6">Our Story</p>
+          <p className="text-[#D4AF37] text-[10px] tracking-[0.4em] uppercase mb-6">Who We Are</p>
           <h2 className="font-playfair text-4xl sm:text-5xl font-bold text-white mb-8">
             Born in Lagos.
             <br />
@@ -259,13 +261,15 @@ export default function HomePage() {
             </span>
           </h2>
           <p className="text-white/50 text-lg leading-relaxed mb-6">
-            Catalyst Talents Lagos is the talent & modelling arm of Catalyst Concepts — a creative
-            powerhouse rooted in Lagos, Nigeria. We believe the continent&apos;s most extraordinary
-            faces, bodies, and personalities deserve a platform that matches their potential.
+            Catalyst Talents Lagos is the talent &amp; modelling arm of Catalyst Concepts. We are a
+            new agency — and we are transparent about that. We represent models, influencers,
+            actors, and commercial talent, and we do it with a welfare-first approach built into
+            everything from day one.
           </p>
           <p className="text-white/35 leading-relaxed mb-10">
-            We don&apos;t just manage talent — we develop careers, build narratives, and connect
-            Lagos to the global fashion and entertainment industry.
+            We don&apos;t have decades of bookings to show you. We have a clear mission, a genuine
+            commitment to the people we represent, and a Lagos full of extraordinary talent that
+            deserves a proper platform. We are open for applications and brand deals now.
           </p>
           <Link
             href="/about"
@@ -276,7 +280,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── TESTIMONIALS ── */}
+      {/* ── WHAT WE STAND FOR ── */}
       <TestimonialsSection />
 
       {/* ── NEWS PREVIEW ── */}
@@ -330,12 +334,13 @@ export default function HomePage() {
                   backgroundClip: 'text',
                 }}
               >
-                Discovered?
+                Represented?
               </span>
             </h2>
             <p className="text-white/45 max-w-xl mx-auto mb-10 leading-relaxed">
-              We are actively scouting models, influencers, actors, and commercial talent across
-              Lagos and Nigeria. Submit your application today.
+              We are actively looking for models, influencers, actors, and commercial talent across
+              Lagos and Nigeria. No prior agency experience required. Submit your application and
+              let&apos;s build something together.
             </p>
             <Link
               href="/apply"
