@@ -145,7 +145,6 @@ export default function RafflePage() {
       {/* Step 2 — Allocate */}
       {step === 'allocate' && ticket && (
         <div>
-          {/* Ticket banner */}
           <div className="bg-brand-gray rounded-2xl p-5 border border-brand-orange/20 mb-8 flex items-center justify-between flex-wrap gap-4">
             <div>
               <p className="text-gray-400 text-sm">
@@ -161,7 +160,6 @@ export default function RafflePage() {
             </div>
           </div>
 
-          {/* Drop grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
             {RAFFLE_ITEMS.map(item => {
               const count = allocation[item.id] ?? 0
@@ -186,7 +184,7 @@ export default function RafflePage() {
                     <p className="text-gray-400 text-xs mb-3">{item.colorway}</p>
                     <div className="flex items-center justify-between text-xs mb-4">
                       <span className="text-brand-orange">{item.pairs} pairs up for grabs</span>
-                      <span className="text-gray-500">Retail ${item.retailValue}</span>
+                      <span className="text-gray-500">Retail ₦{item.retailValue.toLocaleString()}</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <button
@@ -220,7 +218,6 @@ export default function RafflePage() {
             })}
           </div>
 
-          {/* Submit panel */}
           <div className="max-w-md mx-auto">
             <div className="bg-brand-dark rounded-xl p-4 border border-white/10 mb-4 space-y-1.5">
               <div className="flex justify-between text-sm text-gray-400">
@@ -265,8 +262,6 @@ export default function RafflePage() {
                 ? 'Entries for this ticket have already been submitted.'
                 : `${submission.totalEntries} ${submission.totalEntries === 1 ? 'entry' : 'entries'} registered successfully.`}
             </p>
-
-            {/* Entry summary */}
             <div className="bg-brand-dark rounded-xl p-4 border border-white/10 text-left mb-6 space-y-2">
               {Object.entries(submission.allocation)
                 .filter(([, count]) => count > 0)
@@ -286,12 +281,10 @@ export default function RafflePage() {
                   )
                 })}
             </div>
-
             <p className="text-gray-500 text-xs mb-8">
               Draw is live on stage at 4:00 PM · December 12
               <br />Winners are contacted on the day
             </p>
-
             <div className="flex gap-4 justify-center flex-wrap">
               <Link href="/schedule" className="text-brand-orange text-sm hover:underline">
                 View schedule →

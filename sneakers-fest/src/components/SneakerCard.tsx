@@ -42,8 +42,8 @@ export default function SneakerCard({ sneaker, showSeller }: Props) {
         <p className="text-gray-400 text-xs mb-3">{sneaker.colorway}</p>
         <div className="flex items-center justify-between">
           <div>
-            <span className="text-white font-bold text-lg">${sneaker.price}</span>
-            {sneaker.price > sneaker.retailPrice && <span className="text-gray-500 text-xs line-through ml-2">${sneaker.retailPrice}</span>}
+            <span className="text-white font-bold text-lg">₦{sneaker.price.toLocaleString()}</span>
+            {sneaker.price > sneaker.retailPrice && <span className="text-gray-500 text-xs line-through ml-2">₦{sneaker.retailPrice.toLocaleString()}</span>}
           </div>
           <span className="text-xs text-gray-500">{sneaker.category}</span>
         </div>

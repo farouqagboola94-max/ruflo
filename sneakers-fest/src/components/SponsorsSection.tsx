@@ -10,15 +10,24 @@ const TIER_STYLES: Record<string, string> = {
   media: 'text-gray-400 border-gray-400/20 bg-gray-400/5 text-base font-medium',
 }
 
+const hasSponsors = SPONSORS.length > 0
+
 export default function SponsorsSection() {
   return (
     <section className="py-20 border-t border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">Presented by</p>
-          <h2 className="font-display text-4xl sm:text-5xl text-white">SPONSORS & PARTNERS</h2>
+          <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">
+            {hasSponsors ? 'Presented by' : 'Partnerships'}
+          </p>
+          <h2 className="font-display text-4xl sm:text-5xl text-white">SPONSORS &amp; PARTNERS</h2>
+          {!hasSponsors && (
+            <p className="text-gray-500 text-base mt-4 max-w-xl mx-auto">
+              Sneakers Fest 2026 is open for brand partnerships. Be part of West Africa&apos;s first dedicated sneaker festival.
+            </p>
+          )}
         </div>
-        {TIER_ORDER.map(tier => {
+        {hasSponsors && TIER_ORDER.map(tier => {
           const items = SPONSORS.filter(s => s.tier === tier)
           if (!items.length) return null
           return (
@@ -35,7 +44,7 @@ export default function SponsorsSection() {
           )
         })}
         <div className="mt-12 text-center">
-          <p className="text-gray-500 text-sm mb-4">Want your brand at Lagos’ first sneaker festival?</p>
+          <p className="text-gray-500 text-sm mb-4">Want your brand at Lagos&apos; first sneaker festival?</p>
           <Link
             href="/sponsors"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-brand-orange/30 text-brand-orange text-sm font-semibold hover:bg-brand-orange/10 transition-colors"

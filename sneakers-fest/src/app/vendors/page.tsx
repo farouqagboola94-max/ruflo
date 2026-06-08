@@ -76,7 +76,7 @@ export default function VendorsPage() {
         <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">December 12, 2026</p>
         <h1 className="font-display text-5xl sm:text-6xl text-white mb-4">VENDOR REGISTRATION</h1>
         <p className="text-gray-400 text-lg max-w-xl mx-auto">
-          Secure your booth at Africa's biggest sneaker event. Limited spots — first come, first served.
+          Secure your booth at West Africa&apos;s first dedicated sneaker event. Limited spots — first come, first served.
         </p>
       </div>
 
@@ -105,7 +105,7 @@ export default function VendorsPage() {
                 <span className="text-xs text-gray-500 bg-brand-dark px-2 py-1 rounded-lg mt-1">{tier.size}</span>
               </div>
               <div className="flex items-baseline gap-1 mb-3">
-                <span className="text-4xl font-bold text-gradient">${tier.price}</span>
+                <span className="text-4xl font-bold text-gradient">₦{tier.price.toLocaleString()}</span>
                 <span className="text-gray-400 text-sm">one-time</span>
               </div>
               <p className="text-gray-400 text-sm mb-6 leading-relaxed">{tier.description}</p>
@@ -139,7 +139,7 @@ export default function VendorsPage() {
             <h2 className="font-display text-2xl text-white mb-2">YOUR APPLICATION</h2>
             {booth ? (
               <p className="text-brand-orange text-sm mb-6">
-                {booth.name} · {booth.size} · ${booth.price}
+                {booth.name} · {booth.size} · ₦{booth.price.toLocaleString()}
               </p>
             ) : (
               <p className="text-gray-500 text-sm mb-6">Select a booth tier above, then fill in your details.</p>
@@ -203,11 +203,11 @@ export default function VendorsPage() {
                 <div className="bg-brand-dark rounded-xl p-4 border border-white/10">
                   <div className="flex justify-between text-sm text-gray-400 mb-1">
                     <span>{booth.name}</span>
-                    <span>${booth.price}</span>
+                    <span>₦{booth.price.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between font-bold text-white">
                     <span>Total Due</span>
-                    <span className="text-gradient text-lg">${booth.price}</span>
+                    <span className="text-gradient text-lg">₦{booth.price.toLocaleString()}</span>
                   </div>
                 </div>
               )}
@@ -216,7 +216,7 @@ export default function VendorsPage() {
                 disabled={!booth}
                 className="w-full py-4 rounded-xl bg-gradient-to-r from-brand-orange to-brand-yellow text-black font-bold text-lg hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                {booth ? `Submit Application & Pay $${booth.price}` : 'Select a Booth First'}
+                {booth ? `Submit Application — ₦${booth.price.toLocaleString()}` : 'Select a Booth First'}
               </button>
             </form>
           </div>
@@ -237,8 +237,8 @@ export default function VendorsPage() {
                 <span className="text-white">{BOOTH_TIERS.find(b => b.id === confirmedApp.boothType)?.name}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-400">Amount Paid</span>
-                <span className="text-white">${confirmedApp.amount}</span>
+                <span className="text-gray-400">Booth Fee</span>
+                <span className="text-white">₦{confirmedApp.amount.toLocaleString()}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-400">Status</span>
@@ -246,7 +246,7 @@ export default function VendorsPage() {
               </div>
             </div>
             <p className="text-gray-500 text-sm mb-8">
-              We'll review your application and contact you within 3–5 business days.
+              We&apos;ll review your application and contact you within 3–5 business days.
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <button onClick={resetForm} className="text-brand-orange text-sm hover:underline">
