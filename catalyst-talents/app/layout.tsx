@@ -15,10 +15,31 @@ export const metadata: Metadata = {
     'talent management Nigeria',
     'Catalyst Concepts',
   ],
+  icons: {
+    icon: '/catalyst-logo.svg',
+    shortcut: '/catalyst-logo.svg',
+    apple: '/catalyst-logo.svg',
+  },
   openGraph: {
     title: 'Catalyst Talents Lagos',
-    description: 'Where Lagos Meets the World\'s Runways',
+    description: "Where Lagos Meets the World's Runways",
     type: 'website',
+    images: [
+      {
+        url: '/catalyst-logo.svg',
+        width: 600,
+        height: 380,
+        alt: 'Catalyst Talents Lagos — A Division of Catalyst Concepts',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary',
+    site: '@Catalyst188',
+    creator: '@Catalyst188',
+    title: 'Catalyst Talents Lagos',
+    description: "Where Lagos Meets the World's Runways",
+    images: ['/catalyst-logo.svg'],
   },
 }
 
