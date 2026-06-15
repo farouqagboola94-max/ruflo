@@ -85,6 +85,26 @@ export default function ContactPage() {
                     <p className="text-white/25 text-xs mt-0.5">Founder direct</p>
                   </div>
                 </div>
+                <div className="flex gap-4">
+                  <span className="text-gold mt-0.5">◆</span>
+                  <div className="space-y-1.5">
+                    <a
+                      href="tel:+2347084111516"
+                      className="text-white/70 hover:text-gold transition-colors block"
+                    >
+                      +234 708 411 1516
+                    </a>
+                    <a
+                      href="https://wa.me/2349052685799"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white/40 hover:text-gold transition-colors text-xs flex items-center gap-1.5"
+                    >
+                      <span className="text-gold">→</span>
+                      WhatsApp: +234 905 268 5799
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
 

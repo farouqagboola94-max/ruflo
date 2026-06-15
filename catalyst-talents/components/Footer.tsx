@@ -102,6 +102,21 @@ export default function Footer() {
                   info@catalysttalentslagos.com
                 </a>
               </li>
+              <li>
+                <a href="tel:+2347084111516" className="hover:text-[#D4AF37] transition-colors">
+                  +234 708 411 1516
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://wa.me/2349052685799"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#D4AF37] transition-colors"
+                >
+                  WhatsApp us
+                </a>
+              </li>
               <li className="pt-2">
                 <Link
                   href="/contact"
