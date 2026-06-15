@@ -74,28 +74,21 @@ export default function AboutPage() {
       {/* STORY */}
       <section className="py-20 px-4">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <div
-            className="aspect-[4/3] relative"
-            style={{
-              background: 'linear-gradient(135deg, #1a1208 0%, #2a1e0a 40%, #0d0d07 100%)',
-              border: '1px solid rgba(212, 175, 55, 0.15)',
-            }}
-          >
-            <div
-              className="absolute inset-0 opacity-20"
-              style={{
-                backgroundImage:
-                  'linear-gradient(#D4AF37 1px, transparent 1px), linear-gradient(90deg, #D4AF37 1px, transparent 1px)',
-                backgroundSize: '40px 40px',
-              }}
+          <div className="relative overflow-hidden aspect-[4/3]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/catalyst-dragon.jpg"
+              alt="The Catalyst — Catalyst Concepts, Lagos 2026"
+              className="w-full h-full object-cover"
+              style={{ filter: 'brightness(0.88) contrast(1.05)' }}
             />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <span className="font-playfair text-6xl font-bold gold-text block">CTL</span>
-                <span className="text-white/20 text-xs tracking-[0.5em] uppercase mt-2 block">
-                  Est. Lagos, 2025
-                </span>
-              </div>
+            <div
+              className="absolute inset-x-0 bottom-0 p-5"
+              style={{ background: 'linear-gradient(transparent, rgba(5,5,5,0.92))' }}
+            >
+              <p className="text-[#D4AF37]/50 text-[9px] tracking-[0.4em] uppercase">
+                Catalyst Concepts · Main Headquarters · Lagos · 2026
+              </p>
             </div>
           </div>
 

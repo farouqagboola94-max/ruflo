@@ -114,6 +114,54 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── BRAND VISUAL ── */}
+      <section style={{ background: '#050505' }}>
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2">
+            <div className="relative overflow-hidden" style={{ minHeight: '480px' }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/catalyst-dragon.jpg"
+                alt="The Catalyst — Catalyst Concepts, Lagos 2026"
+                className="w-full h-full object-cover"
+                style={{ minHeight: '480px', filter: 'brightness(0.88) contrast(1.05)' }}
+              />
+              <div
+                className="absolute inset-x-0 bottom-0 p-6"
+                style={{ background: 'linear-gradient(transparent, rgba(5,5,5,0.95))' }}
+              >
+                <p className="text-white/30 text-[9px] tracking-[0.4em] uppercase">
+                  Catalyst Concepts · Lagos · March 2026
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex flex-col justify-center px-10 py-16 lg:px-16"
+              style={{ background: 'linear-gradient(135deg, #070705 0%, #0d0d0a 100%)' }}
+            >
+              <p className="text-[#D4AF37] text-[10px] tracking-[0.5em] uppercase mb-5">
+                The Force Behind the Agency
+              </p>
+              <h2 className="font-playfair text-3xl sm:text-4xl font-bold text-white mb-6 leading-tight">
+                Catalyst Concepts
+                <span className="block italic text-[#D4AF37]/80 text-2xl sm:text-3xl mt-1">
+                  Main Headquarters
+                </span>
+                <span className="block w-12 h-px bg-[#D4AF37] mt-5" />
+              </h2>
+              <p className="text-white/50 leading-relaxed mb-5 text-sm sm:text-base">
+                Catalyst Talents Lagos is the talent &amp; modelling division of Catalyst Concepts —
+                a creative company established in Lagos in 2026, built around a single belief:
+                this city produces extraordinary people who deserve an extraordinary platform.
+              </p>
+              <p className="text-white/30 text-sm leading-relaxed">
+                The dragon rises from Lagos. Powerful, purposeful, and facing the world.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── STATS ── */}
       <section
         style={{
