@@ -2,6 +2,7 @@ import Link from 'next/link'
 import ModelCard from '@/components/ModelCard'
 import NewsCard from '@/components/NewsCard'
 import TestimonialsSection from '@/components/TestimonialsSection'
+import ManifestoSection from '@/components/ManifestoSection'
 import { models } from '@/data/models'
 import { news } from '@/data/news'
 import { services } from '@/data/services'
@@ -54,23 +55,23 @@ export default function HomePage() {
       {/* ── HERO ── */}
       <section
         className="relative min-h-screen flex items-center justify-center overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #000000 0%, #0a0a0a 40%, #0d0d07 70%, #0a0a0a 100%)' }}
+        style={{
+          background:
+            'linear-gradient(135deg, #000000 0%, #0a0a0a 40%, #0d0d07 70%, #0a0a0a 100%)',
+        }}
       >
-        <div
-          className="absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage:
-              'linear-gradient(#D4AF37 1px, transparent 1px), linear-gradient(90deg, #D4AF37 1px, transparent 1px)',
-            backgroundSize: '80px 80px',
-          }}
-        />
+        {/* Aso-oke textile texture — Nigerian woven fabric motif */}
+        <div className="absolute inset-0 aso-oke-texture pointer-events-none" />
         <div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full"
-          style={{ background: 'radial-gradient(circle, #D4AF37 0%, transparent 65%)', opacity: 0.04 }}
+          style={{
+            background: 'radial-gradient(circle, #D4AF37 0%, transparent 65%)',
+            opacity: 0.04,
+          }}
         />
         <div className="relative z-10 text-center px-4 max-w-5xl mx-auto pt-20">
           <p className="text-[#D4AF37] text-[10px] tracking-[0.5em] uppercase mb-6">
-            A Catalyst Concepts Extension
+            Believe · Standard · Catalyst
           </p>
           <h1 className="font-playfair text-5xl sm:text-7xl lg:text-8xl font-bold text-white leading-tight mb-6">
             Where Lagos
@@ -78,7 +79,8 @@ export default function HomePage() {
             <span
               className="italic"
               style={{
-                background: 'linear-gradient(135deg, #D4AF37 0%, #F0D060 50%, #D4AF37 100%)',
+                background:
+                  'linear-gradient(135deg, #D4AF37 0%, #F0D060 50%, #D4AF37 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
@@ -88,10 +90,9 @@ export default function HomePage() {
             </span>
           </h1>
           <p className="text-white/50 text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed mb-10">
-            Catalyst Talents Lagos is a new talent management agency representing models,
-            influencers, actors, and commercial talent across Nigeria. We are open for
-            registrations and brand partnerships — and we are building this from the ground up,
-            the right way.
+            Born from Lagos. Built for the world. A new talent management agency — and we are honest
+            about that. Models, influencers, actors, and commercial talent across Nigeria,
+            represented the right way: welfare first, culture intact, standard uncompromised.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
@@ -114,6 +115,9 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── MANIFESTO ── */}
+      <ManifestoSection />
+
       {/* ── BRAND VISUAL ── */}
       <section style={{ background: '#050505' }}>
         <div className="max-w-7xl mx-auto">
@@ -128,7 +132,9 @@ export default function HomePage() {
               />
               <div
                 className="absolute inset-x-0 bottom-0 p-6"
-                style={{ background: 'linear-gradient(transparent, rgba(5,5,5,0.95))' }}
+                style={{
+                  background: 'linear-gradient(transparent, rgba(5,5,5,0.95))',
+                }}
               >
                 <p className="text-white/30 text-[9px] tracking-[0.4em] uppercase">
                   Catalyst Concepts · Lagos · March 2026
@@ -137,7 +143,9 @@ export default function HomePage() {
             </div>
             <div
               className="flex flex-col justify-center px-10 py-16 lg:px-16"
-              style={{ background: 'linear-gradient(135deg, #070705 0%, #0d0d0a 100%)' }}
+              style={{
+                background: 'linear-gradient(135deg, #070705 0%, #0d0d0a 100%)',
+              }}
             >
               <p className="text-[#D4AF37] text-[10px] tracking-[0.5em] uppercase mb-5">
                 The Force Behind the Agency
@@ -150,8 +158,8 @@ export default function HomePage() {
                 <span className="block w-12 h-px bg-[#D4AF37] mt-5" />
               </h2>
               <p className="text-white/50 leading-relaxed mb-5 text-sm sm:text-base">
-                Catalyst Talents Lagos is the talent &amp; modelling division of Catalyst Concepts —
-                a creative company established in Lagos in 2026, built around a single belief:
+                Catalyst Talents Lagos is the talent &amp; modelling division of Catalyst Concepts
+                — a creative company established in Lagos in 2026, built around a single belief:
                 this city produces extraordinary people who deserve an extraordinary platform.
               </p>
               <p className="text-white/30 text-sm leading-relaxed">
@@ -177,7 +185,8 @@ export default function HomePage() {
                 <div
                   className="font-playfair text-4xl sm:text-5xl font-bold mb-2"
                   style={{
-                    background: 'linear-gradient(135deg, #D4AF37 0%, #F0D060 50%, #D4AF37 100%)',
+                    background:
+                      'linear-gradient(135deg, #D4AF37 0%, #F0D060 50%, #D4AF37 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',
@@ -185,7 +194,9 @@ export default function HomePage() {
                 >
                   {value}
                 </div>
-                <div className="text-white/30 text-[9px] tracking-[0.4em] uppercase">{label}</div>
+                <div className="text-white/30 text-[9px] tracking-[0.4em] uppercase">
+                  {label}
+                </div>
               </div>
             ))}
           </div>
@@ -225,7 +236,9 @@ export default function HomePage() {
       {/* ── DIVISIONS ── */}
       <section className="py-24 px-4 max-w-7xl mx-auto">
         <div className="mb-14">
-          <p className="text-[#D4AF37] text-[10px] tracking-[0.4em] uppercase mb-3">What We Represent</p>
+          <p className="text-[#D4AF37] text-[10px] tracking-[0.4em] uppercase mb-3">
+            What We Represent
+          </p>
           <h2 className="font-playfair text-4xl sm:text-5xl font-bold text-white">
             Our Divisions
             <span className="block w-14 h-px bg-[#D4AF37] mt-4" />
@@ -261,7 +274,9 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-14">
             <div>
-              <p className="text-[#D4AF37] text-[10px] tracking-[0.4em] uppercase mb-3">For Brands & Clients</p>
+              <p className="text-[#D4AF37] text-[10px] tracking-[0.4em] uppercase mb-3">
+                For Brands & Clients
+              </p>
               <h2 className="font-playfair text-4xl sm:text-5xl font-bold text-white">
                 What We Offer
                 <span className="block w-14 h-px bg-[#D4AF37] mt-4" />
@@ -328,14 +343,16 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── WHAT WE STAND FOR ── */}
+      {/* ── THE CTL STANDARD ── */}
       <TestimonialsSection />
 
       {/* ── NEWS PREVIEW ── */}
       <section className="py-24 px-4 max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-14">
           <div>
-            <p className="text-[#D4AF37] text-[10px] tracking-[0.4em] uppercase mb-3">Latest from Catalyst</p>
+            <p className="text-[#D4AF37] text-[10px] tracking-[0.4em] uppercase mb-3">
+              Latest from Catalyst
+            </p>
             <h2 className="font-playfair text-4xl sm:text-5xl font-bold text-white">
               News & Stories
               <span className="block w-14 h-px bg-[#D4AF37] mt-4" />
@@ -366,17 +383,23 @@ export default function HomePage() {
         >
           <div
             className="absolute inset-0 opacity-10"
-            style={{ backgroundImage: 'radial-gradient(circle at 50% 50%, #D4AF37 0%, transparent 60%)' }}
+            style={{
+              backgroundImage:
+                'radial-gradient(circle at 50% 50%, #D4AF37 0%, transparent 60%)',
+            }}
           />
           <div className="relative z-10">
-            <p className="text-[#D4AF37] text-[10px] tracking-[0.4em] uppercase mb-4">Join the Roster</p>
+            <p className="text-[#D4AF37] text-[10px] tracking-[0.4em] uppercase mb-4">
+              Join the Roster
+            </p>
             <h2 className="font-playfair text-4xl sm:text-6xl font-bold text-white mb-6">
               Ready to Be
               <br />
               <span
                 className="italic"
                 style={{
-                  background: 'linear-gradient(135deg, #D4AF37 0%, #F0D060 50%, #D4AF37 100%)',
+                  background:
+                    'linear-gradient(135deg, #D4AF37 0%, #F0D060 50%, #D4AF37 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',

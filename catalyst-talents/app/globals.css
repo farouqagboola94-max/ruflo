@@ -47,3 +47,32 @@ body {
   background: #D4AF37;
   margin-top: 16px;
 }
+
+/*
+  Aso-oke textile pattern
+  ─────────────────────────────────────────────────────────────────────────────
+  Inspired by Nigerian hand-woven Aso-oke fabric — the rhythmic horizontal
+  stripe structure with subtle cross-thread geometry. Applied at very low
+  opacity so it reads as texture, not pattern.
+*/
+.aso-oke-texture {
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 11px,
+      rgba(212, 175, 55, 0.032) 11px,
+      rgba(212, 175, 55, 0.032) 12px,
+      transparent 12px,
+      transparent 23px,
+      rgba(212, 175, 55, 0.018) 23px,
+      rgba(212, 175, 55, 0.018) 24px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 47px,
+      rgba(212, 175, 55, 0.02) 47px,
+      rgba(212, 175, 55, 0.02) 48px
+    );
+}
