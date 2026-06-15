@@ -12,6 +12,7 @@ export default function Navbar() {
     { href: '/', label: 'Home' },
     { href: '/models', label: 'Models' },
     { href: '/services', label: 'Services' },
+    { href: '/partnerships', label: 'Partnerships' },
     { href: '/news', label: 'News' },
     { href: '/press', label: 'Press' },
     { href: '/about', label: 'About' },
@@ -43,7 +44,7 @@ export default function Navbar() {
               </span>
             </Link>
 
-            <div className="hidden lg:flex items-center gap-7">
+            <div className="hidden lg:flex items-center gap-6">
               {links.map((link) => (
                 <Link
                   key={link.href}
@@ -87,7 +88,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div className={`lg:hidden overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-[500px]' : 'max-h-0'}`}>
+        <div className={`lg:hidden overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-[600px]' : 'max-h-0'}`}>
           <div className="bg-[#0d0d0d] border-t border-[#D4AF37]/10 px-4 py-6 space-y-5">
             {links.map((link) => (
               <Link

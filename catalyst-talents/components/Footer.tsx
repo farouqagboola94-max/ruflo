@@ -3,6 +3,11 @@ import Link from 'next/link'
 export default function Footer() {
   const year = new Date().getFullYear()
 
+  const socials = [
+    { label: 'Instagram', href: 'https://instagram.com/catalystggg' },
+    { label: 'Twitter / X', href: 'https://twitter.com/Catalyst188' },
+  ]
+
   return (
     <footer className="bg-[#0d0d0d] border-t border-[#D4AF37]/10 pt-20 pb-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -22,13 +27,15 @@ export default function Footer() {
               Concepts — shaping the future of African fashion and entertainment.
             </p>
             <div className="flex flex-wrap gap-5">
-              {['Instagram', 'TikTok', 'Twitter', 'LinkedIn'].map((s) => (
+              {socials.map((s) => (
                 <a
-                  key={s}
-                  href="#"
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-[10px] tracking-wider text-white/25 hover:text-[#D4AF37] transition-colors uppercase"
                 >
-                  {s}
+                  {s.label}
                 </a>
               ))}
             </div>
@@ -41,6 +48,7 @@ export default function Footer() {
               {[
                 { href: '/models', label: 'Our Models' },
                 { href: '/services', label: 'Services' },
+                { href: '/partnerships', label: 'Partnerships' },
                 { href: '/about', label: 'About Us' },
                 { href: '/news', label: 'News & Stories' },
                 { href: '/press', label: 'Press & Media' },
@@ -94,17 +102,12 @@ export default function Footer() {
                   info@catalysttalentslagos.com
                 </a>
               </li>
-              <li>
-                <a href="tel:+2348000000000" className="hover:text-[#D4AF37] transition-colors">
-                  +234 800 000 0000
-                </a>
-              </li>
               <li className="pt-2">
                 <Link
                   href="/contact"
                   className="text-[#D4AF37]/50 hover:text-[#D4AF37] transition-colors text-[10px] tracking-widest uppercase"
                 >
-                  Send a message →
+                  Send a message &rarr;
                 </Link>
               </li>
             </ul>

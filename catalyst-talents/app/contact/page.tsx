@@ -26,6 +26,11 @@ export default function ContactPage() {
     'w-full bg-dark-200 border border-white/10 focus:border-gold/50 text-white placeholder-white/25 px-4 py-3 text-sm outline-none transition-colors duration-300'
   const labelClass = 'block text-xs tracking-widest uppercase text-white/40 mb-2'
 
+  const socials = [
+    { label: 'Instagram', handle: '@catalystggg', href: 'https://instagram.com/catalystggg' },
+    { label: 'Twitter / X', handle: '@Catalyst188', href: 'https://twitter.com/Catalyst188' },
+  ]
+
   return (
     <>
       {/* HEADER */}
@@ -37,7 +42,7 @@ export default function ContactPage() {
           <p className="text-gold text-xs tracking-[0.5em] uppercase mb-4">Get in Touch</p>
           <h1 className="font-playfair text-5xl sm:text-7xl font-bold text-white mb-4">Contact Us</h1>
           <p className="text-white/40 leading-relaxed">
-            For bookings, press enquiries, partnerships, or general questions — we&apos;d love to hear from you.
+            For bookings, press enquiries, partnerships, or general questions &mdash; we&apos;d love to hear from you.
           </p>
         </div>
       </section>
@@ -71,9 +76,13 @@ export default function ContactPage() {
                 <div className="flex gap-4">
                   <span className="text-gold mt-0.5">✦</span>
                   <div>
-                    <a href="tel:+2348000000000" className="text-white/70 hover:text-gold transition-colors">
-                      +234 800 000 0000
+                    <a
+                      href="mailto:farouqagboola94@gmail.com"
+                      className="text-white/70 hover:text-gold transition-colors"
+                    >
+                      farouqagboola94@gmail.com
                     </a>
+                    <p className="text-white/25 text-xs mt-0.5">Founder direct</p>
                   </div>
                 </div>
               </div>
@@ -82,8 +91,8 @@ export default function ContactPage() {
             <div>
               <h4 className="text-xs tracking-[0.3em] uppercase text-gold mb-4">Office Hours</h4>
               <div className="space-y-2 text-sm text-white/40">
-                <p>Monday – Friday: 9am – 6pm WAT</p>
-                <p>Saturday: 10am – 2pm WAT</p>
+                <p>Monday &ndash; Friday: 9am &ndash; 6pm WAT</p>
+                <p>Saturday: 10am &ndash; 2pm WAT</p>
                 <p>Sunday: Closed</p>
               </div>
             </div>
@@ -91,13 +100,17 @@ export default function ContactPage() {
             <div>
               <h4 className="text-xs tracking-[0.3em] uppercase text-gold mb-4">Follow Us</h4>
               <div className="flex flex-col gap-3">
-                {['Instagram', 'TikTok', 'Twitter / X', 'LinkedIn'].map((s) => (
+                {socials.map((s) => (
                   <a
-                    key={s}
-                    href="#"
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="text-sm text-white/40 hover:text-gold transition-colors flex items-center gap-2"
                   >
-                    <span className="text-gold text-xs">→</span> {s}
+                    <span className="text-gold text-xs">&rarr;</span>
+                    <span>{s.label}</span>
+                    <span className="text-white/20 text-xs">{s.handle}</span>
                   </a>
                 ))}
               </div>
@@ -109,11 +122,11 @@ export default function ContactPage() {
             {submitted ? (
               <div className="h-full flex flex-col items-center justify-center text-center py-16">
                 <div className="w-16 h-16 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center mb-6">
-                  <span className="text-gold text-2xl">✓</span>
+                  <span className="text-gold text-2xl">&#10003;</span>
                 </div>
                 <h3 className="font-playfair text-2xl font-bold text-white mb-2">Message Sent</h3>
                 <p className="text-white/40 text-sm">
-                  Thank you for reaching out. We&apos;ll get back to you within 24–48 hours.
+                  Thank you for reaching out. We&apos;ll get back to you within 24&ndash;48 hours.
                 </p>
                 <button
                   onClick={() => setSubmitted(false)}
@@ -168,7 +181,7 @@ export default function ContactPage() {
                     <option value="" disabled>Select a subject</option>
                     <option className="bg-dark-200" value="booking">Book a Model / Talent</option>
                     <option className="bg-dark-200" value="partnership">Brand Partnership</option>
-                    <option className="bg-dark-200" value="press">Press & Media</option>
+                    <option className="bg-dark-200" value="press">Press &amp; Media</option>
                     <option className="bg-dark-200" value="general">General Enquiry</option>
                   </select>
                 </div>
