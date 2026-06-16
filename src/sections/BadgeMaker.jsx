@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { addXP } from '../lib/passport'
+import { addXP, XP_VALUES } from '../lib/passport'
 
 const TIERS = ['ATTENDEE', 'VIP', 'VENDOR', 'PRESS', 'SPEAKER']
 
@@ -30,7 +30,7 @@ export default function BadgeMaker() {
     a.click()
     URL.revokeObjectURL(url)
     setDownloaded(true)
-    addXP(50, 'Badge Maker', 'badge-creator')
+    addXP(XP_VALUES.quickTask, 'Badge Maker', 'badge-creator')
     setTimeout(() => setDownloaded(false), 2000)
   }
 

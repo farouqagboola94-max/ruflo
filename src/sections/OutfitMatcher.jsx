@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { addXP, hasBadge } from '../lib/passport'
+import { addXP, hasBadge, XP_VALUES } from '../lib/passport'
 
 const API = import.meta.env.VITE_BACKEND_URL || ''
 
@@ -59,7 +59,7 @@ export default function OutfitMatcher() {
     if (!matches) matches = localMatch({ vibe, color, budget })
     setResults(matches)
     setLoading(false)
-    if (!hasBadge('outfit-match')) addXP(50, 'Outfit Matcher', 'outfit-match')
+    if (!hasBadge('outfit-match')) addXP(XP_VALUES.quickTask, 'Outfit Matcher', 'outfit-match')
   }
 
   return (

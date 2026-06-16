@@ -10,6 +10,35 @@ export const TIERS = [
   { name: 'Catalyst Elite', min: 3000, color: '#B8FF00' },
 ]
 
+// Single source of truth for every XP reward on the site. Sections import
+// from here instead of hardcoding numbers so the economy stays consistent
+// and the Passport's "Ways to Earn" list never drifts out of sync.
+export const XP_VALUES = {
+  miniPeek: 20,         // Mystery Drop hover/peek
+  quickTask: 50,         // Badge Maker, Outfit Matcher, Raffle entry
+  spinLose: 15,          // Spin to Win — "try again" consolation
+  spinWin: 150,          // Spin to Win — real prize
+  contribution: 100,     // Community Wall post, Gallery upload
+  bigCommitment: 200,    // Museum bid
+  triviaPerCorrect: 100, // Sneaker Trivia — base XP per correct answer
+  triviaQuestions: 10,   // Sneaker Trivia — total questions per run
+}
+
+// Sneaker Trivia awards a streak multiplier on top of the per-question base.
+export function triviaStreakMultiplier(streak) {
+  return streak >= 5 ? 3 : streak >= 3 ? 2 : 1
+}
+
+// Max XP obtainable from a single perfect Sneaker Trivia run (all correct, streak maxed).
+export const TRIVIA_MAX_XP = (() => {
+  let total = 0, streak = 0
+  for (let i = 0; i < XP_VALUES.triviaQuestions; i++) {
+    streak += 1
+    total += XP_VALUES.triviaPerCorrect * triviaStreakMultiplier(streak)
+  }
+  return total
+})()
+
 function read() {
   try { return JSON.parse(localStorage.getItem(KEY)) || { xp: 0, badges: [], log: [] } }
   catch { return { xp: 0, badges: [], log: [] } }
@@ -25,11 +54,11 @@ function backfill(state) {
   if (state.backfilled) return state
   try {
     const entries = JSON.parse(localStorage.getItem('sf26_raffle_entries') || '{}')
-    const rafflePts = Object.values(entries).reduce((s, e) => s + (e.packCount || 1) * 50, 0)
+    const rafflePts = Object.values(entries).reduce((s, e) => s + (e.packCount || 1) * XP_VALUES.quickTask, 0)
     const gallery = JSON.parse(localStorage.getItem('sf26_gallery') || '[]')
-    const galPts = gallery.length * 100
+    const galPts = gallery.length * XP_VALUES.contribution
     const bids = JSON.parse(localStorage.getItem('sf26_museum_bids') || '{}')
-    const bidPts = Object.values(bids).filter(b => b > 0).length * 200
+    const bidPts = Object.values(bids).filter(b => b > 0).length * XP_VALUES.bigCommitment
     state.xp += rafflePts + galPts + bidPts
     state.backfilled = true
   } catch { /* ignore */ }

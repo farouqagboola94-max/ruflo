@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { addXP } from '../lib/passport'
+import { addXP, XP_VALUES } from '../lib/passport'
 
 const EVENT = new Date('2026-12-12T12:00:00')
 
@@ -36,7 +36,7 @@ export default function MysteryDrop() {
     setHovered(true)
     if (!peekedRef.current) {
       peekedRef.current = true
-      addXP(20, 'Mystery Drop Peek', 'mystery-peek')
+      addXP(XP_VALUES.miniPeek, 'Mystery Drop Peek', 'mystery-peek')
     }
   }
 

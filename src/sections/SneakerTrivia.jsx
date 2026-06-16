@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { addXP } from '../lib/passport'
+import { addXP, XP_VALUES, triviaStreakMultiplier } from '../lib/passport'
 
 const QUESTIONS = [
   {
@@ -56,7 +56,8 @@ const QUESTIONS = [
   },
 ]
 
-const getMultiplier = s => s >= 5 ? 3 : s >= 3 ? 2 : 1
+const getMultiplier = triviaStreakMultiplier
+const BASE_PTS = XP_VALUES.triviaPerCorrect
 
 const TIMER_MAX = 25
 const MAX_LIVES = 3
@@ -124,7 +125,7 @@ export default function SneakerTrivia() {
       setScore(s => s + 1)
       setStreak(newStreak)
       setMaxStreak(m => Math.max(m, newStreak))
-      setPoints(p => p + 100 * mult)
+      setPoints(p => p + BASE_PTS * mult)
       scheduleNext(lives, current)
     } else {
       setStreak(0)
@@ -285,7 +286,7 @@ export default function SneakerTrivia() {
                 animation: 'fadeUp 0.3s ease',
               }}>
                 {feedback === 'correct'
-                  ? '✓ +' + (100 * getMultiplier(streak)) + ' PTS' + (getMultiplier(streak) > 1 ? ' - ' + getMultiplier(streak) + 'x STREAK' : '')
+                  ? '✓ +' + (BASE_PTS * getMultiplier(streak)) + ' PTS' + (getMultiplier(streak) > 1 ? ' - ' + getMultiplier(streak) + 'x STREAK' : '')
                   : feedback === 'timeout' ? "⏱ TIME'S UP!" : '✗ WRONG!'}
               </div>
             )}

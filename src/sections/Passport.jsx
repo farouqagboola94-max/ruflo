@@ -1,25 +1,25 @@
 import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag, Divider } from '../components/Shared'
-import { getPassport, getTier, nextTier, subscribe } from '../lib/passport'
+import { getPassport, getTier, nextTier, subscribe, XP_VALUES, TRIVIA_MAX_XP } from '../lib/passport'
 
 const BADGE_INFO = {
   'trivia-ace':    { label: 'Sole Scholar',  emoji: '🧠', desc: 'Scored 7+ on Sneaker Trivia' },
   'spin-winner':   { label: 'Lucky Spin',    emoji: '🎡', desc: 'Won a real prize on Spin to Win' },
   'badge-creator': { label: 'Badge Maker',   emoji: '🪪', desc: 'Created your event badge' },
   'mystery-peek':  { label: 'Curious One',   emoji: '👀', desc: 'Peeked at the Mystery Drop' },
-  'outfit-match':  { label: 'Style Matched', emoji: '🧥', desc: 'Got an AI outfit match' },
+  'outfit-match':  { label: 'Style Matched', emoji: '🤥', desc: 'Got an AI outfit match' },
 }
 
 const EARN_WAYS = [
-  { href: '#trivia',  label: 'Play Sneaker Trivia',   pts: 'up to 900 XP' },
-  { href: '#spin',    label: 'Spin the Wheel',        pts: '15-150 XP' },
-  { href: '#badge',   label: 'Make your Badge',       pts: '50 XP' },
-  { href: '#mystery', label: 'Peek the Mystery Drop',  pts: '20 XP' },
-  { href: '#outfit',  label: 'Get an Outfit Match',    pts: '50 XP' },
-  { href: '#wall',    label: 'Post to the Wall',       pts: '100 XP' },
-  { href: '#museum',  label: 'Bid in the Museum',      pts: '200 XP' },
-  { href: '#raffle',  label: 'Enter the Raffle',       pts: '50 XP' },
+  { href: '#trivia',  label: 'Play Sneaker Trivia',   pts: `up to ${TRIVIA_MAX_XP.toLocaleString()} XP` },
+  { href: '#spin',    label: 'Spin the Wheel',        pts: `${XP_VALUES.spinLose}-${XP_VALUES.spinWin} XP` },
+  { href: '#badge',   label: 'Make your Badge',       pts: `${XP_VALUES.quickTask} XP` },
+  { href: '#mystery', label: 'Peek the Mystery Drop',  pts: `${XP_VALUES.miniPeek} XP` },
+  { href: '#outfit',  label: 'Get an Outfit Match',    pts: `${XP_VALUES.quickTask} XP` },
+  { href: '#wall',    label: 'Post to the Wall',       pts: `${XP_VALUES.contribution} XP` },
+  { href: '#museum',  label: 'Bid in the Museum',      pts: `${XP_VALUES.bigCommitment} XP` },
+  { href: '#raffle',  label: 'Enter the Raffle',       pts: `${XP_VALUES.quickTask} XP` },
 ]
 
 export default function Passport() {

@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { addXP } from '../lib/passport'
+import { addXP, XP_VALUES } from '../lib/passport'
 
 const PRIZES = [
   { label: '₦2,000 OFF',  sub: 'off any ticket tier',      color: '#F5A623', icon: '₦2K'  },
@@ -64,8 +64,8 @@ export default function SpinWheel() {
       setSpinning(false)
       setResult(winnerRef.current)
       const won = PRIZES[winnerRef.current]
-      if (won.label !== 'TRY AGAIN') addXP(150, 'Spin to Win', 'spin-winner')
-      else addXP(15, 'Spin to Win')
+      if (won.label !== 'TRY AGAIN') addXP(XP_VALUES.spinWin, 'Spin to Win', 'spin-winner')
+      else addXP(XP_VALUES.spinLose, 'Spin to Win')
     }, 5200)
   }
 
