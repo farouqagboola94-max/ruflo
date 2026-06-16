@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
+import { addXP } from '../lib/passport'
 
 const QUESTIONS = [
   {
@@ -90,6 +91,12 @@ export default function SneakerTrivia() {
     }, 1000)
     return () => clearInterval(timerRef.current)
   }, [phase, current])
+
+  useEffect(() => {
+    if (phase === 'result' && points > 0) {
+      addXP(points, 'Sneaker Trivia', score >= 7 ? 'trivia-ace' : undefined)
+    }
+  }, [phase])
 
   function handleTimeout() {
     if (lockedRef.current) return
