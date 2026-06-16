@@ -14,6 +14,7 @@ import EventTicker from './components/EventTicker'
 import StreakToast from './components/StreakToast'
 import LevelUpToast from './components/LevelUpToast'
 import KonamiCode from './components/KonamiCode'
+import { captureReferral, reconcileReferralCredits } from './lib/referral'
 import Hero from './sections/Hero'
 import About from './sections/About'
 import OriginStory from './sections/OriginStory'
@@ -63,6 +64,7 @@ import Tickets from './sections/Tickets'
 import VendorReg from './sections/VendorReg'
 import FAQ from './sections/FAQ'
 import Footer from './sections/Footer'
+import EggHuntTracker from './sections/EggHuntTracker'
 
 const SECTION_TITLES = [
   { id: 'about',        title: "About | Sneakers Fest '26" },
@@ -100,6 +102,7 @@ const SECTION_TITLES = [
   { id: 'gallery',      title: "Gallery | Sneakers Fest '26" },
   { id: 'trades',       title: "Trade Board | Sneakers Fest '26" },
   { id: 'leaderboard',  title: "Rankings | Sneakers Fest '26" },
+  { id: 'egg-hunt',     title: "The Great Sole Hunt | Sneakers Fest '26" },
   { id: 'photo-tools',  title: "Photo Studio | Sneakers Fest '26" },
   { id: 'substack',     title: "Substack | Sneakers Fest '26" },
   { id: 'lineup',       title: "Lineup | Sneakers Fest '26" },
@@ -114,6 +117,11 @@ const SECTION_TITLES = [
 ]
 
 export default function App() {
+  useEffect(() => {
+    captureReferral()
+    reconcileReferralCredits()
+  }, [])
+
   useEffect(() => {
     document.title = "Sneakers Fest '26 — The Sole Exhibition, Lagos"
     const observer = new IntersectionObserver(
@@ -206,6 +214,7 @@ export default function App() {
       <Reveal><Gallery /></Reveal>
       <Reveal><TradeBoard /></Reveal>
       <Reveal><Leaderboard /></Reveal>
+      <Reveal><EggHuntTracker /></Reveal>
       <Reveal><PhotoTools /></Reveal>
       <Reveal><SubstackSection /></Reveal>
       <Reveal><Newsletter /></Reveal>

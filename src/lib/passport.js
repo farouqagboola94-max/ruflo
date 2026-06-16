@@ -30,6 +30,9 @@ export const XP_VALUES = {
   voteDailyCap: 10,       // Crew Vote-Off — max XP-earning votes per day
   bingoLine: 60,          // Sneaker Bingo — XP per completed row/column/diagonal
   bingoFull: 300,         // Sneaker Bingo — bonus for completing the full card
+  easterEgg: 40,          // Easter Egg Hunt — XP per hidden egg found (100 scattered across the site)
+  referralXP: 100,        // Referral — flat XP when someone you invited engages (signup/entry/registration)
+  referralPurchaseBonus: 250, // Referral — extra bonus XP when your referral buys a ticket
 }
 
 // Sneaker Trivia awards a streak multiplier on top of the per-question base.

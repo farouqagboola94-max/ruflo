@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag, Divider } from '../components/Shared'
 import { getPassport, getTier, nextTier, subscribe, getLevel, XP_VALUES, TRIVIA_MAX_XP, GRAND_PRIZE_RANK } from '../lib/passport'
+import { getReferralLink } from '../lib/referral'
+import { eggCount, TOTAL_EGGS } from '../lib/easterEggs'
 
 const BADGE_INFO = {
   'trivia-ace':    { label: 'Sole Scholar',  emoji: '🧠', desc: 'Scored 7+ on Sneaker Trivia' },
@@ -13,6 +15,7 @@ const BADGE_INFO = {
   'soledle-ace':   { label: 'Soledle Ace',   emoji: '🗓', desc: 'Solved Soledle in 2 guesses or fewer' },
   'crew-critic':   { label: 'Crew Critic',   emoji: '🗳', desc: 'Hit the daily Crew Vote-Off bonus cap' },
   'bingo-full':    { label: 'Full House',    emoji: '🎊', desc: 'Completed the entire Sneaker Bingo card' },
+  'egg-hunt-complete': { label: 'Egg Hunter', emoji: '🥚', desc: 'Found all 100 hidden eggs on the site' },
 }
 
 const EARN_WAYS = [
@@ -28,14 +31,23 @@ const EARN_WAYS = [
   { href: '#wall',          label: 'Post to the Wall',      pts: `${XP_VALUES.contribution} XP` },
   { href: '#museum',        label: 'Bid in the Museum',     pts: `${XP_VALUES.bigCommitment} XP` },
   { href: '#raffle',        label: 'Enter the Raffle',      pts: `${XP_VALUES.quickTask} XP` },
+  { href: '#egg-hunt',      label: 'Find a hidden egg',     pts: `${XP_VALUES.easterEgg} XP` },
 ]
 
 export default function Passport() {
   const [state, setState] = useState(() => getPassport())
+  const [copied, setCopied] = useState(false)
+  const [eggsFound, setEggsFound] = useState(() => eggCount())
 
   useEffect(() => {
     const unsub = subscribe(setState)
     return unsub
+  }, [])
+
+  useEffect(() => {
+    const onEgg = () => setEggsFound(eggCount())
+    window.addEventListener('sf26:egg', onEgg)
+    return () => window.removeEventListener('sf26:egg', onEgg)
   }, [])
 
   const tier = getTier(state.xp)
@@ -46,6 +58,17 @@ export default function Passport() {
     ? state.dailyEngagement.sources.length
     : 0
   const comboDone = comboCount >= XP_VALUES.engagementTarget
+
+  function copyLink() {
+    const link = getReferralLink()
+    try {
+      navigator.clipboard.writeText(link)
+    } catch {
+      // ignore
+    }
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
 
   return (
     <section id="passport" style={{ background: B.void, padding: '80px 20px', position: 'relative', overflow: 'hidden' }}>
@@ -60,7 +83,7 @@ export default function Passport() {
         </p>
 
         <a href="#leaderboard" style={{
-          display: 'block', textDecoration: 'none', marginBottom: 24,
+          display: 'block', textDecoration: 'none', marginBottom: 16,
           background: `${B.amber}10`, border: `1px solid ${B.amber}40`, borderRadius: 10,
           padding: '14px 18px', fontFamily: "'Space Mono'", fontSize: '0.72rem', color: B.amber,
           letterSpacing: '0.04em', transition: 'border-color 0.2s',
@@ -70,6 +93,47 @@ export default function Passport() {
         >
           🏆 TOP {GRAND_PRIZE_RANK} HIGHEST-XP COLLECTORS WIN GRAND PRIZES AT THE EVENT — CLIMB THE LEADERBOARD →
         </a>
+
+        <a href="#egg-hunt" style={{
+          display: 'block', textDecoration: 'none', marginBottom: 24,
+          background: `${B.neonLime}10`, border: `1px solid ${B.neonLime}40`, borderRadius: 10,
+          padding: '14px 18px', fontFamily: "'Space Mono'", fontSize: '0.72rem', color: B.neonLime,
+          letterSpacing: '0.04em', transition: 'border-color 0.2s',
+        }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = B.neonLime }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = `${B.neonLime}40` }}
+        >
+          🥚 {eggsFound}/{TOTAL_EGGS} HIDDEN EGGS FOUND — 100 EGGS, 100 WINNERS, SCATTERED ACROSS THE WHOLE SITE →
+        </a>
+
+        <div style={{
+          background: B.charcoal, border: `1px solid ${B.gunmetal}`, borderRadius: 12,
+          padding: '20px 24px', marginBottom: 24,
+        }}>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', letterSpacing: '0.2em', color: '#555', marginBottom: 10 }}>INVITE & EARN</div>
+          <p style={{ fontFamily: "'Syne'", fontSize: '0.78rem', color: B.white, marginBottom: 14, lineHeight: 1.5 }}>
+            Share your link. When someone you invite signs up, enters a raffle, or registers, you
+            earn +{XP_VALUES.referralXP} XP. If they buy a ticket, you get a +{XP_VALUES.referralPurchaseBonus} XP bonus.
+          </p>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <input
+              readOnly
+              value={getReferralLink()}
+              onFocus={e => e.target.select()}
+              style={{
+                flex: '1 1 220px', minWidth: 0, background: B.gunmetal, border: `1px solid ${B.gunmetal}`,
+                borderRadius: 6, padding: '10px 12px', color: B.white, fontFamily: "'Space Mono'", fontSize: '0.68rem',
+              }}
+            />
+            <button onClick={copyLink} style={{
+              background: copied ? B.neonLime : B.amber, border: 'none', borderRadius: 6,
+              padding: '10px 18px', color: B.black, fontFamily: "'Orbitron'", fontWeight: 700,
+              fontSize: '0.65rem', cursor: 'pointer', whiteSpace: 'nowrap',
+            }}>
+              {copied ? 'COPIED!' : 'COPY LINK'}
+            </button>
+          </div>
+        </div>
 
         <div style={{
           background: B.charcoal, border: `1px solid ${tier.color}40`, borderRadius: 14,
