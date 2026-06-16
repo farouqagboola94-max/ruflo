@@ -23,6 +23,7 @@ import Sponsors from './sections/Sponsors'
 import Highlights from './sections/Highlights'
 import Community from './sections/Community'
 import Testimonials from './sections/Testimonials'
+import Passport from './sections/Passport'
 import SneakerDNA from './sections/SneakerDNA'
 import SoleOfLagos from './sections/SoleOfLagos'
 import CultureHistory from './sections/CultureHistory'
@@ -31,6 +32,7 @@ import SneakerBible from './sections/SneakerBible'
 import CommunityWall from './sections/CommunityWall'
 import SneakerTrivia from './sections/SneakerTrivia'
 import ShoeColorizer from './sections/ShoeColorizer'
+import OutfitMatcher from './sections/OutfitMatcher'
 import HypeCounter from './sections/HypeCounter'
 import SpinWheel from './sections/SpinWheel'
 import BadgeMaker from './sections/BadgeMaker'
@@ -67,6 +69,7 @@ const SECTION_TITLES = [
   { id: 'highlights',   title: "Experience | Sneakers Fest '26" },
   { id: 'community',    title: "Community | Sneakers Fest '26" },
   { id: 'testimonials', title: "Stories | Sneakers Fest '26" },
+  { id: 'passport',     title: "Sneaker Passport | Sneakers Fest '26" },
   { id: 'dna',          title: "Sneaker DNA | Sneakers Fest '26" },
   { id: 'sole-of-lagos', title: "The Sole of Lagos | Sneakers Fest '26" },
   { id: 'culture-history', title: "Art & Culture | Sneakers Fest '26" },
@@ -75,6 +78,7 @@ const SECTION_TITLES = [
   { id: 'wall',         title: "The Wall | Sneakers Fest '26" },
   { id: 'trivia',       title: "Trivia | Sneakers Fest '26" },
   { id: 'colorizer',    title: "Shoe Builder | Sneakers Fest '26" },
+  { id: 'outfit',       title: "Outfit Matcher | Sneakers Fest '26" },
   { id: 'hype',         title: "Hype | Sneakers Fest '26" },
   { id: 'spin',         title: "Spin to Win | Sneakers Fest '26" },
   { id: 'badge',        title: "Badge Maker | Sneakers Fest '26" },
@@ -166,6 +170,7 @@ export default function App() {
       <Reveal><Highlights /></Reveal>
       <Reveal><Community /></Reveal>
       <Reveal><Testimonials /></Reveal>
+      <Reveal><Passport /></Reveal>
       <Reveal><SneakerDNA /></Reveal>
       <Reveal><SoleOfLagos /></Reveal>
       <Reveal><CultureHistory /></Reveal>
@@ -174,6 +179,7 @@ export default function App() {
       <Reveal><CommunityWall /></Reveal>
       <Reveal><SneakerTrivia /></Reveal>
       <Reveal><ShoeColorizer /></Reveal>
+      <Reveal><OutfitMatcher /></Reveal>
       <Reveal><HypeCounter /></Reveal>
       <Reveal><SpinWheel /></Reveal>
       <Reveal><BadgeMaker /></Reveal>
