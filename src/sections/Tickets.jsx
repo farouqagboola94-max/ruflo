@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import PaymentModal, { TicketCard, downloadTicketPNG } from '../components/PaymentModal'
+import { logReferralConversion } from '../lib/referral'
 
 const TIERS = [
   {
@@ -142,6 +143,18 @@ export default function Tickets() {
     try { setOrders(JSON.parse(localStorage.getItem('sf26_orders') || '[]')) } catch { setOrders([]) }
   }
   useEffect(() => { loadOrders() }, [])
+
+  function closePaymentModal() {
+    const before = orders.length
+    loadOrders()
+    try {
+      const after = JSON.parse(localStorage.getItem('sf26_orders') || '[]')
+      if (after.length > before && selectedTier) {
+        logReferralConversion('purchase', { tier: selectedTier.name })
+      }
+    } catch {}
+    setSelectedTier(null)
+  }
 
   return (
     <section id="tickets" style={{
@@ -389,7 +402,7 @@ export default function Tickets() {
       {selectedTier && (
         <PaymentModal
           tier={selectedTier}
-          onClose={() => { setSelectedTier(null); loadOrders() }}
+          onClose={closePaymentModal}
         />
       )}
 
