@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
+import { addXP } from '../lib/passport'
 
 const EVENT = new Date('2026-12-12T12:00:00')
 
@@ -27,8 +28,17 @@ function useCountdown() {
 export default function MysteryDrop() {
   const [hovered, setHovered] = useState(false)
   const countdown = useCountdown()
+  const peekedRef = useRef(false)
 
   const pad = n => String(n).padStart(2, '0')
+
+  function peek() {
+    setHovered(true)
+    if (!peekedRef.current) {
+      peekedRef.current = true
+      addXP(20, 'Mystery Drop Peek', 'mystery-peek')
+    }
+  }
 
   return (
     <section id="mystery" style={{
@@ -64,9 +74,9 @@ export default function MysteryDrop() {
 
         {/* Blurred shoe silhouette */}
         <div
-          onMouseEnter={() => setHovered(true)}
+          onMouseEnter={peek}
           onMouseLeave={() => setHovered(false)}
-          onTouchStart={() => setHovered(h => !h)}
+          onTouchStart={() => { setHovered(h => !h); peek() }}
           style={{ cursor: 'pointer', marginBottom: 48, position: 'relative', display: 'inline-block' }}
         >
           <svg
