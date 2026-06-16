@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
+import { getPassport, getTier } from '../lib/passport'
 
-// ── static seed data ───────────────────────────────────────────────────────────
+// ── static seed data ──────────────────────────────────────────────────────────
 const CITY_SEEDS = [
   { city:'Lagos',         state:'Lagos',   count:847 },
   { city:'Abuja',         state:'FCT',     count:312 },
@@ -76,7 +77,7 @@ const SHOW_OPTIONS = [
   { label:'ALL',    value:99 },
 ]
 
-// ── read localStorage once ─────────────────────────────────────────────────────
+// ── read localStorage once ──────────────────────────────────────────────────────
 function readAll() {
   const get = (k, d) => { try { return JSON.parse(localStorage.getItem(k) || d) } catch { return JSON.parse(d) } }
 
@@ -185,7 +186,7 @@ function RankRow({ rank, label, sub, metric, metricSub, color, maxMetric, metric
   )
 }
 
-// ── tabs ───────────────────────────────────────────────────────────────────────
+// ── tabs ──────────────────────────────────────────────────────────────────────
 const TABS = [
   { id:'collectors', label:'COLLECTORS', emoji:'👑' },
   { id:'cities',     label:'CITIES',     emoji:'🏙️' },
@@ -194,7 +195,7 @@ const TABS = [
   { id:'museum',     label:'MUSEUM',     emoji:'🏛️' },
 ]
 
-// ── main section ───────────────────────────────────────────────────────────────
+// ── main section ────────────────────────────────────────────────────────────────
 export default function Leaderboard() {
   const [tab,       setTab]       = useState('cities')
   const [data,      setData]      = useState(null)
@@ -406,12 +407,13 @@ export default function Leaderboard() {
             const galPts = galleryItems.length * 100
             const bidsObj = JSON.parse(localStorage.getItem('sf26_museum_bids') || '{}')
             const bidPts = Object.values(bidsObj).filter(b => b > 0).length * 200
-            const total = rafflePts + galPts + bidPts
+            const { xp: total } = getPassport()
+            const tier = getTier(total)
             if (!total && !myName) return null
             const rank = COLLECTOR_SEEDS.filter(c => c.pts > total).length + 1
             return (
               <div style={{ marginTop:28, padding:'20px 24px', background:'rgba(255,255,255,0.02)', border:'1px solid #C084FC20', borderRadius:12 }}>
-                <div style={{ fontFamily:'Orbitron,monospace', fontSize:8, color:'#444', letterSpacing:3, marginBottom:12 }}>MY RANK</div>
+                <div style={{ fontFamily:'Orbitron,monospace', fontSize:8, color:'#444', letterSpacing:3, marginBottom:12 }}>MY RANK · <span style={{ color:tier.color }}>{tier.name}</span></div>
                 <div style={{ display:'flex', alignItems:'center', gap:16, flexWrap:'wrap' }}>
                   <div style={{ display:'flex', alignItems:'baseline', gap:6 }}>
                     <span style={{ fontFamily:'Orbitron,monospace', fontSize:32, color:'#C084FC', fontWeight:900 }}>#{rank}</span>
@@ -427,7 +429,7 @@ export default function Leaderboard() {
                     {bidPts > 0 && <div style={{ textAlign:'center' }}><div style={{ fontFamily:'Orbitron,monospace', fontSize:11, color:B.neonLime }}>{bidPts}</div><div style={{ fontFamily:'Space Mono,monospace', fontSize:6, color:'#444' }}>BIDS</div></div>}
                   </div>
                 </div>
-                <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:'#2a2a2a', letterSpacing:1, marginTop:10 }}>RAFFLE=50pts/entry · GALLERY=100pts/upload · MUSEUM BID=200pts</div>
+                <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:'#2a2a2a', letterSpacing:1, marginTop:10 }}>XP SOURCED FROM YOUR SNEAKER PASSPORT · SEE FULL BREAKDOWN IN THE PASSPORT SECTION</div>
               </div>
             )
           } catch { return null }
