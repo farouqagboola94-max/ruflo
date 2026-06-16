@@ -9,17 +9,25 @@ const BADGE_INFO = {
   'badge-creator': { label: 'Badge Maker',   emoji: '🪪', desc: 'Created your event badge' },
   'mystery-peek':  { label: 'Curious One',   emoji: '👀', desc: 'Peeked at the Mystery Drop' },
   'outfit-match':  { label: 'Style Matched', emoji: '🤥', desc: 'Got an AI outfit match' },
+  'memory-master': { label: 'Sharp Memory',  emoji: '🧩', desc: 'Cleared Sole Memory in near-minimum moves' },
+  'soledle-ace':   { label: 'Soledle Ace',   emoji: '🗓', desc: 'Solved Soledle in 2 guesses or fewer' },
+  'crew-critic':   { label: 'Crew Critic',   emoji: '🗳', desc: 'Hit the daily Crew Vote-Off bonus cap' },
+  'bingo-full':    { label: 'Full House',    emoji: '🎊', desc: 'Completed the entire Sneaker Bingo card' },
 }
 
 const EARN_WAYS = [
-  { href: '#trivia',  label: 'Play Sneaker Trivia',   pts: `up to ${TRIVIA_MAX_XP.toLocaleString()} XP` },
-  { href: '#spin',    label: 'Spin the Wheel',        pts: `${XP_VALUES.spinLose}-${XP_VALUES.spinWin} XP` },
-  { href: '#badge',   label: 'Make your Badge',       pts: `${XP_VALUES.quickTask} XP` },
-  { href: '#mystery', label: 'Peek the Mystery Drop',  pts: `${XP_VALUES.miniPeek} XP` },
-  { href: '#outfit',  label: 'Get an Outfit Match',    pts: `${XP_VALUES.quickTask} XP` },
-  { href: '#wall',    label: 'Post to the Wall',       pts: `${XP_VALUES.contribution} XP` },
-  { href: '#museum',  label: 'Bid in the Museum',      pts: `${XP_VALUES.bigCommitment} XP` },
-  { href: '#raffle',  label: 'Enter the Raffle',       pts: `${XP_VALUES.quickTask} XP` },
+  { href: '#trivia',       label: 'Play Sneaker Trivia',   pts: `up to ${TRIVIA_MAX_XP.toLocaleString()} XP` },
+  { href: '#memory-match',  label: 'Play Sole Memory',      pts: `up to ${XP_VALUES.memoryMatch} XP` },
+  { href: '#soledle',       label: 'Solve Soledle',         pts: `up to ${XP_VALUES.soledleWin} XP` },
+  { href: '#spin',          label: 'Spin the Wheel',        pts: `${XP_VALUES.spinLose}-${XP_VALUES.spinWin} XP` },
+  { href: '#vote-off',      label: 'Judge a Vote-Off',      pts: `${XP_VALUES.vote} XP` },
+  { href: '#badge',         label: 'Make your Badge',       pts: `${XP_VALUES.quickTask} XP` },
+  { href: '#mystery',       label: 'Peek the Mystery Drop', pts: `${XP_VALUES.miniPeek} XP` },
+  { href: '#outfit',        label: 'Get an Outfit Match',   pts: `${XP_VALUES.quickTask} XP` },
+  { href: '#bingo',         label: 'Complete a Bingo line', pts: `${XP_VALUES.bingoLine} XP` },
+  { href: '#wall',          label: 'Post to the Wall',      pts: `${XP_VALUES.contribution} XP` },
+  { href: '#museum',        label: 'Bid in the Museum',     pts: `${XP_VALUES.bigCommitment} XP` },
+  { href: '#raffle',        label: 'Enter the Raffle',      pts: `${XP_VALUES.quickTask} XP` },
 ]
 
 export default function Passport() {

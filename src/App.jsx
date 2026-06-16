@@ -32,13 +32,17 @@ import CultureMuseum from './sections/CultureMuseum'
 import SneakerBible from './sections/SneakerBible'
 import CommunityWall from './sections/CommunityWall'
 import SneakerTrivia from './sections/SneakerTrivia'
+import MemoryMatch from './sections/MemoryMatch'
+import Soledle from './sections/Soledle'
 import ShoeColorizer from './sections/ShoeColorizer'
 import OutfitMatcher from './sections/OutfitMatcher'
 import HypeCounter from './sections/HypeCounter'
 import SpinWheel from './sections/SpinWheel'
+import CrewVoteOff from './sections/CrewVoteOff'
 import BadgeMaker from './sections/BadgeMaker'
 import MysteryDrop from './sections/MysteryDrop'
 import SneakerWorth from './sections/SneakerWorth'
+import SneakerBingo from './sections/SneakerBingo'
 import ArtistSpotlight from './sections/ArtistSpotlight'
 import DropsTimeline from './sections/DropsTimeline'
 import EarlyAccess from './sections/EarlyAccess'
@@ -78,13 +82,17 @@ const SECTION_TITLES = [
   { id: 'vault-200',    title: "The Vault 200 | Sneakers Fest '26" },
   { id: 'wall',         title: "The Wall | Sneakers Fest '26" },
   { id: 'trivia',       title: "Trivia | Sneakers Fest '26" },
+  { id: 'memory-match', title: "Sole Memory | Sneakers Fest '26" },
+  { id: 'soledle',      title: "Soledle | Sneakers Fest '26" },
   { id: 'colorizer',    title: "Shoe Builder | Sneakers Fest '26" },
   { id: 'outfit',       title: "Outfit Matcher | Sneakers Fest '26" },
   { id: 'hype',         title: "Hype | Sneakers Fest '26" },
   { id: 'spin',         title: "Spin to Win | Sneakers Fest '26" },
+  { id: 'vote-off',     title: "Crew Vote-Off | Sneakers Fest '26" },
   { id: 'badge',        title: "Badge Maker | Sneakers Fest '26" },
   { id: 'mystery',      title: "Mystery Drop | Sneakers Fest '26" },
   { id: 'worth',        title: "Collection Worth | Sneakers Fest '26" },
+  { id: 'bingo',        title: "Sneaker Bingo | Sneakers Fest '26" },
   { id: 'artists',      title: "Artists | Sneakers Fest '26" },
   { id: 'timeline',     title: "Drops Timeline | Sneakers Fest '26" },
   { id: 'waitlist',     title: "Early Access | Sneakers Fest '26" },
@@ -180,13 +188,17 @@ export default function App() {
       <Reveal><SneakerBible /></Reveal>
       <Reveal><CommunityWall /></Reveal>
       <Reveal><SneakerTrivia /></Reveal>
+      <Reveal><MemoryMatch /></Reveal>
+      <Reveal><Soledle /></Reveal>
       <Reveal><ShoeColorizer /></Reveal>
       <Reveal><OutfitMatcher /></Reveal>
       <Reveal><HypeCounter /></Reveal>
       <Reveal><SpinWheel /></Reveal>
+      <Reveal><CrewVoteOff /></Reveal>
       <Reveal><BadgeMaker /></Reveal>
       <Reveal><MysteryDrop /></Reveal>
       <Reveal><SneakerWorth /></Reveal>
+      <Reveal><SneakerBingo /></Reveal>
       <Reveal><ArtistSpotlight /></Reveal>
       <Reveal><DropsTimeline /></Reveal>
       <Reveal><EarlyAccess /></Reveal>

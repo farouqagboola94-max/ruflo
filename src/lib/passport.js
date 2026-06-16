@@ -24,6 +24,12 @@ export const XP_VALUES = {
   triviaQuestions: 10,    // Sneaker Trivia — total questions per run
   engagementBonus: 75,    // Daily combo bonus — playing multiple different games in one day
   engagementTarget: 3,    // Distinct activities needed in a day to trigger the combo bonus
+  memoryMatch: 80,        // Sole Memory — base reward for clearing the board (scales down with extra moves)
+  soledleWin: 120,        // Soledle — base reward for solving the daily puzzle (scales down with guesses used)
+  vote: 10,               // Crew Vote-Off — XP per vote, capped per day
+  voteDailyCap: 10,       // Crew Vote-Off — max XP-earning votes per day
+  bingoLine: 60,          // Sneaker Bingo — XP per completed row/column/diagonal
+  bingoFull: 300,         // Sneaker Bingo — bonus for completing the full card
 }
 
 // Sneaker Trivia awards a streak multiplier on top of the per-question base.
