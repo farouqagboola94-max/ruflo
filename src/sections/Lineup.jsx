@@ -2,11 +2,11 @@ import { B } from '../tokens'
 import { GrainOverlay, AmberGlow, SectionTag } from '../components/Shared'
 
 const LINEUP = [
-  { name: "DJ SPINALL", role: "HEADLINER", time: "8PM — 10PM", genre: "AFROBEATS / HIP-HOP", featured: true },
-  { name: "ODUNSI (THE ENGINE)", role: "SPECIAL GUEST", time: "6PM — 8PM", genre: "ALT-R&B / ELECTRONIC" },
-  { name: "SARZ", role: "PRODUCER SET", time: "4PM — 6PM", genre: "STREET / TRAP / AFRO" },
-  { name: "DJ CONSEQUENCE", role: "OPENING ACT", time: "2PM — 4PM", genre: "AFRO HOUSE / ELECTRONIC" },
-  { name: "DJ NEPTUNE", role: "SPECIAL GUEST", time: "12PM — 2PM", genre: "AFROBEATS / STREET POP" },
+  { name: "HEADLINER — TBA", role: "HEADLINER", time: "8PM — 10PM", genre: "AFROBEATS / HIP-HOP", featured: true },
+  { name: "SPECIAL GUEST — TBA", role: "SPECIAL GUEST", time: "6PM — 8PM", genre: "ALT-R&B / ELECTRONIC" },
+  { name: "PRODUCER — TBA", role: "PRODUCER SET", time: "4PM — 6PM", genre: "STREET / TRAP / AFRO" },
+  { name: "OPENING ACT — TBA", role: "OPENING ACT", time: "2PM — 4PM", genre: "AFRO HOUSE / ELECTRONIC" },
+  { name: "SPECIAL GUEST — TBA", role: "SPECIAL GUEST", time: "12PM — 2PM", genre: "AFROBEATS / STREET POP" },
   { name: "+ MORE TBA", role: "SURPRISE GUESTS", time: "THROUGHOUT", genre: "CULTURE × SOUL × FUTURE" },
 ]
 
@@ -83,7 +83,7 @@ export default function Lineup() {
         </div>
 
         <div style={{ marginTop: 28, textAlign: "center", fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing: "0.3em" }}>
-          FULL SCHEDULE ANNOUNCED 60 DAYS BEFORE THE EVENT
+          FULL LINEUP ANNOUNCED 60 DAYS BEFORE THE EVENT
         </div>
       </div>
     </section>

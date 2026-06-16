@@ -16,35 +16,32 @@ const AUDIENCE = [
   { icon: '🔥', title: 'Tastemakers 18–35', desc: 'The target demo of every brand operating in the Lagos market. Disposable income. Very online. Tribal.', color: B.neonLime },
 ]
 
-const TIERS = [
+const PARTNER_LEVELS = [
   {
     tier: 'PRESENTING SPONSOR',
-    range: '₦2,000,000+',
     color: B.amber,
     featured: true,
     badge: 'FLAGSHIP',
     perks: [
       'Naming rights — "Sneakers Fest 2026 presented by [Brand]"',
-      '100sqm activation zone (prime location)',
-      '10 VIP tickets + private lounge access',
+      'Prime activation zone on the floor',
+      'VIP tickets + private lounge access',
       'Speaking slot on main stage',
-      '10 dedicated social posts across all platforms',
+      'Dedicated social posts across all platforms',
       'Logo on all event materials, signage and wristbands',
       'Custom brand moment during DJ headline set',
       'Post-event full media recap package',
-      'First access to attendee engagement data',
       'Founding Partner recognition — all future events',
     ],
   },
   {
     tier: 'GOLD PARTNER',
-    range: '₦800K–₦1.5M',
     color: '#FFD700',
     featured: false,
     perks: [
-      '50sqm activation zone',
-      '6 VIP tickets',
-      '3 dedicated social posts (branded + tagged)',
+      'Branded activation zone',
+      'VIP tickets',
+      'Dedicated social posts (branded + tagged)',
       'Logo on main stage backdrop',
       'Brand mention in MC segments',
       'Post-event email blast feature',
@@ -52,20 +49,18 @@ const TIERS = [
   },
   {
     tier: 'SILVER PARTNER',
-    range: '₦300K–₦700K',
     color: B.smoke,
     featured: false,
     perks: [
-      '25sqm branded space on the floor',
-      '4 general admission tickets',
-      '1 dedicated social post',
+      'Branded space on the floor',
+      'General admission tickets',
+      'Dedicated social post',
       'Logo on event website and programme',
       'Brand tagged in event roundup post',
     ],
   },
   {
     tier: 'MEDIA / COMMUNITY PARTNER',
-    range: 'In-kind exchange',
     color: B.neonCyan,
     featured: false,
     perks: [
@@ -164,20 +159,19 @@ export default function Sponsors() {
           </div>
         </div>
 
-        {/* ── TIERS ── */}
+        {/* ── PARTNER LEVELS ── */}
         <div style={{ marginBottom: 80 }}>
-          <SectionTag>SPONSORSHIP TIERS</SectionTag>
-          <h3 style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 'clamp(32px,5vw,52px)', color: B.white, letterSpacing: 2, marginBottom: 32 }}>CHOOSE YOUR LEVEL</h3>
+          <SectionTag>PARTNERSHIP LEVELS</SectionTag>
+          <h3 style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 'clamp(32px,5vw,52px)', color: B.white, letterSpacing: 2, marginBottom: 32 }}>WAYS TO PARTNER</h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 20 }}>
-            {TIERS.map(({ tier, range, color, featured, badge, perks }) => (
+            {PARTNER_LEVELS.map(({ tier, color, featured, badge, perks }) => (
               <div key={tier}
                 onMouseEnter={() => setHoveredTier(tier)}
                 onMouseLeave={() => setHoveredTier(null)}
                 style={{ position: 'relative', background: featured ? `linear-gradient(135deg, ${B.amber}14, ${B.amber}04)` : 'rgba(255,255,255,0.03)', border: `1px solid ${color}${hoveredTier === tier || featured ? '55' : '25'}`, borderRadius: 16, padding: '28px 22px', overflow: 'hidden', transition: 'transform 0.2s, box-shadow 0.2s', transform: hoveredTier === tier ? 'translateY(-5px)' : featured ? 'scale(1.02)' : 'none', boxShadow: hoveredTier === tier ? `0 16px 48px ${color}20` : featured ? `0 8px 28px ${color}15` : 'none' }}>
                 <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, ${color}, transparent)` }} />
                 {badge && <div style={{ position: 'absolute', top: 14, right: 14, background: B.amber, color: B.black, fontFamily: "'Bebas Neue',sans-serif", fontSize: 9, letterSpacing: 2, padding: '3px 8px', borderRadius: 4 }}>{badge}</div>}
-                <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 8, color, letterSpacing: 3, marginBottom: 6 }}>{tier}</div>
-                <div style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 30, color: B.white, lineHeight: 1, marginBottom: 24 }}>{range}</div>
+                <div style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 24, color: B.white, letterSpacing: 1, marginBottom: 24 }}>{tier}</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
                   {perks.map(p => (
                     <div key={p} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
@@ -189,7 +183,7 @@ export default function Sponsors() {
                 <a href="#partner-form" style={{ display: 'block', marginTop: 22, textAlign: 'center', padding: '10px', background: `${color}18`, border: `1px solid ${color}40`, borderRadius: 6, fontFamily: "'Bebas Neue',sans-serif", fontSize: 13, letterSpacing: 2, color, textDecoration: 'none', transition: 'background 0.2s' }}
                   onMouseEnter={e => e.currentTarget.style.background = `${color}30`}
                   onMouseLeave={e => e.currentTarget.style.background = `${color}18`}>
-                  APPLY FOR THIS TIER →
+                  APPLY FOR THIS LEVEL →
                 </a>
               </div>
             ))}
@@ -208,7 +202,7 @@ export default function Sponsors() {
                 Thanks, <strong>{form.contact || form.brand}</strong>.
               </div>
               <div style={{ fontFamily: "'Syne',sans-serif", fontSize: 15, color: B.smoke, maxWidth: 480, margin: '0 auto 28px', lineHeight: 1.75 }}>
-                Your <strong style={{ color: B.amber }}>{form.tier}</strong> application for <strong style={{ color: B.white }}>{form.brand}</strong> is in. We review all applications and come back within 3 business days with a proposal.
+                Your <strong style={{ color: B.amber }}>{form.tier}</strong> application for <strong style={{ color: B.white }}>{form.brand}</strong> is in. We review all applications and come back within 3 business days with a tailored proposal.
               </div>
               <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 10, color: '#444', letterSpacing: 2 }}>sponsors@sneakersfest.com · Sneakers Fest 2026</div>
             </div>
@@ -218,7 +212,7 @@ export default function Sponsors() {
                 <SectionTag>PARTNERSHIP APPLICATION</SectionTag>
                 <h3 style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 'clamp(28px,4vw,44px)', color: B.white, letterSpacing: 2, marginBottom: 8 }}>APPLY TO PARTNER</h3>
                 <p style={{ fontFamily: "'Syne',sans-serif", fontSize: 14, color: B.smoke, lineHeight: 1.7, maxWidth: 580 }}>
-                  All packages are negotiable. Early sponsors get founding-partner recognition that scales with the event. Fill in what you know — we handle the rest.
+                  Every partnership is tailored to the brand. Early sponsors get founding-partner recognition that scales with the event. Fill in what you know — we'll come back with a proposal built around your goals.
                 </p>
               </div>
               <form name="partner-application" data-netlify="true" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
@@ -251,10 +245,10 @@ export default function Sponsors() {
                     onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'} />
                 </div>
                 <div>
-                  <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 8, color: '#555', letterSpacing: 2, marginBottom: 7 }}>SPONSORSHIP TIER *</div>
+                  <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 8, color: '#555', letterSpacing: 2, marginBottom: 7 }}>PARTNERSHIP LEVEL OF INTEREST *</div>
                   <select name="tier" value={form.tier} onChange={e => setForm(f => ({ ...f, tier: e.target.value }))}
                     style={{ width: '100%', background: '#111', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6, color: B.white, padding: '11px 14px', fontFamily: "'Syne',sans-serif", fontSize: 14, outline: 'none', cursor: 'pointer', boxSizing: 'border-box' }}>
-                    {TIERS.map(t => <option key={t.tier} value={t.tier}>{t.tier} — {t.range}</option>)}
+                    {PARTNER_LEVELS.map(t => <option key={t.tier} value={t.tier}>{t.tier}</option>)}
                   </select>
                 </div>
                 {[
