@@ -14,14 +14,16 @@ export const TIERS = [
 // from here instead of hardcoding numbers so the economy stays consistent
 // and the Passport's "Ways to Earn" list never drifts out of sync.
 export const XP_VALUES = {
-  miniPeek: 20,         // Mystery Drop hover/peek
-  quickTask: 50,         // Badge Maker, Outfit Matcher, Raffle entry
-  spinLose: 15,          // Spin to Win — "try again" consolation
-  spinWin: 150,          // Spin to Win — real prize
-  contribution: 100,     // Community Wall post, Gallery upload
-  bigCommitment: 200,    // Museum bid
-  triviaPerCorrect: 100, // Sneaker Trivia — base XP per correct answer
-  triviaQuestions: 10,   // Sneaker Trivia — total questions per run
+  miniPeek: 20,          // Mystery Drop hover/peek
+  quickTask: 50,          // Badge Maker, Outfit Matcher, Raffle entry
+  spinLose: 15,           // Spin to Win — "try again" consolation
+  spinWin: 150,           // Spin to Win — real prize
+  contribution: 100,      // Community Wall post, Gallery upload
+  bigCommitment: 200,     // Museum bid
+  triviaPerCorrect: 100,  // Sneaker Trivia — base XP per correct answer
+  triviaQuestions: 10,    // Sneaker Trivia — total questions per run
+  engagementBonus: 75,    // Daily combo bonus — playing multiple different games in one day
+  engagementTarget: 3,    // Distinct activities needed in a day to trigger the combo bonus
 }
 
 // Sneaker Trivia awards a streak multiplier on top of the per-question base.
@@ -39,14 +41,31 @@ export const TRIVIA_MAX_XP = (() => {
   return total
 })()
 
+// ── Card leveling — a granular, game-style progression layered on top of tiers.
+// Tiers are the "rank category" (Rookie → Catalyst Elite); Levels are the
+// number that climbs every LEVEL_XP_STEP XP, giving constant forward motion.
+export const LEVEL_XP_STEP = 150
+export const MAX_LEVEL = 50
+
+export function getLevel(xp) {
+  const level = Math.min(MAX_LEVEL, 1 + Math.floor(xp / LEVEL_XP_STEP))
+  const floor = (level - 1) * LEVEL_XP_STEP
+  const ceil = level * LEVEL_XP_STEP
+  const pct = level >= MAX_LEVEL ? 100 : ((xp - floor) / (ceil - floor)) * 100
+  return { level, pct, xpToNext: level >= MAX_LEVEL ? 0 : ceil - xp }
+}
+
+// The top N collectors by total XP win grand prizes at the event.
+export const GRAND_PRIZE_RANK = 5
+
 function read() {
   try { return JSON.parse(localStorage.getItem(KEY)) || { xp: 0, badges: [], log: [] } }
   catch { return { xp: 0, badges: [], log: [] } }
 }
 
-function write(state) {
+function write(state, meta = {}) {
   localStorage.setItem(KEY, JSON.stringify(state))
-  window.dispatchEvent(new CustomEvent(EVENT, { detail: state }))
+  window.dispatchEvent(new CustomEvent(EVENT, { detail: { ...state, ...meta } }))
 }
 
 // Pulls in XP from features that pre-date the passport so no history is lost.
@@ -79,10 +98,33 @@ export function nextTier(xp) {
 
 export function addXP(amount, source, badge) {
   const state = getPassport()
+  const prevLevel = getLevel(state.xp).level
+
   state.xp += amount
   state.log = [...(state.log || []), { amount, source, at: Date.now() }].slice(-50)
   if (badge && !state.badges.includes(badge)) state.badges = [...state.badges, badge]
-  write(state)
+
+  // Daily engagement combo — reward variety (different games/activities), not just grinding one.
+  const today = new Date().toISOString().slice(0, 10)
+  if (state.dailyEngagement?.date !== today) {
+    state.dailyEngagement = { date: today, sources: [] }
+  }
+  if (source && !state.dailyEngagement.sources.includes(source)) {
+    state.dailyEngagement = { ...state.dailyEngagement, sources: [...state.dailyEngagement.sources, source] }
+  }
+
+  let bonusAwarded = false
+  const comboBadge = `combo-${today}`
+  if (state.dailyEngagement.sources.length >= XP_VALUES.engagementTarget && !state.badges.includes(comboBadge)) {
+    state.xp += XP_VALUES.engagementBonus
+    state.badges = [...state.badges, comboBadge]
+    bonusAwarded = true
+  }
+
+  const newLevel = getLevel(state.xp).level
+  const leveledUp = newLevel > prevLevel
+
+  write(state, { leveledUp, newLevel, bonusAwarded })
   return state
 }
 

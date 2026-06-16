@@ -12,6 +12,7 @@ import SplashScreen from './components/SplashScreen'
 import Reveal from './components/Reveal'
 import EventTicker from './components/EventTicker'
 import StreakToast from './components/StreakToast'
+import LevelUpToast from './components/LevelUpToast'
 import KonamiCode from './components/KonamiCode'
 import Hero from './sections/Hero'
 import About from './sections/About'
@@ -156,6 +157,7 @@ export default function App() {
       <ShareButton />
       <MobileCTA />
       <StreakToast />
+      <LevelUpToast />
       <KonamiCode />
 
       <Hero />

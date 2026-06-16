@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
-import { getPassport, getTier } from '../lib/passport'
+import { getPassport, getTier, getLevel, XP_VALUES, GRAND_PRIZE_RANK } from '../lib/passport'
 
 // ── static seed data ──────────────────────────────────────────────────────────
 const CITY_SEEDS = [
@@ -126,19 +126,20 @@ function DeltaBadge({ delta }) {
 }
 
 // ── rank row ───────────────────────────────────────────────────────────────────
-function RankRow({ rank, label, sub, metric, metricSub, color, maxMetric, metricRaw, photo, delay, delta }) {
+function RankRow({ rank, label, sub, metric, metricSub, color, maxMetric, metricRaw, photo, delay, delta, grandPrize }) {
   const [visible, setVisible] = useState(false)
   useEffect(() => { const t = setTimeout(() => setVisible(true), delay); return () => clearTimeout(t) }, [delay])
 
   const pct   = maxMetric > 0 ? (metricRaw / maxMetric) * 100 : 0
   const isTop = rank <= 3
+  const highlightColor = isTop ? color : (grandPrize ? B.amber : null)
 
   return (
     <div style={{
       display:'flex', alignItems:'center', gap:12, padding:'13px 0',
       borderBottom:'1px solid rgba(255,255,255,0.05)',
-      borderLeft: isTop ? `2px solid ${color}` : '2px solid transparent',
-      paddingLeft: isTop ? 10 : 0,
+      borderLeft: highlightColor ? `2px solid ${highlightColor}` : '2px solid transparent',
+      paddingLeft: highlightColor ? 10 : 0,
       position:'relative',
       opacity:visible ? 1 : 0,
       transform:visible ? 'translateY(0)' : 'translateY(14px)',
@@ -152,7 +153,9 @@ function RankRow({ rank, label, sub, metric, metricSub, color, maxMetric, metric
       <div style={{ width:36, textAlign:'center', flexShrink:0, zIndex:1 }}>
         {isTop
           ? <span style={{ fontSize:20, filter: rank === 1 ? `drop-shadow(0 0 6px ${color})` : 'none' }}>{MEDAL[rank]}</span>
-          : <span style={{ fontFamily:'Orbitron,monospace', fontSize:11, color:'#444', fontWeight:700 }}>#{rank}</span>
+          : grandPrize
+            ? <span style={{ fontFamily:'Orbitron,monospace', fontSize:9, color:B.amber, fontWeight:700 }}>🏆{rank}</span>
+            : <span style={{ fontFamily:'Orbitron,monospace', fontSize:11, color:'#444', fontWeight:700 }}>#{rank}</span>
         }
       </div>
 
@@ -235,6 +238,7 @@ export default function Leaderboard() {
       rank:i+1, label:c.name, sub:c.city + (c.badges ? ' · ' + c.badges : ''),
       metric:`${c.pts.toLocaleString()} PTS`, metricSub:'points',
       color:'#C084FC', metricRaw:c.pts, delta:c.delta,
+      grandPrize: i < GRAND_PRIZE_RANK,
     })),
     cities: data.cities.map((c, i) => ({
       rank:i+1, label:c.city, sub:c.state,
@@ -287,7 +291,7 @@ export default function Leaderboard() {
       <div style={{ position:'relative', zIndex:10, maxWidth:860, margin:'0 auto' }}>
 
         {/* header */}
-        <div style={{ textAlign:'center', marginBottom:40 }}>
+        <div style={{ textAlign:'center', marginBottom:24 }}>
           <SectionTag>COMMUNITY RANKINGS</SectionTag>
           <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(44px,8vw,80px)', color:B.white, lineHeight:0.88, marginBottom:12 }}>
             WHO'S<br /><span style={{ color:B.neonCyan }}>LEADING THE PACK</span>
@@ -297,6 +301,13 @@ export default function Leaderboard() {
             <div style={{ width:5, height:5, borderRadius:'50%', background:B.neonLime, boxShadow:`0 0 6px ${B.neonLime}`, animation:'pulse 1.5s infinite' }} />
             <span key={ticker} style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#888', animation:'fadeUp 0.4s ease' }}>{TICKER_MSGS[ticker]}</span>
           </div>
+        </div>
+
+        {/* grand prize banner */}
+        <div style={{ textAlign:'center', marginBottom:28, padding:'12px 18px', background:`${B.amber}10`, border:`1px solid ${B.amber}30`, borderRadius:10 }}>
+          <span style={{ fontFamily:'Space Mono,monospace', fontSize:10, color:B.amber, letterSpacing:1 }}>
+            🏆 THE TOP {GRAND_PRIZE_RANK} HIGHEST-XP COLLECTORS WIN GRAND PRIZES AT THE EVENT — EVERY GAME, BID, AND POST MOVES YOU UP
+          </span>
         </div>
 
         {/* category tabs */}
@@ -402,18 +413,23 @@ export default function Leaderboard() {
           try {
             const entries = JSON.parse(localStorage.getItem('sf26_raffle_entries') || '{}')
             const myName  = Object.values(entries)[0]?.name
-            const rafflePts = Object.values(entries).reduce((s,e) => s + (e.packCount||1)*50, 0)
+            const rafflePts = Object.values(entries).reduce((s,e) => s + (e.packCount||1)*XP_VALUES.quickTask, 0)
             const galleryItems = JSON.parse(localStorage.getItem('sf26_gallery') || '[]')
-            const galPts = galleryItems.length * 100
+            const galPts = galleryItems.length * XP_VALUES.contribution
             const bidsObj = JSON.parse(localStorage.getItem('sf26_museum_bids') || '{}')
-            const bidPts = Object.values(bidsObj).filter(b => b > 0).length * 200
+            const bidPts = Object.values(bidsObj).filter(b => b > 0).length * XP_VALUES.bigCommitment
             const { xp: total } = getPassport()
             const tier = getTier(total)
+            const level = getLevel(total)
             if (!total && !myName) return null
             const rank = COLLECTOR_SEEDS.filter(c => c.pts > total).length + 1
+            const inGrandPrizeZone = rank <= GRAND_PRIZE_RANK
+            const spotsAway = rank - GRAND_PRIZE_RANK
             return (
-              <div style={{ marginTop:28, padding:'20px 24px', background:'rgba(255,255,255,0.02)', border:'1px solid #C084FC20', borderRadius:12 }}>
-                <div style={{ fontFamily:'Orbitron,monospace', fontSize:8, color:'#444', letterSpacing:3, marginBottom:12 }}>MY RANK · <span style={{ color:tier.color }}>{tier.name}</span></div>
+              <div style={{ marginTop:28, padding:'20px 24px', background: inGrandPrizeZone ? `${B.amber}08` : 'rgba(255,255,255,0.02)', border:`1px solid ${inGrandPrizeZone ? B.amber+'40' : '#C084FC20'}`, borderRadius:12 }}>
+                <div style={{ fontFamily:'Orbitron,monospace', fontSize:8, color:'#444', letterSpacing:3, marginBottom:12 }}>
+                  MY RANK · <span style={{ color:tier.color }}>{tier.name}</span> · <span style={{ color:B.neonLime }}>LV {level.level}</span>
+                </div>
                 <div style={{ display:'flex', alignItems:'center', gap:16, flexWrap:'wrap' }}>
                   <div style={{ display:'flex', alignItems:'baseline', gap:6 }}>
                     <span style={{ fontFamily:'Orbitron,monospace', fontSize:32, color:'#C084FC', fontWeight:900 }}>#{rank}</span>
@@ -429,7 +445,12 @@ export default function Leaderboard() {
                     {bidPts > 0 && <div style={{ textAlign:'center' }}><div style={{ fontFamily:'Orbitron,monospace', fontSize:11, color:B.neonLime }}>{bidPts}</div><div style={{ fontFamily:'Space Mono,monospace', fontSize:6, color:'#444' }}>BIDS</div></div>}
                   </div>
                 </div>
-                <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:'#2a2a2a', letterSpacing:1, marginTop:10 }}>XP SOURCED FROM YOUR SNEAKER PASSPORT · SEE FULL BREAKDOWN IN THE PASSPORT SECTION</div>
+                <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: inGrandPrizeZone ? B.amber : '#666', letterSpacing:1, marginTop:14 }}>
+                  {inGrandPrizeZone
+                    ? `🏆 YOU'RE IN THE GRAND PRIZE ZONE — TOP ${GRAND_PRIZE_RANK} XP EARNERS WIN AT THE EVENT`
+                    : `${spotsAway} spot${spotsAway === 1 ? '' : 's'} from the Grand Prize Zone (top ${GRAND_PRIZE_RANK})`}
+                </div>
+                <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:'#2a2a2a', letterSpacing:1, marginTop:8 }}>XP SOURCED FROM YOUR SNEAKER PASSPORT · SEE FULL BREAKDOWN IN THE PASSPORT SECTION</div>
               </div>
             )
           } catch { return null }

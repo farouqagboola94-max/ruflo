@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag, Divider } from '../components/Shared'
-import { getPassport, getTier, nextTier, subscribe, XP_VALUES, TRIVIA_MAX_XP } from '../lib/passport'
+import { getPassport, getTier, nextTier, subscribe, getLevel, XP_VALUES, TRIVIA_MAX_XP, GRAND_PRIZE_RANK } from '../lib/passport'
 
 const BADGE_INFO = {
   'trivia-ace':    { label: 'Sole Scholar',  emoji: '🧠', desc: 'Scored 7+ on Sneaker Trivia' },
@@ -33,6 +33,11 @@ export default function Passport() {
   const tier = getTier(state.xp)
   const next = nextTier(state.xp)
   const pct = next ? Math.min(100, ((state.xp - tier.min) / (next.min - tier.min)) * 100) : 100
+  const level = getLevel(state.xp)
+  const comboCount = state.dailyEngagement?.date === new Date().toISOString().slice(0, 10)
+    ? state.dailyEngagement.sources.length
+    : 0
+  const comboDone = comboCount >= XP_VALUES.engagementTarget
 
   return (
     <section id="passport" style={{ background: B.void, padding: '80px 20px', position: 'relative', overflow: 'hidden' }}>
@@ -43,18 +48,37 @@ export default function Passport() {
           YOUR STATUS, EVERYWHERE ON THE SITE
         </h2>
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.78rem', marginBottom: 40 }}>
-          One XP total. Every game, raffle, and upload feeds it.
+          One XP total. Every game, raffle, and upload feeds it — and levels your card up.
         </p>
+
+        <a href="#leaderboard" style={{
+          display: 'block', textDecoration: 'none', marginBottom: 24,
+          background: `${B.amber}10`, border: `1px solid ${B.amber}40`, borderRadius: 10,
+          padding: '14px 18px', fontFamily: "'Space Mono'", fontSize: '0.72rem', color: B.amber,
+          letterSpacing: '0.04em', transition: 'border-color 0.2s',
+        }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = B.amber }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = `${B.amber}40` }}
+        >
+          🏆 TOP {GRAND_PRIZE_RANK} HIGHEST-XP COLLECTORS WIN GRAND PRIZES AT THE EVENT — CLIMB THE LEADERBOARD →
+        </a>
 
         <div style={{
           background: B.charcoal, border: `1px solid ${tier.color}40`, borderRadius: 14,
-          padding: '28px 32px', marginBottom: 32,
+          padding: '28px 32px', marginBottom: 24,
           boxShadow: `0 0 40px ${tier.color}15`,
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16, marginBottom: 20 }}>
             <div>
               <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', letterSpacing: '0.25em', color: '#555', marginBottom: 6 }}>CURRENT TIER</div>
-              <div style={{ fontFamily: "'Bebas Neue'", fontSize: '2.4rem', color: tier.color, letterSpacing: '0.04em' }}>{tier.name}</div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
+                <div style={{ fontFamily: "'Bebas Neue'", fontSize: '2.4rem', color: tier.color, letterSpacing: '0.04em' }}>{tier.name}</div>
+                <div style={{
+                  fontFamily: "'Orbitron'", fontSize: '0.65rem', fontWeight: 900, color: B.white,
+                  background: `${tier.color}25`, border: `1px solid ${tier.color}60`, borderRadius: 20,
+                  padding: '4px 10px', whiteSpace: 'nowrap',
+                }}>LV {level.level}</div>
+              </div>
             </div>
             <div style={{ textAlign: 'right' }}>
               <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', letterSpacing: '0.25em', color: '#555', marginBottom: 6 }}>TOTAL XP</div>
@@ -65,15 +89,46 @@ export default function Passport() {
           <div style={{ height: 8, background: B.gunmetal, borderRadius: 4, overflow: 'hidden', marginBottom: 8 }}>
             <div style={{ height: '100%', width: `${pct}%`, background: tier.color, transition: 'width 0.6s ease', boxShadow: `0 0 10px ${tier.color}` }} />
           </div>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: '0.65rem', color: '#555' }}>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: '0.65rem', color: '#555', marginBottom: 18 }}>
             {next ? `${next.min - state.xp} XP to ${next.name}` : 'Max tier reached — Catalyst Elite'}
+          </div>
+
+          <div style={{ height: 5, background: B.gunmetal, borderRadius: 3, overflow: 'hidden', marginBottom: 6 }}>
+            <div style={{ height: '100%', width: `${level.pct}%`, background: B.neonLime, transition: 'width 0.6s ease', boxShadow: `0 0 8px ${B.neonLime}` }} />
+          </div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', color: '#555' }}>
+            {level.level >= 50 ? 'Max card level reached' : `${level.xpToNext} XP to Level ${level.level + 1}`}
+          </div>
+        </div>
+
+        <div style={{
+          background: comboDone ? `${B.amber}10` : B.charcoal, border: `1px solid ${comboDone ? B.amber + '60' : B.gunmetal}`,
+          borderRadius: 12, padding: '16px 20px', marginBottom: 32, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap',
+        }}>
+          <div>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', letterSpacing: '0.2em', color: comboDone ? B.amber : '#555', marginBottom: 4 }}>
+              {comboDone ? '✓ DAILY COMBO BONUS CLAIMED' : "TODAY'S COMBO BONUS"}
+            </div>
+            <div style={{ fontFamily: "'Syne'", fontSize: '0.78rem', color: B.white }}>
+              Play {XP_VALUES.engagementTarget} different games today for +{XP_VALUES.engagementBonus} bonus XP
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: 6 }}>
+            {Array.from({ length: XP_VALUES.engagementTarget }).map((_, i) => (
+              <div key={i} style={{
+                width: 26, height: 26, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                background: i < comboCount ? B.amber : 'rgba(255,255,255,0.05)',
+                border: `1px solid ${i < comboCount ? B.amber : 'rgba(255,255,255,0.1)'}`,
+                fontSize: '0.7rem',
+              }}>{i < comboCount ? '🔥' : ''}</div>
+            ))}
           </div>
         </div>
 
         <Divider color={tier.color} />
 
         <div style={{ marginTop: 32, marginBottom: 32 }}>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: '0.65rem', letterSpacing: '0.2em', color: '#555', marginBottom: 16 }}>BADGES EARNED ({state.badges.length}/{Object.keys(BADGE_INFO).length})</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: '0.65rem', letterSpacing: '0.2em', color: '#555', marginBottom: 16 }}>BADGES EARNED ({state.badges.filter(b => BADGE_INFO[b]).length}/{Object.keys(BADGE_INFO).length})</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(140px,1fr))', gap: 12 }}>
             {Object.entries(BADGE_INFO).map(([key, b]) => {
               const earned = state.badges.includes(key)
