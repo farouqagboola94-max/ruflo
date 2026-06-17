@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
 import { SOCIAL_LINKS } from '../config'
+import Egg from '../components/Egg'
 
 // ── zone data ──────────────────────────────────────────────────────────────────
 // viewBox: 800 × 560  |  cols: 0–180, 180–620, 620–800  |  rows: 0–140, 140–320, 320–440, 440–560
@@ -207,6 +208,8 @@ export default function Venue() {
       <div style={{ position:'absolute', top:'10%', right:'-5%', width:400, height:400, background:`${B.neonCyan}10`, borderRadius:'50%', filter:'blur(80px)', pointerEvents:'none' }} />
       <div style={{ position:'absolute', bottom:'10%', left:'-5%', width:350, height:350, background:`${B.amber}10`, borderRadius:'50%', filter:'blur(80px)', pointerEvents:'none' }} />
       <GrainOverlay />
+      <Egg id="egg-085" corner="top-right" />
+      <Egg id="egg-086" corner="bottom-left" />
 
       <div style={{ maxWidth:960, margin:'0 auto', padding:'0 24px', position:'relative', zIndex:10 }}>
 

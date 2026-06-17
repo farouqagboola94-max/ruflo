@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
 
 const PHASES = [
   { label: 'PHASE 1', dates: 'OCT 9 – DEC 4', title: '10-WEEK STREET CAMPAIGN', color: B.neonLime,
@@ -74,6 +75,8 @@ export default function Schedule() {
   return (
     <section id="schedule" style={{ position:'relative', overflow:'hidden', background:B.void, padding:'100px 24px' }}>
       <GrainOverlay />
+      <Egg id="egg-083" corner="top-right" />
+      <Egg id="egg-084" corner="bottom-left" />
       <div style={{ position:'absolute', top:'20%', right:'-5%', width:360, height:360, background:`radial-gradient(circle, ${B.neonMagenta}07 0%, transparent 70%)`, filter:'blur(70px)', pointerEvents:'none' }} />
       <div style={{ position:'absolute', bottom:'20%', left:'-5%', width:320, height:320, background:`radial-gradient(circle, ${B.amber}07 0%, transparent 70%)`, filter:'blur(70px)', pointerEvents:'none' }} />
 

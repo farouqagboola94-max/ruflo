@@ -1,5 +1,6 @@
 import { B } from '../tokens'
 import { GrainOverlay, AmberGlow, SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
 
 const LINEUP = [
   { name: "HEADLINER — TBA", role: "HEADLINER", time: "8PM — 10PM", genre: "AFROBEATS / HIP-HOP", featured: true },
@@ -17,6 +18,8 @@ export default function Lineup() {
       background: B.void, padding: "100px 24px",
     }}>
       <GrainOverlay />
+      <Egg id="egg-081" corner="top-right" />
+      <Egg id="egg-082" corner="bottom-left" />
       <AmberGlow top="20%" left="85%" size={350} />
 
       <div style={{
