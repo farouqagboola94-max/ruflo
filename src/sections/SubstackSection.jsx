@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
 
 const SUBSTACK_URL = 'https://substack.com/@catalyst00555'
 
-// ── featured posts ────────────────────────────────────────────────────────────
+// ── featured posts ──────────────────────────────────────────────────────────────────────────────
 const POSTS = [
   {
     id: 1,
@@ -41,11 +42,11 @@ const POSTS = [
   },
 ]
 
-// ── subscriber ticker ─────────────────────────────────────────────────────────
+// ── subscriber ticker ──────────────────────────────────────────────────────────────────────────────
 const BASE_SUBS = 4820
 function liveCount() { return BASE_SUBS + Math.floor(Date.now() / 120000) % 80 }
 
-// ── post card ─────────────────────────────────────────────────────────────────
+// ── post card ─────────────────────────────────────────────────────────────────────────────────
 function PostCard({ post, featured }) {
   const [hov, setHov] = useState(false)
   return (
@@ -80,7 +81,7 @@ function PostCard({ post, featured }) {
   )
 }
 
-// ── main section ──────────────────────────────────────────────────────────────
+// ── main section ──────────────────────────────────────────────────────────────────────────────
 export default function SubstackSection() {
   const [subs, setSubs]     = useState(liveCount())
   const [email, setEmail]   = useState('')
@@ -109,6 +110,8 @@ export default function SubstackSection() {
   return (
     <section id="substack" style={{ position: 'relative', overflow: 'hidden', background: B.black, padding: '100px 24px' }}>
       <GrainOverlay />
+      <Egg id="egg-077" corner="top-right" />
+      <Egg id="egg-078" corner="bottom-left" />
       <div style={{ position: 'absolute', top: '30%', left: '-5%',  width: 450, height: 350, background: `radial-gradient(ellipse, ${B.amber}08 0%, transparent 70%)`, filter: 'blur(80px)', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', bottom: '20%', right: '-5%', width: 380, height: 300, background: `radial-gradient(ellipse, ${B.neonCyan}06 0%, transparent 70%)`, filter: 'blur(70px)', pointerEvents: 'none' }} />
 
@@ -162,7 +165,7 @@ export default function SubstackSection() {
           <form onSubmit={subscribe} style={{ flex: '1 1 320px', display: 'flex', gap: 10 }}>
             {status === 'ok' ? (
               <div style={{ flex: 1, padding: '13px 20px', background: `${B.neonLime}10`, border: `1px solid ${B.neonLime}40`, borderRadius: 8, fontFamily: 'Space Mono,monospace', fontSize: 11, color: B.neonLime }}>
-                ✓ You're in — check your inbox!
+                ✓ You\'re in — check your inbox!
               </div>
             ) : (
               <>

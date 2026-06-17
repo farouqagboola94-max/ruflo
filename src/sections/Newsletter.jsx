@@ -2,21 +2,22 @@ import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
 import { logReferralConversion } from '../lib/referral'
+import Egg from '../components/Egg'
 
 const LISTMONK_URL     = import.meta.env.VITE_LISTMONK_URL     || ''
 const LIST_UUID        = import.meta.env.VITE_LISTMONK_LIST_UUID || ''
 const FORMSPREE_URL    = 'https://formspree.io/f/xbjnqppq'
 
 const PERKS = [
-  { icon: '🎟️', label: 'EARLY TICKET ACCESS',   desc: 'First in queue before public sale',          color: B.amber },
+  { icon: '🏟️', label: 'EARLY TICKET ACCESS',   desc: 'First in queue before public sale',          color: B.amber },
   { icon: '📦', label: 'DROP ALERTS',            desc: 'Exclusive sneaker releases, first notice',   color: B.neonCyan },
   { icon: '🎙️', label: 'FNP INVITES',            desc: 'Private access to Friday Night Protocol',   color: B.neonMagenta },
   { icon: '🏆', label: 'COMMUNITY CHALLENGES',   desc: 'Members-only giveaways and competitions',   color: B.neonLime },
 ]
 
 const INTERESTS = [
-  { id: 'drops',     label: '👟 Sneaker Drops' },
-  { id: 'events',    label: '🎪 Event Intel' },
+  { id: 'drops',     label: '💟 Sneaker Drops' },
+  { id: 'events',    label: '🎦 Event Intel' },
   { id: 'community', label: '🌍 Community Stories' },
   { id: 'access',    label: '🔑 Exclusive Access' },
 ]
@@ -134,6 +135,8 @@ export default function Newsletter() {
   return (
     <section id="newsletter" style={{ padding: 'clamp(60px,8vw,100px) 24px', background: `linear-gradient(180deg, ${B.void} 0%, ${B.black} 100%)`, position: 'relative', overflow: 'hidden' }}>
       <GrainOverlay />
+      <Egg id="egg-079" corner="top-right" />
+      <Egg id="egg-080" corner="bottom-left" />
       <div style={{ position: 'absolute', top: '15%', left: '5%', width: 500, height: 500, background: `radial-gradient(circle, ${B.amber}07, transparent 70%)`, filter: 'blur(70px)', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', bottom: '5%', right: '5%', width: 350, height: 350, background: `radial-gradient(circle, ${B.neonCyan}05, transparent 70%)`, filter: 'blur(60px)', pointerEvents: 'none' }} />
 
@@ -161,7 +164,7 @@ export default function Newsletter() {
         </div>
 
         {status === 'success' ? (
-          /* ── success state ────────────────────────────────────────────── */
+          /* ── success state ────────────────────────────────────────────────── */
           <div style={{ padding: '40px 32px', borderRadius: 20, background: `${B.amber}08`, border: `1px solid ${B.amber}30`, backdropFilter: 'blur(20px)' }}>
             <style>{`
               @keyframes successGlow { 0%,100%{opacity:0.5;} 50%{opacity:1;} }
@@ -183,7 +186,7 @@ export default function Newsletter() {
             </div>
           </div>
         ) : (
-          /* ── form ─────────────────────────────────────────────────────── */
+          /* ── form ─────────────────────────────────────────────────────────────────────────────── */
           <form onSubmit={subscribe}>
             {/* interest tags */}
             <div style={{ marginBottom: 20 }}>

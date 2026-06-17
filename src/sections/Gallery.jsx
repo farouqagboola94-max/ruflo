@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
 
 const STORE_KEY = 'sf26_gallery'
 const HEAT_KEY  = 'sf26_gallery_heat'
@@ -32,7 +33,7 @@ function genId() {
   return 'gal_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7)
 }
 
-// ── UploadModal ───────────────────────────────────────────────────────────────
+// ── UploadModal ───────────────────────────────────────────────────────────────────────────────
 function UploadModal({ onUpload, onClose }) {
   const [preview, setPreview] = useState(null)
   const [name,    setName]    = useState('')
@@ -139,7 +140,7 @@ function UploadModal({ onUpload, onClose }) {
   )
 }
 
-// ── PhotoCard ─────────────────────────────────────────────────────────────────
+// ── PhotoCard ─────────────────────────────────────────────────────────────────────────────────
 function PhotoCard({ photo, onHeat, liked }) {
   const [hov, setHov] = useState(false)
 
@@ -168,7 +169,7 @@ function PhotoCard({ photo, onHeat, liked }) {
   )
 }
 
-// ── Placeholder card ──────────────────────────────────────────────────────────
+// ── Placeholder card ───────────────────────────────────────────────────────────────────────────────
 const SneakerSVG = ({ color }) => (
   <svg width="90" height="50" viewBox="0 0 140 72" fill="none">
     <path d="M10 56C10 56 30 52 60 48C85 44 108 42 124 44C134 46 136 50 134 54C132 58 118 60 96 62C74 64 44 64 22 62C12 60 8 58 10 56Z" fill={color+'20'} stroke={color} strokeWidth="1.5"/>
@@ -186,7 +187,7 @@ const PLACEHOLDERS = [
   { cat:'NEW BALANCE 550', accent:'#69C9D0',     h:175 },
 ]
 
-// ── Main ──────────────────────────────────────────────────────────────────────
+// ── Main ────────────────────────────────────────────────────────────────────────────────
 export default function Gallery() {
   const [photos, setPhotos] = useState([])
   const [heat,   setHeat]   = useState({})
@@ -222,6 +223,8 @@ export default function Gallery() {
   return (
     <section id="gallery" style={{ position:'relative', overflow:'hidden', background:B.black, padding:'100px 24px' }}>
       <GrainOverlay />
+      <Egg id="egg-069" corner="top-right" />
+      <Egg id="egg-070" corner="bottom-left" />
       <div style={{ position:'absolute', top:'40%', left:'50%', transform:'translate(-50%,-50%)', width:600, height:400, background:`radial-gradient(ellipse, ${B.neonMagenta}07 0%, transparent 70%)`, filter:'blur(60px)', pointerEvents:'none' }} />
 
       <div style={{ position:'relative', zIndex:10, maxWidth:1100, margin:'0 auto' }}>
