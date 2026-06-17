@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
 
 // ── filter presets ────────────────────────────────────────────────────────────
 const PRESETS = [
@@ -197,6 +198,8 @@ export default function PhotoTools() {
   return (
     <section id="photo-tools" style={{ padding:'clamp(60px,8vw,100px) 24px', background:`linear-gradient(180deg, ${B.void} 0%, ${B.black} 100%)`, position:'relative', overflow:'hidden' }}>
       <GrainOverlay />
+      <Egg id="egg-075" corner="top-right" />
+      <Egg id="egg-076" corner="bottom-left" />
       <div style={{ position:'absolute', top:'20%', right:'5%', width:500, height:500, background:`radial-gradient(ellipse, ${B.neonMagenta}06 0%, transparent 70%)`, filter:'blur(80px)', pointerEvents:'none' }} />
       <div style={{ position:'absolute', bottom:'10%', left:0, width:400, height:400, background:`radial-gradient(ellipse, ${B.amber}05 0%, transparent 70%)`, filter:'blur(60px)', pointerEvents:'none' }} />
 

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
 import { getPassport, getTier, getLevel, XP_VALUES, GRAND_PRIZE_RANK } from '../lib/passport'
 
 // ── static seed data ──────────────────────────────────────────────────────────
@@ -286,6 +287,8 @@ export default function Leaderboard() {
   return (
     <section id="leaderboard" style={{ position:'relative', background:`linear-gradient(180deg, ${B.black} 0%, ${B.void} 100%)`, padding:'100px 24px', overflow:'hidden' }}>
       <GrainOverlay />
+      <Egg id="egg-073" corner="top-right" />
+      <Egg id="egg-074" corner="bottom-left" />
       <div style={{ position:'absolute', top:'25%', left:'50%', transform:'translate(-50%,-50%)', width:700, height:500, background:`radial-gradient(ellipse, ${B.neonCyan}05 0%, transparent 70%)`, filter:'blur(80px)', pointerEvents:'none' }} />
 
       <div style={{ position:'relative', zIndex:10, maxWidth:860, margin:'0 auto' }}>

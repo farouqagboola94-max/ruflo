@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
 
 // ── seed listings so the board has content on first visit ─────────────────────
 const SEEDS = [
@@ -259,6 +260,8 @@ export default function TradeBoard() {
   return (
     <section id="trades" style={{ position:'relative', background:`linear-gradient(180deg, ${B.black} 0%, ${B.void} 100%)`, padding:'100px 24px', overflow:'hidden' }}>
       <GrainOverlay />
+      <Egg id="egg-071" corner="top-right" />
+      <Egg id="egg-072" corner="bottom-left" />
       <div style={{ position:'absolute', top:'20%', left:'50%', transform:'translate(-50%,-50%)', width:600, height:400, background:`radial-gradient(ellipse, ${B.neonCyan}06 0%, transparent 70%)`, filter:'blur(80px)', pointerEvents:'none' }} />
 
       <div style={{ position:'relative', zIndex:10, maxWidth:1100, margin:'0 auto' }}>
