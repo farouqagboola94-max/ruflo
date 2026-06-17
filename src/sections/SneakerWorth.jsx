@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
 
 const QUESTIONS = [
   {
@@ -77,6 +78,8 @@ export default function SneakerWorth() {
   return (
     <section id="worth" style={{ background: B.charcoal, padding: '80px 20px', position: 'relative', overflow: 'hidden' }}>
       <GrainOverlay /><ScanLines />
+      <Egg id="egg-057" corner="top-right" />
+      <Egg id="egg-058" corner="bottom-left" />
       <div style={{ maxWidth: 620, margin: '0 auto' }}>
         <SectionTag>COLLECTION CALCULATOR</SectionTag>
         <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>

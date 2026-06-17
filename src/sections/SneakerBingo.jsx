@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import { addXP, subscribe, getPassport, hasBadge, XP_VALUES } from '../lib/passport'
+import Egg from '../components/Egg'
 
 function readJSON(key, fallback) {
   try { return JSON.parse(localStorage.getItem(key)) ?? fallback } catch { return fallback }
@@ -52,6 +53,8 @@ export default function SneakerBingo() {
   return (
     <section id="bingo" style={{ background: B.void, padding: '80px 20px', position: 'relative', overflow: 'hidden', textAlign: 'center' }}>
       <GrainOverlay /><ScanLines />
+      <Egg id="egg-059" corner="top-right" />
+      <Egg id="egg-060" corner="bottom-left" />
       <div style={{ maxWidth: 460, margin: '0 auto' }}>
         <SectionTag color={B.amber}>SNEAKER BINGO</SectionTag>
         <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>

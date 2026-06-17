@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import { addXP, XP_VALUES } from '../lib/passport'
+import Egg from '../components/Egg'
 
 const TALLY_KEY = 'sf26_voteoff_tally'
 const DAILY_KEY = 'sf26_voteoff_daily'
@@ -71,6 +72,8 @@ export default function CrewVoteOff() {
   return (
     <section id="vote-off" style={{ background: B.charcoal, padding: '80px 20px', position: 'relative', overflow: 'hidden', textAlign: 'center' }}>
       <GrainOverlay /><ScanLines />
+      <Egg id="egg-051" corner="top-right" />
+      <Egg id="egg-052" corner="bottom-left" />
       <div style={{ maxWidth: 600, margin: '0 auto' }}>
         <SectionTag color={B.neonCyan}>CREW VOTE-OFF</SectionTag>
         <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>

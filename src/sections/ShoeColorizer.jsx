@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
 
 const ZONES = [
   { id: 'upper',  label: 'UPPER',  default: '#1A1A2E' },
@@ -44,6 +45,8 @@ export default function ShoeColorizer() {
   return (
     <section id="colorizer" style={{ background: B.black, padding: '80px 20px', position: 'relative', overflow: 'hidden' }}>
       <GrainOverlay />
+      <Egg id="egg-043" corner="top-right" />
+      <Egg id="egg-044" corner="bottom-left" />
       <ScanLines />
       <div style={{ maxWidth: 900, margin: '0 auto' }}>
         <SectionTag label="SHOE BUILDER" />

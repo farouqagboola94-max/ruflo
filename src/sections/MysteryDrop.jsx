@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import { addXP, XP_VALUES } from '../lib/passport'
+import Egg from '../components/Egg'
 
 const EVENT = new Date('2026-12-12T12:00:00')
 
@@ -49,6 +50,8 @@ export default function MysteryDrop() {
       overflow: 'hidden',
     }}>
       <GrainOverlay /><ScanLines />
+      <Egg id="egg-055" corner="top-right" />
+      <Egg id="egg-056" corner="bottom-left" />
 
       {/* Ambient glow */}
       <div style={{

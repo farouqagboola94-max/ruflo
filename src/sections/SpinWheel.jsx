@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import { addXP, XP_VALUES } from '../lib/passport'
+import Egg from '../components/Egg'
 
 const PRIZES = [
   { label: '₦2,000 OFF',  sub: 'off any ticket tier',      color: '#F5A623', icon: '₦2K'  },
@@ -77,6 +78,8 @@ export default function SpinWheel() {
       position: 'relative', overflow: 'hidden', textAlign: 'center',
     }}>
       <GrainOverlay /><ScanLines />
+      <Egg id="egg-049" corner="top-right" />
+      <Egg id="egg-050" corner="bottom-left" />
       <style>{`
         @keyframes winnerPop {
           from { opacity: 0; transform: scale(0.7) rotate(-6deg); }

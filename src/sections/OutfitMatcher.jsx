@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import { addXP, hasBadge, XP_VALUES } from '../lib/passport'
+import Egg from '../components/Egg'
 
 const API = import.meta.env.VITE_BACKEND_URL || ''
 
@@ -65,6 +66,8 @@ export default function OutfitMatcher() {
   return (
     <section id="outfit" style={{ background: B.charcoal, padding: '80px 20px', position: 'relative', overflow: 'hidden' }}>
       <GrainOverlay /><ScanLines />
+      <Egg id="egg-045" corner="top-right" />
+      <Egg id="egg-046" corner="bottom-left" />
       <div style={{ maxWidth: 760, margin: '0 auto' }}>
         <SectionTag color={B.neonCyan}>AI OUTFIT MATCHER</SectionTag>
         <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>

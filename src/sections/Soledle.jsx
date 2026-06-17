@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import { addXP, XP_VALUES } from '../lib/passport'
+import Egg from '../components/Egg'
 
 const KEY = 'sf26_soledle'
 const MAX_GUESSES = 5
@@ -69,6 +70,8 @@ export default function Soledle() {
   return (
     <section id="soledle" style={{ background: B.void, padding: '80px 20px', position: 'relative', overflow: 'hidden' }}>
       <GrainOverlay /><ScanLines />
+      <Egg id="egg-041" corner="top-right" />
+      <Egg id="egg-042" corner="bottom-left" />
       <div style={{ maxWidth: 560, margin: '0 auto' }}>
         <SectionTag color={B.neonMagenta}>SOLEDLE · DAILY</SectionTag>
         <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>

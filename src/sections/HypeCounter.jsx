@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
 
 const SEED = 8423
 const KEY = 'sf26_hype'
@@ -57,6 +58,8 @@ export default function HypeCounter() {
       padding: '80px 20px', textAlign: 'center', position: 'relative', overflow: 'hidden',
     }}>
       <GrainOverlay /><ScanLines />
+      <Egg id="egg-047" corner="top-right" />
+      <Egg id="egg-048" corner="bottom-left" />
       <div style={{ maxWidth: 540, margin: '0 auto' }}>
         <SectionTag>COMMUNITY HYPE</SectionTag>
         <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 40 }}>
