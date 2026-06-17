@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
 import { SOCIAL_LINKS } from '../config'
+import { logReferralConversion } from '../lib/referral'
 
 const FORMSPREE   = import.meta.env.VITE_FORMSPREE_ID || ''
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL  || ''
@@ -178,6 +179,7 @@ export default function VendorReg() {
         localStorage.setItem('sf26_vendor_apps', JSON.stringify(apps))
         localStorage.removeItem('sf26_vendor_draft')
       } catch {}
+      logReferralConversion('vendor', { booth: form.booth })
       setAppId(id); setStatus('success')
     } else {
       setStatus('error')

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
+import { logReferralConversion } from '../lib/referral'
 
 const LISTMONK_URL     = import.meta.env.VITE_LISTMONK_URL     || ''
 const LIST_UUID        = import.meta.env.VITE_LISTMONK_LIST_UUID || ''
@@ -113,7 +114,7 @@ export default function Newsletter() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, name: name || email.split('@')[0], list_uuids: LIST_UUID ? [LIST_UUID] : [], status: 'enabled' }),
         })
-        if (res.ok || res.status === 409) { setStatus('success'); return }
+        if (res.ok || res.status === 409) { logReferralConversion('newsletter'); setStatus('success'); return }
       } catch { /* fall through */ }
     }
 
@@ -126,6 +127,7 @@ export default function Newsletter() {
       })
     } catch { /* silent — show success regardless for UX */ }
 
+    logReferralConversion('newsletter')
     setStatus('success')
   }
 

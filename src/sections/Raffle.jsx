@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
+import { logReferralConversion } from '../lib/referral'
 
 // ── raffles ────────────────────────────────────────────────────────────────────
 const RAFFLES = [
@@ -354,6 +355,8 @@ export default function Raffle() {
     const nextCounts = { ...counts, [raffle.id]: counts[raffle.id] + (entry.packCount || 1) }
     setCounts(nextCounts)
     try { localStorage.setItem('sf26_raffle_counts', JSON.stringify(nextCounts)) } catch {}
+
+    logReferralConversion('raffle', { raffle: raffle.name })
   }
 
   const totalEntries = Object.values(counts).reduce((a, b) => a + b, 0)
