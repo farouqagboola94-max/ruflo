@@ -3,6 +3,7 @@ import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
 import { SOCIAL_LINKS } from '../config'
 import { logReferralConversion } from '../lib/referral'
+import Egg from '../components/Egg'
 
 const FORMSPREE   = import.meta.env.VITE_FORMSPREE_ID || ''
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL  || ''
@@ -196,6 +197,8 @@ export default function VendorReg() {
   return (
     <section id="vendors" style={{ position:'relative', overflow:'hidden', background:B.black, padding:'100px 24px' }}>
       <GrainOverlay />
+      <Egg id="egg-095" corner="top-right" />
+      <Egg id="egg-096" corner="bottom-left" />
       <div style={{ position:'absolute', bottom:'20%', left:'-5%', width:400, height:400, background:`radial-gradient(circle, ${B.neonCyan}07 0%, transparent 70%)`, filter:'blur(80px)', pointerEvents:'none' }} />
 
       <div style={{ position:'relative', zIndex:10, maxWidth:900, margin:'0 auto' }}>
@@ -205,7 +208,7 @@ export default function VendorReg() {
             CLAIM YOUR<br /><span style={{ color:B.neonCyan }}>BOOTH</span>
           </div>
           <div style={{ fontFamily:"'Syne', sans-serif", fontSize:14, color:B.smoke, lineHeight:1.7, maxWidth:520, margin:'0 auto' }}>
-            Year 1 is invitation-curated. We're confirming the first cohort of 30 vendors before announcing publicly. If you sell in the sneaker culture ecosystem — kicks, apparel, art, customs — this is your room.
+            Year 1 is invitation-curated. We’re confirming the first cohort of 30 vendors before announcing publicly. If you sell in the sneaker culture ecosystem — kicks, apparel, art, customs — this is your room.
           </div>
         </div>
 
