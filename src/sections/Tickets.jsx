@@ -3,6 +3,7 @@ import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import PaymentModal, { TicketCard, downloadTicketPNG } from '../components/PaymentModal'
 import { logReferralConversion } from '../lib/referral'
+import Egg from '../components/Egg'
 
 const TIERS = [
   {
@@ -163,6 +164,8 @@ export default function Tickets() {
       padding: '100px 24px',
     }}>
       <GrainOverlay />
+      <Egg id="egg-093" corner="top-right" />
+      <Egg id="egg-094" corner="bottom-left" />
       <ScanLines opacity={0.04} />
 
       <div style={{ position:'absolute', top:'25%', left:'8%', width:320, height:320, background:`radial-gradient(circle, ${B.neonCyan}20, transparent 70%)`, filter:'blur(70px)', pointerEvents:'none' }} />
@@ -224,7 +227,6 @@ export default function Tickets() {
                   <div style={{ fontFamily:"'Space Mono', monospace", fontSize:7, color:B.smoke, letterSpacing:'0.2em', marginTop:4 }}>EARLY BIRD PRICE</div>
                 </div>
 
-                {/* availability */}
                 {(() => {
                   const pct  = tier.avail / tier.total
                   const sold = tier.total - tier.avail
