@@ -1,13 +1,14 @@
 import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
 
 const EVENT_DATE = new Date('2026-12-12T12:00:00')
 const RSVP_SEED  = 1247
 const RSVP_KEY   = 'sf26_rsvp_count'
 const JOINED_KEY = 'sf26_rsvp_joined'
 
-// ── countdown logic ───────────────────────────────────────────────────────────
+// ── countdown logic ──────────────────────────────────────────────────────────────
 function useCountdown() {
   const [t, setT] = useState({ days:0, hours:0, minutes:0, seconds:0 })
   useEffect(() => {
@@ -28,7 +29,7 @@ function useCountdown() {
   return t
 }
 
-// ── flip digit card ───────────────────────────────────────────────────────────
+// ── flip digit card ───────────────────────────────────────────────────────────────
 function FlipUnit({ value, label, color }) {
   const padded  = String(value).padStart(2, '0')
   const [pop, setPop]       = useState(false)
@@ -76,7 +77,7 @@ function FlipUnit({ value, label, color }) {
   )
 }
 
-// ── hype card canvas ──────────────────────────────────────────────────────────
+// ── hype card canvas ──────────────────────────────────────────────────────────────
 async function downloadHypeCard({ name, daysLeft }) {
   const W = 1080, H = 1080
   const cv = document.createElement('canvas')
@@ -185,6 +186,8 @@ export default function Countdown() {
   return (
     <section id="countdown" style={{ position:'relative', overflow:'hidden', background:`linear-gradient(180deg, ${B.void} 0%, ${B.black} 100%)`, padding:'100px 24px' }}>
       <GrainOverlay />
+      <Egg id="egg-091" corner="top-right" />
+      <Egg id="egg-092" corner="bottom-left" />
 
       {/* ambient glows */}
       <div style={{ position:'absolute', top:'30%', left:'50%', transform:'translate(-50%,-50%)', width:700, height:500, background:`radial-gradient(ellipse, ${B.amber}08 0%, transparent 70%)`, filter:'blur(80px)', pointerEvents:'none' }} />
@@ -243,7 +246,7 @@ export default function Countdown() {
               onMouseEnter={e => { if (!joined) { e.currentTarget.style.boxShadow = `0 0 48px ${B.amber}50` } }}
               onMouseLeave={e => { e.currentTarget.style.boxShadow = joined ? 'none' : `0 0 32px ${B.amber}30` }}
             >
-              {joined ? '✓ YOU\'RE IN' : 'COUNT ME IN →'}
+              {joined ? "✓ YOU'RE IN" : 'COUNT ME IN →'}
             </button>
           </div>
         </div>
