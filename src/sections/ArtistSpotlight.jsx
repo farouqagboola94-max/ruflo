@@ -1,5 +1,6 @@
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
 
 const ARTISTS = [
   {
@@ -45,7 +46,10 @@ export default function ArtistSpotlight() {
       position: 'relative',
       overflow: 'hidden',
     }}>
-      <GrainOverlay /><ScanLines />
+      <GrainOverlay />
+      <Egg id="egg-061" corner="top-right" />
+      <Egg id="egg-062" corner="bottom-left" />
+      <ScanLines />
       <div style={{ maxWidth: 960, margin: '0 auto' }}>
         <SectionTag>ARTIST SPOTLIGHT</SectionTag>
         <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
 
 const DROPS = [
   { year: '1985', name: 'Air Jordan 1',           brand: 'Nike',   desc: 'The shoe that started everything. Nike paid the NBA fine so MJ could keep wearing it.' },
@@ -8,7 +9,7 @@ const DROPS = [
   { year: '1992', name: 'Huarache',                brand: 'Nike',   desc: 'Tinker Hatfield’s neoprene masterpiece. So ahead of its time it still looks futuristic.' },
   { year: '1994', name: 'Air Max 95',              brand: 'Nike',   desc: 'Sergio Lozano designed the human spine into a sole. Anatomy as footwear.' },
   { year: '1999', name: 'Superstar Millennium',    brand: 'Adidas', desc: 'Shell-toe classics retold for a new century. Run-DMC had already written the lore.' },
-  { year: '2003', name: 'Air Force 1 ‘25th',    brand: 'Nike',   desc: 'Twenty-five years of the most remixed shoe in history. The city edition series exploded.' },
+  { year: '2003', name: 'Air Force 1 ’25th',    brand: 'Nike',   desc: 'Twenty-five years of the most remixed shoe in history. The city edition series exploded.' },
   { year: '2013', name: 'Yeezy 2 “Red October”', brand: 'Nike',   desc: 'Kanye x Nike’s swan song. 9,000 pairs. Dropped unannounced. Resale still in six figures.' },
   { year: '2015', name: 'Yeezy Boost 350',         brand: 'Adidas', desc: 'Kanye brings Boost to the masses. The most copied silhouette of the 2010s.' },
   { year: '2017', name: 'The Ten Collection',      brand: 'Nike',   desc: 'Virgil Abloh’s Off-White x Nike. Ten silhouettes. Quotation marks changed sneakers forever.' },
@@ -30,7 +31,10 @@ export default function DropsTimeline() {
       position: 'relative',
       overflow: 'hidden',
     }}>
-      <GrainOverlay /><ScanLines />
+      <GrainOverlay />
+      <Egg id="egg-063" corner="top-right" />
+      <Egg id="egg-064" corner="bottom-left" />
+      <ScanLines />
       <div style={{ maxWidth: 900, margin: '0 auto' }}>
         <SectionTag>DROPS TIMELINE</SectionTag>
         <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
