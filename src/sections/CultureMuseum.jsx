@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { B } from '../tokens'
+import Egg from '../components/Egg'
 
 const ARTWORKS = [
   {
@@ -151,7 +152,7 @@ const ARTWORKS = [
     title: 'GRAIL KEEPER',
     artist: 'Nnamdi Vis.',
     edition: '2 of 3',
-    medium: 'Collector\'s Digital · 2026',
+    medium: "Collector's Digital · 2026",
     startBid: 220000,
     art: {
       background: `linear-gradient(160deg, #0A0A1A 0%, #000510 100%)`,
@@ -298,12 +299,10 @@ function ArtCard({ artwork, bids, onBid }) {
           }}>BID PLACED</div>
         )}
 
-        {/* Gold frame top line */}
         <div style={{ height:3, background:`linear-gradient(90deg, transparent, ${B.amber}, transparent)` }} />
 
         <ArtCanvas art={artwork.art} shapes={artwork.shapes} />
 
-        {/* Spotlight overlay on hover */}
         {hovered && (
           <div style={{ position:'absolute', top:0, left:0, right:0, paddingTop:'75%',
             background:`radial-gradient(ellipse at 50% 50%, ${B.amber}08 0%, transparent 70%)`,
@@ -347,7 +346,6 @@ function ArtCard({ artwork, bids, onBid }) {
           </div>
         </div>
 
-        {/* Gold frame bottom line */}
         <div style={{ height:3, background:`linear-gradient(90deg, transparent, ${B.amber}, transparent)` }} />
       </div>
 
@@ -375,10 +373,11 @@ export default function CultureMuseum() {
   const totalBid = Object.values(bids).reduce((a, b) => a + b, 0)
 
   return (
-    <section id="museum" style={{ background:B.black, padding:'80px 0' }}>
+    <section id="museum" style={{ background:B.black, padding:'80px 0', position:'relative', overflow:'hidden' }}>
+      <Egg id="egg-031" corner="top-right" />
+      <Egg id="egg-032" corner="bottom-left" />
       <div style={{ maxWidth:1200, margin:'0 auto', padding:'0 24px' }}>
 
-        {/* Header */}
         <div style={{ textAlign:'center', marginBottom:56 }}>
           <div style={{ fontFamily:'Orbitron', fontSize:11, color:B.amber, letterSpacing:4, marginBottom:12 }}>
             SNEAKERS FEST '26 · THE GALLERY
@@ -400,7 +399,6 @@ export default function CultureMuseum() {
           )}
         </div>
 
-        {/* Gallery Grid */}
         <div style={{ columns:'auto 280px', columnGap:20, orphans:1, widows:1 }}>
           {ARTWORKS.map(aw => (
             <div key={aw.id} style={{ breakInside:'avoid', marginBottom:20 }}>
@@ -409,7 +407,6 @@ export default function CultureMuseum() {
           ))}
         </div>
 
-        {/* Footer note */}
         <div style={{ marginTop:48, textAlign:'center', padding:'24px', border:`1px solid ${B.amber}20`, borderRadius:8, background:`${B.amber}05` }}>
           <div style={{ fontFamily:'Bebas Neue', fontSize:16, color:B.amber, letterSpacing:3, marginBottom:8 }}>ABOUT THE MUSEUM</div>
           <div style={{ fontFamily:'Syne', fontSize:13, color:B.smoke, maxWidth:600, margin:'0 auto', lineHeight:1.7 }}>
