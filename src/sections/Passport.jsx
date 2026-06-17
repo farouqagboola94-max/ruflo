@@ -4,6 +4,7 @@ import { GrainOverlay, ScanLines, SectionTag, Divider } from '../components/Shar
 import { getPassport, getTier, nextTier, subscribe, getLevel, XP_VALUES, TRIVIA_MAX_XP, GRAND_PRIZE_RANK } from '../lib/passport'
 import { getReferralLink } from '../lib/referral'
 import { eggCount, TOTAL_EGGS } from '../lib/easterEggs'
+import Egg from '../components/Egg'
 
 const BADGE_INFO = {
   'trivia-ace':    { label: 'Sole Scholar',  emoji: '🧠', desc: 'Scored 7+ on Sneaker Trivia' },
@@ -72,7 +73,10 @@ export default function Passport() {
 
   return (
     <section id="passport" style={{ background: B.void, padding: '80px 20px', position: 'relative', overflow: 'hidden' }}>
-      <GrainOverlay /><ScanLines />
+      <GrainOverlay />
+      <Egg id="egg-023" corner="top-right" />
+      <Egg id="egg-024" corner="bottom-left" />
+      <ScanLines />
       <div style={{ maxWidth: 760, margin: '0 auto' }}>
         <SectionTag color={tier.color}>SNEAKER PASSPORT</SectionTag>
         <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>

@@ -1,5 +1,6 @@
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
 
 const PARTS = [
   {
@@ -34,7 +35,7 @@ const PARTS = [
   },
   {
     num: '06', era: '2017 -- 2024', color: B.amber,
-    title: 'THE AFROBEATS GLOBALIZATION EFFECT', sub: 'When Lagos Became Fashion\'s Reference Point',
+    title: 'THE AFROBEATS GLOBALIZATION EFFECT', sub: "When Lagos Became Fashion's Reference Point",
     pull: 'The global fashion industry had historically defined Africa as a market to sell to. Now they had to learn from it.',
     body: `The period from 2017 to 2024 was extraordinary in Nigerian cultural history. Afrobeats went from a genre known primarily in Africa and the diaspora to a global dominant force. Burna Boy won a Grammy. Wizkid sold out the O2 Arena. Davido collaborated with artists across four continents. A new generation of Nigerian artists rewrote the global pop conversation.\n\nThe fashion implications were direct. Nigerian artists on global stages meant Nigerian aesthetics on global stages. Aso-Oke fabric appeared in music videos alongside Jordan 1s. Lagos street style was documented by Instagram accounts and picked up by i-D, Hypebeast, and Vogue. The global fashion industry had historically defined Africa as a market to sell to. Now they began to acknowledge that something was happening here they needed to learn from.\n\nFor sneaker culture specifically, this meant the Lagos collector and the Lagos reseller were finally legible to the global market. The conversation about what Lagos wants from sneaker culture found an audience that extended beyond the city's own limits.`,
   },
@@ -52,12 +53,12 @@ const PARTS = [
   },
 ]
 
-const R = { '\\n\\n': '\n\n' }
-
 export default function SoleOfLagos() {
   return (
     <section id="sole-of-lagos" style={{ background: B.black, color: B.white, position: 'relative', overflow: 'hidden', padding: '100px 0 120px' }}>
       <GrainOverlay />
+      <Egg id="egg-027" corner="top-right" />
+      <Egg id="egg-028" corner="bottom-left" />
       <ScanLines />
       <div style={{ maxWidth: 860, margin: '0 auto', padding: '0 32px' }}>
 

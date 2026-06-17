@@ -1,5 +1,6 @@
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
 
 const QUOTES = [
   {
@@ -32,6 +33,8 @@ export default function Testimonials() {
   return (
     <section id="testimonials" style={{ position: 'relative', overflow: 'hidden', background: B.void, padding: '100px 24px' }}>
       <GrainOverlay />
+      <Egg id="egg-021" corner="top-right" />
+      <Egg id="egg-022" corner="bottom-left" />
       <div style={{ position: 'absolute', top: '30%', right: '-5%', width: 350, height: 350, background: `radial-gradient(circle, ${B.amber}08 0%, transparent 70%)`, filter: 'blur(70px)', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', bottom: '20%', left: '-5%', width: 300, height: 300, background: `radial-gradient(circle, ${B.neonCyan}07 0%, transparent 70%)`, filter: 'blur(70px)', pointerEvents: 'none' }} />
 

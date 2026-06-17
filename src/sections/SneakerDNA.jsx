@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { B } from '../tokens'
+import Egg from '../components/Egg'
 
 const QUESTIONS = [
   {
@@ -156,6 +157,8 @@ export default function SneakerDNA() {
         alignItems: 'center',
       }}
     >
+      <Egg id="egg-025" corner="top-right" />
+      <Egg id="egg-026" corner="bottom-left" />
       <div style={{ position:'absolute', top:'15%', right:'-8%', width:600, height:600, background:B.amber+'08', borderRadius:'50%', filter:'blur(120px)', pointerEvents:'none' }} />
       <div style={{ position:'absolute', bottom:'10%', left:'-8%', width:500, height:500, background:B.neonMagenta+'08', borderRadius:'50%', filter:'blur(100px)', pointerEvents:'none' }} />
       <div style={{ position:'absolute', top:'50%', left:'50%', transform:'translate(-50%,-50%)', width:700, height:700, background:B.neonCyan+'04', borderRadius:'50%', filter:'blur(140px)', pointerEvents:'none' }} />
@@ -236,7 +239,7 @@ export default function SneakerDNA() {
             <p style={{ fontFamily:'Bebas Neue, sans-serif', color:B.smoke, fontSize:15, letterSpacing:5, marginBottom:36 }}>{arch.subtitle}</p>
             <div style={{ background:`linear-gradient(135deg, ${arch.color}10, transparent)`, border:`1px solid ${arch.color}28`, borderRadius:16, padding:'32px', backdropFilter:'blur(20px)', textAlign:'left', position:'relative', overflow:'hidden', marginBottom:32 }}>
               <div style={{ position:'absolute', top:0, left:0, right:0, height:3, background:`linear-gradient(90deg, ${arch.color}, ${arch.color}30)` }} />
-              <p style={{ fontFamily:'Syne, sans-serif', fontSize:16, color:B.white, lineHeight:1.8, marginBottom:28 }}>“{arch.description}”</p>
+              <p style={{ fontFamily:'Syne, sans-serif', fontSize:16, color:B.white, lineHeight:1.8, marginBottom:28 }}>"{ arch.description}"</p>
               <div style={{ display:'flex', gap:40, flexWrap:'wrap', marginBottom:20 }}>
                 <div>
                   <div style={{ fontFamily:'Bebas Neue, sans-serif', fontSize:10, color:B.smoke, letterSpacing:3, marginBottom:4 }}>SIGNATURE PAIR</div>

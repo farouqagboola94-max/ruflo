@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { B } from '../tokens'
+import Egg from '../components/Egg'
 
 const ERAS = [
   {
@@ -14,7 +15,7 @@ const ERAS = [
     id: 'e2', period: '1970s', color: '#69C9D0',
     title: 'THE STREETS CLAIM THEM',
     sub: 'NYC REWRITES THE RULES',
-    body: 'New York\'s playground basketball scene turned sneakers into social currency. Adidas Superstar on the feet of Harlem ballers. Run DMC wore shell-toes with no laces and made it gospel. For the first time, a shoe told you who someone was before they spoke.',
+    body: "New York's playground basketball scene turned sneakers into social currency. Adidas Superstar on the feet of Harlem ballers. Run DMC wore shell-toes with no laces and made it gospel. For the first time, a shoe told you who someone was before they spoke.",
     lagos: 'Lagos markets begin importing Adidas knock-offs. Surulere traders sense the demand before anyone names it.',
     icon: '◎',
   },
@@ -54,7 +55,7 @@ const ERAS = [
     id: 'e7', period: 'THE LAGOS CHAPTER', color: B.amber,
     title: 'THE CONTINENT WAKES UP',
     sub: 'THIS CITY HAS BEEN READY',
-    body: 'Afrobeats goes global and takes Lagos style with it. Burna Boy, Wizkid, Davido — on every stage in every city in the world — in heat. The world starts to look at Lagos not just for music but for what\'s on people\'s feet. Streetwear brands open pop-ups. Sneaker communities form in Yaba, Lekki, VI. The culture here was never absent — it was waiting for the platform.',
+    body: "Afrobeats goes global and takes Lagos style with it. Burna Boy, Wizkid, Davido — on every stage in every city in the world — in heat. The world starts to look at Lagos not just for music but for what's on people's feet. Streetwear brands open pop-ups. Sneaker communities form in Yaba, Lekki, VI. The culture here was never absent — it was waiting for the platform.",
     lagos: 'THIS IS THE LAGOS CHAPTER. It was always here.',
     icon: '◉',
   },
@@ -62,7 +63,7 @@ const ERAS = [
     id: 'e8', period: 'DECEMBER 12, 2026', color: B.neonMagenta,
     title: 'THE SOLE EXHIBITION',
     sub: 'NOW IT IS OUR TIME',
-    body: 'Sneakers Fest \'26 is not an imitation of New York or Tokyo. It is Lagos speaking for itself. 30-50 curated vendors. Live performances. Custom art. The museum wall. The sacred wall. The drops. This is the chapter where the city claims its place in the global culture — permanently.',
+    body: "Sneakers Fest '26 is not an imitation of New York or Tokyo. It is Lagos speaking for itself. 30-50 curated vendors. Live performances. Custom art. The museum wall. The sacred wall. The drops. This is the chapter where the city claims its place in the global culture — permanently.",
     lagos: 'Lagos. December 12. We built this.',
     icon: '◆',
   },
@@ -76,7 +77,7 @@ const QUESTIONS = [
       { label: 'Sport — I grew up playing', arch: 'GRAIL SEEKER' },
       { label: 'Fashion — I was always drawn to how things looked', arch: 'STYLE ARCHITECT' },
       { label: 'Community — people around me were into it', arch: 'MOVEMENT MAKER' },
-      { label: 'I\'m still finding my way in', arch: 'THE NEWCOMER' },
+      { label: "I'm still finding my way in", arch: 'THE NEWCOMER' },
     ],
   },
   {
@@ -92,17 +93,17 @@ const QUESTIONS = [
   {
     q: 'What does your collection say about you?',
     opts: [
-      { label: 'It\'s a biography — every pair is a chapter', arch: 'CULTURE BEARER' },
-      { label: 'It\'s a gallery — curated, intentional, no duplicates', arch: 'STYLE ARCHITECT' },
-      { label: 'It\'s a vault — investments, preserved and protected', arch: 'GRAIL SEEKER' },
-      { label: 'It\'s a conversation — I dress to connect', arch: 'MOVEMENT MAKER' },
-      { label: 'It\'s still being written', arch: 'THE NEWCOMER' },
+      { label: "It's a biography — every pair is a chapter", arch: 'CULTURE BEARER' },
+      { label: "It's a gallery — curated, intentional, no duplicates", arch: 'STYLE ARCHITECT' },
+      { label: "It's a vault — investments, preserved and protected", arch: 'GRAIL SEEKER' },
+      { label: "It's a conversation — I dress to connect", arch: 'MOVEMENT MAKER' },
+      { label: "It's still being written", arch: 'THE NEWCOMER' },
     ],
   },
   {
     q: 'What does Lagos becoming a sneaker capital mean to you?',
     opts: [
-      { label: 'Validation — we\'ve always been this', arch: 'CULTURE BEARER' },
+      { label: "Validation — we've always been this", arch: 'CULTURE BEARER' },
       { label: 'Opportunity — the market is opening up', arch: 'GRAIL SEEKER' },
       { label: 'Responsibility — we have to do it right', arch: 'STYLE ARCHITECT' },
       { label: 'Power — our city sets trends now', arch: 'MOVEMENT MAKER' },
@@ -125,31 +126,31 @@ const ARCHETYPES = {
   'GRAIL SEEKER': {
     color: B.amber,
     icon: '◆',
-    desc: 'You are the archive. The vaults exist because of people like you. You don\'t just collect shoes — you preserve history. Your shelf is a museum. Your eye is a scholarship.',
-    stake: 'Your stake in the culture is permanence. You make sure the culture remembers itself.',
+    desc: "You are the archive. The vaults exist because of people like you. You don't just collect shoes — you preserve history. Your shelf is a museum. Your eye is a scholarship.",
+    stake: "Your stake in the culture is permanence. You make sure the culture remembers itself.",
   },
   'CULTURE BEARER': {
     color: B.neonCyan,
     icon: '◎',
-    desc: 'The culture moves through you. You were there for the music, the moment, the meaning — and you carry it forward. When the next generation asks how it felt, they\'ll ask you.',
+    desc: "The culture moves through you. You were there for the music, the moment, the meaning — and you carry it forward. When the next generation asks how it felt, they'll ask you.",
     stake: 'Your stake in the culture is memory. You are a living archive.',
   },
   'STYLE ARCHITECT': {
     color: B.neonMagenta,
     icon: '◉',
-    desc: 'You design the aesthetic. You understand that how something looks is also how it feels, and how it speaks. Sneaker culture is fashion, and fashion is power — and you\'ve always known this.',
+    desc: "You design the aesthetic. You understand that how something looks is also how it feels, and how it speaks. Sneaker culture is fashion, and fashion is power — and you've always known this.",
     stake: 'Your stake in the culture is vision. You show the rest of us what it could be.',
   },
   'MOVEMENT MAKER': {
     color: B.neonLime,
     icon: '◈',
-    desc: 'You build the rooms. The communities, the conversations, the platforms — they exist because people like you refused to experience culture alone. The movement has your fingerprints.',
+    desc: "You build the rooms. The communities, the conversations, the platforms — they exist because people like you refused to experience culture alone. The movement has your fingerprints.",
     stake: 'Your stake in the culture is its future. Without you it stays local. With you it goes everywhere.',
   },
   'THE NEWCOMER': {
     color: '#69C9D0',
     icon: '○',
-    desc: 'Every elder was once where you are. You bring something the culture always needs — fresh eyes, no assumptions, and hunger. You haven\'t been shaped by the old rules yet. That\'s power.',
+    desc: "Every elder was once where you are. You bring something the culture always needs — fresh eyes, no assumptions, and hunger. You haven't been shaped by the old rules yet. That's power.",
     stake: 'Your stake in the culture is possibility. The next era belongs to you.',
   },
 }
@@ -315,7 +316,7 @@ function StakeQuiz() {
             <div style={{ padding: '14px 20px', background: cfg.color + '10',
               border: `1px solid ${cfg.color}30`, borderRadius: 6, marginBottom: 24 }}>
               <p style={{ fontFamily: "'Syne',sans-serif", fontSize: 13, color: cfg.color,
-                fontStyle: 'italic', lineHeight: 1.7 }}>"{cfg.stake}"</p>
+                fontStyle: 'italic', lineHeight: 1.7 }}>"{ cfg.stake}"</p>
             </div>
             <button onClick={reset}
               style={{ padding: '10px 28px', background: 'transparent', border: `1px solid ${cfg.color}50`,
@@ -333,6 +334,8 @@ function StakeQuiz() {
 export default function CultureHistory() {
   return (
     <section id="culture-history" style={{ background: B.void, padding: '100px 0 60px', position: 'relative', overflow: 'hidden' }}>
+      <Egg id="egg-029" corner="top-right" />
+      <Egg id="egg-030" corner="bottom-left" />
       <div style={{ position: 'absolute', top: '15%', left: '50%', transform: 'translateX(-50%)',
         width: 700, height: 400, background: `radial-gradient(ellipse, ${B.amber}08, transparent 70%)`,
         pointerEvents: 'none' }} />
