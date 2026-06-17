@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
 
 const SEED_COUNT = 1847
 const GOAL       = 2500
@@ -36,7 +37,7 @@ function genRefCode(name) {
   return `${prefix}${rand}`
 }
 
-// ── animated number counter ────────────────────────────────────────────────────
+// ── animated number counter ──────────────────────────────────────────────────────────────────────────────
 function useCountUp(target, active) {
   const [val, setVal] = useState(0)
   const raf = useRef()
@@ -105,7 +106,10 @@ export default function EarlyAccess() {
 
   return (
     <section id="waitlist" style={{ background:`linear-gradient(135deg, ${B.void} 0%, ${B.black} 50%, ${B.charcoal} 100%)`, padding:'80px 20px', position:'relative', overflow:'hidden' }}>
-      <GrainOverlay /><ScanLines />
+      <GrainOverlay />
+      <Egg id="egg-065" corner="top-right" />
+      <Egg id="egg-066" corner="bottom-left" />
+      <ScanLines />
       <div style={{ position:'absolute', bottom:-80, left:'50%', transform:'translateX(-50%)', width:500, height:300, borderRadius:'50%', background:`radial-gradient(ellipse, ${B.amber}15 0%, transparent 70%)`, filter:'blur(40px)', pointerEvents:'none' }} />
 
       <div style={{ maxWidth:600, margin:'0 auto', position:'relative', zIndex:2 }}>

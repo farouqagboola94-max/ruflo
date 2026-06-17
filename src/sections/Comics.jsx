@@ -1,5 +1,6 @@
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
 
 const ISSUES = [
   {
@@ -54,6 +55,8 @@ export default function Comics() {
   return (
     <section id="comics" style={{ position: 'relative', overflow: 'hidden', background: B.black, padding: '100px 24px' }}>
       <GrainOverlay />
+      <Egg id="egg-067" corner="top-right" />
+      <Egg id="egg-068" corner="bottom-left" />
 
       {/* Wide diagonal streak */}
       <div style={{ position: 'absolute', top: '10%', left: '-10%', width: '120%', height: 2, background: `linear-gradient(90deg, transparent, ${B.amber}20, ${B.neonMagenta}15, transparent)`, transform: 'rotate(-3deg)', pointerEvents: 'none' }} />
