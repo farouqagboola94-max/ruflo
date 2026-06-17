@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import { SNEAKERS, TIER_COLORS, BRAND_COLORS, lagosStory, marketData } from '../data/sneakers'
+import Egg from '../components/Egg'
 
 const TIERS = ['All', 'GRAIL', 'ELITE', 'HEAT', 'SOLID']
 const BRANDS = ['All','Jordan','Nike','Adidas','New Balance','Luxury','Converse','Vans','Reebok','Asics','Puma','Salomon','Hoka','On Running','Saucony']
@@ -92,7 +93,9 @@ export default function SneakerBible() {
   ]
 
   return (
-    <section id="vault-200" style={s.root}>
+    <section id="vault-200" style={{ ...s.root, position: 'relative', overflow: 'hidden' }}>
+      <Egg id="egg-033" corner="top-right" />
+      <Egg id="egg-034" corner="bottom-left" />
       <div style={s.hdr}>
         <div>
           <div style={s.logo}>Sneakers Fest 2026 -- Lagos</div>
