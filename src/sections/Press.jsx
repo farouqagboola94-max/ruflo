@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
 
 const OUTLETS = [
   { name: 'THE NATIVE MAGAZINE', angle: 'Lagos culture · streetwear',      color: '#FF4500' },
@@ -15,11 +16,11 @@ const OUTLETS = [
 ]
 
 const ANGLES = [
-  "Lagos’ first dedicated sneaker festival — what took so long?",
+  "Lagos' first dedicated sneaker festival — what took so long?",
   "From Street Souk to Sneakers Fest: the evolution of Lagos sneaker culture events",
   "The Catalyst: building a three-dimensional festival brand in Lagos",
   "Lagos Noir: the design aesthetic powering Sneakers Fest",
-  "Nigeria’s sneaker economy and the event trying to own it",
+  "Nigeria's sneaker economy and the event trying to own it",
   "From the Void to the Festival: how a Lagos operator is building what Lagos sneakerheads need",
 ]
 
@@ -51,6 +52,8 @@ export default function Press() {
   return (
     <section id="press" style={{ position: 'relative', overflow: 'hidden', background: B.black, padding: '80px 24px' }}>
       <GrainOverlay />
+      <Egg id="egg-013" corner="top-right" />
+      <Egg id="egg-014" corner="bottom-left" />
       <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 600, height: 200, background: `radial-gradient(ellipse, ${B.amber}06 0%, transparent 70%)`, filter: 'blur(60px)', pointerEvents: 'none' }} />
 
       <div style={{ position: 'relative', zIndex: 10, maxWidth: 1000, margin: '0 auto' }}>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
 
 const STATS = [
   { value: '2K–3.5K',   label: 'EVENT ATTENDEES' },
@@ -107,7 +108,10 @@ export default function Sponsors() {
 
   return (
     <section id="sponsors" style={{ background: B.black, position: 'relative', overflow: 'hidden' }}>
-      <GrainOverlay /><ScanLines />
+      <GrainOverlay />
+      <Egg id="egg-015" corner="top-right" />
+      <Egg id="egg-016" corner="bottom-left" />
+      <ScanLines />
 
       {/* ── HERO ── */}
       <div style={{ background: 'linear-gradient(160deg, #0f0800 0%, #1a0c00 40%, #0a0a0a 100%)', padding: '100px 24px 80px', position: 'relative', textAlign: 'center', borderBottom: `1px solid ${B.amber}20` }}>

@@ -1,5 +1,6 @@
 import { B } from '../tokens'
 import { GrainOverlay, AmberGlow, SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
 
 const FEATURES = [
   { label: 'GRAIL PAIRS', title: 'RARE KICKS', desc: '200+ exclusive pairs from collectors across Africa and beyond. Find your grails, see the heat up close.', color: B.amber },
@@ -17,6 +18,8 @@ export default function Highlights() {
       background: B.black, padding: "100px 24px",
     }}>
       <GrainOverlay />
+      <Egg id="egg-017" corner="top-right" />
+      <Egg id="egg-018" corner="bottom-left" />
       <AmberGlow top="30%" left="8%" size={380} />
 
       <div style={{

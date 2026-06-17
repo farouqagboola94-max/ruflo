@@ -2,8 +2,9 @@ import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import { SOCIAL_LINKS } from '../config'
+import Egg from '../components/Egg'
 
-// ── countdown to next Friday 8 PM Lagos (UTC+1) ──────────────────────────────
+// ── countdown to next Friday 8 PM Lagos (UTC+1) ────────────────────────────────────────────
 function calcNextFriday() {
   const LAGOS = 60 * 60 * 1000
   const lagosMs = Date.now() + LAGOS
@@ -24,7 +25,7 @@ function calcNextFriday() {
 
 const pad = n => String(n).padStart(2, '0')
 
-// ── weekly sessions ────────────────────────────────────────────────────────────
+// ── weekly sessions ────────────────────────────────────────────────────────────────────────────────
 const WEEKS = [
   {
     week: 'WEEK 1', name: 'THE DROP DISCUSSION', color: B.amber,
@@ -56,7 +57,7 @@ const WEEKS = [
   },
 ]
 
-// ── past session archive ───────────────────────────────────────────────────────
+// ── past session archive ───────────────────────────────────────────────────────────────────────────────────
 const PAST = [
   { date:'MAY 30', week:'WEEK 2 · CHALLENGE', topic:'Cleanest cop of the month',       stat:'47 entries',   winner:'@sole.lagos',         color:B.neonCyan    },
   { date:'MAY 23', week:'WEEK 1 · DROP DISC', topic:'Nike Air Max DN — Cop or Pass?',  stat:'134 votes',    winner:'PASS · 71%',          color:B.amber       },
@@ -65,7 +66,7 @@ const PAST = [
   { date:'MAY 2',  week:'WEEK 2 · CHALLENGE', topic:'Worst resale decision you made',  stat:'88 confessions',winner:'@kicks.confessions', color:B.neonCyan    },
 ]
 
-// ── challenge categories ───────────────────────────────────────────────────────
+// ── challenge categories ───────────────────────────────────────────────────────────────────────────────────
 const CATS = ['DROP DISCUSSION', 'CHALLENGE', 'CONVERSATION', 'TRIVIA / GAME']
 
 export default function FridayNightProtocol() {
@@ -114,7 +115,10 @@ export default function FridayNightProtocol() {
 
   return (
     <section id="fnp" style={{ background:B.black, padding:'80px 20px', position:'relative', overflow:'hidden' }}>
-      <GrainOverlay /><ScanLines />
+      <GrainOverlay />
+      <Egg id="egg-011" corner="top-right" />
+      <Egg id="egg-012" corner="bottom-left" />
+      <ScanLines />
       <div style={{ position:'absolute', bottom:-100, left:'50%', transform:'translateX(-50%)', width:600, height:400, borderRadius:'50%', background:`radial-gradient(ellipse, ${B.amber}12 0%, transparent 70%)`, filter:'blur(60px)', pointerEvents:'none' }} />
 
       <div style={{ maxWidth:960, margin:'0 auto', position:'relative', zIndex:2 }}>

@@ -1,6 +1,7 @@
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import { SOCIAL_LINKS } from '../config'
+import Egg from '../components/Egg'
 
 const LINKS = {
   tiktok:          SOCIAL_LINKS.tiktok,
@@ -239,6 +240,8 @@ export default function Community() {
       background: B.void, padding: "100px 24px",
     }}>
       <GrainOverlay />
+      <Egg id="egg-019" corner="top-right" />
+      <Egg id="egg-020" corner="bottom-left" />
       <ScanLines opacity={0.04} />
 
       <div style={{
