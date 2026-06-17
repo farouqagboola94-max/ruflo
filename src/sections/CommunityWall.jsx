@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { B } from '../tokens'
+import Egg from '../components/Egg'
 
 const ROLES = {
-  WORDSMITH: { color: B.neonCyan,    symbol: '✦', desc: 'Writer · Poet · Storyteller' },
+  WORDSMITH: { color: B.neonCyan,    symbol: '❆', desc: 'Writer · Poet · Storyteller' },
   VISIONARY: { color: B.neonMagenta, symbol: '◉', desc: 'Designer · Artist · Dreamer' },
   CREATOR:   { color: B.amber,       symbol: '⚡', desc: 'Maker · Builder · Founder'  },
   CATALYST:  { color: B.neonLime,    symbol: '◈', desc: 'Innovator · Leader · Pioneer' },
@@ -313,6 +314,8 @@ export default function CommunityWall() {
         @keyframes sacredPulse { 0%,100% { opacity:0.4; transform:scale(1); } 50% { opacity:0.65; transform:scale(1.08); } }
         @keyframes flameDrift { 0%,100% { transform:scaleX(1) translateY(0); } 50% { transform:scaleX(0.92) translateY(-10px); } }
       `}</style>
+      <Egg id="egg-035" corner="top-right" />
+      <Egg id="egg-036" corner="bottom-left" />
 
       {/* Sacred ambient glows */}
       <div style={{ position:'absolute', top:'10%', left:'50%', transform:'translateX(-50%)', width:600, height:300,
@@ -400,7 +403,7 @@ export default function CommunityWall() {
               e.currentTarget.style.color = B.white
               e.currentTarget.style.boxShadow = `0 0 40px ${B.amber}25, inset 0 0 60px ${B.amber}05`
             }}>
-            ✦ LEAVE YOUR MARK ON THE WALL
+            ❆ LEAVE YOUR MARK ON THE WALL
           </button>
           <p style={{ fontFamily:"'Syne',sans-serif", fontSize:12, color:B.smoke+'80', marginTop:14, letterSpacing:1 }}>
             No account needed. No signup. Just your truth.
