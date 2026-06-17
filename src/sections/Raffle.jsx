@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
 import { logReferralConversion } from '../lib/referral'
+import Egg from '../components/Egg'
 
-// ── raffles ────────────────────────────────────────────────────────────────────
+// ── raffles ───────────────────────────────────────────────────────────────────
 const RAFFLES = [
   { id:'rfl1', name:'Air Jordan 4 Retro Bred',    edition:'Size 43 · Deadstock',  value:'₦120,000', color:B.amber,       seedCount:287, maxEntries:500 },
   { id:'rfl2', name:"SF '26 Exclusive Bundle",    edition:'Hoodie + Cap + Tote',   value:'₦28,000',  color:B.neonCyan,    seedCount:412, maxEntries:500 },
@@ -169,7 +170,7 @@ function EntryModal({ raffle, onEnter, onClose }) {
   )
 }
 
-// ── winner overlay ─────────────────────────────────────────────────────────────
+// ── winner overlay ─────────────────────────────────────────────────────────────────
 function WinnerOverlay({ raffle, winner, onClose }) {
   const dots = Array.from({ length: 24 }, (_, i) => ({
     x: Math.random() * 100, y: Math.random() * 100,
@@ -204,7 +205,7 @@ function WinnerOverlay({ raffle, winner, onClose }) {
   )
 }
 
-// ── ticket stub (shown in card when entered) ───────────────────────────────────
+// ── ticket stub (shown in card when entered) ─────────────────────────────────────────────
 function TicketStub({ raffle, entry }) {
   return (
     <div style={{ background:`${raffle.color}08`, border:`1px solid ${raffle.color}35`, borderRadius:8, overflow:'hidden', animation:'ticketIn 0.35s ease' }}>
@@ -229,7 +230,7 @@ function TicketStub({ raffle, entry }) {
   )
 }
 
-// ── raffle card ────────────────────────────────────────────────────────────────
+// ── raffle card ───────────────────────────────────────────────────────────────────
 function RaffleCard({ raffle, entered, count, spinNum, isSpinning, winner, onEnter, onDraw }) {
   const pct = Math.min(100, (count / raffle.maxEntries) * 100)
   return (
@@ -302,7 +303,7 @@ function RaffleCard({ raffle, entered, count, spinNum, isSpinning, winner, onEnt
   )
 }
 
-// ── main section ───────────────────────────────────────────────────────────────
+// ── main section ───────────────────────────────────────────────────────────────────
 export default function Raffle() {
   const [entries,    setEntries]    = useState(loadEntries)
   const [winners,    setWinners]    = useState(loadWinners)
@@ -364,6 +365,8 @@ export default function Raffle() {
   return (
     <section id="raffle" style={{ position:'relative', background:`linear-gradient(180deg, ${B.void} 0%, ${B.black} 100%)`, padding:'100px 24px', overflow:'hidden' }}>
       <GrainOverlay />
+      <Egg id="egg-089" corner="top-right" />
+      <Egg id="egg-090" corner="bottom-left" />
       <div style={{ position:'absolute', top:'30%', left:'50%', transform:'translate(-50%,-50%)', width:700, height:500, background:`radial-gradient(ellipse, ${B.amber}07 0%, transparent 70%)`, filter:'blur(80px)', pointerEvents:'none' }} />
 
       <div style={{ position:'relative', zIndex:10, maxWidth:1000, margin:'0 auto' }}>
