@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
 import { SOCIAL_LINKS } from '../config'
+import Egg from '../components/Egg'
 
 const CHAPTERS = [
   {
@@ -92,6 +93,8 @@ export default function OriginStory() {
   return (
     <section id="origin" style={{ position:'relative', overflow:'hidden', background:B.black, padding:'100px 24px' }}>
       <GrainOverlay />
+      <Egg id="egg-007" corner="top-right" />
+      <Egg id="egg-008" corner="bottom-left" />
       <div style={{ position:'absolute', top:'20%', right:'-5%', width:450, height:450, background:`radial-gradient(ellipse, ${B.amber}07 0%, transparent 70%)`, filter:'blur(90px)', pointerEvents:'none' }} />
       <div style={{ position:'absolute', bottom:'15%', left:'-5%', width:350, height:350, background:`radial-gradient(ellipse, ${B.neonCyan}06 0%, transparent 70%)`, filter:'blur(80px)', pointerEvents:'none' }} />
 

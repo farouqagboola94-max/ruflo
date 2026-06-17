@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
 
 const PROOF_POINTS = [
   {
@@ -51,6 +52,8 @@ export default function MarketContext() {
   return (
     <section id="market" style={{ position: 'relative', overflow: 'hidden', background: B.void, padding: '100px 24px' }}>
       <GrainOverlay />
+      <Egg id="egg-009" corner="top-right" />
+      <Egg id="egg-010" corner="bottom-left" />
       <div style={{ position: 'absolute', top: '20%', right: '-8%', width: 500, height: 400, background: `radial-gradient(ellipse, ${B.neonCyan}07 0%, transparent 70%)`, filter: 'blur(80px)', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', bottom: '20%', left: '-5%', width: 400, height: 400, background: `radial-gradient(ellipse, ${B.amber}07 0%, transparent 70%)`, filter: 'blur(80px)', pointerEvents: 'none' }} />
 

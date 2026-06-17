@@ -1,4 +1,5 @@
 import { B } from '../tokens'
+import Egg from './Egg'
 
 const ITEMS = [
   "SNEAKERS FEST '26",
@@ -35,6 +36,8 @@ export default function EventTicker() {
           100% { transform: translateX(-50%); }
         }
       `}</style>
+      <Egg id="egg-003" corner="top-right" />
+      <Egg id="egg-004" corner="bottom-left" />
       <div
         style={{
           display: 'inline-block',

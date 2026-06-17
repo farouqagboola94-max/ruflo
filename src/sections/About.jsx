@@ -1,5 +1,6 @@
 import { B } from '../tokens'
 import { GrainOverlay, AmberGlow, SectionTag, Divider } from '../components/Shared'
+import Egg from '../components/Egg'
 
 const STATS = [
   { num: '1K–2.5K', label: 'YEAR 1 ATTENDEES',    accent: true },
@@ -18,7 +19,7 @@ const DIMENSIONS = [
   {
     n: '02',
     title: 'ONLINE PLATFORM',
-    body: 'The website you’re on right now. Year-round content, tools, and community infrastructure that never sleeps.',
+    body: 'The website you\'re on right now. Year-round content, tools, and community infrastructure that never sleeps.',
     color: B.neonCyan,
   },
   {
@@ -36,6 +37,8 @@ export default function About() {
       background: B.void, padding: '100px 24px',
     }}>
       <GrainOverlay />
+      <Egg id="egg-005" corner="top-right" />
+      <Egg id="egg-006" corner="bottom-left" />
       <AmberGlow top="50%" left="90%" size={400} />
 
       <div style={{ position: 'relative', zIndex: 10, maxWidth: 1100, margin: '0 auto' }}>
@@ -54,7 +57,7 @@ export default function About() {
             </div>
             <Divider />
             <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: B.smoke, lineHeight: 1.8, marginBottom: 18 }}>
-              Sneakers Fest 2026 is Lagos’ first dedicated sneaker cultural festival — not a one-day market, not a pop-up. A three-dimensional brand combining a physical exhibition, a year-round online platform, and a community participation engine that runs every single week.
+              Sneakers Fest 2026 is Lagos' first dedicated sneaker cultural festival — not a one-day market, not a pop-up. A three-dimensional brand combining a physical exhibition, a year-round online platform, and a community participation engine that runs every single week.
             </div>
             <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: B.smoke, lineHeight: 1.8, marginBottom: 18 }}>
               Founded by <span style={{ color: B.white, fontWeight: 700 }}>Oluwatobiloba — The Catalyst</span>, principal of Catalyst Concepts, Lagos. Sneakers Fest is built to compound over years, not disappear after one day.

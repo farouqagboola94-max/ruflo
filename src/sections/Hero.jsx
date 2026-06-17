@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines } from '../components/Shared'
+import Egg from '../components/Egg'
 
 const EVENT_DATE = new Date('2026-12-12T12:00:00')
 
@@ -82,6 +83,8 @@ export default function Hero() {
       padding: "100px 24px 80px",
     }}>
       <GrainOverlay />
+      <Egg id="egg-001" corner="top-right" />
+      <Egg id="egg-002" corner="bottom-left" />
       <ScanLines opacity={0.05} />
 
       <div style={{
