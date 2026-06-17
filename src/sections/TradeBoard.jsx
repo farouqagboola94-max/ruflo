@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
 import Egg from '../components/Egg'
+import { tradesApi } from '../lib/api'
 
 // ── seed listings so the board has content on first visit ─────────────────────
 const SEEDS = [
@@ -218,7 +219,22 @@ export default function TradeBoard() {
   const [query,       setQuery]       = useState('')
   const [sort,        setSort]        = useState('NEWEST')
 
+  // Persist to localStorage on every change
   useEffect(() => { try { localStorage.setItem('sf26_trades', JSON.stringify(listings)) } catch {} }, [listings])
+
+  // Sync with server on mount — pulls any listings added from other devices/sessions
+  useEffect(() => {
+    tradesApi.getAll().then(serverListings => {
+      if (!Array.isArray(serverListings) || serverListings.length === 0) return
+      setListings(local => {
+        const localIds = new Set(local.map(l => l.id))
+        const seedIds  = new Set(SEEDS.map(s => s.id))
+        const newFromServer = serverListings.filter(l => !localIds.has(l.id) && !seedIds.has(l.id))
+        if (newFromServer.length === 0) return local
+        return [...newFromServer, ...local]
+      })
+    }).catch(() => {})
+  }, [])
 
   function handlePost(listing) {
     const next = [listing, ...listings]
@@ -226,6 +242,7 @@ export default function TradeBoard() {
     const nextMine = [...mine, listing.id]
     setMine(nextMine)
     try { localStorage.setItem('sf26_my_trades', JSON.stringify(nextMine)) } catch {}
+    tradesApi.add(listing).catch(() => {})
     setPosting(false)
   }
 
@@ -242,6 +259,7 @@ export default function TradeBoard() {
     const next = listings.filter(l => l.id !== id)
     setListings(next)
     setMine(m => { const nm = m.filter(i => i !== id); try { localStorage.setItem('sf26_my_trades', JSON.stringify(nm)) } catch {}; return nm })
+    tradesApi.remove(id).catch(() => {})
   }
 
   const allBrands = [...new Set(listings.map(l => l.brand).filter(Boolean))].sort()

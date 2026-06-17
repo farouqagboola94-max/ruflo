@@ -58,11 +58,11 @@ async function apiDel(path, id, lsKey, idField = 'id') {
   } catch {}
 }
 
-// CommunityWall posts  (localStorage key: sf26_wall_posts)
+// CommunityWall posts  (localStorage key: sf26_sacred_wall)
 export const wallApi = {
-  getPosts:   ()         => apiGet('/api/wall', 'sf26_wall_posts', []),
-  addPost:    (post)     => apiPost('/api/wall', post, 'sf26_wall_posts'),
-  deletePost: (id)       => apiDel('/api/wall', id, 'sf26_wall_posts'),
+  getPosts:   ()     => apiGet('/api/wall', 'sf26_sacred_wall', []),
+  addPost:    (post) => apiPost('/api/wall', post, 'sf26_sacred_wall'),
+  deletePost: (id)   => apiDel('/api/wall', id, 'sf26_sacred_wall'),
 }
 
 // TradeBoard listings  (localStorage key: sf26_trades)

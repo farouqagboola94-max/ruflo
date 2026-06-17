@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 import Egg from '../components/Egg'
+import { wallApi } from '../lib/api'
 
 const ROLES = {
   WORDSMITH: { color: B.neonCyan,    symbol: '❆', desc: 'Writer · Poet · Storyteller' },
@@ -292,6 +293,22 @@ export default function CommunityWall() {
   const [modal, setModal]   = useState(false)
   const [newIds, setNewIds]  = useState([])
 
+  // Sync with server on mount — additive only, never removes local posts
+  useEffect(() => {
+    wallApi.getPosts().then(serverPosts => {
+      if (!Array.isArray(serverPosts) || serverPosts.length === 0) return
+      setStored(local => {
+        const localIds = new Set(local.map(p => p.id))
+        const seedIds  = new Set(SEED.map(s => s.id))
+        const newFromServer = serverPosts.filter(p => !localIds.has(p.id) && !seedIds.has(p.id))
+        if (newFromServer.length === 0) return local
+        const merged = [...local, ...newFromServer]
+        try { localStorage.setItem('sf26_sacred_wall', JSON.stringify(merged)) } catch {}
+        return merged
+      })
+    }).catch(() => {})
+  }, [])
+
   const all = [...SEED, ...stored]
 
   const counts = Object.keys(ROLES).reduce((acc, r) => {
@@ -304,6 +321,7 @@ export default function CommunityWall() {
     try { localStorage.setItem('sf26_sacred_wall', JSON.stringify(updated)) } catch {}
     setStored(updated)
     setNewIds(ids => [...ids, entry.id])
+    wallApi.addPost(entry).catch(() => {})
   }
 
   return (
