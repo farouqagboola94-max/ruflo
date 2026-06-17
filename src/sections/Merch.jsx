@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
 import { SOCIAL_LINKS } from '../config'
+import Egg from '../components/Egg'
 
 const ITEMS = [
   { id:'tee',    name:'CLASSIC TEE',    priceNum:8500,  cat:'APPAREL',      tag:'BESTSELLER',  color:B.neonCyan,    desc:"SF '26 oversized graphic tee. 100% premium cotton. Lagos Noir screen print.", sizes:['S','M','L','XL','XXL'], badge:'NEW',     featured:false, stock:47 },
@@ -87,7 +88,7 @@ function ProductCard({ item, selSize, onPickSize, onAdd, cartQty, onOpen }) {
   )
 }
 
-// ── product modal ─────────────────────────────────────────────────────────────
+// ── product modal ──────────────────────────────────────────────────────────────
 function ProductModal({ item, selSize, onPickSize, onAdd, onClose }) {
   const sa = stockAlert(item.stock)
   return (
@@ -357,6 +358,8 @@ export default function Merch() {
   return (
     <section id="merch" style={{ position:'relative', overflow:'hidden', background:B.void, padding:'100px 24px' }}>
       <GrainOverlay />
+      <Egg id="egg-087" corner="top-right" />
+      <Egg id="egg-088" corner="bottom-left" />
       <div style={{ position:'absolute', top:'50%', right:'-8%', width:400, height:400, background:`radial-gradient(circle, ${B.amber}09 0%, transparent 70%)`, filter:'blur(80px)', pointerEvents:'none' }} />
 
       <div style={{ position:'relative', zIndex:10, maxWidth:1100, margin:'0 auto' }}>
