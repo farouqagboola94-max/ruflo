@@ -18,10 +18,10 @@ import { captureReferral, reconcileReferralCredits } from './lib/referral'
 import Hero from './sections/Hero'
 import About from './sections/About'
 import OriginStory from './sections/OriginStory'
-import MarketContext from './sections/MarketContext'
 import FridayNightProtocol from './sections/FridayNightProtocol'
 import Press from './sections/Press'
 import Sponsors from './sections/Sponsors'
+import SponsorTiers from './sections/SponsorTiers'
 import Highlights from './sections/Highlights'
 import Community from './sections/Community'
 import Testimonials from './sections/Testimonials'
@@ -52,7 +52,6 @@ import Gallery from './sections/Gallery'
 import TradeBoard from './sections/TradeBoard'
 import Leaderboard from './sections/Leaderboard'
 import PhotoTools from './sections/PhotoTools'
-import SubstackSection from './sections/SubstackSection'
 import Newsletter from './sections/Newsletter'
 import Lineup from './sections/Lineup'
 import Schedule from './sections/Schedule'
@@ -67,53 +66,52 @@ import Footer from './sections/Footer'
 import EggHuntTracker from './sections/EggHuntTracker'
 
 const SECTION_TITLES = [
-  { id: 'about',        title: "About | Sneakers Fest '26" },
-  { id: 'origin',       title: "The Origin | Sneakers Fest '26" },
-  { id: 'market',       title: "The Market | Sneakers Fest '26" },
-  { id: 'fnp',          title: "Friday Night Protocol | Sneakers Fest '26" },
-  { id: 'press',        title: "Press | Sneakers Fest '26" },
-  { id: 'sponsors',     title: "Sponsors | Sneakers Fest '26" },
-  { id: 'highlights',   title: "Experience | Sneakers Fest '26" },
-  { id: 'community',    title: "Community | Sneakers Fest '26" },
-  { id: 'testimonials', title: "Stories | Sneakers Fest '26" },
-  { id: 'passport',     title: "Sneaker Passport | Sneakers Fest '26" },
-  { id: 'dna',          title: "Sneaker DNA | Sneakers Fest '26" },
-  { id: 'sole-of-lagos', title: "The Sole of Lagos | Sneakers Fest '26" },
-  { id: 'culture-history', title: "Art & Culture | Sneakers Fest '26" },
-  { id: 'museum',       title: "The Museum | Sneakers Fest '26" },
-  { id: 'vault-200',    title: "The Vault 200 | Sneakers Fest '26" },
-  { id: 'wall',         title: "The Wall | Sneakers Fest '26" },
-  { id: 'trivia',       title: "Trivia | Sneakers Fest '26" },
-  { id: 'memory-match', title: "Sole Memory | Sneakers Fest '26" },
-  { id: 'soledle',      title: "Soledle | Sneakers Fest '26" },
-  { id: 'colorizer',    title: "Shoe Builder | Sneakers Fest '26" },
-  { id: 'outfit',       title: "Outfit Matcher | Sneakers Fest '26" },
-  { id: 'hype',         title: "Hype | Sneakers Fest '26" },
-  { id: 'spin',         title: "Spin to Win | Sneakers Fest '26" },
-  { id: 'vote-off',     title: "Crew Vote-Off | Sneakers Fest '26" },
-  { id: 'badge',        title: "Badge Maker | Sneakers Fest '26" },
-  { id: 'mystery',      title: "Mystery Drop | Sneakers Fest '26" },
-  { id: 'worth',        title: "Collection Worth | Sneakers Fest '26" },
-  { id: 'bingo',        title: "Sneaker Bingo | Sneakers Fest '26" },
-  { id: 'artists',      title: "Artists | Sneakers Fest '26" },
-  { id: 'timeline',     title: "Drops Timeline | Sneakers Fest '26" },
-  { id: 'waitlist',     title: "Early Access | Sneakers Fest '26" },
-  { id: 'comics',       title: "Catalyst Universe | Sneakers Fest '26" },
-  { id: 'gallery',      title: "Gallery | Sneakers Fest '26" },
-  { id: 'trades',       title: "Trade Board | Sneakers Fest '26" },
-  { id: 'leaderboard',  title: "Rankings | Sneakers Fest '26" },
-  { id: 'egg-hunt',     title: "The Great Sole Hunt | Sneakers Fest '26" },
-  { id: 'photo-tools',  title: "Photo Studio | Sneakers Fest '26" },
-  { id: 'substack',     title: "Substack | Sneakers Fest '26" },
-  { id: 'lineup',       title: "Lineup | Sneakers Fest '26" },
-  { id: 'schedule',     title: "Schedule | Sneakers Fest '26" },
-  { id: 'venue',        title: "Venue | Sneakers Fest '26" },
-  { id: 'merch',        title: "Merch | Sneakers Fest '26" },
-  { id: 'raffle',       title: "Raffle | Sneakers Fest '26" },
-  { id: 'countdown',    title: "Countdown | Sneakers Fest '26" },
-  { id: 'tickets',      title: "Tickets | Sneakers Fest '26" },
-  { id: 'vendors',      title: "Vendors | Sneakers Fest '26" },
-  { id: 'faq',          title: "FAQ | Sneakers Fest '26" },
+  { id: 'about',          title: "About | Sneakers Fest '26" },
+  { id: 'origin',         title: "The Origin | Sneakers Fest '26" },
+  { id: 'fnp',            title: "Friday Night Protocol | Sneakers Fest '26" },
+  { id: 'press',          title: "Press | Sneakers Fest '26" },
+  { id: 'sponsors',       title: "Sponsors | Sneakers Fest '26" },
+  { id: 'sponsor-tiers',  title: "Partner With Us | Sneakers Fest '26" },
+  { id: 'highlights',     title: "Experience | Sneakers Fest '26" },
+  { id: 'community',      title: "Community | Sneakers Fest '26" },
+  { id: 'testimonials',   title: "Stories | Sneakers Fest '26" },
+  { id: 'passport',       title: "Sneaker Passport | Sneakers Fest '26" },
+  { id: 'dna',            title: "Sneaker DNA | Sneakers Fest '26" },
+  { id: 'sole-of-lagos',  title: "The Sole of Lagos | Sneakers Fest '26" },
+  { id: 'culture-history',title: "Art & Culture | Sneakers Fest '26" },
+  { id: 'museum',         title: "The Museum | Sneakers Fest '26" },
+  { id: 'vault-200',      title: "The Vault 200 | Sneakers Fest '26" },
+  { id: 'wall',           title: "The Wall | Sneakers Fest '26" },
+  { id: 'trivia',         title: "Trivia | Sneakers Fest '26" },
+  { id: 'memory-match',   title: "Sole Memory | Sneakers Fest '26" },
+  { id: 'soledle',        title: "Soledle | Sneakers Fest '26" },
+  { id: 'colorizer',      title: "Shoe Builder | Sneakers Fest '26" },
+  { id: 'outfit',         title: "Outfit Matcher | Sneakers Fest '26" },
+  { id: 'hype',           title: "Hype | Sneakers Fest '26" },
+  { id: 'spin',           title: "Spin to Win | Sneakers Fest '26" },
+  { id: 'vote-off',       title: "Crew Vote-Off | Sneakers Fest '26" },
+  { id: 'badge',          title: "Badge Maker | Sneakers Fest '26" },
+  { id: 'mystery',        title: "Mystery Drop | Sneakers Fest '26" },
+  { id: 'worth',          title: "Collection Worth | Sneakers Fest '26" },
+  { id: 'bingo',          title: "Sneaker Bingo | Sneakers Fest '26" },
+  { id: 'artists',        title: "Artists | Sneakers Fest '26" },
+  { id: 'timeline',       title: "Drops Timeline | Sneakers Fest '26" },
+  { id: 'waitlist',       title: "Early Access | Sneakers Fest '26" },
+  { id: 'comics',         title: "Catalyst Universe | Sneakers Fest '26" },
+  { id: 'gallery',        title: "Gallery | Sneakers Fest '26" },
+  { id: 'trades',         title: "Trade Board | Sneakers Fest '26" },
+  { id: 'leaderboard',    title: "Rankings | Sneakers Fest '26" },
+  { id: 'egg-hunt',       title: "The Great Sole Hunt | Sneakers Fest '26" },
+  { id: 'photo-tools',    title: "Photo Studio | Sneakers Fest '26" },
+  { id: 'lineup',         title: "Lineup | Sneakers Fest '26" },
+  { id: 'schedule',       title: "Schedule | Sneakers Fest '26" },
+  { id: 'venue',          title: "Venue | Sneakers Fest '26" },
+  { id: 'merch',          title: "Merch | Sneakers Fest '26" },
+  { id: 'raffle',         title: "Raffle | Sneakers Fest '26" },
+  { id: 'countdown',      title: "Countdown | Sneakers Fest '26" },
+  { id: 'tickets',        title: "Tickets | Sneakers Fest '26" },
+  { id: 'vendors',        title: "Vendors | Sneakers Fest '26" },
+  { id: 'faq',            title: "FAQ | Sneakers Fest '26" },
 ]
 
 export default function App() {
@@ -181,10 +179,10 @@ export default function App() {
 
       <Reveal><About /></Reveal>
       <Reveal><OriginStory /></Reveal>
-      <Reveal><MarketContext /></Reveal>
       <Reveal><FridayNightProtocol /></Reveal>
       <Reveal><Press /></Reveal>
       <Reveal><Sponsors /></Reveal>
+      <Reveal><SponsorTiers /></Reveal>
       <Reveal><Highlights /></Reveal>
       <Reveal><Community /></Reveal>
       <Reveal><Testimonials /></Reveal>
@@ -216,7 +214,6 @@ export default function App() {
       <Reveal><Leaderboard /></Reveal>
       <Reveal><EggHuntTracker /></Reveal>
       <Reveal><PhotoTools /></Reveal>
-      <Reveal><SubstackSection /></Reveal>
       <Reveal><Newsletter /></Reveal>
       <Reveal><Lineup /></Reveal>
       <Reveal><Schedule /></Reveal>
