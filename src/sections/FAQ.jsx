@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
 
 const FAQS = [
   { q: "When and where is Sneakers Fest 2026?", a: "December 12, 2026 at Eko Atlantic, Lagos, Nigeria. Doors open at 12:00 PM and the event runs until 10:00 PM." },
@@ -18,6 +19,8 @@ export default function FAQ() {
     <section id="faq" style={{
       background: B.void, padding: "100px 24px", position: "relative",
     }}>
+      <Egg id="egg-097" corner="top-right" />
+      <Egg id="egg-098" corner="bottom-left" />
       <div style={{ position: "relative", zIndex: 10, maxWidth: 820, margin: "0 auto" }}>
         <div style={{ marginBottom: 52 }}>
           <SectionTag>GOT QUESTIONS?</SectionTag>

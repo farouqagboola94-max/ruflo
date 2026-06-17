@@ -1,17 +1,18 @@
 import { B } from '../tokens'
 import { GrainOverlay } from '../components/Shared'
 import { SOCIAL_LINKS } from '../config'
+import Egg from '../components/Egg'
 
 const CT_HREF = SOCIAL_LINKS.catalystTalents
 
 const SOCIALS = [
-  { platform: 'TIKTOK',      handle: '@SNEAKERSFEST',  href: SOCIAL_LINKS.tiktok,             color: '#69C9D0',     icon: 'TK', tip: 'Challenges & Clips' },
-  { platform: 'YOUTUBE',     handle: '@SNEAKERSFEST',  href: SOCIAL_LINKS.youtube,            color: B.neonMagenta, icon: 'YT', tip: 'Docs & Interviews' },
-  { platform: 'TWITTER / X', handle: '@Catalyst188',   href: SOCIAL_LINKS.twitter,            color: B.neonCyan,    icon: 'X',  tip: 'Live Updates' },
-  { platform: 'INSTAGRAM',   handle: '@SNEAKERSFEST5555', href: SOCIAL_LINKS.instagram,        color: '#E1306C',     icon: 'IG', tip: 'Follow for Drops' },
-  { platform: 'SNAPCHAT',    handle: 'SNEAKERSFEST',   href: SOCIAL_LINKS.snapchat,           color: B.amber,       icon: 'SC', tip: 'Stories & BTS' },
-  { platform: 'WHATSAPP',    handle: 'JOIN COMMUNITY', href: SOCIAL_LINKS.whatsapp,           color: B.neonLime,    icon: 'WA', tip: 'Inner Circle' },
-  { platform: 'SUBSTACK',    handle: '@CATALYST00555', href: 'https://substack.com/@catalyst00555', color: '#FF6719', icon: 'SS', tip: 'Read the Culture' },
+  { platform: 'TIKTOK',      handle: '@SNEAKERSFEST',     href: SOCIAL_LINKS.tiktok,                  color: '#69C9D0',     icon: 'TK', tip: 'Challenges & Clips' },
+  { platform: 'YOUTUBE',     handle: '@SNEAKERSFEST',     href: SOCIAL_LINKS.youtube,                 color: B.neonMagenta, icon: 'YT', tip: 'Docs & Interviews' },
+  { platform: 'TWITTER / X', handle: '@Catalyst188',      href: SOCIAL_LINKS.twitter,                 color: B.neonCyan,    icon: 'X',  tip: 'Live Updates' },
+  { platform: 'INSTAGRAM',   handle: '@SNEAKERSFEST5555', href: SOCIAL_LINKS.instagram,               color: '#E1306C',     icon: 'IG', tip: 'Follow for Drops' },
+  { platform: 'SNAPCHAT',    handle: 'SNEAKERSFEST',      href: SOCIAL_LINKS.snapchat,                color: B.amber,       icon: 'SC', tip: 'Stories & BTS' },
+  { platform: 'WHATSAPP',    handle: 'JOIN COMMUNITY',    href: SOCIAL_LINKS.whatsapp,                color: B.neonLime,    icon: 'WA', tip: 'Inner Circle' },
+  { platform: 'SUBSTACK',    handle: '@CATALYST00555',    href: 'https://substack.com/@catalyst00555', color: '#FF6719',     icon: 'SS', tip: 'Read the Culture' },
 ]
 
 const NAV = [
@@ -33,6 +34,8 @@ export default function Footer() {
   return (
     <footer style={{ position: 'relative', overflow: 'hidden', background: B.black, borderTop: `1px solid ${B.gunmetal}`, padding: '64px 24px 28px' }}>
       <GrainOverlay />
+      <Egg id="egg-099" corner="top-right" />
+      <Egg id="egg-100" corner="bottom-left" />
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, #69C9D0, ${B.neonMagenta}, #E1306C, ${B.neonCyan}, ${B.amber}, ${B.neonLime}, #FF6719)` }} />
 
       <div style={{ position: 'relative', zIndex: 10, maxWidth: 1100, margin: '0 auto' }}>
