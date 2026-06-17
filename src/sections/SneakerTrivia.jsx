@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import { addXP, XP_VALUES, triviaStreakMultiplier } from '../lib/passport'
+import Egg from '../components/Egg'
 
 const QUESTIONS = [
   {
@@ -177,6 +178,8 @@ export default function SneakerTrivia() {
   return (
     <section id="trivia" style={{ background: B.void, padding: '80px 20px', position: 'relative', overflow: 'hidden' }}>
       <GrainOverlay />
+      <Egg id="egg-037" corner="top-right" />
+      <Egg id="egg-038" corner="bottom-left" />
       <ScanLines />
       <div style={{ maxWidth: 680, margin: '0 auto' }}>
         <SectionTag>SNEAKER TRIVIA</SectionTag>
@@ -302,7 +305,6 @@ export default function SneakerTrivia() {
               {rank.title}
             </div>
 
-            {/* score card */}
             <div style={{ background:'rgba(255,255,255,0.03)', border:`1px solid ${rank.color}30`, borderRadius:12, padding:'20px 24px', marginBottom:20, textAlign:'left' }}>
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16, marginBottom: maxStreak > 0 ? 14 : 0 }}>
                 <div>

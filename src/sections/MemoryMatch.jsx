@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import { addXP, XP_VALUES } from '../lib/passport'
+import Egg from '../components/Egg'
 
 const ICONS = ['👟', '🔥', '💎', '👑', '🎯', '⚡', '🌟', '🏆']
 const PAIRS = ICONS.length
@@ -79,7 +80,10 @@ export default function MemoryMatch() {
 
   return (
     <section id="memory-match" style={{ background: B.charcoal, padding: '80px 20px', position: 'relative', overflow: 'hidden' }}>
-      <GrainOverlay /><ScanLines />
+      <GrainOverlay />
+      <Egg id="egg-039" corner="top-right" />
+      <Egg id="egg-040" corner="bottom-left" />
+      <ScanLines />
       <div style={{ maxWidth: 560, margin: '0 auto', textAlign: 'center' }}>
         <SectionTag>SOLE MEMORY</SectionTag>
         <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
