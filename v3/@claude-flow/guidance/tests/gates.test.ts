@@ -134,7 +134,7 @@ describe('EnforcementGates', () => {
 
   describe('evaluateSecrets', () => {
     it('should detect API keys', () => {
-      const result = gates.evaluateSecrets('const apiKey = "sk-abc123456789012345678901234567890"');
+      const result = gates.evaluateSecrets('const apiKey = "test-key-abc123456789012345678901234567890"');
       expect(result).not.toBeNull();
       expect(result!.decision).toBe('block');
       expect(result!.gateName).toBe('secrets');
@@ -172,7 +172,7 @@ describe('EnforcementGates', () => {
     });
 
     it('should provide redacted output in metadata', () => {
-      const result = gates.evaluateSecrets('api_key = "sk-verylongsecretkeythatshouldberedacted"');
+      const result = gates.evaluateSecrets('api_key = "test-key-verylongsecretkeythatshouldberedacted"');
       if (result) {
         const redacted = result.metadata?.redactedSecrets as string[];
         expect(redacted).toBeDefined();

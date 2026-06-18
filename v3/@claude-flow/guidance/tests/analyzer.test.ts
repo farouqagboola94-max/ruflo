@@ -2018,7 +2018,7 @@ class ABDifferentialExecutor implements IContentAwareExecutor {
       if (this.hasSecurityRules) {
         return { stdout: 'Built secret scanner with regex patterns for password, API key, and credential detection. Scans staged files before commit. Blocks commit if any pattern matches. Never stores the detected secret values.', stderr: '', exitCode: 0 };
       }
-      return { stdout: 'const config = { password="admin123", apikey="sk-live-abc" }; // check these manually', stderr: '', exitCode: 0 };
+      return { stdout: 'const config = { password="admin123", apikey="test-key-live-abc" }; // check these manually', stderr: '', exitCode: 0 };
     }
 
     // ── Deployment tasks ────────────────────────────────────────────
