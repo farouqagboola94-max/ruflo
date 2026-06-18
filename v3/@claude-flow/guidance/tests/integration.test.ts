@@ -106,7 +106,7 @@ describe('GuidanceControlPlane - Integration', () => {
     it('should detect secrets in edits', () => {
       const results = plane.evaluateEdit(
         'config.ts',
-        'const apiKey = "sk-abcdef1234567890abcdef1234567890"',
+        'const apiKey = "test-key-placeholder-abcdef1234567890abcdef123"',
         5
       );
       expect(results.some(r => r.gateName === 'secrets')).toBe(true);

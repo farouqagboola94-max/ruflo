@@ -509,7 +509,7 @@ describe('DeterministicToolGateway - EnforcementGates Integration', () => {
     const gateway = new DeterministicToolGateway();
 
     const decision = gateway.evaluate('Write', {
-      content: 'api_key = "sk-supersecretkey1234567890abcdef"',
+      content: 'api_key = "test-key-placeholder-supersecret1234567890abcdef"',
     });
     expect(decision.allowed).toBe(false);
     expect(decision.gate).toContain('enforcement:secrets');

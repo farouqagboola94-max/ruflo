@@ -14,7 +14,7 @@ model_list:
       mock_response: "Echo test successful"
 
 general_settings:
-  master_key: "sk-1234567890"
+  master_key: "test-key-placeholder-1234567890"
   request_timeout: 60
   drop_params: false
   stream: true

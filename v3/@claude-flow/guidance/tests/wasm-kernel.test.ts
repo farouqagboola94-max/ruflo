@@ -149,7 +149,7 @@ describe('WASM Kernel: Output Parity', () => {
 describe('WASM Kernel: Secret Scanning', () => {
   it('detects API keys', () => {
     if (!wasm) return;
-    const content = 'api_key = "sk-abcdefghij1234567890"';
+    const content = 'api_key = "test-key-placeholder-abcdef1234567890"';
     const result = JSON.parse(wasm.scan_secrets(content));
     expect(result.length).toBeGreaterThan(0);
     expect(result[0]).toContain('****');
@@ -332,7 +332,7 @@ describe('WASM Kernel: 10k Event Acceptance', () => {
     if (!wasm) return;
 
     const clean = 'This is a normal string with no secrets at all';
-    const dirty = 'api_key = "sk-abcdefghijklmnop1234567890"';
+    const dirty = 'api_key = "test-key-placeholder-abcdefghijklmnop1234567890"';
 
     // Clean inputs
     const cleanStart = performance.now();
