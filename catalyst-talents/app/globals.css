@@ -50,7 +50,6 @@ body {
 
 /*
   Aso-oke textile pattern
-  ────────────────────────────────────────────────────────────────────────────
   Inspired by Nigerian hand-woven Aso-oke fabric — the rhythmic horizontal
   stripe structure with subtle cross-thread geometry.
 */
@@ -134,4 +133,77 @@ body {
 .whatsapp-float:hover {
   transform: scale(1.1);
   box-shadow: 0 8px 28px rgba(37, 211, 102, 0.45);
+}
+
+/* ─── Email capture ─── */
+.ctl-email-input {
+  flex: 1;
+  min-width: 0;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(212, 175, 55, 0.18);
+  color: #ffffff;
+  padding: 0.875rem 1.25rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.25s ease;
+}
+
+.ctl-email-input::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.ctl-email-input:focus {
+  border-color: rgba(212, 175, 55, 0.48);
+}
+
+.ctl-email-btn {
+  background: #D4AF37;
+  color: #000000;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.875rem 1.5rem;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+
+.ctl-email-btn:hover {
+  background: #F0D060;
+}
+
+.ctl-email-btn-full {
+  background: #D4AF37;
+  color: #000000;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.9375rem 2rem;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  width: 100%;
+  transition: background 0.2s ease;
+}
+
+.ctl-email-btn-full:hover:not(:disabled) {
+  background: #F0D060;
+}
+
+.ctl-email-btn-full:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (min-width: 640px) {
+  .ctl-email-btn-full {
+    width: auto;
+  }
 }

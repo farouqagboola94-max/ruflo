@@ -4,6 +4,7 @@ import NewsCard from '@/components/NewsCard'
 import TestimonialsSection from '@/components/TestimonialsSection'
 import ManifestoSection from '@/components/ManifestoSection'
 import MarqueeTicker from '@/components/MarqueeTicker'
+import EmailCapture from '@/components/EmailCapture'
 import { models } from '@/data/models'
 import { news } from '@/data/news'
 import { services } from '@/data/services'
@@ -61,7 +62,7 @@ export default function HomePage() {
             'linear-gradient(135deg, #000000 0%, #0a0a0a 40%, #0d0d07 70%, #0a0a0a 100%)',
         }}
       >
-        {/* Aso-oke textile texture — Nigerian woven fabric motif */}
+        {/* Aso-oke textile texture */}
         <div className="absolute inset-0 aso-oke-texture pointer-events-none" />
         <div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full"
@@ -91,9 +92,16 @@ export default function HomePage() {
             </span>
           </h1>
           <p className="text-white/50 text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed mb-10">
-            Born from Lagos. Built for the world. A new talent management agency — and we are honest
-            about that. Models, influencers, actors, and commercial talent across Nigeria,
-            represented the right way: welfare first, culture intact, standard uncompromised.
+            Born from Lagos. Built for the world. We believe Nigerian talent deserves an
+            agency that treats you like the valuable person you are — not just a booking.
+            Welfare first. Culture intact. Standard uncompromised.{' '}
+            <a
+              href="#join"
+              className="text-[#D4AF37]/60 hover:text-[#D4AF37] transition-colors"
+              style={{ textDecoration: 'underline', textUnderlineOffset: '3px' }}
+            >
+              This is your home.
+            </a>
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
@@ -109,8 +117,16 @@ export default function HomePage() {
               Apply to Join
             </Link>
           </div>
-          <div className="mt-20 flex flex-col items-center gap-2 text-white/15">
-            <div className="w-px h-12 bg-[#D4AF37]/25" />
+          <div className="mt-6">
+            <a
+              href="#join"
+              className="text-white/20 text-[9px] tracking-[0.45em] uppercase hover:text-[#D4AF37]/40 transition-colors"
+            >
+              or join our inner circle ↓
+            </a>
+          </div>
+          <div className="mt-14 flex flex-col items-center gap-2 text-white/15">
+            <div className="w-px h-10 bg-[#D4AF37]/25" />
             <span className="text-[9px] tracking-widest uppercase">Scroll</span>
           </div>
         </div>
@@ -347,6 +363,9 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── EMAIL CAPTURE ── */}
+      <EmailCapture />
+
       {/* ── THE CTL STANDARD ── */}
       <TestimonialsSection />
 
@@ -397,7 +416,7 @@ export default function HomePage() {
               Join the Roster
             </p>
             <h2 className="font-playfair text-4xl sm:text-6xl font-bold text-white mb-6">
-              Ready to Be
+              You Were Made
               <br />
               <span
                 className="italic"
@@ -409,13 +428,13 @@ export default function HomePage() {
                   backgroundClip: 'text',
                 }}
               >
-                Represented?
+                for This.
               </span>
             </h2>
             <p className="text-white/45 max-w-xl mx-auto mb-10 leading-relaxed">
-              We are actively looking for models, influencers, actors, and commercial talent across
-              Lagos and Nigeria. No prior agency experience required. Submit your application and
-              let&apos;s build something together.
+              Lagos is full of extraordinary talent the world hasn&apos;t discovered yet.
+              If you&apos;ve been looking for a place that truly has your back — you found it.
+              Submit your application. We&apos;re ready for you.
             </p>
             <Link
               href="/apply"
@@ -426,6 +445,30 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Hidden Netlify form declarations — statically rendered for deploy-time detection */}
+      <div style={{ display: 'none' }} aria-hidden="true">
+        <form name="newsletter-signup" data-netlify="true" data-netlify-honeypot="bot-field">
+          <input name="bot-field" />
+          <input name="name" type="text" />
+          <input name="email" type="email" />
+        </form>
+        <form name="talent-application" data-netlify="true" data-netlify-honeypot="bot-field">
+          <input name="bot-field" />
+          <input name="name" type="text" />
+          <input name="email" type="email" />
+          <input name="phone" type="text" />
+          <input name="category" type="text" />
+          <textarea name="message" />
+        </form>
+        <form name="brand-inquiry" data-netlify="true" data-netlify-honeypot="bot-field">
+          <input name="bot-field" />
+          <input name="name" type="text" />
+          <input name="email" type="email" />
+          <input name="company" type="text" />
+          <textarea name="message" />
+        </form>
+      </div>
     </>
   )
 }
