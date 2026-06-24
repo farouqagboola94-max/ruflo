@@ -3,6 +3,7 @@ import ModelCard from '@/components/ModelCard'
 import NewsCard from '@/components/NewsCard'
 import TestimonialsSection from '@/components/TestimonialsSection'
 import ManifestoSection from '@/components/ManifestoSection'
+import MarqueeTicker from '@/components/MarqueeTicker'
 import { models } from '@/data/models'
 import { news } from '@/data/news'
 import { services } from '@/data/services'
@@ -114,6 +115,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ── TICKER ── */}
+      <MarqueeTicker />
 
       {/* ── MANIFESTO ── */}
       <ManifestoSection />

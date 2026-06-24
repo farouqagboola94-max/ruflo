@@ -50,10 +50,9 @@ body {
 
 /*
   Aso-oke textile pattern
-  ─────────────────────────────────────────────────────────────────────────────
+  ────────────────────────────────────────────────────────────────────────────
   Inspired by Nigerian hand-woven Aso-oke fabric — the rhythmic horizontal
-  stripe structure with subtle cross-thread geometry. Applied at very low
-  opacity so it reads as texture, not pattern.
+  stripe structure with subtle cross-thread geometry.
 */
 .aso-oke-texture {
   background-image:
@@ -75,4 +74,64 @@ body {
       rgba(212, 175, 55, 0.02) 47px,
       rgba(212, 175, 55, 0.02) 48px
     );
+}
+
+/* ─── Marquee ticker ─── */
+.marquee-inner {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 45s linear infinite;
+  will-change: transform;
+}
+
+.marquee-text {
+  display: inline-block;
+  white-space: nowrap;
+  font-size: 9px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: rgba(212, 175, 55, 0.48);
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+}
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ─── Scroll reveal ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── WhatsApp floating button ─── */
+.whatsapp-float {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 50%;
+  background: #25D366;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.30);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 28px rgba(37, 211, 102, 0.45);
 }

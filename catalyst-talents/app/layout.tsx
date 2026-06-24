@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import WhatsAppButton from '@/components/WhatsAppButton'
+import RevealObserver from '@/components/RevealObserver'
 
 export const metadata: Metadata = {
   title: 'Catalyst Talents Lagos | Premier Modelling & Talent Agency',
@@ -50,6 +52,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Navbar />
         <main>{children}</main>
         <Footer />
+        <WhatsAppButton />
+        <RevealObserver />
       </body>
     </html>
   )
