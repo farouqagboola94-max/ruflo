@@ -126,3 +126,9 @@ export const raffleApi = {
 export const sponsorApi = {
   enquire: (data) => apiPost('/api/sponsor-enquiry', data, 'sf26_sponsor_enquiries'),
 }
+
+// General contact form  (localStorage key: sf26_contact)
+export const contactApi = {
+  submit: (data) => apiPost('/api/contact', data, 'sf26_contact', 200),
+  getAll: ()     => apiGet('/api/contact', 'sf26_contact', []),
+}

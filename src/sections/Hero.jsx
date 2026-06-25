@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines } from '../components/Shared'
 import Egg from '../components/Egg'
+import BackgroundSnake from '../components/BackgroundSnake'
 
 const EVENT_DATE = new Date('2026-12-12T12:00:00')
 
@@ -82,6 +83,7 @@ export default function Hero() {
       alignItems: "center", justifyContent: "center",
       padding: "100px 24px 80px",
     }}>
+      <BackgroundSnake />
       <GrainOverlay />
       <Egg id="egg-001" corner="top-right" />
       <Egg id="egg-002" corner="bottom-left" />

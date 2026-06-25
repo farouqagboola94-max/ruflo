@@ -62,6 +62,7 @@ import Countdown from './sections/Countdown'
 import Tickets from './sections/Tickets'
 import VendorReg from './sections/VendorReg'
 import FAQ from './sections/FAQ'
+import Contact from './sections/Contact'
 import Footer from './sections/Footer'
 import EggHuntTracker from './sections/EggHuntTracker'
 
@@ -112,6 +113,7 @@ const SECTION_TITLES = [
   { id: 'tickets',        title: "Tickets | Sneakers Fest '26" },
   { id: 'vendors',        title: "Vendors | Sneakers Fest '26" },
   { id: 'faq',            title: "FAQ | Sneakers Fest '26" },
+  { id: 'contact',        title: "Contact | Sneakers Fest '26" },
 ]
 
 export default function App() {
@@ -224,6 +226,7 @@ export default function App() {
       <Reveal><Tickets /></Reveal>
       <Reveal><VendorReg /></Reveal>
       <Reveal><FAQ /></Reveal>
+      <Reveal><Contact /></Reveal>
       <Reveal><Footer /></Reveal>
     </div>
   )
