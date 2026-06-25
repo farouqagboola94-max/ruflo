@@ -8,8 +8,6 @@ const TIERS = [
   {
     id: 'bronze',
     name: 'BRONZE',
-    price: '₦500K',
-    priceNote: 'one-time',
     color: '#CD7F32',
     tag: 'ENTRY PARTNER',
     capacity: 10,
@@ -25,8 +23,6 @@ const TIERS = [
   {
     id: 'silver',
     name: 'SILVER',
-    price: '₦1.5M',
-    priceNote: 'one-time',
     color: '#C0C0C0',
     tag: 'BRAND PARTNER',
     capacity: 6,
@@ -43,8 +39,6 @@ const TIERS = [
   {
     id: 'gold',
     name: 'GOLD',
-    price: '₦3M',
-    priceNote: 'one-time',
     color: B.amber,
     tag: 'STAGE PARTNER',
     featured: true,
@@ -64,15 +58,13 @@ const TIERS = [
   {
     id: 'platinum',
     name: 'PLATINUM',
-    price: '₦7M+',
-    priceNote: 'negotiable',
     color: B.neonCyan,
     tag: 'TITLE SPONSOR',
     capacity: 1,
     taken: 0,
     perks: [
       'Everything in Gold',
-      'Title rights: “[Brand] presents Sneakers Fest ’26”',
+      'Title rights: "[Brand] presents Sneakers Fest \'26"',
       'Full custom brand experience zone',
       'Unlimited Phalanx tickets',
       'Exclusive drop collaboration rights',
@@ -86,9 +78,9 @@ const TIERS = [
 
 const STATS = [
   { value: '2,500+', label: 'TARGET ATTENDEES' },
-  { value: '18–35', label: 'AGE RANGE' },
-  { value: '70%+', label: 'LAGOS MARKET' },
-  { value: '₦50M+', label: 'COMBINED REACH' },
+  { value: '18–35',  label: 'AGE RANGE' },
+  { value: '70%+',   label: 'LAGOS MARKET' },
+  { value: '₦50M+',  label: 'COMBINED REACH' },
 ]
 
 const CONTACT_EMAIL = 'sponsors@sneakersfest.com'
@@ -142,7 +134,7 @@ export default function SponsorTiers() {
             PARTNER<br /><span style={{ color: B.amber }}>WITH US</span>
           </div>
           <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: B.smoke, lineHeight: 1.8, maxWidth: 560, margin: '0 auto' }}>
-            Reach Lagos’ most engaged sneaker and streetwear audience. Sneakers Fest ’26 is the premier cultural drop event in West Africa — and we’re building it with brands who get it.
+            Reach Lagos' most engaged sneaker and streetwear audience. Sneakers Fest '26 is the premier cultural drop event in West Africa — and we're building it with brands who get it.
           </div>
         </div>
 
@@ -183,11 +175,7 @@ export default function SponsorTiers() {
                   <div style={{ marginBottom: 10 }}>
                     <span style={{ padding: '3px 10px', borderRadius: 2, background: tier.color + '18', border: `1px solid ${tier.color}40`, fontFamily: 'Space Mono,monospace', fontSize: 7, color: tier.color, letterSpacing: '0.18em' }}>{tier.tag}</span>
                   </div>
-                  <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 30, color: B.white, letterSpacing: '0.06em', marginBottom: 4 }}>{tier.name}</div>
-                  <div style={{ marginBottom: 16 }}>
-                    <span style={{ fontFamily: "'Orbitron', monospace", fontWeight: 900, fontSize: 28, color: tier.color, textShadow: `0 0 20px ${tier.color}40` }}>{tier.price}</span>
-                    <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: '#555', marginLeft: 8 }}>{tier.priceNote}</span>
-                  </div>
+                  <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 34, color: B.white, letterSpacing: '0.06em', marginBottom: 16 }}>{tier.name}</div>
 
                   {/* availability bar */}
                   <div style={{ marginBottom: 20 }}>
@@ -240,7 +228,7 @@ export default function SponsorTiers() {
           <div style={{ textAlign: 'center', marginBottom: 36 }}>
             <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: '#555', letterSpacing: '0.3em', marginBottom: 10 }}>SEND US A BRIEF</div>
             <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 36, color: B.white }}>GET THE FULL DECK</div>
-            <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: B.smoke, marginTop: 8 }}>Drop your details and we’ll send the official sponsorship deck within 24 hours.</div>
+            <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: B.smoke, marginTop: 8 }}>Drop your details and we'll send the official sponsorship deck within 24 hours.</div>
           </div>
 
           {submitted ? (
@@ -249,7 +237,7 @@ export default function SponsorTiers() {
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke={B.neonLime} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </div>
               <div style={{ fontFamily: "'Orbitron', monospace", fontSize: 10, color: B.neonLime, letterSpacing: 3, marginBottom: 8 }}>ENQUIRY RECEIVED</div>
-              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 28, color: B.white }}>WE’LL BE IN TOUCH</div>
+              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 28, color: B.white }}>WE'LL BE IN TOUCH</div>
               <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: B.smoke, marginTop: 8 }}>Sponsorship deck heading to <span style={{ color: B.amber }}>{form.email}</span> within 24 hours.</div>
             </div>
           ) : (
