@@ -3107,12 +3107,17 @@
       document.body.style.overflow = '';
     }
 
-    window.addEventListener('load', function() {
-      setTimeout(_dismissLoader, 1700);
-    });
+    /* Fire as soon as DOM is parsed — don't wait for fonts/images */
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(_dismissLoader, 800);
+      });
+    } else {
+      setTimeout(_dismissLoader, 800);
+    }
 
-    /* Guaranteed fallback — dismiss after 3.5 s even if fonts/CDN stall */
-    setTimeout(_dismissLoader, 3500);
+    /* Hard cap — always visible within 2.5 s no matter what */
+    setTimeout(_dismissLoader, 2500);
 
     /* ── CUSTOM CURSOR ────────────────────────────────────── */
     var cdot  = document.getElementById('cdot');
