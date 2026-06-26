@@ -352,53 +352,6 @@
     body.hov .c-dot   { width: 3px; height: 3px; }
 
     /* ═══════════════════════════════════════════════════
-       LOADER
-    ═══════════════════════════════════════════════════ */
-    #loader {
-      position: fixed; inset: 0;
-      background: var(--black);
-      z-index: 9000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 28px;
-      transition: opacity .9s ease, visibility .9s ease;
-    }
-
-    #loader.out { opacity: 0; visibility: hidden; }
-
-    .ld-dragon {
-      animation: flicker 2.4s steps(1) 0s 1 forwards;
-      filter: drop-shadow(0 0 22px rgba(200,151,26,0.35));
-    }
-
-    .ld-track {
-      width: 180px; height: 1px;
-      background: var(--border);
-      overflow: hidden;
-    }
-
-    .ld-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--gold), var(--gold-lt));
-      animation: fillbar 1.6s var(--ease) forwards;
-    }
-
-    .ld-sub {
-      font-family: var(--fnt-ui);
-      font-size: .62rem;
-      letter-spacing: .3em;
-      text-transform: uppercase;
-      color: var(--text-3);
-      animation: fadeup .8s ease .3s both;
-    }
-
-    @keyframes fillbar { from { transform: scaleX(0); transform-origin: left; } to { transform: scaleX(1); transform-origin: left; } }
-    @keyframes flicker { 0%,100% { opacity: 1; } 15%,17% { opacity: 0; } 20% { opacity: 1; } 55%,57% { opacity: 0; } 59% { opacity: 1; } }
-    @keyframes fadeup { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* ═══════════════════════════════════════════════════
        GRAIN
     ═══════════════════════════════════════════════════ */
     .grain {
@@ -2231,34 +2184,6 @@
 <body>
 
   <!-- Loader -->
-  <div id="loader">
-    <svg class="ld-dragon" width="88" height="100" viewBox="0 0 80 90" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="The Catalyst">
-      <defs>
-        <linearGradient id="ld-c" x1="4" y1="4" x2="76" y2="86" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#E0E8F8"/>
-          <stop offset="44%" stop-color="#B4C0D6"/>
-          <stop offset="100%" stop-color="#6478A0"/>
-        </linearGradient>
-        <linearGradient id="ld-c2" x1="4" y1="4" x2="76" y2="86" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#C6D0E2"/>
-          <stop offset="100%" stop-color="#8292B6"/>
-        </linearGradient>
-      </defs>
-      <path d="M 68 17 A 27 27 0 1 0 68 73" stroke="url(#ld-c)" stroke-width="9.5" stroke-linecap="round" fill="none"/>
-      <path d="M64,14 L76,6 L84,12 L81,24 L67,26 Z" fill="url(#ld-c)"/>
-      <path d="M67,13 L62,2 L69,10" fill="url(#ld-c2)"/>
-      <path d="M75,7 L75,0 L80,7" fill="url(#ld-c2)"/>
-      <path d="M79,20 L89,18 L87,26 L78,24" fill="url(#ld-c2)"/>
-      <path d="M76,24 L84,30 L79,32 L71,27" fill="url(#ld-c2)" opacity=".82"/>
-      <circle cx="72" cy="15" r="4" fill="#C8971A"/>
-      <circle cx="72" cy="15" r="2" fill="#F2C840"/>
-      <circle cx="73" cy="14" r=".9" fill="white" opacity=".55"/>
-      <path d="M66,75 L74,86 L69,76 L76,82" fill="url(#ld-c2)"/>
-    </svg>
-    <div class="ld-track"><div class="ld-fill"></div></div>
-    <div class="ld-sub">Catalyst Concepts · Lagos</div>
-  </div>
-
   <!-- Grain -->
   <div class="grain" aria-hidden="true"></div>
 
@@ -3095,29 +3020,6 @@
   <script>
   (function() {
     'use strict';
-
-    /* ── LOADER ───────────────────────────────────────────── */
-    document.body.style.overflow = 'hidden';
-
-    var _loaderGone = false;
-    function _dismissLoader() {
-      if (_loaderGone) return;
-      _loaderGone = true;
-      document.getElementById('loader').classList.add('out');
-      document.body.style.overflow = '';
-    }
-
-    /* Fire as soon as DOM is parsed — don't wait for fonts/images */
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(_dismissLoader, 800);
-      });
-    } else {
-      setTimeout(_dismissLoader, 800);
-    }
-
-    /* Hard cap — always visible within 2.5 s no matter what */
-    setTimeout(_dismissLoader, 2500);
 
     /* ── CUSTOM CURSOR ────────────────────────────────────── */
     var cdot  = document.getElementById('cdot');
