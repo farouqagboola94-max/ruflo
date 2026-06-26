@@ -3099,12 +3099,20 @@
     /* ── LOADER ───────────────────────────────────────────── */
     document.body.style.overflow = 'hidden';
 
+    var _loaderGone = false;
+    function _dismissLoader() {
+      if (_loaderGone) return;
+      _loaderGone = true;
+      document.getElementById('loader').classList.add('out');
+      document.body.style.overflow = '';
+    }
+
     window.addEventListener('load', function() {
-      setTimeout(function() {
-        document.getElementById('loader').classList.add('out');
-        document.body.style.overflow = '';
-      }, 1700);
+      setTimeout(_dismissLoader, 1700);
     });
+
+    /* Guaranteed fallback — dismiss after 3.5 s even if fonts/CDN stall */
+    setTimeout(_dismissLoader, 3500);
 
     /* ── CUSTOM CURSOR ────────────────────────────────────── */
     var cdot  = document.getElementById('cdot');
