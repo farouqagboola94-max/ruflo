@@ -516,12 +516,17 @@
        REVEAL ANIMATION
     ═══════════════════════════════════════════════════ */
     .rv {
-      opacity: 0;
-      transform: translateY(36px);
       transition: opacity .85s var(--ease), transform .85s var(--ease);
     }
 
-    .rv.in { opacity: 1; transform: none; }
+    .rv.rv-wait {
+      opacity: 0;
+      transform: translateY(36px);
+    }
+
+    .rv.rv-wait.rv-lx { transform: translateX(-36px); }
+
+    .rv.in { opacity: 1 !important; transform: none !important; }
 
     .rv-l { transform: translateX(-36px); }
     .rv-l.in { transform: none; }
@@ -3098,13 +3103,33 @@
     });
 
     /* ── REVEAL OBSERVER ──────────────────────────────────── */
-    var observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(en) {
-        if (en.isIntersecting) en.target.classList.add('in');
-      });
-    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    var rvAll = document.querySelectorAll('.rv');
 
-    document.querySelectorAll('.rv').forEach(function(el) { observer.observe(el); });
+    /* Progressive enhancement: hide via JS so no-JS users always see content */
+    rvAll.forEach(function(el) {
+      if (el.classList.contains('rv-l')) el.classList.add('rv-lx');
+      el.classList.add('rv-wait');
+    });
+
+    var revealObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(en) {
+        if (en.isIntersecting) {
+          en.target.classList.add('in');
+          en.target.classList.remove('rv-wait');
+          revealObserver.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px 0px 0px' });
+
+    rvAll.forEach(function(el) { revealObserver.observe(el); });
+
+    /* Fallback: force-reveal anything still hidden after 2.5s */
+    setTimeout(function() {
+      document.querySelectorAll('.rv.rv-wait').forEach(function(el) {
+        el.classList.add('in');
+        el.classList.remove('rv-wait');
+      });
+    }, 2500);
 
     /* ── HERO CANVAS ──────────────────────────────────────── */
     var canvas = document.getElementById('hcanvas');
