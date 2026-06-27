@@ -5,6 +5,9 @@ import TestimonialsSection from '@/components/TestimonialsSection'
 import ManifestoSection from '@/components/ManifestoSection'
 import MarqueeTicker from '@/components/MarqueeTicker'
 import EmailCapture from '@/components/EmailCapture'
+import PromiseSection from '@/components/PromiseSection'
+import ForTheTalent from '@/components/ForTheTalent'
+import LagosDNA from '@/components/LagosDNA'
 import { models } from '@/data/models'
 import { news } from '@/data/news'
 import { services } from '@/data/services'
@@ -64,18 +67,20 @@ export default function HomePage() {
       >
         {/* Aso-oke textile texture */}
         <div className="absolute inset-0 aso-oke-texture pointer-events-none" />
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full"
-          style={{
-            background: 'radial-gradient(circle, #D4AF37 0%, transparent 65%)',
-            opacity: 0.04,
-          }}
-        />
+        {/* Subtle grid overlay */}
+        <div className="absolute inset-0 hero-grid pointer-events-none" />
+        {/* Pulsing glow orb */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div
+            className="w-[700px] h-[700px] rounded-full hero-glow-orb"
+            style={{ background: 'radial-gradient(circle, #D4AF37 0%, transparent 65%)' }}
+          />
+        </div>
         <div className="relative z-10 text-center px-4 max-w-5xl mx-auto pt-20">
-          <p className="text-[#D4AF37] text-[10px] tracking-[0.5em] uppercase mb-6">
+          <p className="hero-animate-1 text-[#D4AF37] text-[10px] tracking-[0.5em] uppercase mb-6">
             Believe · Standard · Catalyst
           </p>
-          <h1 className="font-playfair text-5xl sm:text-7xl lg:text-8xl font-bold text-white leading-tight mb-6">
+          <h1 className="hero-animate-2 font-playfair text-5xl sm:text-7xl lg:text-8xl font-bold text-white leading-tight mb-6">
             Where Lagos
             <br />
             <span
@@ -91,7 +96,7 @@ export default function HomePage() {
               Meets the World
             </span>
           </h1>
-          <p className="text-white/50 text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed mb-10">
+          <p className="hero-animate-3 text-white/50 text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed mb-10">
             Born from Lagos. Built for the world. We believe Nigerian talent deserves an
             agency that treats you like the valuable person you are — not just a booking.
             Welfare first. Culture intact. Standard uncompromised.{' '}
@@ -103,7 +108,7 @@ export default function HomePage() {
               This is your home.
             </a>
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="hero-animate-4 flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/models"
               className="px-10 py-4 bg-[#D4AF37] text-black font-bold text-xs tracking-widest uppercase hover:bg-[#F0D060] transition-colors"
@@ -117,7 +122,7 @@ export default function HomePage() {
               Apply to Join
             </Link>
           </div>
-          <div className="mt-6">
+          <div className="hero-animate-5 mt-6">
             <a
               href="#join"
               className="text-white/20 text-[9px] tracking-[0.45em] uppercase hover:text-[#D4AF37]/40 transition-colors"
@@ -137,6 +142,9 @@ export default function HomePage() {
 
       {/* ── MANIFESTO ── */}
       <ManifestoSection />
+
+      {/* ── THE CTL PROMISE ── */}
+      <PromiseSection />
 
       {/* ── BRAND VISUAL ── */}
       <section style={{ background: '#050505' }}>
@@ -189,6 +197,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ── FOR THE TALENT ── */}
+      <ForTheTalent />
 
       {/* ── STATS ── */}
       <section
@@ -285,6 +296,9 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      {/* ── LAGOS DNA ── */}
+      <LagosDNA />
 
       {/* ── SERVICES TEASER ── */}
       <section
