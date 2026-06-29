@@ -1,98 +1,133 @@
 import { useEffect, useRef } from 'react'
 
 const SNAKES = [
-  // color, glow, maxWidth, segments, speed(×0.001/ms), amplitude(px), frequency, yFraction, opacity
-  { color: '#0088ff', glow: '#0044cc', maxW: 4.5, seg: 90,  speed: 0.80, amp: 85,  freq: 0.013, yFrac: 0.28, alpha: 0.90 },
-  { color: '#00bbff', glow: '#0077cc', maxW: 2.0, seg: 70,  speed: 1.15, amp: 50,  freq: 0.021, yFrac: 0.50, alpha: 0.70 },
-  { color: '#0033ff', glow: '#0020aa', maxW: 7.0, seg: 100, speed: 0.50, amp: 110, freq: 0.008, yFrac: 0.72, alpha: 0.38 },
-  { color: '#00eeff', glow: '#00aacc', maxW: 1.2, seg: 55,  speed: 1.50, amp: 35,  freq: 0.032, yFrac: 0.38, alpha: 0.75 },
-  { color: '#0055ff', glow: '#003399', maxW: 3.5, seg: 80,  speed: 0.65, amp: 75,  freq: 0.017, yFrac: 0.62, alpha: 0.55 },
-  { color: '#22aaff', glow: '#1166bb', maxW: 5.5, seg: 95,  speed: 0.90, amp: 60,  freq: 0.011, yFrac: 0.14, alpha: 0.62 },
+  // Deep background — large, dim, slow
+  { color: '#002299', glow: '#001177', maxW: 9.0, seg: 115, speed: 0.38, amp: 140, freq: 0.005, yFrac: 0.62, alpha: 0.22 },
+  { color: '#003388', glow: '#001166', maxW: 7.0, seg: 105, speed: 0.52, amp: 112, freq: 0.007, yFrac: 0.28, alpha: 0.28 },
+  // Mid depth
+  { color: '#0055ff', glow: '#0033cc', maxW: 4.0, seg: 88,  speed: 0.65, amp: 80,  freq: 0.015, yFrac: 0.55, alpha: 0.55 },
+  { color: '#0077dd', glow: '#0044aa', maxW: 5.0, seg: 92,  speed: 0.72, amp: 88,  freq: 0.012, yFrac: 0.78, alpha: 0.48 },
+  { color: '#0088ff', glow: '#0055cc', maxW: 4.5, seg: 90,  speed: 0.80, amp: 86,  freq: 0.013, yFrac: 0.30, alpha: 0.60 },
+  // Close foreground — small, bright, fast
+  { color: '#00ccff', glow: '#0099dd', maxW: 2.2, seg: 72,  speed: 1.10, amp: 52,  freq: 0.020, yFrac: 0.50, alpha: 0.72 },
+  { color: '#00eeff', glow: '#00bbcc', maxW: 1.4, seg: 58,  speed: 1.50, amp: 36,  freq: 0.032, yFrac: 0.38, alpha: 0.78 },
+  { color: '#33bbff', glow: '#1188cc', maxW: 1.8, seg: 65,  speed: 1.28, amp: 30,  freq: 0.027, yFrac: 0.14, alpha: 0.68 },
+  // Accent — violet-blue
+  { color: '#5544ff', glow: '#3322cc', maxW: 2.8, seg: 78,  speed: 0.88, amp: 60,  freq: 0.018, yFrac: 0.70, alpha: 0.28 },
 ]
 
-function drawSnake(ctx, s, W, H, ts) {
-  const yC = H * s.yFrac
-  const t  = ts * 0.001 * s.speed
+// Module-level particle init (runs once on import)
+const PARTICLES = Array.from({ length: 55 }, () => ({
+  x:     Math.random(),
+  y:     Math.random(),
+  vx:    (Math.random() - 0.5) * 0.00014,
+  vy:    (Math.random() - 0.5) * 0.00014,
+  r:     Math.random() * 1.3 + 0.3,
+  alpha: Math.random() * 0.28 + 0.05,
+  phase: Math.random() * Math.PI * 2,
+}))
 
+function drawSnake(ctx, s, W, H, t) {
+  const yC = H * s.yFrac
   ctx.save()
   ctx.lineCap = 'round'
-
   for (let i = 1; i < s.seg; i++) {
-    const pct = i / s.seg          // 0 = tail, 1 = head
+    const pct = i / s.seg
     const x0  = ((i - 1) / s.seg) * W
-    const x1  = (i       / s.seg) * W
+    const x1  = (i      / s.seg) * W
     const y0  = yC + s.amp * Math.sin(s.freq * x0 - t)
     const y1  = yC + s.amp * Math.sin(s.freq * x1 - t)
-    const w   = s.maxW * pct * pct  // quadratic taper — thinnest at tail
-
-    if (w < 0.15) continue
-
+    const w   = s.maxW * pct * pct
+    if (w < 0.12) continue
     ctx.globalAlpha = s.alpha * pct
     ctx.strokeStyle = s.color
     ctx.lineWidth   = w
     ctx.shadowColor = s.glow
-    ctx.shadowBlur  = w * 5
+    ctx.shadowBlur  = w * 7
     ctx.beginPath()
     ctx.moveTo(x0, y0)
     ctx.lineTo(x1, y1)
     ctx.stroke()
   }
-
-  // bright head dot at the leading edge
+  // Bright glowing head dot
   const yH = yC + s.amp * Math.sin(s.freq * W - t)
   ctx.globalAlpha = s.alpha
   ctx.shadowColor = '#ffffff'
-  ctx.shadowBlur  = s.maxW * 14
-  ctx.fillStyle   = '#aaddff'
+  ctx.shadowBlur  = s.maxW * 18
+  ctx.fillStyle   = '#cce8ff'
   ctx.beginPath()
-  ctx.arc(W, yH, s.maxW * 0.8, 0, Math.PI * 2)
+  ctx.arc(W, yH, s.maxW * 0.75, 0, Math.PI * 2)
   ctx.fill()
+  ctx.restore()
+}
 
+function drawParticles(ctx, W, H, ts) {
+  ctx.save()
+  const t = ts * 0.001
+  PARTICLES.forEach(p => {
+    p.x += p.vx; if (p.x < 0) p.x = 1; if (p.x > 1) p.x = 0
+    p.y += p.vy; if (p.y < 0) p.y = 1; if (p.y > 1) p.y = 0
+    const pulse = 0.45 + 0.55 * Math.sin(t * 0.7 + p.phase)
+    ctx.globalAlpha = p.alpha * pulse
+    ctx.fillStyle   = '#0077ff'
+    ctx.shadowColor = '#00aaff'
+    ctx.shadowBlur  = 5
+    ctx.beginPath()
+    ctx.arc(p.x * W, p.y * H, p.r, 0, Math.PI * 2)
+    ctx.fill()
+  })
   ctx.restore()
 }
 
 export default function BackgroundSnake() {
-  const ref = useRef(null)
+  const canvasRef = useRef(null)
 
   useEffect(() => {
-    const canvas = ref.current
+    const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
-    let raf
+    const dpr = window.devicePixelRatio || 1
 
-    function resize() {
-      const p = canvas.parentElement
-      canvas.width  = p ? p.offsetWidth  : window.innerWidth
-      canvas.height = p ? p.offsetHeight : window.innerHeight
+    const resize = () => {
+      const W = canvas.offsetWidth
+      const H = canvas.offsetHeight
+      canvas.width  = W * dpr
+      canvas.height = H * dpr
+      ctx.scale(dpr, dpr)
     }
     resize()
     window.addEventListener('resize', resize)
 
-    function loop(ts) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      for (const s of SNAKES) drawSnake(ctx, s, canvas.width, canvas.height, ts)
-      raf = requestAnimationFrame(loop)
+    let raf = null
+    const draw = ts => {
+      const W = canvas.offsetWidth
+      const H = canvas.offsetHeight
+      ctx.clearRect(0, 0, W, H)
+
+      // Depth fog at bottom edge
+      const fog = ctx.createLinearGradient(0, H * 0.65, 0, H)
+      fog.addColorStop(0, 'transparent')
+      fog.addColorStop(1, 'rgba(8,8,14,0.38)')
+      ctx.fillStyle = fog
+      ctx.fillRect(0, 0, W, H)
+
+      drawParticles(ctx, W, H, ts)
+      SNAKES.forEach(s => drawSnake(ctx, s, W, H, ts * 0.001 * s.speed))
+      raf = requestAnimationFrame(draw)
     }
-    raf = requestAnimationFrame(loop)
+    raf = requestAnimationFrame(draw)
 
     return () => {
-      cancelAnimationFrame(raf)
       window.removeEventListener('resize', resize)
+      cancelAnimationFrame(raf)
     }
   }, [])
 
   return (
-    <canvas
-      ref={ref}
-      style={{
-        position: 'absolute',
-        inset: 0,
-        width: '100%',
-        height: '100%',
-        display: 'block',
-        pointerEvents: 'none',
-        zIndex: 0,
-      }}
-    />
+    <canvas ref={canvasRef} style={{
+      position: 'absolute', inset: 0,
+      width: '100%', height: '100%',
+      zIndex: 0, pointerEvents: 'none',
+    }} />
   )
 }

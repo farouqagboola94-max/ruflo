@@ -1,5 +1,6 @@
 import { B, FONTS } from './tokens'
 import { useEffect } from 'react'
+import CustomCursor from './components/CustomCursor'
 import Navbar from './components/Navbar'
 import SocialDock from './components/SocialDock'
 import AIChat from './components/AIChat'
@@ -16,6 +17,7 @@ import LevelUpToast from './components/LevelUpToast'
 import KonamiCode from './components/KonamiCode'
 import { captureReferral, reconcileReferralCredits } from './lib/referral'
 import Hero from './sections/Hero'
+import Stats from './sections/Stats'
 import About from './sections/About'
 import OriginStory from './sections/OriginStory'
 import FridayNightProtocol from './sections/FridayNightProtocol'
@@ -148,21 +150,65 @@ export default function App() {
       <style>{`
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: ${B.void}; }
-        ::-webkit-scrollbar-thumb { background: ${B.amber}60; border-radius: 2px; }
-        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
-        @keyframes flicker { 0%,100% { opacity: 1; } 92% { opacity: 1; } 93% { opacity: 0.8; } 94% { opacity: 1; } 96% { opacity: 0.9; } }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @keyframes chatSlideIn { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        @keyframes slideFromRight { from { opacity: 0; transform: translateX(60px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes confettiFall { 0%{transform:translateY(-20px) rotate(0deg);opacity:0.9} 100%{transform:translateY(110vh) rotate(720deg);opacity:0} }
-        @keyframes ticketIn { from { opacity:0; transform:translateY(10px) scale(0.96); } to { opacity:1; transform:translateY(0) scale(1); } }
+
+        /* Premium scrollbar */
+        ::-webkit-scrollbar { width: 3px; }
+        ::-webkit-scrollbar-track { background: ${B.black}; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(${B.amber}, ${B.neonCyan}); border-radius: 2px; }
+
+        /* Premium text selection */
+        ::selection { background: ${B.amber}28; color: ${B.amberGlow}; }
+        ::-moz-selection { background: ${B.amber}28; color: ${B.amberGlow}; }
+
+        /* Custom cursor — hide system cursor on pointer devices */
+        @media (hover: hover) {
+          * { cursor: none !important; }
+          input, textarea { cursor: text !important; }
+        }
+
+        /* Smooth font rendering */
+        body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+        /* Focus ring */
+        :focus-visible { outline: 2px solid ${B.amber}55; outline-offset: 3px; }
+
         select option { background: #111; color: #fff; }
         input::placeholder { color: rgba(255,255,255,0.25); }
+
+        /* ---- Keyframes ---- */
+        @keyframes pulse       { 0%,100%{opacity:1} 50%{opacity:0.5} }
+        @keyframes flicker     { 0%,100%{opacity:1} 92%{opacity:1} 93%{opacity:0.8} 94%{opacity:1} 96%{opacity:0.9} }
+        @keyframes fadeUp      { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes spin        { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+        @keyframes chatSlideIn { from{opacity:0;transform:translateY(20px) scale(0.95)} to{opacity:1;transform:translateY(0) scale(1)} }
+        @keyframes slideFromRight { from{opacity:0;transform:translateX(60px)} to{opacity:1;transform:translateX(0)} }
+        @keyframes confettiFall  { 0%{transform:translateY(-20px) rotate(0deg);opacity:0.9} 100%{transform:translateY(110vh) rotate(720deg);opacity:0} }
+        @keyframes ticketIn      { from{opacity:0;transform:translateY(10px) scale(0.96)} to{opacity:1;transform:translateY(0) scale(1)} }
+
+        /* Premium additions */
+        @keyframes shimmer {
+          0%   { background-position: 0%   center; }
+          100% { background-position: 200% center; }
+        }
+        @keyframes marqueeScroll {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-33.333%); }
+        }
+        @keyframes float {
+          0%,100% { transform: translateY(0px); }
+          50%     { transform: translateY(-10px); }
+        }
+        @keyframes borderGlow {
+          0%,100% { box-shadow: 0 0 20px ${B.amber}30; }
+          50%     { box-shadow: 0 0 40px ${B.amber}55, 0 0 80px ${B.amber}20; }
+        }
+        @keyframes scanUp {
+          from { transform: translateY(100%); }
+          to   { transform: translateY(-100%); }
+        }
       `}</style>
 
+      <CustomCursor />
       <ScrollProgress />
       <SplashScreen />
       <Navbar />
@@ -178,6 +224,7 @@ export default function App() {
 
       <Hero />
       <EventTicker />
+      <Stats />
 
       <Reveal><About /></Reveal>
       <Reveal><OriginStory /></Reveal>
