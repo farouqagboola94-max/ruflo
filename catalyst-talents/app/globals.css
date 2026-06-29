@@ -4,29 +4,18 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Root tokens ── */
 :root {
   --gold: #D4AF37;
   --gold-light: #F0D060;
   --dark: #0A0A0A;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background-color: #0A0A0A; color: #FFFFFF; font-family: 'Inter', sans-serif; }
 
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  background-color: #0A0A0A;
-  color: #FFFFFF;
-  font-family: 'Inter', sans-serif;
-}
-
-.font-playfair {
-  font-family: 'Playfair Display', serif;
-}
+.font-playfair { font-family: 'Playfair Display', serif; }
 
 .gold-text {
   background: linear-gradient(135deg, #D4AF37 0%, #F0D060 50%, #D4AF37 100%);
@@ -48,214 +37,174 @@ body {
   margin-top: 16px;
 }
 
-/*
-  Aso-oke textile pattern
-  Inspired by Nigerian hand-woven Aso-oke fabric — the rhythmic horizontal
-  stripe structure with subtle cross-thread geometry.
-*/
-.aso-oke-texture {
-  background-image:
-    repeating-linear-gradient(
-      0deg,
-      transparent 0px,
-      transparent 11px,
-      rgba(212, 175, 55, 0.032) 11px,
-      rgba(212, 175, 55, 0.032) 12px,
-      transparent 12px,
-      transparent 23px,
-      rgba(212, 175, 55, 0.018) 23px,
-      rgba(212, 175, 55, 0.018) 24px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent 0px,
-      transparent 47px,
-      rgba(212, 175, 55, 0.02) 47px,
-      rgba(212, 175, 55, 0.02) 48px
-    );
-}
+/* ══════════════════════════════════════════════
+   HERO ENTRANCE ANIMATIONS
+══════════════════════════════════════════════ */
 
-/* ─── Marquee ticker ─── */
-.marquee-inner {
-  display: flex;
-  width: max-content;
-  animation: marquee-scroll 45s linear infinite;
-  will-change: transform;
-}
-
-.marquee-text {
-  display: inline-block;
-  white-space: nowrap;
-  font-size: 9px;
-  letter-spacing: 0.42em;
-  text-transform: uppercase;
-  color: rgba(212, 175, 55, 0.48);
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-}
-
-@keyframes marquee-scroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-/* ─── Scroll reveal ─── */
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition:
-    opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.reveal.revealed {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ─── WhatsApp floating button ─── */
-.whatsapp-float {
-  position: fixed;
-  bottom: 1.5rem;
-  right: 1.5rem;
-  z-index: 50;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 3.25rem;
-  height: 3.25rem;
-  border-radius: 50%;
-  background: #25D366;
-  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.30);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.whatsapp-float:hover {
-  transform: scale(1.1);
-  box-shadow: 0 8px 28px rgba(37, 211, 102, 0.45);
-}
-
-/* ─── Email capture ─── */
-.ctl-email-input {
-  flex: 1;
-  min-width: 0;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(212, 175, 55, 0.18);
-  color: #ffffff;
-  padding: 0.875rem 1.25rem;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.875rem;
-  outline: none;
-  transition: border-color 0.25s ease;
-}
-
-.ctl-email-input::placeholder {
-  color: rgba(255, 255, 255, 0.2);
-}
-
-.ctl-email-input:focus {
-  border-color: rgba(212, 175, 55, 0.48);
-}
-
-.ctl-email-btn {
-  background: #D4AF37;
-  color: #000000;
-  font-family: 'Inter', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  padding: 0.875rem 1.5rem;
-  border: none;
-  cursor: pointer;
-  white-space: nowrap;
-  flex-shrink: 0;
-  transition: background 0.2s ease;
-}
-
-.ctl-email-btn:hover {
-  background: #F0D060;
-}
-
-.ctl-email-btn-full {
-  background: #D4AF37;
-  color: #000000;
-  font-family: 'Inter', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  padding: 0.9375rem 2rem;
-  border: none;
-  cursor: pointer;
-  white-space: nowrap;
-  width: 100%;
-  transition: background 0.2s ease;
-}
-
-.ctl-email-btn-full:hover:not(:disabled) {
-  background: #F0D060;
-}
-
-.ctl-email-btn-full:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-@media (min-width: 640px) {
-  .ctl-email-btn-full {
-    width: auto;
-  }
-}
-
-/* ─── Hero entrance animations ─── */
 @keyframes hero-fade-up {
-  from { opacity: 0; transform: translateY(28px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(30px) translateZ(-15px); }
+  to   { opacity: 1; transform: translateY(0px)  translateZ(0px); }
 }
 
-.hero-animate-1 { animation: hero-fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both; }
-.hero-animate-2 { animation: hero-fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both; }
-.hero-animate-3 { animation: hero-fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both; }
-.hero-animate-4 { animation: hero-fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.65s both; }
-.hero-animate-5 { animation: hero-fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.8s both; }
+.hero-animate-1 { animation: hero-fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.05s  both; }
+.hero-animate-2 { animation: hero-fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.25s  both; }
+.hero-animate-3 { animation: hero-fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.45s  both; }
+.hero-animate-4 { animation: hero-fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.65s  both; }
+.hero-animate-5 { animation: hero-fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.85s  both; }
+
+/* ══════════════════════════════════════════════
+   AMBIENT / ORB
+══════════════════════════════════════════════ */
 
 @keyframes hero-glow {
-  0%,  100% { opacity: 0.04; transform: scale(1); }
-  50%        { opacity: 0.075; transform: scale(1.18); }
+  0%, 100% { opacity: 0.05; transform: scale(1); }
+  50%       { opacity: 0.10; transform: scale(1.12); }
 }
+.hero-glow-orb { animation: hero-glow 7s ease-in-out infinite; }
 
-.hero-glow-orb {
-  animation: hero-glow 9s ease-in-out infinite;
+@keyframes ambient-shift {
+  0%, 100% { opacity: 0.07; transform: scale(1) rotate(0deg); }
+  50%       { opacity: 0.14; transform: scale(1.10) rotate(6deg); }
+}
+.ambient-orb { animation: ambient-shift 9s ease-in-out infinite; }
+
+/* ══════════════════════════════════════════════
+   3D GRID PLANE
+══════════════════════════════════════════════ */
+
+@keyframes grid-drift {
+  0%, 100% { transform: rotateX(62deg) translateZ(0px);  }
+  50%       { transform: rotateX(60deg) translateZ(12px); }
 }
 
 .hero-grid {
+  animation: grid-drift 14s ease-in-out infinite;
   background-image:
-    linear-gradient(rgba(212, 175, 55, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(212, 175, 55, 0.025) 1px, transparent 1px);
-  background-size: 72px 72px;
+    linear-gradient(rgba(212,175,55,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212,175,55,0.08) 1px, transparent 1px);
+  background-size: 64px 64px;
 }
 
-/* ─── Promise section ─── */
-.promise-pillar {
-  transition: background-color 0.5s ease;
+/* ══════════════════════════════════════════════
+   3D FLOAT
+══════════════════════════════════════════════ */
+
+@keyframes float-3d {
+  0%, 100% { transform: translateZ(0px)  translateY(0px)   rotateX(0deg); }
+  33%       { transform: translateZ(24px) translateY(-14px) rotateX(2deg);  }
+  66%       { transform: translateZ(12px) translateY(-7px)  rotateX(-1deg); }
+}
+.float-3d { animation: float-3d 9s ease-in-out infinite; }
+
+/* ══════════════════════════════════════════════
+   GOLD PARTICLE KEYFRAMES
+══════════════════════════════════════════════ */
+
+@keyframes particle-float-a {
+  0%, 100% { transform: translateY(0px)   translateX(0px);  opacity: 0.55; }
+  30%       { transform: translateY(-20px) translateX(9px);  opacity: 0.85; }
+  70%       { transform: translateY(-12px) translateX(-6px); opacity: 0.45; }
 }
 
-.promise-pillar::after {
+@keyframes particle-float-b {
+  0%, 100% { transform: translateY(0px)   translateX(0px);   opacity: 0.40; }
+  40%       { transform: translateY(-24px) translateX(-13px); opacity: 0.70; }
+  70%       { transform: translateY(-10px) translateX(10px);  opacity: 0.30; }
+}
+
+@keyframes particle-float-c {
+  0%, 100% { transform: translateY(0px)   translateX(0px);  opacity: 0.50; }
+  33%       { transform: translateY(-28px) translateX(15px); opacity: 0.80; }
+  66%       { transform: translateY(-15px) translateX(-9px); opacity: 0.40; }
+}
+
+/* ══════════════════════════════════════════════
+   3D TEXT EXTRUSION
+══════════════════════════════════════════════ */
+
+.text-3d-gold {
+  text-shadow:
+    1px  1px  0    rgba(212, 175, 55, 0.50),
+    2px  2px  0    rgba(212, 175, 55, 0.36),
+    3px  3px  0    rgba(212, 175, 55, 0.25),
+    4px  4px  0    rgba(212, 175, 55, 0.18),
+    5px  5px  0    rgba(212, 175, 55, 0.12),
+    6px  6px  2px  rgba(0,   0,   0,  0.45),
+    8px  8px  20px rgba(0,   0,   0,  0.75);
+}
+
+.text-3d-white {
+  text-shadow:
+    1px  1px  0    rgba(255, 255, 255, 0.06),
+    2px  2px  0    rgba(255, 255, 255, 0.03),
+    3px  3px  6px  rgba(0,   0,   0,  0.55),
+    5px  5px  20px rgba(0,   0,   0,  0.40);
+}
+
+/* ══════════════════════════════════════════════
+   DEPTH GLOW PULSE
+══════════════════════════════════════════════ */
+
+@keyframes depth-glow {
+  0%, 100% { box-shadow: 0 0 30px rgba(212,175,55,0.08), 0 30px 60px rgba(0,0,0,0.50); }
+  50%       { box-shadow: 0 0 80px rgba(212,175,55,0.22), 0 50px 90px rgba(0,0,0,0.65); }
+}
+.depth-glow { animation: depth-glow 5s ease-in-out infinite; }
+
+/* ══════════════════════════════════════════════
+   SHIMMER SWEEP (CTA buttons)
+══════════════════════════════════════════════ */
+
+@keyframes shimmer-sweep {
+  0%   { transform: translateX(-120%) skewX(-18deg); opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateX(320%)  skewX(-18deg); opacity: 0; }
+}
+
+.shimmer-btn {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer-btn::after {
   content: '';
   position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 1px;
-  width: 0;
-  background: #D4AF37;
-  transition: width 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.28) 50%, transparent 100%);
+  animation: shimmer-sweep 3.5s ease-in-out infinite;
+  pointer-events: none;
 }
 
+/* ══════════════════════════════════════════════
+   CARD 3D
+══════════════════════════════════════════════ */
+
+.card-3d {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* ══════════════════════════════════════════════
+   SCROLL INDICATOR
+══════════════════════════════════════════════ */
+
+@keyframes scroll-pulse {
+  0%, 100% { opacity: 0.25; transform: translateY(0px); }
+  50%       { opacity: 0.70; transform: translateY(7px);  }
+}
+.scroll-indicator { animation: scroll-pulse 2.2s ease-in-out infinite; }
+
+/* ══════════════════════════════════════════════
+   PROMISE PILLARS
+══════════════════════════════════════════════ */
+
+.promise-pillar {
+  position: relative;
+  padding: 2rem;
+  border: 1px solid rgba(212, 175, 55, 0.12);
+  transition: border-color 0.4s ease, background 0.4s ease;
+}
 .promise-pillar:hover {
-  background-color: #070705 !important;
-}
-
-.promise-pillar:hover::after {
-  width: 100%;
+  border-color: rgba(212, 175, 55, 0.35);
+  background: rgba(212, 175, 55, 0.03);
 }
