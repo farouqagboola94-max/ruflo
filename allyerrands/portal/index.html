@@ -3,79 +3,111 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Za.allyErrands — Client Portal</title>
+  <title>Za.allyErrands — Track Your Runs</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="portal.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script>window.ZA_SUPABASE_URL='https://YOUR_PROJECT_ID.supabase.co';window.ZA_ANON_KEY='YOUR_SUPABASE_ANON_KEY';</script>
+  <style>
+    :root{--bg:#07091A;--bg2:#0C0F2A;--surface:rgba(255,255,255,.04);--border:rgba(255,255,255,.08);--orange:#FF4500;--gold:#F5A623;--blue:#00D4FF;--green:#00FF88;--red:#FF4466;--text:rgba(255,255,255,.9);--muted:rgba(255,255,255,.5);--oz:linear-gradient(135deg,#FF4500,#F5A623);}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    [hidden]{display:none!important}
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:64px;background:rgba(7,9,26,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
+    .nav__logo{text-decoration:none;display:flex;align-items:baseline}
+    .lza{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;background:var(--oz);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:1px}
+    .lal{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--text);letter-spacing:1px}
+    .lre{font-size:.75rem;color:var(--muted);margin-left:6px}
+    .nav__tag{font-size:.68rem;text-transform:uppercase;letter-spacing:2px;color:var(--blue);background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:20px;padding:4px 12px}
+    .nav__btn{font-size:.8rem;font-weight:600;color:#fff;text-decoration:none;background:var(--oz);border:none;border-radius:8px;padding:8px 16px;cursor:pointer;transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif}
+    .nav__btn:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(255,69,0,.3)}
+    .btn{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.88rem;border:none;cursor:pointer;border-radius:12px;padding:14px 28px;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%}
+    .btn-fire{background:var(--oz);color:#fff}
+    .btn-fire:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(255,69,0,.4)}
+    .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border);width:auto}
+    .btn-ghost:hover{border-color:var(--muted)}
+    .btn-sm{padding:9px 18px;font-size:.8rem;width:auto}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+    .p-login{min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;padding:40px 24px}
+    .p-login__box{max-width:420px;width:100%;text-align:center}
+    .p-login__glyph{font-size:3.5rem;margin-bottom:24px;display:block}
+    .p-login__box h1{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;margin-bottom:10px}
+    .p-login__box p{font-size:.88rem;color:var(--muted);line-height:1.7;margin-bottom:32px}
+    .p-form-group{margin-bottom:16px;text-align:left}
+    .p-form-group label{display:block;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:7px}
+    .p-form-group input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.92rem;color:var(--text);outline:none;transition:border-color .2s}
+    .p-form-group input:focus{border-color:var(--orange)}
+    .p-login__note{font-size:.75rem;color:var(--muted);margin-top:14px}
+    .p-dashboard{max-width:860px;margin:0 auto;padding:32px 24px 80px}
+    .p-dashboard__header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+    .p-dashboard__header h2{font-family:'Bebas Neue',sans-serif;font-size:2rem}
+    .p-dashboard__phone{font-size:.82rem;color:var(--muted);margin-top:4px}
+    .p-dashboard__actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .badge-live{display:flex;align-items:center;gap:6px;font-size:.68rem;text-transform:uppercase;letter-spacing:2px;color:var(--green)}
+    .badge-live::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite;flex-shrink:0}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+    .p-section{margin-bottom:40px}
+    .p-section__label{font-size:.68rem;text-transform:uppercase;letter-spacing:3px;color:var(--orange);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+    .run-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin-bottom:12px;display:flex;align-items:flex-start;gap:16px;transition:border-color .2s}
+    .run-card:hover{border-color:rgba(0,212,255,.25)}
+    .run-status{font-size:.66rem;text-transform:uppercase;letter-spacing:2px;font-weight:700;padding:5px 12px;border-radius:20px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+    .run-status[data-status="Pending"]{background:rgba(245,166,35,.14);color:var(--gold);border:1px solid rgba(245,166,35,.28)}
+    .run-status[data-status="Active"]{background:rgba(0,212,255,.1);color:var(--blue);border:1px solid rgba(0,212,255,.25)}
+    .run-status[data-status="En Route"]{background:rgba(156,110,248,.12);color:#9C6EF8;border:1px solid rgba(156,110,248,.28)}
+    .run-status[data-status="Completed"]{background:rgba(0,255,136,.09);color:var(--green);border:1px solid rgba(0,255,136,.22)}
+    .run-status[data-status="Cancelled"]{background:rgba(255,68,102,.08);color:var(--red);border:1px solid rgba(255,68,102,.22)}
+    .run-info{flex:1}
+    .run-info strong{display:block;font-size:.92rem;font-weight:600;margin-bottom:6px}
+    .run-info span{font-size:.8rem;color:var(--muted);line-height:1.5}
+    .run-date{font-size:.72rem;color:var(--muted);white-space:nowrap;flex-shrink:0;margin-top:2px}
+    .p-empty{padding:48px 24px;text-align:center;color:var(--muted);font-size:.85rem;background:var(--surface);border:1px dashed var(--border);border-radius:12px}
+    .p-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(30,35,70,.95);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:12px;padding:14px 24px;font-size:.85rem;color:var(--text);opacity:0;transition:all .3s;pointer-events:none;z-index:200;white-space:nowrap}
+    .p-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    @media(max-width:640px){.p-dashboard__header{flex-direction:column}.run-card{flex-direction:column;gap:10px}.run-date{align-self:flex-start}}
+  </style>
 </head>
 <body>
-
-  <nav class="p-nav">
-    <a href="../index.html" class="p-nav__logo">
-      <span class="logo-za">Za.</span><span class="logo-ally">ally</span><span class="logo-rest">Errands</span>
-    </a>
-    <span class="p-nav__tag">Client Portal</span>
-  </nav>
-
-  <!-- LOGIN SCREEN -->
-  <section class="p-login" id="loginScreen">
-    <div class="p-login__box">
-      <div class="p-login__icon">⚡</div>
-      <h1>Track Your Runs</h1>
-      <p>Enter the WhatsApp number you used when booking. We’ll show you every active and completed errand in real time.</p>
-      <form id="loginForm" novalidate>
-        <div class="p-form-group">
-          <label for="loginPhone">WhatsApp Number</label>
-          <input
-            type="tel"
-            id="loginPhone"
-            placeholder="+234 800 000 0000"
-            required
-            autocomplete="tel"
-          />
-        </div>
-        <button type="submit" class="btn btn--hazard btn--full" id="loginBtn">
-          <span class="btn-text">Access My Runs →</span>
-        </button>
-        <p class="p-login__note">No password. No app. Just your number.</p>
-      </form>
-    </div>
-  </section>
-
-  <!-- DASHBOARD -->
-  <section class="p-dashboard" id="dashboard" hidden>
-    <div class="p-dashboard__header">
-      <div>
-        <h2 id="dashGreeting">Your Runs</h2>
-        <p class="p-dashboard__phone" id="dashPhone"></p>
+<nav class="nav">
+  <a href="../index.html" class="nav__logo"><span class="lza">Za.</span><span class="lal">ally</span><span class="lre">Errands</span></a>
+  <span class="nav__tag">Client Portal</span>
+  <a href="../index.html" class="nav__btn">New Request</a>
+</nav>
+<section class="p-login" id="loginScreen">
+  <div class="p-login__box">
+    <span class="p-login__glyph">&#9889;</span>
+    <h1>Track Your Runs</h1>
+    <p>Enter the WhatsApp number you used when booking. We'll show you every active and completed errand in real time.</p>
+    <form id="loginForm" novalidate>
+      <div class="p-form-group">
+        <label for="loginPhone">WhatsApp Number</label>
+        <input type="tel" id="loginPhone" placeholder="+234 800 000 0000" required autocomplete="tel" />
       </div>
-      <div class="p-dashboard__actions">
-        <span class="badge-live" id="liveIndicator">● LIVE</span>
-        <a href="../index.html" class="btn btn--ghost btn--sm">New Request</a>
-        <button class="btn btn--ghost btn--sm" id="logoutBtn">Log Out</button>
-      </div>
+      <button type="submit" class="btn btn-fire" id="loginBtn"><span class="btn-text">Access My Runs &rarr;</span></button>
+      <p class="p-login__note">No password. No app. Just your number.</p>
+    </form>
+  </div>
+</section>
+<section class="p-dashboard" id="dashboard" hidden>
+  <div class="p-dashboard__header">
+    <div>
+      <h2 id="dashGreeting">Your Runs</h2>
+      <p class="p-dashboard__phone" id="dashPhone"></p>
     </div>
-
-    <!-- Active runs -->
-    <div class="p-section">
-      <div class="p-section__label">ACTIVE</div>
-      <div class="p-runs" id="activeRuns">
-        <div class="p-empty" id="activeEmpty">No active runs right now.</div>
-      </div>
+    <div class="p-dashboard__actions">
+      <span class="badge-live" id="liveIndicator">LIVE</span>
+      <button class="btn-ghost btn-sm btn" id="logoutBtn">Log Out</button>
     </div>
-
-    <!-- Completed runs -->
-    <div class="p-section">
-      <div class="p-section__label">COMPLETED</div>
-      <div class="p-runs" id="completedRuns">
-        <div class="p-empty" id="completedEmpty">No completed runs yet.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Supabase JS (CDN) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="portal.js"></script>
+  </div>
+  <div class="p-section">
+    <div class="p-section__label">Active</div>
+    <div id="activeRuns"><div class="p-empty" id="activeEmpty">No active runs right now.</div></div>
+  </div>
+  <div class="p-section">
+    <div class="p-section__label">Completed</div>
+    <div id="completedRuns"><div class="p-empty" id="completedEmpty">No completed runs yet.</div></div>
+  </div>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="portal.js"></script>
 </body>
 </html>

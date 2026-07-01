@@ -6,67 +6,79 @@
   <title>Za.allyErrands — Payment Confirmed</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="success.css" />
-  <script>
-    window.ZA_SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
-    window.ZA_ANON_KEY     = 'YOUR_SUPABASE_ANON_KEY';
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script>window.ZA_SUPABASE_URL='https://YOUR_PROJECT_ID.supabase.co';window.ZA_ANON_KEY='YOUR_SUPABASE_ANON_KEY';</script>
+  <style>
+    :root{--bg:#07091A;--surface:rgba(255,255,255,.04);--border:rgba(255,255,255,.08);--orange:#FF4500;--gold:#F5A623;--blue:#00D4FF;--green:#00FF88;--red:#FF4466;--text:rgba(255,255,255,.9);--muted:rgba(255,255,255,.5);--oz:linear-gradient(135deg,#FF4500,#F5A623);}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    [hidden]{display:none!important}
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+    .nav{display:flex;align-items:center;padding:0 24px;height:64px;border-bottom:1px solid var(--border);background:rgba(7,9,26,.85)}
+    .nav__logo{text-decoration:none;display:flex;align-items:baseline}
+    .lza{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;background:var(--oz);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:1px}
+    .lal{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--text);letter-spacing:1px}
+    .lre{font-size:.75rem;color:var(--muted);margin-left:5px}
+    .wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px}
+    .box{max-width:480px;width:100%;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:48px 36px;text-align:center}
+    .spinner{width:48px;height:48px;border:3px solid var(--border);border-top-color:var(--orange);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 20px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .state p{font-size:.9rem;color:var(--muted)}
+    .icon{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 24px;font-weight:900}
+    .icon-green{background:rgba(0,255,136,.1);border:2px solid rgba(0,255,136,.3);color:var(--green)}
+    .icon-orange{background:rgba(245,166,35,.1);border:2px solid rgba(245,166,35,.3);color:var(--gold)}
+    .icon-red{background:rgba(255,68,102,.1);border:2px solid rgba(255,68,102,.3);color:var(--red)}
+    .state h1{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;margin-bottom:10px}
+    .state .lead{font-size:.9rem;color:var(--muted);line-height:1.7;margin-bottom:28px}
+    .detail-block{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:left;font-size:.83rem;line-height:1.9;margin-bottom:28px;color:var(--text)}
+    .detail-block strong{color:var(--muted);font-weight:600}
+    .actions{display:flex;flex-direction:column;gap:12px}
+    .btn{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.88rem;border:none;cursor:pointer;border-radius:12px;padding:14px 28px;transition:all .2s;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px}
+    .btn-fire{background:var(--oz);color:#fff}
+    .btn-fire:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(255,69,0,.4)}
+    .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
+    .btn-ghost:hover{border-color:var(--muted)}
+  </style>
 </head>
 <body>
-
-  <div class="success-wrap">
-    <div class="success-box">
-
-      <div class="logo">
-        <a href="../index.html">
-          <span class="logo-za">Za.</span><span class="logo-ally">ally</span><span class="logo-rest">Errands</span>
-        </a>
+<nav class="nav">
+  <a href="../index.html" class="nav__logo"><span class="lza">Za.</span><span class="lal">ally</span><span class="lre">Errands</span></a>
+</nav>
+<div class="wrap">
+  <div class="box">
+    <div id="stateLoading" class="state">
+      <div class="spinner"></div>
+      <p>Verifying your payment&hellip;</p>
+    </div>
+    <div id="stateSuccess" class="state" hidden>
+      <div class="icon icon-green">&#10003;</div>
+      <h1>Payment Confirmed</h1>
+      <p class="lead">Your runner is being dispatched right now. You'll receive a WhatsApp update within minutes.</p>
+      <div class="detail-block" id="jobDetail"></div>
+      <div class="actions">
+        <a href="../portal/index.html" class="btn btn-fire">Track My Run &rarr;</a>
+        <a href="../index.html" class="btn btn-ghost">Back to Home</a>
       </div>
-
-      <!-- Loading state -->
-      <div id="stateLoading" class="state">
-        <div class="spinner"></div>
-        <p>Verifying your payment...</p>
+    </div>
+    <div id="stateDuplicate" class="state" hidden>
+      <div class="icon icon-orange">&#9888;</div>
+      <h1>Already Processed</h1>
+      <p class="lead">This payment was already confirmed. Check your portal for the latest status.</p>
+      <div class="actions">
+        <a href="../portal/index.html" class="btn btn-fire">Open Portal &rarr;</a>
       </div>
-
-      <!-- Success state -->
-      <div id="stateSuccess" class="state" hidden>
-        <div class="icon-wrap icon-wrap--green">&#10003;</div>
-        <h1>Payment Confirmed</h1>
-        <p class="lead">Your runner is being dispatched right now. You’ll receive a WhatsApp update within minutes.</p>
-        <div class="detail-block" id="jobDetail"></div>
-        <div class="actions">
-          <a href="../portal/index.html" class="btn btn--hazard">Track My Run &rarr;</a>
-          <a href="../index.html" class="btn btn--ghost">Back to Home</a>
-        </div>
+    </div>
+    <div id="stateError" class="state" hidden>
+      <div class="icon icon-red">!</div>
+      <h1>Verification Failed</h1>
+      <p class="lead">We couldn't confirm your payment automatically. WhatsApp us and we'll confirm it manually within minutes.</p>
+      <div class="actions">
+        <a href="https://wa.me/2348000000000" class="btn btn-fire">WhatsApp Support &rarr;</a>
+        <a href="../index.html" class="btn btn-ghost">Back to Home</a>
       </div>
-
-      <!-- Already processed -->
-      <div id="stateDuplicate" class="state" hidden>
-        <div class="icon-wrap icon-wrap--orange">&#9888;</div>
-        <h1>Already Processed</h1>
-        <p class="lead">This payment was already confirmed. Check your portal for the latest status.</p>
-        <div class="actions">
-          <a href="../portal/index.html" class="btn btn--hazard">Open Portal &rarr;</a>
-        </div>
-      </div>
-
-      <!-- Error state -->
-      <div id="stateError" class="state" hidden>
-        <div class="icon-wrap icon-wrap--red">&#33;</div>
-        <h1>Something went wrong</h1>
-        <p class="lead">We couldn’t verify your payment automatically. Don’t worry — WhatsApp us and we’ll confirm manually.</p>
-        <div class="actions">
-          <a href="https://wa.me/2348000000000" class="btn btn--hazard">WhatsApp Support</a>
-          <a href="../index.html" class="btn btn--ghost">Back to Home</a>
-        </div>
-      </div>
-
     </div>
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="success.js"></script>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="success.js"></script>
 </body>
 </html>
