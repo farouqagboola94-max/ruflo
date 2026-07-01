@@ -5,7 +5,6 @@ import { SOCIAL_LINKS } from '../config'
 import Egg from '../components/Egg'
 
 // ── zone data ──────────────────────────────────────────────────────────────────
-// viewBox: 800 × 560  |  cols: 0–180, 180–620, 620–800  |  rows: 0–140, 140–320, 320–440, 440–560
 const ZONES = [
   {
     id: 'stage', short: 'MAIN STAGE', label: 'Main Stage',
@@ -95,6 +94,29 @@ const ZONES = [
     desc:'Sneaker customisation masterclasses, lacing tutorials, and brand activation sessions. Limited seats — claim at the info desk.',
     schedule:['Sessions at 13:00, 15:00, 17:00','Walk-in only'],
     tags:['WORKSHOP','CUSTOM','LEARN'],
+  },
+]
+
+const TRANSPORT = [
+  {
+    icon: '🚗',
+    title: 'BY CAR',
+    desc: 'Exit at Falomo Bridge, enter via Adeola Odeku Street. Paid parking available at nearby malls from ₦1,000/hr. Arrive before 2PM to beat traffic.',
+  },
+  {
+    icon: '🚕',
+    title: 'RIDE-HAILING',
+    desc: 'Bolt and Uber drop-offs at the main gate on Adeola Odeku. Pre-book your return — demand surges after 9PM. Allow extra wait time.',
+  },
+  {
+    icon: '🚌',
+    title: 'BY BUS',
+    desc: 'BRT from CMS Terminal to Victoria Island. Alight at VI Terminal then take a short keke or walk to the park. Cheapest option.',
+  },
+  {
+    icon: '🚢',
+    title: 'BY BOAT',
+    desc: 'Ferry from Five Cowries Terminal, Ikoyi. Scenic 8-minute ride. Last return ferry departs 11:00 PM. Book early at the jetty.',
   },
 ]
 
@@ -242,33 +264,22 @@ export default function Venue() {
         {/* SVG floor map */}
         <div style={{ border:`1px solid rgba(255,255,255,0.08)`, borderRadius:12, overflow:'hidden', marginBottom:16, background:'#080810' }}>
           <svg viewBox="0 0 800 560" width="100%" style={{ display:'block' }} xmlns="http://www.w3.org/2000/svg">
-            {/* Background grid */}
             <defs>
               <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
                 <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
               </pattern>
             </defs>
             <rect width="800" height="560" fill="url(#grid)" />
-
-            {/* Outer boundary */}
             <rect x="1" y="1" width="798" height="558" fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="1" rx="2" />
-
-            {/* Zone divider lines */}
             <line x1="180" y1="0" x2="180" y2="560" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
             <line x1="620" y1="0" x2="620" y2="560" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
             <line x1="0" y1="140" x2="800" y2="140" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
             <line x1="0" y1="320" x2="800" y2="320" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
             <line x1="0" y1="440" x2="800" y2="440" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
-
-            {/* Non-clickable: Production / Backstage */}
             <rect x="1" y="1" width="178" height="138" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.06)" strokeWidth="0.8" rx="2" />
             <text x="90" y="70" textAnchor="middle" dominantBaseline="middle" fontFamily="Space Mono,monospace" fontSize={8} fill="rgba(255,255,255,0.2)" letterSpacing={1.5}>PRODUCTION</text>
             <text x="90" y="84" textAnchor="middle" dominantBaseline="middle" fontFamily="Space Mono,monospace" fontSize={7} fill="rgba(255,255,255,0.1)">CREW ONLY</text>
-
-            {/* Vendor booth grid inside main floor */}
             <BoothGrid />
-
-            {/* Clickable zones */}
             {ZONES.map(zone => (
               <ZoneRect
                 key={zone.id}
@@ -280,13 +291,9 @@ export default function Venue() {
                 onClick={z => setActive(prev => prev?.id === z.id ? null : z)}
               />
             ))}
-
-            {/* North indicator */}
             <text x="772" y="20" textAnchor="middle" fontFamily="Space Mono,monospace" fontSize={10} fill="rgba(255,255,255,0.2)">N</text>
             <line x1="772" y1="24" x2="772" y2="38" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
             <polygon points="772,14 769,24 775,24" fill="rgba(255,255,255,0.2)" />
-
-            {/* Scale label */}
             <text x="22" y="550" fontFamily="Space Mono,monospace" fontSize={7} fill="rgba(255,255,255,0.2)" letterSpacing={1}>EXPECTED LAYOUT — SUBJECT TO CHANGE</text>
           </svg>
         </div>
@@ -316,6 +323,62 @@ export default function Venue() {
               style={{ padding:'14px 32px', background:'rgba(255,255,255,0.05)', color:B.amber, fontFamily:'Space Mono,monospace', fontSize:10, letterSpacing:'0.15em', textDecoration:'none', borderRadius:4, border:`1px solid ${B.amber}40` }}>
               EARLY ACCESS →
             </a>
+          </div>
+        </div>
+
+        {/* GETTING THERE */}
+        <div style={{ marginTop:80 }}>
+          {/* Address pill */}
+          <div style={{ textAlign:'center', marginBottom:36 }}>
+            <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#444', letterSpacing:3, marginBottom:18 }}>GETTING THERE</div>
+            <h3 style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(32px,5vw,56px)', color:B.white, letterSpacing:2, lineHeight:0.9, marginBottom:20 }}>
+              PLAN YOUR <span style={{ color:B.neonCyan }}>JOURNEY</span>
+            </h3>
+            <div style={{
+              display:'inline-flex', alignItems:'center', gap:8,
+              padding:'8px 20px',
+              background:'rgba(255,255,255,0.04)',
+              border:`1px solid rgba(255,255,255,0.10)`,
+              borderRadius:100,
+            }}>
+              <span style={{ fontSize:14 }}>📍</span>
+              <span style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#888', letterSpacing:'0.12em' }}>
+                Muri Okunola Park, Adeola Odeku Street, Victoria Island, Lagos State, Nigeria
+              </span>
+            </div>
+          </div>
+
+          {/* Transport cards grid */}
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(200px, 1fr))', gap:16 }}>
+            {TRANSPORT.map(({ icon, title, desc }, i) => {
+              const accent = [B.amber, B.neonCyan, B.neonLime, B.neonMagenta][i]
+              return (
+                <div key={title} style={{
+                  background:'rgba(255,255,255,0.025)',
+                  border:`1px solid rgba(255,255,255,0.07)`,
+                  borderRadius:12,
+                  padding:'24px 22px',
+                  position:'relative',
+                  overflow:'hidden',
+                  transition:'border-color 0.2s, background 0.2s',
+                }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.borderColor = `${accent}40`
+                    e.currentTarget.style.background = `${accent}08`
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'
+                    e.currentTarget.style.background = 'rgba(255,255,255,0.025)'
+                  }}
+                >
+                  {/* Top accent line */}
+                  <div style={{ position:'absolute', top:0, left:24, right:24, height:1, background:`linear-gradient(90deg,transparent,${accent}60,transparent)` }} />
+                  <div style={{ fontSize:28, marginBottom:12 }}>{icon}</div>
+                  <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:accent, letterSpacing:'0.2em', fontWeight:700, marginBottom:10 }}>{title}</div>
+                  <p style={{ fontFamily:'Syne,sans-serif', fontSize:13, color:'#777', lineHeight:1.7, margin:0 }}>{desc}</p>
+                </div>
+              )
+            })}
           </div>
         </div>
 

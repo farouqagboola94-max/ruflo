@@ -62,10 +62,18 @@ const CountBox = ({ value, label }) => (
   </div>
 )
 
+const PRICE_TIERS = [
+  { t: 'GENERAL', p: '₦5,000',  c: B.neonCyan    },
+  { t: 'VIP',     p: '₦10,000', c: B.amber        },
+  { t: 'VVIP',    p: '₦25,000', c: B.neonMagenta  },
+  { t: 'PHALANX', p: '₦50,000', c: B.neonLime     },
+]
+
 export default function Hero() {
   const time = useCountdown(EVENT_DATE)
   const [h1, setH1] = useState(false)
   const [h2, setH2] = useState(false)
+  const [hoveredTier, setHoveredTier] = useState(null)
 
   return (
     <section id="hero" style={{
@@ -101,7 +109,7 @@ export default function Hero() {
       <div style={{ position:'absolute', top:'28%', right:'-4%', width:'42%', height:1, background:`linear-gradient(90deg,transparent,${B.amber}38,transparent)`, transform:'rotate(-7deg)', pointerEvents:'none' }} />
       <div style={{ position:'absolute', bottom:'18%', left:'12%', width:'48%', height:1, background:`linear-gradient(90deg,transparent,${B.neonCyan}28,transparent)`, transform:'rotate(4deg)', pointerEvents:'none' }} />
 
-      {/* All 4 corner marks */}
+      {/* Corner marks */}
       <div style={{ position:'absolute', top:80, left:24, width:40, height:40, borderTop:`1.5px solid ${B.neonCyan}38`, borderLeft:`1.5px solid ${B.neonCyan}38`, pointerEvents:'none' }} />
       <div style={{ position:'absolute', top:80, right:24, width:40, height:40, borderTop:`1.5px solid ${B.neonCyan}38`, borderRight:`1.5px solid ${B.neonCyan}38`, pointerEvents:'none' }} />
       <div style={{ position:'absolute', bottom:80, left:24, width:40, height:40, borderBottom:`1.5px solid ${B.neonCyan}38`, borderLeft:`1.5px solid ${B.neonCyan}38`, pointerEvents:'none' }} />
@@ -115,7 +123,7 @@ export default function Hero() {
         letterSpacing:'0.42em', color:B.smoke, opacity:0.35,
         whiteSpace:'nowrap', pointerEvents:'none',
       }}>
-        WEST AFRICA’S PREMIER SNEAKER CULTURE EVENT
+        WEST AFRICA'S PREMIER SNEAKER CULTURE EVENT
       </div>
 
       {/* Right side editorial text */}
@@ -148,7 +156,7 @@ export default function Hero() {
           </span>
         </div>
 
-        {/* SNEAKERS — metallic shimmer gradient text */}
+        {/* SNEAKERS */}
         <div style={{
           fontFamily:"'Bebas Neue', sans-serif",
           fontSize:'clamp(78px, 16vw, 164px)',
@@ -163,7 +171,7 @@ export default function Hero() {
           SNEAKERS
         </div>
 
-        {/* FEST '26 — amber fire glow */}
+        {/* FEST '26 */}
         <div style={{
           fontFamily:"'Orbitron', monospace", fontWeight:900,
           fontSize:'clamp(56px, 11.5vw, 120px)',
@@ -196,7 +204,7 @@ export default function Hero() {
         }}>
           Rare kicks · 30–50 curated vendors · Live DJs · Custom art · Street food<br />
           <span style={{ color:B.amber, fontWeight:500 }}>
-            West Africa’s first dedicated sneaker culture festival.
+            West Africa's first dedicated sneaker culture festival.
           </span>
         </div>
 
@@ -219,7 +227,7 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* CTAs with hover lift */}
+        {/* CTAs */}
         <div style={{ display:'flex', gap:14, justifyContent:'center', flexWrap:'wrap' }}>
           <a
             href="#tickets"
@@ -265,6 +273,31 @@ export default function Hero() {
           >
             EXPLORE LINEUP
           </a>
+        </div>
+
+        {/* Ticket price anchor pills */}
+        <div style={{ display:'flex', gap:8, justifyContent:'center', flexWrap:'wrap', marginTop:20 }}>
+          {PRICE_TIERS.map(({ t, p, c }) => (
+            <a
+              key={t}
+              href="#tickets"
+              onMouseEnter={() => setHoveredTier(t)}
+              onMouseLeave={() => setHoveredTier(null)}
+              style={{
+                display:'inline-flex', alignItems:'center', gap:6,
+                padding:'5px 13px',
+                borderRadius:100,
+                background: hoveredTier === t ? `${c}18` : 'rgba(255,255,255,0.04)',
+                border: `1px solid ${hoveredTier === t ? c + '60' : 'rgba(255,255,255,0.10)'}`,
+                textDecoration:'none',
+                transition:'background 0.18s, border-color 0.18s, transform 0.18s',
+                transform: hoveredTier === t ? 'translateY(-1px)' : 'none',
+              }}
+            >
+              <span style={{ fontFamily:'Space Mono,monospace', fontSize:7.5, color:'#666', letterSpacing:'0.12em' }}>{t}</span>
+              <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, fontWeight:700, color: hoveredTier === t ? c : '#888', letterSpacing:'0.08em', transition:'color 0.18s' }}>{p}</span>
+            </a>
+          ))}
         </div>
       </div>
 

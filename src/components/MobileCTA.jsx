@@ -19,7 +19,7 @@ const TABS = [
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
         <circle cx="12" cy="12" r="9" stroke={color} strokeWidth={active ? 2 : 1.5}/>
         <circle cx="12" cy="12" r="3" fill={active ? color : 'none'} stroke={color} strokeWidth={active ? 2 : 1.5}/>
-        <path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke={color} strokeWidth={1.5} strokeLinecap="round"/>
+        <path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
       </svg>
     ),
   },
@@ -114,76 +114,114 @@ export default function MobileCTA() {
   if (!isMobile) return null
 
   return (
-    <nav
-      role="navigation"
-      aria-label="Quick navigation"
-      style={{
-        position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 850,
-        background: `${B.void}F0`,
-        backdropFilter: 'blur(24px) saturate(180%)',
-        WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-        borderTop: `1px solid rgba(255,255,255,0.07)`,
-        display: 'flex', alignItems: 'stretch',
-        height: 64,
-        paddingBottom: 'env(safe-area-inset-bottom)',
-      }}
-    >
-      {TABS.map(tab => {
-        const isActive  = active === tab.id
-        const isPressed = pressed === tab.id
-        const color = tab.accent ? B.amber : isActive ? B.white : '#3a3a4a'
-        const labelColor = tab.accent ? B.amber : isActive ? B.white : '#3a3a4a'
+    <>
+      <style>{`
+        @keyframes dotPulse {
+          0%, 100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 ${B.amber}80; }
+          50% { transform: scale(1.15); opacity: 0.85; box-shadow: 0 0 0 4px ${B.amber}00; }
+        }
+      `}</style>
+      <nav
+        role="navigation"
+        aria-label="Quick navigation"
+        style={{
+          position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 850,
+          background: `${B.void}F0`,
+          backdropFilter: 'blur(24px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+          borderTop: `1px solid rgba(255,255,255,0.07)`,
+          display: 'flex', alignItems: 'stretch',
+          height: 64,
+          paddingBottom: 'env(safe-area-inset-bottom)',
+        }}
+      >
+        {TABS.map(tab => {
+          const isActive  = active === tab.id
+          const isPressed = pressed === tab.id
+          const color = tab.accent ? B.amber : isActive ? B.white : '#3a3a4a'
+          const labelColor = tab.accent ? B.amber : isActive ? B.white : '#3a3a4a'
+          const showDot = tab.accent && !isActive
+          const showPriceHint = tab.accent
 
-        return (
-          <button
-            key={tab.id}
-            aria-label={tab.label}
-            aria-current={isActive ? 'page' : undefined}
-            onClick={() => scrollToSection(tab.id)}
-            onTouchStart={() => setPressed(tab.id)}
-            onTouchEnd={() => setPressed(null)}
-            onTouchCancel={() => setPressed(null)}
-            style={{
-              flex: tab.accent ? 1.25 : 1,
-              background: tab.accent && isActive
-                ? `linear-gradient(180deg, ${B.amber}18 0%, transparent 100%)`
-                : isActive && !tab.accent
-                ? 'rgba(255,255,255,0.04)'
-                : 'none',
-              border: 'none',
-              borderTop: tab.accent
-                ? `2px solid ${isActive ? B.amber : B.amber + '50'}`
-                : `2px solid ${isActive ? B.white + '40' : 'transparent'}`,
-              cursor: 'pointer',
-              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3,
-              padding: '8px 4px',
-              transform: isPressed ? 'scale(0.88)' : 'scale(1)',
-              transition: isPressed
-                ? 'transform 0.08s ease-in'
-                : 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s, border-color 0.2s',
-              WebkitTapHighlightColor: 'transparent',
-              outline: 'none',
-            }}
-          >
-            <div style={{
-              transform: isActive ? 'scale(1.08)' : 'scale(1)',
-              transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
-              filter: isActive && tab.accent ? `drop-shadow(0 0 6px ${B.amber}70)` : isActive ? `drop-shadow(0 0 4px rgba(255,255,255,0.3))` : 'none',
-            }}>
-              {tab.icon(isActive, color)}
-            </div>
-            <span style={{
-              fontFamily: 'Space Mono, monospace',
-              fontSize: tab.accent ? 7.5 : 7,
-              fontWeight: tab.accent ? 700 : 400,
-              color: labelColor,
-              letterSpacing: '0.12em',
-              lineHeight: 1,
-              transition: 'color 0.2s',
-            }}>{tab.label}</span>
-          </button>
-        )
-      })}
-    </nav>
+          return (
+            <button
+              key={tab.id}
+              aria-label={tab.label}
+              aria-current={isActive ? 'page' : undefined}
+              onClick={() => scrollToSection(tab.id)}
+              onTouchStart={() => setPressed(tab.id)}
+              onTouchEnd={() => setPressed(null)}
+              onTouchCancel={() => setPressed(null)}
+              style={{
+                flex: tab.accent ? 1.25 : 1,
+                position: 'relative',
+                background: tab.accent && isActive
+                  ? `linear-gradient(180deg, ${B.amber}18 0%, transparent 100%)`
+                  : isActive && !tab.accent
+                  ? 'rgba(255,255,255,0.04)'
+                  : 'none',
+                border: 'none',
+                borderTop: tab.accent
+                  ? `2px solid ${isActive ? B.amber : B.amber + '50'}`
+                  : `2px solid ${isActive ? B.white + '40' : 'transparent'}`,
+                cursor: 'pointer',
+                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2,
+                padding: '6px 4px',
+                transform: isPressed ? 'scale(0.88)' : 'scale(1)',
+                transition: isPressed
+                  ? 'transform 0.08s ease-in'
+                  : 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s, border-color 0.2s',
+                WebkitTapHighlightColor: 'transparent',
+                outline: 'none',
+              }}
+            >
+              {/* Notification dot — amber pulse when not on tickets */}
+              {showDot && (
+                <div style={{
+                  position: 'absolute',
+                  top: 6, right: 'calc(50% - 14px)',
+                  width: 7, height: 7,
+                  borderRadius: '50%',
+                  background: B.amber,
+                  border: `1.5px solid ${B.void}`,
+                  animation: 'dotPulse 1.8s ease-in-out infinite',
+                  zIndex: 2,
+                }} />
+              )}
+
+              <div style={{
+                transform: isActive ? 'scale(1.08)' : 'scale(1)',
+                transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                filter: isActive && tab.accent ? `drop-shadow(0 0 6px ${B.amber}70)` : isActive ? `drop-shadow(0 0 4px rgba(255,255,255,0.3))` : 'none',
+              }}>
+                {tab.icon(isActive, color)}
+              </div>
+
+              <span style={{
+                fontFamily: 'Space Mono, monospace',
+                fontSize: tab.accent ? 7.5 : 7,
+                fontWeight: tab.accent ? 700 : 400,
+                color: labelColor,
+                letterSpacing: '0.12em',
+                lineHeight: 1,
+                transition: 'color 0.2s',
+              }}>{tab.label}</span>
+
+              {/* Price hint below TICKETS label */}
+              {showPriceHint && (
+                <span style={{
+                  fontFamily: 'Space Mono, monospace',
+                  fontSize: 6.5,
+                  color: isActive ? B.amber : B.amber + '80',
+                  letterSpacing: '0.08em',
+                  lineHeight: 1,
+                  transition: 'color 0.2s',
+                }}>₦5K+</span>
+              )}
+            </button>
+          )
+        })}
+      </nav>
+    </>
   )
 }
