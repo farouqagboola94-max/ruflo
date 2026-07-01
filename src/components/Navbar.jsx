@@ -13,25 +13,28 @@ const DESKTOP_LINKS = [
 ]
 
 const MOBILE_LINKS = [
-  { label: 'ABOUT',           href: '#about' },
-  { label: 'ORIGIN STORY',    href: '#origin' },
-  { label: 'FRIDAY PROTOCOL', href: '#fnp' },
-  { label: 'COMMUNITY',       href: '#community' },
-  { label: 'GALLERY',         href: '#gallery' },
-  { label: 'LINEUP',          href: '#lineup' },
-  { label: 'ARTISTS',         href: '#artists' },
-  { label: 'DROPS TIMELINE',  href: '#timeline' },
-  { label: 'SCHEDULE',        href: '#schedule' },
-  { label: 'MERCH',           href: '#merch' },
-  { label: 'EARLY ACCESS',    href: '#waitlist' },
-  { label: 'VENDORS',         href: '#vendors' },
-  { label: 'FAQ',             href: '#faq' },
+  { label: 'ABOUT',           href: '#about',     num: '01' },
+  { label: 'ORIGIN STORY',    href: '#origin',    num: '02' },
+  { label: 'FRIDAY PROTOCOL', href: '#fnp',       num: '03' },
+  { label: 'GALLERY',         href: '#gallery',   num: '04' },
+  { label: 'LINEUP',          href: '#lineup',    num: '05' },
+  { label: 'ARTISTS',         href: '#artists',   num: '06' },
+  { label: 'DROPS TIMELINE',  href: '#timeline',  num: '07' },
+  { label: 'SCHEDULE',        href: '#schedule',  num: '08' },
+  { label: 'VENUE',           href: '#venue',     num: '09' },
+  { label: 'MERCH',           href: '#merch',     num: '10' },
+  { label: 'COMMUNITY',       href: '#community', num: '11' },
+  { label: 'EARLY ACCESS',    href: '#waitlist',  num: '12' },
+  { label: 'VENDORS',         href: '#vendors',   num: '13' },
+  { label: 'FAQ',             href: '#faq',       num: '14' },
+  { label: 'CONTACT',         href: '#contact',   num: '15' },
 ]
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 900)
+  const [scrolled,  setScrolled]  = useState(false)
+  const [menuOpen,  setMenuOpen]  = useState(false)
+  const [closing,   setClosing]   = useState(false)
+  const [isMobile,  setIsMobile]  = useState(typeof window !== 'undefined' && window.innerWidth < 900)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -42,14 +45,23 @@ export default function Navbar() {
   }, [])
 
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : ''
+    document.body.style.overflow = menuOpen && !closing ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
-  }, [menuOpen])
+  }, [menuOpen, closing])
 
-  const close = () => setMenuOpen(false)
+  const close = () => {
+    setClosing(true)
+    setTimeout(() => { setMenuOpen(false); setClosing(false) }, 260)
+  }
 
   return (
     <>
+      <style>{`
+        @keyframes navMenuIn  { from { opacity:0; transform:translateY(-8px) } to { opacity:1; transform:translateY(0) } }
+        @keyframes navMenuOut { from { opacity:1; transform:translateY(0)    } to { opacity:0; transform:translateY(-8px) } }
+        @keyframes navLinkIn  { from { opacity:0; transform:translateX(-22px) } to { opacity:1; transform:translateX(0) } }
+      `}</style>
+
       <nav style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
         padding: '0 24px',
@@ -60,35 +72,31 @@ export default function Navbar() {
         transition: 'background 0.3s, border-color 0.3s',
         height: 60, display: 'flex', alignItems: 'center',
       }}>
-        {/* Logo */}
-        <a href="#" onClick={close} style={{ textDecoration: 'none', flex: 1 }}>
+        <a href="#" onClick={() => menuOpen && close()} style={{ textDecoration: 'none', flex: 1 }}>
           <div style={{ fontFamily: "'Orbitron', monospace", fontWeight: 900, fontSize: 14, color: B.amber, textShadow: `0 0 10px ${B.amber}40`, letterSpacing: '0.08em' }}>SNEAKERS FEST</div>
           <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 6, color: B.smoke, letterSpacing: '0.3em' }}>LAGOS '26</div>
         </a>
 
-        {/* Desktop nav */}
         {!isMobile && (
           <div style={{ display: 'flex', gap: 18, alignItems: 'center' }}>
             {DESKTOP_LINKS.map(link => (
-              <a
-                key={link.label}
-                href={link.href}
+              <a key={link.label} href={link.href}
                 style={{ fontFamily: "'Space Mono', monospace", fontSize: 7.5, color: B.smoke, textDecoration: 'none', letterSpacing: '0.18em', transition: 'color 0.2s' }}
                 onMouseEnter={e => e.target.style.color = B.amber}
                 onMouseLeave={e => e.target.style.color = B.smoke}
               >{link.label}</a>
             ))}
-            <a href="#tickets" style={{ padding: '8px 16px', background: B.amber, color: B.black, fontFamily: "'Space Mono', monospace", fontSize: 7.5, fontWeight: 700, letterSpacing: '0.15em', textDecoration: 'none', borderRadius: 2, boxShadow: `0 0 15px ${B.amber}20`, transition: 'box-shadow 0.2s' }}
+            <a href="#tickets"
+              style={{ padding: '8px 16px', background: B.amber, color: B.black, fontFamily: "'Space Mono', monospace", fontSize: 7.5, fontWeight: 700, letterSpacing: '0.15em', textDecoration: 'none', borderRadius: 2, boxShadow: `0 0 15px ${B.amber}20`, transition: 'box-shadow 0.2s' }}
               onMouseEnter={e => e.currentTarget.style.boxShadow = `0 0 30px ${B.amber}50`}
               onMouseLeave={e => e.currentTarget.style.boxShadow = `0 0 15px ${B.amber}20`}
             >GET TICKETS</a>
           </div>
         )}
 
-        {/* Mobile hamburger */}
         {isMobile && (
           <button
-            onClick={() => setMenuOpen(o => !o)}
+            onClick={() => menuOpen ? close() : setMenuOpen(true)}
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             style={{ background: menuOpen ? `${B.amber}15` : 'transparent', border: `1px solid ${menuOpen ? B.amber + '60' : B.gunmetal}`, borderRadius: 4, padding: '9px 10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}
           >
@@ -105,42 +113,73 @@ export default function Navbar() {
         )}
       </nav>
 
-      {/* Mobile full-screen drawer */}
       {isMobile && menuOpen && (
         <div style={{
           position: 'fixed', top: 60, left: 0, right: 0, bottom: 0, zIndex: 999,
-          background: `${B.black}FA`,
-          backdropFilter: 'blur(28px)',
-          WebkitBackdropFilter: 'blur(28px)',
+          background: `${B.void}FC`,
+          backdropFilter: 'blur(32px)',
+          WebkitBackdropFilter: 'blur(32px)',
           display: 'flex', flexDirection: 'column',
-          padding: '24px 32px 48px',
+          padding: '28px 28px 40px',
           overflowY: 'auto',
-          animation: 'fadeUp 0.2s ease',
+          animation: closing ? 'navMenuOut 0.26s ease forwards' : 'navMenuIn 0.3s ease',
         }}>
-          <div style={{ position: 'absolute', top: '30%', left: '50%', transform: 'translate(-50%,-50%)', width: 400, height: 300, background: `radial-gradient(circle, ${B.amber}08 0%, transparent 70%)`, filter: 'blur(50px)', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', top: '30%', left: '50%', transform: 'translate(-50%,-50%)', width: 480, height: 360, background: `radial-gradient(ellipse, ${B.amber}06, transparent 70%)`, filter: 'blur(50px)', pointerEvents: 'none' }} />
 
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0, position: 'relative' }}>
-            {MOBILE_LINKS.map((link) => (
+          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: '#252525', letterSpacing: '0.3em', marginBottom: 22, position: 'relative' }}>
+            NAVIGATE — {MOBILE_LINKS.length} SECTIONS
+          </div>
+
+          <div style={{ flex: 1, position: 'relative' }}>
+            {MOBILE_LINKS.map((link, i) => (
               <a
                 key={link.label}
                 href={link.href}
                 onClick={close}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 0', fontFamily: "'Bebas Neue', sans-serif", fontSize: 30, color: B.white, textDecoration: 'none', borderBottom: `1px solid ${B.gunmetal}`, letterSpacing: '0.04em', transition: 'color 0.2s, padding-left 0.2s' }}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 14,
+                  padding: '12px 0',
+                  color: B.white,
+                  textDecoration: 'none',
+                  borderBottom: `1px solid rgba(255,255,255,0.055)`,
+                  animation: `navLinkIn 0.35s ease both`,
+                  animationDelay: `${i * 28}ms`,
+                  transition: 'color 0.15s, padding-left 0.18s',
+                }}
                 onMouseEnter={e => { e.currentTarget.style.color = B.amber; e.currentTarget.style.paddingLeft = '8px' }}
                 onMouseLeave={e => { e.currentTarget.style.color = B.white; e.currentTarget.style.paddingLeft = '0' }}
               >
-                {link.label}
-                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 14, color: 'rgba(255,255,255,0.2)' }}>→</span>
+                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: 'inherit', opacity: 0.22, letterSpacing: '0.1em', minWidth: 24 }}>{link.num}</span>
+                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 24, color: 'inherit', letterSpacing: '0.04em', flex: 1 }}>{link.label}</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" style={{ opacity: 0.12 }}><path d="M7 17L17 7M17 7H7M17 7v10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </a>
             ))}
           </div>
 
-          <a
-            href="#tickets"
-            onClick={close}
-            style={{ display: 'block', marginTop: 32, padding: '18px', background: B.amber, color: B.black, fontFamily: "'Space Mono', monospace", fontSize: 12, fontWeight: 700, letterSpacing: '0.2em', textDecoration: 'none', borderRadius: 4, textAlign: 'center', boxShadow: `0 0 40px ${B.amber}25` }}
-          >GET TICKETS →</a>
-          <div style={{ marginTop: 20, fontFamily: "'Space Mono', monospace", fontSize: 7, color: '#333', letterSpacing: '0.25em', textAlign: 'center' }}>DECEMBER 12, 2026 · LAGOS, NIGERIA</div>
+          <div style={{
+            marginTop: 28,
+            animation: `navLinkIn 0.35s ease both`,
+            animationDelay: `${MOBILE_LINKS.length * 28 + 60}ms`,
+          }}>
+            <a
+              href="#tickets"
+              onClick={close}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                padding: '17px 22px',
+                background: B.amber, color: B.black,
+                fontFamily: "'Space Mono', monospace", fontSize: 11, fontWeight: 700,
+                letterSpacing: '0.18em', textDecoration: 'none', borderRadius: 6,
+                boxShadow: `0 0 35px ${B.amber}28`,
+              }}
+            >
+              <span>GET TICKETS</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke={B.black} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </a>
+            <div style={{ marginTop: 14, fontFamily: "'Space Mono', monospace", fontSize: 7, color: '#1e1e1e', letterSpacing: '0.22em', textAlign: 'center' }}>
+              DEC 12, 2026 · MURI OKUNOLA PARK · LAGOS
+            </div>
+          </div>
         </div>
       )}
     </>
