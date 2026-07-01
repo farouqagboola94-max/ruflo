@@ -8,7 +8,7 @@ const RSVP_SEED  = 1247
 const RSVP_KEY   = 'sf26_rsvp_count'
 const JOINED_KEY = 'sf26_rsvp_joined'
 
-// ── countdown logic ──────────────────────────────────────────────────────────────
+// ── countdown logic ──────────────────────────────────────────────────────────────────────────────
 function useCountdown() {
   const [t, setT] = useState({ days:0, hours:0, minutes:0, seconds:0 })
   useEffect(() => {
@@ -29,7 +29,7 @@ function useCountdown() {
   return t
 }
 
-// ── flip digit card ───────────────────────────────────────────────────────────────
+// ── flip digit card ──────────────────────────────────────────────────────────────────────────────────
 function FlipUnit({ value, label, color }) {
   const padded  = String(value).padStart(2, '0')
   const [pop, setPop]       = useState(false)
@@ -59,9 +59,7 @@ function FlipUnit({ value, label, color }) {
         transform: pop ? 'scale(1.06)' : 'scale(1)',
         transition:'transform 0.18s cubic-bezier(0.34,1.56,0.64,1), border-color 0.3s, box-shadow 0.3s',
       }}>
-        {/* top glow line */}
         <div style={{ position:'absolute', top:0, left:10, right:10, height:1, background:`linear-gradient(90deg, transparent, ${color}${bright ? 'AA' : '28'}, transparent)`, transition:'background 0.3s' }} />
-        {/* center divider (split-flap aesthetic) */}
         <div style={{ position:'absolute', left:0, right:0, top:'50%', height:'1px', background:'rgba(0,0,0,0.9)', zIndex:2 }} />
         <div style={{
           fontFamily:'Orbitron,monospace', fontWeight:900,
@@ -77,7 +75,7 @@ function FlipUnit({ value, label, color }) {
   )
 }
 
-// ── hype card canvas ──────────────────────────────────────────────────────────────
+// ── hype card canvas ──────────────────────────────────────────────────────────────────────────────
 async function downloadHypeCard({ name, daysLeft }) {
   const W = 1080, H = 1080
   const cv = document.createElement('canvas')
@@ -112,8 +110,10 @@ async function downloadHypeCard({ name, daysLeft }) {
   c.strokeStyle = '#F5A623'; c.lineWidth = 2
   c.beginPath(); c.moveTo(220, 590); c.lineTo(W - 220, 590); c.stroke()
 
-  c.fillStyle = '#FFFFFF'; c.font = '700 44px monospace'
-  c.fillText('LAGOS, NIGERIA', W/2, 660)
+  c.fillStyle = '#FFFFFF'; c.font = '700 34px monospace'
+  c.fillText('MURI OKUNOLA PARK, VICTORIA ISLAND', W/2, 650)
+  c.fillStyle = '#888'; c.font = '700 22px monospace'
+  c.fillText('LAGOS, NIGERIA', W/2, 688)
 
   c.fillStyle = '#F5A623'; c.font = '900 110px monospace'
   c.fillText(String(daysLeft), W/2, 810)
@@ -140,7 +140,7 @@ async function downloadHypeCard({ name, daysLeft }) {
   }, 'image/png')
 }
 
-// ── main section ──────────────────────────────────────────────────────────────
+// ── main section ──────────────────────────────────────────────────────────────────────────────
 export default function Countdown() {
   const time = useCountdown()
   const [rsvp,   setRsvp]   = useState(RSVP_SEED)
@@ -189,22 +189,19 @@ export default function Countdown() {
       <Egg id="egg-091" corner="top-right" />
       <Egg id="egg-092" corner="bottom-left" />
 
-      {/* ambient glows */}
       <div style={{ position:'absolute', top:'30%', left:'50%', transform:'translate(-50%,-50%)', width:700, height:500, background:`radial-gradient(ellipse, ${B.amber}08 0%, transparent 70%)`, filter:'blur(80px)', pointerEvents:'none' }} />
       <div style={{ position:'absolute', bottom:'10%', left:'10%', width:300, height:300, background:`radial-gradient(circle, ${B.neonCyan}06 0%, transparent 70%)`, filter:'blur(60px)', pointerEvents:'none' }} />
       <div style={{ position:'absolute', bottom:'10%', right:'10%', width:300, height:300, background:`radial-gradient(circle, ${B.neonMagenta}06 0%, transparent 70%)`, filter:'blur(60px)', pointerEvents:'none' }} />
 
       <div style={{ position:'relative', zIndex:10, maxWidth:900, margin:'0 auto' }}>
 
-        {/* Header */}
         <div style={{ textAlign:'center', marginBottom:56 }}>
-          <SectionTag>DECEMBER 12, 2026 · LAGOS</SectionTag>
+          <SectionTag>DECEMBER 12, 2026 · MURI OKUNOLA PARK, V/I</SectionTag>
           <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(44px,9vw,88px)', color:B.white, lineHeight:0.88, letterSpacing:2 }}>
             THE CLOCK<br /><span style={{ color:B.amber }}>IS RUNNING</span>
           </div>
         </div>
 
-        {/* Countdown digits */}
         <div style={{ display:'flex', justifyContent:'center', alignItems:'flex-start', gap:'clamp(10px,3vw,28px)', flexWrap:'wrap', marginBottom:56 }}>
           {UNITS.map((u, i) => (
             <div key={u.label} style={{ display:'flex', alignItems:'center', gap:'clamp(10px,3vw,28px)' }}>
@@ -216,7 +213,6 @@ export default function Countdown() {
           ))}
         </div>
 
-        {/* RSVP counter */}
         <div style={{ textAlign:'center', marginBottom:60 }}>
           <div style={{ display:'inline-flex', flexDirection:'column', alignItems:'center', gap:20, background:'rgba(255,255,255,0.03)', border:`1px solid rgba(255,255,255,0.08)`, borderRadius:16, padding:'32px 48px' }}>
             <div>
@@ -251,7 +247,6 @@ export default function Countdown() {
           </div>
         </div>
 
-        {/* Hype card generator */}
         <div style={{ background:'rgba(255,255,255,0.02)', border:`1px solid ${B.amber}20`, borderRadius:16, padding:'36px 32px' }}>
           <div style={{ textAlign:'center', marginBottom:24 }}>
             <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:28, color:B.white, letterSpacing:3, marginBottom:6 }}>GENERATE YOUR HYPE CARD</div>
@@ -268,12 +263,12 @@ export default function Countdown() {
               />
             </div>
 
-            {/* Card preview mockup */}
             <div style={{ background:'#000', border:`1px solid ${B.amber}30`, borderRadius:8, padding:'20px', textAlign:'center', aspectRatio:'1', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:6 }}>
               <div style={{ fontFamily:'Orbitron,monospace', fontSize:9, color:B.amber, letterSpacing:2 }}>SNEAKERS FEST '26</div>
               <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:'clamp(28px,7vw,48px)', color:B.white, lineHeight:0.9 }}>I'M</div>
               <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:'clamp(36px,9vw,64px)', color:B.amber, lineHeight:0.9 }}>GOING</div>
-              <div style={{ fontFamily:'Orbitron,monospace', fontSize:'clamp(20px,5vw,36px)', color:B.amber, fontWeight:900, marginTop:8 }}>{time.days}</div>
+              <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', letterSpacing:1, marginTop:4 }}>MURI OKUNOLA PARK, V/I</div>
+              <div style={{ fontFamily:'Orbitron,monospace', fontSize:'clamp(20px,5vw,36px)', color:B.amber, fontWeight:900, marginTop:4 }}>{time.days}</div>
               <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', letterSpacing:2 }}>DAYS AWAY</div>
               {cardName && <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:B.smoke, marginTop:4 }}>{cardName.toUpperCase()}</div>}
             </div>
