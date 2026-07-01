@@ -1,6 +1,7 @@
 import { B, FONTS } from './tokens'
 import { useEffect } from 'react'
 import CustomCursor from './components/CustomCursor'
+import SocialProof from './components/SocialProof'
 import Navbar from './components/Navbar'
 import SocialDock from './components/SocialDock'
 import AIChat from './components/AIChat'
@@ -209,6 +210,7 @@ export default function App() {
       `}</style>
 
       <CustomCursor />
+      <SocialProof />
       <ScrollProgress />
       <SplashScreen />
       <Navbar />

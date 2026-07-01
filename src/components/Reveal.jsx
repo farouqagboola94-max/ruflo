@@ -20,8 +20,13 @@ export default function Reveal({ children, delay = 0 }) {
       ref={ref}
       style={{
         opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(36px)',
-        transition: `opacity 0.75s cubic-bezier(0.22,1,0.36,1) ${delay}ms, transform 0.75s cubic-bezier(0.22,1,0.36,1) ${delay}ms`,
+        transform: visible ? 'translateY(0) scale(1)' : 'translateY(28px) scale(0.985)',
+        filter: visible ? 'blur(0px)' : 'blur(2px)',
+        transition: [
+          `opacity 0.75s cubic-bezier(0.22,1,0.36,1) ${delay}ms`,
+          `transform 0.75s cubic-bezier(0.22,1,0.36,1) ${delay}ms`,
+          `filter 0.55s cubic-bezier(0.22,1,0.36,1) ${delay}ms`,
+        ].join(', '),
         willChange: 'opacity, transform',
       }}
     >
