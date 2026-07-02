@@ -4,9 +4,11 @@ import { GrainOverlay, SectionTag } from '../components/Shared'
 import { logReferralConversion } from '../lib/referral'
 import Egg from '../components/Egg'
 
-const LISTMONK_URL     = import.meta.env.VITE_LISTMONK_URL     || ''
-const LIST_UUID        = import.meta.env.VITE_LISTMONK_LIST_UUID || ''
-const FORMSPREE_URL    = 'https://formspree.io/f/xbjnqppq'
+const LISTMONK_URL  = import.meta.env.VITE_LISTMONK_URL      || ''
+const LIST_UUID     = import.meta.env.VITE_LISTMONK_LIST_UUID || ''
+const FORMSPREE_URL = import.meta.env.VITE_FORMSPREE_ID
+  ? `https://formspree.io/f/${import.meta.env.VITE_FORMSPREE_ID}`
+  : ''
 
 const PERKS = [
   { icon: '🏟️', label: 'EARLY TICKET ACCESS',   desc: 'First in queue before public sale',          color: B.amber },
@@ -107,7 +109,23 @@ export default function Newsletter() {
     const num = Math.floor(Math.random() * 8000) + 1000
     setMemberNum(num)
 
-    // try Listmonk
+    // Netlify Forms — always try first (built into Netlify, no API key)
+    try {
+      const nlBody = new URLSearchParams({
+        'form-name': 'newsletter',
+        'bot-field': '',
+        name: name || email.split('@')[0],
+        email,
+        interests: [...interests].join(', '),
+      })
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: nlBody.toString(),
+      })
+    } catch {}
+
+    // Listmonk (self-hosted newsletter platform)
     if (LISTMONK_URL) {
       try {
         const res = await fetch(`${LISTMONK_URL}/api/public/subscription`, {
@@ -119,14 +137,16 @@ export default function Newsletter() {
       } catch { /* fall through */ }
     }
 
-    // Formspree fallback
-    try {
-      await fetch(FORMSPREE_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ name: name || email.split('@')[0], email, interests: [...interests].join(', '), _subject: 'New Inner Circle subscriber — SF26' }),
-      })
-    } catch { /* silent — show success regardless for UX */ }
+    // Formspree fallback — only if VITE_FORMSPREE_ID is set
+    if (FORMSPREE_URL) {
+      try {
+        await fetch(FORMSPREE_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ name: name || email.split('@')[0], email, interests: [...interests].join(', '), _subject: 'New Inner Circle subscriber — SF26' }),
+        })
+      } catch {}
+    }
 
     logReferralConversion('newsletter')
     setStatus('success')

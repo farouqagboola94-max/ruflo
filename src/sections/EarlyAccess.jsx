@@ -73,19 +73,35 @@ export default function EarlyAccess() {
     try { return SEED_COUNT + Number(JSON.parse(localStorage.getItem(KEY) || '0')) } catch { return SEED_COUNT }
   }
 
-  function submit(e) {
+  async function submit(e) {
     e.preventDefault()
     if (!email.includes('@')) { setError('Enter a valid email address.'); return }
     setError(''); setPhase('loading')
-    setTimeout(() => {
-      const pos  = getTotal() + Math.floor(Math.random() * 8) + 1
-      const code = genRefCode(name)
-      try {
-        localStorage.setItem(KEY,     JSON.stringify(pos - SEED_COUNT))
-        localStorage.setItem(REF_KEY, code)
-      } catch {}
-      setPosition(pos); setRefCode(code); setPhase('done')
-    }, 1800)
+
+    const code = genRefCode(name)
+
+    // Send to Netlify Forms — organiser receives this in the Netlify dashboard
+    try {
+      const body = new URLSearchParams({
+        'form-name': 'waitlist',
+        'bot-field': '',
+        name: name.trim() || 'Unknown',
+        email: email.trim().toLowerCase(),
+        refCode: code,
+      })
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString(),
+      })
+    } catch {}
+
+    const pos  = getTotal() + Math.floor(Math.random() * 8) + 1
+    try {
+      localStorage.setItem(KEY,     JSON.stringify(pos - SEED_COUNT))
+      localStorage.setItem(REF_KEY, code)
+    } catch {}
+    setPosition(pos); setRefCode(code); setPhase('done')
   }
 
   function copyRef() {

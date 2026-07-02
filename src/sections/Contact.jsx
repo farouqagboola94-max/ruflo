@@ -39,7 +39,27 @@ export default function Contact() {
       timestamp: new Date().toISOString(),
     }
 
+    // Netlify Forms — primary capture path; works on Netlify with no API key
+    try {
+      const nlBody = new URLSearchParams({
+        'form-name': 'contact',
+        'bot-field': '',
+        name: payload.name,
+        email: payload.email,
+        phone: payload.phone,
+        message: payload.message,
+      })
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: nlBody.toString(),
+      })
+    } catch {}
+
+    // Backend + localStorage fallback
     try { await contactApi.submit(payload) } catch {}
+
+    // Formspree fallback if VITE_FORMSPREE_ID is set
     if (FORMSPREE_URL) {
       try {
         await fetch(FORMSPREE_URL, {

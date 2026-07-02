@@ -110,5 +110,53 @@
   <body style="margin:0;background:#0A0A0A;">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+
+    <!--
+      Netlify Forms: static dummy forms for build-time detection.
+      These are hidden from the UI — React submits them via fetch with
+      Content-Type: application/x-www-form-urlencoded and a form-name field.
+      Each form must match the name used in the fetch calls.
+    -->
+    <form name="waitlist" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="text" name="bot-field" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="refCode" />
+    </form>
+    <form name="newsletter" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="text" name="bot-field" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="interests" />
+    </form>
+    <form name="contact" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="text" name="bot-field" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <textarea name="message"></textarea>
+    </form>
+    <form name="vendor-registration" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="text" name="bot-field" />
+      <input type="text" name="business" />
+      <input type="text" name="contact" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <input type="text" name="category" />
+      <input type="text" name="booth" />
+      <input type="text" name="instagram" />
+      <input type="text" name="twitter" />
+      <input type="text" name="website" />
+      <textarea name="bio"></textarea>
+      <input type="text" name="applicationId" />
+    </form>
+    <form name="sponsor-enquiry" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="text" name="bot-field" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="company" />
+      <input type="text" name="budget" />
+      <textarea name="message"></textarea>
+    </form>
   </body>
 </html>
