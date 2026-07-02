@@ -1,5 +1,6 @@
 import { B, FONTS } from './tokens'
 import { useEffect } from 'react'
+import { AuthProvider } from './lib/auth'
 import CustomCursor from './components/CustomCursor'
 import SocialProof from './components/SocialProof'
 import Navbar from './components/Navbar'
@@ -33,6 +34,7 @@ import SneakerDNA from './sections/SneakerDNA'
 import SoleOfLagos from './sections/SoleOfLagos'
 import CultureHistory from './sections/CultureHistory'
 import CultureMuseum from './sections/CultureMuseum'
+import ArchitectVault from './sections/ArchitectVault'
 import SneakerBible from './sections/SneakerBible'
 import CommunityWall from './sections/CommunityWall'
 import SneakerTrivia from './sections/SneakerTrivia'
@@ -84,7 +86,7 @@ const SECTION_TITLES = [
   { id: 'sole-of-lagos',  title: "The Sole of Lagos | Sneakers Fest '26" },
   { id: 'culture-history',title: "Art & Culture | Sneakers Fest '26" },
   { id: 'museum',         title: "The Museum | Sneakers Fest '26" },
-  { id: 'vault-200',      title: "The Vault 200 | Sneakers Fest '26" },
+  { id: 'vault-200',      title: "Architect Vault | Sneakers Fest '26" },
   { id: 'wall',           title: "The Wall | Sneakers Fest '26" },
   { id: 'trivia',         title: "Trivia | Sneakers Fest '26" },
   { id: 'memory-match',   title: "Sole Memory | Sneakers Fest '26" },
@@ -146,137 +148,140 @@ export default function App() {
   }, [])
 
   return (
-    <div style={{ background: B.black, color: B.white, minHeight: '100vh' }}>
-      <style>{FONTS}</style>
-      <style>{`
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+    <AuthProvider>
+      <div style={{ background: B.black, color: B.white, minHeight: '100vh' }}>
+        <style>{FONTS}</style>
+        <style>{`
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          html { scroll-behavior: smooth; }
 
-        /* Premium scrollbar */
-        ::-webkit-scrollbar { width: 3px; }
-        ::-webkit-scrollbar-track { background: ${B.black}; }
-        ::-webkit-scrollbar-thumb { background: linear-gradient(${B.amber}, ${B.neonCyan}); border-radius: 2px; }
+          /* Premium scrollbar */
+          ::-webkit-scrollbar { width: 3px; }
+          ::-webkit-scrollbar-track { background: ${B.black}; }
+          ::-webkit-scrollbar-thumb { background: linear-gradient(${B.amber}, ${B.neonCyan}); border-radius: 2px; }
 
-        /* Premium text selection */
-        ::selection { background: ${B.amber}28; color: ${B.amberGlow}; }
-        ::-moz-selection { background: ${B.amber}28; color: ${B.amberGlow}; }
+          /* Premium text selection */
+          ::selection { background: ${B.amber}28; color: ${B.amberGlow}; }
+          ::-moz-selection { background: ${B.amber}28; color: ${B.amberGlow}; }
 
-        /* Custom cursor — hide system cursor on pointer devices */
-        @media (hover: hover) {
-          * { cursor: none !important; }
-          input, textarea { cursor: text !important; }
-        }
+          /* Custom cursor — hide system cursor on pointer devices */
+          @media (hover: hover) {
+            * { cursor: none !important; }
+            input, textarea { cursor: text !important; }
+          }
 
-        /* Smooth font rendering */
-        body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+          /* Smooth font rendering */
+          body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 
-        /* Focus ring */
-        :focus-visible { outline: 2px solid ${B.amber}55; outline-offset: 3px; }
+          /* Focus ring */
+          :focus-visible { outline: 2px solid ${B.amber}55; outline-offset: 3px; }
 
-        select option { background: #111; color: #fff; }
-        input::placeholder { color: rgba(255,255,255,0.25); }
+          select option { background: #111; color: #fff; }
+          input::placeholder { color: rgba(255,255,255,0.25); }
 
-        /* ---- Keyframes ---- */
-        @keyframes pulse       { 0%,100%{opacity:1} 50%{opacity:0.5} }
-        @keyframes flicker     { 0%,100%{opacity:1} 92%{opacity:1} 93%{opacity:0.8} 94%{opacity:1} 96%{opacity:0.9} }
-        @keyframes fadeUp      { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes spin        { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-        @keyframes chatSlideIn { from{opacity:0;transform:translateY(20px) scale(0.95)} to{opacity:1;transform:translateY(0) scale(1)} }
-        @keyframes slideFromRight { from{opacity:0;transform:translateX(60px)} to{opacity:1;transform:translateX(0)} }
-        @keyframes confettiFall  { 0%{transform:translateY(-20px) rotate(0deg);opacity:0.9} 100%{transform:translateY(110vh) rotate(720deg);opacity:0} }
-        @keyframes ticketIn      { from{opacity:0;transform:translateY(10px) scale(0.96)} to{opacity:1;transform:translateY(0) scale(1)} }
+          /* ---- Keyframes ---- */
+          @keyframes pulse       { 0%,100%{opacity:1} 50%{opacity:0.5} }
+          @keyframes flicker     { 0%,100%{opacity:1} 92%{opacity:1} 93%{opacity:0.8} 94%{opacity:1} 96%{opacity:0.9} }
+          @keyframes fadeUp      { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+          @keyframes spin        { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+          @keyframes chatSlideIn { from{opacity:0;transform:translateY(20px) scale(0.95)} to{opacity:1;transform:translateY(0) scale(1)} }
+          @keyframes slideFromRight { from{opacity:0;transform:translateX(60px)} to{opacity:1;transform:translateX(0)} }
+          @keyframes confettiFall  { 0%{transform:translateY(-20px) rotate(0deg);opacity:0.9} 100%{transform:translateY(110vh) rotate(720deg);opacity:0} }
+          @keyframes ticketIn      { from{opacity:0;transform:translateY(10px) scale(0.96)} to{opacity:1;transform:translateY(0) scale(1)} }
 
-        /* Premium additions */
-        @keyframes shimmer {
-          0%   { background-position: 0%   center; }
-          100% { background-position: 200% center; }
-        }
-        @keyframes marqueeScroll {
-          from { transform: translateX(0); }
-          to   { transform: translateX(-33.333%); }
-        }
-        @keyframes float {
-          0%,100% { transform: translateY(0px); }
-          50%     { transform: translateY(-10px); }
-        }
-        @keyframes borderGlow {
-          0%,100% { box-shadow: 0 0 20px ${B.amber}30; }
-          50%     { box-shadow: 0 0 40px ${B.amber}55, 0 0 80px ${B.amber}20; }
-        }
-        @keyframes scanUp {
-          from { transform: translateY(100%); }
-          to   { transform: translateY(-100%); }
-        }
-      `}</style>
+          /* Premium additions */
+          @keyframes shimmer {
+            0%   { background-position: 0%   center; }
+            100% { background-position: 200% center; }
+          }
+          @keyframes marqueeScroll {
+            from { transform: translateX(0); }
+            to   { transform: translateX(-33.333%); }
+          }
+          @keyframes float {
+            0%,100% { transform: translateY(0px); }
+            50%     { transform: translateY(-10px); }
+          }
+          @keyframes borderGlow {
+            0%,100% { box-shadow: 0 0 20px ${B.amber}30; }
+            50%     { box-shadow: 0 0 40px ${B.amber}55, 0 0 80px ${B.amber}20; }
+          }
+          @keyframes scanUp {
+            from { transform: translateY(100%); }
+            to   { transform: translateY(-100%); }
+          }
+        `}</style>
 
-      <CustomCursor />
-      <SocialProof />
-      <ScrollProgress />
-      <SplashScreen />
-      <Navbar />
-      <SocialDock />
-      <AIChat />
-      <BackToTop />
-      <WhatsAppButton />
-      <ShareButton />
-      <MobileCTA />
-      <StreakToast />
-      <LevelUpToast />
-      <KonamiCode />
+        <CustomCursor />
+        <SocialProof />
+        <ScrollProgress />
+        <SplashScreen />
+        <Navbar />
+        <SocialDock />
+        <AIChat />
+        <BackToTop />
+        <WhatsAppButton />
+        <ShareButton />
+        <MobileCTA />
+        <StreakToast />
+        <LevelUpToast />
+        <KonamiCode />
 
-      <Hero />
-      <EventTicker />
-      <Stats />
+        <Hero />
+        <EventTicker />
+        <Stats />
 
-      <Reveal><About /></Reveal>
-      <Reveal><OriginStory /></Reveal>
-      <Reveal><FridayNightProtocol /></Reveal>
-      <Reveal><Press /></Reveal>
-      <Reveal><Sponsors /></Reveal>
-      <Reveal><SponsorTiers /></Reveal>
-      <Reveal><Highlights /></Reveal>
-      <Reveal><Community /></Reveal>
-      <Reveal><Testimonials /></Reveal>
-      <Reveal><Passport /></Reveal>
-      <Reveal><SneakerDNA /></Reveal>
-      <Reveal><SoleOfLagos /></Reveal>
-      <Reveal><CultureHistory /></Reveal>
-      <Reveal><CultureMuseum /></Reveal>
-      <Reveal><SneakerBible /></Reveal>
-      <Reveal><CommunityWall /></Reveal>
-      <Reveal><SneakerTrivia /></Reveal>
-      <Reveal><MemoryMatch /></Reveal>
-      <Reveal><Soledle /></Reveal>
-      <Reveal><ShoeColorizer /></Reveal>
-      <Reveal><OutfitMatcher /></Reveal>
-      <Reveal><HypeCounter /></Reveal>
-      <Reveal><SpinWheel /></Reveal>
-      <Reveal><CrewVoteOff /></Reveal>
-      <Reveal><BadgeMaker /></Reveal>
-      <Reveal><MysteryDrop /></Reveal>
-      <Reveal><SneakerWorth /></Reveal>
-      <Reveal><SneakerBingo /></Reveal>
-      <Reveal><ArtistSpotlight /></Reveal>
-      <Reveal><DropsTimeline /></Reveal>
-      <Reveal><EarlyAccess /></Reveal>
-      <Reveal><Comics /></Reveal>
-      <Reveal><Gallery /></Reveal>
-      <Reveal><TradeBoard /></Reveal>
-      <Reveal><Leaderboard /></Reveal>
-      <Reveal><EggHuntTracker /></Reveal>
-      <Reveal><PhotoTools /></Reveal>
-      <Reveal><Newsletter /></Reveal>
-      <Reveal><Lineup /></Reveal>
-      <Reveal><Schedule /></Reveal>
-      <Reveal><Venue /></Reveal>
-      <Reveal><Merch /></Reveal>
-      <Reveal><Raffle /></Reveal>
-      <Reveal><Countdown /></Reveal>
-      <Reveal><Tickets /></Reveal>
-      <Reveal><VendorReg /></Reveal>
-      <Reveal><FAQ /></Reveal>
-      <Reveal><Contact /></Reveal>
-      <Reveal><Footer /></Reveal>
-    </div>
+        <Reveal><About /></Reveal>
+        <Reveal><OriginStory /></Reveal>
+        <Reveal><FridayNightProtocol /></Reveal>
+        <Reveal><Press /></Reveal>
+        <Reveal><Sponsors /></Reveal>
+        <Reveal><SponsorTiers /></Reveal>
+        <Reveal><Highlights /></Reveal>
+        <Reveal><Community /></Reveal>
+        <Reveal><Testimonials /></Reveal>
+        <Reveal><Passport /></Reveal>
+        <Reveal><SneakerDNA /></Reveal>
+        <Reveal><SoleOfLagos /></Reveal>
+        <Reveal><CultureHistory /></Reveal>
+        <Reveal><CultureMuseum /></Reveal>
+        <Reveal><ArchitectVault /></Reveal>
+        <Reveal><SneakerBible /></Reveal>
+        <Reveal><CommunityWall /></Reveal>
+        <Reveal><SneakerTrivia /></Reveal>
+        <Reveal><MemoryMatch /></Reveal>
+        <Reveal><Soledle /></Reveal>
+        <Reveal><ShoeColorizer /></Reveal>
+        <Reveal><OutfitMatcher /></Reveal>
+        <Reveal><HypeCounter /></Reveal>
+        <Reveal><SpinWheel /></Reveal>
+        <Reveal><CrewVoteOff /></Reveal>
+        <Reveal><BadgeMaker /></Reveal>
+        <Reveal><MysteryDrop /></Reveal>
+        <Reveal><SneakerWorth /></Reveal>
+        <Reveal><SneakerBingo /></Reveal>
+        <Reveal><ArtistSpotlight /></Reveal>
+        <Reveal><DropsTimeline /></Reveal>
+        <Reveal><EarlyAccess /></Reveal>
+        <Reveal><Comics /></Reveal>
+        <Reveal><Gallery /></Reveal>
+        <Reveal><TradeBoard /></Reveal>
+        <Reveal><Leaderboard /></Reveal>
+        <Reveal><EggHuntTracker /></Reveal>
+        <Reveal><PhotoTools /></Reveal>
+        <Reveal><Newsletter /></Reveal>
+        <Reveal><Lineup /></Reveal>
+        <Reveal><Schedule /></Reveal>
+        <Reveal><Venue /></Reveal>
+        <Reveal><Merch /></Reveal>
+        <Reveal><Raffle /></Reveal>
+        <Reveal><Countdown /></Reveal>
+        <Reveal><Tickets /></Reveal>
+        <Reveal><VendorReg /></Reveal>
+        <Reveal><FAQ /></Reveal>
+        <Reveal><Contact /></Reveal>
+        <Reveal><Footer /></Reveal>
+      </div>
+    </AuthProvider>
   )
 }

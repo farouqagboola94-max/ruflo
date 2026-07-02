@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { B } from '../tokens'
+import { useAuth } from '../lib/auth'
 
 const DESKTOP_LINKS = [
   { label: 'ABOUT',   href: '#about' },
@@ -25,9 +26,10 @@ const MOBILE_LINKS = [
   { label: 'MERCH',           href: '#merch',     num: '10' },
   { label: 'COMMUNITY',       href: '#community', num: '11' },
   { label: 'EARLY ACCESS',    href: '#waitlist',  num: '12' },
-  { label: 'VENDORS',         href: '#vendors',   num: '13' },
-  { label: 'FAQ',             href: '#faq',       num: '14' },
-  { label: 'CONTACT',         href: '#contact',   num: '15' },
+  { label: 'ARCHITECT VAULT', href: '#vault-200', num: '13' },
+  { label: 'VENDORS',         href: '#vendors',   num: '14' },
+  { label: 'FAQ',             href: '#faq',       num: '15' },
+  { label: 'CONTACT',         href: '#contact',   num: '16' },
 ]
 
 export default function Navbar() {
@@ -35,6 +37,11 @@ export default function Navbar() {
   const [menuOpen,  setMenuOpen]  = useState(false)
   const [closing,   setClosing]   = useState(false)
   const [isMobile,  setIsMobile]  = useState(typeof window !== 'undefined' && window.innerWidth < 900)
+  const { user, login, logout } = useAuth()
+
+  const displayName = user
+    ? (user.user_metadata?.full_name?.split(' ')[0] || user.email?.split('@')[0] || '').toUpperCase().slice(0, 10)
+    : null
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -86,11 +93,39 @@ export default function Navbar() {
                 onMouseLeave={e => e.target.style.color = B.smoke}
               >{link.label}</a>
             ))}
+            <a href="#vault-200"
+              style={{
+                fontFamily: "'Space Mono', monospace", fontSize: 7.5, letterSpacing: '0.15em',
+                textDecoration: 'none', color: B.amber,
+                border: `1px solid ${B.amber}40`, borderRadius: 3, padding: '5px 10px',
+                transition: 'border-color 0.2s, box-shadow 0.2s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = B.amber; e.currentTarget.style.boxShadow = `0 0 12px ${B.amber}30` }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = `${B.amber}40`; e.currentTarget.style.boxShadow = 'none' }}
+            >🔐 VAULT</a>
             <a href="#tickets"
               style={{ padding: '8px 16px', background: B.amber, color: B.black, fontFamily: "'Space Mono', monospace", fontSize: 7.5, fontWeight: 700, letterSpacing: '0.15em', textDecoration: 'none', borderRadius: 2, boxShadow: `0 0 15px ${B.amber}20`, transition: 'box-shadow 0.2s' }}
               onMouseEnter={e => e.currentTarget.style.boxShadow = `0 0 30px ${B.amber}50`}
               onMouseLeave={e => e.currentTarget.style.boxShadow = `0 0 15px ${B.amber}20`}
             >GET TICKETS</a>
+            {user ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, maxWidth: 72, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{displayName}</span>
+                <button
+                  onClick={logout}
+                  style={{ background: 'transparent', border: `1px solid ${B.gunmetal}`, borderRadius: 3, padding: '5px 10px', cursor: 'pointer', fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, letterSpacing: '0.12em', transition: 'border-color 0.2s, color 0.2s' }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = '#FF2D7B'; e.currentTarget.style.color = '#FF2D7B' }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = B.gunmetal; e.currentTarget.style.color = B.smoke }}
+                >EXIT</button>
+              </div>
+            ) : (
+              <button
+                onClick={login}
+                style={{ background: 'transparent', border: `1px solid ${B.gunmetal}`, borderRadius: 3, padding: '5px 12px', cursor: 'pointer', fontFamily: "'Space Mono', monospace", fontSize: 7.5, color: B.white, letterSpacing: '0.12em', transition: 'border-color 0.2s, color 0.2s' }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = B.amber; e.currentTarget.style.color = B.amber }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = B.gunmetal; e.currentTarget.style.color = B.white }}
+              >SIGN IN</button>
+            )}
           </div>
         )}
 
@@ -139,7 +174,7 @@ export default function Navbar() {
                 style={{
                   display: 'flex', alignItems: 'center', gap: 14,
                   padding: '12px 0',
-                  color: B.white,
+                  color: link.href === '#vault-200' ? B.amber : B.white,
                   textDecoration: 'none',
                   borderBottom: `1px solid rgba(255,255,255,0.055)`,
                   animation: `navLinkIn 0.35s ease both`,
@@ -147,7 +182,7 @@ export default function Navbar() {
                   transition: 'color 0.15s, padding-left 0.18s',
                 }}
                 onMouseEnter={e => { e.currentTarget.style.color = B.amber; e.currentTarget.style.paddingLeft = '8px' }}
-                onMouseLeave={e => { e.currentTarget.style.color = B.white; e.currentTarget.style.paddingLeft = '0' }}
+                onMouseLeave={e => { e.currentTarget.style.color = link.href === '#vault-200' ? B.amber : B.white; e.currentTarget.style.paddingLeft = '0' }}
               >
                 <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: 'inherit', opacity: 0.22, letterSpacing: '0.1em', minWidth: 24 }}>{link.num}</span>
                 <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 24, color: 'inherit', letterSpacing: '0.04em', flex: 1 }}>{link.label}</span>
@@ -160,6 +195,7 @@ export default function Navbar() {
             marginTop: 28,
             animation: `navLinkIn 0.35s ease both`,
             animationDelay: `${MOBILE_LINKS.length * 28 + 60}ms`,
+            display: 'flex', flexDirection: 'column', gap: 10,
           }}>
             <a
               href="#tickets"
@@ -176,7 +212,36 @@ export default function Navbar() {
               <span>GET TICKETS</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke={B.black} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </a>
-            <div style={{ marginTop: 14, fontFamily: "'Space Mono', monospace", fontSize: 7, color: '#1e1e1e', letterSpacing: '0.22em', textAlign: 'center' }}>
+            {user ? (
+              <button
+                onClick={() => { logout(); close() }}
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  padding: '14px 22px',
+                  background: 'transparent',
+                  border: '1px solid rgba(255,45,123,0.4)',
+                  borderRadius: 6,
+                  color: '#FF2D7B',
+                  fontFamily: "'Space Mono', monospace", fontSize: 10, fontWeight: 700,
+                  letterSpacing: '0.18em', cursor: 'pointer',
+                }}
+              >SIGN OUT ({displayName})</button>
+            ) : (
+              <button
+                onClick={() => { login(); close() }}
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  padding: '14px 22px',
+                  background: 'transparent',
+                  border: `1px solid ${B.amber}50`,
+                  borderRadius: 6,
+                  color: B.amber,
+                  fontFamily: "'Space Mono', monospace", fontSize: 10, fontWeight: 700,
+                  letterSpacing: '0.18em', cursor: 'pointer',
+                }}
+              >SIGN IN / REGISTER</button>
+            )}
+            <div style={{ marginTop: 4, fontFamily: "'Space Mono', monospace", fontSize: 7, color: '#1e1e1e', letterSpacing: '0.22em', textAlign: 'center' }}>
               DEC 12, 2026 · MURI OKUNOLA PARK · LAGOS
             </div>
           </div>

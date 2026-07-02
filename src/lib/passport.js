@@ -1,6 +1,23 @@
-// Sneaker Passport — unified XP/tier system shared across all interactive sections
-const KEY = 'sf26_passport'
+const ANON_KEY = 'sf26_passport'
 const EVENT = 'sf26:xp'
+
+let _userEmail = null
+
+export function setPassportUser(email) {
+  _userEmail = email || null
+  if (_userEmail) {
+    const userKey = `sf26_passport_${_userEmail}`
+    try {
+      if (!localStorage.getItem(userKey) && localStorage.getItem(ANON_KEY)) {
+        localStorage.setItem(userKey, localStorage.getItem(ANON_KEY))
+      }
+    } catch { /* ignore */ }
+  }
+}
+
+function getKey() {
+  return _userEmail ? `sf26_passport_${_userEmail}` : ANON_KEY
+}
 
 export const TIERS = [
   { name: 'Rookie',         min: 0,    color: '#8A8A8A' },
@@ -10,37 +27,32 @@ export const TIERS = [
   { name: 'Catalyst Elite', min: 3000, color: '#B8FF00' },
 ]
 
-// Single source of truth for every XP reward on the site. Sections import
-// from here instead of hardcoding numbers so the economy stays consistent
-// and the Passport's "Ways to Earn" list never drifts out of sync.
 export const XP_VALUES = {
-  miniPeek: 20,          // Mystery Drop hover/peek
-  quickTask: 50,          // Badge Maker, Outfit Matcher, Raffle entry
-  spinLose: 15,           // Spin to Win — "try again" consolation
-  spinWin: 150,           // Spin to Win — real prize
-  contribution: 100,      // Community Wall post, Gallery upload
-  bigCommitment: 200,     // Museum bid
-  triviaPerCorrect: 100,  // Sneaker Trivia — base XP per correct answer
-  triviaQuestions: 10,    // Sneaker Trivia — total questions per run
-  engagementBonus: 75,    // Daily combo bonus — playing multiple different games in one day
-  engagementTarget: 3,    // Distinct activities needed in a day to trigger the combo bonus
-  memoryMatch: 80,        // Sole Memory — base reward for clearing the board (scales down with extra moves)
-  soledleWin: 120,        // Soledle — base reward for solving the daily puzzle (scales down with guesses used)
-  vote: 10,               // Crew Vote-Off — XP per vote, capped per day
-  voteDailyCap: 10,       // Crew Vote-Off — max XP-earning votes per day
-  bingoLine: 60,          // Sneaker Bingo — XP per completed row/column/diagonal
-  bingoFull: 300,         // Sneaker Bingo — bonus for completing the full card
-  easterEgg: 40,          // Easter Egg Hunt — XP per hidden egg found (100 scattered across the site)
-  referralXP: 100,        // Referral — flat XP when someone you invited engages (signup/entry/registration)
-  referralPurchaseBonus: 250, // Referral — extra bonus XP when your referral buys a ticket
+  miniPeek: 20,
+  quickTask: 50,
+  spinLose: 15,
+  spinWin: 150,
+  contribution: 100,
+  bigCommitment: 200,
+  triviaPerCorrect: 100,
+  triviaQuestions: 10,
+  engagementBonus: 75,
+  engagementTarget: 3,
+  memoryMatch: 80,
+  soledleWin: 120,
+  vote: 10,
+  voteDailyCap: 10,
+  bingoLine: 60,
+  bingoFull: 300,
+  easterEgg: 40,
+  referralXP: 100,
+  referralPurchaseBonus: 250,
 }
 
-// Sneaker Trivia awards a streak multiplier on top of the per-question base.
 export function triviaStreakMultiplier(streak) {
   return streak >= 5 ? 3 : streak >= 3 ? 2 : 1
 }
 
-// Max XP obtainable from a single perfect Sneaker Trivia run (all correct, streak maxed).
 export const TRIVIA_MAX_XP = (() => {
   let total = 0, streak = 0
   for (let i = 0; i < XP_VALUES.triviaQuestions; i++) {
@@ -50,9 +62,6 @@ export const TRIVIA_MAX_XP = (() => {
   return total
 })()
 
-// ── Card leveling — a granular, game-style progression layered on top of tiers.
-// Tiers are the "rank category" (Rookie → Catalyst Elite); Levels are the
-// number that climbs every LEVEL_XP_STEP XP, giving constant forward motion.
 export const LEVEL_XP_STEP = 150
 export const MAX_LEVEL = 50
 
@@ -64,20 +73,18 @@ export function getLevel(xp) {
   return { level, pct, xpToNext: level >= MAX_LEVEL ? 0 : ceil - xp }
 }
 
-// The top N collectors by total XP win grand prizes at the event.
 export const GRAND_PRIZE_RANK = 5
 
 function read() {
-  try { return JSON.parse(localStorage.getItem(KEY)) || { xp: 0, badges: [], log: [] } }
+  try { return JSON.parse(localStorage.getItem(getKey())) || { xp: 0, badges: [], log: [] } }
   catch { return { xp: 0, badges: [], log: [] } }
 }
 
 function write(state, meta = {}) {
-  localStorage.setItem(KEY, JSON.stringify(state))
+  localStorage.setItem(getKey(), JSON.stringify(state))
   window.dispatchEvent(new CustomEvent(EVENT, { detail: { ...state, ...meta } }))
 }
 
-// Pulls in XP from features that pre-date the passport so no history is lost.
 function backfill(state) {
   if (state.backfilled) return state
   try {
@@ -113,7 +120,6 @@ export function addXP(amount, source, badge) {
   state.log = [...(state.log || []), { amount, source, at: Date.now() }].slice(-50)
   if (badge && !state.badges.includes(badge)) state.badges = [...state.badges, badge]
 
-  // Daily engagement combo — reward variety (different games/activities), not just grinding one.
   const today = new Date().toISOString().slice(0, 10)
   if (state.dailyEngagement?.date !== today) {
     state.dailyEngagement = { date: today, sources: [] }
