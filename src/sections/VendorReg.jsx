@@ -161,13 +161,40 @@ export default function VendorReg() {
     setStatus('loading')
     const payload = { ...form, applicationId:id, _subject:`Vendor Application [${id}] — ${form.business}` }
     let ok = false
-    if (BACKEND_URL) {
-      try { const r = await fetch(`${BACKEND_URL}/api/vendor-applications`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) }); ok = r.ok } catch {}
+
+    // Netlify Forms — primary path; works on Netlify with no API key required
+    try {
+      const nlBody = new URLSearchParams({
+        'form-name': 'vendor-registration',
+        'bot-field': '',
+        business: form.business,
+        contact: form.contact,
+        email: form.email,
+        phone: form.phone,
+        category: form.category,
+        booth: form.booth,
+        instagram: form.instagram || '',
+        twitter: form.twitter || '',
+        website: form.website || '',
+        bio: form.bio,
+        applicationId: id,
+      })
+      const r = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: nlBody.toString(),
+      })
+      if (r.ok) ok = true
+    } catch {}
+
+    if (!ok && BACKEND_URL) {
+      try { const r = await fetch(`${BACKEND_URL}/api/vendor-applications`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) }); if (r.ok) ok = true } catch {}
     }
     if (!ok && FORMSPREE) {
-      try { const r = await fetch(`https://formspree.io/f/${FORMSPREE}`, { method:'POST', headers:{'Content-Type':'application/json', Accept:'application/json'}, body:JSON.stringify(payload) }); ok = r.ok } catch {}
+      try { const r = await fetch(`https://formspree.io/f/${FORMSPREE}`, { method:'POST', headers:{'Content-Type':'application/json', Accept:'application/json'}, body:JSON.stringify(payload) }); if (r.ok) ok = true } catch {}
     }
-    if (ok || (!BACKEND_URL && !FORMSPREE)) {
+
+    if (ok) {
       const matched = BOOTHS.find(b => form.booth === b.id)
       if (matched) {
         const next = { ...taken, [matched.id]: (taken[matched.id] || 0) + 1 }
@@ -208,7 +235,7 @@ export default function VendorReg() {
             CLAIM YOUR<br /><span style={{ color:B.neonCyan }}>BOOTH</span>
           </div>
           <div style={{ fontFamily:"'Syne', sans-serif", fontSize:14, color:B.smoke, lineHeight:1.7, maxWidth:520, margin:'0 auto' }}>
-            Year 1 is invitation-curated. We’re confirming the first cohort of 30 vendors before announcing publicly. If you sell in the sneaker culture ecosystem — kicks, apparel, art, customs — this is your room.
+            Year 1 is invitation-curated. We're confirming the first cohort of 30 vendors before announcing publicly. If you sell in the sneaker culture ecosystem — kicks, apparel, art, customs — this is your room.
           </div>
         </div>
 
