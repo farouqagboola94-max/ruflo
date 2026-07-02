@@ -1,38 +1,44 @@
-import netlifyIdentity from 'netlify-identity-widget'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { setPassportUser } from './passport'
 
-netlifyIdentity.init()
+// netlify-identity-widget is loaded via CDN script tag in index.html
+// (blocking script, so window.netlifyIdentity is available before this module runs)
+const ni = window.netlifyIdentity
+
+if (ni) {
+  ni.init()
+}
 
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(() => netlifyIdentity.currentUser())
+  const [user, setUser] = useState(() => ni?.currentUser() ?? null)
 
   useEffect(() => {
     setPassportUser(user?.email ?? null)
   }, [user])
 
   useEffect(() => {
-    const onLogin = u => { setUser(u); netlifyIdentity.close() }
+    if (!ni) return
+    const onLogin = u => { setUser(u); ni.close() }
     const onLogout = () => setUser(null)
     const onInit = u => setUser(u)
-    netlifyIdentity.on('login', onLogin)
-    netlifyIdentity.on('logout', onLogout)
-    netlifyIdentity.on('init', onInit)
+    ni.on('login', onLogin)
+    ni.on('logout', onLogout)
+    ni.on('init', onInit)
     return () => {
-      netlifyIdentity.off('login', onLogin)
-      netlifyIdentity.off('logout', onLogout)
-      netlifyIdentity.off('init', onInit)
+      ni.off('login', onLogin)
+      ni.off('logout', onLogout)
+      ni.off('init', onInit)
     }
   }, [])
 
   return (
     <AuthContext.Provider value={{
       user,
-      login: () => netlifyIdentity.open('login'),
-      signup: () => netlifyIdentity.open('signup'),
-      logout: () => netlifyIdentity.logout(),
+      login:  () => ni?.open('login'),
+      signup: () => ni?.open('signup'),
+      logout: () => ni?.logout(),
     }}>
       {children}
     </AuthContext.Provider>
