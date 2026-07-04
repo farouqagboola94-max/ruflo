@@ -6,30 +6,281 @@
   <title>Za.allyErrands — Admin Node</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="admin.css" />
-
-  <!-- Replace with your real Supabase credentials -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <script>
     window.ZA_SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
-    window.ZA_SERVICE_KEY  = 'YOUR_SUPABASE_ANON_KEY'; // use service_role key server-side only; anon ok here if RLS allows
+    window.ZA_SERVICE_KEY  = 'YOUR_SUPABASE_ANON_KEY';
   </script>
+  <style>
+    :root{
+      --bg:#07091A;--bg2:#0C0F2A;
+      --surface:rgba(255,255,255,.04);--border:rgba(255,255,255,.08);
+      --orange:#FF4500;--gold:#F5A623;--blue:#00D4FF;--green:#00FF88;--red:#FF4466;--purple:#9C6EF8;
+      --text:rgba(255,255,255,.9);--muted:rgba(255,255,255,.5);
+      --oz:linear-gradient(135deg,#FF4500,#F5A623);
+      --sidebar-w:220px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    [hidden]{display:none!important}
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+    /* PIN GATE */
+    .pin-gate{
+      position:fixed;inset:0;background:var(--bg);
+      display:flex;align-items:center;justify-content:center;
+      z-index:100;padding:24px;
+    }
+    .pin-box{
+      max-width:380px;width:100%;
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:20px;padding:48px 36px;text-align:center;
+    }
+    .pin-icon{font-size:2.8rem;margin-bottom:20px}
+    .pin-box h1{
+      font-family:'Bebas Neue',sans-serif;font-size:2.8rem;margin-bottom:8px;
+      background:var(--oz);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .pin-box>p{font-size:.85rem;color:var(--muted);line-height:1.6;margin-bottom:28px}
+    .pin-input{
+      width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);
+      border-radius:10px;padding:16px;text-align:center;
+      font-family:'Plus Jakarta Sans',sans-serif;font-size:1.4rem;letter-spacing:.4em;
+      color:var(--text);outline:none;margin-bottom:14px;transition:border-color .2s;
+    }
+    .pin-input:focus{border-color:var(--orange)}
+    .pin-input.error{border-color:var(--red);animation:shake .3s ease}
+    @keyframes shake{0%,100%{transform:none}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+    .pin-hint{font-size:.72rem;color:var(--muted);margin-top:12px}
+    .pin-hint code{background:rgba(255,255,255,.08);padding:2px 6px;border-radius:4px;color:var(--orange)}
+
+    /* BUTTONS */
+    .btn{
+      font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.82rem;
+      border:none;cursor:pointer;border-radius:10px;padding:12px 20px;
+      transition:all .2s;text-decoration:none;
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    }
+    .btn--hazard{background:var(--oz);color:#fff}
+    .btn--hazard:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(255,69,0,.35)}
+    .btn--ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
+    .btn--ghost:hover{border-color:var(--muted)}
+    .btn--full{width:100%}
+    .btn--sm{padding:7px 14px;font-size:.76rem}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+
+    /* LAYOUT */
+    .admin{display:flex;min-height:100vh}
+
+    /* SIDEBAR */
+    .sidebar{
+      width:var(--sidebar-w);min-height:100vh;flex-shrink:0;
+      background:var(--bg2);border-right:1px solid var(--border);
+      display:flex;flex-direction:column;position:sticky;top:0;height:100vh;
+    }
+    .sidebar__logo{
+      display:block;padding:24px 20px;text-decoration:none;
+      border-bottom:1px solid var(--border);line-height:1.2;
+    }
+    .logo-za{
+      font-family:'Bebas Neue',sans-serif;font-size:1.4rem;
+      background:var(--oz);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .logo-ally{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--text)}
+    .logo-rest{font-size:.62rem;text-transform:uppercase;letter-spacing:3px;color:var(--muted);display:block;margin-top:2px}
+    .sidebar__nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:4px}
+    .sidebar__link{
+      display:flex;align-items:center;gap:10px;padding:10px 12px;
+      border-radius:10px;text-decoration:none;color:var(--muted);font-size:.82rem;font-weight:500;
+      transition:all .2s;border:1px solid transparent;
+    }
+    .sidebar__link:hover{background:rgba(255,255,255,.04);color:var(--text)}
+    .sidebar__link--active{background:rgba(255,69,0,.1);color:var(--orange);border-color:rgba(255,69,0,.2)}
+    .sidebar__status{
+      padding:16px 20px;font-size:.72rem;color:var(--muted);
+      display:flex;align-items:center;gap:8px;border-top:1px solid var(--border);
+    }
+    .pulse-dot{
+      width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;
+      animation:pulse 1.5s infinite;
+    }
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+    .sidebar__logout{
+      margin:12px;border-radius:10px;background:transparent;border:1px solid var(--border);
+      color:var(--muted);font-size:.78rem;padding:10px;cursor:pointer;
+      font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;
+    }
+    .sidebar__logout:hover{border-color:var(--red);color:var(--red)}
+
+    /* MAIN */
+    .admin__main{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+
+    /* STATS BAR */
+    .stats-bar{
+      display:flex;align-items:center;gap:12px;padding:20px 28px;
+      border-bottom:1px solid var(--border);background:var(--bg2);flex-wrap:wrap;
+    }
+    .stat-chip{
+      display:flex;flex-direction:column;align-items:center;
+      background:var(--surface);border:1px solid var(--border);border-radius:12px;
+      padding:10px 20px;min-width:72px;
+    }
+    .stat-chip--orange{border-color:rgba(255,69,0,.25);background:rgba(255,69,0,.06)}
+    .stat-chip--green{border-color:rgba(0,255,136,.2);background:rgba(0,255,136,.05)}
+    .stat-chip__num{
+      font-family:'Bebas Neue',sans-serif;font-size:1.8rem;line-height:1;
+      background:var(--oz);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .stat-chip--green .stat-chip__num{background:none;-webkit-text-fill-color:var(--green)}
+    .stat-chip__label{font-size:.58rem;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-top:3px}
+    .stats-bar__live{
+      margin-left:auto;display:flex;align-items:center;gap:6px;
+      font-size:.65rem;text-transform:uppercase;letter-spacing:3px;color:var(--green);
+    }
+
+    /* VIEWS */
+    .view{padding:28px;flex:1}
+    .view__header{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:16px;margin-bottom:24px;flex-wrap:wrap;
+    }
+    .view__header h2{font-family:'Bebas Neue',sans-serif;font-size:2rem}
+    .view__sub{font-size:.78rem;color:var(--muted);margin-top:3px}
+    .view__filters{display:flex;gap:10px;align-items:center}
+
+    /* SELECT */
+    .a-select{
+      background:var(--surface);border:1px solid var(--border);border-radius:10px;
+      padding:9px 14px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.8rem;
+      color:var(--text);outline:none;cursor:pointer;-webkit-appearance:none;appearance:none;
+      transition:border-color .2s;
+    }
+    .a-select:focus{border-color:var(--orange)}
+    .a-select option{background:#0C0F2A;color:var(--text)}
+
+    /* REQUEST CARDS */
+    .request-list{display:flex;flex-direction:column;gap:10px}
+    .req-card{
+      background:var(--surface);border:1px solid var(--border);border-radius:14px;
+      padding:20px 24px;display:grid;gap:16px;
+      grid-template-columns:auto 1fr auto;align-items:start;
+      transition:border-color .2s;
+    }
+    .req-card:hover{border-color:rgba(0,212,255,.2)}
+    .status-badge{
+      font-size:.62rem;text-transform:uppercase;letter-spacing:2px;font-weight:700;
+      padding:5px 12px;border-radius:20px;white-space:nowrap;
+    }
+    .status-badge[data-s="Pending"]{background:rgba(245,166,35,.14);color:var(--gold);border:1px solid rgba(245,166,35,.28)}
+    .status-badge[data-s="Active"]{background:rgba(0,212,255,.1);color:var(--blue);border:1px solid rgba(0,212,255,.25)}
+    .status-badge[data-s="En Route"]{background:rgba(156,110,248,.12);color:var(--purple);border:1px solid rgba(156,110,248,.28)}
+    .status-badge[data-s="Completed"]{background:rgba(0,255,136,.09);color:var(--green);border:1px solid rgba(0,255,136,.22)}
+    .status-badge[data-s="Cancelled"]{background:rgba(255,68,102,.08);color:var(--red);border:1px solid rgba(255,68,102,.22)}
+    .req-card__name{font-weight:600;font-size:.9rem;margin-bottom:5px}
+    .req-card__desc{font-size:.84rem;color:var(--muted);margin-bottom:8px;line-height:1.5}
+    .req-card__meta{display:flex;flex-wrap:wrap;gap:12px;font-size:.76rem;color:var(--muted)}
+    .req-card__meta strong{color:var(--text);font-weight:600}
+    .req-card__actions{display:flex;flex-direction:column;gap:8px;min-width:180px}
+    .a-status-select,.a-runner-select{
+      width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;
+      padding:8px 12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.78rem;
+      color:var(--text);outline:none;cursor:pointer;-webkit-appearance:none;appearance:none;
+      transition:border-color .2s;
+    }
+    .a-status-select:focus,.a-runner-select:focus{border-color:var(--orange)}
+    .a-status-select option,.a-runner-select option{background:#0C0F2A;color:var(--text)}
+    .req-card__time{font-size:.7rem;color:var(--muted);text-align:right}
+
+    /* RUNNER CARDS */
+    .runner-list{display:flex;flex-direction:column;gap:10px}
+    .runner-card{
+      background:var(--surface);border:1px solid var(--border);border-radius:14px;
+      padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;
+    }
+    .runner-card__info{flex:1}
+    .runner-card__info strong{display:block;font-size:.9rem;font-weight:600;margin-bottom:4px}
+    .runner-card__info span{font-size:.78rem;color:var(--muted)}
+    .runner-card__actions{display:flex;align-items:center;gap:12px}
+    .runner-active{
+      font-size:.62rem;text-transform:uppercase;letter-spacing:2px;font-weight:700;
+      padding:4px 10px;border-radius:20px;
+    }
+    .runner-active[data-active="true"]{background:rgba(0,255,136,.09);color:var(--green);border:1px solid rgba(0,255,136,.22)}
+    .runner-active[data-active="false"]{background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--border)}
+
+    /* RUNNER FORM */
+    .runner-form{
+      margin-top:24px;background:var(--surface);border:1px solid var(--border);
+      border-radius:16px;padding:28px 24px;
+    }
+    .runner-form h3{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;margin-bottom:20px}
+    .form-group{margin-bottom:14px}
+    .form-group label{
+      display:block;font-size:.68rem;text-transform:uppercase;letter-spacing:1px;
+      color:var(--muted);font-weight:600;margin-bottom:6px;
+    }
+    .form-group input{
+      width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);
+      border-radius:10px;padding:12px 14px;font-family:'Plus Jakarta Sans',sans-serif;
+      font-size:.88rem;color:var(--text);outline:none;transition:border-color .2s;
+    }
+    .form-group input:focus{border-color:var(--orange)}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+    /* STATS GRID */
+    .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .stat-block{
+      background:var(--surface);border:1px solid var(--border);border-radius:16px;
+      padding:28px 24px;text-align:center;
+    }
+    .stat-block__num{
+      font-family:'Bebas Neue',sans-serif;font-size:3rem;line-height:1;
+      background:var(--oz);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .stat-block__label{font-size:.68rem;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-top:8px}
+
+    /* EMPTY STATE */
+    .empty-state{
+      padding:60px 24px;text-align:center;color:var(--muted);font-size:.85rem;
+      background:var(--surface);border:1px dashed var(--border);border-radius:12px;
+    }
+
+    /* TOAST (injected by admin.js) */
+    .a-toast{
+      position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+      background:rgba(30,35,70,.95);backdrop-filter:blur(20px);
+      border:1px solid var(--border);border-radius:12px;
+      padding:12px 24px;font-size:.82rem;color:var(--text);
+      opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap;
+    }
+    .a-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .a-toast--ok{border-color:rgba(0,255,136,.3);color:var(--green)}
+    .a-toast--err{border-color:rgba(255,68,102,.3);color:var(--red)}
+
+    @media(max-width:768px){
+      .sidebar{width:60px}
+      .sidebar__logo,.sidebar__status,.sidebar__logout{display:none}
+      .sidebar__link span{display:none}
+      .req-card{grid-template-columns:1fr;gap:12px}
+      .req-card__actions{min-width:0}
+      .stats-grid{grid-template-columns:1fr 1fr}
+      .form-row{grid-template-columns:1fr}
+    }
+  </style>
 </head>
 <body>
 
-  <!-- PIN GATE -->
   <section class="pin-gate" id="pinGate">
     <div class="pin-box">
       <div class="pin-icon">&#128274;</div>
       <h1>Admin Node</h1>
-      <p>Za.allyErrands operations control. Enter your access PIN.</p>
+      <p>Za.allyErrands operations control. Enter your access PIN to continue.</p>
       <form id="pinForm">
         <input
           type="password"
           id="pinInput"
           class="pin-input"
           maxlength="8"
-          placeholder="— — — — — —"
+          placeholder="&bull; &bull; &bull; &bull; &bull; &bull;"
           autocomplete="current-password"
           required
         />
@@ -39,13 +290,11 @@
     </div>
   </section>
 
-  <!-- ADMIN DASHBOARD -->
   <div class="admin" id="adminDash" hidden>
 
-    <!-- Sidebar -->
     <aside class="sidebar">
       <a href="../index.html" class="sidebar__logo">
-        <span class="logo-za">Za.</span><span class="logo-ally">ally</span><br />
+        <span class="logo-za">Za.</span><span class="logo-ally">ally</span>
         <span class="logo-rest">Admin Node</span>
       </a>
       <nav class="sidebar__nav">
@@ -56,42 +305,41 @@
       </nav>
       <div class="sidebar__status">
         <span class="pulse-dot"></span>
-        <span id="sidebarStatus">Connecting...</span>
+        <span id="sidebarStatus">Connecting&hellip;</span>
       </div>
       <button class="sidebar__logout" id="adminLogout">Log Out</button>
     </aside>
 
-    <!-- Main content -->
     <main class="admin__main">
 
-      <!-- Stats bar -->
       <div class="stats-bar" id="statsBar">
         <div class="stat-chip">
           <span class="stat-chip__num" id="statPending">0</span>
-          <span class="stat-chip__label">PENDING</span>
+          <span class="stat-chip__label">Pending</span>
         </div>
         <div class="stat-chip stat-chip--orange">
           <span class="stat-chip__num" id="statActive">0</span>
-          <span class="stat-chip__label">ACTIVE</span>
+          <span class="stat-chip__label">Active</span>
         </div>
         <div class="stat-chip stat-chip--green">
           <span class="stat-chip__num" id="statDone">0</span>
-          <span class="stat-chip__label">DONE TODAY</span>
+          <span class="stat-chip__label">Done Today</span>
         </div>
         <div class="stat-chip">
           <span class="stat-chip__num" id="statTotal">0</span>
-          <span class="stat-chip__label">TOTAL</span>
+          <span class="stat-chip__label">Total</span>
         </div>
         <div class="stats-bar__live">
           <span class="pulse-dot"></span> LIVE
         </div>
       </div>
 
-      <!-- Views -->
       <div id="viewQueue" class="view">
         <div class="view__header">
-          <h2>Live Queue</h2>
-          <span class="view__sub">Pending &amp; Active requests requiring action</span>
+          <div>
+            <h2>Live Queue</h2>
+            <div class="view__sub">Pending &amp; Active requests requiring action</div>
+          </div>
         </div>
         <div class="request-list" id="queueList">
           <div class="empty-state">No pending requests. System is clear.</div>
@@ -113,7 +361,7 @@
           </div>
         </div>
         <div class="request-list" id="allList">
-          <div class="empty-state">Loading...</div>
+          <div class="empty-state">Loading&hellip;</div>
         </div>
       </div>
 
@@ -125,7 +373,6 @@
         <div class="runner-list" id="runnerList">
           <div class="empty-state">No runners registered yet.</div>
         </div>
-        <!-- Add runner form -->
         <div class="runner-form" id="runnerForm" hidden>
           <h3>New Runner</h3>
           <div class="form-row">
@@ -133,7 +380,7 @@
             <div class="form-group"><label>Phone</label><input type="tel" id="rPhone" placeholder="+234 800 000 0000" /></div>
           </div>
           <div class="form-group"><label>Zone</label><input type="text" id="rZone" placeholder="e.g. Lagos Island" /></div>
-          <div class="form-row">
+          <div class="form-row" style="margin-top:8px">
             <button class="btn btn--hazard" id="saveRunner">Save Runner</button>
             <button class="btn btn--ghost" id="cancelRunner">Cancel</button>
           </div>
@@ -143,14 +390,13 @@
       <div id="viewStats" class="view" hidden>
         <div class="view__header"><h2>Stats</h2></div>
         <div class="stats-grid" id="statsGrid">
-          <div class="empty-state">Loading analytics...</div>
+          <div class="empty-state">Loading analytics&hellip;</div>
         </div>
       </div>
 
     </main>
   </div>
 
-  <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="admin.js"></script>
 </body>
