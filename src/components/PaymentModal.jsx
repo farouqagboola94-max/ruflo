@@ -1,9 +1,8 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { B } from '../tokens'
 
 const PAYSTACK_KEY = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || ''
 const FLW_KEY      = import.meta.env.VITE_FLUTTERWAVE_PUBLIC_KEY || ''
-const BACKEND_URL  = import.meta.env.VITE_BACKEND_URL || ''
 
 const parseNaira = (str) => parseInt(str.replace(/[₦,\s]/g, ''))
 
@@ -22,18 +21,6 @@ function saveOrder(order) {
     existing.unshift(order)
     localStorage.setItem('sf26_orders', JSON.stringify(existing.slice(0, 20)))
   } catch {}
-}
-
-async function sendTicketEmail({ name, email, tier, ref, price }) {
-  if (!BACKEND_URL) return false
-  try {
-    const r = await fetch(`${BACKEND_URL}/api/send-ticket`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, tier, ref, price, event: "Sneakers Fest '26", date: 'December 12, 2026', venue: 'Lagos, Nigeria' }),
-    })
-    return r.ok
-  } catch { return false }
 }
 
 export async function downloadTicketPNG({ name, email, tier, tierColor, ref, price }) {
@@ -170,12 +157,12 @@ export async function downloadTicketPNG({ name, email, tier, tierColor, ref, pri
   })
 }
 
-function payWithPaystack({ name, email, amount, tier, onSuccess, onError }) {
+function payWithPaystack({ name, email, amount, tier, serverRef, onSuccess, onError }) {
   if (!PAYSTACK_KEY) { onError('Add VITE_PAYSTACK_PUBLIC_KEY in Netlify → Environment Variables.'); return }
   if (!window.PaystackPop) { onError('Paystack SDK failed to load. Check your connection.'); return }
   const handler = window.PaystackPop.setup({
     key: PAYSTACK_KEY, email, amount: amount * 100, currency: 'NGN',
-    ref: `SF26_PS_${Date.now()}`,
+    ref: serverRef || `SF26_PS_${Date.now()}`,
     metadata: { custom_fields: [
       { display_name: 'Name',        variable_name: 'name', value: name },
       { display_name: 'Ticket Tier', variable_name: 'tier', value: tier },
@@ -268,24 +255,18 @@ export function TicketCard({ name, tier, tierColor, ticketRef, price, qrData }) 
 
 // ── PaymentModal ──────────────────────────────────────────────────────────────
 export default function PaymentModal({ tier, onClose }) {
-  const [name,     setName]     = useState('')
-  const [email,    setEmail]    = useState('')
-  const [method,   setMethod]   = useState('paystack')
-  const [loading,  setLoading]  = useState(false)
-  const [error,    setError]    = useState('')
-  const [success,  setSuccess]  = useState(null)
-  const [emailSent, setEmailSent] = useState(null)
+  const [name,        setName]        = useState('')
+  const [email,       setEmail]       = useState('')
+  const [method,      setMethod]      = useState('paystack')
+  const [loading,     setLoading]     = useState(false)
+  const [error,       setError]       = useState('')
+  const [success,     setSuccess]     = useState(null)
   const [downloading, setDownloading] = useState(false)
 
-  const amount = parseNaira(tier.price)
+  const quantity = tier.quantity || 1
+  const amount   = parseNaira(tier.price) * quantity
 
-  useEffect(() => {
-    if (!success) return
-    sendTicketEmail({ name, email, tier: tier.name, ref: success.ref, price: tier.price })
-      .then(ok => setEmailSent(ok))
-  }, [success])
-
-  function handlePay() {
+  async function handlePay() {
     if (!name.trim()) { setError('Please enter your full name.'); return }
     if (!email.trim() || !email.includes('@')) { setError('Please enter a valid email address.'); return }
     setError(''); setLoading(true)
@@ -293,13 +274,30 @@ export default function PaymentModal({ tier, onClose }) {
       name: name.trim(), email: email.trim().toLowerCase(),
       amount, tier: tier.name,
       onSuccess: (gateway, ref) => {
-        saveOrder({ name: name.trim(), email: email.trim().toLowerCase(), tier: tier.name, tierColor: tier.color, ref, price: tier.price, gateway, purchasedAt: Date.now() })
+        saveOrder({ name: name.trim(), email: email.trim().toLowerCase(), tier: tier.name, tierColor: tier.color, ref, price: tier.price, quantity, gateway, purchasedAt: Date.now() })
         setLoading(false); setSuccess({ gateway, ref })
       },
-      onError:   (msg)          => { setLoading(false); setError(msg) },
+      onError: (msg) => { setLoading(false); setError(msg) },
     }
-    if (method === 'paystack') { payWithPaystack(opts); setTimeout(() => setLoading(false), 800) }
-    else                       { payWithFlutterwave(opts); setTimeout(() => setLoading(false), 800) }
+    if (method === 'paystack') {
+      // Get a server-controlled reference so verify-payment can link the Blobs record
+      try {
+        const res = await fetch('/.netlify/functions/ticket-purchase', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: opts.name, email: opts.email, tier: tier.name.toLowerCase(), quantity }),
+        })
+        if (res.ok) {
+          const data = await res.json()
+          if (data.reference) opts.serverRef = data.reference
+        }
+      } catch {}
+      payWithPaystack(opts)
+      setTimeout(() => setLoading(false), 800)
+    } else {
+      payWithFlutterwave(opts)
+      setTimeout(() => setLoading(false), 800)
+    }
   }
 
   async function handleDownload() {
@@ -356,15 +354,9 @@ export default function PaymentModal({ tier, onClose }) {
 
             {/* Email status */}
             <div style={{ textAlign:'center' }}>
-              {emailSent === null && BACKEND_URL && (
-                <p style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#444' }}>Sending confirmation email…</p>
-              )}
-              {emailSent === true && (
-                <p style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:B.neonLime }}>✓ Confirmation sent to {email}</p>
-              )}
-              {(emailSent === false || !BACKEND_URL) && (
-                <p style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#444' }}>Screenshot or download your ticket below.</p>
-              )}
+              <p style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#444' }}>
+                A confirmation email will be sent to <span style={{ color:B.smoke }}>{email}</span>
+              </p>
             </div>
 
             {/* Download button */}
@@ -385,10 +377,12 @@ export default function PaymentModal({ tier, onClose }) {
           <div style={{ padding:24, display:'flex', flexDirection:'column', gap:16 }}>
             <div style={{ padding:'12px 16px', background:`${tier.color}08`, border:`1px solid ${tier.color}20`, borderRadius:10, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
               <div>
-                <p style={{ color:'#555', fontFamily:'Space Mono,monospace', fontSize:9, letterSpacing:1, marginBottom:2 }}>1 × {tier.name} TICKET</p>
+                <p style={{ color:'#555', fontFamily:'Space Mono,monospace', fontSize:9, letterSpacing:1, marginBottom:2 }}>{quantity} × {tier.name} TICKET</p>
                 <p style={{ color:B.smoke, fontFamily:'Space Mono,monospace', fontSize:10 }}>The Sole Exhibition · December 12 2026</p>
               </div>
-              <p style={{ color:tier.color, fontFamily:'Orbitron,sans-serif', fontSize:20, fontWeight:900, textShadow:`0 0 16px ${tier.color}60` }}>{tier.price}</p>
+              <p style={{ color:tier.color, fontFamily:'Orbitron,sans-serif', fontSize:20, fontWeight:900, textShadow:`0 0 16px ${tier.color}60` }}>
+                {quantity > 1 ? `₦${amount.toLocaleString()}` : tier.price}
+              </p>
             </div>
 
             <div>{label('FULL NAME')}<input value={name} onChange={e => setName(e.target.value)} placeholder="Your full name" style={inputStyle()} /></div>
@@ -416,7 +410,7 @@ export default function PaymentModal({ tier, onClose }) {
               style={{ padding:'15px', borderRadius:10, border:`1px solid ${loading ? 'transparent' : tier.color}`, background: loading ? '#1a1a2e' : tier.color, color: loading ? B.smoke : B.black, fontFamily:'Orbitron,sans-serif', fontSize:12, fontWeight:700, letterSpacing:2, cursor: loading ? 'not-allowed' : 'pointer', boxShadow: loading ? 'none' : `0 0 32px ${tier.color}30`, transition:'all 0.2s' }}>
               {loading
                 ? <span style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:10 }}><span style={{ width:12, height:12, border:`2px solid ${B.smoke}`, borderTopColor:'transparent', borderRadius:'50%', display:'inline-block', animation:'spin 0.8s linear infinite' }} />OPENING PAYMENT…</span>
-                : `PAY ${tier.price} →`}
+                : `PAY ₦${amount.toLocaleString()} →`}
             </button>
 
             <p style={{ color:'#333', fontFamily:'Space Mono,monospace', fontSize:9, textAlign:'center', letterSpacing:1 }}>
