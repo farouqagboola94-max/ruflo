@@ -26,7 +26,6 @@ const INTERESTS = [
 
 const CONFETTI_COLORS = [B.amber, B.neonCyan, B.neonMagenta, B.neonLime, '#ffffff']
 
-// animated counter
 function Counter({ target, duration = 1400 }) {
   const [val, setVal] = useState(0)
   const started = useRef(false)
@@ -50,7 +49,6 @@ function Counter({ target, duration = 1400 }) {
   return <span ref={ref}>{val.toLocaleString()}</span>
 }
 
-// badge SVG with glow animation
 function LoyaltyBadge({ memberNum, animate }) {
   return (
     <div style={{ position: 'relative', width: 160, height: 160, margin: '0 auto' }}>
@@ -63,19 +61,14 @@ function LoyaltyBadge({ memberNum, animate }) {
       <svg viewBox="0 0 160 160" width="160" height="160"
         style={{ animation: animate ? 'badgeIn 0.7s cubic-bezier(0.175,0.885,0.32,1.275) forwards' : 'none', filter: animate ? `drop-shadow(0 0 20px ${B.amber}80)` : 'none' }}
       >
-        {/* hexagon */}
         <polygon points="80,8 146,44 146,116 80,152 14,116 14,44" fill={`${B.amber}15`} stroke={B.amber} strokeWidth="2" />
         <polygon points="80,20 134,52 134,108 80,140 26,108 26,52" fill="none" stroke={`${B.amber}40`} strokeWidth="1" />
-        {/* inner ring */}
         <circle cx="80" cy="80" r="36" fill="none" stroke={`${B.amber}30`} strokeWidth="1" strokeDasharray="4 4" />
-        {/* crown icon */}
         <path d="M60 90 L60 75 L68 82 L80 65 L92 82 L100 75 L100 90 Z" fill={B.amber} opacity="0.9" />
-        {/* text */}
         <text x="80" y="110" textAnchor="middle" fontFamily="Orbitron,monospace" fontSize="8" fill={B.amber} letterSpacing="3" fontWeight="700">INNER CIRCLE</text>
         <text x="80" y="124" textAnchor="middle" fontFamily="Space Mono,monospace" fontSize="7" fill={`${B.amber}70`}>#{memberNum}</text>
         <text x="80" y="58" textAnchor="middle" fontFamily="Orbitron,monospace" fontSize="7" fill={`${B.amber}60`} letterSpacing="2">SF'26</text>
       </svg>
-      {/* confetti burst */}
       {animate && [...Array(14)].map((_, i) => (
         <div key={i} style={{
           position: 'absolute',
@@ -123,6 +116,19 @@ export default function Newsletter() {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: nlBody.toString(),
       })
+    } catch {}
+
+    // Netlify Function — deduplicates by email, stores in Blobs, sends welcome email
+    try {
+      const res = await fetch('/.netlify/functions/newsletter-subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name || email.split('@')[0], email, interests: [...interests] }),
+      })
+      if (res.ok) {
+        const data = await res.json()
+        if (data.memberNum) setMemberNum(data.memberNum)
+      }
     } catch {}
 
     // Listmonk (self-hosted newsletter platform)
@@ -184,7 +190,6 @@ export default function Newsletter() {
         </div>
 
         {status === 'success' ? (
-          /* ── success state ────────────────────────────────────────────────── */
           <div style={{ padding: '40px 32px', borderRadius: 20, background: `${B.amber}08`, border: `1px solid ${B.amber}30`, backdropFilter: 'blur(20px)' }}>
             <style>{`
               @keyframes successGlow { 0%,100%{opacity:0.5;} 50%{opacity:1;} }
@@ -206,7 +211,6 @@ export default function Newsletter() {
             </div>
           </div>
         ) : (
-          /* ── form ─────────────────────────────────────────────────────────────────────────────── */
           <form onSubmit={subscribe}>
             {/* interest tags */}
             <div style={{ marginBottom: 20 }}>

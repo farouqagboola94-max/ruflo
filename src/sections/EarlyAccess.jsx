@@ -37,7 +37,6 @@ function genRefCode(name) {
   return `${prefix}${rand}`
 }
 
-// ── animated number counter ──────────────────────────────────────────────────────────────────────────────
 function useCountUp(target, active) {
   const [val, setVal] = useState(0)
   const raf = useRef()
@@ -80,7 +79,7 @@ export default function EarlyAccess() {
 
     const code = genRefCode(name)
 
-    // Send to Netlify Forms — organiser receives this in the Netlify dashboard
+    // Netlify Forms — organiser receives this in the Netlify dashboard
     try {
       const body = new URLSearchParams({
         'form-name': 'waitlist',
@@ -96,7 +95,20 @@ export default function EarlyAccess() {
       })
     } catch {}
 
-    const pos  = getTotal() + Math.floor(Math.random() * 8) + 1
+    // Netlify Function — stores entry server-side, returns real queue position, sends confirmation email
+    let pos = getTotal() + Math.floor(Math.random() * 8) + 1
+    try {
+      const res = await fetch('/.netlify/functions/waitlist-signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name.trim() || 'Unknown', email: email.trim().toLowerCase(), refCode: code }),
+      })
+      if (res.ok) {
+        const data = await res.json()
+        if (data.position && typeof data.position === 'number') pos = data.position
+      }
+    } catch {}
+
     try {
       localStorage.setItem(KEY,     JSON.stringify(pos - SEED_COUNT))
       localStorage.setItem(REF_KEY, code)
@@ -159,7 +171,7 @@ export default function EarlyAccess() {
           </div>
         </div>
 
-        {/* ── FORM ── */}
+        {/* FORM */}
         {phase === 'form' && (
           <form onSubmit={submit}>
             <div style={{ display:'flex', flexDirection:'column', gap:12, marginBottom:16 }}>
@@ -182,7 +194,7 @@ export default function EarlyAccess() {
           </form>
         )}
 
-        {/* ── LOADING ── */}
+        {/* LOADING */}
         {phase === 'loading' && (
           <div style={{ textAlign:'center', padding:'40px 0' }}>
             <div style={{ width:48, height:48, borderRadius:'50%', border:`3px solid ${B.gunmetal}`, borderTop:`3px solid ${B.amber}`, margin:'0 auto 16px', animation:'spin 0.8s linear infinite' }} />
@@ -190,7 +202,7 @@ export default function EarlyAccess() {
           </div>
         )}
 
-        {/* ── DONE ── */}
+        {/* DONE */}
         {phase === 'done' && tier && (
           <div>
             {/* tier badge */}

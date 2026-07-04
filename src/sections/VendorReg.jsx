@@ -5,8 +5,7 @@ import { SOCIAL_LINKS } from '../config'
 import { logReferralConversion } from '../lib/referral'
 import Egg from '../components/Egg'
 
-const FORMSPREE   = import.meta.env.VITE_FORMSPREE_ID || ''
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL  || ''
+const FORMSPREE = import.meta.env.VITE_FORMSPREE_ID || ''
 
 const CATEGORIES = ['Sneakers', 'Apparel', 'Accessories', 'Vintage', 'Custom Art', 'Food & Beverage', 'Tech / Photography', 'Other']
 
@@ -162,7 +161,7 @@ export default function VendorReg() {
     const payload = { ...form, applicationId:id, _subject:`Vendor Application [${id}] — ${form.business}` }
     let ok = false
 
-    // Netlify Forms — primary path; works on Netlify with no API key required
+    // Netlify Forms — primary data capture; works on Netlify with no API key required
     try {
       const nlBody = new URLSearchParams({
         'form-name': 'vendor-registration',
@@ -187,9 +186,31 @@ export default function VendorReg() {
       if (r.ok) ok = true
     } catch {}
 
-    if (!ok && BACKEND_URL) {
-      try { const r = await fetch(`${BACKEND_URL}/api/vendor-applications`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) }); if (r.ok) ok = true } catch {}
-    }
+    // Netlify Function — stores in Blobs, sends confirmation email to vendor + org
+    try {
+      const r = await fetch('/.netlify/functions/vendor-apply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.contact,
+          email: form.email,
+          phone: form.phone,
+          businessName: form.business,
+          boothType: form.booth,
+          category: form.category,
+          instagram: form.instagram || '',
+          twitter: form.twitter || '',
+          website: form.website || '',
+          deckUrl: form.deckUrl || '',
+          exclusiveDrop: form.exclusiveDrop || '',
+          bio: form.bio,
+          applicationId: id,
+        }),
+      })
+      if (r.ok) ok = true
+    } catch {}
+
+    // Formspree — last resort fallback
     if (!ok && FORMSPREE) {
       try { const r = await fetch(`https://formspree.io/f/${FORMSPREE}`, { method:'POST', headers:{'Content-Type':'application/json', Accept:'application/json'}, body:JSON.stringify(payload) }); if (r.ok) ok = true } catch {}
     }
@@ -270,7 +291,6 @@ export default function VendorReg() {
               <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:B.smoke, marginTop:6 }}>Save this. Reference it in any follow-up communication.</div>
             </div>
 
-            {/* visual status pipeline */}
             <div style={{ marginBottom:28 }}>
               <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#555', letterSpacing:2, marginBottom:20 }}>APPLICATION STATUS</div>
               <div style={{ display:'flex', alignItems:'flex-start' }}>
@@ -298,7 +318,6 @@ export default function VendorReg() {
           </div>
         ) : (
           <div>
-            {/* returning applicant banner */}
             {showPrevBanner && existingApp && (
               <div style={{ marginBottom:24, background:`${B.amber}08`, border:`1px solid ${B.amber}30`, borderRadius:12, overflow:'hidden' }}>
                 <div style={{ padding:'14px 20px', display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:12 }}>
@@ -331,7 +350,6 @@ export default function VendorReg() {
               </div>
             )}
 
-            {/* step indicator */}
             <div style={{ display:'flex', alignItems:'center', gap:0, marginBottom:32 }}>
               {STEPS.map((s, i) => (
                 <div key={i} style={{ display:'flex', alignItems:'center', flex: i < STEPS.length-1 ? 1 : 0 }}>
@@ -348,12 +366,10 @@ export default function VendorReg() {
               ))}
             </div>
 
-            {/* form card */}
             <div style={{ background:'rgba(255,255,255,0.03)', backdropFilter:'blur(20px)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:16, overflow:'hidden' }}>
               <div style={{ height:3, background:`linear-gradient(90deg, ${B.neonCyan}, ${B.amber}, ${B.neonMagenta})` }} />
               <div style={{ padding:32, display:'flex', flexDirection:'column', gap:24 }}>
 
-                {/* Step 0 — Booth */}
                 {step === 0 && (
                   <div>
                     {lbl('SELECT BOOTH TYPE *')}
@@ -367,7 +383,6 @@ export default function VendorReg() {
                   </div>
                 )}
 
-                {/* Step 1 — Brand info */}
                 {step === 1 && (
                   <>
                     <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 }}>
@@ -392,7 +407,6 @@ export default function VendorReg() {
                   </>
                 )}
 
-                {/* Step 2 — Social + bio */}
                 {step === 2 && (
                   <>
                     <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 }}>
@@ -423,7 +437,6 @@ export default function VendorReg() {
                   </>
                 )}
 
-                {/* Step 3 — Review */}
                 {step === 3 && (
                   <>
                     <div style={{ fontFamily:'Orbitron,monospace', fontSize:9, color:B.amber, letterSpacing:3 }}>REVIEW YOUR APPLICATION</div>
@@ -466,7 +479,6 @@ export default function VendorReg() {
                   </>
                 )}
 
-                {/* navigation */}
                 <div style={{ display:'flex', gap:12, alignItems:'center' }}>
                   {step > 0 && (
                     <button onClick={() => setStep(s => s-1)}
@@ -512,7 +524,6 @@ export default function VendorReg() {
           </div>
         </div>
 
-        {/* FAQ */}
         <div style={{ marginTop:48 }}>
           <div style={{ fontFamily:"'Space Mono'", fontSize:8, letterSpacing:'0.4em', color:B.smoke, marginBottom:16 }}>VENDOR FAQ</div>
           {FAQ.map((f, i) => (

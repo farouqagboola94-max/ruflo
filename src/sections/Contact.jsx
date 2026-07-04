@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay } from '../components/Shared'
 import Egg from '../components/Egg'
-import { contactApi } from '../lib/api'
 
 const FORMSPREE_URL = import.meta.env.VITE_FORMSPREE_ID
   ? `https://formspree.io/f/${import.meta.env.VITE_FORMSPREE_ID}`
@@ -56,8 +55,14 @@ export default function Contact() {
       })
     } catch {}
 
-    // Backend + localStorage fallback
-    try { await contactApi.submit(payload) } catch {}
+    // Netlify Function — sends email notification to org + auto-reply to sender
+    try {
+      await fetch('/.netlify/functions/contact-form', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: payload.name, email: payload.email, phone: payload.phone, message: payload.message }),
+      })
+    } catch {}
 
     // Formspree fallback if VITE_FORMSPREE_ID is set
     if (FORMSPREE_URL) {
