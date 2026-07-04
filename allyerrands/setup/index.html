@@ -4,25 +4,32 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Za.allyErrands — Setup Wizard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --black: #080808;
-    --gray: #111111;
-    --border: #222222;
+    --bg: #07091A;
+    --bg2: #0C0F2A;
+    --surface: rgba(255,255,255,.04);
+    --border: rgba(255,255,255,.08);
     --orange: #FF4500;
+    --gold: #F5A623;
+    --blue: #00D4FF;
     --green: #00FF88;
-    --white: #F2F0EB;
-    --muted: #666666;
-    --font: 'Space Grotesk', sans-serif;
+    --red: #FF4466;
+    --white: rgba(255,255,255,.9);
+    --muted: rgba(255,255,255,.5);
+    --font: 'Plus Jakarta Sans', sans-serif;
+    --oz: linear-gradient(135deg,#FF4500,#F5A623);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { background: var(--black); color: var(--white); font-family: var(--font); }
-  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap');
+  html { min-height: 100vh; background: var(--bg); color: var(--white); font-family: var(--font); }
 
   body { max-width: 680px; margin: 0 auto; padding: 32px 20px 80px; }
 
   .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; margin-bottom: 8px; }
-  .logo span { color: var(--orange); }
+  .logo span { background: var(--oz); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
   .tagline { color: var(--muted); font-size: 13px; margin-bottom: 40px; }
 
   h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
@@ -35,28 +42,28 @@
   .step-tab.active { color: var(--orange); border-bottom-color: var(--orange); }
   .step-tab.done { color: var(--green); border-bottom-color: var(--green); }
 
-  .card { background: var(--gray); border: 1px solid var(--border); border-radius: 4px;
-    padding: 24px; margin-bottom: 16px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 24px; margin-bottom: 16px; backdrop-filter: blur(8px); }
   .card-title { font-size: 13px; font-weight: 700; text-transform: uppercase;
     letter-spacing: 1px; color: var(--orange); margin-bottom: 16px; }
 
   .field { margin-bottom: 18px; }
   label { display: block; font-size: 12px; font-weight: 600; color: var(--muted);
     text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
-  input, select { width: 100%; background: #0d0d0d; border: 1px solid var(--border);
+  input, select { width: 100%; background: rgba(0,0,0,.3); border: 1px solid var(--border);
     color: var(--white); font-family: var(--font); font-size: 14px; padding: 10px 12px;
-    border-radius: 3px; outline: none; transition: border .2s; }
+    border-radius: 8px; outline: none; transition: border .2s; }
   input:focus { border-color: var(--orange); }
   .hint { font-size: 11px; color: var(--muted); margin-top: 5px; line-height: 1.5; }
   .hint a { color: var(--orange); text-decoration: none; }
 
   .btn { display: inline-block; padding: 12px 24px; font-family: var(--font);
     font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
-    cursor: pointer; border: none; border-radius: 3px; transition: all .2s; }
-  .btn-primary { background: var(--orange); color: #000; }
-  .btn-primary:hover { background: #ff6030; }
+    cursor: pointer; border: none; border-radius: 10px; transition: all .2s; }
+  .btn-primary { background: var(--oz); color: #fff; }
+  .btn-primary:hover { opacity: .85; }
   .btn-outline { background: transparent; color: var(--orange); border: 1px solid var(--orange); }
-  .btn-outline:hover { background: var(--orange); color: #000; }
+  .btn-outline:hover { background: var(--orange); color: #fff; }
   .btn-green { background: var(--green); color: #000; }
   .btn-row { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
 
@@ -65,27 +72,27 @@
 
   .steps-list { list-style: none; counter-reset: steps; }
   .steps-list li { counter-increment: steps; display: flex; gap: 14px; margin-bottom: 16px; align-items: flex-start; }
-  .steps-list li::before { content: counter(steps); background: var(--orange); color: #000;
+  .steps-list li::before { content: counter(steps); background: var(--oz); color: #fff;
     font-weight: 700; font-size: 11px; min-width: 22px; height: 22px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
   .steps-list li p { font-size: 14px; line-height: 1.6; color: var(--white); }
   .steps-list li strong { color: var(--orange); }
 
-  code { background: #0d0d0d; border: 1px solid var(--border); border-radius: 3px;
+  code { background: rgba(0,0,0,.3); border: 1px solid var(--border); border-radius: 6px;
     padding: 2px 6px; font-family: monospace; font-size: 12px; color: var(--green); }
-  pre { background: #0d0d0d; border: 1px solid var(--border); border-radius: 3px;
+  pre { background: rgba(0,0,0,.4); border: 1px solid var(--border); border-radius: 10px;
     padding: 16px; font-family: monospace; font-size: 12px; color: var(--green);
     overflow-x: auto; white-space: pre; line-height: 1.6; margin: 12px 0; }
 
   .output-box { position: relative; }
-  .output-box textarea { width: 100%; background: #0d0d0d; border: 1px solid var(--border);
-    border-radius: 3px; color: var(--green); font-family: monospace; font-size: 11px;
+  .output-box textarea { width: 100%; background: rgba(0,0,0,.4); border: 1px solid var(--border);
+    border-radius: 10px; color: var(--green); font-family: monospace; font-size: 11px;
     padding: 16px; line-height: 1.6; resize: vertical; min-height: 320px; outline: none; }
   .copy-btn { position: absolute; top: 8px; right: 8px; padding: 5px 12px;
-    font-size: 11px; background: var(--border); color: var(--white); border: none;
-    border-radius: 3px; cursor: pointer; font-family: var(--font); }
-  .copy-btn:hover { background: var(--orange); color: #000; }
-  .copy-btn.copied { background: var(--green); color: #000; }
+    font-size: 11px; background: rgba(255,255,255,.06); color: var(--white); border: 1px solid var(--border);
+    border-radius: 6px; cursor: pointer; font-family: var(--font); transition: all .2s; }
+  .copy-btn:hover { background: var(--orange); color: #fff; border-color: var(--orange); }
+  .copy-btn.copied { background: var(--green); color: #000; border-color: var(--green); }
 
   .summary-row { display: flex; justify-content: space-between; align-items: center;
     padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
@@ -95,14 +102,14 @@
     max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
   .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
-  .alert { padding: 12px 16px; border-radius: 3px; font-size: 13px; line-height: 1.5; margin-bottom: 16px; }
-  .alert-orange { background: #2a1a00; border: 1px solid #ff4500aa; color: var(--white); }
-  .alert-green { background: #002a15; border: 1px solid #00ff8855; color: var(--white); }
+  .alert { padding: 12px 16px; border-radius: 10px; font-size: 13px; line-height: 1.5; margin-bottom: 16px; }
+  .alert-orange { background: rgba(255,69,0,.08); border: 1px solid rgba(255,69,0,.3); color: var(--white); }
+  .alert-green { background: rgba(0,255,136,.06); border: 1px solid rgba(0,255,136,.25); color: var(--white); }
 
   .scenario-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
   .scenario-tab { padding: 6px 16px; font-size: 12px; font-weight: 700; text-transform: uppercase;
     letter-spacing: .5px; border: 1px solid var(--border); background: transparent;
-    color: var(--muted); cursor: pointer; border-radius: 3px; font-family: var(--font); }
+    color: var(--muted); cursor: pointer; border-radius: 8px; font-family: var(--font); transition: all .2s; }
   .scenario-tab.active { border-color: var(--orange); color: var(--orange); }
 </style>
 </head>
@@ -320,7 +327,7 @@
       🌐 <strong>za-allyerrands.netlify.app</strong> — landing page<br>
       🗂 /portal — client order tracking<br>
       🔐 /admin — operations dashboard<br>
-      🏍 /runner — runner mobile view
+      🏙 /runner — runner mobile view
     </div>
   </div>
   <div class="btn-row">
