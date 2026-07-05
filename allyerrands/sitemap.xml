@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://zallyerrands.com/</loc>
+    <loc>https://za-allyerrands.netlify.app/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <lastmod>2026-07-05</lastmod>
   </url>
   <url>
-    <loc>https://zallyerrands.com/portal/</loc>
+    <loc>https://za-allyerrands.netlify.app/business-portal/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-07-05</lastmod>
+  </url>
+  <url>
+    <loc>https://za-allyerrands.netlify.app/api/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <lastmod>2026-07-05</lastmod>
+  </url>
+  <url>
+    <loc>https://za-allyerrands.netlify.app/errandme/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <lastmod>2026-07-05</lastmod>
   </url>
 </urlset>
