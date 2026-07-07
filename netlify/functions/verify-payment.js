@@ -44,10 +44,13 @@ export const handler = async (event) => {
     return { statusCode: 200, body: 'Already processed' }
   }
 
-  const name  = meta.name  || data.customer?.first_name || 'Guest'
-  const email = data.customer?.email
-  const tier  = meta.tier  || 'general'
-  const qty   = parseInt(meta.qty) || 1
+  // Fall back to the pending record created by ticket-purchase for reliable buyer data
+  const pending = await get(Tickets, `pending:${ref}`)
+
+  const name  = meta.name  || pending?.name  || data.customer?.first_name || 'Guest'
+  const email = data.customer?.email || pending?.email
+  const tier  = meta.tier  || pending?.tier  || 'general'
+  const qty   = parseInt(meta.qty || pending?.qty) || 1
   const tierData = getTier(tier)
 
   const ticketId = generateTicketId(tier, ref)

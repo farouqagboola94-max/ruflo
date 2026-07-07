@@ -1,5 +1,6 @@
 // POST /.netlify/functions/vendor-apply
-// Body: { business, contact, email, phone?, category?, booth?, instagram?, bio? }
+// Body: { name|contact, email, phone?, businessName|business, boothType|booth,
+//         category?, instagram?, twitter?, website?, deckUrl?, exclusiveDrop?, bio? }
 // Stores application in Blobs + sends email to vendor and organiser.
 
 import { createHash } from 'crypto'
@@ -14,7 +15,11 @@ export const handler = async (event) => {
   let body
   try { body = JSON.parse(event.body || '{}') } catch { return err(400, 'Invalid JSON') }
 
-  const { business, contact, email, phone, category, booth, instagram, bio } = body
+  // Accept both naming conventions (frontend sends name/businessName/boothType)
+  const contact      = (body.contact      || body.name         || '').trim()
+  const business     = (body.business     || body.businessName || '').trim()
+  const booth        = (body.booth        || body.boothType    || '').trim()
+  const { email, phone, category, instagram, twitter, website, deckUrl, exclusiveDrop, bio } = body
 
   if (!business || !contact || !email) return err(400, 'business, contact, and email are required')
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return err(400, 'Invalid email address')
@@ -25,16 +30,20 @@ export const handler = async (event) => {
 
   const record = {
     applicationId,
-    status: 'pending',
-    business: business.trim(),
-    contact:  contact.trim(),
-    email:    email.toLowerCase().trim(),
-    phone:    (phone    || '').trim(),
-    category: (category || '').trim(),
-    booth:    (booth    || '').trim(),
-    instagram:(instagram|| '').trim(),
-    bio:      (bio      || '').trim(),
-    submittedAt: new Date().toISOString(),
+    status:        'pending',
+    business,
+    contact,
+    email:         email.toLowerCase().trim(),
+    phone:         (phone         || '').trim(),
+    category:      (category      || '').trim(),
+    booth,
+    instagram:     (instagram     || '').trim(),
+    twitter:       (twitter       || '').trim(),
+    website:       (website       || '').trim(),
+    deckUrl:       (deckUrl       || '').trim(),
+    exclusiveDrop: (exclusiveDrop || '').trim(),
+    bio:           (bio           || '').trim(),
+    submittedAt:   new Date().toISOString(),
   }
 
   await set(Vendors, applicationId, record)
@@ -52,7 +61,11 @@ export const handler = async (event) => {
         <li><strong>Contact:</strong> ${contact}</li>
         <li><strong>Email:</strong> ${email}</li>
         <li><strong>Category:</strong> ${category || 'N/A'}</li>
-        <li><strong>Booth size:</strong> ${booth || 'N/A'}</li>
+        <li><strong>Booth:</strong> ${booth || 'N/A'}</li>
+        <li><strong>Instagram:</strong> ${instagram || 'N/A'}</li>
+        <li><strong>Twitter:</strong> ${twitter || 'N/A'}</li>
+        <li><strong>Website:</strong> ${website || 'N/A'}</li>
+        <li><strong>Exclusive Drop:</strong> ${exclusiveDrop || 'N/A'}</li>
         <li><strong>Application ID:</strong> ${applicationId}</li>
       </ul>${bio ? `<p><strong>Bio:</strong> ${bio}</p>` : ''}`
     ),

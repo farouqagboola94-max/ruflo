@@ -15,7 +15,9 @@ export const handler = async (event) => {
   let body
   try { body = JSON.parse(event.body || '{}') } catch { return err(400, 'Invalid JSON') }
 
-  const { name, email, phone, tier, qty = 1 } = body
+  // Accept both `quantity` (frontend) and `qty` (direct API callers)
+  const { name, email, phone, tier } = body
+  const qty = body.quantity ?? body.qty ?? 1
 
   if (!name || !email || !tier) return err(400, 'name, email, and tier are required')
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return err(400, 'Invalid email address')

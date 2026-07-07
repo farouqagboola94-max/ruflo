@@ -1,4 +1,4 @@
-// GET /.netlify/functions/admin?resource=summary|tickets|waitlist|vendors|newsletter
+// GET /.netlify/functions/admin?resource=summary|tickets|pending|waitlist|vendors|newsletter
 // Header: Authorization: Bearer <ADMIN_SECRET>
 // Protected admin endpoint — returns live data from Netlify Blobs.
 
@@ -19,9 +19,17 @@ export const handler = async (event) => {
   if (resource === 'tickets') {
     const all = await listAll(Tickets, 'ticket:')
     return ok({
-      tickets: all.sort((a, b) => b.confirmedAt?.localeCompare(a.confirmedAt)),
-      total:   all.length,
+      tickets:   all.sort((a, b) => b.confirmedAt?.localeCompare(a.confirmedAt)),
+      total:     all.length,
       checkedIn: all.filter(t => t.checkedIn).length,
+    })
+  }
+
+  if (resource === 'pending') {
+    const all = await listAll(Tickets, 'pending:')
+    return ok({
+      pending: all.sort((a, b) => b.createdAt?.localeCompare(a.createdAt)),
+      total:   all.length,
     })
   }
 
@@ -53,22 +61,29 @@ export const handler = async (event) => {
   ])
 
   const revenue = tickets.reduce((sum, t) => sum + (t.amountNGN || 0), 0)
+
   const tierBreakdown = tickets.reduce((acc, t) => {
-    acc[t.tier] = (acc[t.tier] || 0) + 1
+    if (!acc[t.tier]) acc[t.tier] = { count: 0, revenue: 0 }
+    acc[t.tier].count   += 1
+    acc[t.tier].revenue += t.amountNGN || 0
     return acc
   }, {})
 
+  const pending = await listAll(Tickets, 'pending:')
+
   return ok({
     summary: {
-      ticketsSold:  tickets.length,
-      checkedIn:    tickets.filter(t => t.checkedIn).length,
-      revenueNGN:   revenue,
+      ticketsSold:      tickets.length,
+      checkedIn:        tickets.filter(t => t.checkedIn).length,
+      pendingPayments:  pending.length,
+      revenueNGN:       revenue,
       revenueFormatted: `₦${revenue.toLocaleString()}`,
       tierBreakdown,
-      waitlistSize: waitlist.length,
-      vendorApps:   vendors.length,
-      pendingVendors: vendors.filter(v => v.status === 'pending').length,
-      subscribers:  newsletter.length,
+      waitlistSize:     waitlist.length,
+      vendorApps:       vendors.length,
+      pendingVendors:   vendors.filter(v => v.status === 'pending').length,
+      approvedVendors:  vendors.filter(v => v.status === 'approved').length,
+      subscribers:      newsletter.length,
     },
   })
 }

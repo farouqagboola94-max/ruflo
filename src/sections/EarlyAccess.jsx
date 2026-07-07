@@ -57,14 +57,15 @@ function useCountUp(target, active) {
 }
 
 export default function EarlyAccess() {
-  const [email,    setEmail]    = useState('')
-  const [name,     setName]     = useState('')
-  const [phase,    setPhase]    = useState('form')
-  const [position, setPosition] = useState(null)
-  const [error,    setError]    = useState('')
-  const [refCode,  setRefCode]  = useState('')
-  const [refCopied,setRefCopied]= useState(false)
-  const [shared,   setShared]   = useState(false)
+  const [email,       setEmail]       = useState('')
+  const [name,        setName]        = useState('')
+  const [phase,       setPhase]       = useState('form')
+  const [position,    setPosition]    = useState(null)
+  const [error,       setError]       = useState('')
+  const [refCode,     setRefCode]     = useState('')
+  const [refCopied,   setRefCopied]   = useState(false)
+  const [shared,      setShared]      = useState(false)
+  const [refCount,    setRefCount]    = useState(null)
 
   const animPos = useCountUp(position, phase === 'done')
 
@@ -114,6 +115,12 @@ export default function EarlyAccess() {
       localStorage.setItem(REF_KEY, code)
     } catch {}
     setPosition(pos); setRefCode(code); setPhase('done')
+
+    // Fetch live referral count for this code (fire-and-forget)
+    fetch(`/.netlify/functions/referral-stats?code=${encodeURIComponent(code)}`)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d?.referralCount != null) setRefCount(d.referralCount) })
+      .catch(() => {})
   }
 
   function copyRef() {
@@ -223,9 +230,9 @@ export default function EarlyAccess() {
             {/* context stats */}
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:12, marginBottom:24 }}>
               {[
-                { label:'AHEAD OF YOU', val:position.toLocaleString(), color:B.amber },
-                { label:'BEHIND YOU',   val:ahead.toLocaleString(),    color:B.neonCyan },
-                { label:'QUEUE FILL',   val:`${pct}%`,                 color:B.neonLime },
+                { label:'AHEAD OF YOU', val:Math.max(0, position - 1).toLocaleString(), color:B.amber },
+                { label:'BEHIND YOU',   val:ahead.toLocaleString(),                     color:B.neonCyan },
+                { label:'QUEUE FILL',   val:`${pct}%`,                                  color:B.neonLime },
               ].map(s => (
                 <div key={s.label} style={{ background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:8, padding:'12px 14px', textAlign:'center' }}>
                   <div style={{ fontFamily:"'Orbitron'", fontSize:'1.2rem', fontWeight:900, color:s.color, marginBottom:4 }}>{s.val}</div>
@@ -250,7 +257,14 @@ export default function EarlyAccess() {
             {/* referral link */}
             <div style={{ background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.07)', borderRadius:10, padding:'16px 20px', marginBottom:24 }}>
               <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color:'#555', letterSpacing:3, marginBottom:4 }}>YOUR REFERRAL LINK</div>
-              <div style={{ fontFamily:"'Space Mono'", fontSize:'0.65rem', color:B.amber, marginBottom:10 }}>Share to move up the queue</div>
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:10 }}>
+                <span style={{ fontFamily:"'Space Mono'", fontSize:'0.65rem', color:B.amber }}>Share to move up the queue</span>
+                {refCount !== null && (
+                  <span style={{ fontFamily:"'Orbitron'", fontSize:'0.7rem', color:B.neonLime, fontWeight:700 }}>
+                    {refCount} referral{refCount !== 1 ? 's' : ''}
+                  </span>
+                )}
+              </div>
               <div style={{ display:'flex', gap:8, alignItems:'center' }}>
                 <div style={{ flex:1, background:B.charcoal, border:'1px solid rgba(255,255,255,0.08)', borderRadius:6, padding:'10px 14px', fontFamily:"'Space Mono'", fontSize:'0.7rem', color:'#888', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
                   sneakersfest26.com?ref=<span style={{ color:B.amber }}>{refCode}</span>

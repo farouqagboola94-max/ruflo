@@ -1,9 +1,9 @@
 // POST /.netlify/functions/newsletter-subscribe
-// Body: { email, name? }
-// Returns: { success, alreadySubscribed? }
+// Body: { email, name?, interests? }
+// Returns: { success, alreadySubscribed?, memberNum? }
 
 import { ok, err, preflight } from './lib/cors.js'
-import { get, set, Newsletter } from './lib/storage.js'
+import { get, set, listAll, Newsletter } from './lib/storage.js'
 import { sendEmail, newsletterEmail } from './lib/email.js'
 
 export const handler = async (event) => {
@@ -13,26 +13,33 @@ export const handler = async (event) => {
   let body
   try { body = JSON.parse(event.body || '{}') } catch { return err(400, 'Invalid JSON') }
 
-  const { email, name } = body
+  const { email, name, interests } = body
   if (!email) return err(400, 'email is required')
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return err(400, 'Invalid email address')
 
-  const key = email.toLowerCase().trim()
+  const key            = email.toLowerCase().trim()
+  const cleanName      = (name || '').trim()
+  const cleanInterests = Array.isArray(interests) ? interests.slice(0, 10).map(String) : []
 
   const existing = await get(Newsletter, key)
-  if (existing) return ok({ success: true, alreadySubscribed: true })
+  if (existing) return ok({ success: true, alreadySubscribed: true, memberNum: existing.memberNum })
+
+  const all       = await listAll(Newsletter)
+  const memberNum = all.length + 1
 
   await set(Newsletter, key, {
-    name:         (name || '').trim(),
+    name:         cleanName,
     email:        key,
+    interests:    cleanInterests,
+    memberNum,
     subscribedAt: new Date().toISOString(),
   })
 
   await sendEmail({
     to: key,
     subject: "Sneakers Fest '26 — You're subscribed!",
-    html: newsletterEmail({ name: (name || '').trim() }),
+    html: newsletterEmail({ name: cleanName, interests: cleanInterests }),
   })
 
-  return ok({ success: true })
+  return ok({ success: true, memberNum })
 }

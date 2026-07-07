@@ -262,6 +262,7 @@ export default function PaymentModal({ tier, onClose }) {
   const [error,       setError]       = useState('')
   const [success,     setSuccess]     = useState(null)
   const [downloading, setDownloading] = useState(false)
+  const [paymentUrl,  setPaymentUrl]  = useState(null)
 
   const quantity = tier.quantity || 1
   const amount   = parseNaira(tier.price) * quantity
@@ -281,6 +282,7 @@ export default function PaymentModal({ tier, onClose }) {
     }
     if (method === 'paystack') {
       // Get a server-controlled reference so verify-payment can link the Blobs record
+      let serverPaymentUrl = null
       try {
         const res = await fetch('/.netlify/functions/ticket-purchase', {
           method: 'POST',
@@ -289,9 +291,11 @@ export default function PaymentModal({ tier, onClose }) {
         })
         if (res.ok) {
           const data = await res.json()
-          if (data.reference) opts.serverRef = data.reference
+          if (data.reference)   opts.serverRef = data.reference
+          if (data.payment_url) serverPaymentUrl = data.payment_url
         }
       } catch {}
+      if (serverPaymentUrl) setPaymentUrl(serverPaymentUrl)
       payWithPaystack(opts)
       setTimeout(() => setLoading(false), 800)
     } else {
@@ -404,7 +408,22 @@ export default function PaymentModal({ tier, onClose }) {
               </div>
             </div>
 
-            {error && <div style={{ padding:'10px 14px', background:'rgba(255,45,123,0.08)', border:'1px solid rgba(255,45,123,0.2)', borderRadius:8 }}><p style={{ color:B.neonMagenta, fontFamily:'Space Mono,monospace', fontSize:11 }}>{error}</p></div>}
+            {error && (
+              <div style={{ padding:'10px 14px', background:'rgba(255,45,123,0.08)', border:'1px solid rgba(255,45,123,0.2)', borderRadius:8 }}>
+                <p style={{ color:B.neonMagenta, fontFamily:'Space Mono,monospace', fontSize:11 }}>{error}</p>
+              </div>
+            )}
+
+            {/* Fallback link if popup was blocked */}
+            {paymentUrl && !success && (
+              <div style={{ padding:'10px 14px', background:'rgba(0,195,247,0.06)', border:'1px solid rgba(0,195,247,0.2)', borderRadius:8, textAlign:'center' }}>
+                <p style={{ color:'#555', fontFamily:'Space Mono,monospace', fontSize:9, marginBottom:6 }}>POPUP BLOCKED?</p>
+                <a href={paymentUrl} target="_blank" rel="noopener noreferrer"
+                  style={{ color:'#00C3F7', fontFamily:'Orbitron,sans-serif', fontSize:10, fontWeight:700, letterSpacing:1, textDecoration:'none' }}>
+                  OPEN PAYMENT PAGE →
+                </a>
+              </div>
+            )}
 
             <button onClick={handlePay} disabled={loading}
               style={{ padding:'15px', borderRadius:10, border:`1px solid ${loading ? 'transparent' : tier.color}`, background: loading ? '#1a1a2e' : tier.color, color: loading ? B.smoke : B.black, fontFamily:'Orbitron,sans-serif', fontSize:12, fontWeight:700, letterSpacing:2, cursor: loading ? 'not-allowed' : 'pointer', boxShadow: loading ? 'none' : `0 0 32px ${tier.color}30`, transition:'all 0.2s' }}>
