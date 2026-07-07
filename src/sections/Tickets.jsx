@@ -7,25 +7,25 @@ import Egg from '../components/Egg'
 
 const TIERS = [
   {
-    name: 'GENERAL', price: '₤5,000', priceNum: 5000,
+    name: 'GENERAL', price: '₦5,000', priceNum: 5000,
     tag: 'ENTRY', color: B.neonCyan,
     perks: ['Full event floor access','Vendor floor entry','Live DJ sets all day','Street food zone'],
     cta: 'BUY NOW', featured: false, avail: 820, total: 1500,
   },
   {
-    name: 'VIP', price: '₤10,000', priceNum: 10000,
+    name: 'VIP', price: '₦10,000', priceNum: 10000,
     tag: 'MOST POPULAR', color: B.amber,
     perks: ['Everything in General','VIP lounge access','Exclusive drop previews','Meet & greet access',"SF '26 merch bag"],
     cta: 'GET VIP', featured: true, avail: 143, total: 400,
   },
   {
-    name: 'VVIP', price: '₤25,000', priceNum: 25000,
+    name: 'VVIP', price: '₦25,000', priceNum: 25000,
     tag: 'EXCLUSIVE', color: B.neonMagenta,
     perks: ['Everything in VIP','Private collector room','Artist studio access','Signed memorabilia','Exclusive VVIP badge','Priority entry & exit'],
     cta: 'GO VVIP', featured: false, avail: 38, total: 150,
   },
   {
-    name: 'PHALANX', price: '₤50,000', priceNum: 50000,
+    name: 'PHALANX', price: '₦50,000', priceNum: 50000,
     tag: 'TOP TIER', color: B.neonLime,
     perks: ['Everything in VVIP','Private Phalanx lounge','Dedicated concierge host','Early entry from 11:00 AM','Exclusive badge + collectible box','Founder-level floor access'],
     cta: 'JOIN PHALANX', featured: false, avail: 12, total: 50,
@@ -305,7 +305,7 @@ export default function Tickets() {
                   onMouseEnter={e => { e.currentTarget.style.background = tier.color; e.currentTarget.style.color = B.black; e.currentTarget.style.boxShadow = `0 0 36px ${tier.color}55` }}
                   onMouseLeave={e => { e.currentTarget.style.background = tier.featured ? tier.color : 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = tier.featured ? B.black : tier.color; e.currentTarget.style.boxShadow = tier.featured ? `0 0 24px ${tier.color}35` : 'none' }}
                 >
-                  {tier.cta}{qty[tier.name] > 1 ? ` × ${qty[tier.name]} = ₤${(tier.priceNum * qty[tier.name]).toLocaleString()}` : ''}
+                  {tier.cta}{qty[tier.name] > 1 ? ` × ${qty[tier.name]} = ₦${(tier.priceNum * qty[tier.name]).toLocaleString()}` : ''}
                 </button>
               </div>
             </div>

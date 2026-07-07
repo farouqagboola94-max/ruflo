@@ -3,7 +3,7 @@
 // Protected admin endpoint — returns live data from Netlify Blobs.
 
 import { ok, err, preflight } from './lib/cors.js'
-import { listAll, Tickets, Waitlist, Vendors, Newsletter } from './lib/storage.js'
+import { listAll, Tickets, Waitlist, Vendors, Newsletter, Contacts } from './lib/storage.js'
 
 export const handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return preflight()
@@ -52,12 +52,21 @@ export const handler = async (event) => {
     return ok({ subscribers: all, total: all.length })
   }
 
+  if (resource === 'contacts') {
+    const all = await listAll(Contacts)
+    return ok({
+      contacts: all.sort((a, b) => b.submittedAt?.localeCompare(a.submittedAt)),
+      total:    all.length,
+    })
+  }
+
   // Default: summary dashboard
-  const [tickets, waitlist, vendors, newsletter] = await Promise.all([
+  const [tickets, waitlist, vendors, newsletter, contacts] = await Promise.all([
     listAll(Tickets, 'ticket:'),
     listAll(Waitlist),
     listAll(Vendors),
     listAll(Newsletter),
+    listAll(Contacts),
   ])
 
   const revenue = tickets.reduce((sum, t) => sum + (t.amountNGN || 0), 0)
@@ -84,6 +93,7 @@ export const handler = async (event) => {
       pendingVendors:   vendors.filter(v => v.status === 'pending').length,
       approvedVendors:  vendors.filter(v => v.status === 'approved').length,
       subscribers:      newsletter.length,
+      contactMessages:  contacts.length,
     },
   })
 }

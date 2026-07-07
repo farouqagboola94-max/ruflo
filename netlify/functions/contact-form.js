@@ -3,6 +3,7 @@
 // Sends notification to organiser + auto-reply to sender.
 
 import { ok, err, preflight } from './lib/cors.js'
+import { set, Contacts } from './lib/storage.js'
 import { sendEmail, notifyOrg, contactAutoReply } from './lib/email.js'
 
 export const handler = async (event) => {
@@ -16,6 +17,16 @@ export const handler = async (event) => {
   if (!name || !email || !message) return err(400, 'name, email, and message are required')
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return err(400, 'Invalid email address')
   if (message.length > 3000) return err(400, 'Message too long (max 3 000 chars)')
+
+  const submittedAt = new Date().toISOString()
+  const key = `${submittedAt.replace(/[:.]/g, '-')}-${email.toLowerCase().replace(/[^a-z0-9]/g, '')}`
+  await set(Contacts, key, {
+    name: name.trim(),
+    email: email.toLowerCase().trim(),
+    phone: (phone || '').trim(),
+    message: message.trim(),
+    submittedAt,
+  })
 
   await Promise.all([
     notifyOrg(

@@ -69,6 +69,23 @@ export default function EarlyAccess() {
 
   const animPos = useCountUp(position, phase === 'done')
 
+  useEffect(() => {
+    try {
+      const savedCode = localStorage.getItem(REF_KEY)
+      if (savedCode) {
+        const stored   = JSON.parse(localStorage.getItem(KEY) || '0')
+        const savedPos = SEED_COUNT + Number(stored)
+        setRefCode(savedCode)
+        setPosition(savedPos)
+        setPhase('done')
+        fetch(`/.netlify/functions/referral-stats?code=${encodeURIComponent(savedCode)}`)
+          .then(r => r.ok ? r.json() : null)
+          .then(d => { if (d?.referralCount != null) setRefCount(d.referralCount) })
+          .catch(() => {})
+      }
+    } catch {}
+  }, [])
+
   function getTotal() {
     try { return SEED_COUNT + Number(JSON.parse(localStorage.getItem(KEY) || '0')) } catch { return SEED_COUNT }
   }

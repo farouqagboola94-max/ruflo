@@ -6,6 +6,7 @@ export const Tickets    = () => store('sf26-tickets')
 export const Waitlist   = () => store('sf26-waitlist')
 export const Vendors    = () => store('sf26-vendors')
 export const Newsletter = () => store('sf26-newsletter')
+export const Contacts   = () => store('sf26-contacts')
 
 export async function get(storeFactory, key) {
   try {

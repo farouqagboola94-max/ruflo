@@ -14,10 +14,11 @@ export const handler = async (event) => {
   try { body = JSON.parse(event.body || '{}') } catch { return err(400, 'Invalid JSON') }
 
   const { name, email, refCode } = body
-  if (!name || !email) return err(400, 'name and email are required')
+  if (!email) return err(400, 'email is required')
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return err(400, 'Invalid email address')
 
-  const key = email.toLowerCase().trim()
+  const key       = email.toLowerCase().trim()
+  const cleanName = (name || '').trim() || key.split('@')[0]
 
   const existing = await get(Waitlist, key)
   if (existing) return ok({ success: true, alreadyRegistered: true, position: existing.position })
@@ -26,7 +27,7 @@ export const handler = async (event) => {
   const position = all.length + 1
 
   await set(Waitlist, key, {
-    name:     name.trim(),
+    name:     cleanName,
     email:    key,
     refCode:  (refCode || '').trim(),
     position,
@@ -36,7 +37,7 @@ export const handler = async (event) => {
   await sendEmail({
     to: key,
     subject: `Sneakers Fest '26 — You're on the waitlist! (#${position})`,
-    html: waitlistEmail({ name: name.trim(), position }),
+    html: waitlistEmail({ name: cleanName, position }),
   })
 
   return ok({ success: true, position })

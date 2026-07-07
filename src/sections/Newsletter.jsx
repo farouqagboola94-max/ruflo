@@ -99,8 +99,6 @@ export default function Newsletter() {
     e.preventDefault()
     if (!email) return
     setStatus('loading'); setErr('')
-    const num = Math.floor(Math.random() * 8000) + 1000
-    setMemberNum(num)
 
     // Netlify Forms — always try first (built into Netlify, no API key)
     try {
@@ -194,12 +192,12 @@ export default function Newsletter() {
             <style>{`
               @keyframes successGlow { 0%,100%{opacity:0.5;} 50%{opacity:1;} }
             `}</style>
-            <LoyaltyBadge memberNum={memberNum} animate />
+            <LoyaltyBadge memberNum={memberNum ?? '...'} animate />
             <div style={{ marginTop: 24, fontFamily: 'Bebas Neue,sans-serif', fontSize: 28, color: B.amber, letterSpacing: 3 }}>
               YOU'RE INNER CIRCLE
             </div>
             <div style={{ fontFamily: 'Space Mono,monospace', fontSize: 10, color: '#666', marginTop: 8 }}>
-              Member #{memberNum} · Check your inbox to confirm
+              {memberNum ? `Member #${memberNum}` : 'Check your inbox to confirm'}
             </div>
             <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center', gap: 16, flexWrap: 'wrap' }}>
               {['Early access unlocked', 'Drop alerts activated', 'FNP invites incoming'].map(t => (
