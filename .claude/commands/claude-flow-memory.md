@@ -1,107 +1,176 @@
 ---
 name: claude-flow-memory
-description: Interact with Claude-Flow memory system
+description: AgentDB memory system with HNSW vector search (v3.6.27)
 ---
 
-# 🧠 Claude-Flow Memory System
+# Memory System — Ruflo v3.6.27
 
-The memory system provides persistent storage for cross-session and cross-agent collaboration with CRDT-based conflict resolution.
+**AgentDB** with 384-dim ONNX embeddings (all-MiniLM-L6-v2), sql.js WASM SQLite, and HNSW vector index — 150x–12,500x faster than brute-force search.
 
-## Store Information
+---
+
+## Architecture
+
+| Component | Technology | Speed |
+|-----------|-----------|-------|
+| Vector embeddings | ONNX all-MiniLM-L6-v2 | 384 dims |
+| Storage backend | sql.js WASM SQLite | Hybrid |
+| Search index | HNSW | 150x–12,500x faster |
+| Cross-session sync | Claude Code bridge | Auto on SessionStart |
+
+---
+
+## Basic Operations
+
 ```bash
 # Store with default namespace
-./claude-flow memory store "key" "value"
+npx ruflo@latest memory store "key" "value"
 
 # Store with specific namespace
-./claude-flow memory store "architecture_decisions" "microservices with API gateway" --namespace arch
+npx ruflo@latest memory store "architecture_decisions" "microservices with API gateway" --namespace arch
+
+# Semantic search (HNSW)
+npx ruflo@latest memory search -q "authentication patterns"
+npx ruflo@latest memory search -q "API design" --namespace arch --limit 10
+
+# Stats
+npx ruflo@latest memory stats
+npx ruflo@latest memory stats --namespace project
 ```
 
-## Query Memory
+---
+
+## Claude Code ↔ AgentDB Bridge
+
 ```bash
-# Search across all namespaces
-./claude-flow memory query "authentication"
+# Import Claude Code memories into AgentDB (auto-runs on SessionStart)
+npx ruflo@latest memory import-claude
 
-# Search with filters
-./claude-flow memory query "API design" --namespace arch --limit 10
+# Import all projects
+npx ruflo@latest memory import-claude --all-projects
+
+# Bridge health check
+npx ruflo@latest memory bridge-status
+
+# Unified semantic search across all namespaces
+npx ruflo@latest memory search-unified -q "security vulnerabilities"
 ```
 
-## Memory Statistics
-```bash
-# Show overall statistics
-./claude-flow memory stats
+---
 
-# Show namespace-specific stats
-./claude-flow memory stats --namespace project
-```
+## Export / Import
 
-## Export/Import
 ```bash
 # Export all memory
-./claude-flow memory export full-backup.json
+npx ruflo@latest memory export full-backup.json
 
 # Export specific namespace
-./claude-flow memory export project-backup.json --namespace project
+npx ruflo@latest memory export project-backup.json --namespace project
 
-# Import memory
-./claude-flow memory import backup.json
+# Import
+npx ruflo@latest memory import backup.json
+
+# Cleanup old entries
+npx ruflo@latest memory cleanup --days 30
+npx ruflo@latest memory cleanup --namespace temp --days 7
 ```
 
-## Cleanup Operations
-```bash
-# Clean entries older than 30 days
-./claude-flow memory cleanup --days 30
+---
 
-# Clean specific namespace
-./claude-flow memory cleanup --namespace temp --days 7
+## Namespaces
+
+| Namespace | Purpose |
+|-----------|---------|
+| `default` | General storage |
+| `agents` | Agent state and config |
+| `tasks` | Task results |
+| `sessions` | Session history and context |
+| `swarm` | Swarm coordination and objectives |
+| `project` | Project-specific context |
+| `spec` | Requirements and specifications |
+| `arch` | Architecture decisions |
+| `impl` | Implementation notes |
+| `test` | Test results and coverage |
+| `debug` | Debug logs and fixes |
+| `agent-teams` | Shared namespace for named-agent comms |
+
+---
+
+## Programmatic API
+
+### AgentDB via `@claude-flow/memory`
+
+```typescript
+import { AgentDB } from '@claude-flow/memory';
+import { createEmbeddings } from '@claude-flow/embeddings';
+
+const db = new AgentDB();
+
+// Store with vector embedding
+await db.store({ key: 'auth_pattern', value: 'OAuth2 with PKCE', namespace: 'arch' });
+
+// Semantic search via HNSW
+const results = await db.search({ query: 'authentication', limit: 5 });
+
+// Unified search across all namespaces
+const all = await db.searchUnified({ query: 'security', limit: 10 });
 ```
 
-## 🗂️ Namespaces
-- **default** - General storage
-- **agents** - Agent-specific data and state
-- **tasks** - Task information and results
-- **sessions** - Session history and context
-- **swarm** - Swarm coordination and objectives
-- **project** - Project-specific context
-- **spec** - Requirements and specifications
-- **arch** - Architecture decisions
-- **impl** - Implementation notes
-- **test** - Test results and coverage
-- **debug** - Debug logs and fixes
+### Memory bridge tools (MCP)
 
-## 🎯 Best Practices
+| Tool | Description |
+|------|-------------|
+| `memory_import_claude` | Import Claude Code memories into AgentDB |
+| `memory_bridge_status` | Bridge health check |
+| `memory_search_unified` | Semantic search across all namespaces |
+
+---
+
+## Best Practices
 
 ### Naming Conventions
 - Use descriptive, searchable keys
-- Include timestamp for time-sensitive data
-- Prefix with component name for clarity
+- Include component prefix for clarity: `auth_`, `api_`, `test_`
+- Timestamp time-sensitive data: `perf_results_20260712`
 
 ### Organization
-- Use namespaces to categorize data
-- Store related data together
-- Keep values concise but complete
+- Use namespaces to categorize — `arch` for decisions, `spec` for requirements
+- Store related data together, keep values concise
+- Use `agent-teams` namespace for cross-agent SendMessage coordination
 
 ### Maintenance
-- Regular backups with export
-- Clean old data periodically
-- Monitor storage statistics
-- Compress large values
+- Regular backups: `npx ruflo@latest memory export project-$(date +%Y%m%d).json`
+- Clean old data: `npx ruflo@latest memory cleanup --days 30`
+- Monitor stats: `npx ruflo@latest memory stats`
+
+### Retention (from `.claude/settings.json`)
+- Short-term: 24h
+- Long-term: 30d
+
+---
 
 ## Examples
 
-### Store SPARC context:
+### Store SPARC development context
+
 ```bash
-./claude-flow memory store "spec_auth_requirements" "OAuth2 + JWT with refresh tokens" --namespace spec
-./claude-flow memory store "arch_api_design" "RESTful microservices with GraphQL gateway" --namespace arch
-./claude-flow memory store "test_coverage_auth" "95% coverage, all tests passing" --namespace test
+npx ruflo@latest memory store "spec_auth_requirements" "OAuth2 + JWT with refresh tokens" --namespace spec
+npx ruflo@latest memory store "arch_api_design" "RESTful microservices with GraphQL gateway" --namespace arch
+npx ruflo@latest memory store "test_coverage_auth" "95% coverage, all edge cases passing" --namespace test
 ```
 
-### Query project decisions:
+### Cross-agent coordination via memory
+
 ```bash
-./claude-flow memory query "authentication" --namespace arch --limit 5
-./claude-flow memory query "test results" --namespace test
+# Agent A stores findings
+npx ruflo@latest memory store "security_findings" "XSS in /api/render endpoint" --namespace swarm
+
+# Agent B retrieves and continues
+npx ruflo@latest memory search -q "security_findings" --namespace swarm
 ```
 
-### Backup project memory:
+### Backup before major work
+
 ```bash
-./claude-flow memory export project-$(date +%Y%m%d).json --namespace project
+npx ruflo@latest memory export pre-refactor-$(date +%Y%m%d).json
 ```
