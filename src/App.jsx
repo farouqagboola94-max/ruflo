@@ -1,6 +1,6 @@
 import { B, FONTS } from './tokens'
 import { useEffect } from 'react'
-import { AuthProvider } from './lib/auth'
+import { AuthProvider } from './lib/auth.jsx'
 import CustomCursor from './components/CustomCursor'
 import SocialProof from './components/SocialProof'
 import Navbar from './components/Navbar'

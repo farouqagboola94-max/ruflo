@@ -13,7 +13,7 @@ export const handler = async (event) => {
   let body
   try { body = JSON.parse(event.body || '{}') } catch { return err(400, 'Invalid JSON') }
 
-  const { name, email, refCode } = body
+  const { name, email, refCode, referredBy } = body
   if (!email) return err(400, 'email is required')
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return err(400, 'Invalid email address')
 
@@ -26,13 +26,16 @@ export const handler = async (event) => {
   const all = await listAll(Waitlist)
   const position = all.length + 1
 
-  await set(Waitlist, key, {
+  const record = {
     name:     cleanName,
     email:    key,
     refCode:  (refCode || '').trim(),
     position,
     joinedAt: new Date().toISOString(),
-  })
+  }
+  if (referredBy) record.referredBy = referredBy.trim()
+
+  await set(Waitlist, key, record)
 
   await sendEmail({
     to: key,

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag, ScanLines } from '../components/Shared'
-import { useAuth } from '../lib/auth'
+import { useAuth } from '../lib/auth.jsx'
 import AuthGate from '../components/AuthGate'
 import { getPassport, getTier, getLevel, subscribe } from '../lib/passport'
 

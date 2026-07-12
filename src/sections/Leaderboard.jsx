@@ -201,15 +201,29 @@ const TABS = [
 
 // ── main section ────────────────────────────────────────────────────────────────
 export default function Leaderboard() {
-  const [tab,       setTab]       = useState('cities')
-  const [data,      setData]      = useState(null)
-  const [ticker,    setTicker]    = useState(0)
-  const [tabKey,    setTabKey]    = useState(0)
-  const [showCount, setShowCount] = useState(10)
-  const [copied,    setCopied]    = useState(false)
+  const [tab,            setTab]            = useState('cities')
+  const [data,           setData]           = useState(null)
+  const [ticker,         setTicker]         = useState(0)
+  const [tabKey,         setTabKey]         = useState(0)
+  const [showCount,      setShowCount]      = useState(10)
+  const [copied,         setCopied]         = useState(false)
+  const [liveBoard,      setLiveBoard]      = useState([])
+  const [liveBoardReady, setLiveBoardReady] = useState(false)
   const tickRef = useRef(null)
 
   useEffect(() => { setData(readAll()) }, [])
+
+  useEffect(() => {
+    fetch('/.netlify/functions/leaderboard?limit=10')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (d?.leaderboard?.length) {
+          setLiveBoard(d.leaderboard)
+          setLiveBoardReady(true)
+        }
+      })
+      .catch(() => {})
+  }, [])
 
   useEffect(() => {
     tickRef.current = setInterval(() => setTicker(t => (t + 1) % TICKER_MSGS.length), 4000)
@@ -234,13 +248,22 @@ export default function Leaderboard() {
 
   const tabColor = { collectors:'#C084FC', cities:B.amber, gallery:B.neonCyan, traders:B.neonMagenta, museum:B.neonLime }
 
+  const collectorRows = liveBoardReady
+    ? liveBoard.map((c, i) => ({
+        rank:i+1, label:c.name, sub:`${c.tierIcon || ''} ${c.tier} · #${c.position}`,
+        metric:`${c.referralCount} REFS`, metricSub:'referrals',
+        color:'#C084FC', metricRaw:c.referralCount, delta:null,
+        grandPrize: i < GRAND_PRIZE_RANK,
+      }))
+    : COLLECTOR_SEEDS.map((c, i) => ({
+        rank:i+1, label:c.name, sub:c.city + (c.badges ? ' · ' + c.badges : ''),
+        metric:`${c.pts.toLocaleString()} PTS`, metricSub:'points',
+        color:'#C084FC', metricRaw:c.pts, delta:c.delta,
+        grandPrize: i < GRAND_PRIZE_RANK,
+      }))
+
   const buildRows = {
-    collectors: COLLECTOR_SEEDS.map((c, i) => ({
-      rank:i+1, label:c.name, sub:c.city + (c.badges ? ' · ' + c.badges : ''),
-      metric:`${c.pts.toLocaleString()} PTS`, metricSub:'points',
-      color:'#C084FC', metricRaw:c.pts, delta:c.delta,
-      grandPrize: i < GRAND_PRIZE_RANK,
-    })),
+    collectors: collectorRows,
     cities: data.cities.map((c, i) => ({
       rank:i+1, label:c.city, sub:c.state,
       metric:c.count.toLocaleString(), metricSub:'RSVPs',
@@ -278,8 +301,11 @@ export default function Leaderboard() {
   const totalWants = data.trades.reduce((s, t) => s + (t.wants || 0), 0)
   const totalBids  = data.museum.reduce((s, m) => s + (m.amount || 0), 0)
 
-  const summaryVal = { collectors:COLLECTOR_SEEDS.reduce((s,c)=>s+c.pts,0).toLocaleString(), cities:totalRSVPs.toLocaleString(), gallery:totalHeat || '—', traders:totalWants || '—', museum:totalBids ? fmt(totalBids) : '—' }
-  const summaryLbl = { collectors:'total pts banked', cities:'total RSVPs', gallery:'total heat', traders:'total wants', museum:'total bid value' }
+  const collectorsSum = liveBoardReady
+    ? liveBoard.reduce((s, c) => s + c.referralCount, 0).toLocaleString() + ' refs'
+    : COLLECTOR_SEEDS.reduce((s, c) => s + c.pts, 0).toLocaleString()
+  const summaryVal = { collectors:collectorsSum, cities:totalRSVPs.toLocaleString(), gallery:totalHeat || '—', traders:totalWants || '—', museum:totalBids ? fmt(totalBids) : '—' }
+  const summaryLbl = { collectors: liveBoardReady ? 'total referrals' : 'total pts banked', cities:'total RSVPs', gallery:'total heat', traders:'total wants', museum:'total bid value' }
   const emptyMsg   = { collectors:'Collectors rank here as community activity accumulates.', gallery:'Community photos will rank here once uploaded.', traders:'Trade listings will rank here once posted.', museum:'Museum bids will rank here once placed.', cities:'' }
 
   const accent = tabColor[tab]

@@ -5,7 +5,7 @@ import { getPassport, getTier, nextTier, subscribe, getLevel, XP_VALUES, TRIVIA_
 import { getReferralLink } from '../lib/referral'
 import { eggCount, TOTAL_EGGS } from '../lib/easterEggs'
 import Egg from '../components/Egg'
-import { useAuth } from '../lib/auth'
+import { useAuth } from '../lib/auth.jsx'
 import AuthGate from '../components/AuthGate'
 
 const BADGE_INFO = {

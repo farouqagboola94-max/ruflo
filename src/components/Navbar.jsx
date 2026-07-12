@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { B } from '../tokens'
-import { useAuth } from '../lib/auth'
+import { useAuth } from '../lib/auth.jsx'
 
 const DESKTOP_LINKS = [
   { label: 'ABOUT',   href: '#about' },

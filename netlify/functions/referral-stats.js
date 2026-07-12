@@ -11,8 +11,8 @@ export const handler = async (event) => {
   const code = (event.queryStringParameters?.code || '').trim()
   if (!code) return err(400, '?code= is required')
 
-  const all      = await listAll(Waitlist)
-  const referrals = all.filter(r => r.refCode === code)
+  const all       = await listAll(Waitlist)
+  const referrals = all.filter(r => r.referredBy === code)
 
   return ok({ code, referralCount: referrals.length })
 }

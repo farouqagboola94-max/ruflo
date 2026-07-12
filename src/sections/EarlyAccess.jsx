@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import Egg from '../components/Egg'
+import MemberCard from '../components/MemberCard'
 
 const SEED_COUNT = 1847
 const GOAL       = 2500
@@ -63,6 +64,7 @@ export default function EarlyAccess() {
   const [position,    setPosition]    = useState(null)
   const [error,       setError]       = useState('')
   const [refCode,     setRefCode]     = useState('')
+  const [referredBy,  setReferredBy]  = useState('')
   const [refCopied,   setRefCopied]   = useState(false)
   const [shared,      setShared]      = useState(false)
   const [refCount,    setRefCount]    = useState(null)
@@ -70,6 +72,13 @@ export default function EarlyAccess() {
   const animPos = useCountUp(position, phase === 'done')
 
   useEffect(() => {
+    // Read ?ref= from URL to credit the referrer
+    try {
+      const urlRef = new URLSearchParams(window.location.search).get('ref')
+      if (urlRef) setReferredBy(urlRef.trim())
+    } catch {}
+
+    // Restore returning user's waitlist state from localStorage
     try {
       const savedCode = localStorage.getItem(REF_KEY)
       if (savedCode) {
@@ -119,7 +128,12 @@ export default function EarlyAccess() {
       const res = await fetch('/.netlify/functions/waitlist-signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: name.trim() || 'Unknown', email: email.trim().toLowerCase(), refCode: code }),
+        body: JSON.stringify({
+          name:       name.trim() || 'Unknown',
+          email:      email.trim().toLowerCase(),
+          refCode:    code,
+          referredBy: referredBy || undefined,
+        }),
       })
       if (res.ok) {
         const data = await res.json()
@@ -229,6 +243,18 @@ export default function EarlyAccess() {
         {/* DONE */}
         {phase === 'done' && tier && (
           <div>
+            {/* premium member card */}
+            <MemberCard
+              name={name || undefined}
+              refCode={refCode}
+              position={position}
+              tier={tier.label}
+              tierIcon={tier.icon}
+              referralCount={refCount ?? 0}
+              ticket={null}
+              style={{ marginBottom: 24 }}
+            />
+
             {/* tier badge */}
             <div style={{ display:'flex', alignItems:'center', gap:14, padding:'16px 20px', background:`${tier.color}12`, border:`1px solid ${tier.color}40`, borderRadius:10, marginBottom:24 }}>
               <span style={{ fontSize:32 }}>{tier.icon}</span>

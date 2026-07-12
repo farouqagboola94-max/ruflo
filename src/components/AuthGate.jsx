@@ -1,4 +1,4 @@
-import { useAuth } from '../lib/auth'
+import { useAuth } from '../lib/auth.jsx'
 import { B } from '../tokens'
 
 export default function AuthGate({ children, title = 'Members Only', message = 'Sign in to unlock this feature.' }) {
