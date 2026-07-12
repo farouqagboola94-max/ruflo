@@ -1,103 +1,229 @@
 ---
 name: claude-flow-help
-description: Show Claude-Flow commands and usage
+description: Show Claude-Flow / Ruflo v3 commands and usage
 ---
 
-# Claude-Flow Commands
+# Ruflo / Claude-Flow v3.6.27
 
-## 🌊 Claude-Flow: Agent Orchestration Platform
+Enterprise AI agent orchestration platform. Three installable packages:
+- `npx ruflo@latest` — user-facing CLI (recommended)
+- `npx claude-flow@latest` — umbrella package
+- `npx @claude-flow/cli@latest` — scoped CLI
 
-Claude-Flow is the ultimate multi-terminal orchestration platform that revolutionizes how you work with Claude Code.
+After `npx ruflo@latest init`, local alias `./claude-flow` is also available.
 
-## Core Commands
+---
 
-### 🚀 System Management
-- `./claude-flow start` - Start orchestration system
-- `./claude-flow start --ui` - Start with interactive process management UI
-- `./claude-flow status` - Check system status
-- `./claude-flow monitor` - Real-time monitoring
-- `./claude-flow stop` - Stop orchestration
+## All 26 Commands
 
-### 🤖 Agent Management
-- `./claude-flow agent spawn <type>` - Create new agent
-- `./claude-flow agent list` - List active agents
-- `./claude-flow agent info <id>` - Agent details
-- `./claude-flow agent terminate <id>` - Stop agent
+### Core Development
 
-### 📋 Task Management
-- `./claude-flow task create <type> "description"` - Create task
-- `./claude-flow task list` - List all tasks
-- `./claude-flow task status <id>` - Task status
-- `./claude-flow task cancel <id>` - Cancel task
-- `./claude-flow task workflow <file>` - Execute workflow
+| Command | Description |
+|---------|-------------|
+| `init` | Project initialization (wizard, presets, skills, hooks) |
+| `agent` | Agent lifecycle (spawn, list, status, stop, metrics, pool, health, logs) |
+| `swarm` | Multi-agent swarm coordination |
+| `task` | Task creation, assignment, lifecycle |
+| `workflow` | Workflow execution and templates |
+| `session` | Session state management |
 
-### 🧠 Memory Operations
-- `./claude-flow memory store "key" "value"` - Store data
-- `./claude-flow memory query "search"` - Search memory
-- `./claude-flow memory stats` - Memory statistics
-- `./claude-flow memory export <file>` - Export memory
-- `./claude-flow memory import <file>` - Import memory
+### Intelligence & Memory
 
-### ⚡ SPARC Development
-- `./claude-flow sparc "task"` - Run SPARC orchestrator
-- `./claude-flow sparc modes` - List all 17+ SPARC modes
-- `./claude-flow sparc run <mode> "task"` - Run specific mode
-- `./claude-flow sparc tdd "feature"` - TDD workflow
-- `./claude-flow sparc info <mode>` - Mode details
+| Command | Description |
+|---------|-------------|
+| `memory` | AgentDB + HNSW vector search (150x–12,500x faster) |
+| `hooks` | 17 hooks + 12 background workers (self-learning) |
+| `neural` | Neural pattern training (SONA, MoE, EWC++) |
+| `embeddings` | Vector embeddings (75x faster with agentic-flow) |
 
-### 🐝 Swarm Coordination
-- `./claude-flow swarm "task" --strategy <type>` - Start swarm
-- `./claude-flow swarm "task" --background` - Long-running swarm
-- `./claude-flow swarm "task" --monitor` - With monitoring
-- `./claude-flow swarm "task" --ui` - Interactive UI
-- `./claude-flow swarm "task" --distributed` - Distributed coordination
+### Infrastructure
 
-### 🌍 MCP Integration
-- `./claude-flow mcp status` - MCP server status
-- `./claude-flow mcp tools` - List available tools
-- `./claude-flow mcp config` - Show configuration
-- `./claude-flow mcp logs` - View MCP logs
+| Command | Description |
+|---------|-------------|
+| `mcp` | MCP server management (314 tools) |
+| `config` | Configuration and provider setup |
+| `providers` | Multi-LLM provider management (Claude, GPT, Gemini, Ollama) |
+| `plugins` | Plugin manager (32 native + 21 npm plugins) |
+| `deployment` | Deployment management and rollback |
+| `daemon` | Background worker daemon |
 
-### 🤖 Claude Integration
-- `./claude-flow claude spawn "task"` - Spawn Claude with enhanced guidance
-- `./claude-flow claude batch <file>` - Execute workflow configuration
+### Security & Quality
 
-## 🌟 Quick Examples
+| Command | Description |
+|---------|-------------|
+| `security` | Security scanning (scan, audit, cve, threats, validate, report) |
+| `claims` | Claims-based authorization (check, grant, revoke, list) |
+| `federation` | Zero-trust cross-machine agent federation |
+| `performance` | Performance profiling (benchmark, profile, metrics, optimize) |
 
-### Initialize with SPARC:
+### System
+
+| Command | Description |
+|---------|-------------|
+| `status` | System status monitoring |
+| `start` | Service startup |
+| `hive-mind` | Queen-led Byzantine fault-tolerant consensus |
+| `migrate` | V2→V3 migration with rollback support |
+| `doctor` | System diagnostics with auto-fix |
+| `help` | Show command help |
+
+---
+
+## Quick Start
+
 ```bash
-npx -y claude-flow@latest init --sparc
+# Initialize project
+npx ruflo@latest init --wizard
+
+# Start background daemon
+npx ruflo@latest daemon start
+
+# Run health checks
+npx ruflo@latest doctor --fix
 ```
 
-### Start a development swarm:
+---
+
+## Agent Management
+
 ```bash
-./claude-flow swarm "Build REST API" --strategy development --monitor --review
+npx ruflo@latest agent spawn -t coder --name my-coder
+npx ruflo@latest agent spawn -t researcher --name research-1
+npx ruflo@latest agent list
+npx ruflo@latest agent status <id>
+npx ruflo@latest agent stop <id>
+npx ruflo@latest agent metrics
+npx ruflo@latest agent pool --size 5
+npx ruflo@latest agent health
+npx ruflo@latest agent logs <id>
 ```
 
-### Run TDD workflow:
+---
+
+## Swarm Coordination
+
+Default topology: **hierarchical-mesh**, 15-agent swarm.
+
 ```bash
-./claude-flow sparc tdd "user authentication"
+# Initialize swarm (v3 mode)
+npx ruflo@latest swarm init --v3-mode
+
+# Start swarm for a task
+npx ruflo@latest swarm "Build REST API" --strategy development --monitor
+
+# Long-running background swarm
+npx ruflo@latest swarm "Analyze codebase" --background --max-agents 8
+
+# Distributed swarm
+npx ruflo@latest swarm "Security audit" --strategy testing --distributed
 ```
 
-### Store project context:
+---
+
+## Memory Operations
+
+AgentDB with 384-dim ONNX embeddings and HNSW vector search.
+
 ```bash
-./claude-flow memory store "project_requirements" "e-commerce platform specs" --namespace project
+# Store data
+npx ruflo@latest memory store "key" "value" --namespace project
+
+# Semantic search
+npx ruflo@latest memory search -q "authentication patterns"
+
+# Import Claude Code memories into AgentDB
+npx ruflo@latest memory import-claude
+
+# Export
+npx ruflo@latest memory export backup.json --namespace project
+
+# Stats
+npx ruflo@latest memory stats
 ```
 
-### Spawn specialized agents:
+---
+
+## Hooks System (17 hooks + 12 workers)
+
 ```bash
-./claude-flow agent spawn researcher --name "Senior Researcher" --priority 8
-./claude-flow agent spawn developer --name "Lead Developer" --priority 9
+npx ruflo@latest hooks pre-task --description "Build feature X"
+npx ruflo@latest hooks post-task --task-id "abc123" --success true
+npx ruflo@latest hooks session-start --session-id "sess-1"
+npx ruflo@latest hooks route --task "Implement OAuth2"
+npx ruflo@latest hooks worker list
+npx ruflo@latest hooks worker dispatch --trigger audit
 ```
 
-## 🎯 Best Practices
-- Use `./claude-flow` instead of `npx claude-flow` after initialization
-- Store important context in memory for cross-session persistence
-- Use swarm mode for complex tasks requiring multiple agents
-- Enable monitoring for real-time progress tracking
-- Use background mode for tasks > 30 minutes
+---
 
-## 📚 Resources
-- Documentation: https://github.com/ruvnet/claude-code-flow/docs
-- Examples: https://github.com/ruvnet/claude-code-flow/examples
-- Issues: https://github.com/ruvnet/claude-code-flow/issues
+## Security
+
+```bash
+npx ruflo@latest security scan --depth full
+npx ruflo@latest security audit
+npx ruflo@latest security cve
+npx ruflo@latest security threats
+npx ruflo@latest security validate
+npx ruflo@latest security report
+```
+
+---
+
+## Agent Federation (Zero-Trust)
+
+```bash
+npx ruflo@latest federation init           # Generate keypair, start node
+npx ruflo@latest federation join wss://peer.example.com:8443
+npx ruflo@latest federation send --to team-b --type task-request --message "..."
+npx ruflo@latest federation status
+```
+
+---
+
+## Dual-Mode Orchestration (Claude + Codex)
+
+```bash
+npx claude-flow-codex dual run feature --task "Add OAuth2 authentication"
+npx claude-flow-codex dual run security --target "./src"
+npx claude-flow-codex dual run refactor --target "./src/legacy"
+npx claude-flow-codex dual status
+npx claude-flow-codex dual templates
+```
+
+---
+
+## SPARC Workflow
+
+```bash
+npx ruflo@latest sparc "Implement user authentication"
+npx ruflo@latest sparc modes
+npx ruflo@latest sparc run architect "API design"
+npx ruflo@latest sparc tdd "user session management"
+```
+
+---
+
+## Publishing (three packages in order)
+
+```bash
+# 1. @claude-flow/cli
+cd v3/@claude-flow/cli
+npm version 3.6.X --no-git-tag-version && npm run build && npm publish --tag latest
+
+# 2. claude-flow (root)
+npm version 3.6.X --no-git-tag-version && npm publish --tag latest
+
+# 3. ruflo
+cd ruflo
+npm version 3.6.X --no-git-tag-version && npm publish --tag latest
+```
+
+---
+
+## Resources
+
+- Repository: https://github.com/ruvnet/ruflo
+- Issues: https://github.com/ruvnet/ruflo/issues
+- Web UI: https://flo.ruv.io
+- Goal Planner: https://goal.ruv.io
+- Enterprise: https://ruv.io
