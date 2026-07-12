@@ -68,8 +68,27 @@ export default function EarlyAccess() {
   const [refCopied,   setRefCopied]   = useState(false)
   const [shared,      setShared]      = useState(false)
   const [refCount,    setRefCount]    = useState(null)
+  const [confetti,    setConfetti]    = useState([])
 
   const animPos = useCountUp(position, phase === 'done')
+
+  useEffect(() => {
+    if (phase !== 'done') return
+    const COLORS = [B.amber, B.neonCyan, B.neonMagenta, B.neonLime, '#ffffff', B.electricPurple]
+    const pieces = Array.from({ length: 48 }, (_, i) => ({
+      id: i,
+      color: COLORS[i % COLORS.length],
+      left: Math.random() * 100,
+      delay: Math.random() * 0.6,
+      dur: 0.9 + Math.random() * 0.8,
+      size: 5 + Math.random() * 7,
+      spin: Math.random() > 0.5 ? 1 : -1,
+      shape: Math.random() > 0.4 ? 'rect' : 'circle',
+    }))
+    setConfetti(pieces)
+    const t = setTimeout(() => setConfetti([]), 2400)
+    return () => clearTimeout(t)
+  }, [phase])
 
   useEffect(() => {
     // Read ?ref= from URL to credit the referrer
@@ -177,6 +196,32 @@ export default function EarlyAccess() {
       <Egg id="egg-066" corner="bottom-left" />
       <ScanLines />
       <div style={{ position:'absolute', bottom:-80, left:'50%', transform:'translateX(-50%)', width:500, height:300, borderRadius:'50%', background:`radial-gradient(ellipse, ${B.amber}15 0%, transparent 70%)`, filter:'blur(40px)', pointerEvents:'none' }} />
+
+      {/* confetti burst */}
+      {confetti.length > 0 && (
+        <div style={{ position:'absolute', inset:0, pointerEvents:'none', overflow:'hidden', zIndex:10 }}>
+          <style>{`
+            @keyframes confettiDrop {
+              0%   { transform: translateY(-30px) rotate(0deg); opacity: 1; }
+              100% { transform: translateY(110%) rotate(var(--spin, 360deg)); opacity: 0; }
+            }
+          `}</style>
+          {confetti.map(p => (
+            <div key={p.id} style={{
+              position: 'absolute',
+              left: `${p.left}%`,
+              top: 0,
+              width: p.size,
+              height: p.size,
+              borderRadius: p.shape === 'circle' ? '50%' : 2,
+              background: p.color,
+              '--spin': `${p.spin * 540}deg`,
+              animation: `confettiDrop ${p.dur}s ${p.delay}s ease-in forwards`,
+              boxShadow: `0 0 6px ${p.color}80`,
+            }} />
+          ))}
+        </div>
+      )}
 
       <div style={{ maxWidth:600, margin:'0 auto', position:'relative', zIndex:2 }}>
         <SectionTag color={B.amber}>EARLY ACCESS</SectionTag>

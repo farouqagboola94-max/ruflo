@@ -193,11 +193,37 @@ function payWithFlutterwave({ name, email, amount, tier, onSuccess, onError }) {
 // ── TicketCard ────────────────────────────────────────────────────────────────
 export function TicketCard({ name, tier, tierColor, ticketRef, price, qrData }) {
   const [imgLoaded, setImgLoaded] = useState(false)
+  const [hovered,   setHovered]   = useState(false)
   const src = qrUrl(qrData, tierColor)
 
   return (
-    <div style={{ background:'#050508', border:`1px solid ${tierColor}40`, borderRadius:12, overflow:'hidden', maxWidth:360, margin:'0 auto' }}>
-      <div style={{ height:4, background:`linear-gradient(90deg, ${tierColor}, ${tierColor}40)` }} />
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        background:'#050508',
+        border:`1px solid ${hovered ? tierColor + '80' : tierColor + '40'}`,
+        borderRadius:12,
+        overflow:'hidden',
+        maxWidth:360,
+        margin:'0 auto',
+        boxShadow: hovered ? `0 0 40px ${tierColor}28, 0 16px 48px rgba(0,0,0,0.8)` : `0 8px 32px rgba(0,0,0,0.6)`,
+        transform: hovered ? 'translateY(-3px)' : 'none',
+        transition: 'all 0.3s ease',
+        position: 'relative',
+      }}
+    >
+      {/* holographic shimmer overlay */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: `linear-gradient(105deg, transparent 30%, ${tierColor}08 50%, transparent 70%)`,
+        backgroundSize: '200% 100%',
+        animation: 'shimmer 3s linear infinite',
+        pointerEvents: 'none',
+        zIndex: 0,
+      }} />
+      <div style={{ height:4, background:`linear-gradient(90deg, ${tierColor}, ${tierColor}80, ${tierColor})`, animation: 'shimmer 2s linear infinite', backgroundSize: '200% 100%' }} />
       <div style={{ padding:'20px 24px' }}>
         <div style={{ fontFamily:'Orbitron,monospace', fontSize:9, color:tierColor, letterSpacing:3, marginBottom:4 }}>SNEAKERS FEST '26</div>
         <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:28, color:B.white, letterSpacing:3, lineHeight:1 }}>THE SOLE EXHIBITION</div>

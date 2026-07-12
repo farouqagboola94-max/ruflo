@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { B } from '../tokens'
 
 const CHAIN = [
@@ -23,7 +23,10 @@ function getInitials(name) {
 }
 
 export default function MemberCard({ name, refCode, position, tier, tierIcon, referralCount, ticket, style }) {
-  const [copied, setCopied] = useState(false)
+  const [copied,  setCopied]  = useState(false)
+  const [shared,  setShared]  = useState(false)
+  const [hovered, setHovered] = useState(false)
+  const cardRef = useRef(null)
 
   const tierColor  = TIER_COLORS[tier] || '#888'
   const chainEntry = CHAIN.find(c => c.label === tier) || CHAIN[4]
@@ -36,14 +39,35 @@ export default function MemberCard({ name, refCode, position, tier, tierIcon, re
       .catch(() => {})
   }
 
+  function shareCard() {
+    const text = `${name ? name + ' is' : 'I\'m'} #${(position || 0).toLocaleString()} in the Sneakers Fest '26 movement · ${tier} · Lagos Dec 12, 2026\n\nJoin the culture 👉 ${shareUrl}`
+    if (navigator.share) {
+      navigator.share({ title: "Sneakers Fest '26 Member Card", text })
+        .catch(() => {})
+    } else {
+      navigator.clipboard.writeText(text)
+        .then(() => { setShared(true); setTimeout(() => setShared(false), 2200) })
+        .catch(() => {})
+    }
+  }
+
   return (
-    <div style={{
-      borderRadius: 16,
-      padding: 2,
-      background: `linear-gradient(135deg, ${tierColor}80 0%, ${tierColor}10 45%, ${tierColor}50 100%)`,
-      boxShadow: `0 0 48px ${tierColor}28, 0 24px 64px rgba(0,0,0,0.65)`,
-      ...style,
-    }}>
+    <div
+      ref={cardRef}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        borderRadius: 16,
+        padding: 2,
+        background: `linear-gradient(135deg, ${tierColor}80 0%, ${tierColor}10 45%, ${tierColor}50 100%)`,
+        boxShadow: hovered
+          ? `0 0 72px ${tierColor}45, 0 32px 80px rgba(0,0,0,0.75)`
+          : `0 0 48px ${tierColor}28, 0 24px 64px rgba(0,0,0,0.65)`,
+        transform: hovered ? 'translateY(-4px) scale(1.012)' : 'none',
+        transition: 'box-shadow 0.35s ease, transform 0.35s ease',
+        ...style,
+      }}
+    >
       {/* inner card */}
       <div style={{
         borderRadius: 14,
@@ -200,9 +224,35 @@ export default function MemberCard({ name, refCode, position, tier, tierIcon, re
           gap: 8,
           position: 'relative',
           zIndex: 1,
+          marginBottom: 8,
         }}>
           <span style={{ fontSize: 11 }}>{copied ? '✓' : '🔗'}</span>
           {copied ? 'REFERRAL LINK COPIED!' : 'COPY YOUR REFERRAL LINK'}
+        </button>
+
+        {/* ── SHARE CARD ── */}
+        <button onClick={shareCard} style={{
+          width: '100%',
+          padding: '11px 16px',
+          background: shared ? `${tierColor}22` : `linear-gradient(135deg, ${tierColor}18 0%, ${tierColor}08 100%)`,
+          border: `1px solid ${shared ? tierColor + '70' : tierColor + '35'}`,
+          borderRadius: 8,
+          color: shared ? tierColor : tierColor + 'cc',
+          fontFamily: "'Space Mono'",
+          fontSize: '0.6rem',
+          letterSpacing: 2,
+          cursor: 'pointer',
+          transition: 'all 0.2s',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 8,
+          position: 'relative',
+          zIndex: 1,
+          boxShadow: shared ? `0 0 16px ${tierColor}25` : 'none',
+        }}>
+          <span style={{ fontSize: 11 }}>{shared ? '✓' : '↗'}</span>
+          {shared ? 'CARD TEXT COPIED!' : 'SHARE MY CARD'}
         </button>
 
         {/* ── FOOTER ── */}

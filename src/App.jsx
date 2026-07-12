@@ -1,5 +1,5 @@
 import { B, FONTS } from './tokens'
-import { useEffect } from 'react'
+import { useEffect, lazy, Suspense } from 'react'
 import { AuthProvider } from './lib/auth.jsx'
 import CustomCursor from './components/CustomCursor'
 import SocialProof from './components/SocialProof'
@@ -30,33 +30,35 @@ import Highlights from './sections/Highlights'
 import Community from './sections/Community'
 import Testimonials from './sections/Testimonials'
 import Passport from './sections/Passport'
-import SneakerDNA from './sections/SneakerDNA'
-import SoleOfLagos from './sections/SoleOfLagos'
-import CultureHistory from './sections/CultureHistory'
-import CultureMuseum from './sections/CultureMuseum'
-import ArchitectVault from './sections/ArchitectVault'
-import SneakerBible from './sections/SneakerBible'
-import CommunityWall from './sections/CommunityWall'
-import SneakerTrivia from './sections/SneakerTrivia'
-import MemoryMatch from './sections/MemoryMatch'
-import Soledle from './sections/Soledle'
-import ShoeColorizer from './sections/ShoeColorizer'
-import OutfitMatcher from './sections/OutfitMatcher'
-import HypeCounter from './sections/HypeCounter'
-import SpinWheel from './sections/SpinWheel'
-import CrewVoteOff from './sections/CrewVoteOff'
-import BadgeMaker from './sections/BadgeMaker'
-import MysteryDrop from './sections/MysteryDrop'
-import SneakerWorth from './sections/SneakerWorth'
-import SneakerBingo from './sections/SneakerBingo'
-import ArtistSpotlight from './sections/ArtistSpotlight'
-import DropsTimeline from './sections/DropsTimeline'
+const SneakerDNA    = lazy(() => import('./sections/SneakerDNA'))
+const SoleOfLagos   = lazy(() => import('./sections/SoleOfLagos'))
+const CultureHistory = lazy(() => import('./sections/CultureHistory'))
+const CultureMuseum  = lazy(() => import('./sections/CultureMuseum'))
+const ArchitectVault = lazy(() => import('./sections/ArchitectVault'))
+const SneakerBible   = lazy(() => import('./sections/SneakerBible'))
+const CommunityWall  = lazy(() => import('./sections/CommunityWall'))
+// Game sections — lazy-loaded to reduce initial bundle
+const SneakerTrivia  = lazy(() => import('./sections/SneakerTrivia'))
+const MemoryMatch    = lazy(() => import('./sections/MemoryMatch'))
+const Soledle        = lazy(() => import('./sections/Soledle'))
+const ShoeColorizer  = lazy(() => import('./sections/ShoeColorizer'))
+const OutfitMatcher  = lazy(() => import('./sections/OutfitMatcher'))
+const HypeCounter    = lazy(() => import('./sections/HypeCounter'))
+const SpinWheel      = lazy(() => import('./sections/SpinWheel'))
+const CrewVoteOff    = lazy(() => import('./sections/CrewVoteOff'))
+const BadgeMaker     = lazy(() => import('./sections/BadgeMaker'))
+const MysteryDrop    = lazy(() => import('./sections/MysteryDrop'))
+const SneakerWorth   = lazy(() => import('./sections/SneakerWorth'))
+const SneakerBingo   = lazy(() => import('./sections/SneakerBingo'))
+// Culture & tools — lazy-loaded
+const ArtistSpotlight = lazy(() => import('./sections/ArtistSpotlight'))
+const DropsTimeline   = lazy(() => import('./sections/DropsTimeline'))
 import EarlyAccess from './sections/EarlyAccess'
-import Comics from './sections/Comics'
-import Gallery from './sections/Gallery'
-import TradeBoard from './sections/TradeBoard'
+const Comics      = lazy(() => import('./sections/Comics'))
+const Gallery     = lazy(() => import('./sections/Gallery'))
+const TradeBoard  = lazy(() => import('./sections/TradeBoard'))
 import Leaderboard from './sections/Leaderboard'
-import PhotoTools from './sections/PhotoTools'
+const PhotoTools  = lazy(() => import('./sections/PhotoTools'))
 import Newsletter from './sections/Newsletter'
 import Lineup from './sections/Lineup'
 import Schedule from './sections/Schedule'
@@ -69,7 +71,7 @@ import VendorReg from './sections/VendorReg'
 import FAQ from './sections/FAQ'
 import Contact from './sections/Contact'
 import Footer from './sections/Footer'
-import EggHuntTracker from './sections/EggHuntTracker'
+const EggHuntTracker = lazy(() => import('./sections/EggHuntTracker'))
 
 const SECTION_TITLES = [
   { id: 'about',          title: "About | Sneakers Fest '26" },
@@ -241,34 +243,40 @@ export default function App() {
         <Reveal><Community /></Reveal>
         <Reveal><Testimonials /></Reveal>
         <Reveal><Passport /></Reveal>
-        <Reveal><SneakerDNA /></Reveal>
-        <Reveal><SoleOfLagos /></Reveal>
-        <Reveal><CultureHistory /></Reveal>
-        <Reveal><CultureMuseum /></Reveal>
-        <Reveal><ArchitectVault /></Reveal>
-        <Reveal><SneakerBible /></Reveal>
-        <Reveal><CommunityWall /></Reveal>
-        <Reveal><SneakerTrivia /></Reveal>
-        <Reveal><MemoryMatch /></Reveal>
-        <Reveal><Soledle /></Reveal>
-        <Reveal><ShoeColorizer /></Reveal>
-        <Reveal><OutfitMatcher /></Reveal>
-        <Reveal><HypeCounter /></Reveal>
-        <Reveal><SpinWheel /></Reveal>
-        <Reveal><CrewVoteOff /></Reveal>
-        <Reveal><BadgeMaker /></Reveal>
-        <Reveal><MysteryDrop /></Reveal>
-        <Reveal><SneakerWorth /></Reveal>
-        <Reveal><SneakerBingo /></Reveal>
-        <Reveal><ArtistSpotlight /></Reveal>
-        <Reveal><DropsTimeline /></Reveal>
+        <Suspense fallback={null}>
+          <Reveal><SneakerDNA /></Reveal>
+          <Reveal><SoleOfLagos /></Reveal>
+          <Reveal><CultureHistory /></Reveal>
+          <Reveal><CultureMuseum /></Reveal>
+          <Reveal><ArchitectVault /></Reveal>
+          <Reveal><SneakerBible /></Reveal>
+          <Reveal><CommunityWall /></Reveal>
+          <Reveal><SneakerTrivia /></Reveal>
+          <Reveal><MemoryMatch /></Reveal>
+          <Reveal><Soledle /></Reveal>
+          <Reveal><ShoeColorizer /></Reveal>
+          <Reveal><OutfitMatcher /></Reveal>
+          <Reveal><HypeCounter /></Reveal>
+          <Reveal><SpinWheel /></Reveal>
+          <Reveal><CrewVoteOff /></Reveal>
+          <Reveal><BadgeMaker /></Reveal>
+          <Reveal><MysteryDrop /></Reveal>
+          <Reveal><SneakerWorth /></Reveal>
+          <Reveal><SneakerBingo /></Reveal>
+          <Reveal><ArtistSpotlight /></Reveal>
+          <Reveal><DropsTimeline /></Reveal>
+        </Suspense>
         <Reveal><EarlyAccess /></Reveal>
-        <Reveal><Comics /></Reveal>
-        <Reveal><Gallery /></Reveal>
-        <Reveal><TradeBoard /></Reveal>
+        <Suspense fallback={null}>
+          <Reveal><Comics /></Reveal>
+          <Reveal><Gallery /></Reveal>
+          <Reveal><TradeBoard /></Reveal>
+        </Suspense>
         <Reveal><Leaderboard /></Reveal>
-        <Reveal><EggHuntTracker /></Reveal>
-        <Reveal><PhotoTools /></Reveal>
+        <Suspense fallback={null}>
+          <Reveal><EggHuntTracker /></Reveal>
+          <Reveal><PhotoTools /></Reveal>
+        </Suspense>
         <Reveal><Newsletter /></Reveal>
         <Reveal><Lineup /></Reveal>
         <Reveal><Schedule /></Reveal>

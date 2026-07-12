@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
-import { logReferralConversion } from '../lib/referral'
+import { logReferralConversion, getReferredBy } from '../lib/referral'
 import Egg from '../components/Egg'
 
 const LISTMONK_URL  = import.meta.env.VITE_LISTMONK_URL      || ''
@@ -121,7 +121,7 @@ export default function Newsletter() {
       const res = await fetch('/.netlify/functions/newsletter-subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: name || email.split('@')[0], email, interests: [...interests] }),
+        body: JSON.stringify({ name: name || email.split('@')[0], email, interests: [...interests], referredBy: getReferredBy() || undefined }),
       })
       if (res.ok) {
         const data = await res.json()

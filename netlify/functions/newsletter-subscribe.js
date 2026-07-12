@@ -13,13 +13,14 @@ export const handler = async (event) => {
   let body
   try { body = JSON.parse(event.body || '{}') } catch { return err(400, 'Invalid JSON') }
 
-  const { email, name, interests } = body
+  const { email, name, interests, referredBy } = body
   if (!email) return err(400, 'email is required')
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return err(400, 'Invalid email address')
 
   const key            = email.toLowerCase().trim()
   const cleanName      = (name || '').trim()
   const cleanInterests = Array.isArray(interests) ? interests.slice(0, 10).map(String) : []
+  const cleanRef       = (referredBy || '').trim().toUpperCase().slice(0, 12)
 
   const existing = await get(Newsletter, key)
   if (existing) return ok({ success: true, alreadySubscribed: true, memberNum: existing.memberNum })
@@ -27,13 +28,16 @@ export const handler = async (event) => {
   const all       = await listAll(Newsletter)
   const memberNum = all.length + 1
 
-  await set(Newsletter, key, {
+  const record = {
     name:         cleanName,
     email:        key,
     interests:    cleanInterests,
     memberNum,
     subscribedAt: new Date().toISOString(),
-  })
+  }
+  if (cleanRef) record.referredBy = cleanRef
+
+  await set(Newsletter, key, record)
 
   await sendEmail({
     to: key,
