@@ -1,205 +1,214 @@
 ---
 name: claude-flow-swarm
-description: Coordinate multi-agent swarms for complex tasks
+description: Coordinate multi-agent swarms for complex tasks (v3.6.27)
 ---
 
-# 🐝 Claude-Flow Swarm Coordination
+# Swarm Coordination — Ruflo v3.6.27
 
-Advanced multi-agent coordination system with timeout-free execution, distributed memory sharing, and intelligent load balancing.
+15-agent hierarchical-mesh swarm with Byzantine fault tolerance, work-stealing load balancing, and hive-mind consensus.
 
 ## Basic Usage
+
 ```bash
-./claude-flow swarm "your complex task" --strategy <type> [options]
+npx ruflo@latest swarm init --v3-mode
+npx ruflo@latest swarm "your complex task" --strategy <type> [options]
 ```
 
-## 🎯 Swarm Strategies
-- **auto** - Automatic strategy selection based on task analysis
-- **development** - Code implementation with review and testing
-- **research** - Information gathering and synthesis
-- **analysis** - Data processing and pattern identification
-- **testing** - Comprehensive quality assurance
-- **optimization** - Performance tuning and refactoring
-- **maintenance** - System updates and bug fixes
+---
 
-## 🤖 Agent Types
-- **coordinator** - Plans and delegates tasks to other agents
-- **developer** - Writes code and implements solutions
-- **researcher** - Gathers and analyzes information
-- **analyzer** - Identifies patterns and generates insights
-- **tester** - Creates and runs tests for quality assurance
-- **reviewer** - Performs code and design reviews
-- **documenter** - Creates documentation and guides
-- **monitor** - Tracks performance and system health
-- **specialist** - Domain-specific expert agents
+## Default Topology: Hierarchical-Mesh (15 agents)
 
-## 🔄 Coordination Modes
-- **centralized** - Single coordinator manages all agents (default)
-- **distributed** - Multiple coordinators share management
-- **hierarchical** - Tree structure with nested coordination
-- **mesh** - Peer-to-peer agent collaboration
-- **hybrid** - Mixed coordination strategies
+Configured in `v3/swarm.config.ts`:
 
-## ⚙️ Common Options
-- `--strategy <type>` - Execution strategy
-- `--mode <type>` - Coordination mode
-- `--max-agents <n>` - Maximum concurrent agents (default: 5)
-- `--timeout <minutes>` - Timeout in minutes (default: 60)
-- `--background` - Run in background for tasks > 30 minutes
-- `--monitor` - Enable real-time monitoring
-- `--ui` - Launch terminal UI interface
-- `--parallel` - Enable parallel execution
-- `--distributed` - Enable distributed coordination
-- `--review` - Enable peer review process
-- `--testing` - Include automated testing
-- `--encryption` - Enable data encryption
-- `--verbose` - Detailed logging output
-- `--dry-run` - Show configuration without executing
+| Setting | Default |
+|---------|---------|
+| `topology` | `hierarchical-mesh` |
+| `maxAgents` | 15 (anti-drift: 6-8 for coding swarms) |
+| `loadBalancingStrategy` | `capability-match` |
+| `consensus` | `raft` |
 
-## 🌟 Examples
+### 15-Agent Role Mapping
+
+| Agent | Role | Domain |
+|-------|------|--------|
+| agent-1 | Queen Coordinator | core — orchestrates all 15 agents |
+| agent-2 | Security Architect | security — threat modeling |
+| agent-3 | Security Implementer | security — CVE fixes |
+| agent-4 | Security Tester | security — TDD security harness |
+| agent-5 | Core Architect | core — DDD architecture |
+| agent-6 | Core Implementer | core — type system |
+| agent-7 | Memory Specialist | core — AgentDB unification |
+| agent-8 | Swarm Specialist | core — coordinator merge |
+| agent-9 | MCP Specialist | core — tool registration |
+| agent-10 | Integration Architect | integration — agentic-flow |
+| agent-11 | CLI/Hooks Developer | integration — CLI modernization |
+| agent-12 | Neural/Learning Dev | integration — SONA learning |
+| agent-13 | TDD Test Engineer | quality — London School TDD |
+| agent-14 | Performance Engineer | performance — Flash Attention |
+| agent-15 | Release Engineer | deployment — CI/CD pipeline |
+
+---
+
+## Topologies
+
+| Topology | When to Use |
+|----------|-------------|
+| `hierarchical` | Coding swarms — queen controls workers directly |
+| `mesh` | Peer-to-peer, fully connected collaboration |
+| `hierarchical-mesh` | Default — hybrid for large task sets |
+| `adaptive` | Dynamic based on load |
+| `centralized` | Single point, small tasks |
+
+## Consensus Strategies
+
+| Strategy | Algorithm | Fault Tolerance |
+|----------|-----------|----------------|
+| `raft` | Leader-based | Tolerates f < n/2 failures |
+| `byzantine` | BFT | Tolerates f < n/3 malicious |
+| `gossip` | Epidemic | Eventually consistent |
+| `crdt` | Conflict-free | No coordination needed |
+| `quorum` | Configurable | Adjustable threshold |
+
+---
+
+## Swarm Strategies
+
+- **auto** — Automatic based on task analysis
+- **development** — Code implementation with review and testing
+- **research** — Information gathering and synthesis
+- **analysis** — Data processing and pattern identification
+- **testing** — Comprehensive QA
+- **optimization** — Performance tuning
+- **maintenance** — Bug fixes and updates
+- **security** — Security auditing (routes to agents 2-4)
+
+---
+
+## Agent Types (60+ available)
+
+**Core:** `coder`, `reviewer`, `tester`, `planner`, `researcher`
+
+**Coordination:** `hierarchical-coordinator`, `mesh-coordinator`, `adaptive-coordinator`, `queen-coordinator`
+
+**Consensus:** `byzantine-coordinator`, `raft-manager`, `gossip-coordinator`, `crdt-synchronizer`, `quorum-manager`
+
+**Specialized:** `security-architect`, `memory-specialist`, `performance-engineer`, `v3-queen-coordinator`
+
+---
+
+## Common Options
+
+```bash
+--strategy <type>          # Execution strategy
+--topology <type>          # Swarm topology (default: hierarchical)
+--max-agents <n>           # Max concurrent agents (default for coding: 6-8)
+--background               # Long-running background execution
+--monitor                  # Real-time monitoring
+--distributed              # Distributed coordination
+--review                   # Enable peer review
+--testing                  # Include automated testing
+--dry-run                  # Preview config without executing
+--verbose                  # Detailed logging
+```
+
+---
+
+## Examples
+
+### Anti-Drift Coding Swarm (recommended default)
+
+```bash
+npx ruflo@latest swarm init --topology hierarchical --max-agents 8 --strategy specialized
+```
 
 ### Development Swarm with Review
+
 ```bash
-./claude-flow swarm "Build e-commerce REST API" \
+npx ruflo@latest swarm "Build e-commerce REST API" \
   --strategy development \
+  --topology hierarchical \
+  --max-agents 8 \
   --monitor \
   --review \
   --testing
 ```
 
-### Long-Running Research Swarm
+### Security Audit Swarm
+
 ```bash
-./claude-flow swarm "Analyze AI market trends 2024-2025" \
+npx ruflo@latest swarm "Comprehensive security audit" \
+  --strategy security \
+  --max-agents 6 \
+  --review \
+  --verbose
+```
+
+### Long-Running Research Swarm
+
+```bash
+npx ruflo@latest swarm "Analyze AI market trends 2025" \
   --strategy research \
   --background \
   --distributed \
-  --max-agents 8
+  --max-agents 10
 ```
 
-### Performance Optimization Swarm
-```bash
-./claude-flow swarm "Optimize database queries and API performance" \
-  --strategy optimization \
-  --testing \
-  --parallel \
-  --monitor
-```
+### Full Enterprise Swarm
 
-### Enterprise Development Swarm
 ```bash
-./claude-flow swarm "Implement secure payment processing system" \
+npx ruflo@latest swarm "Implement secure payment processing" \
   --strategy development \
-  --mode distributed \
-  --max-agents 10 \
+  --topology hierarchical-mesh \
+  --max-agents 15 \
   --parallel \
   --monitor \
   --review \
   --testing \
-  --encryption \
   --verbose
 ```
 
-### Testing and QA Swarm
-```bash
-./claude-flow swarm "Comprehensive security audit and testing" \
-  --strategy testing \
-  --review \
-  --verbose \
-  --max-agents 6
+---
+
+## Claude Code + Task Tool Pattern
+
+For in-session swarm orchestration via Task tool (the recommended execution path):
+
+```javascript
+// Initialize swarm via MCP
+mcp__ruv-swarm__swarm_init({ topology: "hierarchical", maxAgents: 8, strategy: "specialized" })
+
+// Spawn all named agents concurrently in ONE message
+Task({ prompt: "Design API. SendMessage design to 'developer'.", subagent_type: "system-architect", name: "architect", run_in_background: true })
+Task({ prompt: "Wait for design from 'architect'. Implement. SendMessage to 'tester'.", subagent_type: "coder", name: "developer", run_in_background: true })
+Task({ prompt: "Wait for code from 'developer'. Write tests.", subagent_type: "tester", name: "tester", run_in_background: true })
+
+// Kick off the pipeline
+SendMessage({ to: "architect", summary: "Start", message: "Design a REST API for user management" })
 ```
 
-## 📊 Monitoring and Control
+---
 
-### Real-time monitoring:
-```bash
-# Monitor swarm activity
-./claude-flow monitor
-
-# Monitor specific component
-./claude-flow monitor --focus swarm
-```
-
-### Check swarm status:
-```bash
-# Overall system status
-./claude-flow status
-
-# Detailed swarm status
-./claude-flow status --verbose
-```
-
-### View agent activity:
-```bash
-# List all agents
-./claude-flow agent list
-
-# Agent details
-./claude-flow agent info <agent-id>
-```
-
-## 💾 Memory Integration
-
-Swarms automatically use distributed memory for collaboration:
+## Monitoring and Control
 
 ```bash
-# Store swarm objectives
-./claude-flow memory store "swarm_objective" "Build scalable API" --namespace swarm
+# Real-time monitoring
+npx ruflo@latest status
+npx ruflo@latest agent list
+npx ruflo@latest agent info <agent-id>
 
-# Query swarm progress
-./claude-flow memory query "swarm_progress" --namespace swarm
-
-# Export swarm memory
-./claude-flow memory export swarm-results.json --namespace swarm
+# Memory coordination
+npx ruflo@latest memory store "swarm_objective" "Build scalable API" --namespace swarm
+npx ruflo@latest memory search -q "swarm_progress" --namespace swarm
+npx ruflo@latest memory export swarm-results.json --namespace swarm
 ```
 
-## 🎯 Key Features
+---
 
-### Timeout-Free Execution
-- Background mode for long-running tasks
-- State persistence across sessions
-- Automatic checkpoint recovery
+## Key Features
 
-### Work Stealing & Load Balancing
-- Dynamic task redistribution
-- Automatic agent scaling
-- Resource-aware scheduling
-
-### Circuit Breakers & Fault Tolerance
-- Automatic retry with exponential backoff
-- Graceful degradation
-- Health monitoring and recovery
-
-### Real-Time Collaboration
-- Cross-agent communication
-- Shared memory access
-- Event-driven coordination
-
-### Enterprise Security
-- Role-based access control
-- Audit logging
-- Data encryption
-- Input validation
-
-## 🔧 Advanced Configuration
-
-### Dry run to preview:
-```bash
-./claude-flow swarm "Test task" --dry-run --strategy development
-```
-
-### Custom quality thresholds:
-```bash
-./claude-flow swarm "High quality API" \
-  --strategy development \
-  --quality-threshold 0.95
-```
-
-### Scheduling algorithms:
-- FIFO (First In, First Out)
-- Priority-based
-- Deadline-driven
-- Shortest Job First
-- Critical Path
-- Resource-aware
-- Adaptive
-
-For detailed documentation, see: https://github.com/ruvnet/claude-code-flow/docs/swarm-system.md
+- **Timeout-free execution** — background mode with state persistence
+- **Work-stealing load balancing** — dynamic task redistribution
+- **Circuit breakers** — retry with exponential backoff
+- **Hive-mind consensus** — raft-based leader maintains authoritative state
+- **Zero-trust federation** — cross-machine collaboration (ed25519 + mTLS)
+- **SONA learning** — patterns stored post-task via `post-task` hook
