@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Privacy Policy — Za.allyErrands</title>
+<meta name="description" content="How Za.allyErrands collects, uses, and protects your personal data across our Lagos errand and delivery service."/>
+<link rel="canonical" href="https://za-allyerrands.netlify.app/privacy/"/>
+<meta name="geo.region" content="NG-LA"/>
+<meta name="geo.placename" content="Lagos, Nigeria"/>
+<meta property="og:title" content="Privacy Policy — Za.allyErrands"/>
+<meta property="og:description" content="How Za.allyErrands collects, uses, and protects your personal data across our Lagos errand and delivery service."/>
+<meta property="og:url" content="https://za-allyerrands.netlify.app/privacy/"/>
+<meta property="og:type" content="website"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#07091A;--bg2:#0D0F2B;--bg3:#111435;
+--orange:#FF4500;--orange2:#FF6B35;
+--gold:#F5A623;--gold2:#FFD700;
+--white:#FFFFFF;--grey:#8892B0;--grey2:#CCD6F6;
+--glass:rgba(255,255,255,0.04);--glass2:rgba(255,255,255,0.08);
+--border:rgba(255,255,255,0.08);--border2:rgba(245,166,35,0.3);
+--glow-orange:0 0 40px rgba(255,69,0,0.4);
+--glow-gold:0 0 40px rgba(245,166,35,0.4);
+--font-body:'Plus Jakarta Sans',sans-serif;
+--font-display:'Bebas Neue',cursive;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--white);font-family:var(--font-body);overflow-x:hidden}
+a{color:inherit}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:1.2rem 4rem;display:flex;align-items:center;justify-content:space-between;transition:all .4s;background:rgba(7,9,26,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--font-display);font-size:1.6rem;letter-spacing:.12em;background:linear-gradient(135deg,var(--orange),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+.nav-links{display:flex;gap:2.5rem;list-style:none;align-items:center}
+.nav-links a{color:var(--grey2);text-decoration:none;font-size:.9rem;font-weight:500;letter-spacing:.03em;transition:color .3s;position:relative}
+.nav-links a:hover{color:var(--white)}
+.nav-cta{background:linear-gradient(135deg,var(--orange),var(--orange2));color:var(--white)!important;padding:.55rem 1.4rem;border-radius:8px;font-weight:600!important;box-shadow:var(--glow-orange);transition:transform .3s,box-shadow .3s!important}
+.nav-cta:hover{transform:translateY(-2px)!important;box-shadow:0 0 60px rgba(255,69,0,.6)!important}
+.nav-burger{display:none;flex-direction:column;gap:5px;cursor:pointer}
+.nav-burger span{width:24px;height:2px;background:var(--white);border-radius:2px;transition:all .3s}
+/* PAGE HEADER */
+.page-hero{padding:9rem 4rem 4rem;text-align:center;position:relative;overflow:hidden;background:var(--bg2);border-bottom:1px solid var(--border)}
+.page-hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(255,69,0,.06),transparent 60%);pointer-events:none}
+.page-tag{display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--orange);margin-bottom:1rem;padding:.3rem .9rem;background:rgba(255,69,0,.1);border-radius:99px;border:1px solid rgba(255,69,0,.25);position:relative}
+.page-title{font-family:var(--font-display);font-size:clamp(2.6rem,6vw,4.5rem);letter-spacing:.04em;line-height:1;margin-bottom:1rem;position:relative}
+.page-title .gold{background:linear-gradient(135deg,var(--orange),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{font-size:1.05rem;color:var(--grey);max-width:560px;margin:0 auto;line-height:1.7;position:relative}
+/* CONTENT */
+.wrap{max-width:900px;margin:0 auto;padding:4rem 4rem 5rem}
+.wrap.narrow{max-width:760px}
+.btn-primary{display:inline-flex;align-items:center;gap:.6rem;padding:.85rem 2rem;background:linear-gradient(135deg,var(--orange),var(--orange2));color:var(--white);font-family:var(--font-body);font-size:.95rem;font-weight:700;border-radius:10px;text-decoration:none;box-shadow:var(--glow-orange);transition:transform .3s,box-shadow .3s;border:none;cursor:pointer}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 0 70px rgba(255,69,0,.7)}
+.btn-secondary{display:inline-flex;align-items:center;gap:.6rem;padding:.85rem 2rem;background:var(--glass2);color:var(--white);font-family:var(--font-body);font-size:.95rem;font-weight:600;border-radius:10px;text-decoration:none;border:1px solid var(--border);transition:all .3s;cursor:pointer}
+.btn-secondary:hover{border-color:var(--gold);color:var(--gold)}
+/* FOOTER */
+footer{background:var(--bg3);padding:5rem 4rem 2rem;border-top:1px solid var(--border)}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;max-width:1200px;margin:0 auto 3rem}
+.footer-brand .logo{font-family:var(--font-display);font-size:1.8rem;letter-spacing:.12em;background:linear-gradient(135deg,var(--orange),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block;margin-bottom:1rem}
+.footer-brand p{font-size:.88rem;color:var(--grey);line-height:1.7;max-width:280px;margin-bottom:1.5rem}
+.footer-socials{display:flex;gap:.9rem}
+.social-btn{width:38px;height:38px;background:var(--glass2);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;text-decoration:none;transition:all .3s;color:var(--grey2)}
+.social-btn:hover{border-color:var(--orange);color:var(--orange);background:rgba(255,69,0,.1)}
+.footer-col h4{font-size:.82rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:1.3rem}
+.footer-col a{display:block;font-size:.87rem;color:var(--grey);text-decoration:none;margin-bottom:.7rem;transition:color .3s}
+.footer-col a:hover{color:var(--white)}
+.footer-bottom{max-width:1200px;margin:0 auto;padding-top:2rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-bottom p{font-size:.82rem;color:var(--grey)}
+.footer-links{display:flex;gap:1.5rem}
+.footer-links a{font-size:.82rem;color:var(--grey);text-decoration:none;transition:color .3s}
+.footer-links a:hover{color:var(--white)}
+#wa-btn{position:fixed;bottom:2rem;right:2rem;width:56px;height:56px;background:linear-gradient(135deg,#25d366,#128c7e);border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:5000;box-shadow:0 4px 30px rgba(37,211,102,.4);transition:transform .3s;text-decoration:none;font-size:1.6rem}
+#wa-btn:hover{transform:scale(1.12)}
+.gs-fade{opacity:0;transform:translateY(30px)}
+.animate-in{opacity:1!important;transform:none!important;transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+@media(max-width:1024px){.footer-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){
+nav{padding:1rem 1.5rem}
+.nav-links{display:none;position:fixed;inset:0;top:60px;background:rgba(7,9,26,.97);flex-direction:column;align-items:center;justify-content:center;gap:2rem;z-index:999}
+.nav-links.open{display:flex}
+.nav-burger{display:flex}
+.page-hero{padding:7rem 1.5rem 3rem}
+.wrap{padding:3rem 1.5rem 4rem}
+.footer-grid{grid-template-columns:1fr}
+.footer-bottom{flex-direction:column;text-align:center}
+.legal-doc h2{font-size:1.35rem}
+.legal-block{padding:1.4rem 1.3rem}
+}
+/* LEGAL DOCUMENT */
+.legal-intro{font-size:1.02rem;color:var(--grey2);line-height:1.8;margin-bottom:2.5rem;padding-bottom:2rem;border-bottom:1px solid var(--border)}
+.legal-doc{counter-reset:section}
+.legal-block{margin-bottom:1.6rem;padding:1.8rem 1.9rem;background:var(--glass);border:1px solid var(--border);border-radius:14px}
+.legal-doc h2{font-family:var(--font-display);letter-spacing:.04em;font-size:1.7rem;line-height:1.15;color:var(--gold);margin-bottom:1rem;display:flex;align-items:baseline;gap:.7rem}
+.legal-doc h2 .num{font-size:1.05rem;font-weight:700;color:var(--orange);font-family:var(--font-body);letter-spacing:0}
+.legal-doc h3{font-size:1rem;font-weight:700;color:var(--grey2);margin:1.4rem 0 .6rem}
+.legal-doc p{font-size:.96rem;color:var(--grey);line-height:1.8;margin-bottom:1rem}
+.legal-doc p:last-child{margin-bottom:0}
+.legal-doc a{color:var(--gold);text-decoration:none;border-bottom:1px solid var(--border2);transition:color .3s,border-color .3s}
+.legal-doc a:hover{color:var(--gold2);border-color:var(--gold2)}
+.legal-doc ul{list-style:none;margin:0 0 1rem;padding:0}
+.legal-doc ul li{position:relative;padding-left:1.5rem;font-size:.94rem;color:var(--grey);line-height:1.75;margin-bottom:.7rem}
+.legal-doc ul li::before{content:'';position:absolute;left:0;top:.62em;width:7px;height:7px;border-radius:2px;background:linear-gradient(135deg,var(--orange),var(--gold))}
+.legal-doc ul li:last-child{margin-bottom:0}
+.legal-doc strong{color:var(--grey2);font-weight:600}
+.legal-contact{margin-top:.4rem;padding:2rem 1.9rem;background:linear-gradient(135deg,rgba(255,69,0,.08),rgba(245,166,35,.06));border:1px solid var(--border2);border-radius:14px}
+.legal-contact p{color:var(--grey2)}
+</style>
+</head>
+<body>
+<!-- NAV -->
+<nav id="nav">
+  <a href="/" class="nav-logo">ZA.ALLY</a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="/#services">Services</a></li>
+    <li><a href="/#pricing">Pricing</a></li>
+    <li><a href="/#faq">FAQ</a></li>
+    <li><a href="/about/">About</a></li>
+    <li><a href="/api/">API</a></li>
+    <li><a href="/errandme/" class="nav-cta">Book Now</a></li>
+  </ul>
+  <div class="nav-burger" id="burger" onclick="document.getElementById('nav-links').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<main>
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <span class="page-tag">Legal</span>
+  <h1 class="page-title">Privacy <span class="gold">Policy</span></h1>
+  <p class="page-sub">Last updated: July 2025</p>
+</section>
+
+<div class="wrap narrow">
+  <div class="legal-doc">
+
+    <p class="legal-intro gs-fade">
+      Za.allyErrands ("Za.allyErrands", "we", "us", or "our") operates an errand and delivery
+      service across Lagos, Nigeria, connecting customers with vetted runners for shopping,
+      pickups, drop-offs, and same-day dispatch. This Privacy Policy explains what personal data
+      we collect when you use our website, mobile experiences, and dispatch platform, how we use
+      and share that data, and the choices and rights available to you. We handle personal data
+      in line with the Nigeria Data Protection Regulation (NDPR) 2019 and the Nigeria Data
+      Protection Act (NDPA) 2023, and this policy should be read together with our
+      <a href="/terms/">Terms of Service</a>.
+    </p>
+
+    <div class="legal-block gs-fade">
+      <h2><span class="num">1.</span> Scope &amp; Who We Are</h2>
+      <p>
+        This policy applies to everyone who interacts with Za.allyErrands, including customers who
+        book errands, runners who fulfil them, and visitors to our marketing website. It covers
+        personal data processed through our booking flows, business portal, developer API, and
+        customer support channels.
+      </p>
+      <p>
+        Za.allyErrands acts as the <strong>data controller</strong> for the personal data described
+        here. Where we engage third parties (such as payment processors or mapping providers) to
+        process data on our behalf, those parties act as our data processors under written
+        agreements. If you do not agree with this policy, please do not use our services.
+      </p>
+    </div>
+
+    <div class="legal-block gs-fade">
+      <h2><span class="num">2.</span> Information We Collect</h2>
+      <p>We collect information you provide directly, information generated as you use the service, and information from trusted third parties.</p>
+
+      <h3>Personal &amp; contact details</h3>
+      <ul>
+        <li>Your name, phone number, and email address when you create an account or book an errand.</li>
+        <li>Delivery details such as recipient names, contact numbers, and written instructions for a task.</li>
+        <li>Communications you send us via WhatsApp, email, in-app chat, or our contact form.</li>
+      </ul>
+
+      <h3>Location &amp; dispatch data</h3>
+      <ul>
+        <li>Pickup and drop-off addresses you enter so we can plan and price a route.</li>
+        <li>Approximate or precise device location (with your permission) to match you with a nearby runner and enable real-time tracking of an active errand.</li>
+        <li>Runner location during an assignment, used to keep customers updated on progress.</li>
+      </ul>
+
+      <h3>Payment information</h3>
+      <ul>
+        <li>Transaction details such as amount, currency, errand reference, and payment status.</li>
+        <li>Card and bank payment data is entered directly with our licensed payment processors (for example, <strong>Flutterwave</strong> and other Nigerian payment gateways). We do <strong>not</strong> store full card numbers or CVV codes on our own servers; we receive only a secure token and limited confirmation details needed to complete and reconcile your order.</li>
+      </ul>
+
+      <h3>Usage &amp; device data</h3>
+      <ul>
+        <li>Log data such as IP address, browser type, device identifiers, pages viewed, and timestamps.</li>
+        <li>Interaction data about how you use our website and app, collected via cookies and similar technologies (see Section 6).</li>
+      </ul>
+    </div>
+
+    <div class="legal-block gs-fade">
+      <h2><span class="num">3.</span> How We Use Your Information</h2>
+      <p>We process personal data on lawful bases including your consent, the performance of our contract with you, our legitimate business interests, and compliance with legal obligations. Specifically, we use your data to:</p>
+      <ul>
+        <li>Create and manage your account and verify your identity.</li>
+        <li>Accept, price, dispatch, and fulfil your errands and deliveries.</li>
+        <li>Match tasks to available runners and enable live tracking and updates.</li>
+        <li>Process payments, issue receipts, and handle refunds or disputes.</li>
+        <li>Provide customer support and respond to your enquiries.</li>
+        <li>Send service messages such as booking confirmations, dispatch alerts, and delivery notifications.</li>
+        <li>Improve, secure, and troubleshoot our platform, and prevent fraud or misuse.</li>
+        <li>Send marketing or promotional messages where you have opted in, which you can unsubscribe from at any time.</li>
+        <li>Meet our legal, tax, and regulatory obligations in Nigeria.</li>
+      </ul>
+    </div>
+
+    <div class="legal-block gs-fade">
+      <h2><span class="num">4.</span> How We Share Your Information</h2>
+      <p>We do not sell your personal data. We share it only where necessary to run the service and always under appropriate safeguards:</p>
+      <ul>
+        <li><strong>Runners:</strong> we share the details required to complete your task — such as pickup and drop-off addresses, recipient contact numbers, and task instructions — with the runner assigned to your errand.</li>
+        <li><strong>Payment processors:</strong> we share transaction data with licensed providers such as Flutterwave to authorise and settle payments securely.</li>
+        <li><strong>Service providers:</strong> we work with trusted vendors for hosting, mapping, SMS/messaging, analytics, and customer support, who may process data on our behalf under contract.</li>
+        <li><strong>Legal &amp; safety:</strong> we may disclose data where required by law, court order, or a lawful request from a regulator or law-enforcement agency, or to protect the rights, property, or safety of Za.allyErrands, our users, or the public.</li>
+        <li><strong>Business transfers:</strong> if we are involved in a merger, acquisition, or sale of assets, personal data may be transferred as part of that transaction, subject to this policy.</li>
+      </ul>
+    </div>
+
+    <div class="legal-block gs-fade">
+      <h2><span class="num">5.</span> Data Security</h2>
+      <p>
+        We apply appropriate technical and organisational measures to protect your data, including
+        encryption of data in transit (HTTPS/TLS), access controls, tokenised payment handling, and
+        regular review of our systems. Runner accounts are vetted and access to customer data is
+        limited to what is needed to complete an assignment.
+      </p>
+      <p>
+        No method of transmission or storage is completely secure, so while we work hard to protect
+        your information we cannot guarantee absolute security. If we become aware of a personal data
+        breach that is likely to affect your rights, we will notify you and the relevant authorities
+        as required under the NDPR.
+      </p>
+    </div>
+
+    <div class="legal-block gs-fade">
+      <h2><span class="num">6.</span> Cookies &amp; Similar Technologies</h2>
+      <p>
+        Our website uses cookies and similar technologies to keep the site working, remember your
+        preferences, understand how the site is used, and measure the performance of our content.
+        These include strictly necessary cookies, functional cookies, and analytics cookies.
+      </p>
+      <p>
+        You can control or delete cookies through your browser settings. Blocking some cookies may
+        affect how parts of the site function. Where required, we will ask for your consent before
+        setting non-essential cookies.
+      </p>
+    </div>
+
+    <div class="legal-block gs-fade">
+      <h2><span class="num">7.</span> Your Rights</h2>
+      <p>Subject to applicable law, including the NDPR, you have the right to:</p>
+      <ul>
+        <li><strong>Access</strong> — request a copy of the personal data we hold about you.</li>
+        <li><strong>Correction</strong> — ask us to update or correct inaccurate or incomplete data.</li>
+        <li><strong>Deletion</strong> — request that we delete your personal data where we no longer have a lawful reason to keep it.</li>
+        <li><strong>Objection &amp; restriction</strong> — object to or ask us to limit certain processing, including direct marketing.</li>
+        <li><strong>Withdraw consent</strong> — where we rely on your consent, you may withdraw it at any time without affecting prior processing.</li>
+        <li><strong>Portability</strong> — request your data in a structured, commonly used format where technically feasible.</li>
+      </ul>
+      <p>
+        To exercise any of these rights, contact us using the details in Section 11. We may need to
+        verify your identity before acting on a request. You also have the right to lodge a complaint
+        with the Nigeria Data Protection Commission (NDPC).
+      </p>
+    </div>
+
+    <div class="legal-block gs-fade">
+      <h2><span class="num">8.</span> Data Retention</h2>
+      <p>
+        We keep personal data only for as long as necessary to provide our services, comply with our
+        legal, accounting, and tax obligations, resolve disputes, and enforce our agreements.
+        Transaction and order records are typically retained for the period required by Nigerian
+        financial and tax regulations. When data is no longer needed, we securely delete or anonymise
+        it.
+      </p>
+    </div>
+
+    <div class="legal-block gs-fade">
+      <h2><span class="num">9.</span> Children's Data</h2>
+      <p>
+        Za.allyErrands is intended for users aged 18 and above. We do not knowingly collect personal
+        data from children. If you believe a child has provided us with personal data, please contact
+        us and we will take steps to delete it promptly.
+      </p>
+    </div>
+
+    <div class="legal-block gs-fade">
+      <h2><span class="num">10.</span> Changes to This Policy</h2>
+      <p>
+        We may update this Privacy Policy from time to time to reflect changes in our services, legal
+        requirements, or business practices. When we make material changes, we will update the "Last
+        updated" date above and, where appropriate, notify you through the app, email, or our website.
+        Your continued use of Za.allyErrands after an update means you accept the revised policy.
+      </p>
+    </div>
+
+    <div class="legal-contact gs-fade">
+      <h2><span class="num">11.</span> Contact Us</h2>
+      <p>
+        If you have questions about this Privacy Policy or how we handle your data, or if you would
+        like to exercise your rights, reach out to us:
+      </p>
+      <ul>
+        <li>Email: <a href="mailto:hello@za-allyerrands.netlify.app">hello@za-allyerrands.netlify.app</a></li>
+        <li>Contact form: <a href="/contact/">za-allyerrands.netlify.app/contact</a></li>
+        <li>Location: Lagos, Nigeria</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="logo">Za.allyErrands</span>
+      <p>Lagos' premium errand and delivery service. Trusted runners, real-time tracking, API-first dispatch infrastructure.</p>
+      <div class="footer-socials">
+        <a class="social-btn" href="https://twitter.com/zallyerrands" target="_blank" rel="noopener" aria-label="Twitter">&#120143;</a>
+        <a class="social-btn" href="https://instagram.com/zallyerrands" target="_blank" rel="noopener" aria-label="Instagram">&#128247;</a>
+        <a class="social-btn" href="https://wa.me/2348000000000" target="_blank" rel="noopener" aria-label="WhatsApp">&#128172;</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <a href="/errandme/">Book Errand</a>
+      <a href="/errandme/">Same-Day Delivery</a>
+      <a href="/errandme/">Shopping Runs</a>
+      <a href="/#pricing">Pricing</a>
+    </div>
+    <div class="footer-col">
+      <h4>Developers</h4>
+      <a href="/api/">API Docs</a>
+      <a href="/business-portal/">Business Portal</a>
+      <a href="https://za-allyerrands-app.netlify.app/" target="_blank" rel="noopener">Launch App</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="/about/">About Us</a>
+      <a href="/#faq">FAQ</a>
+      <a href="/contact/">Contact Us</a>
+      <a href="/privacy/">Privacy Policy</a>
+      <a href="/terms/">Terms of Service</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2025 Za.allyErrands. All rights reserved. Lagos, Nigeria.</p>
+    <div class="footer-links">
+      <a href="/privacy/">Privacy Policy</a>
+      <a href="/terms/">Terms of Service</a>
+      <a href="/sitemap.xml">Sitemap</a>
+    </div>
+  </div>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<a id="wa-btn" href="https://wa.me/2348000000000?text=Hi%20Za.allyErrands" target="_blank" rel="noopener" aria-label="WhatsApp">&#128172;</a>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script>
+document.querySelectorAll('.gs-fade').forEach((el,i)=>{
+  if(typeof gsap!=='undefined'&&typeof ScrollTrigger!=='undefined'){
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.to(el,{opacity:1,y:0,duration:1,delay:(i%4)*.08,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 90%'}});
+  }else{
+    const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){el.classList.add('animate-in');obs.unobserve(el);}}),{threshold:.1});
+    obs.observe(el);
+  }
+});
+</script>
+</body>
+</html>
