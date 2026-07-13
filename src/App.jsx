@@ -17,6 +17,7 @@ import EventTicker from './components/EventTicker'
 import StreakToast from './components/StreakToast'
 import LevelUpToast from './components/LevelUpToast'
 import KonamiCode from './components/KonamiCode'
+import LiveActivity from './components/LiveActivity'
 import { captureReferral, reconcileReferralCredits } from './lib/referral'
 import Hero from './sections/Hero'
 import Stats from './sections/Stats'
@@ -227,6 +228,7 @@ export default function App() {
         <MobileCTA />
         <StreakToast />
         <LevelUpToast />
+        <LiveActivity />
         <KonamiCode />
 
         <Hero />

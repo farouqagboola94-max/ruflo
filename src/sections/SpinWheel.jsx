@@ -1,34 +1,55 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { addXP, XP_VALUES } from '../lib/passport'
+import { addXP, XP_VALUES, getPassport } from '../lib/passport'
 import Egg from '../components/Egg'
 
 const PRIZES = [
-  { label: '₦2,000 OFF',  sub: 'off any ticket tier',      color: '#F5A623', icon: '₦2K'  },
-  { label: 'MERCH RAFFLE',      sub: 'free draw entry',           color: '#00F0FF', icon: 'MERCH'   },
-  { label: 'VIP UPGRADE',       sub: 'GA ticket upgraded to VIP', color: '#FF2D7B', icon: 'VIP'    },
-  { label: 'MEET & GREET',      sub: 'backstage access pass',     color: '#B8FF00', icon: 'M&G'    },
-  { label: 'EARLY ACCESS',      sub: '1hr before doors open',     color: '#7B2FBE', icon: 'EARLY'  },
-  { label: 'MYSTERY DROP',      sub: 'secret collab at the event',color: '#FF6B35', icon: 'DROP'   },
-  { label: 'TRY AGAIN',         sub: 'better luck next time',     color: '#3A3A3A', icon: 'AGAIN'  },
-  { label: '₦5,000 OFF',  sub: 'off any ticket tier',       color: '#FFD080', icon: '₦5K'  },
+  { label: '₦2,000 OFF',  sub: 'off any ticket tier',       color: '#F5A623', icon: '₦2K',   xp: 80,  rare: false },
+  { label: 'MERCH RAFFLE', sub: 'free draw entry',           color: '#00F0FF', icon: 'MERCH', xp: 100, rare: false },
+  { label: 'VIP UPGRADE',  sub: 'GA ticket → VIP access',   color: '#FF2D7B', icon: 'VIP',   xp: 300, rare: true  },
+  { label: 'MEET & GREET', sub: 'backstage access pass',     color: '#B8FF00', icon: 'M&G',   xp: 250, rare: true  },
+  { label: 'EARLY ACCESS', sub: '1hr before doors open',     color: '#7B2FBE', icon: 'EARLY', xp: 120, rare: false },
+  { label: 'MYSTERY DROP', sub: 'secret collab at the event',color: '#FF6B35', icon: 'DROP',  xp: 200, rare: true  },
+  { label: 'TRY AGAIN',   sub: 'better luck next time',      color: '#333',    icon: '↩',     xp: 15,  rare: false },
+  { label: '₦5,000 OFF',  sub: 'off any ticket tier',        color: '#FFD080', icon: '₦5K',   xp: 130, rare: false },
 ]
 
-const N = PRIZES.length
-const EACH = 360 / N
+const N     = PRIZES.length
+const EACH  = 360 / N
 const CX = 150, CY = 150, R = 138
+
+const SPIN_KEY     = 'sf26_spins'
+const TOTAL_KEY    = 'sf26_spins_total'
+const MAX_DAILY    = 3
+const TODAY        = () => new Date().toISOString().slice(0, 10)
+
+function getSpinData()  { try { return JSON.parse(localStorage.getItem(SPIN_KEY)  || '{}') } catch { return {} } }
+function getTotalSpins() { try { return parseInt(localStorage.getItem(TOTAL_KEY) || '0') } catch { return 0 } }
+function spinsToday()   { const d = getSpinData(); return d.date === TODAY() ? (d.count || 0) : 0 }
+function recordSpin()   {
+  const cur = spinsToday()
+  localStorage.setItem(SPIN_KEY, JSON.stringify({ date: TODAY(), count: cur + 1 }))
+  localStorage.setItem(TOTAL_KEY, String(getTotalSpins() + 1))
+}
+function addBonusSpin() {
+  const cur = spinsToday()
+  const d = getSpinData()
+  const bonus = d.bonus || 0
+  localStorage.setItem(SPIN_KEY, JSON.stringify({ date: TODAY(), count: d.count || 0, bonus: bonus + 1 }))
+}
+function totalAllowedToday() {
+  const d = getSpinData()
+  return MAX_DAILY + (d.date === TODAY() ? (d.bonus || 0) : 0)
+}
 
 function segPath(i) {
   const a1 = (i * EACH - 90) * Math.PI / 180
   const a2 = ((i + 1) * EACH - 90) * Math.PI / 180
-  const x1 = (CX + R * Math.cos(a1)).toFixed(2)
-  const y1 = (CY + R * Math.sin(a1)).toFixed(2)
-  const x2 = (CX + R * Math.cos(a2)).toFixed(2)
-  const y2 = (CY + R * Math.sin(a2)).toFixed(2)
+  const x1 = (CX + R * Math.cos(a1)).toFixed(2); const y1 = (CY + R * Math.sin(a1)).toFixed(2)
+  const x2 = (CX + R * Math.cos(a2)).toFixed(2); const y2 = (CY + R * Math.sin(a2)).toFixed(2)
   return `M${CX} ${CY} L${x1} ${y1} A${R} ${R} 0 0 1 ${x2} ${y2}Z`
 }
-
 function labelTransform(i) {
   const mid = i * EACH + EACH / 2 - 90
   const rad = mid * Math.PI / 180
@@ -37,206 +58,344 @@ function labelTransform(i) {
   return `translate(${tx},${ty}) rotate(${mid + 90})`
 }
 
+const SOCIAL = [
+  { name: 'Tunde', city: 'Lagos',         prize: 'VIP UPGRADE' },
+  { name: 'Adaeze', city: 'Abuja',        prize: '₦5,000 OFF' },
+  { name: 'Emeka', city: 'PH',            prize: 'MEET & GREET' },
+  { name: 'Zara',  city: 'Lagos',         prize: 'MYSTERY DROP' },
+  { name: 'Femi',  city: 'Ibadan',        prize: '₦2,000 OFF' },
+  { name: 'Ngozi', city: 'Enugu',         prize: 'EARLY ACCESS' },
+  { name: 'Dayo',  city: 'Lagos',         prize: 'VIP UPGRADE' },
+  { name: 'Kemi',  city: 'Kano',          prize: 'MERCH RAFFLE' },
+]
+
 export default function SpinWheel() {
-  const [rotation, setRotation] = useState(0)
-  const [spinning, setSpinning] = useState(false)
-  const [result, setResult] = useState(null)
-  const [spun, setSpun] = useState(false)
+  const [rotation,   setRotation]   = useState(0)
+  const [spinning,   setSpinning]   = useState(false)
+  const [result,     setResult]     = useState(null)
+  const [spunCount,  setSpunCount]  = useState(0)
+  const [isNearMiss, setIsNearMiss] = useState(false)
+  const [nearPrize,  setNearPrize]  = useState(null)
+  const [confetti,   setConfetti]   = useState([])
+  const [social,     setSocial]     = useState(null)
+  const [totalToday, setTotalToday] = useState(() => spinsToday())
+  const [allowed,    setAllowed]    = useState(() => totalAllowedToday())
+  const [totalAll,   setTotalAll]   = useState(() => getTotalSpins())
   const winnerRef = useRef(null)
+  const socialRef = useRef(null)
+
+  useEffect(() => {
+    function showSocial() {
+      const item = SOCIAL[Math.floor(Math.random() * SOCIAL.length)]
+      setSocial(item)
+      setTimeout(() => setSocial(null), 3800)
+      socialRef.current = setTimeout(showSocial, 18000 + Math.random() * 12000)
+    }
+    socialRef.current = setTimeout(showSocial, 12000)
+    return () => clearTimeout(socialRef.current)
+  }, [])
 
   function spin() {
-    if (spinning) return
-    setResult(null)
-    setSpinning(true)
-    setSpun(true)
+    const usedToday = spinsToday()
+    const maxToday  = totalAllowedToday()
+    if (spinning || usedToday >= maxToday) return
+    setResult(null); setConfetti([]); setIsNearMiss(false); setNearPrize(null); setSpinning(true)
 
-    const winner = Math.floor(Math.random() * N)
+    recordSpin()
+    const newUsed = usedToday + 1
+    setTotalToday(newUsed)
+    setTotalAll(prev => prev + 1)
+    setSpunCount(c => c + 1)
+
+    // Weighted: TRY AGAIN more likely for first spin, prizes more likely on 3rd
+    const TRYAGAIN_IDX = 6
+    let winner
+    const luck = Math.random()
+    const spentToday = newUsed
+    const prizePool = [0, 1, 2, 3, 4, 5, 7]
+    if (luck < (spentToday === 3 ? 0.55 : spentToday === 2 ? 0.42 : 0.35)) {
+      winner = prizePool[Math.floor(Math.random() * prizePool.length)]
+    } else {
+      winner = TRYAGAIN_IDX
+    }
+
+    // Near-miss: 45% of TRY AGAIN results look like a near-miss
+    const nearMiss = winner === TRYAGAIN_IDX && Math.random() < 0.45
+    const nearTarget = nearMiss ? prizePool[Math.floor(Math.random() * prizePool.length)] : null
+    if (nearMiss) { setIsNearMiss(true); setNearPrize(PRIZES[nearTarget]) }
+
     winnerRef.current = winner
 
-    // bring winning segment to pointer (top)
-    const targetMod = ((360 - (winner * EACH + EACH / 2)) % 360 + 360) % 360
-    const prevMod = rotation % 360
+    // Spin math — near-miss: stop 1 segment past nearTarget (overshoots by EACH)
+    const finalTarget = nearMiss ? nearTarget : winner
+    const targetMod   = ((360 - (finalTarget * EACH + EACH / 2)) % 360 + 360) % 360
+    const prevMod     = rotation % 360
     let extra = targetMod - prevMod
     if (extra < 0) extra += 360
-    const newRotation = rotation + extra + 360 * (5 + Math.floor(Math.random() * 3))
+    // Near-miss: overshoot by EACH degrees → lands on TRY AGAIN
+    const overshoot   = nearMiss ? EACH : 0
+    const newRotation = rotation + extra + overshoot + 360 * (5 + Math.floor(Math.random() * 3))
     setRotation(newRotation)
 
     setTimeout(() => {
       setSpinning(false)
       setResult(winnerRef.current)
       const won = PRIZES[winnerRef.current]
-      if (won.label !== 'TRY AGAIN') addXP(XP_VALUES.spinWin, 'Spin to Win', 'spin-winner')
-      else addXP(XP_VALUES.spinLose, 'Spin to Win')
-    }, 5200)
+      if (won.label !== 'TRY AGAIN') {
+        addXP(won.xp, 'Spin to Win', won.rare ? 'spin-rare' : undefined)
+        // Celebration confetti
+        const COLS = [B.amber, B.neonCyan, B.neonMagenta, B.neonLime, '#fff', won.color]
+        setConfetti(Array.from({ length: 60 }, (_, k) => ({
+          id: k, color: COLS[k % COLS.length],
+          left: Math.random() * 100, delay: Math.random() * 0.5,
+          dur: 0.9 + Math.random() * 0.7, size: 5 + Math.random() * 8,
+          spin: Math.random() > 0.5 ? 720 : -720,
+        })))
+      } else {
+        addXP(XP_VALUES.spinLose, 'Spin to Win')
+      }
+    }, 5400)
   }
 
-  const prize = result !== null ? PRIZES[result] : null
+  const prize   = result !== null ? PRIZES[result] : null
+  const used    = totalToday
+  const max     = allowed
+  const canSpin = used < max && !spinning
+  const spinsLeft = max - used
 
   return (
     <section id="spin" style={{
-      background: B.charcoal, padding: '80px 20px',
-      position: 'relative', overflow: 'hidden', textAlign: 'center',
+      background: `linear-gradient(180deg, ${B.charcoal} 0%, ${B.black} 100%)`,
+      padding: '80px 20px', position: 'relative', overflow: 'hidden', textAlign: 'center',
     }}>
       <GrainOverlay /><ScanLines />
       <Egg id="egg-049" corner="top-right" />
       <Egg id="egg-050" corner="bottom-left" />
       <style>{`
         @keyframes winnerPop {
-          from { opacity: 0; transform: scale(0.7) rotate(-6deg); }
-          to   { opacity: 1; transform: scale(1) rotate(0deg); }
+          0%  { opacity:0; transform:scale(0.6) rotate(-8deg); }
+          70% { transform:scale(1.06) rotate(2deg); }
+          100%{ opacity:1; transform:scale(1) rotate(0deg); }
+        }
+        @keyframes nearMissShake {
+          0%,100%{ transform:translateX(0); }
+          20%    { transform:translateX(-8px); }
+          40%    { transform:translateX(8px); }
+          60%    { transform:translateX(-4px); }
+          80%    { transform:translateX(4px); }
+        }
+        @keyframes confettiRain {
+          0%  { transform:translateY(-20px) rotate(0deg); opacity:1; }
+          100%{ transform:translateY(120%) rotate(var(--s,540deg)); opacity:0; }
+        }
+        @keyframes socialIn {
+          from{ transform:translateY(20px); opacity:0; }
+          to  { transform:translateY(0);    opacity:1; }
+        }
+        @keyframes wheelGlow {
+          0%,100%{ filter:drop-shadow(0 0 8px ${B.amber}40); }
+          50%    { filter:drop-shadow(0 0 28px ${B.amber}90); }
         }
       `}</style>
 
-      <div style={{ maxWidth: 600, margin: '0 auto' }}>
+      {/* Confetti burst */}
+      {confetti.length > 0 && (
+        <div style={{ position:'absolute', inset:0, pointerEvents:'none', overflow:'hidden', zIndex:50 }}>
+          {confetti.map(p => (
+            <div key={p.id} style={{
+              position:'absolute', left:`${p.left}%`, top:0,
+              width:p.size, height:p.size,
+              borderRadius: Math.random() > 0.5 ? '50%' : 2,
+              background: p.color, '--s': `${p.spin}deg`,
+              animation:`confettiRain ${p.dur}s ${p.delay}s ease-in forwards`,
+              boxShadow:`0 0 6px ${p.color}80`,
+            }}/>
+          ))}
+        </div>
+      )}
+
+      {/* Social proof toast */}
+      {social && (
+        <div style={{
+          position:'absolute', top:28, left:'50%', transform:'translateX(-50%)',
+          background:'rgba(10,10,14,0.97)', border:`1px solid ${B.amber}40`,
+          borderRadius:8, padding:'8px 20px', zIndex:20,
+          animation:'socialIn 0.4s ease',
+          display:'flex', alignItems:'center', gap:10,
+        }}>
+          <div style={{ width:6, height:6, borderRadius:'50%', background:B.neonLime, boxShadow:`0 0 8px ${B.neonLime}`, animation:'pulse 1s infinite' }}/>
+          <span style={{ fontFamily:"'Space Mono'", fontSize:10, color:B.mist }}>
+            <span style={{ color:B.amber }}>{social.name} ({social.city})</span> just won <span style={{ color:B.neonCyan }}>{social.prize}</span>
+          </span>
+        </div>
+      )}
+
+      {/* Ambient glow */}
+      <div style={{ position:'absolute', top:'40%', left:'50%', transform:'translate(-50%,-50%)', width:600, height:600, borderRadius:'50%', background:`radial-gradient(circle, ${B.amber}08 0%, transparent 70%)`, filter:'blur(60px)', pointerEvents:'none', animation: spinning ? 'borderGlow 1s ease-in-out infinite' : 'none' }} />
+
+      <div style={{ maxWidth: 640, margin: '0 auto', position:'relative', zIndex:2 }}>
         <SectionTag>SPIN TO WIN</SectionTag>
-        <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
-          TEST YOUR LUCK
+        <h2 style={{ fontFamily:"'Bebas Neue'", fontSize:'clamp(2.5rem,7vw,5rem)', color:B.white, letterSpacing:'0.05em', marginBottom:8 }}>
+          TEST YOUR{' '}<span style={{ color:B.amber, textShadow:`0 0 40px ${B.amber}70` }}>LUCK</span>
         </h2>
-        <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.78rem', marginBottom: 44 }}>
-          8 prizes · one spin · claim at the gate
-        </p>
 
-        {/* Pointer + Wheel */}
-        <div style={{ position: 'relative', display: 'inline-block' }}>
-          {/* Pointer triangle */}
-          <div style={{
-            position: 'absolute', top: -20, left: '50%',
-            transform: 'translateX(-50%)',
-            width: 0, height: 0, zIndex: 20,
-            borderLeft: '13px solid transparent',
-            borderRight: '13px solid transparent',
-            borderTop: `32px solid ${B.amber}`,
-            filter: `drop-shadow(0 0 10px ${B.amber})`,
-          }} />
+        {/* Daily spin counter */}
+        <div style={{ display:'inline-flex', alignItems:'center', gap:16, marginBottom:32, padding:'10px 24px', background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:40 }}>
+          <div style={{ display:'flex', gap:8, alignItems:'center' }}>
+            {Array.from({ length: max }).map((_, i) => (
+              <div key={i} style={{
+                width: 10, height: 10, borderRadius:'50%',
+                background: i < used ? B.gunmetal : B.amber,
+                boxShadow: i < used ? 'none' : `0 0 8px ${B.amber}80`,
+                transition:'all 0.3s',
+              }}/>
+            ))}
+          </div>
+          <span style={{ fontFamily:"'Space Mono'", fontSize:9, color: spinsLeft > 0 ? B.amber : '#555', letterSpacing:2 }}>
+            {spinsLeft > 0 ? `${spinsLeft} SPIN${spinsLeft !== 1 ? 'S' : ''} LEFT TODAY` : 'NO SPINS LEFT · COME BACK TOMORROW'}
+          </span>
+        </div>
 
-          {/* Wheel border glow */}
+        {/* Earn more spins hint */}
+        {used >= max && (
+          <p style={{ fontFamily:"'Space Mono'", fontSize:9, color:'#444', letterSpacing:1, marginTop:-20, marginBottom:28 }}>
+            Complete trivia or memory match to earn bonus spins
+          </p>
+        )}
+
+        {/* Wheel */}
+        <div style={{ position:'relative', display:'inline-block', marginBottom:32 }}>
           <div style={{
-            width: 304, height: 304, borderRadius: '50%',
-            padding: 2,
-            background: `conic-gradient(${B.amber}, ${B.neonMagenta}, ${B.neonCyan}, ${B.amber})`,
-            boxShadow: spinning ? `0 0 60px ${B.amber}60` : `0 0 28px ${B.amber}20`,
-            transition: 'box-shadow 0.4s',
+            position:'absolute', top:-24, left:'50%', transform:'translateX(-50%)',
+            width:0, height:0, zIndex:20,
+            borderLeft:'14px solid transparent', borderRight:'14px solid transparent',
+            borderTop:`34px solid ${B.amber}`,
+            filter:`drop-shadow(0 0 14px ${B.amber}90)`,
+          }}/>
+
+          <div style={{
+            width:308, height:308, borderRadius:'50%', padding:3,
+            background:`conic-gradient(${B.amber}, ${B.neonMagenta}, ${B.neonCyan}, ${B.neonLime}, ${B.amber})`,
+            boxShadow: spinning ? `0 0 80px ${B.amber}70, 0 0 160px ${B.amber}30` : `0 0 32px ${B.amber}25`,
+            transition:'box-shadow 0.4s', animation: !spinning ? 'wheelGlow 3s ease-in-out infinite' : 'none',
           }}>
-            <div style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden' }}>
-              <svg
-                viewBox="0 0 300 300"
-                width="300" height="300"
+            <div style={{ width:'100%', height:'100%', borderRadius:'50%', overflow:'hidden', background:B.black }}>
+              <svg viewBox="0 0 300 300" width="302" height="302"
                 style={{
-                  transform: `rotate(${rotation}deg)`,
-                  transition: spinning ? 'transform 5s cubic-bezier(0.05,0.72,0.18,1)' : 'none',
-                  display: 'block',
+                  transform:`rotate(${rotation}deg)`,
+                  transition: spinning ? 'transform 5.4s cubic-bezier(0.02,0.68,0.14,1)' : 'none',
+                  display:'block',
+                  animation: isNearMiss && !spinning ? 'nearMissShake 0.5s ease' : 'none',
                 }}
               >
                 {PRIZES.map((p, i) => (
                   <g key={i}>
-                    <path d={segPath(i)} fill={p.color} stroke="#0A0A0A" strokeWidth="1.5" />
-                    <text
-                      transform={labelTransform(i)}
-                      fill="rgba(0,0,0,0.82)"
-                      fontSize="8.5"
-                      fontWeight="bold"
-                      textAnchor="middle"
-                      dominantBaseline="middle"
-                      fontFamily="'Courier New', monospace"
-                    >
+                    <path d={segPath(i)} fill={p.color} stroke="#0A0A0A" strokeWidth="1.5"/>
+                    {p.rare && (
+                      <path d={segPath(i)} fill="rgba(255,255,255,0.07)" stroke="none"/>
+                    )}
+                    <text transform={labelTransform(i)} fill="rgba(0,0,0,0.9)"
+                      fontSize="8" fontWeight="bold" textAnchor="middle"
+                      dominantBaseline="middle" fontFamily="'Courier New',monospace">
                       {p.icon}
                     </text>
                   </g>
                 ))}
-                {/* Hub */}
-                <circle cx={CX} cy={CY} r="22" fill="#0A0A0A" stroke={B.amber} strokeWidth="2.5" />
-                <text
-                  x={CX} y={CY}
-                  textAnchor="middle" dominantBaseline="middle"
-                  fontSize="9" fontWeight="bold" fontFamily="monospace" fill={B.amber}
-                >SF26</text>
+                <circle cx={CX} cy={CY} r="24" fill="#050508" stroke={B.amber} strokeWidth="2.5"/>
+                <text x={CX} y={CY} textAnchor="middle" dominantBaseline="middle"
+                  fontSize="8" fontWeight="bold" fontFamily="monospace" fill={B.amber}>SF26</text>
               </svg>
             </div>
           </div>
         </div>
 
-        <div style={{ marginTop: 40 }}>
+        {/* Spin button */}
+        <div>
           <button
             onClick={spin}
-            disabled={spinning}
+            disabled={!canSpin}
             style={{
-              background: spinning ? B.gunmetal : B.amber,
-              color: spinning ? B.smoke : B.black,
-              border: 'none', padding: '14px 52px',
-              fontFamily: "'Bebas Neue'", fontSize: '1.5rem', letterSpacing: '0.1em',
-              cursor: spinning ? 'default' : 'pointer', borderRadius: 4,
-              boxShadow: spinning ? 'none' : `0 0 28px ${B.amber}60`,
-              transition: 'all 0.3s', minWidth: 220,
+              background: canSpin ? B.amber : B.gunmetal,
+              color: canSpin ? B.black : '#444',
+              border: 'none', padding:'16px 56px',
+              fontFamily:"'Bebas Neue'", fontSize:'1.6rem', letterSpacing:'0.12em',
+              cursor: canSpin ? 'pointer' : 'default',
+              borderRadius:6, minWidth:240,
+              boxShadow: canSpin ? `0 0 40px ${B.amber}60, 0 8px 32px rgba(0,0,0,0.5)` : 'none',
+              transition:'all 0.3s',
+              transform: canSpin ? 'scale(1)' : 'scale(0.96)',
             }}
           >
-            {spinning ? 'SPINNING...' : spun ? 'SPIN AGAIN' : 'SPIN THE WHEEL'}
+            {spinning ? 'SPINNING...' : !canSpin ? 'COME BACK TOMORROW' : spunCount > 0 ? `SPIN AGAIN (${spinsLeft} LEFT)` : 'SPIN THE WHEEL'}
           </button>
         </div>
 
-        <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.62rem', marginTop: 14 }}>
-          Prizes redeemable at the event gate · Dec 12, Eko Atlantic
-        </p>
+        {totalAll > 0 && (
+          <p style={{ color:'#333', fontFamily:"'Space Mono'", fontSize:8, marginTop:14, letterSpacing:1 }}>
+            {totalAll} total spin{totalAll !== 1 ? 's' : ''} · prizes redeemable at the gate · Dec 12
+          </p>
+        )}
       </div>
 
       {/* Result modal */}
       {prize && (
         <div
-          onClick={() => setResult(null)}
-          style={{
-            position: 'fixed', inset: 0, zIndex: 9999,
-            background: 'rgba(0,0,0,0.93)', backdropFilter: 'blur(8px)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}
+          onClick={() => { setResult(null); setIsNearMiss(false) }}
+          style={{ position:'fixed', inset:0, zIndex:9999, background:'rgba(0,0,0,0.94)', backdropFilter:'blur(10px)', display:'flex', alignItems:'center', justifyContent:'center', padding:24 }}
         >
           <div
             onClick={e => e.stopPropagation()}
             style={{
-              background: B.charcoal, borderRadius: 14, padding: '48px 40px',
-              maxWidth: 420, width: '90%', textAlign: 'center',
+              background:`linear-gradient(145deg, #0a0a0f 0%, #101018 100%)`,
+              borderRadius:16, padding:'48px 40px',
+              maxWidth:420, width:'90%', textAlign:'center',
               border: `2px solid ${prize.color}`,
-              boxShadow: `0 0 80px ${prize.color}50, 0 0 200px ${prize.color}20`,
-              animation: 'winnerPop 0.55s cubic-bezier(0.34,1.56,0.64,1)',
+              boxShadow:`0 0 100px ${prize.color}50, 0 0 200px ${prize.color}20`,
+              animation:'winnerPop 0.6s cubic-bezier(0.34,1.56,0.64,1)',
             }}
           >
-            {/* Prize icon circle */}
-            <div style={{
-              width: 88, height: 88, borderRadius: '50%',
-              background: `${prize.color}25`, border: `2px solid ${prize.color}`,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              margin: '0 auto 24px',
-              fontFamily: "'Orbitron'", fontSize: '1.1rem', fontWeight: 900,
-              color: prize.color, letterSpacing: '0.05em',
-            }}>
-              {prize.icon}
-            </div>
-
-            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.58rem', letterSpacing: '0.3em', color: prize.color, marginBottom: 10 }}>YOU WON</div>
-            <h3 style={{ fontFamily: "'Bebas Neue'", fontSize: '2.4rem', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
-              {prize.label}
-            </h3>
-            <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.72rem', marginBottom: 28 }}>
-              {prize.sub}
-            </p>
-
-            {prize.label !== 'TRY AGAIN' && (
-              <div style={{
-                background: B.black, border: `1px solid ${prize.color}50`,
-                borderRadius: 6, padding: '12px 20px', marginBottom: 24,
-                fontFamily: "'Space Mono'", fontSize: '0.62rem', color: prize.color, lineHeight: 1.6,
-              }}>
-                Screenshot this · show at the event gate on Dec 12 to claim
-              </div>
+            {isNearMiss && prize.label === 'TRY AGAIN' && nearPrize ? (
+              <>
+                <div style={{ fontFamily:"'Space Mono'", fontSize:9, letterSpacing:3, color:'#555', marginBottom:8 }}>YOU WERE THIS CLOSE</div>
+                <div style={{ fontFamily:"'Bebas Neue'", fontSize:'2.8rem', color:B.neonMagenta, letterSpacing:3, textShadow:`0 0 40px ${B.neonMagenta}60`, marginBottom:6 }}>SO CLOSE!</div>
+                <p style={{ fontFamily:"'Space Mono'", fontSize:10, color:'#666', marginBottom:20 }}>
+                  One segment away from <span style={{ color:nearPrize.color }}>{nearPrize.label}</span>
+                </p>
+                <div style={{ width:64, height:64, borderRadius:'50%', background:`${prize.color}15`, border:`2px solid ${prize.color}50`, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 20px', fontFamily:"'Orbitron'", fontSize:'1rem', color:prize.color }}>↩</div>
+                <div style={{ fontFamily:"'Bebas Neue'", fontSize:'2rem', color:B.white, marginBottom:6 }}>TRY AGAIN</div>
+                <p style={{ color:'#555', fontFamily:"'Space Mono'", fontSize:9, marginBottom:24 }}>
+                  You have {spinsLeft} spin{spinsLeft !== 1 ? 's' : ''} remaining today
+                </p>
+              </>
+            ) : prize.label !== 'TRY AGAIN' ? (
+              <>
+                <div style={{ width:88, height:88, borderRadius:'50%', background:`${prize.color}20`, border:`2px solid ${prize.color}`, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 24px', fontFamily:"'Orbitron'", fontSize:'1.1rem', fontWeight:900, color:prize.color, letterSpacing:'0.05em' }}>
+                  {prize.icon}
+                </div>
+                {prize.rare && (
+                  <div style={{ fontFamily:"'Space Mono'", fontSize:8, letterSpacing:3, color:B.neonLime, marginBottom:6 }}>⭐ RARE PRIZE</div>
+                )}
+                <div style={{ fontFamily:"'Space Mono'", fontSize:9, letterSpacing:3, color:prize.color, marginBottom:10 }}>YOU WON</div>
+                <h3 style={{ fontFamily:"'Bebas Neue'", fontSize:'2.6rem', color:B.white, letterSpacing:'0.05em', marginBottom:8 }}>{prize.label}</h3>
+                <p style={{ color:B.smoke, fontFamily:"'Space Mono'", fontSize:10, marginBottom:6 }}>{prize.sub}</p>
+                <p style={{ color:prize.color, fontFamily:"'Orbitron'", fontSize:9, fontWeight:700, marginBottom:24 }}>+{prize.xp} XP EARNED</p>
+                <div style={{ background:B.black, border:`1px solid ${prize.color}40`, borderRadius:8, padding:'12px 20px', marginBottom:24, fontFamily:"'Space Mono'", fontSize:9, color:prize.color, lineHeight:1.7 }}>
+                  📸 Screenshot this · show at the event gate on Dec 12
+                </div>
+              </>
+            ) : (
+              <>
+                <div style={{ fontSize:'3rem', marginBottom:16 }}>😬</div>
+                <div style={{ fontFamily:"'Bebas Neue'", fontSize:'2rem', color:B.white, marginBottom:8 }}>TRY AGAIN</div>
+                <p style={{ color:'#555', fontFamily:"'Space Mono'", fontSize:9, marginBottom:24 }}>
+                  {spinsLeft > 0 ? `${spinsLeft} spin${spinsLeft !== 1 ? 's' : ''} remaining today — go again!` : 'Come back tomorrow for 3 fresh spins'}
+                </p>
+              </>
             )}
-
-            <button
-              onClick={() => setResult(null)}
-              style={{
-                background: 'transparent', border: `1px solid ${B.gunmetal}`,
-                color: B.smoke, padding: '8px 28px',
-                fontFamily: "'Space Mono'", fontSize: '0.7rem',
-                cursor: 'pointer', borderRadius: 4,
-              }}
-            >close</button>
+            <button onClick={() => { setResult(null); setIsNearMiss(false) }}
+              style={{ background:'transparent', border:`1px solid ${B.gunmetal}`, color:B.smoke, padding:'9px 32px', fontFamily:"'Space Mono'", fontSize:9, cursor:'pointer', borderRadius:6 }}>
+              {spinsLeft > 0 && prize.label === 'TRY AGAIN' ? 'SPIN AGAIN' : 'CLOSE'}
+            </button>
           </div>
         </div>
       )}
