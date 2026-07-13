@@ -150,3 +150,18 @@ export function subscribe(cb) {
   window.addEventListener(EVENT, fn)
   return () => window.removeEventListener(EVENT, fn)
 }
+
+export const STREAK_XP = {
+  daily: 50,
+  day3: 200,
+  day7: 500,
+  day14: 1000,
+}
+
+export function processStreakXP(streak) {
+  if (streak === 14) { addXP(STREAK_XP.day14, 'Daily Streak', '14-day-legend'); return STREAK_XP.day14 }
+  if (streak === 7)  { addXP(STREAK_XP.day7,  'Daily Streak', '7-day-devotee'); return STREAK_XP.day7  }
+  if (streak === 3)  { addXP(STREAK_XP.day3,  'Daily Streak', 'streak-devotee'); return STREAK_XP.day3 }
+  addXP(STREAK_XP.daily, 'Daily Streak', null)
+  return STREAK_XP.daily
+}
