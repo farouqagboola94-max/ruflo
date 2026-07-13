@@ -1,850 +1,864 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="noir">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Request anything in Lagos. Dispatched in minutes, not hours. No calls, no follow-ups, no missed pickups. Za.allyErrands — Lagos' fastest errand machine." />
-  <title>Za.allyErrands — Lagos' Fastest Errand Machine</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Za.allyErrands — Lagos Premium Errand &amp; Delivery Service</title>
+<meta name="description" content="Lagos' #1 same-day errand and delivery service. Book a trusted runner in seconds. Business portals, real-time tracking, and API integration available."/>
+<link rel="canonical" href="https://za-allyerrands.netlify.app/"/>
+<meta name="keywords" content="errand service Lagos, delivery service Lagos, same day delivery Lagos, dispatch service Lagos, errand runners Lagos, courier Lagos, Za allyErrands"/>
+<meta name="geo.region" content="NG-LA"/>
+<meta name="geo.placename" content="Lagos, Nigeria"/>
+<meta name="geo.position" content="6.5244;3.3792"/>
+<meta name="ICBM" content="6.5244, 3.3792"/>
+<meta property="og:title" content="Za.allyErrands — Lagos Premium Errand Service"/>
+<meta property="og:description" content="Book a trusted Lagos runner in seconds. Same-day delivery, real-time tracking."/>
+<meta property="og:url" content="https://za-allyerrands.netlify.app/"/>
+<meta property="og:type" content="website"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"LocalBusiness","name":"Za.allyErrands","description":"Lagos' #1 same-day errand and delivery service","url":"https://za-allyerrands.netlify.app","telephone":"+234-800-ALLY-RUN","address":{"@type":"PostalAddress","addressLocality":"Lagos","addressRegion":"Lagos State","addressCountry":"NG"},"geo":{"@type":"GeoCoordinates","latitude":6.5244,"longitude":3.3792},"openingHours":"Mo-Su 06:00-22:00","priceRange":"₦₦","serviceArea":{"@type":"City","name":"Lagos"},"hasOfferCatalog":{"@type":"OfferCatalog","name":"Errand Services","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Same-Day Delivery","description":"Door-to-door Lagos delivery within 2 hours"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Errand Running","description":"Shopping, banking, document pickup across Lagos"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Business Dispatch","description":"Bulk delivery and logistics for Lagos businesses"}}]}}
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#07091A;--bg2:#0D0F2B;--bg3:#111435;
+--orange:#FF4500;--orange2:#FF6B35;
+--gold:#F5A623;--gold2:#FFD700;
+--white:#FFFFFF;--grey:#8892B0;--grey2:#CCD6F6;
+--glass:rgba(255,255,255,0.04);--glass2:rgba(255,255,255,0.08);
+--border:rgba(255,255,255,0.08);--border2:rgba(245,166,35,0.3);
+--glow-orange:0 0 40px rgba(255,69,0,0.4);
+--glow-gold:0 0 40px rgba(245,166,35,0.4);
+--font-body:'Plus Jakarta Sans',sans-serif;
+--font-display:'Bebas Neue',cursive;
+}
+html{scroll-behavior:smooth}
+body{
+background:var(--bg);color:var(--white);
+font-family:var(--font-body);overflow-x:hidden;
+cursor:none;
+}
 
-  <!-- ═══ CANONICAL + GEO ═══ -->
-  <link rel="canonical" href="https://za-allyerrands.netlify.app/" />
-  <meta name="geo.region" content="NG-LA" />
-  <meta name="geo.placename" content="Lagos, Nigeria" />
-  <meta name="geo.position" content="6.5244;3.3792" />
-  <meta name="ICBM" content="6.5244, 3.3792" />
-  <meta name="keywords" content="errand service Lagos, Lagos errand runner, grocery delivery Lagos, pharmacy pickup Lagos, same day delivery Lagos, errand dispatch Lagos, errand app Lagos Nigeria" />
+/* ── CURSOR ── */
+#cursor-dot{position:fixed;width:8px;height:8px;background:var(--orange);border-radius:50%;pointer-events:none;z-index:10000;transform:translate(-50%,-50%);transition:transform .1s}
+#cursor-ring{position:fixed;width:40px;height:40px;border:1.5px solid var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:all .25s cubic-bezier(.16,1,.3,1);opacity:.7}
+body:hover #cursor-ring{opacity:1}
 
-  <!-- ═══ SOCIAL / OG ═══ -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://za-allyerrands.netlify.app" />
-  <meta property="og:site_name" content="Za.allyErrands" />
-  <meta property="og:title" content="Za.allyErrands — Lagos' Fastest Errand Machine" />
-  <meta property="og:description" content="Request anything in Lagos. Dispatched in 8 minutes, not hours. Groceries, pharmacy, packages — no stress, no calls, just done. 1,200+ errands completed." />
-  <meta property="og:image" content="https://za-allyerrands.netlify.app/assets/og.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Za.allyErrands — Lagos Errand Dispatch" />
-  <meta property="og:locale" content="en_NG" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Za.allyErrands — Lagos' Fastest Errand Machine" />
-  <meta name="twitter:description" content="Request anything. Dispatched in 8 mins. Groceries, pharmacy, packages — done without you lifting a finger." />
-  <meta name="twitter:image" content="https://za-allyerrands.netlify.app/assets/og.png" />
+/* ── LOADER ── */
+#loader{position:fixed;inset:0;background:var(--bg);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem}
+.loader-logo{font-family:var(--font-display);font-size:3rem;letter-spacing:.15em;background:linear-gradient(135deg,var(--orange),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:pulse-text 1.5s ease-in-out infinite}
+.loader-bar-wrap{width:260px;height:3px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}
+.loader-bar{height:100%;background:linear-gradient(90deg,var(--orange),var(--gold));border-radius:99px;animation:load-fill 2s ease forwards}
+.loader-sub{font-size:.8rem;letter-spacing:.3em;text-transform:uppercase;color:var(--grey);opacity:.7}
+@keyframes load-fill{from{width:0}to{width:100%}}
+@keyframes pulse-text{0%,100%{opacity:1}50%{opacity:.6}}
+#loader.hide{animation:fade-out .6s forwards}
+@keyframes fade-out{to{opacity:0;visibility:hidden}}
 
-  <!-- ═══ PWA / MOBILE ═══ -->
-  <meta name="theme-color" content="#FF4500" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Za.Errands" />
-  <link rel="manifest" href="/manifest.json" />
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:1.2rem 4rem;display:flex;align-items:center;justify-content:space-between;transition:all .4s}
+nav.scrolled{background:rgba(7,9,26,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:1rem 4rem}
+.nav-logo{font-family:var(--font-display);font-size:1.6rem;letter-spacing:.12em;background:linear-gradient(135deg,var(--orange),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+.nav-links{display:flex;gap:2.5rem;list-style:none;align-items:center}
+.nav-links a{color:var(--grey2);text-decoration:none;font-size:.9rem;font-weight:500;letter-spacing:.03em;transition:color .3s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1.5px;background:var(--orange);transition:width .3s}
+.nav-links a:hover{color:var(--white)}
+.nav-links a:hover::after{width:100%}
+.nav-cta{background:linear-gradient(135deg,var(--orange),var(--orange2));color:var(--white)!important;padding:.55rem 1.4rem;border-radius:8px;font-weight:600!important;box-shadow:var(--glow-orange);transition:transform .3s,box-shadow .3s!important}
+.nav-cta:hover{transform:translateY(-2px)!important;box-shadow:0 0 60px rgba(255,69,0,.6)!important}
+.nav-cta::after{display:none!important}
+.nav-burger{display:none;flex-direction:column;gap:5px;cursor:pointer}
+.nav-burger span{width:24px;height:2px;background:var(--white);border-radius:2px;transition:all .3s}
 
-  <!-- ═══ SCHEMA ═══ -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "Za.allyErrands",
-    "description": "Lagos' autonomous errand dispatch service — groceries, pharmacy, packages, dry cleaning and more",
-    "url": "https://za-allyerrands.netlify.app",
-    "areaServed": [
-      { "@type": "City", "name": "Lagos" }
-    ],
-    "serviceType": "Errand delivery and dispatch service",
-    "priceRange": "₦₦",
-    "openingHours": "Mo-Su 06:00-23:00",
-    "telephone": "+2348000000000"
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "How quickly will my runner be dispatched in Lagos?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Average dispatch is 8 minutes. You'll get a WhatsApp message the moment a runner accepts your job. During peak hours (7-9am, 5-8pm) allow up to 15 minutes."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How do I pay for errands in Lagos?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Payment is via Flutterwave — card, bank transfer, or USSD. You pay after we confirm your quote via WhatsApp. No card data is ever stored on our end."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Which areas of Lagos does Za.allyErrands cover?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Currently 20+ zones across Lagos — Island (Victoria Island, Ikoyi, Lekki Phase 1 and 2), Mainland (Ikeja, Yaba, Surulere), and Outskirts (Ajah, Sangotedo, Epe). WhatsApp us to confirm your exact street."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What if something goes wrong with my errand?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "All errands are photo-documented at pickup and delivery. If there's ever an issue, WhatsApp us and we resolve it within 2 hours. We stand behind every run."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Do I need to create an account to use Za.allyErrands?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "No account needed for your first request. Returning clients get a dedicated portal for tracking, history, and scheduling recurring errands."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Can I schedule recurring errands in Lagos?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes — weekly and monthly plan clients get a recurring scheduler in their portal. Set it once, we handle it every time. Or message us directly on WhatsApp."
-        }
-      }
-    ]
-  }
-  </script>
+/* ── TICKER ── */
+.ticker{background:linear-gradient(90deg,var(--orange),var(--gold));overflow:hidden;padding:.45rem 0;position:relative;z-index:999}
+.ticker-track{display:flex;gap:3rem;animation:ticker-scroll 25s linear infinite;white-space:nowrap;width:max-content}
+.ticker-item{font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--bg);opacity:.9}
+.ticker-sep{color:rgba(7,9,26,.5)}
+@keyframes ticker-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    "serviceType": "Errand Dispatch Service",
-    "provider": {
-      "@type": "LocalBusiness",
-      "name": "Za.allyErrands",
-      "url": "https://za-allyerrands.netlify.app"
-    },
-    "areaServed": {
-      "@type": "City",
-      "name": "Lagos",
-      "sameAs": "https://en.wikipedia.org/wiki/Lagos"
-    },
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": "Za.allyErrands Errand Services",
-      "itemListElement": [
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Grocery Run Lagos",
-            "description": "Shop your grocery list from Shoprite, Market Square, Spar and deliver fresh across Lagos."
-          },
-          "priceSpecification": { "@type": "PriceSpecification", "price": "1500", "priceCurrency": "NGN" }
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Pharmacy Pickup Lagos",
-            "description": "Prescription collected and delivered sealed, documented, direct to your door across Lagos."
-          },
-          "priceSpecification": { "@type": "PriceSpecification", "price": "1200", "priceCurrency": "NGN" }
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Package and Post Delivery Lagos",
-            "description": "NIPOST drops, courier pickups, same day parcel delivery across Lagos."
-          },
-          "priceSpecification": { "@type": "PriceSpecification", "price": "1500", "priceCurrency": "NGN" }
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Restaurant Pickup Lagos",
-            "description": "Your order straight from the kitchen — no cold deliveries, no wrong bags."
-          },
-          "priceSpecification": { "@type": "PriceSpecification", "price": "1300", "priceCurrency": "NGN" }
-        }
-      ]
-    }
-  }
-  </script>
+/* ── HERO ── */
+#hero{position:relative;height:100vh;min-height:700px;display:flex;align-items:center;overflow:hidden}
+#hero-canvas{position:absolute;inset:0;z-index:0}
+.hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse at 60% 50%,transparent 30%,rgba(7,9,26,.7) 70%,var(--bg) 100%);z-index:1}
+.hero-content{position:relative;z-index:2;padding:0 4rem;max-width:700px}
+.hero-badge{display:inline-flex;align-items:center;gap:.6rem;padding:.4rem 1rem;background:var(--glass2);border:1px solid var(--border2);border-radius:99px;font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:1.6rem;backdrop-filter:blur(10px)}
+.hero-badge::before{content:'';width:8px;height:8px;background:var(--gold);border-radius:50%;animation:blink 1.5s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1;box-shadow:0 0 8px var(--gold)}50%{opacity:.3}}
+.hero-h1{font-family:var(--font-display);font-size:clamp(3.5rem,7vw,6rem);line-height:.95;letter-spacing:.04em;margin-bottom:1.4rem}
+.hero-h1 .line2{background:linear-gradient(135deg,var(--orange),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block}
+.hero-sub{font-size:1.15rem;color:var(--grey2);line-height:1.7;margin-bottom:2.2rem;max-width:520px;font-weight:400}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-primary{display:inline-flex;align-items:center;gap:.6rem;padding:.85rem 2rem;background:linear-gradient(135deg,var(--orange),var(--orange2));color:var(--white);font-family:var(--font-body);font-size:.95rem;font-weight:700;border-radius:10px;text-decoration:none;box-shadow:var(--glow-orange);transition:transform .3s,box-shadow .3s;border:none;cursor:pointer}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 0 70px rgba(255,69,0,.7)}
+.btn-secondary{display:inline-flex;align-items:center;gap:.6rem;padding:.85rem 2rem;background:var(--glass2);color:var(--white);font-family:var(--font-body);font-size:.95rem;font-weight:600;border-radius:10px;text-decoration:none;border:1px solid var(--border);backdrop-filter:blur(10px);transition:all .3s;cursor:pointer}
+.btn-secondary:hover{background:var(--glass);border-color:var(--gold);color:var(--gold)}
+.hero-scroll{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--grey);font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;animation:bounce 2s ease-in-out infinite}
+.hero-scroll span{width:1.5px;height:40px;background:linear-gradient(var(--gold),transparent);border-radius:99px}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
+/* ── STATS ── */
+.stats{padding:5rem 4rem;background:var(--bg2);position:relative}
+.stats::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;max-width:1100px;margin:0 auto;text-align:center}
+.stat-card{padding:2rem 1rem;background:var(--glass);border:1px solid var(--border);border-radius:16px;transition:transform .4s,border-color .4s;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--orange),var(--gold));transform:scaleX(0);transition:transform .4s;transform-origin:left}
+.stat-card:hover{transform:translateY(-6px);border-color:var(--border2)}
+.stat-card:hover::before{transform:scaleX(1)}
+.stat-num{font-family:var(--font-display);font-size:3.5rem;line-height:1;background:linear-gradient(135deg,var(--orange),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{font-size:.82rem;color:var(--grey);margin-top:.5rem;letter-spacing:.05em;text-transform:uppercase}
+
+/* ── SECTION HEADER ── */
+.section-header{text-align:center;margin-bottom:4rem}
+.section-tag{display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--orange);margin-bottom:.8rem;padding:.3rem .9rem;background:rgba(255,69,0,.1);border-radius:99px;border:1px solid rgba(255,69,0,.25)}
+.section-title{font-family:var(--font-display);font-size:clamp(2.2rem,4.5vw,3.5rem);letter-spacing:.04em;line-height:1.05;margin-bottom:1rem}
+.section-title .gold{background:linear-gradient(135deg,var(--orange),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.section-sub{font-size:1rem;color:var(--grey);max-width:540px;margin:0 auto;line-height:1.7}
+
+/* ── SERVICES ── */
+.services{padding:6rem 4rem;background:var(--bg)}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.8rem;max-width:1200px;margin:0 auto}
+.service-card{background:var(--glass);border:1px solid var(--border);border-radius:20px;padding:2.2rem;transition:all .4s;position:relative;overflow:hidden;transform-style:preserve-3d;cursor:pointer}
+.service-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,69,0,.07),rgba(245,166,35,.05));opacity:0;transition:opacity .4s;border-radius:20px}
+.service-card:hover{transform:translateY(-8px) rotateX(3deg);border-color:var(--border2);box-shadow:var(--glow-gold)}
+.service-card:hover::after{opacity:1}
+.service-icon{width:56px;height:56px;background:linear-gradient(135deg,rgba(255,69,0,.15),rgba(245,166,35,.1));border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:1.4rem;font-size:1.8rem;border:1px solid rgba(255,69,0,.2)}
+.service-title{font-size:1.15rem;font-weight:700;margin-bottom:.7rem;color:var(--white)}
+.service-desc{font-size:.88rem;color:var(--grey);line-height:1.65}
+.service-tag{display:inline-block;margin-top:1.2rem;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);padding:.25rem .7rem;background:rgba(245,166,35,.1);border-radius:99px;border:1px solid rgba(245,166,35,.2)}
+
+/* ── HOW IT WORKS ── */
+.how{padding:6rem 4rem;background:var(--bg2);position:relative;overflow:hidden}
+.how::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(255,69,0,.04),transparent 60%);pointer-events:none}
+.how-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;max-width:1200px;margin:0 auto;position:relative}
+.how-steps::before{content:'';position:absolute;top:44px;left:calc(12.5% + 28px);right:calc(12.5% + 28px);height:1px;background:linear-gradient(90deg,var(--orange),var(--gold),var(--orange));opacity:.3}
+.step-card{text-align:center;padding:0 1rem;position:relative}
+.step-num{width:56px;height:56px;background:linear-gradient(135deg,var(--orange),var(--gold));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.4rem;font-family:var(--font-display);font-size:1.5rem;position:relative;z-index:1;box-shadow:0 0 30px rgba(255,69,0,.4)}
+.step-title{font-size:1rem;font-weight:700;margin-bottom:.6rem}
+.step-desc{font-size:.85rem;color:var(--grey);line-height:1.6}
+
+/* ── MAP ── */
+.coverage{padding:6rem 4rem;background:var(--bg);overflow:hidden}
+.coverage-wrap{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.coverage-info{padding-right:2rem}
+.coverage-title{font-family:var(--font-display);font-size:clamp(2rem,4vw,3rem);letter-spacing:.04em;margin-bottom:1.2rem;line-height:1.1}
+.coverage-desc{font-size:.95rem;color:var(--grey);line-height:1.75;margin-bottom:2rem}
+.zone-pills{display:flex;flex-wrap:wrap;gap:.7rem;margin-bottom:2rem}
+.zone-pill{padding:.4rem .9rem;background:var(--glass2);border:1px solid var(--border);border-radius:99px;font-size:.78rem;font-weight:600;color:var(--grey2);transition:all .3s}
+.zone-pill:hover{border-color:var(--gold);color:var(--gold)}
+#map-canvas{border-radius:20px;border:1px solid var(--border);background:var(--bg3);display:block}
+
+/* ── PRICING ── */
+.pricing{padding:6rem 4rem;background:var(--bg2)}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.8rem;max-width:1100px;margin:0 auto}
+.price-card{background:var(--glass);border:1px solid var(--border);border-radius:20px;padding:2.5rem 2rem;position:relative;transition:all .4s;text-align:center}
+.price-card.featured{background:linear-gradient(135deg,rgba(255,69,0,.12),rgba(245,166,35,.08));border-color:var(--border2);transform:scale(1.04)}
+.price-card.featured::before{content:'MOST POPULAR';position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--orange),var(--gold));color:var(--white);font-size:.65rem;font-weight:800;letter-spacing:.18em;padding:.3rem 1.1rem;border-radius:99px}
+.price-card:hover:not(.featured){transform:translateY(-8px);border-color:rgba(255,255,255,.15)}
+.price-tier{font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--grey);margin-bottom:1rem}
+.price-num{font-family:var(--font-display);font-size:3.5rem;line-height:1;color:var(--white);margin-bottom:.3rem}
+.price-num .naira{font-size:1.8rem;color:var(--gold)}
+.price-period{font-size:.8rem;color:var(--grey);margin-bottom:1.8rem}
+.price-features{list-style:none;text-align:left;margin-bottom:2rem;display:flex;flex-direction:column;gap:.8rem}
+.price-features li{font-size:.88rem;color:var(--grey2);display:flex;align-items:center;gap:.7rem}
+.price-features li::before{content:'✓';color:var(--gold);font-weight:800;flex-shrink:0}
+.price-btn{width:100%;padding:.85rem;background:var(--glass2);border:1px solid var(--border);border-radius:10px;color:var(--white);font-family:var(--font-body);font-size:.9rem;font-weight:600;cursor:pointer;transition:all .3s}
+.price-card.featured .price-btn{background:linear-gradient(135deg,var(--orange),var(--orange2));border-color:transparent;box-shadow:var(--glow-orange)}
+.price-btn:hover{border-color:var(--gold);color:var(--gold)}
+.price-card.featured .price-btn:hover{box-shadow:0 0 60px rgba(255,69,0,.7);transform:translateY(-2px)}
+
+/* ── TESTIMONIALS ── */
+.testimonials{padding:6rem 4rem;background:var(--bg);overflow:hidden}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.8rem;max-width:1200px;margin:0 auto}
+.testi-card{background:var(--glass);border:1px solid var(--border);border-radius:20px;padding:2rem;transition:all .4s}
+.testi-card:hover{transform:translateY(-6px);border-color:var(--border2);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.testi-stars{color:var(--gold);font-size:1rem;letter-spacing:.1em;margin-bottom:1rem}
+.testi-text{font-size:.9rem;color:var(--grey2);line-height:1.7;font-style:italic;margin-bottom:1.5rem}
+.testi-author{display:flex;align-items:center;gap:.9rem}
+.testi-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--gold));display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;flex-shrink:0}
+.testi-name{font-size:.9rem;font-weight:700}
+.testi-role{font-size:.78rem;color:var(--grey);margin-top:.15rem}
+
+/* ── CTA STRIP ── */
+.cta-strip{padding:5rem 4rem;background:linear-gradient(135deg,rgba(255,69,0,.12),rgba(245,166,35,.08));border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center;position:relative;overflow:hidden}
+.cta-strip::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(255,69,0,.1),transparent 60%);pointer-events:none;animation:glow-pulse 3s ease-in-out infinite}
+@keyframes glow-pulse{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.2)}}
+.cta-strip h2{font-family:var(--font-display);font-size:clamp(2.5rem,5vw,4rem);letter-spacing:.05em;position:relative;z-index:1;margin-bottom:1rem}
+.cta-strip p{font-size:1rem;color:var(--grey2);max-width:500px;margin:0 auto 2.5rem;line-height:1.65;position:relative;z-index:1}
+.cta-strip-btns{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;position:relative;z-index:1}
+
+/* ── FOOTER ── */
+footer{background:var(--bg3);padding:5rem 4rem 2rem;border-top:1px solid var(--border)}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;max-width:1200px;margin:0 auto 3rem}
+.footer-brand .logo{font-family:var(--font-display);font-size:1.8rem;letter-spacing:.12em;background:linear-gradient(135deg,var(--orange),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block;margin-bottom:1rem}
+.footer-brand p{font-size:.88rem;color:var(--grey);line-height:1.7;max-width:280px;margin-bottom:1.5rem}
+.footer-socials{display:flex;gap:.9rem}
+.social-btn{width:38px;height:38px;background:var(--glass2);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;text-decoration:none;transition:all .3s;color:var(--grey2)}
+.social-btn:hover{border-color:var(--orange);color:var(--orange);background:rgba(255,69,0,.1)}
+.footer-col h4{font-size:.82rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:1.3rem}
+.footer-col a{display:block;font-size:.87rem;color:var(--grey);text-decoration:none;margin-bottom:.7rem;transition:color .3s}
+.footer-col a:hover{color:var(--white)}
+.footer-bottom{max-width:1200px;margin:0 auto;padding-top:2rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-bottom p{font-size:.82rem;color:var(--grey)}
+.footer-links{display:flex;gap:1.5rem}
+.footer-links a{font-size:.82rem;color:var(--grey);text-decoration:none;transition:color .3s}
+.footer-links a:hover{color:var(--white)}
+
+/* ── WHATSAPP FLOAT ── */
+#wa-btn{position:fixed;bottom:2rem;right:2rem;width:56px;height:56px;background:linear-gradient(135deg,#25d366,#128c7e);border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:5000;box-shadow:0 4px 30px rgba(37,211,102,.4);transition:transform .3s,box-shadow .3s;text-decoration:none;font-size:1.6rem}
+#wa-btn:hover{transform:scale(1.12);box-shadow:0 4px 50px rgba(37,211,102,.7)}
+
+/* ── ANIMATIONS ── */
+.gs-fade{opacity:0;transform:translateY(30px)}
+.gs-scale{opacity:0;transform:scale(.9)}
+.gs-fade-left{opacity:0;transform:translateX(-40px)}
+.gs-fade-right{opacity:0;transform:translateX(40px)}
+.animate-in{opacity:1!important;transform:none!important;transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .services-grid,.pricing-grid,.testi-grid{grid-template-columns:repeat(2,1fr)}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .how-steps{grid-template-columns:repeat(2,1fr)}
+  .how-steps::before{display:none}
+  .coverage-wrap{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  nav{padding:1rem 1.5rem}
+  nav.scrolled{padding:.9rem 1.5rem}
+  .nav-links{display:none;position:fixed;inset:0;top:65px;background:rgba(7,9,26,.97);flex-direction:column;align-items:center;justify-content:center;gap:2rem;z-index:999}
+  .nav-links.open{display:flex}
+  .nav-burger{display:flex}
+  .hero-content{padding:0 1.5rem}
+  .stats,.services,.how,.coverage,.pricing,.testimonials,.cta-strip{padding:4rem 1.5rem}
+  .services-grid,.pricing-grid,.testi-grid{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .how-steps{grid-template-columns:1fr 1fr}
+  .price-card.featured{transform:scale(1)}
+  .footer-grid{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;text-align:center}
+  #cursor-dot,#cursor-ring{display:none}
+  body{cursor:default}
+}
+</style>
 </head>
 <body>
 
-  <div class="promo-banner" id="promoBanner">
-    <div class="promo-banner__inner">
-      <span class="promo-tag">LAUNCH OFFER</span>
-      First errand <strong>&#8358;500 off</strong> &mdash; code <strong class="promo-code">FIRST500</strong>
-      &nbsp;&mdash;&nbsp;ends in <span class="promo-timer" id="promoTimer">24:00:00</span>
-      <a href="#drop" class="promo-link" id="promoClaim">Claim &rarr;</a>
-    </div>
-    <button class="promo-close" id="promoBannerClose" aria-label="Dismiss">&times;</button>
+<!-- CURSOR -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">Za.allyErrands</div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+  <div class="loader-sub">Lagos Delivery Network</div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="/" class="nav-logo">ZA.ALLY</a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#coverage">Coverage</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="/errandme/">ErrandMe</a></li>
+    <li><a href="/api/">API</a></li>
+    <li><a href="/errandme/" class="nav-cta">Book Now</a></li>
+  </ul>
+  <div class="nav-burger" id="burger" onclick="toggleNav()">
+    <span></span><span></span><span></span>
   </div>
+</nav>
 
-  <div class="cursor-glow" id="cursorGlow"></div>
+<!-- TICKER -->
+<div class="ticker" style="margin-top:65px">
+  <div class="ticker-track" id="ticker-track">
+    <span class="ticker-item">Victoria Island</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Lekki Phase 1</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Ikeja GRA</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Surulere</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Ikoyi</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Ajah</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Alausa</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Yaba Tech</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Maryland</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Ojodu Berger</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Victoria Island</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Lekki Phase 1</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Ikeja GRA</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Surulere</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Ikoyi</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Ajah</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Alausa</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Yaba Tech</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Maryland</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Ojodu Berger</span><span class="ticker-sep">✦</span>
+  </div>
+</div>
 
-  <nav class="nav" id="navbar">
-    <div class="nav__inner">
-      <a href="#drop" class="nav__logo">
-        <span class="logo-za">Za.</span><span class="logo-ally">ally</span><span class="logo-rest">Errands</span>
-      </a>
-      <ul class="nav__links" id="navLinks">
-        <li><a href="#process">Process</a></li>
-        <li><a href="#services">Fleet</a></li>
-        <li><a href="#pricing">Rates</a></li>
-        <li><a href="portal/index.html" class="nav__portal">Client Portal</a></li>
-        <li><a href="business/index.html" class="nav__portal" style="background:rgba(0,212,255,0.1);border-color:rgba(0,212,255,0.3);color:#00D4FF;">For Businesses</a></li>
-        <li><a href="#drop" class="nav__cta">Request Now</a></li>
+<!-- HERO -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🟢 120 Runners Online in Lagos</div>
+    <h1 class="hero-h1">
+      Lagos Errands<br/>
+      <span class="line2">Done Right.</span>
+    </h1>
+    <p class="hero-sub">Premium same-day errand and delivery service across Lagos. Book a trusted runner in seconds — we move so you don't have to.</p>
+    <div class="hero-btns">
+      <a href="/errandme/" class="btn-primary">📦 Book a Runner</a>
+      <a href="/business-portal/" class="btn-secondary">🏢 Business Portal</a>
+    </div>
+  </div>
+  <div class="hero-scroll">Scroll<span></span></div>
+</section>
+
+<!-- STATS -->
+<section class="stats" id="stats">
+  <div class="stats-grid">
+    <div class="stat-card gs-fade">
+      <div class="stat-num" data-target="2400">0</div>
+      <div class="stat-label">Deliveries Monthly</div>
+    </div>
+    <div class="stat-card gs-fade">
+      <div class="stat-num" data-target="42">0</div>
+      <div class="stat-label">Min Avg ETA</div>
+    </div>
+    <div class="stat-card gs-fade">
+      <div class="stat-num" data-target="98">0</div>
+      <div class="stat-label">% Satisfaction Rate</div>
+    </div>
+    <div class="stat-card gs-fade">
+      <div class="stat-num" data-target="120">0</div>
+      <div class="stat-label">Active Runners</div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="section-header">
+    <div class="section-tag">What We Do</div>
+    <h2 class="section-title">Premium <span class="gold">Lagos Services</span></h2>
+    <p class="section-sub">From doorstep delivery to complex errand chains — our runners handle it all.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card gs-scale">
+      <div class="service-icon">📦</div>
+      <div class="service-title">Same-Day Delivery</div>
+      <div class="service-desc">Pick up and deliver packages, documents, and parcels anywhere in Lagos within 2 hours. Real-time GPS tracking included.</div>
+      <div class="service-tag">From ₦1,500</div>
+    </div>
+    <div class="service-card gs-scale">
+      <div class="service-icon">🛒</div>
+      <div class="service-title">Shopping Errands</div>
+      <div class="service-desc">Send your list; we shop, pay, and deliver. Markets, malls, pharmacies — our runners know Lagos like the back of their hand.</div>
+      <div class="service-tag">From ₦2,000</div>
+    </div>
+    <div class="service-card gs-scale">
+      <div class="service-icon">🏦</div>
+      <div class="service-title">Banking &amp; Documents</div>
+      <div class="service-desc">CAC filings, bank deposits, NIN updates, LASG document runs — trusted runners with identity verification for sensitive tasks.</div>
+      <div class="service-tag">From ₦2,500</div>
+    </div>
+    <div class="service-card gs-scale">
+      <div class="service-icon">🍔</div>
+      <div class="service-title">Food Pickup</div>
+      <div class="service-desc">Order from any restaurant in Lagos — even those not on delivery apps. Your runner picks up, you track live, food stays hot.</div>
+      <div class="service-tag">From ₦1,200</div>
+    </div>
+    <div class="service-card gs-scale">
+      <div class="service-icon">🏢</div>
+      <div class="service-title">Business Dispatch</div>
+      <div class="service-desc">Bulk daily dispatch for Lagos businesses. API integration, runner pools, SLA guarantees, and a dedicated account manager.</div>
+      <div class="service-tag">Custom Pricing</div>
+    </div>
+    <div class="service-card gs-scale">
+      <div class="service-icon">🔑</div>
+      <div class="service-title">Key &amp; Access Runs</div>
+      <div class="service-desc">Property key handovers, Airbnb check-ins, office access management — our verified runners ensure secure handovers every time.</div>
+      <div class="service-tag">From ₦3,000</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="section-header">
+    <div class="section-tag">The Process</div>
+    <h2 class="section-title">Booked in <span class="gold">60 Seconds</span></h2>
+    <p class="section-sub">No apps to install, no waiting. Four steps to your errand being handled.</p>
+  </div>
+  <div class="how-steps">
+    <div class="step-card gs-fade">
+      <div class="step-num">1</div>
+      <div class="step-title">Describe Your Errand</div>
+      <div class="step-desc">Tell us what you need via the app, WhatsApp, or our web portal. Pickup and dropoff locations, timing, any special instructions.</div>
+    </div>
+    <div class="step-card gs-fade">
+      <div class="step-num">2</div>
+      <div class="step-title">Runner Matched</div>
+      <div class="step-desc">Our AI dispatches the nearest verified runner within 90 seconds. See their profile, rating, and live location before they move.</div>
+    </div>
+    <div class="step-card gs-fade">
+      <div class="step-num">3</div>
+      <div class="step-title">Track Live</div>
+      <div class="step-desc">Real-time GPS updates, in-app chat, and photo confirmations at pickup and dropoff. You see everything, live.</div>
+    </div>
+    <div class="step-card gs-fade">
+      <div class="step-num">4</div>
+      <div class="step-title">Rate &amp; Done</div>
+      <div class="step-desc">Errand complete. Pay securely via card, transfer, or Flutterwave. Rate your runner and keep their streak alive.</div>
+    </div>
+  </div>
+</section>
+
+<!-- COVERAGE MAP -->
+<section class="coverage" id="coverage">
+  <div class="coverage-wrap">
+    <div class="coverage-info gs-fade-left">
+      <div class="section-tag">Coverage</div>
+      <h2 class="coverage-title">All of <span style="background:linear-gradient(135deg,var(--orange),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent">Lagos</span> Covered</h2>
+      <p class="coverage-desc">From Lagos Island to the mainland, our runner network covers 15+ zones. We're adding Abeokuta and Ibadan routes in Q3 2025.</p>
+      <div class="zone-pills">
+        <span class="zone-pill">Victoria Island</span>
+        <span class="zone-pill">Lekki</span>
+        <span class="zone-pill">Ikeja</span>
+        <span class="zone-pill">Surulere</span>
+        <span class="zone-pill">Ikoyi</span>
+        <span class="zone-pill">Ajah</span>
+        <span class="zone-pill">Alausa</span>
+        <span class="zone-pill">Yaba</span>
+        <span class="zone-pill">Maryland</span>
+        <span class="zone-pill">Berger</span>
+        <span class="zone-pill">Apapa</span>
+        <span class="zone-pill">Festac</span>
+      </div>
+      <a href="/errandme/" class="btn-primary">Book from Your Zone →</a>
+    </div>
+    <canvas id="map-canvas" width="480" height="420"></canvas>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="section-header">
+    <div class="section-tag">Pricing</div>
+    <h2 class="section-title">Simple, <span class="gold">Transparent</span> Plans</h2>
+    <p class="section-sub">No hidden fees. No surge pricing. Just honest Lagos rates.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="price-card gs-scale">
+      <div class="price-tier">Consumer</div>
+      <div class="price-num"><span class="naira">₦</span>1,500</div>
+      <div class="price-period">Per errand, pay-as-you-go</div>
+      <ul class="price-features">
+        <li>Same-day Lagos delivery</li>
+        <li>Live GPS tracking</li>
+        <li>WhatsApp updates</li>
+        <li>Up to 5 items per errand</li>
+        <li>Card &amp; bank transfer payment</li>
       </ul>
-      <button class="hamburger" id="hamburger" aria-label="Menu">
-        <span></span><span></span>
-      </button>
+      <button class="price-btn" onclick="window.location='/errandme/'">Get Started</button>
     </div>
-  </nav>
+    <div class="price-card featured gs-scale">
+      <div class="price-tier">Business</div>
+      <div class="price-num"><span class="naira">₦</span>45,000</div>
+      <div class="price-period">Per month, 50 dispatches</div>
+      <ul class="price-features">
+        <li>Dedicated runner pool</li>
+        <li>Business portal access</li>
+        <li>API integration (REST)</li>
+        <li>Priority dispatch queue</li>
+        <li>Real-time analytics dashboard</li>
+        <li>SLA: 60 min delivery guarantee</li>
+        <li>Dedicated account manager</li>
+      </ul>
+      <button class="price-btn" onclick="window.location='/business-portal/'">Start Business Plan</button>
+    </div>
+    <div class="price-card gs-scale">
+      <div class="price-tier">Enterprise</div>
+      <div class="price-num" style="font-size:2.5rem">Custom</div>
+      <div class="price-period">Volume pricing, contract-based</div>
+      <ul class="price-features">
+        <li>Unlimited dispatch volume</li>
+        <li>White-label runner app</li>
+        <li>Custom API endpoints</li>
+        <li>Webhook integrations</li>
+        <li>Multi-city expansion support</li>
+        <li>99.5% SLA uptime</li>
+        <li>On-site runner embedding</li>
+      </ul>
+      <button class="price-btn" onclick="window.open('https://wa.me/2348000000000?text=Hi, I want to discuss Enterprise pricing','_blank')">Talk to Sales</button>
+    </div>
+  </div>
+</section>
 
-  <section class="drop" id="drop">
-    <div class="drop__grid-overlay"></div>
-    <div class="drop__scanline"></div>
-    <div class="drop__inner">
-      <div class="drop__eyebrow">
-        <span class="pulse-dot"></span>
-        <span>SYSTEM ONLINE &mdash; LAGOS, NG</span>
-      </div>
-      <h1 class="drop__headline">
-        What needs<br />
-        <em>moving?</em>
-      </h1>
-      <p class="drop__sub">
-        You tell us. We dispatch. It moves. No friction, no follow-ups, no missed pickups.
-        Za.allyErrands is Lagos' autonomous errand machine.
-      </p>
-      <form class="quote-widget" id="quoteForm" novalidate>
-        <div class="quote-widget__input-wrap">
-          <span class="quote-widget__prefix">&rsaquo;&rsaquo;</span>
-          <input
-            type="text"
-            id="quoteInput"
-            name="errand"
-            placeholder="Groceries at Shoprite, pick up drugs at Reddington..."
-            autocomplete="off"
-            required
-          />
-        </div>
-        <button type="submit" class="btn btn--hazard">Request Ally</button>
-      </form>
-      <div class="drop__meta">
-        <span class="meta-tag">&#9650; <span class="counter-num" data-target="1247">1,247</span>+ runs completed</span>
-        <span class="meta-divider">|</span>
-        <span class="meta-tag">Avg dispatch: <strong style="color:var(--green)">8 min</strong></span>
-        <span class="meta-divider">|</span>
-        <span class="meta-tag">Lagos, Nigeria</span>
-      </div>
-      <div class="live-feed" id="liveFeed">
-        <span class="live-feed__dot"></span>
-        <span class="live-feed__text" id="liveFeedText">Runner dispatched — Chioma's grocery run, Lekki Phase 1 &middot; just now</span>
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonials">
+  <div class="section-header">
+    <div class="section-tag">Reviews</div>
+    <h2 class="section-title">Lagos <span class="gold">Loves Us</span></h2>
+    <p class="section-sub">Don't take our word for it — here's what our customers say.</p>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card gs-fade">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"Booked a runner at 8am, documents dropped at LASG Alausa and back by 11am. These guys are the real deal for Lagos errands."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">AO</div>
+        <div><div class="testi-name">Adaeze Okonkwo</div><div class="testi-role">SME Owner, VI</div></div>
       </div>
     </div>
-    <div class="drop__ticker" aria-hidden="true">
-      <div class="ticker__track">
-        <span>GROCERY PICKUP &mdash;</span>
-        <span>PHARMACY RUN &mdash;</span>
-        <span>PACKAGE DELIVERY &mdash;</span>
-        <span>DRY CLEANING &mdash;</span>
-        <span>RESTAURANT PICKUP &mdash;</span>
-        <span>CUSTOM ERRAND &mdash;</span>
-        <span>GROCERY PICKUP &mdash;</span>
-        <span>PHARMACY RUN &mdash;</span>
-        <span>PACKAGE DELIVERY &mdash;</span>
-        <span>DRY CLEANING &mdash;</span>
-        <span>RESTAURANT PICKUP &mdash;</span>
-        <span>CUSTOM ERRAND &mdash;</span>
+    <div class="testi-card gs-fade">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"Our e-commerce business handles 80+ deliveries a week through Za.allyErrands API. The uptime and reliability is exceptional for Lagos."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">TF</div>
+        <div><div class="testi-name">Tunde Fashola</div><div class="testi-role">CTO, Konga Seller</div></div>
       </div>
     </div>
-  </section>
-
-  <section class="stats-bar">
-    <div class="stats-bar__inner">
-      <div class="stat-item" data-reveal>
-        <div class="stat-item__num"><span class="counter-num" data-target="1247">1,247</span><span>+</span></div>
-        <div class="stat-item__label">Errands Completed</div>
-      </div>
-      <div class="stat-item" data-reveal>
-        <div class="stat-item__num"><span class="counter-num" data-target="8">8</span><span style="color:var(--white)"> min</span></div>
-        <div class="stat-item__label">Avg Dispatch Time</div>
-      </div>
-      <div class="stat-item" data-reveal>
-        <div class="stat-item__num"><span class="counter-num" data-target="98">98</span><span>%</span></div>
-        <div class="stat-item__label">On-Time Delivery Rate</div>
-      </div>
-      <div class="stat-item" data-reveal>
-        <div class="stat-item__num"><span class="counter-num" data-target="24">24</span><span style="color:var(--white)">/7</span></div>
-        <div class="stat-item__label">Lagos. Day &amp; Night.</div>
-      </div>
-    </div>
-  </section>
-
-  <div class="compare-strip">
-    <div class="compare-strip__inner">
-      <div class="compare-col compare-col--old">
-        <div class="compare-label">Without Za.</div>
-        <ul>
-          <li>Sit in Lagos traffic for 1+ hour</li>
-          <li>Queue at Shoprite yourself</li>
-          <li>Miss a meeting or appointment</li>
-          <li>Arrive home drained</li>
-        </ul>
-      </div>
-      <div class="compare-vs" aria-hidden="true">vs</div>
-      <div class="compare-col compare-col--new">
-        <div class="compare-label">Za.allyErrands</div>
-        <ul>
-          <li>Request in under 30 seconds</li>
-          <li>Runner dispatched in 8 min</li>
-          <li>Track live — stay at your desk</li>
-          <li>Done. You never moved.</li>
-        </ul>
+    <div class="testi-card gs-fade">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"I live in Lekki and my runner picked up medication from Ikeja within the hour. Customer service was responsive throughout. Highly recommend."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">NB</div>
+        <div><div class="testi-name">Ngozi Bello</div><div class="testi-role">Homeowner, Lekki Phase 2</div></div>
       </div>
     </div>
   </div>
+</section>
 
-  <section class="process" id="process">
-    <div class="section-label">// DISPATCH PROTOCOL</div>
-    <div class="process__inner">
-      <header class="process__header">
-        <h2>Three steps.<br /><span>Zero babysitting.</span></h2>
-        <p>The system runs itself. Here's exactly what happens the moment you submit a request.</p>
-      </header>
-      <div class="process__steps">
-        <div class="p-step" data-reveal>
-          <div class="p-step__num"><span>01</span></div>
-          <div class="p-step__body">
-            <div class="p-step__icon">&#9997;&#65039;</div>
-            <h3>You Request</h3>
-            <p>Drop your errand details into the form. Pickup location, destination, what's being moved. That's it.</p>
-            <div class="p-step__tech">TRIGGER &rarr; WEBHOOK FIRED</div>
-          </div>
-        </div>
-        <div class="p-step__arrow" aria-hidden="true">&darr;</div>
-        <div class="p-step" data-reveal>
-          <div class="p-step__num"><span>02</span></div>
-          <div class="p-step__body">
-            <div class="p-step__icon">&#9889;</div>
-            <h3>We Dispatch</h3>
-            <p>Our system routes your job to the nearest available runner. You get a WhatsApp confirmation within minutes, not hours.</p>
-            <div class="p-step__tech">MAKE.COM &rarr; WHATSAPP API</div>
-          </div>
-        </div>
-        <div class="p-step__arrow" aria-hidden="true">&darr;</div>
-        <div class="p-step" data-reveal>
-          <div class="p-step__num"><span>03</span></div>
-          <div class="p-step__body">
-            <div class="p-step__icon">&#9989;</div>
-            <h3>Ally Delivers</h3>
-            <p>Your runner moves. You track in real-time via your client portal. Job closed. You never lifted a finger.</p>
-            <div class="p-step__tech">SUPABASE &rarr; REAL-TIME SYNC</div>
-          </div>
-        </div>
+<!-- CTA STRIP -->
+<section class="cta-strip">
+  <h2>Ready to Move?</h2>
+  <p>Lagos doesn't wait — and neither should you. Book a runner in 60 seconds.</p>
+  <div class="cta-strip-btns">
+    <a href="/errandme/" class="btn-primary">📦 Book Now</a>
+    <a href="/api/" class="btn-secondary">🔗 Explore API</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="logo">Za.allyErrands</span>
+      <p>Lagos' premium errand and delivery service. Trusted runners, real-time tracking, API-first dispatch infrastructure.</p>
+      <div class="footer-socials">
+        <a class="social-btn" href="https://twitter.com/zallyerrands" target="_blank" rel="noopener" aria-label="Twitter">𝕏</a>
+        <a class="social-btn" href="https://instagram.com/zallyerrands" target="_blank" rel="noopener" aria-label="Instagram">📸</a>
+        <a class="social-btn" href="https://wa.me/2348000000000" target="_blank" rel="noopener" aria-label="WhatsApp">💬</a>
       </div>
     </div>
-  </section>
-
-  <section class="services" id="services">
-    <div class="section-label">// WHAT WE MOVE</div>
-    <div class="services__inner">
-      <header class="services__header">
-        <h2>The Fleet</h2>
-        <p>Every category. Every neighbourhood. Day or night.</p>
-      </header>
-      <div class="services__grid">
-        <div class="s-card" data-reveal>
-          <div class="s-card__top"><span class="s-card__num">01</span><span class="s-card__icon">&#128722;</span></div>
-          <h3>Grocery Run</h3>
-          <p>Shoprite, Market Square, Spar — we shop your list and deliver fresh.</p>
-          <div class="s-card__tag">AVG 90MIN</div>
-        </div>
-        <div class="s-card" data-reveal>
-          <div class="s-card__top"><span class="s-card__num">02</span><span class="s-card__icon">&#128138;</span></div>
-          <h3>Pharmacy Pickup</h3>
-          <p>Prescription collected. Delivered sealed, documented, direct to your door.</p>
-          <div class="s-card__tag">AVG 45MIN</div>
-        </div>
-        <div class="s-card" data-reveal>
-          <div class="s-card__top"><span class="s-card__num">03</span><span class="s-card__icon">&#128230;</span></div>
-          <h3>Package &amp; Post</h3>
-          <p>NIPOST, courier drops, parcel pickups. We queue so you don't have to.</p>
-          <div class="s-card__tag">SAME DAY</div>
-        </div>
-        <div class="s-card" data-reveal>
-          <div class="s-card__top"><span class="s-card__num">04</span><span class="s-card__icon">&#127828;</span></div>
-          <h3>Restaurant Pickup</h3>
-          <p>Your order, straight from the kitchen. No cold deliveries, no wrong bags.</p>
-          <div class="s-card__tag">AVG 30MIN</div>
-        </div>
-        <div class="s-card" data-reveal>
-          <div class="s-card__top"><span class="s-card__num">05</span><span class="s-card__icon">&#128092;</span></div>
-          <h3>Dry Cleaning</h3>
-          <p>Drop-off and collection handled back-to-back. Your wardrobe stays clean.</p>
-          <div class="s-card__tag">SCHEDULED</div>
-        </div>
-        <div class="s-card s-card--open" data-reveal>
-          <div class="s-card__top"><span class="s-card__num">06</span><span class="s-card__icon">&#10133;</span></div>
-          <h3>Custom Request</h3>
-          <p>Can't find it on the list? We'll handle it. Tell us what you need moved.</p>
-          <a href="#drop" class="s-card__link">Make a Request &rarr;</a>
-        </div>
-      </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <a href="/errandme/">Book Errand</a>
+      <a href="/errandme/">Same-Day Delivery</a>
+      <a href="/errandme/">Shopping Runs</a>
+      <a href="/errandme/">Business Dispatch</a>
+      <a href="#pricing">Pricing</a>
     </div>
-  </section>
-
-  <section class="estimator" id="estimator">
-    <div class="estimator__inner">
-      <div class="section-label">// COST ESTIMATOR</div>
-      <div class="estimator__layout">
-        <div class="estimator__copy">
-          <h2>Know the cost<br /><span>before you ask.</span></h2>
-          <p>Pick your errand type and zone. Instant flat-rate estimate — no hidden charges, ever.</p>
-        </div>
-        <div class="estimator__widget">
-          <div class="est-group">
-            <div class="est-group__label">Errand Type</div>
-            <div class="est-pills" id="estType">
-              <button class="est-pill est-pill--active" data-base="1500">Grocery</button>
-              <button class="est-pill" data-base="1200">Pharmacy</button>
-              <button class="est-pill" data-base="1500">Package</button>
-              <button class="est-pill" data-base="1300">Restaurant</button>
-              <button class="est-pill" data-base="2500">Custom</button>
-            </div>
-          </div>
-          <div class="est-group">
-            <div class="est-group__label">Your Zone</div>
-            <div class="est-pills" id="estZone">
-              <button class="est-pill est-pill--active" data-mult="1.0">Lagos Island</button>
-              <button class="est-pill" data-mult="1.1">Mainland</button>
-              <button class="est-pill" data-mult="1.25">Outskirts</button>
-              <button class="est-pill" data-mult="1.25">Lagos Outskirts</button>
-            </div>
-          </div>
-          <div class="est-result">
-            <div class="est-result__label">Estimated Rate</div>
-            <div class="est-result__price" id="estPriceBox">&#8358;<span id="estPrice">1,500</span></div>
-            <div class="est-result__sub">Flat rate &middot; No surprises &middot; Confirmed via WhatsApp</div>
-            <a href="#drop" class="btn btn--hazard btn--full" style="margin-top:20px">Request at This Rate &rarr;</a>
-          </div>
-        </div>
-      </div>
+    <div class="footer-col">
+      <h4>Developers</h4>
+      <a href="/api/">API Docs</a>
+      <a href="/api/#webhooks">Webhooks</a>
+      <a href="/api/#sdks">Node.js SDK</a>
+      <a href="/api/#sdks">Python SDK</a>
+      <a href="/business-portal/">Business Portal</a>
     </div>
-  </section>
-
-  <section class="pricing" id="pricing">
-    <div class="section-label">// RATES</div>
-    <div class="pricing__inner">
-      <header class="pricing__header">
-        <h2>Flat rates.<br /><span>No surprises.</span></h2>
-        <p>Pay for what you use. Or lock in a plan and never think about it again.</p>
-      </header>
-      <div class="pricing__grid">
-        <div class="rate-card" data-reveal>
-          <div class="rate-card__label">PAY-AS-YOU-GO</div>
-          <div class="rate-card__price"><span class="rate-currency">&#8358;</span>1,500</div>
-          <div class="rate-card__period">per errand</div>
-          <ul class="rate-card__list">
-            <li>Single errand</li>
-            <li>Up to 5km radius</li>
-            <li>2hr turnaround</li>
-            <li>WhatsApp confirmation</li>
-          </ul>
-          <a href="#drop" class="btn btn--ghost btn--full">Request Now</a>
-        </div>
-        <div class="rate-card rate-card--featured" data-reveal>
-          <div class="rate-card__badge">MOST DEPLOYED</div>
-          <div class="rate-card__label">WEEKLY BUNDLE</div>
-          <div class="rate-card__price"><span class="rate-currency">&#8358;</span>8,000</div>
-          <div class="rate-card__period">per week</div>
-          <ul class="rate-card__list">
-            <li>7 errands per week</li>
-            <li>Up to 10km radius</li>
-            <li>1hr turnaround</li>
-            <li>Priority dispatch</li>
-            <li>Real-time portal access</li>
-          </ul>
-          <a href="#drop" class="btn btn--hazard btn--full">Request Now</a>
-        </div>
-        <div class="rate-card" data-reveal>
-          <div class="rate-card__label">MONTHLY PLAN</div>
-          <div class="rate-card__price"><span class="rate-currency">&#8358;</span>25,000</div>
-          <div class="rate-card__period">per month</div>
-          <ul class="rate-card__list">
-            <li>Unlimited errands</li>
-            <li>No distance cap</li>
-            <li>45-min dispatch</li>
-            <li>Dedicated runner</li>
-            <li>Full portal + analytics</li>
-          </ul>
-          <a href="#drop" class="btn btn--ghost btn--full">Request Now</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="portal" id="portal">
-    <div class="portal__inner">
-      <div class="portal__copy">
-        <div class="section-label">// CLIENT PORTAL</div>
-        <h2>Track every run.<br /><span>In real time.</span></h2>
-        <p>Once you're onboarded, your dedicated portal shows every errand: in-queue, dispatched, en-route, delivered. Powered by Supabase live sync. No refresh required.</p>
-        <ul class="portal__features">
-          <li><span class="feat-dot"></span> Live runner location</li>
-          <li><span class="feat-dot"></span> Order history &amp; receipts</li>
-          <li><span class="feat-dot"></span> WhatsApp notifications</li>
-          <li><span class="feat-dot"></span> Recurring errand scheduler</li>
-        </ul>
-        <a href="portal/index.html" class="btn btn--hazard">Open Portal &rarr;</a>
-      </div>
-      <div class="portal__mockup" aria-hidden="true">
-        <div class="mockup-window">
-          <div class="mockup-bar">
-            <span class="mockup-dot"></span>
-            <span class="mockup-dot"></span>
-            <span class="mockup-dot mockup-dot--orange"></span>
-            <span class="mockup-url">portal.zallyerrands.com</span>
-          </div>
-          <div class="mockup-body">
-            <div class="mockup-row mockup-row--heading">
-              <span>Active Runs</span>
-              <span class="badge-live">&#9679; LIVE</span>
-            </div>
-            <div class="mockup-errand mockup-errand--active">
-              <div class="errand-status">EN ROUTE</div>
-              <div class="errand-info"><strong>Grocery Run</strong><span>Shoprite VI &rarr; Ikoyi</span></div>
-              <div class="errand-eta">12 MIN</div>
-            </div>
-            <div class="mockup-errand">
-              <div class="errand-status errand-status--queue">QUEUED</div>
-              <div class="errand-info"><strong>Pharmacy Pickup</strong><span>Reddington Hospital</span></div>
-              <div class="errand-eta">~45M</div>
-            </div>
-            <div class="mockup-errand mockup-errand--done">
-              <div class="errand-status errand-status--done">DONE</div>
-              <div class="errand-info"><strong>Package Drop</strong><span>DHL Lekki Phase 1</span></div>
-              <div class="errand-eta">&#10003;</div>
-            </div>
-            <div class="mockup-progress"><div class="progress-bar"></div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="proof" id="proof">
-    <div class="section-label">// FIELD REPORTS</div>
-    <div class="proof__inner">
-      <h2>From the clients</h2>
-      <div class="proof__grid">
-        <div class="proof-card" data-reveal>
-          <div class="proof-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p>&ldquo;Runs like a machine. I booked a pharmacy pickup at 11pm and got a WhatsApp update in 7 minutes. Nothing else in Lagos moves this fast.&rdquo;</p>
-          <div class="proof-card__author">
-            <div class="proof-avatar" data-initials="TK" style="background:var(--orange)"></div>
-            <div class="proof-author-info"><strong>Tunde K.</strong><span>Lekki &middot; Monthly Plan</span></div>
-          </div>
-        </div>
-        <div class="proof-card proof-card--accent" data-reveal>
-          <div class="proof-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p>&ldquo;I&rsquo;m on the monthly plan. I haven&rsquo;t personally run a single errand since March. Za.allyErrands is the best business decision I&rsquo;ve made all year.&rdquo;</p>
-          <div class="proof-card__author">
-            <div class="proof-avatar proof-avatar--dark" data-initials="AM"></div>
-            <div class="proof-author-info"><strong>Amara M.</strong><span>Lagos Island</span></div>
-          </div>
-        </div>
-        <div class="proof-card" data-reveal>
-          <div class="proof-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p>&ldquo;The portal is clean, runners are reliable, and WhatsApp updates keep me in the loop without needing to call anyone. Exactly what I needed.&rdquo;</p>
-          <div class="proof-card__author">
-            <div class="proof-avatar" data-initials="CF" style="background:var(--green);color:var(--black)"></div>
-            <div class="proof-author-info"><strong>Chisom F.</strong><span>Surulere</span></div>
-          </div>
-        </div>
-        <div class="proof-card" data-reveal>
-          <div class="proof-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p>&ldquo;Grocery run, pharmacy, and a package drop — all in one day. One request each. They handled everything while I was in back-to-back meetings.&rdquo;</p>
-          <div class="proof-card__author">
-            <div class="proof-avatar" data-initials="SO" style="background:#9C6EF8"></div>
-            <div class="proof-author-info"><strong>Sola O.</strong><span>Lekki Phase 2</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="coverage">
-    <div class="coverage__inner">
-      <div class="section-label">// ACTIVE ZONES</div>
-      <div class="coverage__layout">
-        <div class="coverage__copy">
-          <h2>We run<br /><span>everywhere.</span></h2>
-          <p>20+ active zones across Lagos. Island, Mainland, and Outskirts — covered. New areas unlocking monthly.</p>
-          <div class="coverage__stat"><span class="counter-num" data-target="20">20</span>+ Lagos Zones</div>
-        </div>
-        <div class="coverage__zones">
-          <span class="zone zone--hot">Victoria Island</span>
-          <span class="zone zone--hot">Lekki Phase 1</span>
-          <span class="zone zone--hot">Ikoyi</span>
-          <span class="zone zone--active">Lekki Phase 2</span>
-          <span class="zone zone--active">Ikeja GRA</span>
-          <span class="zone zone--active">Surulere</span>
-          <span class="zone zone--active">Yaba</span>
-          <span class="zone zone--active">Oniru Estate</span>
-          <span class="zone zone--active">Ajah</span>
-          <span class="zone zone--active">Osapa London</span>
-          <span class="zone zone--active">Magodo</span>
-          <span class="zone zone--active">Maryland</span>
-          <span class="zone zone--active">Gbagada</span>
-          <span class="zone zone--active">Sangotedo</span>
-          <span class="zone zone--mid">Badagry</span>
-          <span class="zone zone--mid">Epe</span>
-          <span class="zone zone--mid">Ikorodu</span>
-          <span class="zone zone--coming">Lekki Free Zone</span>
-          <span class="zone zone--coming">Agege</span>
-          <span class="zone zone--coming">Alimosho</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="faq" id="faq">
-    <div class="faq__inner">
-      <div class="section-label">// QUESTIONS</div>
-      <div class="faq__layout">
-        <div class="faq__copy">
-          <h2>Got questions.<br /><span>We answer them.</span></h2>
-        </div>
-        <div class="faq__list">
-          <div class="faq-item" data-reveal>
-            <button class="faq-q">How quickly will my runner be dispatched?<span class="faq-icon">+</span></button>
-            <div class="faq-a"><p>Average dispatch is 8 minutes. You&rsquo;ll get a WhatsApp message the moment a runner accepts your job. During peak hours (7&ndash;9am, 5&ndash;8pm) allow up to 15 minutes.</p></div>
-          </div>
-          <div class="faq-item" data-reveal>
-            <button class="faq-q">How do I pay?<span class="faq-icon">+</span></button>
-            <div class="faq-a"><p>Payment is via Flutterwave &mdash; card, bank transfer, or USSD. You pay after we confirm your quote via WhatsApp. No card data is ever stored on our end.</p></div>
-          </div>
-          <div class="faq-item" data-reveal>
-            <button class="faq-q">Which areas do you cover?<span class="faq-icon">+</span></button>
-            <div class="faq-a"><p>Currently 20+ zones across Lagos — Island (VI, Ikoyi, Lekki), Mainland (Ikeja, Yaba, Surulere), and Outskirts (Ajah, Sangotedo, Epe). See the zone map above, or WhatsApp us to confirm your street.</p></div>
-          </div>
-          <div class="faq-item" data-reveal>
-            <button class="faq-q">What if something goes wrong with my errand?<span class="faq-icon">+</span></button>
-            <div class="faq-a"><p>All errands are photo-documented at pickup and delivery. If there&rsquo;s ever an issue, WhatsApp us and we resolve it within 2 hours. We stand behind every run.</p></div>
-          </div>
-          <div class="faq-item" data-reveal>
-            <button class="faq-q">Do I need to create an account?<span class="faq-icon">+</span></button>
-            <div class="faq-a"><p>No account needed for your first request. Returning clients get a dedicated portal for tracking, history, and scheduling recurring errands.</p></div>
-          </div>
-          <div class="faq-item" data-reveal>
-            <button class="faq-q">Can I schedule recurring errands?<span class="faq-icon">+</span></button>
-            <div class="faq-a"><p>Yes &mdash; weekly and monthly plan clients get a recurring scheduler in their portal. Set it once, we handle it every time. Or message us directly on WhatsApp.</p></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="share-cta" id="share">
-    <div class="share-cta__inner">
-      <div class="share-cta__copy">
-        <p class="share-cta__label">// SPREAD THE WORD</p>
-        <h2>Your mates still running<br /><em>their own errands?</em></h2>
-        <p>That's on you. Send them this. Takes 3 seconds.</p>
-      </div>
-      <div class="share-cta__actions">
-        <a id="waShareBtn" href="https://wa.me/?text=Guy%2C%20I%20just%20discovered%20Za.allyErrands%20%E2%80%94%20they%20run%20errands%20anywhere%20in%20Lagos%20in%20under%2030%20mins%20%F0%9F%94%A5%20Groceries%2C%20pharmacy%2C%20packages%2C%20anything.%20No%20stress%2C%20no%20calls%2C%20just%20done.%20Try%20them%3A%20https%3A%2F%2Fza-allyerrands.netlify.app" class="btn btn--wa" target="_blank" rel="noopener noreferrer">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-          Share on WhatsApp
-        </a>
-        <button class="btn btn--ghost" id="copyLinkBtn">
-          <span id="copyLinkText">Copy Link</span>
-        </button>
-      </div>
-      <p class="share-cta__proof">
-        <span class="share-count" id="shareCount">1,247</span> Lagosians shared this week
-      </p>
-    </div>
-  </section>
-
-  <!-- B2B TEASER -->
-  <section style="background:linear-gradient(135deg,#0A0D20 0%,#0F1228 100%);border-top:1px solid rgba(255,255,255,0.07);border-bottom:1px solid rgba(255,255,255,0.07);padding:72px 0;">
-    <div style="max-width:1100px;margin:0 auto;padding:0 24px;">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;">
-        <div>
-          <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#00D4FF;margin-bottom:12px;">// FOR BUSINESSES</div>
-          <h2 style="font-size:clamp(28px,4vw,42px);font-weight:700;line-height:1.15;margin-bottom:16px;">
-            Plug your business into<br /><span style="background:linear-gradient(135deg,#00D4FF,#0080FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Lagos dispatch.</span>
-          </h2>
-          <p style="color:rgba(255,255,255,0.65);font-size:16px;line-height:1.7;margin-bottom:24px;">
-            Za.allyErrands is more than a consumer service. It's the dispatch backbone local businesses plug into for their daily deliveries — with a full API, real-time dashboard, and zero logistics headache.
-          </p>
-          <ul style="list-style:none;padding:0;margin-bottom:28px;">
-            <li style="display:flex;align-items:center;gap:10px;margin-bottom:10px;color:rgba(255,255,255,0.75);font-size:15px;">
-              <span style="width:20px;height:20px;background:rgba(0,212,255,0.12);border:1px solid rgba(0,212,255,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#00D4FF;flex-shrink:0;">&#10003;</span>
-              REST API — dispatch from your own system
-            </li>
-            <li style="display:flex;align-items:center;gap:10px;margin-bottom:10px;color:rgba(255,255,255,0.75);font-size:15px;">
-              <span style="width:20px;height:20px;background:rgba(0,212,255,0.12);border:1px solid rgba(0,212,255,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#00D4FF;flex-shrink:0;">&#10003;</span>
-              Live operations dashboard with runner tracking
-            </li>
-            <li style="display:flex;align-items:center;gap:10px;margin-bottom:10px;color:rgba(255,255,255,0.75);font-size:15px;">
-              <span style="width:20px;height:20px;background:rgba(0,212,255,0.12);border:1px solid rgba(0,212,255,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#00D4FF;flex-shrink:0;">&#10003;</span>
-              Webhook events for every delivery milestone
-            </li>
-            <li style="display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.75);font-size:15px;">
-              <span style="width:20px;height:20px;background:rgba(0,212,255,0.12);border:1px solid rgba(0,212,255,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#00D4FF;flex-shrink:0;">&#10003;</span>
-              Plans from &#8358;50,000/month — scales with your volume
-            </li>
-          </ul>
-          <div style="display:flex;gap:12px;flex-wrap:wrap;">
-            <a href="business/index.html" style="display:inline-block;background:linear-gradient(135deg,#00D4FF,#0080FF);color:#07091A;font-size:14px;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;">Explore Business Plans &rarr;</a>
-            <a href="api/index.html" style="display:inline-block;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.8);font-size:14px;font-weight:600;padding:12px 24px;border-radius:8px;text-decoration:none;">API Reference</a>
-          </div>
-        </div>
-        <div style="background:rgba(255,255,255,0.025);border:1px solid rgba(0,212,255,0.15);border-radius:14px;padding:28px;font-family:'JetBrains Mono','Courier New',monospace;font-size:13px;line-height:1.8;">
-          <div style="display:flex;gap:6px;margin-bottom:16px;">
-            <span style="width:10px;height:10px;border-radius:50%;background:#FF3B5C;display:inline-block;"></span>
-            <span style="width:10px;height:10px;border-radius:50%;background:#FFD60A;display:inline-block;"></span>
-            <span style="width:10px;height:10px;border-radius:50%;background:#00FF88;display:inline-block;"></span>
-            <span style="color:rgba(255,255,255,0.3);font-size:11px;margin-left:8px;">POST /v1/dispatch</span>
-          </div>
-          <div style="color:#8B949E;">// Fire and forget. We handle the rest.</div>
-          <div><span style="color:#FF7B72;">const</span> <span style="color:#FFA657;">run</span> <span style="color:rgba(255,255,255,0.5);">= </span><span style="color:#FF7B72;">await</span> client<span style="color:rgba(255,255,255,0.5);">.</span><span style="color:#D2A8FF;">dispatch</span><span style="color:rgba(255,255,255,0.5);">.</span><span style="color:#79C0FF;">create</span><span style="color:rgba(255,255,255,0.5);">({</span></div>
-          <div style="padding-left:16px;"><span style="color:#79C0FF;">pickupAddress</span><span style="color:rgba(255,255,255,0.5);">:</span> <span style="color:#A5D6FF;">'14 Adeola Odeku, VI'</span><span style="color:rgba(255,255,255,0.5);"> ,</span></div>
-          <div style="padding-left:16px;"><span style="color:#79C0FF;">dropoffAddress</span><span style="color:rgba(255,255,255,0.5);">:</span> <span style="color:#A5D6FF;">'42 Admiralty Way, Lekki'</span><span style="color:rgba(255,255,255,0.5);"> ,</span></div>
-          <div style="padding-left:16px;"><span style="color:#79C0FF;">priority</span><span style="color:rgba(255,255,255,0.5);">:</span> <span style="color:#A5D6FF;">'express'</span></div>
-          <div><span style="color:rgba(255,255,255,0.5);">});</span></div>
-          <div style="margin-top:10px;color:#8B949E;">// &#x2713; Runner dispatched in 6 min</div>
-          <div style="color:#8B949E;">// &#x2713; Webhook fired: dispatch.delivered</div>
-          <div style="color:#8B949E;">// &#x2713; Proof photo attached</div>
-          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
-            <span style="background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.25);color:#00FF88;font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;font-family:var(--font-body,sans-serif);">Node.js</span>
-            <span style="background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.25);color:#00FF88;font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;font-family:var(--font-body,sans-serif);">Python</span>
-            <span style="background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.25);color:#00FF88;font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;font-family:var(--font-body,sans-serif);">REST</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="final-cta">
-    <div class="final-cta__inner">
-      <p class="final-cta__label">READY TO MOVE?</p>
-      <h2>Stop doing it yourself.</h2>
-      <a href="#drop" class="btn btn--hazard btn--xl">Request Your First Errand &rarr;</a>
-      <p class="final-cta__note">No account needed to start. First response in under 15 minutes.</p>
-    </div>
-  </section>
-
-  <footer class="footer">
-    <div class="footer__inner">
-      <div class="footer__brand">
-        <a href="#drop" class="nav__logo">
-          <span class="logo-za">Za.</span><span class="logo-ally">ally</span><span class="logo-rest">Errands</span>
-        </a>
-        <p>Lagos' autonomous errand dispatch. Built for people who value their time above everything.</p>
-        <div class="footer__socials">
-          <a href="#" class="social" aria-label="Instagram">IG</a>
-          <a href="#" class="social" aria-label="X / Twitter">&#120143;</a>
-          <a href="https://wa.me/?text=Check%20out%20Za.allyErrands%20%E2%80%94%20Lagos'%20fastest%20errand%20dispatch%3A%20https%3A%2F%2Fza-allyerrands.netlify.app" class="social" aria-label="WhatsApp" target="_blank" rel="noopener">WA</a>
-        </div>
-      </div>
-      <div class="footer__col">
-        <h4>Services</h4>
-        <ul>
-          <li><a href="#services">Grocery Run</a></li>
-          <li><a href="#services">Pharmacy Pickup</a></li>
-          <li><a href="#services">Package &amp; Post</a></li>
-          <li><a href="#services">Restaurant Pickup</a></li>
-          <li><a href="#services">Dry Cleaning</a></li>
-        </ul>
-      </div>
-      <div class="footer__col">
-        <h4>Company</h4>
-        <ul>
-          <li><a href="#process">How It Works</a></li>
-          <li><a href="#pricing">Rates</a></li>
-          <li><a href="portal/index.html">Client Portal</a></li>
-          <li><a href="business/index.html">For Businesses</a></li>
-          <li><a href="api/index.html">API Docs</a></li>
-          <li><a href="#drop">Book Now</a></li>
-        </ul>
-      </div>
-      <div class="footer__col">
-        <h4>Contact</h4>
-        <ul>
-          <li><a href="https://wa.me/2348000000000" target="_blank" rel="noopener">WhatsApp Us</a></li>
-          <li><a href="mailto:hello@zallyerrands.com">hello@zallyerrands.com</a></li>
-          <li><a href="tel:+2348000000000">+234 800 000 0000</a></li>
-          <li><a href="#">Privacy Policy</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer__bottom">
-      <span>&copy; 2026 Za.allyErrands. All rights reserved.</span>
-      <span class="footer__status"><span class="pulse-dot"></span> All systems operational</span>
-    </div>
-  </footer>
-
-  <div class="modal" id="quoteModal" role="dialog" aria-modal="true" aria-label="Request an Ally">
-    <div class="modal__backdrop" id="modalBackdrop"></div>
-    <div class="modal__box">
-      <button class="modal__close" id="modalClose" aria-label="Close">&times;</button>
-      <div class="modal__icon">&#9889;</div>
-      <h3>Request an Ally</h3>
-      <p>Fill in the details. We'll confirm your price and runner via WhatsApp within 15 minutes.</p>
-      <form id="fullQuoteForm" novalidate>
-        <div class="form-group">
-          <label for="qErrand">Errand Description</label>
-          <textarea id="qErrand" name="errand" rows="3" placeholder="Describe what needs to be picked up or dropped off..." required></textarea>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="qName">Your Name</label>
-            <input type="text" id="qName" name="name" placeholder="Tunde K." required />
-          </div>
-          <div class="form-group">
-            <label for="qPhone">WhatsApp Number</label>
-            <input type="tel" id="qPhone" name="phone" placeholder="+234 800 000 0000" required />
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="qLocation">Pickup Location</label>
-          <input type="text" id="qLocation" name="location" placeholder="e.g. Shoprite Lekki Phase 1" required />
-        </div>
-        <button type="submit" class="btn btn--hazard btn--full" id="modalSubmitBtn">
-          <span class="btn-text">Send Request &rarr;</span>
-        </button>
-        <div class="form-success" id="modalSuccess">
-          &#9989; Request received. Expect a WhatsApp message in under 15 minutes.
-        </div>
-      </form>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#coverage">Coverage Map</a>
+      <a href="#testimonials">Reviews</a>
+      <a href="/errandme/">Become a Runner</a>
+      <a href="mailto:hello@za-allyerrands.netlify.app">Contact Us</a>
     </div>
   </div>
-
-  <div class="mobile-cta" id="mobileCta" aria-hidden="true">
-    <div class="mobile-cta__inner">
-      <div class="mobile-cta__info">
-        <span class="pulse-dot"></span>
-        <span>Runners available now</span>
-      </div>
-      <a href="#drop" class="btn btn--hazard mobile-cta__btn" onclick="document.getElementById('mobileCta').classList.remove('visible')">Request Now</a>
+  <div class="footer-bottom">
+    <p>© 2025 Za.allyErrands. All rights reserved. Lagos, Nigeria.</p>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="/sitemap.xml">Sitemap</a>
     </div>
   </div>
+</footer>
 
-  <a href="https://wa.me/2348000000000?text=Hi%20Za.allyErrands%2C%20I%27d%20like%20to%20request%20an%20errand" class="wa-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-    <span class="wa-float__tip">Chat with us</span>
-  </a>
+<!-- WHATSAPP FLOAT -->
+<a id="wa-btn" href="https://wa.me/2348000000000?text=Hi%20Za.allyErrands%2C%20I%20want%20to%20book%20an%20errand" target="_blank" rel="noopener" aria-label="WhatsApp">💬</a>
 
-  <script src="script.js"></script>
+<!-- THREE.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<script>
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    const loader=document.getElementById('loader');
+    loader.classList.add('hide');
+    setTimeout(()=>loader.remove(),700);
+    initAll();
+  },2100);
+});
+
+function initAll(){
+  initCursor();
+  initNav();
+  initHero3D();
+  initScrollAnimations();
+  initCounters();
+  initMapCanvas();
+}
+
+function initCursor(){
+  const dot=document.getElementById('cursor-dot');
+  const ring=document.getElementById('cursor-ring');
+  if(!dot||!ring)return;
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  function animCursor(){
+    dot.style.left=mx+'px';dot.style.top=my+'px';
+    rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
+    ring.style.left=rx+'px';ring.style.top=ry+'px';
+    requestAnimationFrame(animCursor);
+  }
+  animCursor();
+  document.querySelectorAll('a,button,.service-card,.price-card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{
+      ring.style.transform='translate(-50%,-50%) scale(1.8)';
+      ring.style.borderColor='var(--orange)';
+      ring.style.opacity='.5';
+    });
+    el.addEventListener('mouseleave',()=>{
+      ring.style.transform='translate(-50%,-50%) scale(1)';
+      ring.style.borderColor='var(--gold)';
+      ring.style.opacity='.7';
+    });
+  });
+}
+
+function initNav(){
+  const nav=document.getElementById('nav');
+  window.addEventListener('scroll',()=>{
+    nav.classList.toggle('scrolled',window.scrollY>60);
+  });
+}
+function toggleNav(){
+  document.getElementById('nav-links').classList.toggle('open');
+}
+
+function initHero3D(){
+  if(typeof THREE==='undefined')return;
+  const canvas=document.getElementById('hero-canvas');
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(canvas.clientWidth,canvas.clientHeight);
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(60,canvas.clientWidth/canvas.clientHeight,.1,1000);
+  camera.position.set(0,0,14);
+  scene.add(new THREE.AmbientLight(0xffffff,.3));
+  const pointLight=new THREE.PointLight(0xFF4500,.8,50);
+  pointLight.position.set(5,5,5);
+  scene.add(pointLight);
+  const goldLight=new THREE.PointLight(0xF5A623,.5,40);
+  goldLight.position.set(-5,-3,3);
+  scene.add(goldLight);
+  const particleCount=800;
+  const pGeo=new THREE.BufferGeometry();
+  const pPos=new Float32Array(particleCount*3);
+  const pColors=new Float32Array(particleCount*3);
+  for(let i=0;i<particleCount;i++){
+    pPos[i*3]=(Math.random()-.5)*40;
+    pPos[i*3+1]=(Math.random()-.5)*25;
+    pPos[i*3+2]=(Math.random()-.5)*20;
+    const isOrange=Math.random()>.5;
+    pColors[i*3]=isOrange?1:.96;
+    pColors[i*3+1]=isOrange?.27:.65;
+    pColors[i*3+2]=isOrange?0:.14;
+  }
+  pGeo.setAttribute('position',new THREE.BufferAttribute(pPos,3));
+  pGeo.setAttribute('color',new THREE.BufferAttribute(pColors,3));
+  const pMat=new THREE.PointsMaterial({size:.07,vertexColors:true,transparent:true,opacity:.75,sizeAttenuation:true});
+  const particles=new THREE.Points(pGeo,pMat);
+  scene.add(particles);
+  const lagosNodes=[
+    {name:'VI',x:4,y:-1.5,z:0},{name:'Lekki',x:6,y:-2.5,z:.5},
+    {name:'Ikeja',x:-3,y:2,z:0},{name:'Surulere',x:0,y:.5,z:.5},
+    {name:'Ikoyi',x:3,y:0,z:.5},{name:'Ajah',x:8,y:-3.5,z:0},
+    {name:'Alausa',x:-2,y:1,z:.5},{name:'Yaba',x:1,y:1.5,z:0},
+  ];
+  const nodeGeo=new THREE.SphereGeometry(.18,16,16);
+  lagosNodes.forEach(n=>{
+    const mat=new THREE.MeshStandardMaterial({color:0xF5A623,emissive:0xF5A623,emissiveIntensity:.4,roughness:.3,metalness:.8});
+    const mesh=new THREE.Mesh(nodeGeo,mat);
+    mesh.position.set(n.x,n.y,n.z);
+    scene.add(mesh);
+    const ringGeo=new THREE.RingGeometry(.25,.32,32);
+    const ringMat=new THREE.MeshBasicMaterial({color:0xF5A623,transparent:true,opacity:.4,side:THREE.DoubleSide});
+    const ring=new THREE.Mesh(ringGeo,ringMat);
+    ring.position.copy(mesh.position);
+    ring.userData={pulse:true,phase:Math.random()*Math.PI*2};
+    scene.add(ring);
+  });
+  const connections=[[0,1],[0,4],[1,5],[2,6],[2,3],[3,7],[3,4],[6,7],[4,7],[2,7]];
+  connections.forEach(([a,b])=>{
+    const aNode=lagosNodes[a],bNode=lagosNodes[b];
+    const lineGeo=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(aNode.x,aNode.y,aNode.z),new THREE.Vector3(bNode.x,bNode.y,bNode.z)]);
+    scene.add(new THREE.Line(lineGeo,new THREE.LineBasicMaterial({color:0xFF4500,transparent:true,opacity:.25})));
+  });
+  const pkgGeo=new THREE.SphereGeometry(.1,12,12);
+  const pkgMat=new THREE.MeshStandardMaterial({color:0xFFD700,emissive:0xFFD700,emissiveIntensity:.8,roughness:.2,metalness:.9});
+  const packages=connections.map(([a,b])=>{
+    const mesh=new THREE.Mesh(pkgGeo,pkgMat.clone());
+    mesh.userData={t:Math.random(),speed:.003+Math.random()*.004,a,b};
+    scene.add(mesh);
+    return mesh;
+  });
+  let mouseX=0,mouseY=0;
+  document.addEventListener('mousemove',e=>{mouseX=(e.clientX/window.innerWidth-.5)*2;mouseY=-(e.clientY/window.innerHeight-.5)*2;});
+  window.addEventListener('resize',()=>{
+    const w=canvas.clientWidth,h=canvas.clientHeight;
+    renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();
+  });
+  let t=0;
+  function animateHero(){
+    requestAnimationFrame(animateHero);t+=.005;
+    particles.rotation.y=t*.08;particles.rotation.x=t*.03;
+    camera.position.x+=(mouseX*.8-camera.position.x)*.03;
+    camera.position.y+=(mouseY*.5-camera.position.y)*.03;
+    camera.lookAt(scene.position);
+    scene.children.forEach(c=>{
+      if(c.userData&&c.userData.pulse){
+        c.userData.phase+=.04;
+        const sc=1+.3*Math.sin(c.userData.phase);
+        c.scale.set(sc,sc,1);
+        c.material.opacity=.3+.2*Math.sin(c.userData.phase);
+      }
+    });
+    packages.forEach(pkg=>{
+      pkg.userData.t+=pkg.userData.speed;
+      if(pkg.userData.t>1)pkg.userData.t=0;
+      const{t:progress,a,b}=pkg.userData;
+      const aNode=lagosNodes[a],bNode=lagosNodes[b];
+      pkg.position.set(aNode.x+(bNode.x-aNode.x)*progress,aNode.y+(bNode.y-aNode.y)*progress+.1*Math.sin(progress*Math.PI),aNode.z+(bNode.z-aNode.z)*progress);
+      pkg.material.emissiveIntensity=.6+.4*Math.sin(t*5+progress*10);
+    });
+    pointLight.intensity=.6+.3*Math.sin(t*1.5);
+    goldLight.intensity=.4+.2*Math.sin(t*1.2+1);
+    renderer.render(scene,camera);
+  }
+  animateHero();
+}
+
+function initScrollAnimations(){
+  if(typeof gsap==='undefined'){observeAnimations();return;}
+  if(typeof ScrollTrigger!=='undefined'){gsap.registerPlugin(ScrollTrigger);}
+  document.querySelectorAll('.gs-fade,.gs-scale,.gs-fade-left,.gs-fade-right').forEach((el,i)=>{
+    const delay=i%4*.1;
+    if(typeof ScrollTrigger!=='undefined'){
+      gsap.to(el,{opacity:1,x:0,y:0,scale:1,duration:1,delay,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 88%',toggleActions:'play none none none'}});
+    } else {observeEl(el,delay);}
+  });
+}
+function observeAnimations(){
+  document.querySelectorAll('.gs-fade,.gs-scale,.gs-fade-left,.gs-fade-right').forEach((el,i)=>observeEl(el,i%4*.1));
+}
+function observeEl(el,delay){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){setTimeout(()=>el.classList.add('animate-in'),delay*1000);obs.unobserve(el);}
+    });
+  },{threshold:.12});
+  obs.observe(el);
+}
+
+function initCounters(){
+  const counters=document.querySelectorAll('[data-target]');
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const el=e.target,target=+el.dataset.target;
+        let current=0;const step=target/80;
+        const timer=setInterval(()=>{
+          current+=step;
+          if(current>=target){current=target;clearInterval(timer);}
+          el.textContent=Math.floor(current).toLocaleString();
+        },16);
+        obs.unobserve(el);
+      }
+    });
+  },{threshold:.5});
+  counters.forEach(c=>obs.observe(c));
+}
+
+function initMapCanvas(){
+  const canvas=document.getElementById('map-canvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  const zones=[
+    {name:'VI',x:.72,y:.62,r:28,color:'#FF4500'},
+    {name:'Lekki',x:.85,y:.72,r:22,color:'#FF6B35'},
+    {name:'Ikeja',x:.3,y:.28,r:26,color:'#F5A623'},
+    {name:'Surulere',x:.48,y:.52,r:20,color:'#FF4500'},
+    {name:'Ikoyi',x:.65,y:.5,r:18,color:'#FFD700'},
+    {name:'Ajah',x:.94,y:.82,r:18,color:'#FF4500'},
+    {name:'Alausa',x:.35,y:.38,r:16,color:'#F5A623'},
+    {name:'Yaba',x:.52,y:.42,r:20,color:'#FF4500'},
+  ];
+  const connections=[[0,1],[0,4],[1,5],[2,6],[2,3],[3,7],[3,4],[6,7],[4,7]];
+  const movingDots=connections.map(([a,b])=>({a,b,t:Math.random(),speed:.004+Math.random()*.005}));
+  function lerp(a,b,t){return a+(b-a)*t;}
+  let phase=0;
+  function drawMap(){
+    ctx.clearRect(0,0,W,H);
+    ctx.strokeStyle='rgba(255,255,255,0.04)';ctx.lineWidth=1;
+    for(let x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    for(let y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+    ctx.lineWidth=1.5;
+    connections.forEach(([a,b])=>{
+      const za=zones[a],zb=zones[b];
+      ctx.beginPath();ctx.moveTo(za.x*W,za.y*H);ctx.lineTo(zb.x*W,zb.y*H);
+      ctx.strokeStyle='rgba(255,69,0,0.2)';ctx.stroke();
+    });
+    zones.forEach((z,i)=>{
+      const pulseR=z.r+6+4*Math.sin(phase+i);
+      const grad=ctx.createRadialGradient(z.x*W,z.y*H,0,z.x*W,z.y*H,pulseR);
+      grad.addColorStop(0,z.color+'66');grad.addColorStop(1,'transparent');
+      ctx.beginPath();ctx.arc(z.x*W,z.y*H,pulseR,0,Math.PI*2);ctx.fillStyle=grad;ctx.fill();
+      ctx.beginPath();ctx.arc(z.x*W,z.y*H,z.r,0,Math.PI*2);
+      ctx.fillStyle=z.color+'33';ctx.fill();
+      ctx.strokeStyle=z.color+'88';ctx.lineWidth=1.5;ctx.stroke();
+      ctx.fillStyle='rgba(255,255,255,0.85)';
+      ctx.font=`bold ${z.r*.5+6}px Plus Jakarta Sans,sans-serif`;
+      ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(z.name,z.x*W,z.y*H);
+    });
+    movingDots.forEach(d=>{
+      d.t+=d.speed;if(d.t>1)d.t=0;
+      const za=zones[d.a],zb=zones[d.b];
+      const dx=lerp(za.x*W,zb.x*W,d.t);
+      const dy=lerp(za.y*H,zb.y*H,d.t)+Math.sin(d.t*Math.PI)*-12;
+      ctx.beginPath();ctx.arc(dx,dy,5,0,Math.PI*2);
+      ctx.fillStyle='#FFD700';ctx.fill();
+      ctx.strokeStyle='rgba(255,215,0,0.5)';ctx.lineWidth=3;ctx.stroke();
+    });
+    phase+=.035;
+    requestAnimationFrame(drawMap);
+  }
+  drawMap();
+}
+</script>
 </body>
 </html>
