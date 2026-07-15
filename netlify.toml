@@ -15,6 +15,9 @@
   # scanning stays ON for the published site.
   SECRETS_SCAN_SMART_DETECTION_ENABLED = "false"
   SECRETS_SCAN_OMIT_PATHS = "v3/**,ruflo/**,catalyst-talents/**,allyerrands/app/**"
+  # NB: the same two vars are also set as SITE-LEVEL env vars via the Netlify
+  # API (build scope) because netlify.toml [build.environment] was not honored
+  # for this site's API/source-zip deploys. Site-level is the effective config.
 
 # Clean URLs
 [[redirects]]
