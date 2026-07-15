@@ -2,6 +2,9 @@
 
 [build]
   publish = "allyerrands"
+  # Static HTML site — no build step. Explicit no-op command overrides any
+  # dashboard build command so the "building site" stage can't fail.
+  command = "echo 'Za.allyErrands is a static site — no build required'"
 
 # Clean URLs
 [[redirects]]
