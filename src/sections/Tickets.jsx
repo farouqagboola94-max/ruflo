@@ -32,6 +32,19 @@ const TIERS = [
   },
 ]
 
+const BUYER_NAMES = [
+  { name:'Tunde',  city:'Lagos',         tier:'PHALANX', color:B.neonLime    },
+  { name:'Chisom', city:'Abuja',         tier:'VIP',     color:B.amber       },
+  { name:'Adaeze', city:'Port Harcourt', tier:'VVIP',    color:B.neonMagenta },
+  { name:'Emeka',  city:'Lagos',         tier:'PHALANX', color:B.neonLime    },
+  { name:'Seun',   city:'Ibadan',        tier:'VIP',     color:B.amber       },
+  { name:'Ngozi',  city:'Enugu',         tier:'GENERAL', color:B.neonCyan    },
+  { name:'Dayo',   city:'Lagos',         tier:'VIP',     color:B.amber       },
+  { name:'Kemi',   city:'Kano',          tier:'VVIP',    color:B.neonMagenta },
+  { name:'Bola',   city:'Abuja',         tier:'PHALANX', color:B.neonLime    },
+  { name:'Femi',   city:'Ibadan',        tier:'GENERAL', color:B.neonCyan    },
+]
+
 const COMPARE_ROWS = [
   { feature:'Event floor access',        tiers:[true, true, true, true] },
   { feature:'Vendor floor entry',         tiers:[true, true, true, true] },
@@ -57,7 +70,6 @@ const TICKET_FAQ = [
   { q:"What's the age requirement?",            a:'Ages 16 and above. Under-18s must be accompanied by an adult with a valid ticket.' },
 ]
 
-// Extracted as top-level component to comply with Rules of Hooks
 function TicketFAQ({ items }) {
   const [openIdx, setOpenIdx] = useState(null)
   return (
@@ -87,21 +99,19 @@ function QtySelector({ name, value, color, onChange }) {
     <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'9px 14px', background:'rgba(255,255,255,0.04)', borderRadius:8, border:'1px solid rgba(255,255,255,0.08)', marginBottom:16 }}>
       <span style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color:B.smoke, letterSpacing:'0.15em' }}>QTY</span>
       <div style={{ display:'flex', alignItems:'center', gap:14 }}>
-        <button
-          onClick={() => onChange(Math.max(1, value - 1))}
+        <button onClick={() => onChange(Math.max(1, value - 1))}
           style={{ width:28, height:28, borderRadius:4, background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.12)', color:B.white, cursor:'pointer', fontSize:18, lineHeight:1, display:'flex', alignItems:'center', justifyContent:'center', transition:'all 0.15s' }}
-          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; e.currentTarget.style.borderColor = color + '60' }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)' }}
+          onMouseEnter={e => { e.currentTarget.style.background='rgba(255,255,255,0.12)'; e.currentTarget.style.borderColor=color+'60' }}
+          onMouseLeave={e => { e.currentTarget.style.background='rgba(255,255,255,0.06)'; e.currentTarget.style.borderColor='rgba(255,255,255,0.12)' }}
         >−</button>
         <span style={{ fontFamily:"'Orbitron', monospace", fontSize:15, fontWeight:700, color:B.white, minWidth:20, textAlign:'center' }}>{value}</span>
-        <button
-          onClick={() => onChange(Math.min(4, value + 1))}
+        <button onClick={() => onChange(Math.min(4, value + 1))}
           style={{ width:28, height:28, borderRadius:4, background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.12)', color:B.white, cursor:'pointer', fontSize:18, lineHeight:1, display:'flex', alignItems:'center', justifyContent:'center', transition:'all 0.15s' }}
-          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; e.currentTarget.style.borderColor = color + '60' }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)' }}
+          onMouseEnter={e => { e.currentTarget.style.background='rgba(255,255,255,0.12)'; e.currentTarget.style.borderColor=color+'60' }}
+          onMouseLeave={e => { e.currentTarget.style.background='rgba(255,255,255,0.06)'; e.currentTarget.style.borderColor='rgba(255,255,255,0.12)' }}
         >+</button>
       </div>
-      <span style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color: value > 1 ? color : 'transparent', letterSpacing:'0.1em', minWidth:56, textAlign:'right', transition:'color 0.2s' }}>
+      <span style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color:value>1?color:'transparent', letterSpacing:'0.1em', minWidth:56, textAlign:'right', transition:'color 0.2s' }}>
         {value > 1 ? 'MAX 4' : ''}
       </span>
     </div>
@@ -110,21 +120,19 @@ function QtySelector({ name, value, color, onChange }) {
 
 function downloadCalendar() {
   const lines = [
-    'BEGIN:VCALENDAR', 'VERSION:2.0',
-    "PRODID:-//Sneakers Fest '26//SF26//EN",
-    'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', 'BEGIN:VEVENT',
+    'BEGIN:VCALENDAR','VERSION:2.0',"PRODID:-//Sneakers Fest '26//SF26//EN",
+    'CALSCALE:GREGORIAN','METHOD:PUBLISH','BEGIN:VEVENT',
     'UID:sneakers-fest-26-dec12@sneakersfest.com',
-    'DTSTAMP:20260101T000000Z', 'DTSTART:20261212T120000', 'DTEND:20261212T220000',
+    'DTSTAMP:20260101T000000Z','DTSTART:20261212T120000','DTEND:20261212T220000',
     "SUMMARY:Sneakers Fest '26 — The Sole Exhibition",
     "DESCRIPTION:West Africa's premier sneaker culture event. 200+ rare kicks\\, 30-50 curated vendors\\, live DJs\\, custom art and street food.",
     'LOCATION:Muri Okunola Park\\, Victoria Island\\, Lagos\\, Nigeria',
-    'URL:https://sneakers-fest-26.netlify.app',
-    'STATUS:CONFIRMED', 'END:VEVENT', 'END:VCALENDAR',
+    'URL:https://sneakers-fest-26.netlify.app','STATUS:CONFIRMED','END:VEVENT','END:VCALENDAR',
   ]
-  const blob = new Blob([lines.join('\r\n')], { type: 'text/calendar;charset=utf-8' })
-  const url  = URL.createObjectURL(blob)
-  const a    = document.createElement('a')
-  a.href = url; a.download = "sneakers-fest-26.ics"
+  const blob = new Blob([lines.join('\r\n')], { type:'text/calendar;charset=utf-8' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url; a.download = 'sneakers-fest-26.ics'
   document.body.appendChild(a); a.click()
   document.body.removeChild(a); URL.revokeObjectURL(url)
 }
@@ -134,7 +142,10 @@ export default function Tickets() {
   const [showMyTickets, setShowMyTickets] = useState(false)
   const [orders,        setOrders]        = useState([])
   const [dlRef,         setDlRef]         = useState(null)
-  const [qty,           setQty]           = useState({ GENERAL: 1, VIP: 1, VVIP: 1, PHALANX: 1 })
+  const [qty,           setQty]           = useState({ GENERAL:1, VIP:1, VVIP:1, PHALANX:1 })
+  const [buyerIdx,      setBuyerIdx]      = useState(0)
+  const [buyerVisible,  setBuyerVisible]  = useState(true)
+  const [tierViewers,   setTierViewers]   = useState({ GENERAL:21, VIP:27, VVIP:18, PHALANX:13 })
 
   const daysLeft = Math.max(0, Math.ceil((new Date('2026-12-01') - new Date()) / 86400000))
 
@@ -143,35 +154,57 @@ export default function Tickets() {
   }
   useEffect(() => { loadOrders() }, [])
 
+  useEffect(() => {
+    const vid = setInterval(() => {
+      setTierViewers(p => ({
+        GENERAL: Math.max(12, Math.min(38, p.GENERAL + Math.floor(Math.random()*5)-2)),
+        VIP:     Math.max(18, Math.min(50, p.VIP     + Math.floor(Math.random()*5)-2)),
+        VVIP:    Math.max(10, Math.min(30, p.VVIP    + Math.floor(Math.random()*5)-2)),
+        PHALANX: Math.max(6,  Math.min(22, p.PHALANX + Math.floor(Math.random()*3)-1)),
+      }))
+    }, 5300)
+    const bid = setInterval(() => {
+      setBuyerVisible(false)
+      setTimeout(() => { setBuyerIdx(i => (i+1) % BUYER_NAMES.length); setBuyerVisible(true) }, 350)
+    }, 5000)
+    return () => { clearInterval(vid); clearInterval(bid) }
+  }, [])
+
   function closePaymentModal() {
     const before = orders.length
     loadOrders()
     try {
       const after = JSON.parse(localStorage.getItem('sf26_orders') || '[]')
-      if (after.length > before && selectedTier) logReferralConversion('purchase', { tier: selectedTier.name })
+      if (after.length > before && selectedTier) logReferralConversion('purchase', { tier:selectedTier.name })
     } catch {}
     setSelectedTier(null)
   }
 
-  const setTierQty = (name, val) => setQty(q => ({ ...q, [name]: val }))
+  const setTierQty = (name, val) => setQty(q => ({ ...q, [name]:val }))
+  const buyer = BUYER_NAMES[buyerIdx]
 
   return (
     <section id="tickets" style={{ position:'relative', overflow:'hidden', background:B.black, padding:'100px 24px' }}>
+      <style>{`
+        @keyframes buyerSlide { from { transform:translateX(8px);opacity:0 } to { transform:translateX(0);opacity:1 } }
+        @keyframes viewBlink  { 0%,100%{ opacity:1 } 50%{ opacity:0.25 } }
+        @keyframes scarGlow   { 0%,100%{ opacity:0 } 50%{ opacity:0.65 } }
+      `}</style>
       <GrainOverlay />
       <Egg id="egg-093" corner="top-right" />
       <Egg id="egg-094" corner="bottom-left" />
       <ScanLines opacity={0.04} />
 
-      <div style={{ position:'absolute', top:'25%', left:'8%',  width:320, height:320, background:`radial-gradient(circle, ${B.neonCyan}20, transparent 70%)`,    filter:'blur(70px)', pointerEvents:'none' }} />
-      <div style={{ position:'absolute', top:'15%', left:'42%', width:360, height:360, background:`radial-gradient(circle, ${B.amber}18, transparent 70%)`,       filter:'blur(70px)', pointerEvents:'none' }} />
-      <div style={{ position:'absolute', bottom:'20%', right:'8%', width:300, height:300, background:`radial-gradient(circle, ${B.neonMagenta}18, transparent 70%)`, filter:'blur(70px)', pointerEvents:'none' }} />
-      <div style={{ position:'absolute', top:'5%', right:'15%', width:240, height:240, background:`radial-gradient(circle, ${B.neonLime}12, transparent 70%)`,    filter:'blur(60px)', pointerEvents:'none' }} />
-      <div style={{ position:'absolute', bottom:0, left:'50%', transform:'translateX(-50%)', width:600, height:2, background:`linear-gradient(90deg, transparent, ${B.amber}30, transparent)` }} />
+      <div style={{ position:'absolute', top:'25%', left:'8%',   width:320, height:320, background:`radial-gradient(circle,${B.neonCyan}20,transparent 70%)`,    filter:'blur(70px)', pointerEvents:'none' }} />
+      <div style={{ position:'absolute', top:'15%', left:'42%',  width:360, height:360, background:`radial-gradient(circle,${B.amber}18,transparent 70%)`,       filter:'blur(70px)', pointerEvents:'none' }} />
+      <div style={{ position:'absolute', bottom:'20%', right:'8%',width:300, height:300, background:`radial-gradient(circle,${B.neonMagenta}18,transparent 70%)`, filter:'blur(70px)', pointerEvents:'none' }} />
+      <div style={{ position:'absolute', top:'5%', right:'15%',  width:240, height:240, background:`radial-gradient(circle,${B.neonLime}12,transparent 70%)`,    filter:'blur(60px)', pointerEvents:'none' }} />
+      <div style={{ position:'absolute', bottom:0, left:'50%', transform:'translateX(-50%)', width:600, height:2, background:`linear-gradient(90deg,transparent,${B.amber}30,transparent)` }} />
 
       <div style={{ position:'relative', zIndex:10, maxWidth:1200, margin:'0 auto' }}>
 
         {/* Header */}
-        <div style={{ textAlign:'center', marginBottom:40 }}>
+        <div style={{ textAlign:'center', marginBottom:32 }}>
           <SectionTag>SECURE YOUR SPOT</SectionTag>
           <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(40px,6vw,68px)', color:B.white, lineHeight:0.9 }}>
             GET YOUR<br /><span style={{ color:B.amber }}>TICKETS</span>
@@ -181,18 +214,18 @@ export default function Tickets() {
           </div>
         </div>
 
+        {/* Live buyer ticker */}
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:10, marginBottom:28, minHeight:22 }}>
+          <span style={{ width:6, height:6, borderRadius:'50%', background:B.neonLime, boxShadow:`0 0 8px ${B.neonLime}`, display:'inline-block', animation:'viewBlink 1.2s ease-in-out infinite', flexShrink:0 }} />
+          <span style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color:'#444', letterSpacing:2 }}>JUST PURCHASED:</span>
+          <span style={{ fontFamily:"'Space Mono', monospace", fontSize:8, letterSpacing:1, color:buyer.color, opacity:buyerVisible?1:0, transition:'opacity 0.3s', animation:buyerVisible?'buyerSlide 0.35s ease':undefined }}>
+            {buyer.name} ({buyer.city}) → {buyer.tier}
+          </span>
+        </div>
+
         {/* Early Bird Banner */}
         {daysLeft > 0 && (
-          <div style={{
-            marginBottom: 48,
-            padding: '20px 28px',
-            background: `linear-gradient(135deg, rgba(245,166,35,0.10), rgba(0,240,255,0.04))`,
-            border: `1px solid ${B.amber}35`,
-            borderRadius: 12,
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            flexWrap: 'wrap', gap: 16,
-            backdropFilter: 'blur(12px)',
-          }}>
+          <div style={{ marginBottom:48, padding:'20px 28px', background:`linear-gradient(135deg,rgba(245,166,35,0.10),rgba(0,240,255,0.04))`, border:`1px solid ${B.amber}35`, borderRadius:12, display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:16, backdropFilter:'blur(12px)' }}>
             <div>
               <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:6 }}>
                 <span style={{ fontSize:14 }}>⚡</span>
@@ -210,106 +243,76 @@ export default function Tickets() {
 
         {/* Tier Cards */}
         <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(260px, 1fr))', gap:20, alignItems:'center' }}>
-          {TIERS.map((tier, i) => (
-            <div
-              key={i}
-              style={{
-                background: tier.featured ? `rgba(245,166,35,0.07)` : `rgba(255,255,255,0.05)`,
-                backdropFilter:'blur(20px) saturate(180%)', WebkitBackdropFilter:'blur(20px) saturate(180%)',
-                border:`1px solid ${tier.featured ? tier.color + '55' : 'rgba(255,255,255,0.10)'}`,
-                borderRadius:14, overflow:'hidden', position:'relative',
-                transform: tier.featured ? 'scale(1.04)' : 'scale(1)',
-                boxShadow: tier.featured
-                  ? `0 8px 40px rgba(0,0,0,0.6), 0 0 0 1px ${tier.color}15, inset 0 1px 0 rgba(255,255,255,0.12)`
-                  : `0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.07)`,
-                transition:'all 0.3s ease',
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.background   = tier.featured ? `rgba(245,166,35,0.12)` : `rgba(255,255,255,0.09)`
-                e.currentTarget.style.transform    = tier.featured ? 'scale(1.06)' : 'scale(1.02)'
-                e.currentTarget.style.borderColor  = tier.color + '70'
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.background   = tier.featured ? `rgba(245,166,35,0.07)` : `rgba(255,255,255,0.05)`
-                e.currentTarget.style.transform    = tier.featured ? 'scale(1.04)' : 'scale(1)'
-                e.currentTarget.style.borderColor  = tier.featured ? tier.color + '55' : 'rgba(255,255,255,0.10)'
-              }}
-            >
-              <div style={{ position:'absolute', top:0, left:0, right:0, height:1, background:'linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)' }} />
-              <div style={{ height:3, background:`linear-gradient(90deg, ${tier.color}, ${tier.color}30)` }} />
+          {TIERS.map((tier, i) => {
+            const pct      = tier.avail / tier.total
+            const sold     = tier.total - tier.avail
+            const urgColor = pct < 0.15 ? B.neonMagenta : pct < 0.4 ? B.amber : tier.color
+            const isUrgent = pct < 0.3 && !tier.featured
+            return (
+              <div key={i}
+                style={{ background:tier.featured?`rgba(245,166,35,0.07)`:`rgba(255,255,255,0.05)`, backdropFilter:'blur(20px) saturate(180%)', WebkitBackdropFilter:'blur(20px) saturate(180%)', border:`1px solid ${tier.featured?tier.color+'55':'rgba(255,255,255,0.10)'}`, borderRadius:14, overflow:'hidden', position:'relative', transform:tier.featured?'scale(1.04)':'scale(1)', boxShadow:tier.featured?`0 8px 40px rgba(0,0,0,0.6),0 0 0 1px ${tier.color}15,inset 0 1px 0 rgba(255,255,255,0.12)`:`0 8px 32px rgba(0,0,0,0.45),inset 0 1px 0 rgba(255,255,255,0.07)`, transition:'all 0.3s ease' }}
+                onMouseEnter={e => { e.currentTarget.style.background=tier.featured?`rgba(245,166,35,0.12)`:`rgba(255,255,255,0.09)`; e.currentTarget.style.transform=tier.featured?'scale(1.06)':'scale(1.02)'; e.currentTarget.style.borderColor=tier.color+'70' }}
+                onMouseLeave={e => { e.currentTarget.style.background=tier.featured?`rgba(245,166,35,0.07)`:`rgba(255,255,255,0.05)`; e.currentTarget.style.transform=tier.featured?'scale(1.04)':'scale(1)'; e.currentTarget.style.borderColor=tier.featured?tier.color+'55':'rgba(255,255,255,0.10)' }}
+              >
+                {isUrgent && <div style={{ position:'absolute', inset:0, borderRadius:13, border:`1.5px solid ${tier.color}`, opacity:0, animation:'scarGlow 2.5s ease-in-out infinite', pointerEvents:'none', zIndex:2 }} />}
+                <div style={{ position:'absolute', top:0, left:0, right:0, height:1, background:'linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent)' }} />
+                <div style={{ height:3, background:`linear-gradient(90deg,${tier.color},${tier.color}30)` }} />
 
-              <div style={{ padding:28 }}>
-                <div style={{ marginBottom:14 }}>
-                  <span style={{ padding:'3px 10px', borderRadius:2, background:tier.color+'18', border:`1px solid ${tier.color}50`, fontFamily:"'Space Mono', monospace", fontSize:7, color:tier.color, letterSpacing:'0.2em' }}>{tier.tag}</span>
-                </div>
+                <div style={{ padding:28 }}>
+                  {/* Tag row + viewer chip */}
+                  <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14 }}>
+                    <span style={{ padding:'3px 10px', borderRadius:2, background:tier.color+'18', border:`1px solid ${tier.color}50`, fontFamily:"'Space Mono', monospace", fontSize:7, color:tier.color, letterSpacing:'0.2em' }}>{tier.tag}</span>
+                    <span style={{ display:'flex', alignItems:'center', gap:5, fontFamily:"'Space Mono', monospace", fontSize:7, color:'#555', letterSpacing:1 }}>
+                      <span style={{ width:5, height:5, borderRadius:'50%', background:B.neonCyan, boxShadow:`0 0 5px ${B.neonCyan}`, display:'inline-block', animation:'viewBlink 2s ease-in-out infinite' }} />
+                      {tierViewers[tier.name]} viewing
+                    </span>
+                  </div>
 
-                <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:28, color:B.white, letterSpacing:'0.05em' }}>{tier.name}</div>
+                  <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:28, color:B.white, letterSpacing:'0.05em' }}>{tier.name}</div>
 
-                <div style={{ margin:'14px 0 16px', padding:'12px 16px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:8, display:'inline-block' }}>
-                  <div style={{ fontFamily:"'Orbitron', monospace", fontWeight:900, fontSize:32, color:tier.color, lineHeight:1, textShadow:`0 0 20px ${tier.color}50` }}>{tier.price}</div>
-                  <div style={{ fontFamily:"'Space Mono', monospace", fontSize:7, color:B.smoke, letterSpacing:'0.2em', marginTop:4 }}>EARLY BIRD PRICE</div>
-                </div>
+                  <div style={{ margin:'14px 0 16px', padding:'12px 16px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:8, display:'inline-block' }}>
+                    <div style={{ fontFamily:"'Orbitron', monospace", fontWeight:900, fontSize:32, color:tier.color, lineHeight:1, textShadow:`0 0 20px ${tier.color}50` }}>{tier.price}</div>
+                    <div style={{ fontFamily:"'Space Mono', monospace", fontSize:7, color:B.smoke, letterSpacing:'0.2em', marginTop:4 }}>EARLY BIRD PRICE</div>
+                  </div>
 
-                {(() => {
-                  const pct      = tier.avail / tier.total
-                  const sold     = tier.total - tier.avail
-                  const urgColor = pct < 0.15 ? B.neonMagenta : pct < 0.4 ? B.amber : tier.color
-                  return (
-                    <div style={{ marginBottom:16 }}>
-                      <div style={{ display:'flex', justifyContent:'space-between', marginBottom:5 }}>
-                        <span style={{ fontFamily:"'Space Mono', monospace", fontSize:7, color:urgColor, letterSpacing:1 }}>
-                          {pct < 0.15 ? '⚡ ALMOST GONE' : pct < 0.4 ? 'SELLING FAST' : 'AVAILABLE'}
-                        </span>
-                        <span style={{ fontFamily:"'Space Mono', monospace", fontSize:7, color:'#555', letterSpacing:1 }}>{sold} / {tier.total} SOLD</span>
-                      </div>
-                      <div style={{ height:3, background:'rgba(255,255,255,0.06)', borderRadius:2, overflow:'hidden' }}>
-                        <div style={{ height:'100%', width:`${(sold/tier.total)*100}%`, background:urgColor, borderRadius:2 }} />
-                      </div>
+                  {/* Scarcity bar */}
+                  <div style={{ marginBottom:16 }}>
+                    <div style={{ display:'flex', justifyContent:'space-between', marginBottom:5 }}>
+                      <span style={{ fontFamily:"'Space Mono', monospace", fontSize:7, color:urgColor, letterSpacing:1 }}>
+                        {pct < 0.15 ? '⚡ ALMOST GONE' : pct < 0.4 ? 'SELLING FAST' : 'AVAILABLE'}
+                      </span>
+                      <span style={{ fontFamily:"'Space Mono', monospace", fontSize:7, color:'#555', letterSpacing:1 }}>{sold} / {tier.total} SOLD</span>
                     </div>
-                  )
-                })()}
-
-                <div style={{ width:'100%', height:1, background:'rgba(255,255,255,0.08)', marginBottom:20 }} />
-
-                {/* Perks */}
-                <div style={{ display:'flex', flexDirection:'column', gap:10, marginBottom:20 }}>
-                  {tier.perks.map((perk, j) => (
-                    <div key={j} style={{ display:'flex', alignItems:'center', gap:10 }}>
-                      <div style={{ width:6, height:6, borderRadius:'50%', background:tier.color, boxShadow:`0 0 8px ${tier.color}`, flexShrink:0 }} />
-                      <span style={{ fontFamily:"'Syne', sans-serif", fontSize:13, color:B.smoke }}>{perk}</span>
+                    <div style={{ height:3, background:'rgba(255,255,255,0.06)', borderRadius:2, overflow:'hidden' }}>
+                      <div style={{ height:'100%', width:`${(sold/tier.total)*100}%`, background:urgColor, borderRadius:2 }} />
                     </div>
-                  ))}
+                  </div>
+
+                  <div style={{ width:'100%', height:1, background:'rgba(255,255,255,0.08)', marginBottom:20 }} />
+
+                  <div style={{ display:'flex', flexDirection:'column', gap:10, marginBottom:20 }}>
+                    {tier.perks.map((perk, j) => (
+                      <div key={j} style={{ display:'flex', alignItems:'center', gap:10 }}>
+                        <div style={{ width:6, height:6, borderRadius:'50%', background:tier.color, boxShadow:`0 0 8px ${tier.color}`, flexShrink:0 }} />
+                        <span style={{ fontFamily:"'Syne', sans-serif", fontSize:13, color:B.smoke }}>{perk}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <QtySelector name={tier.name} value={qty[tier.name]} color={tier.color} onChange={val => setTierQty(tier.name, val)} />
+
+                  <button
+                    onClick={() => setSelectedTier({ ...tier, quantity:qty[tier.name] })}
+                    style={{ width:'100%', padding:'14px 0', background:tier.featured?tier.color:'rgba(255,255,255,0.07)', border:`1px solid ${tier.color}`, borderRadius:6, cursor:'pointer', fontFamily:"'Space Mono', monospace", fontSize:10, fontWeight:700, color:tier.featured?B.black:tier.color, letterSpacing:'0.2em', transition:'all 0.25s', boxShadow:tier.featured?`0 0 24px ${tier.color}35`:'none' }}
+                    onMouseEnter={e => { e.currentTarget.style.background=tier.color; e.currentTarget.style.color=B.black; e.currentTarget.style.boxShadow=`0 0 36px ${tier.color}55` }}
+                    onMouseLeave={e => { e.currentTarget.style.background=tier.featured?tier.color:'rgba(255,255,255,0.07)'; e.currentTarget.style.color=tier.featured?B.black:tier.color; e.currentTarget.style.boxShadow=tier.featured?`0 0 24px ${tier.color}35`:'none' }}
+                  >
+                    {tier.cta}{qty[tier.name]>1?` × ${qty[tier.name]} = ₦${(tier.priceNum*qty[tier.name]).toLocaleString()}`:''}
+                  </button>
                 </div>
-
-                {/* Quantity Selector */}
-                <QtySelector
-                  name={tier.name}
-                  value={qty[tier.name]}
-                  color={tier.color}
-                  onChange={val => setTierQty(tier.name, val)}
-                />
-
-                {/* CTA */}
-                <button
-                  onClick={() => setSelectedTier({ ...tier, quantity: qty[tier.name] })}
-                  style={{
-                    width:'100%', padding:'14px 0',
-                    background: tier.featured ? tier.color : 'rgba(255,255,255,0.07)',
-                    border:`1px solid ${tier.color}`,
-                    borderRadius:6, cursor:'pointer',
-                    fontFamily:"'Space Mono', monospace", fontSize:10, fontWeight:700,
-                    color: tier.featured ? B.black : tier.color,
-                    letterSpacing:'0.2em', transition:'all 0.25s',
-                    boxShadow: tier.featured ? `0 0 24px ${tier.color}35` : 'none',
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.background = tier.color; e.currentTarget.style.color = B.black; e.currentTarget.style.boxShadow = `0 0 36px ${tier.color}55` }}
-                  onMouseLeave={e => { e.currentTarget.style.background = tier.featured ? tier.color : 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = tier.featured ? B.black : tier.color; e.currentTarget.style.boxShadow = tier.featured ? `0 0 24px ${tier.color}35` : 'none' }}
-                >
-                  {tier.cta}{qty[tier.name] > 1 ? ` × ${qty[tier.name]} = ₦${(tier.priceNum * qty[tier.name]).toLocaleString()}` : ''}
-                </button>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
         {/* Comparison Table */}
@@ -326,13 +329,11 @@ export default function Tickets() {
             </thead>
             <tbody>
               {COMPARE_ROWS.map((row, i) => (
-                <tr key={i} style={{ background: i%2===0 ? 'rgba(255,255,255,0.015)' : 'transparent' }}>
+                <tr key={i} style={{ background:i%2===0?'rgba(255,255,255,0.015)':'transparent' }}>
                   <td style={{ padding:'9px 16px', fontFamily:"'Syne', sans-serif", fontSize:12, color:B.smoke, borderBottom:'1px solid rgba(255,255,255,0.04)' }}>{row.feature}</td>
                   {row.tiers.map((has, j) => (
                     <td key={j} style={{ padding:'9px 12px', textAlign:'center', borderBottom:'1px solid rgba(255,255,255,0.04)' }}>
-                      {has
-                        ? <span style={{ color:TIERS[j].color, fontSize:13 }}>✓</span>
-                        : <span style={{ color:'#2a2a2a', fontSize:13 }}>&mdash;</span>}
+                      {has ? <span style={{ color:TIERS[j].color, fontSize:13 }}>✓</span> : <span style={{ color:'#2a2a2a', fontSize:13 }}>&mdash;</span>}
                     </td>
                   ))}
                 </tr>
@@ -358,8 +359,8 @@ export default function Tickets() {
           <button
             onClick={downloadCalendar}
             style={{ display:'inline-flex', alignItems:'center', gap:10, padding:'13px 28px', background:'rgba(255,255,255,0.04)', border:`1px solid ${B.amber}40`, borderRadius:8, cursor:'pointer', fontFamily:"'Space Mono', monospace", fontSize:10, color:B.amber, letterSpacing:'0.18em', transition:'all 0.2s', backdropFilter:'blur(12px)' }}
-            onMouseEnter={e => { e.currentTarget.style.background = `rgba(245,166,35,0.10)`; e.currentTarget.style.borderColor = `${B.amber}70`; e.currentTarget.style.boxShadow = `0 0 20px ${B.amber}20` }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.borderColor = `${B.amber}40`; e.currentTarget.style.boxShadow = 'none' }}
+            onMouseEnter={e => { e.currentTarget.style.background=`rgba(245,166,35,0.10)`; e.currentTarget.style.borderColor=`${B.amber}70`; e.currentTarget.style.boxShadow=`0 0 20px ${B.amber}20` }}
+            onMouseLeave={e => { e.currentTarget.style.background='rgba(255,255,255,0.04)'; e.currentTarget.style.borderColor=`${B.amber}40`; e.currentTarget.style.boxShadow='none' }}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={B.amber} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
@@ -371,11 +372,10 @@ export default function Tickets() {
             <button
               onClick={() => { loadOrders(); setShowMyTickets(true) }}
               style={{ display:'inline-flex', alignItems:'center', gap:10, padding:'13px 28px', background:'rgba(255,255,255,0.04)', border:`1px solid rgba(255,255,255,0.12)`, borderRadius:8, cursor:'pointer', fontFamily:"'Space Mono', monospace", fontSize:10, color:B.smoke, letterSpacing:'0.18em', transition:'all 0.2s' }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = `rgba(255,255,255,0.25)`; e.currentTarget.style.color = B.white }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = `rgba(255,255,255,0.12)`; e.currentTarget.style.color = B.smoke }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor=`rgba(255,255,255,0.25)`; e.currentTarget.style.color=B.white }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor=`rgba(255,255,255,0.12)`; e.currentTarget.style.color=B.smoke }}
             >MY TICKETS ({orders.length})</button>
           )}
-
           <div style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color:B.smoke, letterSpacing:'0.2em' }}>
             ALL SALES FINAL · AGES 16+ · SECURE CHECKOUT VIA PAYSTACK & FLUTTERWAVE
           </div>
@@ -385,9 +385,8 @@ export default function Tickets() {
       {selectedTier && <PaymentModal tier={selectedTier} onClose={closePaymentModal} />}
 
       {showMyTickets && (
-        <div
-          style={{ position:'fixed', inset:0, zIndex:2000, background:'rgba(0,0,0,0.88)', backdropFilter:'blur(10px)', display:'flex', justifyContent:'flex-end', animation:'fadeUp 0.2s ease' }}
-          onClick={e => { if (e.target === e.currentTarget) setShowMyTickets(false) }}
+        <div style={{ position:'fixed', inset:0, zIndex:2000, background:'rgba(0,0,0,0.88)', backdropFilter:'blur(10px)', display:'flex', justifyContent:'flex-end', animation:'fadeUp 0.2s ease' }}
+          onClick={e => { if (e.target===e.currentTarget) setShowMyTickets(false) }}
         >
           <div style={{ width:'100%', maxWidth:480, background:'rgba(10,10,15,0.97)', borderLeft:'1px solid rgba(255,255,255,0.08)', overflowY:'auto', display:'flex', flexDirection:'column', animation:'slideFromRight 0.25s ease' }}>
             <div style={{ padding:'18px 24px', borderBottom:'1px solid rgba(255,255,255,0.07)', display:'flex', alignItems:'center', justifyContent:'space-between', position:'sticky', top:0, background:'rgba(10,10,15,0.97)', zIndex:1 }}>
@@ -402,23 +401,13 @@ export default function Tickets() {
             <div style={{ padding:24, display:'flex', flexDirection:'column', gap:32 }}>
               {orders.map((order, i) => (
                 <div key={i}>
-                  <TicketCard
-                    name={order.name} tier={order.tier} tierColor={order.tierColor}
-                    ticketRef={order.ref} price={order.price}
-                    qrData={`SF26|${order.tier}|${order.ref}|${order.name}|DEC-12-2026|LAGOS`}
-                  />
+                  <TicketCard name={order.name} tier={order.tier} tierColor={order.tierColor} ticketRef={order.ref} price={order.price} qrData={`SF26|${order.tier}|${order.ref}|${order.name}|DEC-12-2026|LAGOS`} />
                   <div style={{ marginTop:12, display:'flex', flexDirection:'column', gap:8 }}>
                     <button
-                      onClick={async () => {
-                        setDlRef(order.ref)
-                        await downloadTicketPNG({ name:order.name, email:order.email, tier:order.tier, tierColor:order.tierColor, ref:order.ref, price:order.price })
-                        setDlRef(null)
-                      }}
-                      disabled={dlRef === order.ref}
-                      style={{ width:'100%', padding:'12px', borderRadius:10, border:`1px solid ${order.tierColor}`, background:`${order.tierColor}15`, color:order.tierColor, fontFamily:"'Orbitron', monospace", fontSize:10, fontWeight:700, letterSpacing:2, cursor:dlRef===order.ref ? 'wait' : 'pointer', transition:'all 0.2s' }}
-                    >
-                      {dlRef === order.ref ? 'SAVING…' : 'DOWNLOAD TICKET PNG →'}
-                    </button>
+                      onClick={async () => { setDlRef(order.ref); await downloadTicketPNG({ name:order.name, email:order.email, tier:order.tier, tierColor:order.tierColor, ref:order.ref, price:order.price }); setDlRef(null) }}
+                      disabled={dlRef===order.ref}
+                      style={{ width:'100%', padding:'12px', borderRadius:10, border:`1px solid ${order.tierColor}`, background:`${order.tierColor}15`, color:order.tierColor, fontFamily:"'Orbitron', monospace", fontSize:10, fontWeight:700, letterSpacing:2, cursor:dlRef===order.ref?'wait':'pointer', transition:'all 0.2s' }}
+                    >{dlRef===order.ref?'SAVING…':'DOWNLOAD TICKET PNG →'}</button>
                     <p style={{ fontFamily:"'Space Mono', monospace", fontSize:9, color:'#333', textAlign:'center' }}>
                       Purchased {new Date(order.purchasedAt).toLocaleDateString('en-NG')} via {order.gateway}
                     </p>

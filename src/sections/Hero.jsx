@@ -69,11 +69,38 @@ const PRICE_TIERS = [
   { t: 'PHALANX', p: '₦50,000', c: B.neonLime     },
 ]
 
+const RECENT_BUYERS = [
+  { name: 'Tunde', city: 'Lagos',         tier: 'PHALANX', color: B.neonLime    },
+  { name: 'Chisom', city: 'Abuja',        tier: 'VIP',     color: B.amber       },
+  { name: 'Adaeze', city: 'Port Harcourt',tier: 'VVIP',    color: B.neonMagenta },
+  { name: 'Emeka', city: 'Lagos',         tier: 'PHALANX', color: B.neonLime    },
+  { name: 'Seun', city: 'Ibadan',         tier: 'VIP',     color: B.amber       },
+  { name: 'Ngozi', city: 'Enugu',         tier: 'GENERAL', color: B.neonCyan    },
+  { name: 'Dayo', city: 'Lagos',          tier: 'VIP',     color: B.amber       },
+  { name: 'Kemi', city: 'Kano',           tier: 'VVIP',    color: B.neonMagenta },
+]
+
 export default function Hero() {
   const time = useCountdown(EVENT_DATE)
   const [h1, setH1] = useState(false)
   const [h2, setH2] = useState(false)
   const [hoveredTier, setHoveredTier] = useState(null)
+  const [viewers, setViewers] = useState(338)
+  const [buyerIdx, setBuyerIdx] = useState(0)
+  const [buyerVisible, setBuyerVisible] = useState(true)
+
+  useEffect(() => {
+    const id1 = setInterval(() => {
+      setViewers(v => Math.max(280, Math.min(520, v + Math.floor(Math.random() * 7) - 3)))
+    }, 4200)
+    const id2 = setInterval(() => {
+      setBuyerVisible(false)
+      setTimeout(() => { setBuyerIdx(i => (i + 1) % RECENT_BUYERS.length); setBuyerVisible(true) }, 350)
+    }, 4800)
+    return () => { clearInterval(id1); clearInterval(id2) }
+  }, [])
+
+  const buyer = RECENT_BUYERS[buyerIdx]
 
   return (
     <section id="hero" style={{
@@ -94,6 +121,21 @@ export default function Hero() {
       <ScanLines opacity={0.04} />
       <Egg id="egg-001" corner="top-right" />
       <Egg id="egg-002" corner="bottom-left" />
+
+      <style>{`
+        @keyframes buyerSlide {
+          from { opacity: 0; transform: translateY(8px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes viewerBlink {
+          0%,100% { opacity: 1; }
+          50%     { opacity: 0.5; }
+        }
+        @keyframes ctaPulse {
+          0%,100% { box-shadow: 0 0 40px ${B.amber}35, 0 4px 20px rgba(0,0,0,0.45); }
+          50%     { box-shadow: 0 0 70px ${B.amber}70, 0 4px 20px rgba(0,0,0,0.45); }
+        }
+      `}</style>
 
       {/* Atmospheric orbs */}
       <div style={{ position:'absolute', top:'-12%', left:'50%', transform:'translateX(-50%)', width:900, height:550, background:`radial-gradient(ellipse, ${B.amber}09 0%, transparent 65%)`, filter:'blur(70px)', pointerEvents:'none' }} />
@@ -116,44 +158,44 @@ export default function Hero() {
       <div style={{ position:'absolute', bottom:80, right:24, width:40, height:40, borderBottom:`1.5px solid ${B.neonCyan}38`, borderRight:`1.5px solid ${B.neonCyan}38`, pointerEvents:'none' }} />
 
       {/* Left side editorial text */}
-      <div style={{
-        position:'absolute', left:18, top:'50%',
-        transform:'translateX(-50%) rotate(-90deg)',
-        fontFamily:"'Space Mono', monospace", fontSize:7,
-        letterSpacing:'0.42em', color:B.smoke, opacity:0.35,
-        whiteSpace:'nowrap', pointerEvents:'none',
-      }}>
+      <div style={{ position:'absolute', left:18, top:'50%', transform:'translateX(-50%) rotate(-90deg)', fontFamily:"'Space Mono', monospace", fontSize:7, letterSpacing:'0.42em', color:B.smoke, opacity:0.35, whiteSpace:'nowrap', pointerEvents:'none' }}>
         WEST AFRICA'S PREMIER SNEAKER CULTURE EVENT
       </div>
 
       {/* Right side editorial text */}
-      <div style={{
-        position:'absolute', right:18, top:'50%',
-        transform:'translateX(50%) rotate(90deg)',
-        fontFamily:"'Space Mono', monospace", fontSize:7,
-        letterSpacing:'0.42em', color:B.smoke, opacity:0.35,
-        whiteSpace:'nowrap', pointerEvents:'none',
-      }}>
+      <div style={{ position:'absolute', right:18, top:'50%', transform:'translateX(50%) rotate(90deg)', fontFamily:"'Space Mono', monospace", fontSize:7, letterSpacing:'0.42em', color:B.smoke, opacity:0.35, whiteSpace:'nowrap', pointerEvents:'none' }}>
         LAGOS · DECEMBER 12 · 2026 · SF26
       </div>
 
       {/* Main content */}
-      <div style={{
-        position:'relative', zIndex:10, textAlign:'center', maxWidth:980,
-        animation:'fadeUp 0.9s ease both',
-      }}>
-        {/* Live badge */}
-        <div style={{
-          display:'inline-flex', alignItems:'center', gap:8, marginBottom:32,
-          padding:'6px 18px',
-          background:'rgba(255,255,255,0.04)',
-          backdropFilter:'blur(14px)', WebkitBackdropFilter:'blur(14px)',
-          border:`1px solid ${B.neonCyan}32`, borderRadius:100,
-        }}>
-          <div style={{ width:5, height:5, borderRadius:'50%', background:B.neonLime, animation:'pulse 2s infinite', boxShadow:`0 0 8px ${B.neonLime}` }} />
-          <span style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color:B.neonCyan, letterSpacing:'0.45em' }}>
-            DECEMBER 12 · LAGOS, NIGERIA
-          </span>
+      <div style={{ position:'relative', zIndex:10, textAlign:'center', maxWidth:980, animation:'fadeUp 0.9s ease both' }}>
+
+        {/* Live badge — now with viewer count */}
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:16, marginBottom:32, flexWrap:'wrap' }}>
+          <div style={{
+            display:'inline-flex', alignItems:'center', gap:8,
+            padding:'6px 18px',
+            background:'rgba(255,255,255,0.04)',
+            backdropFilter:'blur(14px)', WebkitBackdropFilter:'blur(14px)',
+            border:`1px solid ${B.neonCyan}32`, borderRadius:100,
+          }}>
+            <div style={{ width:5, height:5, borderRadius:'50%', background:B.neonLime, animation:'pulse 2s infinite', boxShadow:`0 0 8px ${B.neonLime}` }} />
+            <span style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color:B.neonCyan, letterSpacing:'0.45em' }}>
+              DECEMBER 12 · LAGOS, NIGERIA
+            </span>
+          </div>
+          <div style={{
+            display:'inline-flex', alignItems:'center', gap:6,
+            padding:'6px 14px',
+            background:'rgba(255,255,255,0.04)',
+            backdropFilter:'blur(14px)', WebkitBackdropFilter:'blur(14px)',
+            border:`1px solid ${B.amber}28`, borderRadius:100,
+          }}>
+            <div style={{ width:5, height:5, borderRadius:'50%', background:B.amber, animation:'viewerBlink 1.8s ease-in-out infinite', boxShadow:`0 0 6px ${B.amber}` }} />
+            <span style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color:B.amber, letterSpacing:'0.3em' }}>
+              {viewers} VIEWING NOW
+            </span>
+          </div>
         </div>
 
         {/* SNEAKERS */}
@@ -237,7 +279,7 @@ export default function Hero() {
               padding:'16px 46px',
               background:`linear-gradient(135deg, ${B.amber} 0%, ${B.amberGlow} 50%, ${B.amber} 100%)`,
               backgroundSize:'220% auto',
-              animation: h1 ? 'shimmer 1.5s linear infinite' : 'none',
+              animation: h1 ? 'shimmer 1.5s linear infinite' : 'ctaPulse 2.5s ease-in-out infinite',
               color:B.black,
               fontFamily:"'Space Mono', monospace", fontSize:10, fontWeight:700,
               letterSpacing:'0.2em', textDecoration:'none', borderRadius:4,
@@ -275,8 +317,25 @@ export default function Hero() {
           </a>
         </div>
 
+        {/* Live buyer social proof */}
+        <div style={{ marginTop: 20, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          {buyerVisible && (
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              animation: 'buyerSlide 0.35s ease',
+            }}>
+              <div style={{ width: 5, height: 5, borderRadius: '50%', background: B.neonLime, boxShadow: `0 0 6px ${B.neonLime}`, flexShrink: 0 }} />
+              <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: '#666' }}>
+                <span style={{ color: buyer.color }}>{buyer.name} ({buyer.city})</span>
+                {' '}just secured{' '}
+                <span style={{ color: buyer.color }}>{buyer.tier}</span>
+              </span>
+            </div>
+          )}
+        </div>
+
         {/* Ticket price anchor pills */}
-        <div style={{ display:'flex', gap:8, justifyContent:'center', flexWrap:'wrap', marginTop:20 }}>
+        <div style={{ display:'flex', gap:8, justifyContent:'center', flexWrap:'wrap', marginTop:10 }}>
           {PRICE_TIERS.map(({ t, p, c }) => (
             <a
               key={t}
@@ -298,6 +357,12 @@ export default function Hero() {
               <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, fontWeight:700, color: hoveredTier === t ? c : '#888', letterSpacing:'0.08em', transition:'color 0.18s' }}>{p}</span>
             </a>
           ))}
+        </div>
+
+        {/* PHALANX scarcity line */}
+        <div style={{ marginTop: 14, fontFamily: "'Space Mono', monospace", fontSize: 8, letterSpacing: '0.1em' }}>
+          <span style={{ color: B.neonLime }}>⚡ Only 12 PHALANX slots remain</span>
+          <span style={{ color: '#555' }}> · Prices increase December 1</span>
         </div>
       </div>
 

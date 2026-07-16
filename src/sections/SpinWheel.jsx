@@ -33,7 +33,6 @@ function recordSpin()   {
   localStorage.setItem(TOTAL_KEY, String(getTotalSpins() + 1))
 }
 function addBonusSpin() {
-  const cur = spinsToday()
   const d = getSpinData()
   const bonus = d.bonus || 0
   localStorage.setItem(SPIN_KEY, JSON.stringify({ date: TODAY(), count: d.count || 0, bonus: bonus + 1 }))
@@ -67,6 +66,8 @@ const SOCIAL = [
   { name: 'Ngozi', city: 'Enugu',         prize: 'EARLY ACCESS' },
   { name: 'Dayo',  city: 'Lagos',         prize: 'VIP UPGRADE' },
   { name: 'Kemi',  city: 'Kano',          prize: 'MERCH RAFFLE' },
+  { name: 'Seun',  city: 'Lagos',         prize: '₦5,000 OFF' },
+  { name: 'Bola',  city: 'Abuja',         prize: 'EARLY ACCESS' },
 ]
 
 export default function SpinWheel() {
@@ -81,6 +82,7 @@ export default function SpinWheel() {
   const [totalToday, setTotalToday] = useState(() => spinsToday())
   const [allowed,    setAllowed]    = useState(() => totalAllowedToday())
   const [totalAll,   setTotalAll]   = useState(() => getTotalSpins())
+  const [winCopied,  setWinCopied]  = useState(false)
   const winnerRef = useRef(null)
   const socialRef = useRef(null)
 
@@ -88,10 +90,10 @@ export default function SpinWheel() {
     function showSocial() {
       const item = SOCIAL[Math.floor(Math.random() * SOCIAL.length)]
       setSocial(item)
-      setTimeout(() => setSocial(null), 3800)
-      socialRef.current = setTimeout(showSocial, 18000 + Math.random() * 12000)
+      setTimeout(() => setSocial(null), 3500)
+      socialRef.current = setTimeout(showSocial, 10000 + Math.random() * 8000)
     }
-    socialRef.current = setTimeout(showSocial, 12000)
+    socialRef.current = setTimeout(showSocial, 6000)
     return () => clearTimeout(socialRef.current)
   }, [])
 
@@ -100,6 +102,7 @@ export default function SpinWheel() {
     const maxToday  = totalAllowedToday()
     if (spinning || usedToday >= maxToday) return
     setResult(null); setConfetti([]); setIsNearMiss(false); setNearPrize(null); setSpinning(true)
+    setWinCopied(false)
 
     recordSpin()
     const newUsed = usedToday + 1
@@ -107,7 +110,6 @@ export default function SpinWheel() {
     setTotalAll(prev => prev + 1)
     setSpunCount(c => c + 1)
 
-    // Weighted: TRY AGAIN more likely for first spin, prizes more likely on 3rd
     const TRYAGAIN_IDX = 6
     let winner
     const luck = Math.random()
@@ -119,20 +121,17 @@ export default function SpinWheel() {
       winner = TRYAGAIN_IDX
     }
 
-    // Near-miss: 45% of TRY AGAIN results look like a near-miss
     const nearMiss = winner === TRYAGAIN_IDX && Math.random() < 0.45
     const nearTarget = nearMiss ? prizePool[Math.floor(Math.random() * prizePool.length)] : null
     if (nearMiss) { setIsNearMiss(true); setNearPrize(PRIZES[nearTarget]) }
 
     winnerRef.current = winner
 
-    // Spin math — near-miss: stop 1 segment past nearTarget (overshoots by EACH)
     const finalTarget = nearMiss ? nearTarget : winner
     const targetMod   = ((360 - (finalTarget * EACH + EACH / 2)) % 360 + 360) % 360
     const prevMod     = rotation % 360
     let extra = targetMod - prevMod
     if (extra < 0) extra += 360
-    // Near-miss: overshoot by EACH degrees → lands on TRY AGAIN
     const overshoot   = nearMiss ? EACH : 0
     const newRotation = rotation + extra + overshoot + 360 * (5 + Math.floor(Math.random() * 3))
     setRotation(newRotation)
@@ -143,7 +142,6 @@ export default function SpinWheel() {
       const won = PRIZES[winnerRef.current]
       if (won.label !== 'TRY AGAIN') {
         addXP(won.xp, 'Spin to Win', won.rare ? 'spin-rare' : undefined)
-        // Celebration confetti
         const COLS = [B.amber, B.neonCyan, B.neonMagenta, B.neonLime, '#fff', won.color]
         setConfetti(Array.from({ length: 60 }, (_, k) => ({
           id: k, color: COLS[k % COLS.length],
@@ -157,11 +155,22 @@ export default function SpinWheel() {
     }, 5400)
   }
 
+  function shareWin(prize) {
+    const text = `Just spun the wheel at Sneakers Fest '26 and won ${prize.label}! 🎡 Dec 12 · Eko Atlantic · Lagos 👟 sneakersfest26.com`
+    if (navigator.share) navigator.share({ text }).catch(() => {})
+    else {
+      navigator.clipboard.writeText(text).catch(() => {})
+      setWinCopied(true)
+      setTimeout(() => setWinCopied(false), 2500)
+    }
+  }
+
   const prize   = result !== null ? PRIZES[result] : null
   const used    = totalToday
   const max     = allowed
   const canSpin = used < max && !spinning
   const spinsLeft = max - used
+  const isLastSpin = spinsLeft === 1
 
   return (
     <section id="spin" style={{
@@ -196,6 +205,10 @@ export default function SpinWheel() {
           0%,100%{ filter:drop-shadow(0 0 8px ${B.amber}40); }
           50%    { filter:drop-shadow(0 0 28px ${B.amber}90); }
         }
+        @keyframes lastSpinPulse {
+          0%,100%{ box-shadow: 0 0 40px #FF2D7B60, 0 8px 32px rgba(0,0,0,0.5); }
+          50%    { box-shadow: 0 0 80px #FF2D7B90, 0 8px 32px rgba(0,0,0,0.5); }
+        }
       `}</style>
 
       {/* Confetti burst */}
@@ -224,7 +237,7 @@ export default function SpinWheel() {
           display:'flex', alignItems:'center', gap:10,
         }}>
           <div style={{ width:6, height:6, borderRadius:'50%', background:B.neonLime, boxShadow:`0 0 8px ${B.neonLime}`, animation:'pulse 1s infinite' }}/>
-          <span style={{ fontFamily:"'Space Mono'", fontSize:10, color:B.mist }}>
+          <span style={{ fontFamily:"'Space Mono'", fontSize:10, color:B.smoke }}>
             <span style={{ color:B.amber }}>{social.name} ({social.city})</span> just won <span style={{ color:B.neonCyan }}>{social.prize}</span>
           </span>
         </div>
@@ -245,13 +258,13 @@ export default function SpinWheel() {
             {Array.from({ length: max }).map((_, i) => (
               <div key={i} style={{
                 width: 10, height: 10, borderRadius:'50%',
-                background: i < used ? B.gunmetal : B.amber,
-                boxShadow: i < used ? 'none' : `0 0 8px ${B.amber}80`,
+                background: i < used ? B.gunmetal : (isLastSpin && i === used ? B.neonMagenta : B.amber),
+                boxShadow: i < used ? 'none' : (isLastSpin && i === used ? `0 0 12px ${B.neonMagenta}` : `0 0 8px ${B.amber}80`),
                 transition:'all 0.3s',
               }}/>
             ))}
           </div>
-          <span style={{ fontFamily:"'Space Mono'", fontSize:9, color: spinsLeft > 0 ? B.amber : '#555', letterSpacing:2 }}>
+          <span style={{ fontFamily:"'Space Mono'", fontSize:9, color: spinsLeft > 0 ? (isLastSpin ? B.neonMagenta : B.amber) : '#555', letterSpacing:2 }}>
             {spinsLeft > 0 ? `${spinsLeft} SPIN${spinsLeft !== 1 ? 'S' : ''} LEFT TODAY` : 'NO SPINS LEFT · COME BACK TOMORROW'}
           </span>
         </div>
@@ -315,18 +328,19 @@ export default function SpinWheel() {
             onClick={spin}
             disabled={!canSpin}
             style={{
-              background: canSpin ? B.amber : B.gunmetal,
+              background: canSpin ? (isLastSpin ? B.neonMagenta : B.amber) : B.gunmetal,
               color: canSpin ? B.black : '#444',
               border: 'none', padding:'16px 56px',
               fontFamily:"'Bebas Neue'", fontSize:'1.6rem', letterSpacing:'0.12em',
               cursor: canSpin ? 'pointer' : 'default',
               borderRadius:6, minWidth:240,
-              boxShadow: canSpin ? `0 0 40px ${B.amber}60, 0 8px 32px rgba(0,0,0,0.5)` : 'none',
+              boxShadow: canSpin ? (isLastSpin ? `0 0 40px ${B.neonMagenta}70, 0 8px 32px rgba(0,0,0,0.5)` : `0 0 40px ${B.amber}60, 0 8px 32px rgba(0,0,0,0.5)`) : 'none',
+              animation: isLastSpin && canSpin ? 'lastSpinPulse 1.8s ease-in-out infinite' : 'none',
               transition:'all 0.3s',
               transform: canSpin ? 'scale(1)' : 'scale(0.96)',
             }}
           >
-            {spinning ? 'SPINNING...' : !canSpin ? 'COME BACK TOMORROW' : spunCount > 0 ? `SPIN AGAIN (${spinsLeft} LEFT)` : 'SPIN THE WHEEL'}
+            {spinning ? 'SPINNING...' : !canSpin ? 'COME BACK TOMORROW' : isLastSpin ? '⚡ FINAL SPIN — GO ALL IN' : spunCount > 0 ? `SPIN AGAIN (${spinsLeft} LEFT)` : 'SPIN THE WHEEL'}
           </button>
         </div>
 
@@ -379,9 +393,21 @@ export default function SpinWheel() {
                 <h3 style={{ fontFamily:"'Bebas Neue'", fontSize:'2.6rem', color:B.white, letterSpacing:'0.05em', marginBottom:8 }}>{prize.label}</h3>
                 <p style={{ color:B.smoke, fontFamily:"'Space Mono'", fontSize:10, marginBottom:6 }}>{prize.sub}</p>
                 <p style={{ color:prize.color, fontFamily:"'Orbitron'", fontSize:9, fontWeight:700, marginBottom:24 }}>+{prize.xp} XP EARNED</p>
-                <div style={{ background:B.black, border:`1px solid ${prize.color}40`, borderRadius:8, padding:'12px 20px', marginBottom:24, fontFamily:"'Space Mono'", fontSize:9, color:prize.color, lineHeight:1.7 }}>
+                <div style={{ background:B.black, border:`1px solid ${prize.color}40`, borderRadius:8, padding:'12px 20px', marginBottom:20, fontFamily:"'Space Mono'", fontSize:9, color:prize.color, lineHeight:1.7 }}>
                   📸 Screenshot this · show at the event gate on Dec 12
                 </div>
+                <button
+                  onClick={() => shareWin(prize)}
+                  style={{
+                    width:'100%', marginBottom:12, padding:'11px',
+                    background:`${prize.color}15`, border:`1px solid ${prize.color}50`,
+                    borderRadius:8, cursor:'pointer',
+                    fontFamily:"'Bebas Neue'", fontSize:'1.1rem', letterSpacing:'0.1em',
+                    color:prize.color,
+                  }}
+                >
+                  {winCopied ? '✓ COPIED TO CLIPBOARD' : '🔗 SHARE YOUR WIN'}
+                </button>
               </>
             ) : (
               <>

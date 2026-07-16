@@ -38,6 +38,7 @@ function useCountdown() {
 
 const WATCHER_BASE = 7843
 const WATCHER_KEY  = 'sf26_mystery_watchers'
+const FOUNDER_KEY  = 'sf26_mystery_founders'
 
 function getWatchers() {
   try {
@@ -49,24 +50,37 @@ function getWatchers() {
   return c
 }
 
+function getFounderCount() {
+  try {
+    const s = JSON.parse(localStorage.getItem(FOUNDER_KEY) || '{}')
+    if (s.date === new Date().toISOString().slice(0, 10)) return s.count
+  } catch {}
+  const c = 47 + Math.floor(Math.random() * 28)
+  localStorage.setItem(FOUNDER_KEY, JSON.stringify({ date: new Date().toISOString().slice(0, 10), count: c }))
+  return c
+}
+
 export default function MysteryDrop() {
-  const [hovered,      setHovered]      = useState(false)
-  const [watchers,     setWatchers]     = useState(WATCHER_BASE)
+  const [hovered,       setHovered]       = useState(false)
+  const [watchers,      setWatchers]      = useState(WATCHER_BASE)
   const [unlockedClues, setUnlockedClues] = useState([0])
-  const [newClue,      setNewClue]      = useState(null)
-  const [elapsedMs,    setElapsedMs]    = useState(0)
-  const [founderGate,  setFounderGate]  = useState(false)
-  const countdown   = useCountdown()
-  const peekedRef   = useRef(false)
-  const startRef    = useRef(Date.now())
-  const watcherRef  = useRef(null)
-  const clueRef     = useRef(null)
-  const elapsedRef  = useRef(null)
+  const [newClue,       setNewClue]       = useState(null)
+  const [elapsedMs,     setElapsedMs]     = useState(0)
+  const [founderGate,   setFounderGate]   = useState(false)
+  const [founderCount,  setFounderCount]  = useState(0)
+  const [newClueToast,  setNewClueToast]  = useState(null)
+  const countdown    = useCountdown()
+  const peekedRef    = useRef(false)
+  const startRef     = useRef(Date.now())
+  const watcherRef   = useRef(null)
+  const clueRef      = useRef(null)
+  const elapsedRef   = useRef(null)
 
   const pad = n => String(n).padStart(2, '0')
 
   useEffect(() => {
     setWatchers(getWatchers())
+    setFounderCount(getFounderCount())
 
     watcherRef.current = setInterval(() => {
       setWatchers(w => {
@@ -87,8 +101,11 @@ export default function MysteryDrop() {
       setUnlockedClues(prev => {
         const added = unlocked.filter(i => !prev.includes(i))
         if (added.length > 0) {
-          setNewClue(added[added.length - 1])
+          const latestIdx = added[added.length - 1]
+          setNewClue(latestIdx)
+          setNewClueToast(CLUES[latestIdx].text.slice(0, 40) + '…')
           setTimeout(() => setNewClue(null), 5000)
+          setTimeout(() => setNewClueToast(null), 4500)
         }
         return unlocked
       })
@@ -125,7 +142,38 @@ export default function MysteryDrop() {
         @keyframes clueSlide { 0%{transform:translateX(-12px);opacity:0} 100%{transform:translateX(0);opacity:1} }
         @keyframes watcherPop { 0%{transform:scale(1)} 50%{transform:scale(1.15)} 100%{transform:scale(1)} }
         @keyframes founderBadge { 0%{opacity:0;transform:scale(0.8)} 100%{opacity:1;transform:scale(1)} }
+        @keyframes intelToast {
+          0%  { opacity:0; transform:translateY(-12px); }
+          15% { opacity:1; transform:translateY(0); }
+          80% { opacity:1; }
+          100%{ opacity:0; }
+        }
+        @keyframes scarPulse {
+          0%,100%{ box-shadow: 0 0 6px ${B.neonMagenta}40; }
+          50%    { box-shadow: 0 0 20px ${B.neonMagenta}80; }
+        }
       `}</style>
+
+      {/* New intel toast */}
+      {newClueToast && (
+        <div style={{
+          position: 'fixed', top: 80, left: '50%', transform: 'translateX(-50%)',
+          zIndex: 9800, background: 'rgba(10,10,15,0.97)',
+          border: `1px solid ${B.neonMagenta}60`, borderRadius: 10,
+          padding: '10px 20px',
+          display: 'flex', alignItems: 'center', gap: 10,
+          animation: 'intelToast 4.5s ease forwards',
+          pointerEvents: 'none', maxWidth: '90vw',
+        }}>
+          <span style={{ fontSize: 14 }}>🔓</span>
+          <span style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.neonMagenta, letterSpacing: 2 }}>
+            NEW INTEL UNLOCKED
+          </span>
+          <span style={{ fontFamily: "'Syne'", fontSize: 11, color: B.white }}>
+            {newClueToast}
+          </span>
+        </div>
+      )}
 
       {/* Ambient glow */}
       <div style={{
@@ -158,7 +206,7 @@ export default function MysteryDrop() {
         }}>SOMETHING DROPS DEC 12</h2>
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.78rem', marginBottom: 40, lineHeight: 1.8 }}>
           A limited collaboration. A silhouette you've never seen.<br />
-          <strong style={{ color: B.neonMagenta }}>Revealed only at the event.</strong>
+          <strong style={{ color: B.neonMagenta }}>Revealed only at the event. No online release.</strong>
         </p>
 
         {/* Shoe silhouette */}
@@ -194,17 +242,27 @@ export default function MysteryDrop() {
           )}
         </div>
 
-        {/* Scarcity bar */}
+        {/* Scarcity bar — urgent styling */}
         <div style={{ marginBottom: 32, padding: '12px 0' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
             <span style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', color: B.smoke, letterSpacing: 2 }}>PAIRS REMAINING</span>
             <span style={{ fontFamily: "'Orbitron'", fontSize: '0.6rem', color: B.neonMagenta, fontWeight: 700 }}>{'< 300 WORLDWIDE'}</span>
           </div>
-          <div style={{ height: 3, background: B.charcoal, borderRadius: 2, overflow: 'hidden' }}>
-            <div style={{ height: '100%', width: '23%', background: `linear-gradient(90deg, ${B.neonMagenta}, ${B.amber})`, borderRadius: 2, boxShadow: `0 0 8px ${B.neonMagenta}` }} />
+          <div style={{ height: 4, background: B.charcoal, borderRadius: 2, overflow: 'hidden' }}>
+            <div style={{
+              height: '100%', width: '23%',
+              background: `linear-gradient(90deg, ${B.neonMagenta}, ${B.amber})`,
+              borderRadius: 2,
+              animation: 'scarPulse 2s ease-in-out infinite',
+            }} />
           </div>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', color: '#555', marginTop: 6, textAlign: 'right', letterSpacing: 1 }}>
-            77% ALREADY SPOKEN FOR
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6 }}>
+            <span style={{ fontFamily: "'Space Mono'", fontSize: '0.58rem', color: B.neonMagenta, letterSpacing: 1, fontWeight: 700 }}>
+              77% ALREADY SPOKEN FOR
+            </span>
+            <span style={{ fontFamily: "'Space Mono'", fontSize: '0.55rem', color: '#444', letterSpacing: 1 }}>
+              ONLY {23}% AVAILABLE
+            </span>
           </div>
         </div>
 
@@ -275,7 +333,7 @@ export default function MysteryDrop() {
           )}
         </div>
 
-        {/* Founding Member gate */}
+        {/* Founding Member gate — with founder count */}
         <div style={{
           padding: '20px 24px',
           background: `linear-gradient(135deg, ${B.amber}10 0%, ${B.amber}05 100%)`,
@@ -285,23 +343,37 @@ export default function MysteryDrop() {
             <span style={{ fontSize: 20 }}>👑</span>
             <div style={{ fontFamily: "'Bebas Neue'", fontSize: '1.1rem', color: B.amber, letterSpacing: 3 }}>FOUNDING MEMBERS ONLY</div>
           </div>
-          <p style={{ fontFamily: "'Space Mono'", fontSize: '0.65rem', color: B.smoke, lineHeight: 1.7, marginBottom: 14 }}>
+          <p style={{ fontFamily: "'Space Mono'", fontSize: '0.65rem', color: B.smoke, lineHeight: 1.7, marginBottom: 10 }}>
             Founding Members receive early access intel 48 hours before general announcement. If you're not on the list, you're behind.
           </p>
-          <button
-            onClick={() => { setFounderGate(true); document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' }) }}
-            style={{
-              background: `linear-gradient(135deg, ${B.amber} 0%, #e8960f 100%)`,
-              color: B.black, border: 'none', padding: '10px 28px',
-              fontFamily: "'Bebas Neue'", fontSize: '1rem', letterSpacing: '0.15em',
-              cursor: 'pointer', borderRadius: 4,
-              boxShadow: `0 0 20px ${B.amber}40`,
-            }}
-          >SECURE YOUR STATUS</button>
+          {founderCount > 0 && (
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              background: `rgba(245,166,35,0.1)`, border: `1px solid ${B.amber}30`,
+              borderRadius: 20, padding: '4px 12px', marginBottom: 14,
+            }}>
+              <div style={{ width: 5, height: 5, borderRadius: '50%', background: B.neonLime, boxShadow: `0 0 6px ${B.neonLime}` }} />
+              <span style={{ fontFamily: "'Space Mono'", fontSize: '0.58rem', color: B.amber, letterSpacing: 1 }}>
+                <strong>{founderCount}</strong> founding members joined today
+              </span>
+            </div>
+          )}
+          <div style={{ display: 'block' }}>
+            <button
+              onClick={() => { setFounderGate(true); document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' }) }}
+              style={{
+                background: `linear-gradient(135deg, ${B.amber} 0%, #e8960f 100%)`,
+                color: B.black, border: 'none', padding: '10px 28px',
+                fontFamily: "'Bebas Neue'", fontSize: '1rem', letterSpacing: '0.15em',
+                cursor: 'pointer', borderRadius: 4,
+                boxShadow: `0 0 20px ${B.amber}40`,
+              }}
+            >SECURE YOUR STATUS →</button>
+          </div>
         </div>
 
-        <p style={{ color: '#444', fontFamily: "'Space Mono'", fontSize: '0.65rem', letterSpacing: '0.1em' }}>
-          Be there or miss history.
+        <p style={{ color: '#555', fontFamily: "'Space Mono'", fontSize: '0.65rem', letterSpacing: '0.1em' }}>
+          Every hour that passes is a pair you won't get. Be there or miss history.
         </p>
       </div>
     </section>
