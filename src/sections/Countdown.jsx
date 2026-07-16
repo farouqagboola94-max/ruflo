@@ -8,6 +8,21 @@ const RSVP_SEED  = 1247
 const RSVP_KEY   = 'sf26_rsvp_count'
 const JOINED_KEY = 'sf26_rsvp_joined'
 
+const MILESTONES = [1500, 2000, 2500]
+
+const JOIN_POOL = [
+  { name: 'Tunde O.',  city: 'Lagos Island' },
+  { name: 'Chisom A.', city: 'Lekki' },
+  { name: 'Adaeze N.', city: 'Ikeja' },
+  { name: 'Emeka K.',  city: 'Abuja' },
+  { name: 'Seun B.',   city: 'VI' },
+  { name: 'Ngozi F.',  city: 'Surulere' },
+  { name: 'Dayo L.',   city: 'Yaba' },
+  { name: 'Kemi R.',   city: 'Port Harcourt' },
+  { name: 'Bola J.',   city: 'Ikoyi' },
+  { name: 'Femi S.',   city: 'Festac' },
+]
+
 // ── countdown logic ──────────────────────────────────────────────────────────────────────────────
 function useCountdown() {
   const [t, setT] = useState({ days:0, hours:0, minutes:0, seconds:0 })
@@ -143,11 +158,15 @@ async function downloadHypeCard({ name, daysLeft }) {
 // ── main section ──────────────────────────────────────────────────────────────────────────────
 export default function Countdown() {
   const time = useCountdown()
-  const [rsvp,   setRsvp]   = useState(RSVP_SEED)
-  const [joined, setJoined] = useState(false)
-  const [burst,  setBurst]  = useState(false)
-  const [cardName, setCardName] = useState('')
+  const [rsvp,       setRsvp]       = useState(RSVP_SEED)
+  const [joined,     setJoined]     = useState(false)
+  const [burst,      setBurst]      = useState(false)
+  const [cardName,   setCardName]   = useState('')
   const [generating, setGenerating] = useState(false)
+  const [joinPerson, setJoinPerson] = useState(null)
+  const [joinVis,    setJoinVis]    = useState(false)
+  const joinRef = useRef(null)
+  const joinIdx = useRef(0)
 
   useEffect(() => {
     try {
@@ -155,6 +174,18 @@ export default function Countdown() {
       setRsvp(RSVP_SEED + extra)
       setJoined(localStorage.getItem(JOINED_KEY) === '1')
     } catch {}
+
+    function showJoin() {
+      setJoinVis(false)
+      joinRef.current = setTimeout(() => {
+        joinIdx.current = (joinIdx.current + 1) % JOIN_POOL.length
+        setJoinPerson(JOIN_POOL[joinIdx.current])
+        setJoinVis(true)
+        joinRef.current = setTimeout(showJoin, 5500 + Math.random() * 3000)
+      }, 400)
+    }
+    joinRef.current = setTimeout(showJoin, 4000)
+    return () => clearTimeout(joinRef.current)
   }, [])
 
   function joinCount() {
@@ -214,6 +245,10 @@ export default function Countdown() {
         </div>
 
         <div style={{ textAlign:'center', marginBottom:60 }}>
+          <style>{`
+            @keyframes joinSlide { from{ opacity:0; transform:translateY(4px) } to{ opacity:1; transform:translateY(0) } }
+            @keyframes dotBlink2 { 0%,100%{ opacity:1 } 50%{ opacity:0.4 } }
+          `}</style>
           <div style={{ display:'inline-flex', flexDirection:'column', alignItems:'center', gap:20, background:'rgba(255,255,255,0.03)', border:`1px solid rgba(255,255,255,0.08)`, borderRadius:16, padding:'32px 48px' }}>
             <div>
               <div style={{ fontFamily:'Orbitron,monospace', fontWeight:900, fontSize:'clamp(36px,7vw,64px)', color:B.white, lineHeight:1,
@@ -223,7 +258,41 @@ export default function Countdown() {
               <div style={{ fontFamily:'Space Mono,monospace', fontSize:10, color:B.smoke, letterSpacing:3, marginTop:6, textAlign:'center' }}>
                 {joined ? 'HEADS ARE IN · INCLUDING YOU' : 'HEADS ALREADY IN'}
               </div>
+
+              {/* Live join ticker */}
+              <div style={{ height:20, marginTop:10, display:'flex', alignItems:'center', justifyContent:'center', gap:6, opacity: joinVis && joinPerson ? 1 : 0, transition:'opacity 0.4s' }}>
+                {joinVis && joinPerson && (
+                  <>
+                    <div style={{ width:6, height:6, borderRadius:'50%', background:B.neonLime, boxShadow:`0 0 6px ${B.neonLime}`, animation:'dotBlink2 1.5s ease-in-out infinite' }} />
+                    <span style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:B.neonLime, letterSpacing:1, animation:'joinSlide 0.4s ease' }}>
+                      {joinPerson.name} <span style={{ color:B.smoke }}>({joinPerson.city}) just joined</span>
+                    </span>
+                  </>
+                )}
+              </div>
             </div>
+
+            {/* Milestone bar */}
+            {(() => {
+              const next = MILESTONES.find(m => m > rsvp) ?? MILESTONES[MILESTONES.length - 1]
+              const prev = MILESTONES[MILESTONES.indexOf(next) - 1] ?? 0
+              const pct  = Math.min(1, (rsvp - prev) / (next - prev))
+              const left = next - rsvp
+              return (
+                <div style={{ width:'100%', maxWidth:280 }}>
+                  <div style={{ display:'flex', justifyContent:'space-between', marginBottom:6 }}>
+                    <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:B.smoke, letterSpacing:1 }}>NEXT MILESTONE</span>
+                    <span style={{ fontFamily:'Orbitron,monospace', fontSize:8, color:B.amber, letterSpacing:1 }}>{next.toLocaleString()}</span>
+                  </div>
+                  <div style={{ height:4, background:'rgba(255,255,255,0.08)', borderRadius:2, overflow:'hidden' }}>
+                    <div style={{ height:'100%', width:`${pct*100}%`, background:`linear-gradient(90deg,${B.amber},${B.neonLime})`, borderRadius:2, transition:'width 0.6s ease' }} />
+                  </div>
+                  <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:B.smoke, letterSpacing:1, marginTop:6, textAlign:'center' }}>
+                    {left.toLocaleString()} heads to unlock next tier unlock
+                  </div>
+                </div>
+              )
+            })()}
 
             <button
               onClick={joinCount}

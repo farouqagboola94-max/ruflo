@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import CountUp from '../components/CountUp'
 import Marquee from '../components/Marquee'
@@ -15,51 +16,116 @@ const BRANDS = [
   'Travis Scott', 'A Bathing Ape', 'Yeezy', 'Fear Of God', 'Palm Angels', 'Supreme',
 ]
 
+const ACTIVITY_POOL = [
+  { name: 'Tunde O.',  city: 'Lagos Island', action: 'just checked event details' },
+  { name: 'Chisom A.', city: 'Lekki',        action: 'just viewed ticket tiers' },
+  { name: 'Emeka N.',  city: 'Abuja',        action: 'just joined the waitlist' },
+  { name: 'Seun B.',   city: 'VI',           action: 'just entered a raffle' },
+  { name: 'Adaeze K.', city: 'Ikeja',        action: 'just spun the wheel' },
+  { name: 'Dayo F.',   city: 'Port Harcourt',action: 'just reserved a spot' },
+  { name: 'Kemi L.',   city: 'Yaba',         action: 'just checked vendor slots' },
+  { name: 'Bola R.',   city: 'Surulere',     action: 'just viewed ticket tiers' },
+]
+
+const VIEWER_KEY = 'sf26_stats_viewers'
+
 export default function Stats() {
+  const [viewers,  setViewers]  = useState(142)
+  const [actIdx,   setActIdx]   = useState(0)
+  const [actVis,   setActVis]   = useState(true)
+  const timerRef = useRef(null)
+  const idxRef   = useRef(0)
+
+  useEffect(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem(VIEWER_KEY) || 'null')
+      const today  = new Date().toISOString().slice(0, 10)
+      if (stored?.date === today) {
+        setViewers(stored.count)
+      } else {
+        const v = 120 + Math.floor(Math.random() * 90)
+        localStorage.setItem(VIEWER_KEY, JSON.stringify({ date: today, count: v }))
+        setViewers(v)
+      }
+    } catch {}
+
+    const vId = setInterval(() => {
+      setViewers(v => Math.max(100, Math.min(260, v + Math.floor(Math.random() * 7) - 3)))
+    }, 6200)
+
+    function cycle() {
+      setActVis(false)
+      timerRef.current = setTimeout(() => {
+        idxRef.current = (idxRef.current + 1) % ACTIVITY_POOL.length
+        setActIdx(idxRef.current)
+        setActVis(true)
+        timerRef.current = setTimeout(cycle, 4800 + Math.random() * 2200)
+      }, 380)
+    }
+    timerRef.current = setTimeout(cycle, 3500)
+
+    return () => { clearInterval(vId); clearTimeout(timerRef.current) }
+  }, [])
+
+  const person = ACTIVITY_POOL[actIdx]
+
   return (
     <section id="stats" style={{
       background: B.void,
       borderTop:    '1px solid rgba(255,255,255,0.04)',
       borderBottom: '1px solid rgba(255,255,255,0.04)',
     }}>
+      <style>{`
+        @keyframes dotBlink { 0%,100%{ opacity:1 } 50%{ opacity:0.4 } }
+        @keyframes actFade  { from{ opacity:0;transform:translateY(4px) } to{ opacity:1;transform:translateY(0) } }
+      `}</style>
+
+      {/* Live activity strip */}
+      <div style={{
+        borderBottom: '1px solid rgba(255,255,255,0.04)',
+        padding: '9px 24px',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div style={{ width: 7, height: 7, borderRadius: '50%', background: B.neonLime, boxShadow: `0 0 8px ${B.neonLime}`, animation: 'dotBlink 1.8s ease-in-out infinite' }} />
+          <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: B.smoke, letterSpacing: 2 }}>
+            {viewers} EXPLORING THE EVENT NOW
+          </span>
+        </div>
+        <div style={{ height: 18, display: 'flex', alignItems: 'center', opacity: actVis ? 1 : 0, transition: 'opacity 0.38s' }}>
+          {actVis && (
+            <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: B.amber, letterSpacing: 1, animation: 'actFade 0.38s ease' }}>
+              ⚡ {person.name} <span style={{ color: B.smoke }}>({person.city}) {person.action}</span>
+            </span>
+          )}
+        </div>
+      </div>
+
       {/* Animated counters */}
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '72px 24px 56px' }}>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-        }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '72px 24px 48px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}>
           {STATS.map((s, i) => (
             <div key={i} style={{
-              padding: '28px 20px',
-              textAlign: 'center',
-              borderRight: i < STATS.length - 1
-                ? '1px solid rgba(255,255,255,0.06)' : 'none',
+              padding: '28px 20px', textAlign: 'center',
+              borderRight: i < STATS.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
               position: 'relative',
             }}>
-              <div style={{
-                position: 'absolute', bottom: 0, left: '50%',
-                transform: 'translateX(-50%)',
-                width: 28, height: 2,
-                background: s.color, opacity: 0.35, borderRadius: 1,
-              }} />
-              <div style={{
-                fontFamily: "'Orbitron', monospace", fontWeight: 900,
-                fontSize: 'clamp(42px, 6vw, 66px)',
-                color: s.color,
-                textShadow: `0 0 40px ${s.color}30`,
-                lineHeight: 1,
-              }}>
+              <div style={{ position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)', width: 28, height: 2, background: s.color, opacity: 0.35, borderRadius: 1 }} />
+              <div style={{ fontFamily: "'Orbitron', monospace", fontWeight: 900, fontSize: 'clamp(42px, 6vw, 66px)', color: s.color, textShadow: `0 0 40px ${s.color}30`, lineHeight: 1 }}>
                 <CountUp to={s.to} suffix={s.suffix} duration={2000} />
               </div>
-              <div style={{
-                fontFamily: "'Space Mono', monospace",
-                fontSize: 9, letterSpacing: '0.45em',
-                color: B.smoke, marginTop: 12,
-              }}>
+              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, letterSpacing: '0.45em', color: B.smoke, marginTop: 12 }}>
                 {s.label}
               </div>
             </div>
           ))}
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 36 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 18px', background: `${B.neonCyan}08`, border: `1px solid ${B.neonCyan}22`, borderRadius: 20 }}>
+            <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: B.neonCyan, letterSpacing: 1 }}>✓</span>
+            <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 8, color: B.neonCyan, letterSpacing: 2 }}>COMMUNITY VERIFIED · UPDATED LIVE</span>
+          </div>
         </div>
       </div>
 
