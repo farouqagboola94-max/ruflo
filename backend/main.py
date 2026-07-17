@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse, JSONResponse
 from pydantic import BaseModel
 from typing import List
-import io, tempfile, os
+import io, json, tempfile, os
 
 SF26_SYSTEM = """You are the official AI concierge for Sneakers Fest '26 — The Sole Exhibition, Lagos.
 Speak in short, punchy replies (2–4 sentences max). Lagos streetwear energy, confident, knowledgeable.
@@ -69,6 +69,55 @@ async def chat(req: ChatRequest):
         raise HTTPException(status_code=500, detail="anthropic not installed")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/chat/stream")
+async def chat_stream(req: ChatRequest):
+    """Streaming AI chat via SSE — yields data: {"delta": text} chunks."""
+    api_key = os.getenv("ANTHROPIC_API_KEY")
+    if not api_key:
+        raise HTTPException(status_code=503, detail="ANTHROPIC_API_KEY not configured")
+    if not req.messages:
+        raise HTTPException(status_code=400, detail="messages required")
+    last_content = req.messages[-1].content if req.messages else ""
+    if len(last_content) > 2000:
+        raise HTTPException(status_code=400, detail="Message too long (max 2000 chars)")
+
+    async def generate():
+        try:
+            import anthropic
+            client = anthropic.Anthropic(api_key=api_key)
+            msgs = [{"role": m.role, "content": m.content} for m in req.messages[-8:]]
+            with client.messages.stream(
+                model="claude-haiku-4-5-20251001",
+                max_tokens=350,
+                system=SF26_SYSTEM,
+                messages=msgs,
+            ) as stream:
+                for text in stream.text_stream:
+                    yield f"data: {json.dumps({'delta': text})}\n\n"
+            yield "data: [DONE]\n\n"
+        except ImportError:
+            yield f"data: {json.dumps({'error': 'anthropic not installed'})}\n\n"
+        except Exception as e:
+            yield f"data: {json.dumps({'error': str(e)})}\n\n"
+
+    return StreamingResponse(
+        generate(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
+
+
+@app.get("/api/stats")
+async def stats():
+    """Basic event stats for the frontend."""
+    return JSONResponse({
+        "status": "ok",
+        "event": "Sneakers Fest '26",
+        "date": "December 12, 2026",
+        "venue": "Lagos, Nigeria",
+    })
+
 
 @app.get("/")
 def health():

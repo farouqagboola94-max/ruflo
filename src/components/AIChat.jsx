@@ -42,20 +42,22 @@ const SUGGESTIONS = [
 
 // ── component ─────────────────────────────────────────────────────────────────
 export default function AIChat() {
-  const [open,       setOpen]       = useState(false)
-  const [messages,   setMessages]   = useState([
+  const [open,       setOpen]      = useState(false)
+  const [messages,   setMessages]  = useState([
     { role: 'assistant', content: "What's good. I'm the Sneakers Fest AI — ask me anything about tickets, lineup, vendors, the Friday Protocol, drops, or the event." }
   ])
-  const [input,      setInput]      = useState('')
-  const [loading,    setLoading]    = useState(false)
-  const [claude,     setClaude]     = useState(false)
-  const [suggSet,    setSuggSet]    = useState(0)
-  const [mobile,     setMobile]     = useState(() => window.innerWidth < 768)
-  const endRef = useRef(null)
+  const [input,      setInput]     = useState('')
+  const [loading,    setLoading]   = useState(false)
+  const [streaming,  setStreaming] = useState(false)
+  const [streamText, setStreamText]= useState('')
+  const [claude,     setClaude]    = useState(false)
+  const [suggSet,    setSuggSet]   = useState(0)
+  const [mobile,     setMobile]    = useState(() => window.innerWidth < 768)
+  const endRef  = useRef(null)
   const msgsRef = useRef(messages)
   msgsRef.current = messages
 
-  useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages, loading])
+  useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages, loading, streamText])
   useEffect(() => {
     const fn = () => setMobile(window.innerWidth < 768)
     window.addEventListener('resize', fn)
@@ -63,11 +65,56 @@ export default function AIChat() {
   }, [])
 
   const sendText = useCallback(async (text) => {
-    if (!text.trim() || loading) return
+    if (!text.trim() || loading || streaming) return
     const history = [...msgsRef.current, { role: 'user', content: text }]
     setMessages(history)
     setLoading(true)
 
+    // ── 1. Try SSE streaming endpoint
+    if (API) {
+      try {
+        const res = await fetch(`${API}/api/chat/stream`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: history.map(m => ({ role: m.role, content: m.content })) }),
+        })
+        if (res.ok && res.body) {
+          setLoading(false)
+          setStreaming(true)
+          setStreamText('')
+          setClaude(true)
+          let accumulated = ''
+          const reader  = res.body.getReader()
+          const decoder = new TextDecoder()
+          let done = false
+          while (!done) {
+            const { value, done: d } = await reader.read()
+            done = d
+            if (value) {
+              const chunk = decoder.decode(value, { stream: true })
+              for (const line of chunk.split('\n')) {
+                const trimmed = line.trim()
+                if (!trimmed.startsWith('data:')) continue
+                const payload = trimmed.slice(5).trim()
+                if (payload === '[DONE]') { done = true; break }
+                try {
+                  const parsed = JSON.parse(payload)
+                  if (parsed.delta) { accumulated += parsed.delta; setStreamText(accumulated) }
+                } catch {}
+              }
+            }
+          }
+          const final = accumulated || "Sorry, I couldn't get a response."
+          setMessages(prev => [...prev, { role: 'assistant', content: final }])
+          setStreamText('')
+          setStreaming(false)
+          if (history.length >= 3) setSuggSet(1)
+          return
+        }
+      } catch { /* fall through to non-streaming */ }
+    }
+
+    // ── 2. Non-streaming /api/chat fallback
     let reply = null
     if (API) {
       try {
@@ -77,9 +124,10 @@ export default function AIChat() {
           body: JSON.stringify({ messages: history.map(m => ({ role: m.role, content: m.content })) }),
         })
         if (res.ok) { reply = (await res.json()).reply; setClaude(true) }
-      } catch { /* fall through */ }
+      } catch {}
     }
 
+    // ── 3. Keyword fallback
     if (!reply) {
       await new Promise(r => setTimeout(r, 480))
       reply = keywordReply(text) || "That's best answered directly by the team — tap the WhatsApp button (bottom right) for a fast reply."
@@ -88,20 +136,27 @@ export default function AIChat() {
     setMessages(prev => [...prev, { role: 'assistant', content: reply }])
     setLoading(false)
     if (history.length >= 3) setSuggSet(1)
-  }, [loading])
+  }, [loading, streaming])
 
   function send() { sendText(input.trim()); setInput('') }
   function clearChat() {
     setMessages([{ role: 'assistant', content: "What's good. I'm the Sneakers Fest AI — ask me anything about tickets, lineup, vendors, the Friday Protocol, drops, or the event." }])
-    setSuggSet(0); setClaude(false)
+    setSuggSet(0); setClaude(false); setStreamText(''); setStreaming(false)
   }
 
-  const accent     = claude ? B.neonCyan : B.amber
-  const showSuggs  = !loading && messages.length <= 2 || (!loading && suggSet === 1 && messages.length === 3)
+  const accent   = claude ? B.neonCyan : B.amber
+  const isActive = loading || streaming
+  const showSuggs = !isActive && (messages.length <= 2 || (suggSet === 1 && messages.length === 3))
 
   return (
     <>
-      {/* ── trigger ────────────────────────────────────────────────────── */}
+      <style>{`
+        @keyframes chatSlideIn { from{ opacity:0; transform:translateY(12px) } to{ opacity:1; transform:translateY(0) } }
+        @keyframes pulse { 0%,100%{ opacity:1 } 50%{ opacity:0.35 } }
+        @keyframes cursorBlink { 0%,100%{ opacity:1 } 50%{ opacity:0 } }
+      `}</style>
+
+      {/* ── trigger button ─────────────────────────────────────────────── */}
       <button
         onClick={() => setOpen(o => !o)}
         aria-label={open ? 'Close chat' : 'Open chat'}
@@ -121,11 +176,13 @@ export default function AIChat() {
 
           {/* header */}
           <div style={{ padding: '11px 14px', borderBottom: '1px solid rgba(255,255,255,0.07)', background: `linear-gradient(90deg, ${accent}10, transparent)`, display: 'flex', alignItems: 'center', gap: 8 }}>
-            <div style={{ width: 7, height: 7, borderRadius: '50%', background: loading ? B.amber : accent, boxShadow: `0 0 8px ${loading ? B.amber : accent}`, animation: 'pulse 2s infinite', flexShrink: 0 }} />
+            <div style={{ width: 7, height: 7, borderRadius: '50%', background: isActive ? B.amber : accent, boxShadow: `0 0 8px ${isActive ? B.amber : accent}`, animation: 'pulse 2s infinite', flexShrink: 0 }} />
             <span style={{ color: accent, fontFamily: 'Orbitron,sans-serif', fontSize: 9, fontWeight: 700, letterSpacing: 2 }}>
               {claude ? 'CLAUDE AI' : 'SNEAKERS FEST AI'}
             </span>
-            {claude && <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 7, color: `${B.neonCyan}55` }}>claude-haiku</span>}
+            {claude && <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 7, color: `${B.neonCyan}55` }}>
+              {streaming ? 'streaming…' : 'claude-haiku'}
+            </span>}
             <button onClick={clearChat} title="Clear chat" style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#333', cursor: 'pointer', fontSize: 14, padding: '1px 4px', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#888'} onMouseLeave={e => e.currentTarget.style.color = '#333'}>↺</button>
           </div>
 
@@ -136,6 +193,16 @@ export default function AIChat() {
                 {m.content}
               </div>
             ))}
+
+            {/* streaming bubble */}
+            {streaming && (
+              <div style={{ alignSelf: 'flex-start', maxWidth: '84%', padding: '9px 13px', borderRadius: '14px 14px 14px 3px', background: 'rgba(255,255,255,0.05)', border: `1px solid rgba(0,240,255,0.15)`, color: B.white, fontSize: 12, lineHeight: 1.65, fontFamily: 'Space Mono,monospace' }}>
+                {streamText || ' '}
+                <span style={{ display: 'inline-block', width: 8, height: 13, background: B.neonCyan, marginLeft: 2, verticalAlign: 'middle', animation: 'cursorBlink 0.9s ease-in-out infinite' }} />
+              </div>
+            )}
+
+            {/* loading dots (pre-stream) */}
             {loading && (
               <div style={{ alignSelf: 'flex-start', display: 'flex', gap: 5, padding: '10px 14px', background: 'rgba(255,255,255,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.07)' }}>
                 {[0,1,2].map(i => <div key={i} style={{ width: 6, height: 6, borderRadius: '50%', background: accent, animation: `pulse 1.2s ${i*0.2}s infinite` }} />)}
@@ -164,10 +231,11 @@ export default function AIChat() {
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
               placeholder="Ask about Sneakers Fest..."
-              style={{ flex: 1, background: 'rgba(255,255,255,0.04)', border: `1px solid rgba(245,166,35,0.18)`, borderRadius: 10, color: B.white, padding: '9px 12px', fontSize: 12, fontFamily: 'Space Mono,monospace', outline: 'none' }}
+              disabled={isActive}
+              style={{ flex: 1, background: 'rgba(255,255,255,0.04)', border: `1px solid rgba(245,166,35,0.18)`, borderRadius: 10, color: B.white, padding: '9px 12px', fontSize: 12, fontFamily: 'Space Mono,monospace', outline: 'none', opacity: isActive ? 0.5 : 1 }}
             />
-            <button onClick={send} disabled={loading || !input.trim()}
-              style={{ background: loading || !input.trim() ? 'rgba(255,255,255,0.05)' : accent, border: 'none', borderRadius: 10, padding: '9px 14px', cursor: loading || !input.trim() ? 'not-allowed' : 'pointer', color: loading || !input.trim() ? '#333' : B.black, fontFamily: 'Orbitron,sans-serif', fontSize: 10, fontWeight: 700, letterSpacing: 1, transition: 'all 0.2s' }}
+            <button onClick={send} disabled={isActive || !input.trim()}
+              style={{ background: isActive || !input.trim() ? 'rgba(255,255,255,0.05)' : accent, border: 'none', borderRadius: 10, padding: '9px 14px', cursor: isActive || !input.trim() ? 'not-allowed' : 'pointer', color: isActive || !input.trim() ? '#333' : B.black, fontFamily: 'Orbitron,sans-serif', fontSize: 10, fontWeight: 700, letterSpacing: 1, transition: 'all 0.2s' }}
             >GO</button>
           </div>
 

@@ -111,3 +111,20 @@ export const contactAutoReply = ({ name }) => shell(`
   <p>Hey <strong>${esc(name)}</strong>,</p>
   <p style="color:#ccc;">Thanks for reaching out. We'll get back to you within 24 hours.</p>
 `)
+
+export const raffleEmail = ({ name, raffleId, entryNum }) => {
+  const labels = { rfl1: 'Raffle 1 — Grail Drop', rfl2: 'Raffle 2 — Collector\'s Pick', rfl3: 'Raffle 3 — Culture Edition', rfl4: 'Raffle 4 — Phalanx Exclusive' }
+  const label = labels[raffleId] || raffleId.toUpperCase()
+  const num   = String(entryNum).padStart(4, '0')
+  return shell(`
+    <h2 style="margin-top:0;color:#F5A623;">Entry Confirmed &#x1F3B2;</h2>
+    <p>Hey <strong>${esc(name || 'Sneakerhead')}</strong>,</p>
+    <p style="color:#ccc;">You're in. Your entry for <strong style="color:#fff;">${esc(label)}</strong> at Sneakers Fest '26 is locked.</p>
+    <div style="background:#0d0d0d;border:1px solid rgba(245,166,35,.2);border-radius:10px;padding:24px;margin:20px 0;text-align:center;">
+      <p style="margin:0 0 6px;color:#555;font-size:11px;text-transform:uppercase;letter-spacing:3px;">Entry Number</p>
+      <p style="margin:0;font-family:monospace;font-size:40px;color:#F5A623;font-weight:bold;letter-spacing:6px;">#${esc(num)}</p>
+    </div>
+    <p style="color:#ccc;">Draws happen <strong style="color:#fff;">live on December 12, 2026</strong>. Keep this number — you'll need it if your entry is called at the venue.</p>
+    <p style="color:#666;font-size:13px;">Good luck. &#x1F91E; See you on the floor.</p>
+  `)
+}

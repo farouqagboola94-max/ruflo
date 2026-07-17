@@ -3,6 +3,7 @@
 // Returns: { success, alreadyEntered?, entryNum, totalEntries }
 
 import { ok, err, preflight } from './lib/cors.js'
+import { sendEmail, raffleEmail } from './lib/email.js'
 import { getStore } from '@netlify/blobs'
 
 const Raffles = () => getStore({ name: 'sf26-raffles', consistency: 'strong' })
@@ -45,6 +46,15 @@ export const handler = async (event) => {
 
   await store.setJSON(entryKey, record)
   await store.setJSON(listKey, { count: entryNum, updatedAt: new Date().toISOString() })
+
+  // Send confirmation email when a name is provided
+  if (record.name) {
+    sendEmail({
+      to: record.email,
+      subject: `Raffle Entry #${String(entryNum).padStart(4, '0')} — Sneakers Fest '26`,
+      html: raffleEmail({ name: record.name, raffleId, entryNum }),
+    }).catch(e => console.error('[raffle] email error', e))
+  }
 
   return ok({ success: true, entryNum, totalEntries: entryNum })
 }
