@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
 import Egg from '../components/Egg'
@@ -36,41 +36,89 @@ const DAY2 = [
   { time: '10:00', period: 'PM', title: 'DOORS CLOSE', desc: 'Final vendor rounds. Collect your purchases. See you next year.', tag: 'CLOSE', color: B.smoke },
 ]
 
-function Timeline({ items }) {
+function parseMins(time, period) {
+  const [h, m] = time.split(':').map(Number)
+  let hour = h
+  if (period === 'PM' && hour !== 12) hour += 12
+  if (period === 'AM' && hour === 12) hour = 0
+  return hour * 60 + (m || 0)
+}
+
+function getLiveStatus(items, dateStr) {
+  // Convert local time to Lagos (WAT = UTC+1)
+  const lagosMs = Date.now() + new Date().getTimezoneOffset() * 60000 + 60 * 60000
+  const lagos   = new Date(lagosMs)
+  const lagosDate = `${lagos.getFullYear()}-${String(lagos.getMonth()+1).padStart(2,'0')}-${String(lagos.getDate()).padStart(2,'0')}`
+  if (lagosDate !== dateStr) return {}
+  const cur    = lagos.getHours() * 60 + lagos.getMinutes()
+  const status = {}
+  let nextSet  = false
+  for (let i = 0; i < items.length; i++) {
+    const start = parseMins(items[i].time, items[i].period)
+    const nxt   = items[i + 1]
+    const end   = nxt ? parseMins(nxt.time, nxt.period) : start + 90
+    if (cur >= start && cur < end)    { status[i] = 'NOW' }
+    else if (cur < start && !nextSet) { status[i] = 'NEXT'; nextSet = true }
+  }
+  return status
+}
+
+function Timeline({ items, liveStatus = {} }) {
   return (
     <div style={{ position:'relative' }}>
+      <style>{`@keyframes liveNow { 0%,100%{opacity:1} 50%{opacity:0.45} }`}</style>
       <div style={{ position:'absolute', left:86, top:0, bottom:0, width:1, background:`linear-gradient(${B.amber}00, ${B.gunmetal}80, ${B.amber}40, ${B.gunmetal}80, ${B.amber}00)` }} />
       <div style={{ display:'flex', flexDirection:'column' }}>
-        {items.map((item, i) => (
-          <div key={i} style={{ display:'flex', alignItems:'flex-start', marginBottom: i < items.length - 1 ? 8 : 0 }}>
-            <div style={{ width:86, flexShrink:0, paddingTop:18, paddingRight:18, textAlign:'right' }}>
-              <div style={{ fontFamily:"'Orbitron',monospace", fontSize:11, fontWeight:700, color:item.featured ? item.color : item.tag==='CLOSE' ? '#333' : B.smoke, lineHeight:1.2, textShadow:item.featured ? `0 0 12px ${item.color}50` : 'none' }}>{item.time}</div>
-              <div style={{ fontFamily:"'Space Mono',monospace", fontSize:7, color:'#333', letterSpacing:'0.1em' }}>{item.period}</div>
-            </div>
-            <div style={{ flexShrink:0, paddingTop:22, display:'flex', alignItems:'center', justifyContent:'center', width:12 }}>
-              <div style={{ width:11, height:11, borderRadius:'50%', background:item.featured ? item.color : item.tag==='CLOSE' ? B.gunmetal : B.charcoal, border:`2px solid ${item.featured ? item.color : item.tag==='CLOSE' ? B.gunmetal : item.color+'60'}`, boxShadow:item.featured ? `0 0 18px ${item.color}80` : 'none', flexShrink:0 }} />
-            </div>
-            <div
-              style={{ flex:1, marginLeft:16, padding:'14px 18px', background:item.featured ? `${item.color}08` : 'rgba(255,255,255,0.025)', border:`1px solid ${item.featured ? item.color+'45' : B.gunmetal}`, borderRadius:8, position:'relative', overflow:'hidden' }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = item.color+'70'; e.currentTarget.style.background = `${item.color}0e` }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = item.featured ? item.color+'45' : B.gunmetal; e.currentTarget.style.background = item.featured ? `${item.color}08` : 'rgba(255,255,255,0.025)' }}
-            >
-              {item.featured && <div style={{ position:'absolute', left:0, top:0, bottom:0, width:3, background:item.color, boxShadow:`0 0 12px ${item.color}` }} />}
-              <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:5, flexWrap:'wrap' }}>
-                <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:18, color:item.tag==='CLOSE' ? B.smoke : B.white, letterSpacing:'0.04em', lineHeight:1 }}>{item.title}</div>
-                <span style={{ padding:'2px 7px', background:item.color+'18', border:`1px solid ${item.color}40`, borderRadius:2, fontFamily:"'Space Mono',monospace", fontSize:7, color:item.color, letterSpacing:'0.12em', whiteSpace:'nowrap' }}>{item.tag}</span>
+        {items.map((item, i) => {
+          const isNow  = liveStatus[i] === 'NOW'
+          const isNext = liveStatus[i] === 'NEXT'
+          return (
+            <div key={i} style={{ display:'flex', alignItems:'flex-start', marginBottom: i < items.length - 1 ? 8 : 0 }}>
+              <div style={{ width:86, flexShrink:0, paddingTop:18, paddingRight:18, textAlign:'right' }}>
+                <div style={{ fontFamily:"'Orbitron',monospace", fontSize:11, fontWeight:700, color: isNow ? item.color : item.featured ? item.color : item.tag==='CLOSE' ? '#333' : B.smoke, lineHeight:1.2, textShadow: isNow||item.featured ? `0 0 12px ${item.color}50` : 'none' }}>{item.time}</div>
+                <div style={{ fontFamily:"'Space Mono',monospace", fontSize:7, color:'#333', letterSpacing:'0.1em' }}>{item.period}</div>
               </div>
-              <div style={{ fontFamily:"'Syne',sans-serif", fontSize:12, color:B.smoke, lineHeight:1.6 }}>{item.desc}</div>
+              <div style={{ flexShrink:0, paddingTop:22, display:'flex', alignItems:'center', justifyContent:'center', width:12 }}>
+                <div style={{ width:11, height:11, borderRadius:'50%', background: isNow ? item.color : item.featured ? item.color : item.tag==='CLOSE' ? B.gunmetal : B.charcoal, border:`2px solid ${isNow ? item.color : item.featured ? item.color : item.tag==='CLOSE' ? B.gunmetal : item.color+'60'}`, boxShadow: isNow||item.featured ? `0 0 18px ${item.color}80` : 'none', flexShrink:0 }} />
+              </div>
+              <div
+                style={{ flex:1, marginLeft:16, padding:'14px 18px', background: isNow ? `${item.color}10` : item.featured ? `${item.color}08` : 'rgba(255,255,255,0.025)', border:`1px solid ${isNow ? item.color+'60' : item.featured ? item.color+'45' : B.gunmetal}`, borderRadius:8, position:'relative', overflow:'hidden' }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = item.color+'70'; e.currentTarget.style.background = `${item.color}0e` }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = isNow ? item.color+'60' : item.featured ? item.color+'45' : B.gunmetal; e.currentTarget.style.background = isNow ? `${item.color}10` : item.featured ? `${item.color}08` : 'rgba(255,255,255,0.025)' }}
+              >
+                {(item.featured || isNow) && <div style={{ position:'absolute', left:0, top:0, bottom:0, width:3, background:item.color, boxShadow:`0 0 12px ${item.color}` }} />}
+                <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:5, flexWrap:'wrap' }}>
+                  <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:18, color:item.tag==='CLOSE' ? B.smoke : B.white, letterSpacing:'0.04em', lineHeight:1 }}>{item.title}</div>
+                  <span style={{ padding:'2px 7px', background:item.color+'18', border:`1px solid ${item.color}40`, borderRadius:2, fontFamily:"'Space Mono',monospace", fontSize:7, color:item.color, letterSpacing:'0.12em', whiteSpace:'nowrap' }}>{item.tag}</span>
+                  {isNow && (
+                    <span style={{ padding:'2px 8px', background:`${B.neonLime}20`, border:`1px solid ${B.neonLime}60`, borderRadius:2, fontFamily:"'Space Mono',monospace", fontSize:7, color:B.neonLime, letterSpacing:'0.1em', animation:'liveNow 2s ease infinite' }}>● LIVE NOW</span>
+                  )}
+                  {isNext && (
+                    <span style={{ padding:'2px 8px', background:`${B.amber}15`, border:`1px solid ${B.amber}50`, borderRadius:2, fontFamily:"'Space Mono',monospace", fontSize:7, color:B.amber, letterSpacing:'0.1em' }}>▶ UP NEXT</span>
+                  )}
+                </div>
+                <div style={{ fontFamily:"'Syne',sans-serif", fontSize:12, color:B.smoke, lineHeight:1.6 }}>{item.desc}</div>
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   )
 }
 
 export default function Schedule() {
-  const [day, setDay] = useState(2)
+  const [day, setDay]             = useState(2)
+  const [liveStatus, setLiveStatus] = useState({})
+  const liveRef = useRef(null)
+
+  useEffect(() => {
+    const items   = day === 1 ? DAY1 : DAY2
+    const dateStr = day === 1 ? '2026-12-11' : '2026-12-12'
+    setLiveStatus(getLiveStatus(items, dateStr))
+    liveRef.current = setInterval(() => setLiveStatus(getLiveStatus(items, dateStr)), 60000)
+    return () => clearInterval(liveRef.current)
+  }, [day])
 
   return (
     <section id="schedule" style={{ position:'relative', overflow:'hidden', background:B.void, padding:'100px 24px' }}>
@@ -126,7 +174,7 @@ export default function Schedule() {
           </div>
         </div>
 
-        <Timeline items={day === 1 ? DAY1 : DAY2} />
+        <Timeline items={day === 1 ? DAY1 : DAY2} liveStatus={liveStatus} />
 
         <div style={{ marginTop:36, padding:'20px 24px', background:B.charcoal, border:`1px solid ${B.gunmetal}`, borderRadius:8, display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:12 }}>
           <div style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color:B.smoke, letterSpacing:'0.15em', lineHeight:1.7 }}>

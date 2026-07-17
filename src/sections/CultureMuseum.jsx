@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import Egg from '../components/Egg'
 
@@ -169,6 +169,26 @@ const ARTWORKS = [
   },
 ]
 
+const AW_WATCHERS = [23, 41, 67, 18, 89, 12, 54, 31]
+
+const BID_ACTIVITY = [
+  "Anonymous raised NEON VOID I to ₦335,000",
+  "Tunde B. placed ₦95,500 on SOLE SUPREMACY",
+  "Kemi A. is watching DEC 12 PROPHESY",
+  "New bid on ALTÉ ALTAR — ₦520,000",
+  "Adaeze placed ₦170,000 on THE MOVEMENT",
+  "Chidi C. watching GRAIL KEEPER",
+  "LAGOS AT DAWN just received a bid — ₦195,000",
+  "3 people watching MARKET DAY",
+]
+
+function editionUrgency(edition) {
+  if (edition.includes('1 of 1')) return 'ONE OF A KIND'
+  const m = edition.match(/of (\d+)/)
+  if (m && parseInt(m[1]) <= 3) return 'LIMITED EDITION'
+  return null
+}
+
 function fmt(n) {
   return '₦' + n.toLocaleString('en-NG')
 }
@@ -273,7 +293,7 @@ function BidModal({ artwork, bids, onBid, onClose }) {
   )
 }
 
-function ArtCard({ artwork, bids, onBid }) {
+function ArtCard({ artwork, bids, onBid, watchers }) {
   const [hovered, setHovered] = useState(false)
   const [bidOpen, setBidOpen] = useState(false)
   const current = bids[artwork.id] || artwork.startBid
@@ -299,6 +319,12 @@ function ArtCard({ artwork, bids, onBid }) {
           }}>BID PLACED</div>
         )}
 
+        {watchers > 0 && (
+          <div style={{ position:'absolute', top:12, left:12, zIndex:2, background:'rgba(0,0,0,0.75)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:3, padding:'3px 9px', fontFamily:'Space Mono', fontSize:8, color:'#555', whiteSpace:'nowrap' }}>
+            👁 {watchers}
+          </div>
+        )}
+
         <div style={{ height:3, background:`linear-gradient(90deg, transparent, ${B.amber}, transparent)` }} />
 
         <ArtCanvas art={artwork.art} shapes={artwork.shapes} />
@@ -317,6 +343,11 @@ function ArtCard({ artwork, bids, onBid }) {
             </div>
             <div style={{ textAlign:'right' }}>
               <div style={{ fontFamily:'Space Mono', fontSize:9, color:B.amber, letterSpacing:1 }}>{artwork.edition}</div>
+              {editionUrgency(artwork.edition) && (
+                <div style={{ fontFamily:'Space Mono', fontSize:7, color:B.neonMagenta, letterSpacing:1, marginTop:2 }}>
+                  ⚡ {editionUrgency(artwork.edition)}
+                </div>
+              )}
               <div style={{ fontFamily:'Space Mono', fontSize:9, color:B.smoke, marginTop:1 }}>{artwork.medium}</div>
             </div>
           </div>
@@ -355,13 +386,30 @@ function ArtCard({ artwork, bids, onBid }) {
 }
 
 export default function CultureMuseum() {
-  const [bids, setBids] = useState({})
+  const [bids, setBids]               = useState({})
+  const [watcherMap, setWatcherMap]   = useState(() => Object.fromEntries(ARTWORKS.map((aw, i) => [aw.id, AW_WATCHERS[i]])))
+  const [tickerIdx,  setTickerIdx]    = useState(0)
+  const watchRef = useRef(null)
+  const bidRef   = useRef(null)
 
   useEffect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem('sf26_museum_bids') || '{}')
       setBids(saved)
     } catch {}
+    watchRef.current = setInterval(() => {
+      setWatcherMap(prev => {
+        const next = { ...prev }
+        ARTWORKS.forEach((aw, i) => {
+          const base  = AW_WATCHERS[i]
+          const delta = Math.floor(Math.random() * 5) - 2
+          next[aw.id] = Math.max(base - 5, (prev[aw.id] || base) + delta)
+        })
+        return next
+      })
+    }, 9000)
+    bidRef.current = setInterval(() => setTickerIdx(p => (p + 1) % BID_ACTIVITY.length), 4500)
+    return () => { clearInterval(watchRef.current); clearInterval(bidRef.current) }
   }, [])
 
   function handleBid(id, amount) {
@@ -397,12 +445,21 @@ export default function CultureMuseum() {
               <span style={{ fontFamily:'Bebas Neue', fontSize:18, color:B.amber, letterSpacing:2 }}>{fmt(totalBid)}</span>
             </div>
           )}
+          <style>{`@keyframes bidTick { 0%,100%{opacity:1} 50%{opacity:0.3} }`}</style>
+          <div style={{ marginTop:14, display:'flex', justifyContent:'center' }}>
+            <div style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(255,255,255,0.025)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:4, padding:'7px 14px', maxWidth:380, overflow:'hidden' }}>
+              <span style={{ width:5, height:5, borderRadius:'50%', background:B.neonCyan, flexShrink:0, animation:'bidTick 3s ease infinite' }} />
+              <span style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color:'#555', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>
+                {BID_ACTIVITY[tickerIdx]}
+              </span>
+            </div>
+          </div>
         </div>
 
         <div style={{ columns:'auto 280px', columnGap:20, orphans:1, widows:1 }}>
           {ARTWORKS.map(aw => (
             <div key={aw.id} style={{ breakInside:'avoid', marginBottom:20 }}>
-              <ArtCard artwork={aw} bids={bids} onBid={handleBid} />
+              <ArtCard artwork={aw} bids={bids} onBid={handleBid} watchers={watcherMap[aw.id] || 0} />
             </div>
           ))}
         </div>
