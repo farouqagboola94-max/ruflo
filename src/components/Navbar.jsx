@@ -30,6 +30,7 @@ const MOBILE_LINKS = [
   { label: 'VENDORS',         href: '#vendors',   num: '14' },
   { label: 'FAQ',             href: '#faq',       num: '15' },
   { label: 'CONTACT',         href: '#contact',   num: '16' },
+  { label: 'CATALYST: THE AWAKENING ↗', href: 'https://catalyst-awakening.netlify.app/', num: '17', external: true },
 ]
 
 export default function Navbar() {
@@ -93,6 +94,19 @@ export default function Navbar() {
                 onMouseLeave={e => e.target.style.color = B.smoke}
               >{link.label}</a>
             ))}
+            <a
+              href="https://catalyst-awakening.netlify.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontFamily: "'Space Mono', monospace", fontSize: 7.5, letterSpacing: '0.15em',
+                textDecoration: 'none', color: '#9B59FF',
+                border: '1px solid #9B59FF40', borderRadius: 3, padding: '5px 10px',
+                transition: 'border-color 0.2s, box-shadow 0.2s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = '#9B59FF'; e.currentTarget.style.boxShadow = '0 0 12px #9B59FF40' }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = '#9B59FF40'; e.currentTarget.style.boxShadow = 'none' }}
+            >⚡ CATALYST</a>
             <a href="#vault-200"
               style={{
                 fontFamily: "'Space Mono', monospace", fontSize: 7.5, letterSpacing: '0.15em',
@@ -162,7 +176,7 @@ export default function Navbar() {
           <div style={{ position: 'absolute', top: '30%', left: '50%', transform: 'translate(-50%,-50%)', width: 480, height: 360, background: `radial-gradient(ellipse, ${B.amber}06, transparent 70%)`, filter: 'blur(50px)', pointerEvents: 'none' }} />
 
           <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: '#252525', letterSpacing: '0.3em', marginBottom: 22, position: 'relative' }}>
-            NAVIGATE — {MOBILE_LINKS.length} SECTIONS
+            NAVIGATE — {MOBILE_LINKS.length - 1} SECTIONS + CATALYST UNIVERSE
           </div>
 
           <div style={{ flex: 1, position: 'relative' }}>
@@ -170,19 +184,21 @@ export default function Navbar() {
               <a
                 key={link.label}
                 href={link.href}
-                onClick={close}
+                onClick={link.external ? undefined : close}
+                target={link.external ? '_blank' : undefined}
+                rel={link.external ? 'noopener noreferrer' : undefined}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 14,
                   padding: '12px 0',
-                  color: link.href === '#vault-200' ? B.amber : B.white,
+                  color: link.external ? '#9B59FF' : link.href === '#vault-200' ? B.amber : B.white,
                   textDecoration: 'none',
                   borderBottom: `1px solid rgba(255,255,255,0.055)`,
                   animation: `navLinkIn 0.35s ease both`,
                   animationDelay: `${i * 28}ms`,
                   transition: 'color 0.15s, padding-left 0.18s',
                 }}
-                onMouseEnter={e => { e.currentTarget.style.color = B.amber; e.currentTarget.style.paddingLeft = '8px' }}
-                onMouseLeave={e => { e.currentTarget.style.color = link.href === '#vault-200' ? B.amber : B.white; e.currentTarget.style.paddingLeft = '0' }}
+                onMouseEnter={e => { e.currentTarget.style.color = link.external ? '#c084fc' : B.amber; e.currentTarget.style.paddingLeft = '8px' }}
+                onMouseLeave={e => { e.currentTarget.style.color = link.external ? '#9B59FF' : link.href === '#vault-200' ? B.amber : B.white; e.currentTarget.style.paddingLeft = '0' }}
               >
                 <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: 'inherit', opacity: 0.22, letterSpacing: '0.1em', minWidth: 24 }}>{link.num}</span>
                 <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 24, color: 'inherit', letterSpacing: '0.04em', flex: 1 }}>{link.label}</span>
