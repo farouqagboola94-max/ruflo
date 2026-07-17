@@ -57,6 +57,16 @@ export default function Footer() {
               <span style={{ fontFamily: "'Orbitron', monospace", fontSize: 9, fontWeight: 900, color: '#D4A017', letterSpacing: 1 }}>CT</span>
               <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 6, color: B.smoke, letterSpacing: '0.18em' }}>CATALYST TALENTS ↗</span>
             </a>
+            <a href="https://catalyst-awakening.netlify.app/" target="_blank" rel="noopener noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 7, textDecoration: 'none', marginBottom: 16,
+                padding: '5px 10px', border: '1px solid #9B59FF28', borderRadius: 3,
+                background: '#9B59FF08', transition: 'border-color 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = '#9B59FF60'}
+              onMouseLeave={e => e.currentTarget.style.borderColor = '#9B59FF28'}
+            >
+              <span style={{ fontFamily: "'Orbitron', monospace", fontSize: 10, fontWeight: 900, color: '#9B59FF', letterSpacing: 1 }}>⚡</span>
+              <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 6, color: B.smoke, letterSpacing: '0.18em' }}>CATALYST: THE AWAKENING ↗</span>
+            </a>
             <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: B.smoke, lineHeight: 1.75, maxWidth: 260, marginBottom: 16 }}>West Africa's premier sneaker culture festival. Online every Friday. In person December 12, 2026.</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, letterSpacing: '0.15em' }}>FOUNDED BY <span style={{ color: B.amberGlow }}>OLUWATOBILOBA</span></div>
@@ -111,7 +121,8 @@ export default function Footer() {
             <a href="#waitlist" style={{ display: 'block', padding: '11px 20px', border: `1px solid ${B.neonMagenta}50`, color: B.neonMagenta, fontFamily: "'Space Mono', monospace", fontSize: 9, fontWeight: 700, letterSpacing: '0.15em', textDecoration: 'none', borderRadius: 2, textAlign: 'center', marginBottom: 8 }}>EARLY ACCESS</a>
             <a href="https://substack.com/@catalyst00555" target="_blank" rel="noopener noreferrer" style={{ display: 'block', padding: '11px 20px', border: `1px solid #FF671950`, color: '#FF6719', fontFamily: "'Space Mono', monospace", fontSize: 9, fontWeight: 700, letterSpacing: '0.15em', textDecoration: 'none', borderRadius: 2, textAlign: 'center', marginBottom: 8 }}>READ SUBSTACK</a>
             <a href="#vendors" style={{ display: 'block', padding: '11px 20px', border: `1px solid ${B.neonCyan}50`, color: B.neonCyan, fontFamily: "'Space Mono', monospace", fontSize: 9, fontWeight: 700, letterSpacing: '0.15em', textDecoration: 'none', borderRadius: 2, textAlign: 'center', marginBottom: 8 }}>VENDOR APPLY</a>
-            <a href="#fnp" style={{ display: 'block', padding: '11px 20px', border: `1px solid ${B.neonLime}50`, color: B.neonLime, fontFamily: "'Space Mono', monospace", fontSize: 9, fontWeight: 700, letterSpacing: '0.15em', textDecoration: 'none', borderRadius: 2, textAlign: 'center', marginBottom: 16 }}>FRIDAY PROTOCOL</a>
+            <a href="#fnp" style={{ display: 'block', padding: '11px 20px', border: `1px solid ${B.neonLime}50`, color: B.neonLime, fontFamily: "'Space Mono', monospace", fontSize: 9, fontWeight: 700, letterSpacing: '0.15em', textDecoration: 'none', borderRadius: 2, textAlign: 'center', marginBottom: 8 }}>FRIDAY PROTOCOL</a>
+            <a href="https://catalyst-awakening.netlify.app/" target="_blank" rel="noopener noreferrer" style={{ display: 'block', padding: '11px 20px', border: '1px solid #9B59FF50', color: '#9B59FF', fontFamily: "'Space Mono', monospace", fontSize: 9, fontWeight: 700, letterSpacing: '0.15em', textDecoration: 'none', borderRadius: 2, textAlign: 'center', marginBottom: 16 }}>⚡ CATALYST: AWAKENING</a>
             <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 11, color: B.smoke, lineHeight: 1.7 }}>Online first. Lagos December 12. Six platforms. One community.</div>
           </div>
         </div>

@@ -17,6 +17,7 @@ import EventTicker from './components/EventTicker'
 import StreakToast from './components/StreakToast'
 import LevelUpToast from './components/LevelUpToast'
 import KonamiCode from './components/KonamiCode'
+import ReactivationBanner from './components/ReactivationBanner'
 import LiveActivity from './components/LiveActivity'
 import { captureReferral, reconcileReferralCredits } from './lib/referral'
 import Hero from './sections/Hero'
@@ -150,6 +151,68 @@ export default function App() {
     return () => observer.disconnect()
   }, [])
 
+  // Framework 1: Agentic suspend/resume — save scroll state, restore on return within 30 min
+  // Framework 3: RL experience replay — track dwell time per section, persist as interaction memory
+  useEffect(() => {
+    const SESSION_KEY = 'sf26_session'
+    const MEMORY_KEY  = 'sf26_interaction_memory'
+
+    // Restore last scroll position if within the same session window
+    try {
+      const saved = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null')
+      if (saved && Date.now() - saved.ts < 30 * 60 * 1000 && saved.scroll > 400) {
+        setTimeout(() => window.scrollTo({ top: saved.scroll, behavior: 'smooth' }), 900)
+      }
+    } catch {}
+
+    // Throttled session state saver (Framework 1)
+    let saveTimer
+    const saveSession = () => {
+      try { localStorage.setItem(SESSION_KEY, JSON.stringify({ ts: Date.now(), scroll: window.scrollY })) } catch {}
+    }
+    const onScroll = () => { clearTimeout(saveTimer); saveTimer = setTimeout(saveSession, 500) }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('beforeunload', saveSession)
+
+    // RL dwell-time observer (Framework 3)
+    let mem = []
+    try { mem = JSON.parse(localStorage.getItem(MEMORY_KEY) || '[]') } catch {}
+    const dwellStart = {}
+
+    const rlObserver = new IntersectionObserver(entries => {
+      const now = Date.now()
+      entries.forEach(entry => {
+        const id = entry.target.id
+        if (entry.isIntersecting) {
+          dwellStart[id] = now
+        } else if (dwellStart[id]) {
+          const ms = now - dwellStart[id]
+          delete dwellStart[id]
+          if (ms < 700) return
+          try {
+            const hit = mem.find(m => m.section === id)
+            if (hit) { hit.duration += ms; hit.visits = (hit.visits || 1) + 1 }
+            else mem.push({ section: id, duration: ms, visits: 1 })
+            localStorage.setItem(MEMORY_KEY, JSON.stringify(mem.slice(-20)))
+          } catch {}
+        }
+      })
+    }, { threshold: 0.4 })
+
+    SECTION_TITLES.forEach(s => {
+      const el = document.getElementById(s.id)
+      if (el) rlObserver.observe(el)
+    })
+
+    return () => {
+      clearTimeout(saveTimer)
+      saveSession()
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('beforeunload', saveSession)
+      rlObserver.disconnect()
+    }
+  }, [])
+
   return (
     <AuthProvider>
       <div style={{ background: B.black, color: B.white, minHeight: '100vh' }}>
@@ -229,6 +292,7 @@ export default function App() {
         <StreakToast />
         <LevelUpToast />
         <LiveActivity />
+        <ReactivationBanner />
         <KonamiCode />
 
         <Hero />
