@@ -17,7 +17,7 @@ export default function EggHuntTracker() {
       <GrainOverlay />
       <div style={{ maxWidth: 900, margin: '0 auto', position: 'relative', zIndex: 2 }}>
         <SectionTag label="THE GREAT SOLE HUNT" />
-        <h2 style={{ fontFamily: "'Anton', sans-serif", fontSize: 'clamp(28px,5vw,52px)', color: B.white, lineHeight: 1.05 }}>
+        <h2 className="reveal-3d text-3d" style={{ fontFamily: "'Anton', sans-serif", fontSize: 'clamp(28px,5vw,52px)', color: B.white, lineHeight: 1.05 }}>
           100 EGGS. 100 WINNERS.<br />ARE YOU ONE OF THEM?
         </h2>
         <Divider />
@@ -40,7 +40,7 @@ export default function EggHuntTracker() {
         </div>
 
         {complete && (
-          <div style={{
+          <div className="card-3d" style={{
             background: `${B.amber}15`, border: `1px solid ${B.amber}`, borderRadius: 8,
             padding: '16px 20px', marginBottom: 28, color: B.amber, fontFamily: "'Space Mono', monospace", fontSize: 13,
           }}>

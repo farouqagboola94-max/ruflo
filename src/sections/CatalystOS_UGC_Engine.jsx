@@ -98,7 +98,7 @@ export default function UGCEngine() {
               CATALYSTOS MODULE
             </span>
           </div>
-          <h1 style={{
+          <h1 className="reveal-3d" style={{
             margin: 0,
             fontSize: "22px",
             fontWeight: 700,
@@ -178,7 +178,7 @@ export default function UGCEngine() {
             </div>
 
             {/* Detail */}
-            <div style={{
+            <div className="card-3d" style={{
               background: "#0D0D0D",
               border: `1px solid ${files[active].color}22`,
               borderRadius: "12px",
@@ -257,7 +257,7 @@ export default function UGCEngine() {
                     )}
                   </div>
                   {/* Content */}
-                  <div style={{
+                  <div className="card-3d" style={{
                     background: "#0D0D0D",
                     border: "1px solid #1A1A1A",
                     borderRadius: "8px",
@@ -311,7 +311,7 @@ export default function UGCEngine() {
                 { label: "settings.json", sub: "MCP executes", color: "#C5A028" },
                 { label: "reference/", sub: "feeds assets", color: "#4A9EDB" },
               ].map((c, i) => (
-                <div key={i} style={{
+                <div key={i} className="card-3d" style={{
                   background: "#0D0D0D",
                   border: `1px solid ${c.color}33`,
                   borderRadius: "8px",
