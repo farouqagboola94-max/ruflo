@@ -169,7 +169,7 @@ function ContactPop({ listing, onClose }) {
 function ListingCard({ listing, wanted, onWant, onContact, onRemove, isOwn }) {
   const c = COND_COLOR[listing.condition] || B.smoke
   return (
-    <div style={{ background:'rgba(255,255,255,0.03)', border:`1px solid rgba(255,255,255,0.08)`, borderRadius:12, overflow:'hidden', breakInside:'avoid', marginBottom:14, display:'flex', flexDirection:'column' }}>
+    <div className="card-3d" style={{ background:'rgba(255,255,255,0.03)', border:`1px solid rgba(255,255,255,0.08)`, borderRadius:12, overflow:'hidden', breakInside:'avoid', marginBottom:14, display:'flex', flexDirection:'column' }}>
       {listing.photo
         ? <img src={listing.photo} alt={listing.name} style={{ width:'100%', aspectRatio:'1', objectFit:'cover' }} />
         : (
@@ -288,7 +288,7 @@ export default function TradeBoard() {
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-end', flexWrap:'wrap', gap:20, marginBottom:16 }}>
           <div>
             <SectionTag>COMMUNITY MARKET</SectionTag>
-            <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(40px,7vw,72px)', color:B.white, lineHeight:0.88 }}>
+            <div className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(40px,7vw,72px)', color:B.white, lineHeight:0.88 }}>
               SWAP · SELL<br /><span style={{ color:B.neonCyan }}>· SCORE</span>
             </div>
           </div>

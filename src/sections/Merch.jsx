@@ -366,7 +366,7 @@ export default function Merch() {
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-end', flexWrap:'wrap', gap:20, marginBottom:28 }}>
           <div>
             <SectionTag>OFFICIAL MERCHANDISE</SectionTag>
-            <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(40px,6vw,68px)', color:B.white, lineHeight:0.9 }}>THE<br /><span style={{ color:B.amber }}>DROP</span></div>
+            <div className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(40px,6vw,68px)', color:B.white, lineHeight:0.9 }}>THE<br /><span style={{ color:B.amber }}>DROP</span></div>
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:20 }}>
             <div style={{ fontFamily:"'Syne', sans-serif", fontSize:13, color:B.smoke, maxWidth:220, textAlign:'right', lineHeight:1.65 }}>Limited edition SF '26 merch. Ships to Lagos and beyond.</div>

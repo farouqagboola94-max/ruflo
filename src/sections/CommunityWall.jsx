@@ -356,7 +356,7 @@ export default function CommunityWall() {
           <p style={{ fontFamily:"'Space Mono',monospace", color:B.amber, fontSize:10, letterSpacing:6, marginBottom:14 }}>
             ◈ THE SACRED WALL ◈
           </p>
-          <h2 style={{ fontFamily:"'Bebas Neue',sans-serif",
+          <h2 className="reveal-3d" style={{ fontFamily:"'Bebas Neue',sans-serif",
             fontSize:'clamp(52px,10vw,100px)', lineHeight:0.9, letterSpacing:4, marginBottom:0,
             background:`linear-gradient(180deg, #fff 40%, ${B.amber}80)`,
             WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent',

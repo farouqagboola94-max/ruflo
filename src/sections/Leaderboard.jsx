@@ -322,7 +322,7 @@ export default function Leaderboard() {
         {/* header */}
         <div style={{ textAlign:'center', marginBottom:24 }}>
           <SectionTag>COMMUNITY RANKINGS</SectionTag>
-          <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(44px,8vw,80px)', color:B.white, lineHeight:0.88, marginBottom:12 }}>
+          <div className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(44px,8vw,80px)', color:B.white, lineHeight:0.88, marginBottom:12 }}>
             WHO'S<br /><span style={{ color:B.neonCyan }}>LEADING THE PACK</span>
           </div>
           {/* live ticker */}
@@ -333,7 +333,7 @@ export default function Leaderboard() {
         </div>
 
         {/* grand prize banner */}
-        <div style={{ textAlign:'center', marginBottom:28, padding:'12px 18px', background:`${B.amber}10`, border:`1px solid ${B.amber}30`, borderRadius:10 }}>
+        <div className="card-3d" style={{ textAlign:'center', marginBottom:28, padding:'12px 18px', background:`${B.amber}10`, border:`1px solid ${B.amber}30`, borderRadius:10 }}>
           <span style={{ fontFamily:'Space Mono,monospace', fontSize:10, color:B.amber, letterSpacing:1 }}>
             🏆 THE TOP {GRAND_PRIZE_RANK} HIGHEST-XP COLLECTORS WIN GRAND PRIZES AT THE EVENT — EVERY GAME, BID, AND POST MOVES YOU UP
           </span>
