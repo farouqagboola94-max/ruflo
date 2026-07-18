@@ -169,7 +169,7 @@ export default function SneakerDNA() {
         {phase === 'intro' && (
           <div style={{ textAlign:'center', animation:'fadeUp 0.7s ease both' }}>
             <p style={{ fontFamily:'Bebas Neue, sans-serif', color:B.amber, fontSize:13, letterSpacing:6, marginBottom:16 }}>COMMUNITY EXPERIENCE</p>
-            <h2 style={{ fontFamily:'Bebas Neue, sans-serif', fontSize:'clamp(54px, 11vw, 108px)', color:B.white, lineHeight:0.88, letterSpacing:2, marginBottom:16 }}>
+            <h2 className="reveal-3d text-3d" style={{ fontFamily:'Bebas Neue, sans-serif', fontSize:'clamp(54px, 11vw, 108px)', color:B.white, lineHeight:0.88, letterSpacing:2, marginBottom:16 }}>
               WHAT'S YOUR<br />
               <span style={{ color:B.amber, textShadow:`0 0 60px ${B.amber}55` }}>SNEAKER DNA?</span>
             </h2>

@@ -331,7 +331,7 @@ export default function Venue() {
           {/* Address pill */}
           <div style={{ textAlign:'center', marginBottom:36 }}>
             <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#444', letterSpacing:3, marginBottom:18 }}>GETTING THERE</div>
-            <h3 style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(32px,5vw,56px)', color:B.white, letterSpacing:2, lineHeight:0.9, marginBottom:20 }}>
+            <h3 className="reveal-3d" style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(32px,5vw,56px)', color:B.white, letterSpacing:2, lineHeight:0.9, marginBottom:20 }}>
               PLAN YOUR <span style={{ color:B.neonCyan }}>JOURNEY</span>
             </h3>
             <div style={{
@@ -353,7 +353,7 @@ export default function Venue() {
             {TRANSPORT.map(({ icon, title, desc }, i) => {
               const accent = [B.amber, B.neonCyan, B.neonLime, B.neonMagenta][i]
               return (
-                <div key={title} style={{
+                <div key={title} className="card-3d" style={{
                   background:'rgba(255,255,255,0.025)',
                   border:`1px solid rgba(255,255,255,0.07)`,
                   borderRadius:12,

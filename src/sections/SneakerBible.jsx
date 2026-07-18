@@ -120,13 +120,13 @@ export default function SneakerBible() {
         {tab === 'story' && (
           <div>
             <div style={{ marginBottom: 40 }}>
-              <div style={{ ...s.hed, fontSize: 'clamp(36px, 7vw, 72px)', color: B.amber, marginBottom: 4 }}>LAGOS KICKS</div>
-              <div style={{ ...s.hed, fontSize: 'clamp(36px, 7vw, 72px)', color: B.white, marginBottom: 20 }}>A CULTURAL ARCHIVE</div>
+              <div className="reveal-3d text-3d" style={{ ...s.hed, fontSize: 'clamp(36px, 7vw, 72px)', color: B.amber, marginBottom: 4 }}>LAGOS KICKS</div>
+              <div className="reveal-3d text-3d" style={{ ...s.hed, fontSize: 'clamp(36px, 7vw, 72px)', color: B.white, marginBottom: 20 }}>A CULTURAL ARCHIVE</div>
               <div style={{ ...s.storyBody, maxWidth: 700 }}>The complete oral history of sneaker culture in Nigeria -- from the okrika markets of Yaba to the WhatsApp groups that moved Jordan 4s at 2AM. This is the story Sneakers Fest 2026 exists to tell.</div>
             </div>
             <div style={s.statRow}>
               {[['40+','Years of Lagos Sneaker History'],['200M+','Nigerians Connected to This Culture'],['1985','Year the Jordan 1 Changed Everything'],['2026','Year Lagos Plants Its Flag']].map(([v, l]) => (
-                <div key={v} style={s.stat}><div style={s.statVal}>{v}</div><div style={s.statLbl}>{l}</div></div>
+                <div key={v} className="card-3d" style={s.stat}><div style={s.statVal}>{v}</div><div style={s.statLbl}>{l}</div></div>
               ))}
             </div>
             {lagosStory.map((sec, i) => (
@@ -147,7 +147,7 @@ export default function SneakerBible() {
             <div style={s.note}>
               PRICE DISCLAIMER: All retail and resell prices are approximate figures as of mid-2025. Resell prices change DAILY on StockX and GOAT. NGN estimates use ~1600/USD baseline -- verify current exchange rate before any commercial decision.
             </div>
-            <div style={{ ...s.hed, fontSize: 36, color: B.amber, marginBottom: 24 }}>THE 200</div>
+            <div className="reveal-3d text-3d" style={{ ...s.hed, fontSize: 36, color: B.amber, marginBottom: 24 }}>THE 200</div>
             <div style={s.filters}>
               <input style={s.searchBox} placeholder="SEARCH BY NAME OR COLORWAY..." value={search} onChange={e => setSearch(e.target.value)} />
               <select style={s.sel} value={brand} onChange={e => setBrand(e.target.value)}>{BRANDS.map(b => <option key={b}>{b}</option>)}</select>
@@ -208,8 +208,8 @@ export default function SneakerBible() {
 
         {tab === 'market' && (
           <div>
-            <div style={{ ...s.hed, fontSize: 48, color: B.amber, marginBottom: 4 }}>MARKET</div>
-            <div style={{ ...s.hed, fontSize: 48, marginBottom: 32, color: B.white }}>INTELLIGENCE</div>
+            <div className="reveal-3d text-3d" style={{ ...s.hed, fontSize: 48, color: B.amber, marginBottom: 4 }}>MARKET</div>
+            <div className="reveal-3d text-3d" style={{ ...s.hed, fontSize: 48, marginBottom: 32, color: B.white }}>INTELLIGENCE</div>
             <div style={s.note}>All data is approximate and based on available information as of mid-2025. The Lagos resell market is informal and largely untracked. All NGN figures depend on the current USD/NGN rate which is highly volatile. Verify every number before commercial decisions.</div>
             <div style={s.secTitle}>KEY MARKET METRICS</div>
             <div style={s.mktGrid}>
@@ -236,11 +236,11 @@ export default function SneakerBible() {
 
         {tab === 'exhibition' && (
           <div>
-            <div style={{ ...s.hed, fontSize: 48, color: B.amber, marginBottom: 4 }}>EXHIBITION</div>
-            <div style={{ ...s.hed, fontSize: 48, marginBottom: 32, color: B.white }}>GUIDE</div>
+            <div className="reveal-3d text-3d" style={{ ...s.hed, fontSize: 48, color: B.amber, marginBottom: 4 }}>EXHIBITION</div>
+            <div className="reveal-3d text-3d" style={{ ...s.hed, fontSize: 48, marginBottom: 32, color: B.white }}>GUIDE</div>
             <div style={s.statRow}>
               {[['Dec 12','Event Date 2026'],['Muri Okunola','Park, V/I Lagos'],['200','Silhouettes in The Vault'],['4','Exhibition Tiers']].map(([v, l]) => (
-                <div key={v} style={s.stat}><div style={s.statVal}>{v}</div><div style={s.statLbl}>{l}</div></div>
+                <div key={v} className="card-3d" style={s.stat}><div style={s.statVal}>{v}</div><div style={s.statLbl}>{l}</div></div>
               ))}
             </div>
             {[

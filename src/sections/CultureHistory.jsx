@@ -196,7 +196,7 @@ function EraCard({ era, idx }) {
 function EraContent({ era, open, setOpen }) {
   return (
     <div style={{ paddingBottom: 40, width: '100%' }}>
-      <div style={{ padding: '20px 22px', background: 'rgba(255,255,255,0.03)',
+      <div className="card-3d" style={{ padding: '20px 22px', background: 'rgba(255,255,255,0.03)',
         border: `1px solid ${era.color}20`, borderRadius: 8, cursor: 'pointer',
         transition: 'all 0.25s', position: 'relative', overflow: 'hidden' }}
         onClick={() => setOpen(o => !o)}
@@ -349,7 +349,7 @@ export default function CultureHistory() {
           <p style={{ fontFamily: "'Space Mono',monospace", color: B.amber, fontSize: 10, letterSpacing: 6, marginBottom: 14 }}>
             THE ARCHIVE
           </p>
-          <h2 style={{ fontFamily: "'Bebas Neue',sans-serif",
+          <h2 className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue',sans-serif",
             fontSize: 'clamp(48px,9vw,96px)', lineHeight: 0.88, letterSpacing: 3, marginBottom: 20 }}>
             THE CULTURE<br />
             <span style={{ color: B.amber }}>HAS A HISTORY</span>

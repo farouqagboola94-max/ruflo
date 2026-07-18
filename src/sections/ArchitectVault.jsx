@@ -122,7 +122,7 @@ function VaultContent() {
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))', gap: 14 }}>
           {VAULT_DROPS.map(drop => (
-            <div key={drop.code} style={{
+            <div key={drop.code} className="card-3d" style={{
               background: '#1A1A1A',
               border: `1px solid ${drop.color}28`,
               borderRadius: 12,
@@ -159,7 +159,7 @@ function VaultContent() {
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: 12 }}>
           {VAULT_PERKS.map(perk => (
-            <div key={perk.label} style={{
+            <div key={perk.label} className="card-3d" style={{
               background: 'rgba(245,166,35,0.04)',
               border: '1px solid rgba(245,166,35,0.18)',
               borderRadius: 10,
@@ -194,7 +194,7 @@ export default function ArchitectVault() {
       }} />
       <div style={{ maxWidth: 860, margin: '0 auto', position: 'relative' }}>
         <SectionTag color="#F5A623">ARCHITECT VAULT</SectionTag>
-        <h2 style={{
+        <h2 className="reveal-3d text-3d" style={{
           fontFamily: "'Bebas Neue', sans-serif",
           fontSize: 'clamp(2.8rem, 7vw, 5rem)',
           color: '#F0EDE6',

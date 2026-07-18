@@ -82,6 +82,7 @@ function Timeline({ items, liveStatus = {} }) {
                 <div style={{ width:11, height:11, borderRadius:'50%', background: isNow ? item.color : item.featured ? item.color : item.tag==='CLOSE' ? B.gunmetal : B.charcoal, border:`2px solid ${isNow ? item.color : item.featured ? item.color : item.tag==='CLOSE' ? B.gunmetal : item.color+'60'}`, boxShadow: isNow||item.featured ? `0 0 18px ${item.color}80` : 'none', flexShrink:0 }} />
               </div>
               <div
+                className="card-3d"
                 style={{ flex:1, marginLeft:16, padding:'14px 18px', background: isNow ? `${item.color}10` : item.featured ? `${item.color}08` : 'rgba(255,255,255,0.025)', border:`1px solid ${isNow ? item.color+'60' : item.featured ? item.color+'45' : B.gunmetal}`, borderRadius:8, position:'relative', overflow:'hidden' }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = item.color+'70'; e.currentTarget.style.background = `${item.color}0e` }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = isNow ? item.color+'60' : item.featured ? item.color+'45' : B.gunmetal; e.currentTarget.style.background = isNow ? `${item.color}10` : item.featured ? `${item.color}08` : 'rgba(255,255,255,0.025)' }}
@@ -134,14 +135,14 @@ export default function Schedule() {
         <div style={{ marginBottom:56 }}>
           <div style={{ textAlign:'center', marginBottom:32 }}>
             <SectionTag>THE PHALANX FRAMEWORK</SectionTag>
-            <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:'clamp(36px,5vw,60px)', color:B.white, lineHeight:0.9 }}>
+            <div className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:'clamp(36px,5vw,60px)', color:B.white, lineHeight:0.9 }}>
               4 PHASES. 1 MOVEMENT.
             </div>
             <div style={{ fontFamily:"'Space Mono',sans-serif", fontSize:12, color:B.smoke, marginTop:10 }}>Oct 9, 2026 → Dec 12, 2026 · Za.allyErrands · The Phalanx · The Catalyst Codes</div>
           </div>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(180px, 1fr))', gap:12 }}>
             {PHASES.map((ph, i) => (
-              <div key={i} style={{ background:'rgba(255,255,255,0.025)', border:`1px solid ${ph.color}30`, borderTop:`2px solid ${ph.color}`, borderRadius:8, padding:'18px 16px' }}>
+              <div key={i} className="card-3d" style={{ background:'rgba(255,255,255,0.025)', border:`1px solid ${ph.color}30`, borderTop:`2px solid ${ph.color}`, borderRadius:8, padding:'18px 16px' }}>
                 <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:8 }}>
                   <div style={{ fontFamily:"'Space Mono',monospace", fontSize:7, color:ph.color, letterSpacing:2 }}>{ph.label}</div>
                   <div style={{ fontFamily:"'Orbitron',monospace", fontSize:7, color:'#444', letterSpacing:1 }}>{ph.dates}</div>
@@ -158,7 +159,7 @@ export default function Schedule() {
         {/* Day selector */}
         <div style={{ textAlign:'center', marginBottom:40 }}>
           <SectionTag>{day === 1 ? 'DECEMBER 11, 2026' : 'DECEMBER 12, 2026'}</SectionTag>
-          <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:'clamp(40px,6vw,68px)', color:B.white, lineHeight:0.9 }}>
+          <div className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:'clamp(40px,6vw,68px)', color:B.white, lineHeight:0.9 }}>
             EVENT<br /><span style={{ color:B.amber }}>SCHEDULE</span>
           </div>
           <div style={{ display:'flex', gap:10, justifyContent:'center', marginTop:20 }}>

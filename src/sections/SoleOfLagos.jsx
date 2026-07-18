@@ -64,7 +64,7 @@ export default function SoleOfLagos() {
 
         <SectionTag text="EXHIBITION ESSAY" color={B.amber} />
 
-        <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(52px, 11vw, 130px)', lineHeight: 0.85, marginBottom: 32, marginTop: 24 }}>
+        <div className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(52px, 11vw, 130px)', lineHeight: 0.85, marginBottom: 32, marginTop: 24 }}>
           <div style={{ color: B.white }}>THE SOLE</div>
           <div style={{ color: B.amber }}>OF LAGOS</div>
         </div>

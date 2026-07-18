@@ -430,7 +430,7 @@ export default function CultureMuseum() {
           <div style={{ fontFamily:'Orbitron', fontSize:11, color:B.amber, letterSpacing:4, marginBottom:12 }}>
             SNEAKERS FEST '26 · THE GALLERY
           </div>
-          <h2 style={{ fontFamily:'Bebas Neue', fontSize:'clamp(42px,8vw,80px)', color:B.white, letterSpacing:4, lineHeight:1, margin:0 }}>
+          <h2 className="reveal-3d text-3d" style={{ fontFamily:'Bebas Neue', fontSize:'clamp(42px,8vw,80px)', color:B.white, letterSpacing:4, lineHeight:1, margin:0 }}>
             THE CULTURE MUSEUM
           </h2>
           <div style={{ fontFamily:'Syne', fontSize:14, color:B.smoke, marginTop:16, maxWidth:540, margin:'16px auto 0', lineHeight:1.7 }}>
