@@ -130,7 +130,7 @@ export default function SponsorTiers() {
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 64 }}>
           <SectionTag>PARTNERSHIP OPPORTUNITIES</SectionTag>
-          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(40px,6vw,72px)', color: B.white, lineHeight: 0.9, marginBottom: 16 }}>
+          <div className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(40px,6vw,72px)', color: B.white, lineHeight: 0.9, marginBottom: 16 }}>
             PARTNER<br /><span style={{ color: B.amber }}>WITH US</span>
           </div>
           <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: B.smoke, lineHeight: 1.8, maxWidth: 560, margin: '0 auto' }}>
@@ -141,7 +141,7 @@ export default function SponsorTiers() {
         {/* Audience stats */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 64 }}>
           {STATS.map((s, i) => (
-            <div key={i} style={{ padding: '20px 16px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 10, textAlign: 'center' }}>
+            <div key={i} className="card-3d" style={{ padding: '20px 16px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 10, textAlign: 'center' }}>
               <div style={{ fontFamily: "'Orbitron', monospace", fontWeight: 900, fontSize: 22, color: B.amber, marginBottom: 6 }}>{s.value}</div>
               <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: '#555', letterSpacing: '0.2em' }}>{s.label}</div>
             </div>

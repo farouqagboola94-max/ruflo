@@ -31,7 +31,7 @@ export default function Highlights() {
       <div style={{ position: "relative", zIndex: 10, maxWidth: 1100, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 64 }}>
           <SectionTag>WHAT TO EXPECT</SectionTag>
-          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(40px, 6vw, 68px)", color: B.white, lineHeight: 0.9 }}>
+          <div className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(40px, 6vw, 68px)", color: B.white, lineHeight: 0.9 }}>
             THE FULL<br /><span style={{ color: B.amber }}>EXPERIENCE</span>
           </div>
         </div>

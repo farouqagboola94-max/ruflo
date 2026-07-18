@@ -80,7 +80,7 @@ export default function Testimonials() {
       <div style={{ position: 'relative', zIndex: 10, maxWidth: 1100, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 60 }}>
           <SectionTag>COMMUNITY VOICES</SectionTag>
-          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(40px, 6vw, 68px)', color: B.white, lineHeight: 0.9 }}>
+          <div className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(40px, 6vw, 68px)', color: B.white, lineHeight: 0.9 }}>
             THEY WERE<br /><span style={{ color: B.amber }}>THERE</span>
           </div>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, marginTop: 20, padding: '6px 14px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20 }}>

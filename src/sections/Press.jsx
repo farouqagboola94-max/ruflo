@@ -62,7 +62,7 @@ export default function Press() {
         <div style={{ marginBottom: 64 }}>
           <div style={{ textAlign: 'center', marginBottom: 36 }}>
             <SectionTag>PRESS & MEDIA</SectionTag>
-            <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.smoke, letterSpacing: '0.5em' }}>TARGET PRESS OUTLETS</div>
+            <div className="reveal-3d" style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.smoke, letterSpacing: '0.5em' }}>TARGET PRESS OUTLETS</div>
           </div>
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
             {OUTLETS.map((m, i) => (
@@ -111,7 +111,7 @@ export default function Press() {
             <div style={{ fontFamily: "'Space Mono'", fontSize: 8, letterSpacing: '0.4em', color: B.smoke, marginBottom: 20 }}>PRESS ANGLES</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 32 }}>
               {ANGLES.map((a, i) => (
-                <div key={i} style={{
+                <div key={i} className="card-3d" style={{
                   padding: '12px 16px',
                   background: B.charcoal,
                   borderRadius: 6,
@@ -125,7 +125,7 @@ export default function Press() {
             {/* Boilerplate copy */}
             <div style={{ marginBottom: 20 }}>
               <div style={{ fontFamily: "'Space Mono'", fontSize: 8, letterSpacing: '0.4em', color: B.smoke, marginBottom: 12 }}>PRESS BOILERPLATE</div>
-              <div style={{
+              <div className="card-3d" style={{
                 background: B.charcoal, borderRadius: 8,
                 padding: '16px 18px',
                 border: `1px solid ${B.gunmetal}`,

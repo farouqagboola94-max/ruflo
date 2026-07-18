@@ -98,7 +98,7 @@ export default function About() {
           {/* Right: Stats */}
           <div style={{ flex: '1 1 300px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
             {STATS.map((s, i) => (
-              <div key={i} style={{
+              <div key={i} className="card-3d" style={{
                 padding: '24px 20px',
                 background: B.charcoal,
                 border: `1px solid ${s.accent ? B.amber + '50' : B.gunmetal}`,
@@ -130,7 +130,7 @@ export default function About() {
           <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.smoke, letterSpacing: '0.4em', marginBottom: 20 }}>THE THREE DIMENSIONS</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}>
             {DIMENSIONS.map((d, i) => (
-              <div key={i} style={{
+              <div key={i} className="card-3d" style={{
                 padding: '24px 22px', background: B.charcoal,
                 borderRadius: 8, border: `1px solid ${B.gunmetal}`,
                 borderTop: `2px solid ${d.color}`,

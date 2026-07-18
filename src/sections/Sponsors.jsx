@@ -149,10 +149,10 @@ export default function Sponsors() {
         {/* ── AUDIENCE ── */}
         <div style={{ marginBottom: 72 }}>
           <SectionTag>WHO YOU REACH</SectionTag>
-          <h3 style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 'clamp(32px,5vw,52px)', color: B.white, letterSpacing: 2, marginBottom: 32 }}>THE SNEAKERS FEST AUDIENCE</h3>
+          <h3 className="reveal-3d" style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 'clamp(32px,5vw,52px)', color: B.white, letterSpacing: 2, marginBottom: 32 }}>THE SNEAKERS FEST AUDIENCE</h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
             {AUDIENCE.map(({ icon, title, desc, color }) => (
-              <div key={title} style={{ background: 'rgba(255,255,255,0.025)', border: `1px solid ${color}25`, borderTop: `2px solid ${color}`, borderRadius: 10, padding: '24px 20px', transition: 'all 0.2s' }}
+              <div key={title} className="card-3d" style={{ background: 'rgba(255,255,255,0.025)', border: `1px solid ${color}25`, borderTop: `2px solid ${color}`, borderRadius: 10, padding: '24px 20px', transition: 'all 0.2s' }}
                 onMouseEnter={e => { e.currentTarget.style.background = `${color}0a`; e.currentTarget.style.borderColor = `${color}50` }}
                 onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.025)'; e.currentTarget.style.borderColor = `${color}25` }}>
                 <div style={{ fontSize: 28, marginBottom: 12 }}>{icon}</div>
@@ -166,7 +166,7 @@ export default function Sponsors() {
         {/* ── PARTNER LEVELS ── */}
         <div style={{ marginBottom: 80 }}>
           <SectionTag>PARTNERSHIP LEVELS</SectionTag>
-          <h3 style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 'clamp(32px,5vw,52px)', color: B.white, letterSpacing: 2, marginBottom: 32 }}>WAYS TO PARTNER</h3>
+          <h3 className="reveal-3d" style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 'clamp(32px,5vw,52px)', color: B.white, letterSpacing: 2, marginBottom: 32 }}>WAYS TO PARTNER</h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 20 }}>
             {PARTNER_LEVELS.map(({ tier, color, featured, badge, perks }) => (
               <div key={tier}

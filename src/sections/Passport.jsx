@@ -243,7 +243,7 @@ export default function Passport() {
       <ScanLines />
       <div style={{ maxWidth: 760, margin: '0 auto' }}>
         <SectionTag color={user ? tier.color : B.amber}>SNEAKER PASSPORT</SectionTag>
-        <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
+        <h2 className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
           YOUR STATUS, EVERYWHERE ON THE SITE
         </h2>
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.78rem', marginBottom: 40 }}>
