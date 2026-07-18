@@ -50,7 +50,7 @@ export default function ShoeColorizer() {
       <ScanLines />
       <div style={{ maxWidth: 900, margin: '0 auto' }}>
         <SectionTag label="SHOE BUILDER" />
-        <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
+        <h2 className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
           BUILD YOUR COLORWAY
         </h2>
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.8rem', marginBottom: 48 }}>
@@ -63,7 +63,7 @@ export default function ShoeColorizer() {
           gap: 32, alignItems: 'start',
         }}>
           {/* Shoe canvas */}
-          <div style={{
+          <div className="card-3d" style={{
             background: B.charcoal, borderRadius: 12, padding: '32px 24px',
             border: `1px solid ${B.gunmetal}`, display: 'flex',
             justifyContent: 'center', alignItems: 'center', minHeight: 220,

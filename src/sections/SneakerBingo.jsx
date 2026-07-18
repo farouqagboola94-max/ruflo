@@ -129,7 +129,7 @@ export default function SneakerBingo() {
 
       <div style={{ maxWidth: 460, margin: '0 auto' }}>
         <SectionTag color={B.amber}>SNEAKER BINGO</SectionTag>
-        <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
+        <h2 className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
           PLAY EVERYTHING, WIN THE CARD
         </h2>
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.75rem', marginBottom: 16 }}>
@@ -202,7 +202,7 @@ export default function SneakerBingo() {
 
         {/* Full card celebration */}
         {fullCard && (
-          <div style={{
+          <div className="card-3d" style={{
             background: `${B.neonLime}10`, border: `1px solid ${B.neonLime}60`,
             borderRadius: 12, padding: '20px 24px',
             animation: 'jackpotPulse 2s ease-in-out infinite',

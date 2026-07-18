@@ -208,7 +208,7 @@ function RaffleCard({ raffle, entered, count, spinNum, isSpinning, winner, onEnt
   const isFilling = pct > 65
   const isNearFull = pct > 80
   return (
-    <div style={{ background:'rgba(255,255,255,0.03)', border:`1px solid ${winner?raffle.color+'60':'rgba(255,255,255,0.08)'}`, borderRadius:14, overflow:'hidden', display:'flex', flexDirection:'column', transition:'border-color 0.3s' }}>
+    <div className="card-3d" style={{ background:'rgba(255,255,255,0.03)', border:`1px solid ${winner?raffle.color+'60':'rgba(255,255,255,0.08)'}`, borderRadius:14, overflow:'hidden', display:'flex', flexDirection:'column', transition:'border-color 0.3s' }}>
       <div style={{ height:3, background:`linear-gradient(90deg,${raffle.color},${raffle.color}30)` }} />
       <div style={{ height:160, background:`radial-gradient(ellipse at 50% 60%,${raffle.color}18 0%,transparent 65%)`, display:'flex', alignItems:'center', justifyContent:'center', position:'relative', flexDirection:'column', gap:4 }}>
         <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:56, color:`${raffle.color}25`, lineHeight:1, position:'absolute' }}>WIN</div>
@@ -363,7 +363,7 @@ export default function Raffle() {
         {/* header */}
         <div style={{ textAlign:'center', marginBottom:52 }}>
           <SectionTag>EVENT DAY RAFFLES</SectionTag>
-          <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(44px,8vw,84px)', color:B.white, lineHeight:0.88, marginBottom:12 }}>
+          <div className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(44px,8vw,84px)', color:B.white, lineHeight:0.88, marginBottom:12 }}>
             ENTER.<br /><span style={{ color:B.amber }}>WIN. COLLECT.</span>
           </div>
           <p style={{ fontFamily:"'Syne', sans-serif", fontSize:14, color:'#777', maxWidth:440, margin:'0 auto 16px' }}>
@@ -417,7 +417,7 @@ export default function Raffle() {
         </div>
 
         {Object.keys(entries).length > 0 && (
-          <div style={{ marginTop:28, padding:'20px 24px', background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:12 }}>
+          <div className="card-3d" style={{ marginTop:28, padding:'20px 24px', background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:12 }}>
             <div style={{ fontFamily:'Orbitron,monospace', fontSize:8, color:'#444', letterSpacing:3, marginBottom:12 }}>MY ENTRIES</div>
             <div style={{ display:'flex', flexWrap:'wrap', gap:8, marginBottom:12 }}>
               {RAFFLES.filter(r => entries[r.id]).map(r => (

@@ -144,7 +144,7 @@ export default function CrewVoteOff() {
 
       <div style={{ maxWidth: 600, margin: '0 auto' }}>
         <SectionTag color={B.neonCyan}>CREW VOTE-OFF</SectionTag>
-        <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
+        <h2 className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
           THIS OR THAT
         </h2>
 
@@ -267,7 +267,7 @@ export default function CrewVoteOff() {
             </button>
           </>
         ) : (
-          <div style={{ background: `${B.neonLime}08`, border: `1px solid ${B.neonLime}25`, borderRadius: 12, padding: '28px 24px' }}>
+          <div className="card-3d" style={{ background: `${B.neonLime}08`, border: `1px solid ${B.neonLime}25`, borderRadius: 12, padding: '28px 24px' }}>
             <div style={{ fontSize: '2rem', marginBottom: 10 }}>👑</div>
             <div style={{ fontFamily: "'Bebas Neue'", fontSize: '1.4rem', color: B.neonLime, letterSpacing: '0.1em', marginBottom: 6 }}>
               FULL SWEEP — YOU JUDGED EVERYTHING

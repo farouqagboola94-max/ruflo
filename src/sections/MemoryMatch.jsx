@@ -194,7 +194,7 @@ export default function MemoryMatch() {
 
       <div style={{ maxWidth: 560, margin: '0 auto', textAlign: 'center' }}>
         <SectionTag>SOLE MEMORY</SectionTag>
-        <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 6 }}>
+        <h2 className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 6 }}>
           MATCH THE PAIRS
         </h2>
 
@@ -318,7 +318,7 @@ export default function MemoryMatch() {
 
         {/* RESULT */}
         {phase === 'done' && (
-          <div style={{
+          <div className="card-3d" style={{
             background: perfect ? `${B.amber}10` : 'rgba(255,255,255,0.03)',
             border: `1px solid ${perfect ? B.amber + '50' : B.neonLime + '30'}`,
             borderRadius: 12, padding: '24px',

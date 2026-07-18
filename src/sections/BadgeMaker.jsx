@@ -127,7 +127,7 @@ export default function BadgeMaker() {
 
       <div style={{ maxWidth: 720, margin: '0 auto' }}>
         <SectionTag>BADGE MAKER</SectionTag>
-        <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
+        <h2 className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
           CREATE YOUR EVENT BADGE
         </h2>
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.78rem', marginBottom: 6 }}>
@@ -192,7 +192,7 @@ export default function BadgeMaker() {
         </div>
 
         {/* Live Badge Preview */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 28 }}>
+        <div className="card-3d" style={{ display: 'flex', justifyContent: 'center', marginBottom: 28 }}>
           <svg
             ref={svgRef}
             viewBox="0 0 620 310"

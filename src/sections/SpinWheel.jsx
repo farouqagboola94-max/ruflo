@@ -257,7 +257,7 @@ export default function SpinWheel() {
 
       <div style={{ maxWidth: 640, margin: '0 auto', position:'relative', zIndex:2 }}>
         <SectionTag>SPIN TO WIN</SectionTag>
-        <h2 style={{ fontFamily:"'Bebas Neue'", fontSize:'clamp(2.5rem,7vw,5rem)', color:B.white, letterSpacing:'0.05em', marginBottom:8 }}>
+        <h2 className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue'", fontSize:'clamp(2.5rem,7vw,5rem)', color:B.white, letterSpacing:'0.05em', marginBottom:8 }}>
           TEST YOUR{' '}<span style={{ color:B.amber, textShadow:`0 0 40px ${B.amber}70` }}>LUCK</span>
         </h2>
         <p style={{ fontFamily:"'Space Mono'", fontSize:9, color:'#444', letterSpacing:'0.15em', marginBottom:28 }}>

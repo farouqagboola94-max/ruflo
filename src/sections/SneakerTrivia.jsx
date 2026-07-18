@@ -248,7 +248,7 @@ export default function SneakerTrivia() {
 
       <div style={{ maxWidth: 680, margin: '0 auto' }}>
         <SectionTag>SNEAKER TRIVIA</SectionTag>
-        <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
+        <h2 className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
           TEST YOUR SOLE KNOWLEDGE
         </h2>
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.8rem', marginBottom: 40 }}>
@@ -325,7 +325,7 @@ export default function SneakerTrivia() {
             </div>
 
             {/* Question */}
-            <div style={{
+            <div className="card-3d" style={{
               background: B.charcoal, borderRadius: 8, padding: '24px 28px', marginBottom: 16,
               border: `1px solid ${B.gunmetal}`, borderLeft: `3px solid ${B.amber}`,
             }}>
@@ -397,7 +397,7 @@ export default function SneakerTrivia() {
               {rank.title}
             </div>
 
-            <div style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${rank.color}30`, borderRadius: 12, padding: '20px 24px', marginBottom: 20, textAlign: 'left' }}>
+            <div className="card-3d" style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${rank.color}30`, borderRadius: 12, padding: '20px 24px', marginBottom: 20, textAlign: 'left' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: maxStreak > 0 ? 14 : 0 }}>
                 <div>
                   <div style={{ fontFamily: "'Space Mono'", fontSize: 7, color: '#444', letterSpacing: 2, marginBottom: 4 }}>TOTAL POINTS</div>

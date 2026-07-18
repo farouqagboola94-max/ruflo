@@ -197,7 +197,7 @@ export default function SneakerWorth() {
 
       <div style={{ maxWidth: 620, margin: '0 auto' }}>
         <SectionTag>COLLECTION CALCULATOR</SectionTag>
-        <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
+        <h2 className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
           WHAT IS YOUR COLLECTION WORTH?
         </h2>
 
@@ -223,7 +223,7 @@ export default function SneakerWorth() {
               QUESTION {current + 1} OF {QUESTIONS.length}
             </div>
 
-            <div style={{
+            <div className="card-3d" style={{
               background: B.black, borderRadius: 8, padding: '24px 28px', marginBottom: 24,
               border: `1px solid ${B.gunmetal}`, borderLeft: `3px solid ${B.amber}`,
             }}>
@@ -274,7 +274,7 @@ export default function SneakerWorth() {
               TOP {pct}% OF LAGOS COLLECTORS
             </div>
 
-            <div style={{
+            <div className="card-3d" style={{
               background: B.black, border: `1px solid ${archetypeColor}35`,
               borderLeft: `4px solid ${archetypeColor}`,
               borderRadius: 8, padding: '20px 24px', marginBottom: 8,

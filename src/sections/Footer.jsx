@@ -43,7 +43,7 @@ export default function Footer() {
 
           {/* Brand */}
           <div style={{ flex: '1 1 240px' }}>
-            <div style={{ fontFamily: "'Orbitron', monospace", fontWeight: 900, fontSize: 20, color: B.amber, textShadow: `0 0 15px ${B.amber}30`, marginBottom: 6 }}>SNEAKERS FEST '26</div>
+            <div className="reveal-3d" style={{ fontFamily: "'Orbitron', monospace", fontWeight: 900, fontSize: 20, color: B.amber, textShadow: `0 0 15px ${B.amber}30`, marginBottom: 6 }}>SNEAKERS FEST '26</div>
             <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.smoke, letterSpacing: '0.3em', marginBottom: 6 }}>THE SOLE EXHIBITION — LAGOS, NIGERIA</div>
             <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.neonCyan, letterSpacing: '0.25em', marginBottom: 4 }}>ONLINE COMMUNITY. PHYSICAL PRESENCE.</div>
             <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: '#FF6719', letterSpacing: '0.2em', marginBottom: 10 }}>A CATALYST CONCEPTS PROPERTY</div>
@@ -97,6 +97,7 @@ export default function Footer() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {SOCIALS.map(s => (
                 <a key={s.platform} href={s.href} target="_blank" rel="noopener noreferrer"
+                  className="card-3d"
                   style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: B.charcoal, border: `1px solid ${B.gunmetal}`, borderRadius: 4, textDecoration: 'none', transition: 'all 0.25s' }}
                   onMouseEnter={e => { e.currentTarget.style.borderColor = s.color + '70'; e.currentTarget.style.background = s.color + '12' }}
                   onMouseLeave={e => { e.currentTarget.style.borderColor = B.gunmetal; e.currentTarget.style.background = B.charcoal }}

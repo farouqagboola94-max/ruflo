@@ -169,7 +169,7 @@ export default function Soledle() {
 
       <div style={{ maxWidth: 560, margin: '0 auto' }}>
         <SectionTag color={B.neonMagenta}>SOLEDLE · DAILY</SectionTag>
-        <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
+        <h2 className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
           GUESS TODAY'S SNEAKER
         </h2>
 
@@ -181,7 +181,7 @@ export default function Soledle() {
         </div>
 
         {/* Clue card */}
-        <div style={{ background: B.charcoal, border: `1px solid ${B.gunmetal}`, borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+        <div className="card-3d" style={{ background: B.charcoal, border: `1px solid ${B.gunmetal}`, borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
           <div style={{ fontFamily: "'Space Mono'", fontSize: '0.52rem', color: '#444', letterSpacing: '0.12em', marginBottom: 12 }}>
             PUZZLE #{dayNumber()} · {cluesRevealed} OF {answer.clues.length} CLUES REVEALED
           </div>
@@ -262,7 +262,7 @@ export default function Soledle() {
 
         {/* Won */}
         {game.status === 'won' && (
-          <div style={{ textAlign: 'center', background: `${B.neonLime}08`, border: `1px solid ${B.neonLime}30`, borderRadius: 12, padding: '24px', animation: 'winPop 0.5s cubic-bezier(0.34,1.56,0.64,1)' }}>
+          <div className="card-3d" style={{ textAlign: 'center', background: `${B.neonLime}08`, border: `1px solid ${B.neonLime}30`, borderRadius: 12, padding: '24px', animation: 'winPop 0.5s cubic-bezier(0.34,1.56,0.64,1)' }}>
             {game.oracle && (
               <div style={{
                 display: 'inline-block', background: `${B.amber}15`, border: `1px solid ${B.amber}50`,

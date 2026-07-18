@@ -70,7 +70,7 @@ export default function OutfitMatcher() {
       <Egg id="egg-046" corner="bottom-left" />
       <div style={{ maxWidth: 760, margin: '0 auto' }}>
         <SectionTag color={B.neonCyan}>AI OUTFIT MATCHER</SectionTag>
-        <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
+        <h2 className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
           BUILD THE FIT AROUND THE SHOE
         </h2>
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.78rem', marginBottom: 40 }}>
@@ -113,7 +113,7 @@ export default function OutfitMatcher() {
         {results && (
           <div style={{ display: 'grid', gap: 16 }}>
             {results.map((r, i) => (
-              <div key={r.id} style={{
+              <div key={r.id} className="card-3d" style={{
                 background: B.void, border: `1px solid ${i === 0 ? B.neonCyan + '60' : B.gunmetal}`,
                 borderRadius: 10, padding: '20px 24px', position: 'relative',
               }}>

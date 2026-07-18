@@ -207,7 +207,7 @@ export default function PhotoTools() {
 
         <div style={{ textAlign:'center', marginBottom:48 }}>
           <SectionTag>CREATOR STUDIO</SectionTag>
-          <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(44px,8vw,80px)', color:B.white, lineHeight:0.88, marginBottom:12 }}>
+          <div className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(44px,8vw,80px)', color:B.white, lineHeight:0.88, marginBottom:12 }}>
             SHOE<br /><span style={{ color:B.neonMagenta }}>PHOTO STUDIO</span>
           </div>
           <p style={{ color:'#666', fontFamily:'Space Mono,monospace', fontSize:12, maxWidth:480, margin:'0 auto', lineHeight:1.8 }}>
@@ -264,7 +264,7 @@ export default function PhotoTools() {
             </div>
 
             {/* ── controls column ── */}
-            <div style={panel}>
+            <div className="card-3d" style={panel}>
               <div style={{ display:'flex', borderBottom:'1px solid rgba(255,255,255,0.06)' }}>
                 {TABS.map(t => (
                   <button key={t} onClick={() => setTab(t)} style={{ flex:1, padding:'12px 2px', background:tab===t ? 'rgba(255,45,123,0.1)' : 'transparent', border:'none', color:tab===t ? B.neonMagenta : '#444', fontFamily:'Orbitron,monospace', fontSize:6, fontWeight:700, cursor:'pointer', letterSpacing:0.5, borderBottom:tab===t ? `2px solid ${B.neonMagenta}` : '2px solid transparent', transition:'all 0.2s' }}>

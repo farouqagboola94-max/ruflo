@@ -197,7 +197,7 @@ export default function HypeCounter() {
 
       <div style={{ maxWidth: 540, margin: '0 auto' }}>
         <SectionTag>COMMUNITY HYPE</SectionTag>
-        <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 12 }}>
+        <h2 className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 12 }}>
           THE CULTURE IS COUNTING
         </h2>
 

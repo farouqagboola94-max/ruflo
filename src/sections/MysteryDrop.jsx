@@ -200,7 +200,7 @@ export default function MysteryDrop() {
           </span>
         </div>
 
-        <h2 style={{
+        <h2 className="reveal-3d text-3d" style={{
           fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,7vw,5rem)',
           color: B.white, letterSpacing: '0.05em', marginBottom: 8,
         }}>SOMETHING DROPS DEC 12</h2>
@@ -334,7 +334,7 @@ export default function MysteryDrop() {
         </div>
 
         {/* Founding Member gate — with founder count */}
-        <div style={{
+        <div className="card-3d" style={{
           padding: '20px 24px',
           background: `linear-gradient(135deg, ${B.amber}10 0%, ${B.amber}05 100%)`,
           border: `1px solid ${B.amber}30`, borderRadius: 12, marginBottom: 24,
