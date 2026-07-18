@@ -37,7 +37,7 @@ export default function DropsTimeline() {
       <ScanLines />
       <div style={{ maxWidth: 900, margin: '0 auto' }}>
         <SectionTag>DROPS TIMELINE</SectionTag>
-        <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
+        <h2 className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
           40 YEARS OF CULTURE
         </h2>
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.78rem', marginBottom: 48 }}>
@@ -91,7 +91,7 @@ export default function DropsTimeline() {
         </div>
 
         {/* Detail card */}
-        <div style={{
+        <div className="card-3d" style={{
           background: B.charcoal,
           borderRadius: 12, padding: '36px 32px',
           border: `1px solid ${B.gunmetal}`,

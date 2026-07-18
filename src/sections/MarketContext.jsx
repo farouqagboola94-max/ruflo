@@ -62,7 +62,7 @@ export default function MarketContext() {
         {/* Header */}
         <div style={{ maxWidth: 720, marginBottom: 64 }}>
           <SectionTag label="THE MARKET" />
-          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(42px, 7vw, 80px)', color: B.white, lineHeight: 0.88, marginBottom: 24 }}>
+          <div className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(42px, 7vw, 80px)', color: B.white, lineHeight: 0.88, marginBottom: 24 }}>
             WHY HASN'T LAGOS<br />
             <span style={{ color: B.amber }}>DONE THIS BEFORE?</span>
           </div>
@@ -94,7 +94,7 @@ export default function MarketContext() {
           <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.smoke, letterSpacing: '0.3em', marginBottom: 28 }}>THE EVENTS THAT PROVED THE DEMAND</div>
           <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
             {PROOF_POINTS.map((p, pi) => (
-              <div key={pi} style={{ flex: '1 1 300px', padding: '28px 24px', background: B.charcoal, border: `1px solid ${B.gunmetal}`, borderRadius: 8, position: 'relative', overflow: 'hidden', transition: 'border-color 0.3s' }}
+              <div key={pi} className="card-3d" style={{ flex: '1 1 300px', padding: '28px 24px', background: B.charcoal, border: `1px solid ${B.gunmetal}`, borderRadius: 8, position: 'relative', overflow: 'hidden', transition: 'border-color 0.3s' }}
                 onMouseEnter={e => e.currentTarget.style.borderColor = p.color + '60'}
                 onMouseLeave={e => e.currentTarget.style.borderColor = B.gunmetal}
               >

@@ -62,7 +62,7 @@ export default function FAQ() {
       <div style={{ position: "relative", zIndex: 10, maxWidth: 820, margin: "0 auto" }}>
         <div style={{ marginBottom: 40 }}>
           <SectionTag>GOT QUESTIONS?</SectionTag>
-          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(36px, 5vw, 60px)", color: B.white, lineHeight: 0.9 }}>
+          <div className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(36px, 5vw, 60px)", color: B.white, lineHeight: 0.9 }}>
             FREQUENTLY<br /><span style={{ color: B.amber }}>ASKED</span>
           </div>
         </div>
@@ -94,7 +94,7 @@ export default function FAQ() {
           {visible.map(item => {
             const i = FAQS.indexOf(item)
             return (
-              <div key={i} style={{ border: `1px solid ${open === i ? B.amber + "50" : B.gunmetal}`, borderRadius: 4, overflow: "hidden", transition: "border-color 0.3s", animation: search ? 'faqIn 0.22s ease' : 'none' }}>
+              <div key={i} className="card-3d" style={{ border: `1px solid ${open === i ? B.amber + "50" : B.gunmetal}`, borderRadius: 4, overflow: "hidden", transition: "border-color 0.3s", animation: search ? 'faqIn 0.22s ease' : 'none' }}>
                 <button
                   onClick={() => setOpen(open === i ? null : i)}
                   style={{ width: "100%", padding: "18px 20px", background: open === i ? B.charcoal : "transparent", display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "pointer", border: "none", textAlign: "left", transition: "background 0.3s", gap: 12 }}
@@ -135,7 +135,7 @@ export default function FAQ() {
           })}
         </div>
 
-        <div style={{ marginTop: 44, padding: "22px 28px", background: B.charcoal, border: `1px solid ${B.gunmetal}`, borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+        <div className="card-3d" style={{ marginTop: 44, padding: "22px 28px", background: B.charcoal, border: `1px solid ${B.gunmetal}`, borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
           <div>
             <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.smoke, letterSpacing: "0.2em", marginBottom: 8 }}>STILL HAVE QUESTIONS?</div>
             <a href="mailto:info@sneakersfest.com" style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: B.amber, textDecoration: "none", fontWeight: 700 }}>
