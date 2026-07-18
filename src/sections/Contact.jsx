@@ -125,7 +125,7 @@ export default function Contact() {
         <div style={{ textAlign: 'center', marginBottom: 56 }}>
           <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.neonCyan,
             letterSpacing: '0.45em', marginBottom: 16 }}>GET IN TOUCH</div>
-          <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(44px, 8vw, 70px)',
+          <h2 className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(44px, 8vw, 70px)',
             color: B.white, lineHeight: 1, marginBottom: 18 }}>CONTACT US</h2>
           <div style={{ width: 64, height: 2, margin: '0 auto 20px',
             background: `linear-gradient(90deg, ${B.neonCyan}, ${B.amber})` }} />

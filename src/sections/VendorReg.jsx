@@ -252,7 +252,7 @@ export default function VendorReg() {
       <div style={{ position:'relative', zIndex:10, maxWidth:900, margin:'0 auto' }}>
         <div style={{ textAlign:'center', marginBottom:44 }}>
           <SectionTag>VENDOR APPLICATIONS</SectionTag>
-          <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(40px,6vw,68px)', color:B.white, lineHeight:0.9, marginBottom:16 }}>
+          <div className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(40px,6vw,68px)', color:B.white, lineHeight:0.9, marginBottom:16 }}>
             CLAIM YOUR<br /><span style={{ color:B.neonCyan }}>BOOTH</span>
           </div>
           <div style={{ fontFamily:"'Syne', sans-serif", fontSize:14, color:B.smoke, lineHeight:1.7, maxWidth:520, margin:'0 auto' }}>
@@ -266,7 +266,7 @@ export default function VendorReg() {
             { n:'30–50',   l:'VENDOR SPOTS (YEAR 1)', c:B.amber },
             { n:'DEC 12',  l:'2026 · LAGOS, NIGERIA', c:B.neonMagenta },
           ].map((s, i) => (
-            <div key={i} style={{ padding:'18px 16px', background:B.charcoal, border:`1px solid ${s.c}28`, borderRadius:8, textAlign:'center' }}>
+            <div key={i} className="card-3d" style={{ padding:'18px 16px', background:B.charcoal, border:`1px solid ${s.c}28`, borderRadius:8, textAlign:'center' }}>
               <div style={{ fontFamily:"'Orbitron', monospace", fontWeight:900, fontSize:22, color:s.c, textShadow:`0 0 16px ${s.c}30` }}>{s.n}</div>
               <div style={{ fontFamily:"'Space Mono', monospace", fontSize:7, color:B.smoke, letterSpacing:'0.15em', marginTop:6 }}>{s.l}</div>
             </div>
@@ -515,7 +515,7 @@ export default function VendorReg() {
           <div style={{ fontFamily:"'Space Mono'", fontSize:8, letterSpacing:'0.4em', color:B.smoke, marginBottom:16 }}>CONFIRMED VENDORS (PREVIEW)</div>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(180px, 1fr))', gap:12 }}>
             {CONFIRMED_VENDORS.map((v, i) => (
-              <div key={i} style={{ padding:'16px', background:'rgba(255,255,255,0.03)', border:`1px solid ${v.color}30`, borderRadius:8 }}>
+              <div key={i} className="card-3d" style={{ padding:'16px', background:'rgba(255,255,255,0.03)', border:`1px solid ${v.color}30`, borderRadius:8 }}>
                 <div style={{ width:36, height:36, borderRadius:'50%', background:`${v.color}15`, border:`1.5px solid ${v.color}50`, marginBottom:10, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Bebas Neue,sans-serif', fontSize:16, color:v.color }}>{v.name[0]}</div>
                 <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:15, color:B.white }}>{v.name}</div>
                 <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:v.color, marginTop:2 }}>{v.cat} / {v.city} / {v.ig}</div>

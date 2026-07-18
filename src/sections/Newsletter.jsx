@@ -167,7 +167,7 @@ export default function Newsletter() {
       <div style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 1 }}>
 
         <SectionTag>COMMUNITY NEWSLETTER</SectionTag>
-        <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(42px,7vw,80px)', color: B.white, lineHeight: 1, marginBottom: 16, letterSpacing: 2 }}>
+        <div className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(42px,7vw,80px)', color: B.white, lineHeight: 1, marginBottom: 16, letterSpacing: 2 }}>
           JOIN THE{' '}
           <span style={{ color: B.amber, textShadow: `0 0 40px ${B.amber}70` }}>INNER CIRCLE</span>
         </div>
@@ -178,7 +178,7 @@ export default function Newsletter() {
         {/* perks grid */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px,1fr))', gap: 12, marginBottom: 44 }}>
           {PERKS.map(p => (
-            <div key={p.label} style={{ padding: '16px 12px', background: 'rgba(255,255,255,0.03)', border: `1px solid rgba(255,255,255,0.06)`, borderRadius: 12, textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+            <div key={p.label} className="card-3d" style={{ padding: '16px 12px', background: 'rgba(255,255,255,0.03)', border: `1px solid rgba(255,255,255,0.06)`, borderRadius: 12, textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, ${p.color}60, transparent)` }} />
               <div style={{ fontSize: 20, marginBottom: 8 }}>{p.icon}</div>
               <div style={{ fontFamily: 'Orbitron,monospace', fontSize: 7, color: p.color, letterSpacing: 2, marginBottom: 4, fontWeight: 700 }}>{p.label}</div>
@@ -256,7 +256,7 @@ export default function Newsletter() {
         )}
 
         {/* live stats bar */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 40, marginTop: 56, flexWrap: 'wrap', padding: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: 16 }}>
+        <div className="card-3d" style={{ display: 'flex', justifyContent: 'center', gap: 40, marginTop: 56, flexWrap: 'wrap', padding: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: 16 }}>
           {[
             { val: 10847, label: 'SUBSCRIBERS', color: B.amber },
             { val: 6,     label: 'PLATFORMS',  color: B.neonCyan, fmt: v => v },

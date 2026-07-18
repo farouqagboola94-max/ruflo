@@ -225,7 +225,7 @@ export default function EarlyAccess() {
 
       <div style={{ maxWidth:600, margin:'0 auto', position:'relative', zIndex:2 }}>
         <SectionTag color={B.amber}>EARLY ACCESS</SectionTag>
-        <h2 style={{ fontFamily:"'Bebas Neue'", fontSize:'clamp(2.5rem,7vw,5rem)', color:B.white, letterSpacing:'0.05em', marginBottom:8 }}>
+        <h2 className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue'", fontSize:'clamp(2.5rem,7vw,5rem)', color:B.white, letterSpacing:'0.05em', marginBottom:8 }}>
           JOIN THE INNER CIRCLE
         </h2>
         <p style={{ color:B.smoke, fontFamily:"'Space Mono'", fontSize:'0.8rem', marginBottom:20, lineHeight:1.7 }}>
@@ -322,7 +322,7 @@ export default function EarlyAccess() {
                 { label:'BEHIND YOU',   val:ahead.toLocaleString(),                     color:B.neonCyan },
                 { label:'QUEUE FILL',   val:`${pct}%`,                                  color:B.neonLime },
               ].map(s => (
-                <div key={s.label} style={{ background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:8, padding:'12px 14px', textAlign:'center' }}>
+                <div key={s.label} className="card-3d" style={{ background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:8, padding:'12px 14px', textAlign:'center' }}>
                   <div style={{ fontFamily:"'Orbitron'", fontSize:'1.2rem', fontWeight:900, color:s.color, marginBottom:4 }}>{s.val}</div>
                   <div style={{ fontFamily:"'Space Mono'", fontSize:'0.55rem', color:'#444', letterSpacing:2 }}>{s.label}</div>
                 </div>
