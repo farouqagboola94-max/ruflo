@@ -228,7 +228,7 @@ export default function Countdown() {
 
         <div style={{ textAlign:'center', marginBottom:56 }}>
           <SectionTag>DECEMBER 12, 2026 · MURI OKUNOLA PARK, V/I</SectionTag>
-          <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(44px,9vw,88px)', color:B.white, lineHeight:0.88, letterSpacing:2 }}>
+          <div className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(44px,9vw,88px)', color:B.white, lineHeight:0.88, letterSpacing:2 }}>
             THE CLOCK<br /><span style={{ color:B.amber }}>IS RUNNING</span>
           </div>
         </div>
@@ -249,7 +249,7 @@ export default function Countdown() {
             @keyframes joinSlide { from{ opacity:0; transform:translateY(4px) } to{ opacity:1; transform:translateY(0) } }
             @keyframes dotBlink2 { 0%,100%{ opacity:1 } 50%{ opacity:0.4 } }
           `}</style>
-          <div style={{ display:'inline-flex', flexDirection:'column', alignItems:'center', gap:20, background:'rgba(255,255,255,0.03)', border:`1px solid rgba(255,255,255,0.08)`, borderRadius:16, padding:'32px 48px' }}>
+          <div className="card-3d" style={{ display:'inline-flex', flexDirection:'column', alignItems:'center', gap:20, background:'rgba(255,255,255,0.03)', border:`1px solid rgba(255,255,255,0.08)`, borderRadius:16, padding:'32px 48px' }}>
             <div>
               <div style={{ fontFamily:'Orbitron,monospace', fontWeight:900, fontSize:'clamp(36px,7vw,64px)', color:B.white, lineHeight:1,
                 transform: burst ? 'scale(1.1)' : 'scale(1)', transition:'transform 0.2s cubic-bezier(0.34,1.56,0.64,1)' }}>
@@ -316,7 +316,7 @@ export default function Countdown() {
           </div>
         </div>
 
-        <div style={{ background:'rgba(255,255,255,0.02)', border:`1px solid ${B.amber}20`, borderRadius:16, padding:'36px 32px' }}>
+        <div className="card-3d" style={{ background:'rgba(255,255,255,0.02)', border:`1px solid ${B.amber}20`, borderRadius:16, padding:'36px 32px' }}>
           <div style={{ textAlign:'center', marginBottom:24 }}>
             <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:28, color:B.white, letterSpacing:3, marginBottom:6 }}>GENERATE YOUR HYPE CARD</div>
             <div style={{ fontFamily:'Syne,sans-serif', fontSize:13, color:B.smoke }}>1080×1080 · Instagram-ready · Download & share</div>
