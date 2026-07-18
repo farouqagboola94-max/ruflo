@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import './styles/threed.css'
 import App from './App.jsx'
 import Admin from './pages/Admin.jsx'
 

@@ -14,6 +14,15 @@ export const B = {
   white: "#F0EDE6",
   smoke: "#8A8A8A",
   mist: "#C8C4BC",
+  // Lagos Noir palette
+  lagosOcher: "#D4751A",
+  danfoYellow: "#FFE033",
+  noirBlue: "#0D1B2A",
+  wetConcrete: "#1C1A17",
+  lagoonTeal: "#0A3040",
+  brickRust: "#5C2D0A",
+  neonOrange: "#FF6B1A",
+  streetHaze: "#2A1F0F",
 }
 
 export const FONTS = "@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap');"
