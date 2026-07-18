@@ -1,0 +1,607 @@
+{
+  "meta": {
+    "owner": "Oluwatobiloba — The Catalyst",
+    "os": "Catalyst OS",
+    "version": "2.0.0",
+    "compiled": "2026-05-08",
+    "location": "Lagos, Nigeria",
+    "archetype": "Metal Dragon | INFJ | Personal Year 5",
+    "project_codes": {
+      "TGS": "The Great Sabotage",
+      "SNEAKFEST": "Sneakers Fest 2026",
+      "CHAMBERS": "Abegbe Agboola Chambers AI Consulting",
+      "CATMAN": "Catalyst Manifesto",
+      "DARKMATTER": "Dark Matter Manuscript",
+      "ADMIN": "Admin & Systems",
+      "COMICIP": "Catalyst: The Awakening"
+    }
+  },
+
+  "departments": [
+    { "id": "CONTENT", "name": "Content & Publishing" },
+    { "id": "LEGAL_CHAMBERS", "name": "Legal & Chambers" },
+    { "id": "EVENTS", "name": "Events & Partnerships" },
+    { "id": "ADMIN_SYSTEMS", "name": "Admin & Systems" }
+  ],
+
+  "projects": {
+
+    "catalyst_os_core": {
+      "category": "Catalyst OS — Core System",
+      "department": "ADMIN_SYSTEMS",
+      "items": [
+        {
+          "id": "COS-001",
+          "name": "Catalyst OS Brand OS Document",
+          "type": "document",
+          "status": "complete",
+          "description": "Full brand identity, voice rules, visual language, and OS architecture",
+          "code": "ADMIN"
+        },
+        {
+          "id": "COS-002",
+          "name": "Master Operations Manual",
+          "type": "document",
+          "status": "complete",
+          "description": "12 execution chains, 4 departments, 8 named roles",
+          "code": "ADMIN"
+        },
+        {
+          "id": "COS-003",
+          "name": "Substack Production System",
+          "type": "document",
+          "status": "complete",
+          "description": "End-to-end pipeline from idea to published Substack post",
+          "code": "ADMIN"
+        },
+        {
+          "id": "COS-004",
+          "name": "Expansion Pack",
+          "type": "document",
+          "status": "complete",
+          "description": "Scaling frameworks for Catalyst OS revenue arms",
+          "code": "ADMIN"
+        },
+        {
+          "id": "COS-005",
+          "name": "Books I–IV Canon",
+          "type": "document",
+          "status": "complete",
+          "description": "Four-book canon defining the Catalyst OS intellectual framework",
+          "code": "CATMAN"
+        },
+        {
+          "id": "COS-006",
+          "name": "Course & Workbook",
+          "type": "product",
+          "status": "complete",
+          "description": "Standalone digital product built on Catalyst OS philosophy",
+          "code": "CATMAN"
+        },
+        {
+          "id": "COS-007",
+          "name": "Launch Assets",
+          "type": "marketing",
+          "status": "complete",
+          "description": "Full suite of launch materials for Catalyst OS product line",
+          "code": "ADMIN"
+        },
+        {
+          "id": "COS-008",
+          "name": "Licensing Terms",
+          "type": "legal",
+          "status": "complete",
+          "description": "IP licensing framework for Catalyst OS brand and content",
+          "code": "ADMIN"
+        },
+        {
+          "id": "COS-009",
+          "name": "VA Handoff Documentation",
+          "type": "operations",
+          "status": "complete",
+          "description": "Full delegation and handoff docs for virtual assistant roles",
+          "code": "ADMIN"
+        },
+        {
+          "id": "COS-010",
+          "name": "CLAUDE.md Master Context File",
+          "type": "ai_config",
+          "status": "complete",
+          "description": "Master context file capturing full operational setup, voice rules, and prompt stack for Claude Code",
+          "code": "ADMIN"
+        },
+        {
+          "id": "COS-011",
+          "name": "Notion/ClickUp Workspace Architecture",
+          "type": "workspace",
+          "status": "complete",
+          "description": "4-department workspace: Content, Legal & Chambers, Events & Partnerships, Admin & Systems",
+          "code": "ADMIN"
+        },
+        {
+          "id": "COS-012",
+          "name": "90-Day Revenue Plan",
+          "type": "strategy",
+          "status": "active",
+          "description": "₦10M+ Sneakers Fest, ₦2M+ digital products, ₦1.5M+ Chambers consulting",
+          "targets": {
+            "sneakers_fest": "₦10,000,000+",
+            "digital_products": "₦2,000,000+",
+            "chambers_consulting": "₦1,500,000+"
+          },
+          "code": "ADMIN"
+        }
+      ]
+    },
+
+    "technical_builds": {
+      "category": "Technical Builds & Dashboards",
+      "department": "ADMIN_SYSTEMS",
+      "items": [
+        {
+          "id": "TECH-001",
+          "name": "Catalyst OS React v2 Master Dashboard",
+          "type": "react_app",
+          "status": "complete",
+          "description": "Dark industrial command-center React dashboard unifying all OS modules",
+          "stack": ["React", "TailwindCSS", "JetBrains Mono", "DM Sans"],
+          "theme": "dark/orange",
+          "code": "ADMIN"
+        },
+        {
+          "id": "TECH-002",
+          "name": "Claude + Obsidian Knowledge System Dashboard",
+          "type": "react_app",
+          "status": "complete",
+          "description": "Knowledge management dashboard styled in Catalyst OS brand colors",
+          "stack": ["React", "JetBrains Mono", "DM Sans"],
+          "theme": "dark/orange",
+          "code": "ADMIN"
+        },
+        {
+          "id": "TECH-003",
+          "name": "Sneakers Fest 2026 Command Center",
+          "type": "react_app",
+          "status": "active",
+          "description": "Full event operations hub with Naira formatting and persistent storage",
+          "stack": ["React", "LocalStorage", "Naira formatting"],
+          "theme": "dark/orange",
+          "code": "SNEAKFEST"
+        },
+        {
+          "id": "TECH-004",
+          "name": "Catalyst OS AI Hub Directory",
+          "type": "html_app",
+          "status": "complete",
+          "description": "Interactive HTML directory of 70 AI tools organized by function",
+          "tool_count": 70,
+          "code": "ADMIN"
+        },
+        {
+          "id": "TECH-005",
+          "name": "Python Skills Index",
+          "type": "index",
+          "status": "complete",
+          "description": "70 Python skills mapped across 7 categories for Catalyst OS operations",
+          "skill_count": 70,
+          "category_count": 7,
+          "code": "ADMIN"
+        }
+      ]
+    },
+
+    "ai_agents": {
+      "category": "AI Agents & Automation",
+      "department": "ADMIN_SYSTEMS",
+      "items": [
+        {
+          "id": "AGENT-001",
+          "name": "Legal Document Agent",
+          "type": "autonomous_agent",
+          "status": "deployed",
+          "description": "Agent for generating legal documents for Abegbe Agboola Chambers",
+          "client": "Abegbe Agboola Chambers",
+          "outputs": ["Affidavits of Service", "Particulars of Claim", "Legal Correspondence"],
+          "code": "CHAMBERS"
+        },
+        {
+          "id": "AGENT-002",
+          "name": "Master Orchestration Agent",
+          "type": "orchestration_agent",
+          "status": "complete",
+          "description": "Central orchestrator with REST API and CLI for Catalyst OS operations",
+          "interfaces": ["REST API", "CLI"],
+          "code": "ADMIN"
+        },
+        {
+          "id": "AGENT-003",
+          "name": "Agentic Inbox",
+          "type": "agent_module",
+          "status": "integrated",
+          "description": "Autonomous email and communication management module for Catalyst OS",
+          "code": "ADMIN"
+        },
+        {
+          "id": "AGENT-004",
+          "name": "AutoHedge",
+          "type": "agent_module",
+          "status": "integrated",
+          "description": "Automated portfolio hedging and risk management module",
+          "code": "ADMIN"
+        },
+        {
+          "id": "AGENT-005",
+          "name": "Vibe Trading",
+          "type": "agent_module",
+          "status": "integrated",
+          "description": "Sentiment-driven trading analysis and execution module",
+          "code": "ADMIN"
+        },
+        {
+          "id": "AGENT-006",
+          "name": "FinceptTerminal",
+          "type": "agent_module",
+          "status": "integrated",
+          "description": "Financial intelligence terminal module for Catalyst OS",
+          "code": "ADMIN"
+        },
+        {
+          "id": "AGENT-007",
+          "name": "Higgsfield Integration",
+          "type": "integration",
+          "status": "integrated",
+          "description": "Higgsfield AI video generation module in Catalyst OS",
+          "code": "ADMIN"
+        },
+        {
+          "id": "AGENT-008",
+          "name": "HeyGen Integration",
+          "type": "integration",
+          "status": "integrated",
+          "description": "HeyGen avatar video generation module for content production",
+          "code": "ADMIN"
+        },
+        {
+          "id": "AGENT-009",
+          "name": "Chambers 60-Day AI Integration Blueprint",
+          "type": "consulting_deliverable",
+          "status": "delivered",
+          "description": "Full 60-day AI adoption roadmap for Abegbe Agboola Chambers law firm",
+          "client": "Abegbe Agboola Chambers",
+          "code": "CHAMBERS"
+        },
+        {
+          "id": "AGENT-010",
+          "name": "Voice Note to Content Pipeline",
+          "type": "automation_pipeline",
+          "status": "active",
+          "description": "Core production pattern: voice notes → Substack + YouTube long-form + 60s Shorts + Word doc",
+          "outputs": ["Substack post", "YouTube long-form", "60s Shorts", "Word doc"],
+          "code": "CONTENT"
+        }
+      ]
+    },
+
+    "open_source_repo_stack": {
+      "category": "Open Source Repository Stack",
+      "department": "ADMIN_SYSTEMS",
+      "total_repos": 68,
+      "deployment_status": "mapped_and_prioritized",
+      "items": [
+        {
+          "id": "REPO-001",
+          "name": "AI4AnimationPy",
+          "source": "github.com/facebookresearch/ai4animationpy",
+          "owner": "Meta / Facebook Research",
+          "type": "ai_ml_framework",
+          "stack": ["Python", "PyTorch"],
+          "description": "AI-driven character animation, neural networks, and motion capture framework",
+          "use_cases": [
+            "Catalyst: The Awakening comic IP pipeline",
+            "Sneakers Fest visual content",
+            "Digital/virtual brand experiences"
+          ],
+          "priority": "HIGH",
+          "code": "COMICIP"
+        }
+      ],
+      "note": "67 additional curated AI/ML repos mapped to Catalyst OS operations — priorities assigned per deployment context"
+    },
+
+    "content_writing": {
+      "category": "Content, Writing & Publishing",
+      "department": "CONTENT",
+      "items": [
+        {
+          "id": "CONT-001",
+          "name": "The Great Sabotage",
+          "type": "substack_series",
+          "status": "active",
+          "parts_complete": 9,
+          "parts_total": 12,
+          "word_count": 48500,
+          "description": "12-part Substack series on psychology, systems, and Nigerian social dynamics",
+          "coined_frameworks": [
+            "The Upstream/Downstream Man",
+            "Cup Economics vs Ocean Economics",
+            "Direction Protocol",
+            "48 Laws of Conscience"
+          ],
+          "code": "TGS"
+        },
+        {
+          "id": "CONT-002",
+          "name": "Dark Matter Manuscript",
+          "type": "manuscript",
+          "status": "active",
+          "word_count_range": "36000-50000",
+          "description": "Long-form manuscript — full scope TBD",
+          "code": "DARKMATTER"
+        },
+        {
+          "id": "CONT-003",
+          "name": "Catalyst Manifesto",
+          "type": "book",
+          "status": "complete",
+          "chapters": 88,
+          "word_count": 72000,
+          "description": "Spiritual and philosophical work — 88-chapter manifesto defining the Catalyst worldview",
+          "code": "CATMAN"
+        },
+        {
+          "id": "CONT-004",
+          "name": "The Difference Between Control and Respect: A Nigerian Reckoning",
+          "type": "substack_essay",
+          "status": "complete",
+          "parts": 7,
+          "word_count": 20000,
+          "description": "Cultural psychology analysis of control in Nigerian family and social structures",
+          "code": "TGS"
+        },
+        {
+          "id": "CONT-005",
+          "name": "YouTube Production System",
+          "type": "system",
+          "status": "complete",
+          "description": "MrBeast-modeled YouTube content production and strategy system",
+          "code": "CONTENT"
+        },
+        {
+          "id": "CONT-006",
+          "name": "Content Pipeline: Voice to Multi-Format",
+          "type": "workflow",
+          "status": "active",
+          "description": "Voice note → Substack + YouTube long-form + 60s Shorts + Word doc workflow",
+          "code": "CONTENT"
+        }
+      ]
+    },
+
+    "comic_ip": {
+      "category": "Comic IP — Catalyst: The Awakening",
+      "department": "CONTENT",
+      "items": [
+        {
+          "id": "COMIC-001",
+          "name": "Catalyst: The Awakening — Full Series",
+          "type": "comic_series",
+          "status": "in_development",
+          "issues": 12,
+          "genre": ["Afrofuturism", "Cyberpunk"],
+          "setting": "Near-future Lagos",
+          "code": "COMICIP"
+        },
+        {
+          "id": "COMIC-002",
+          "name": "Full Issue Scripts",
+          "type": "scripts",
+          "status": "complete",
+          "code": "COMICIP"
+        },
+        {
+          "id": "COMIC-003",
+          "name": "Series Bible",
+          "type": "document",
+          "status": "complete",
+          "description": "World-building, lore, characters, and narrative arc documentation",
+          "code": "COMICIP"
+        },
+        {
+          "id": "COMIC-004",
+          "name": "Character Design Briefs",
+          "type": "design",
+          "status": "complete",
+          "code": "COMICIP"
+        },
+        {
+          "id": "COMIC-005",
+          "name": "Kickstarter & Monetization Infrastructure",
+          "type": "business",
+          "status": "complete",
+          "description": "Full crowdfunding and revenue model for the comic series",
+          "code": "COMICIP"
+        }
+      ]
+    },
+
+    "client_work_chambers": {
+      "category": "Client Work — Abegbe Agboola Chambers",
+      "department": "LEGAL_CHAMBERS",
+      "client": "Abegbe Agboola Chambers",
+      "location": "Ikoyi, Lagos",
+      "items": [
+        {
+          "id": "CHAM-001",
+          "name": "60-Day AI Integration Blueprint",
+          "type": "consulting_deliverable",
+          "status": "delivered",
+          "description": "Full AI adoption roadmap for the law firm",
+          "code": "CHAMBERS"
+        },
+        {
+          "id": "CHAM-002",
+          "name": "AI Consulting Pitch Materials",
+          "type": "pitch",
+          "status": "delivered",
+          "code": "CHAMBERS"
+        },
+        {
+          "id": "CHAM-003",
+          "name": "Carousel Deliverables",
+          "type": "content",
+          "status": "delivered",
+          "description": "Social content carousels for Chambers vendor prospects",
+          "code": "CHAMBERS"
+        },
+        {
+          "id": "CHAM-004",
+          "name": "Legal Document Agent (Chambers)",
+          "type": "autonomous_agent",
+          "status": "deployed",
+          "description": "AI agent for generating legal documents",
+          "code": "CHAMBERS"
+        },
+        {
+          "id": "CHAM-005",
+          "name": "Affidavits of Service",
+          "type": "legal_document",
+          "status": "delivered",
+          "code": "CHAMBERS"
+        },
+        {
+          "id": "CHAM-006",
+          "name": "Particulars of Claim",
+          "type": "legal_document",
+          "status": "delivered",
+          "code": "CHAMBERS"
+        },
+        {
+          "id": "CHAM-007",
+          "name": "Agentic SaaS Build Framework",
+          "type": "framework",
+          "status": "delivered",
+          "description": "Adapted for event management and brand OS formats from Chambers engagement",
+          "code": "CHAMBERS"
+        }
+      ]
+    },
+
+    "client_work_social": {
+      "category": "Client Work — Social Media Management",
+      "department": "CONTENT",
+      "items": [
+        {
+          "id": "SMM-001",
+          "name": "Aso Oke Brand Social Media Proposal",
+          "type": "proposal",
+          "status": "delivered",
+          "client": "Aso Oke Brand, Ikoyi",
+          "platform": "Instagram",
+          "code": "CONTENT"
+        },
+        {
+          "id": "SMM-002",
+          "name": "90-Day Instagram Content Calendar",
+          "type": "content_calendar",
+          "status": "delivered",
+          "client": "Lagos Family Fashion Brand",
+          "platform": "Instagram",
+          "code": "CONTENT"
+        }
+      ]
+    },
+
+    "events": {
+      "category": "Events — Sneakers Fest 2026",
+      "department": "EVENTS",
+      "items": [
+        {
+          "id": "SFEST-001",
+          "name": "Sneakers Fest 2026 — Full Event",
+          "type": "event",
+          "status": "active",
+          "revenue_target": "₦10,000,000+",
+          "code": "SNEAKFEST"
+        },
+        {
+          "id": "SFEST-002",
+          "name": "Sneakers Fest 2026 Command Center",
+          "type": "react_app",
+          "status": "deployed",
+          "description": "React ops hub with Naira formatting and persistent storage",
+          "code": "SNEAKFEST"
+        }
+      ]
+    },
+
+    "philosophy_framework": {
+      "category": "Philosophy & Framework System",
+      "department": "CONTENT",
+      "items": [
+        {
+          "id": "PHIL-001",
+          "name": "5 Pillars of Catalyst OS",
+          "type": "framework",
+          "status": "complete",
+          "pillars": [
+            "Efficiency Arbitrage",
+            "The Scarcity Lie",
+            "Value Alchemy",
+            "The Phalanx Strategy",
+            "The Resilience Engine"
+          ],
+          "code": "CATMAN"
+        },
+        {
+          "id": "PHIL-002",
+          "name": "The Great Sabotage Coined Frameworks",
+          "type": "framework",
+          "status": "complete",
+          "frameworks": [
+            "The Upstream/Downstream Man",
+            "Cup Economics vs Ocean Economics",
+            "Direction Protocol",
+            "48 Laws of Conscience"
+          ],
+          "code": "TGS"
+        },
+        {
+          "id": "PHIL-003",
+          "name": "Cognitive Model Archetypes",
+          "type": "model",
+          "status": "active",
+          "archetypes": [
+            "Thomas Shelby",
+            "Raymond Reddington",
+            "Michael Scofield",
+            "Harvey Specter",
+            "The Professor"
+          ],
+          "code": "CATMAN"
+        }
+      ]
+    }
+  },
+
+  "tech_stack": {
+    "frontend": ["React", "TailwindCSS", "HTML5", "CSS3"],
+    "backend": ["Python", "REST API", "CLI"],
+    "ai_ml": ["Claude API", "PyTorch", "AI4AnimationPy"],
+    "databases": ["LocalStorage", "Persistent Storage"],
+    "design": ["JetBrains Mono", "DM Sans", "dark/orange theme"],
+    "integrations": ["Higgsfield", "HeyGen", "Obsidian", "Notion", "ClickUp"],
+    "tools": ["Claude Code", "Substack", "YouTube"]
+  },
+
+  "statistics": {
+    "total_projects": 57,
+    "total_word_count_all_writing": "176500+",
+    "ai_agents_built": 10,
+    "dashboards_built": 4,
+    "client_deliverables": 9,
+    "open_source_repos_curated": 68,
+    "python_skills_indexed": 70,
+    "ai_tools_catalogued": 70,
+    "comic_issues_in_development": 12
+  }
+}

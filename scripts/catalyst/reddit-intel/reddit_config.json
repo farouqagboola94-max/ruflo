@@ -1,0 +1,155 @@
+{
+  "module_name": "Reddit Intelligence",
+  "version": "1.0.0",
+  "description": "Extract actionable content strategy from Reddit community psychology",
+  
+  "core_config": {
+    "default_subreddits": [
+      "Nigeria",
+      "Lagos",
+      "Naija",
+      "NaijaSnark",
+      "FashionNigeria",
+      "NigerianGamers"
+    ],
+    "posts_per_subreddit": 20,
+    "max_analyses": 10,
+    "time_filter": "week",
+    "min_engagement_score": 100,
+    "min_engagement_comments": 10
+  },
+  
+  "api_config": {
+    "reddit": {
+      "timeout": 30,
+      "rate_limit": "60/minute"
+    },
+    "claude": {
+      "model": "claude-3-5-sonnet-20241022",
+      "max_tokens": 1000,
+      "rate_limit": "50/minute"
+    },
+    "google_sheets": {
+      "scopes": [
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/drive"
+      ]
+    }
+  },
+  
+  "analysis_outputs": {
+    "per_post": [
+      "sentiment_score",
+      "sentiment_label",
+      "core_insight",
+      "audience_psychology",
+      "content_hook",
+      "alternative_angles",
+      "tone_match",
+      "engagement_potential",
+      "catalyst_perspective"
+    ],
+    "batch_summary": [
+      "dominant_sentiment",
+      "top_hooks",
+      "tone_recommendation",
+      "psychology_synthesis",
+      "content_strategy",
+      "red_flags"
+    ]
+  },
+  
+  "deployment": {
+    "module_path": "modules/reddit_intelligence",
+    "api_router": "orchestration/reddit_integration_agent.py",
+    "cli_command": "cli/commands/reddit.py",
+    "react_component": "dashboard/src/components/RedditIntelligence.jsx",
+    "requires_google_sheets": false,
+    "requires_background_jobs": true
+  },
+  
+  "environment_variables": [
+    "REDDIT_CLIENT_ID",
+    "REDDIT_CLIENT_SECRET",
+    "REDDIT_USER_AGENT",
+    "ANTHROPIC_API_KEY",
+    "GOOGLE_SHEETS_CREDENTIALS"
+  ],
+  
+  "dependencies": {
+    "praw": "7.7.0",
+    "anthropic": "0.28.0",
+    "google-auth": "2.27.0",
+    "gspread": "5.12.0",
+    "python-dotenv": "1.0.0"
+  },
+  
+  "use_cases": [
+    "Content strategy research",
+    "Audience psychology analysis",
+    "Hook validation before publishing",
+    "Market trend monitoring",
+    "Competitor sentiment tracking",
+    "Brand perception monitoring"
+  ],
+  
+  "integrations": {
+    "fastapi": {
+      "endpoint_prefix": "/api/reddit",
+      "endpoints": [
+        "POST /run-analysis",
+        "GET /status",
+        "GET /results",
+        "GET /default-config"
+      ]
+    },
+    "react_dashboard": {
+      "component": "RedditIntelligence",
+      "features": [
+        "Run analysis trigger",
+        "Live progress monitoring",
+        "Results display",
+        "Google Sheets link"
+      ]
+    },
+    "cli": {
+      "commands": [
+        "reddit analyze",
+        "reddit status"
+      ]
+    }
+  },
+  
+  "monitoring": {
+    "metrics": [
+      "posts_collected",
+      "posts_analyzed",
+      "analysis_time",
+      "api_calls_made",
+      "sheets_storage_success_rate"
+    ],
+    "error_handling": "Graceful degradation - works without Sheets, logs all failures"
+  },
+  
+  "performance": {
+    "typical_run_time_seconds": 60,
+    "concurrent_analyses": 1,
+    "batch_size": 10,
+    "cache_strategy": "No caching - fresh analysis each run"
+  },
+  
+  "cost_per_100_posts": {
+    "claude_api": 0.30,
+    "reddit_api": 0,
+    "google_sheets": 0,
+    "total_usd": 0.30
+  },
+  
+  "metadata": {
+    "created_date": "2026-05-11",
+    "created_for": "Catalyst (Oluwatobiloba)",
+    "framework": "CatalystOS v2",
+    "deployed_in": "Lagos, Nigeria",
+    "status": "Production Ready"
+  }
+}

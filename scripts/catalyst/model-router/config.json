@@ -1,0 +1,61 @@
+{
+  "LOG": true,
+  "LOG_LEVEL": "info",
+  "API_TIMEOUT_MS": 600000,
+  "OPENROUTER_API_KEY": "$OPENROUTER_API_KEY",
+  "DEEPSEEK_API_KEY": "$DEEPSEEK_API_KEY",
+  "GEMINI_API_KEY": "$GEMINI_API_KEY",
+  "ANTHROPIC_API_KEY": "$ANTHROPIC_API_KEY",
+
+  "Providers": [
+    {
+      "name": "openrouter",
+      "api_base_url": "https://openrouter.ai/api/v1/chat/completions",
+      "api_key": "$OPENROUTER_API_KEY",
+      "models": [
+        "google/gemini-2.5-pro",
+        "google/gemini-2.5-flash",
+        "deepseek/deepseek-chat",
+        "deepseek/deepseek-r1",
+        "z-ai/glm-4.6",
+        "anthropic/claude-sonnet-4.5"
+      ]
+    },
+    {
+      "name": "deepseek",
+      "api_base_url": "https://api.deepseek.com/chat/completions",
+      "api_key": "$DEEPSEEK_API_KEY",
+      "models": ["deepseek-chat", "deepseek-reasoner"]
+    },
+    {
+      "name": "gemini",
+      "api_base_url": "https://generativelanguage.googleapis.com/v1beta/models/",
+      "api_key": "$GEMINI_API_KEY",
+      "models": ["gemini-2.5-flash", "gemini-2.5-pro"],
+      "transformer": { "use": ["gemini"] }
+    },
+    {
+      "name": "anthropic",
+      "api_base_url": "https://api.anthropic.com/v1/messages",
+      "api_key": "$ANTHROPIC_API_KEY",
+      "models": ["claude-sonnet-4-5", "claude-opus-4-1", "claude-haiku-4-5"],
+      "transformer": { "use": ["Anthropic"] }
+    }
+  ],
+
+  "Router": {
+    "default": "deepseek,deepseek-chat",
+    "background": "gemini,gemini-2.5-flash",
+    "think": "deepseek,deepseek-reasoner",
+    "longContext": "openrouter,google/gemini-2.5-pro",
+    "longContextThreshold": 60000,
+    "webSearch": "gemini,gemini-2.5-flash"
+  },
+
+  "fallback": {
+    "default": ["openrouter,deepseek/deepseek-chat", "anthropic,claude-sonnet-4-5"],
+    "background": ["deepseek,deepseek-chat"],
+    "think": ["openrouter,deepseek/deepseek-r1"],
+    "longContext": ["openrouter,anthropic/claude-sonnet-4.5"]
+  }
+}

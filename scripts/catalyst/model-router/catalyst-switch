@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+#
+# catalyst-switch — quick model switching for CatalystOS, with a risk guard.
+# Source it into your shell:  source catalyst-switch
+# Then use:
+#   cs cheap      -> route everything to the cheapest stack (DeepSeek/Gemini Flash)
+#   cs balanced   -> the default mixed routing (cheap background, strong reasoning)
+#   cs strong     -> route default to a frontier model for hard work
+#   cs secure     -> ANTHROPIC ONLY. use for Chambers / client / NDPR work.
+#   cs status     -> show current routing
+#
+# The risk rule: confidential client work (legal, contracts, anything under NDPR)
+# should never flow through a third party model. `cs secure` locks routing to
+# Anthropic direct so nothing leaks to an intermediary.
+
+CFG="$HOME/.claude-code-router/config.json"
+
+_cs_set_default(){
+  # $1 = "provider,model" ; rewrites Router.default via node
+  node -e '
+    const fs=require("fs"); const f=process.env.CFG;
+    const c=JSON.parse(fs.readFileSync(f,"utf8"));
+    c.Router.default=process.argv[1];
+    fs.writeFileSync(f,JSON.stringify(c,null,2));
+  ' "$1"
+}
+
+cs(){
+  case "${1:-status}" in
+    cheap)
+      CFG="$CFG" _cs_set_default "deepseek,deepseek-chat"
+      echo "▸ routing: CHEAP  (default -> deepseek-chat). restart: ccr restart" ;;
+    balanced)
+      CFG="$CFG" _cs_set_default "deepseek,deepseek-chat"
+      echo "▸ routing: BALANCED (mixed defaults, strong reasoning). restart: ccr restart" ;;
+    strong)
+      CFG="$CFG" _cs_set_default "openrouter,anthropic/claude-sonnet-4.5"
+      echo "▸ routing: STRONG (default -> claude sonnet via openrouter). restart: ccr restart" ;;
+    secure)
+      CFG="$CFG" node -e '
+        const fs=require("fs"); const f=process.env.CFG;
+        const c=JSON.parse(fs.readFileSync(f,"utf8"));
+        const A="anthropic,claude-sonnet-4-5";
+        c.Router.default=A; c.Router.background=A; c.Router.think=A; c.Router.longContext=A;
+        fs.writeFileSync(f,JSON.stringify(c,null,2));
+      '
+      echo "▸ routing: SECURE  (ALL traffic -> Anthropic direct). Client/NDPR safe. restart: ccr restart" ;;
+    status)
+      CFG="$CFG" node -e '
+        const c=JSON.parse(require("fs").readFileSync(process.env.CFG,"utf8"));
+        console.log("Current routing:"); for(const k in c.Router){ if(typeof c.Router[k]==="string") console.log("  "+k.padEnd(14)+c.Router[k]); }
+      ' ;;
+    *) echo "usage: cs {cheap|balanced|strong|secure|status}" ;;
+  esac
+}

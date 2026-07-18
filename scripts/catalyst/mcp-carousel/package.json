@@ -1,0 +1,14 @@
+{
+  "name": "catalyst-mcp-carousel",
+  "version": "1.0.0",
+  "description": "MCP Intelligence Carousel — CatalystOS Module. Lagos Noir aesthetic.",
+  "main": "src/MCP_Carousel.jsx",
+  "author": "Catalyst Concepts",
+  "license": "UNLICENSED",
+  "private": true,
+  "keywords": ["catalyst-os", "mcp", "carousel", "claude", "lagos-noir"],
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  }
+}

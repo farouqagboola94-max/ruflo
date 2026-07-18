@@ -1,0 +1,871 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "built_at": "2026-04-28T18:18:55.320666Z",
+    "total_skills": 70,
+    "categories": [
+      "AI Automation",
+      "Business",
+      "Content",
+      "Event Management",
+      "Legal",
+      "Marketing",
+      "Psychology"
+    ],
+    "os": "CatalystOS",
+    "owner": "The Catalyst \u2014 Lagos, Nigeria"
+  },
+  "skills": [
+    {
+      "id": "legal-001",
+      "name": "Affidavit Drafter",
+      "category": "Legal",
+      "subcategory": "Document Drafting",
+      "description": "Draft affidavits for Nigerian High Court with proper sworn statement format.",
+      "tags": [
+        "affidavit",
+        "sworn",
+        "court",
+        "lagos"
+      ],
+      "jurisdiction": "Nigeria"
+    },
+    {
+      "id": "legal-002",
+      "name": "Motion Writer",
+      "category": "Legal",
+      "subcategory": "Document Drafting",
+      "description": "Draft motions and applications for filing in Nigerian courts.",
+      "tags": [
+        "motion",
+        "court",
+        "filing"
+      ],
+      "jurisdiction": "Nigeria"
+    },
+    {
+      "id": "legal-003",
+      "name": "Brief Summarizer",
+      "category": "Legal",
+      "subcategory": "Research",
+      "description": "Summarize legal briefs and case files into concise action points.",
+      "tags": [
+        "summary",
+        "brief",
+        "case"
+      ],
+      "jurisdiction": "Nigeria"
+    },
+    {
+      "id": "legal-004",
+      "name": "Case Law Researcher",
+      "category": "Legal",
+      "subcategory": "Research",
+      "description": "Research Nigerian case law and precedents for litigation support.",
+      "tags": [
+        "case law",
+        "precedent",
+        "research"
+      ],
+      "jurisdiction": "Nigeria"
+    },
+    {
+      "id": "legal-005",
+      "name": "Contract Reviewer",
+      "category": "Legal",
+      "subcategory": "Review",
+      "description": "Review contracts for red flags, missing clauses, and risk exposure.",
+      "tags": [
+        "contract",
+        "review",
+        "risk"
+      ],
+      "jurisdiction": "Nigeria"
+    },
+    {
+      "id": "legal-006",
+      "name": "Witness Statement Drafter",
+      "category": "Legal",
+      "subcategory": "Document Drafting",
+      "description": "Structure witness statements for court admissibility.",
+      "tags": [
+        "witness",
+        "statement",
+        "court"
+      ],
+      "jurisdiction": "Nigeria"
+    },
+    {
+      "id": "legal-007",
+      "name": "Pleadings Formatter",
+      "category": "Legal",
+      "subcategory": "Formatting",
+      "description": "Format pleadings to Lagos High Court filing standards.",
+      "tags": [
+        "pleadings",
+        "format",
+        "lagos"
+      ],
+      "jurisdiction": "Nigeria"
+    },
+    {
+      "id": "legal-008",
+      "name": "Legal Letter Drafter",
+      "category": "Legal",
+      "subcategory": "Correspondence",
+      "description": "Draft demand letters, notices, and legal correspondence.",
+      "tags": [
+        "letter",
+        "demand",
+        "notice"
+      ],
+      "jurisdiction": "Nigeria"
+    },
+    {
+      "id": "legal-009",
+      "name": "Deposition Summarizer",
+      "category": "Legal",
+      "subcategory": "Research",
+      "description": "Summarize depositions and transcripts into key points.",
+      "tags": [
+        "deposition",
+        "transcript",
+        "summary"
+      ],
+      "jurisdiction": "Nigeria"
+    },
+    {
+      "id": "legal-010",
+      "name": "Court Filing Checklist",
+      "category": "Legal",
+      "subcategory": "Compliance",
+      "description": "Generate filing checklists for specific court applications.",
+      "tags": [
+        "checklist",
+        "filing",
+        "compliance"
+      ],
+      "jurisdiction": "Nigeria"
+    },
+    {
+      "id": "ai-001",
+      "name": "Prompt Engineer",
+      "category": "AI Automation",
+      "subcategory": "Prompting",
+      "description": "Design high-performance prompts for Claude, GPT, and Gemini.",
+      "tags": [
+        "prompt",
+        "engineering",
+        "claude"
+      ]
+    },
+    {
+      "id": "ai-002",
+      "name": "Workflow Automator",
+      "category": "AI Automation",
+      "subcategory": "Workflows",
+      "description": "Build multi-step AI workflows for document processing and research.",
+      "tags": [
+        "workflow",
+        "automation",
+        "pipeline"
+      ]
+    },
+    {
+      "id": "ai-003",
+      "name": "AI Integration Consultant",
+      "category": "AI Automation",
+      "subcategory": "Strategy",
+      "description": "Plan and execute AI integration into business operations.",
+      "tags": [
+        "integration",
+        "strategy",
+        "consulting"
+      ]
+    },
+    {
+      "id": "ai-004",
+      "name": "Data Extractor",
+      "category": "AI Automation",
+      "subcategory": "Data",
+      "description": "Extract structured data from unstructured documents and text.",
+      "tags": [
+        "extraction",
+        "data",
+        "nlp"
+      ]
+    },
+    {
+      "id": "ai-005",
+      "name": "Report Generator",
+      "category": "AI Automation",
+      "subcategory": "Documents",
+      "description": "Auto-generate structured reports from raw notes and data.",
+      "tags": [
+        "report",
+        "generation",
+        "automation"
+      ]
+    },
+    {
+      "id": "ai-006",
+      "name": "Meeting Transcriber",
+      "category": "AI Automation",
+      "subcategory": "Transcription",
+      "description": "Transcribe and summarize meetings with action item extraction.",
+      "tags": [
+        "transcription",
+        "meeting",
+        "summary"
+      ]
+    },
+    {
+      "id": "ai-007",
+      "name": "Email Classifier",
+      "category": "AI Automation",
+      "subcategory": "Email",
+      "description": "Classify and route emails by urgency, topic, and sender.",
+      "tags": [
+        "email",
+        "classification",
+        "routing"
+      ]
+    },
+    {
+      "id": "ai-008",
+      "name": "Knowledge Base Builder",
+      "category": "AI Automation",
+      "subcategory": "Knowledge",
+      "description": "Structure raw information into searchable knowledge bases.",
+      "tags": [
+        "knowledge",
+        "database",
+        "search"
+      ]
+    },
+    {
+      "id": "ai-009",
+      "name": "Agent Orchestrator",
+      "category": "AI Automation",
+      "subcategory": "Agents",
+      "description": "Coordinate multiple AI agents for complex multi-step tasks.",
+      "tags": [
+        "agent",
+        "orchestration",
+        "multi-agent"
+      ]
+    },
+    {
+      "id": "ai-010",
+      "name": "API Connector",
+      "category": "AI Automation",
+      "subcategory": "Integration",
+      "description": "Connect AI models to external APIs and data sources.",
+      "tags": [
+        "api",
+        "integration",
+        "connector"
+      ]
+    },
+    {
+      "id": "content-001",
+      "name": "Substack Article Writer",
+      "category": "Content",
+      "subcategory": "Long-Form",
+      "description": "Write long-form Substack articles in the Catalyst voice \u2014 direct, no fluff.",
+      "tags": [
+        "substack",
+        "article",
+        "writing"
+      ]
+    },
+    {
+      "id": "content-002",
+      "name": "YouTube Script Writer",
+      "category": "Content",
+      "subcategory": "Video",
+      "description": "Script YouTube videos with hook, body, and CTA structure.",
+      "tags": [
+        "youtube",
+        "script",
+        "video"
+      ]
+    },
+    {
+      "id": "content-003",
+      "name": "Twitter Thread Builder",
+      "category": "Content",
+      "subcategory": "Social",
+      "description": "Build high-engagement Twitter/X threads from core ideas.",
+      "tags": [
+        "twitter",
+        "thread",
+        "social media"
+      ]
+    },
+    {
+      "id": "content-004",
+      "name": "Instagram Caption Writer",
+      "category": "Content",
+      "subcategory": "Social",
+      "description": "Write punchy Instagram captions that stop the scroll.",
+      "tags": [
+        "instagram",
+        "caption",
+        "social media"
+      ]
+    },
+    {
+      "id": "content-005",
+      "name": "TikTok Hook Generator",
+      "category": "Content",
+      "subcategory": "Video",
+      "description": "Generate viral TikTok hooks for the first 3 seconds.",
+      "tags": [
+        "tiktok",
+        "hook",
+        "viral"
+      ]
+    },
+    {
+      "id": "content-006",
+      "name": "Newsletter Writer",
+      "category": "Content",
+      "subcategory": "Email",
+      "description": "Write high-conversion email newsletters with Catalyst OS voice.",
+      "tags": [
+        "newsletter",
+        "email",
+        "marketing"
+      ]
+    },
+    {
+      "id": "content-007",
+      "name": "SEO Blog Post Writer",
+      "category": "Content",
+      "subcategory": "SEO",
+      "description": "Write SEO-optimized blog posts targeting specific keywords.",
+      "tags": [
+        "seo",
+        "blog",
+        "writing"
+      ]
+    },
+    {
+      "id": "content-008",
+      "name": "Podcast Show Notes Writer",
+      "category": "Content",
+      "subcategory": "Audio",
+      "description": "Write podcast show notes and episode descriptions.",
+      "tags": [
+        "podcast",
+        "show notes",
+        "audio"
+      ]
+    },
+    {
+      "id": "content-009",
+      "name": "Brand Story Writer",
+      "category": "Content",
+      "subcategory": "Branding",
+      "description": "Craft brand origin stories that build emotional connection.",
+      "tags": [
+        "brand",
+        "story",
+        "narrative"
+      ]
+    },
+    {
+      "id": "content-010",
+      "name": "Sales Copy Writer",
+      "category": "Content",
+      "subcategory": "Copywriting",
+      "description": "Write direct-response sales copy for products and services.",
+      "tags": [
+        "sales",
+        "copy",
+        "conversion"
+      ]
+    },
+    {
+      "id": "event-001",
+      "name": "Event Operations Planner",
+      "category": "Event Management",
+      "subcategory": "Operations",
+      "description": "Build event operations plans with vendor, logistics, and timeline structure.",
+      "tags": [
+        "event",
+        "operations",
+        "planning"
+      ]
+    },
+    {
+      "id": "event-002",
+      "name": "Vendor Contract Drafter",
+      "category": "Event Management",
+      "subcategory": "Legal",
+      "description": "Draft vendor agreements and contracts for event suppliers.",
+      "tags": [
+        "vendor",
+        "contract",
+        "event"
+      ]
+    },
+    {
+      "id": "event-003",
+      "name": "Sponsorship Deck Builder",
+      "category": "Event Management",
+      "subcategory": "Fundraising",
+      "description": "Build sponsorship proposals with tiered benefit packages.",
+      "tags": [
+        "sponsorship",
+        "deck",
+        "proposal"
+      ]
+    },
+    {
+      "id": "event-004",
+      "name": "Event Budget Modeler",
+      "category": "Event Management",
+      "subcategory": "Finance",
+      "description": "Model event budgets with revenue projections and cost breakdowns.",
+      "tags": [
+        "budget",
+        "finance",
+        "event"
+      ]
+    },
+    {
+      "id": "event-005",
+      "name": "Marketing Campaign Planner",
+      "category": "Event Management",
+      "subcategory": "Marketing",
+      "description": "Plan full marketing campaigns for event launches.",
+      "tags": [
+        "marketing",
+        "campaign",
+        "launch"
+      ]
+    },
+    {
+      "id": "event-006",
+      "name": "Ticketing Strategy Builder",
+      "category": "Event Management",
+      "subcategory": "Revenue",
+      "description": "Design ticket tier strategies for maximum revenue.",
+      "tags": [
+        "ticketing",
+        "revenue",
+        "strategy"
+      ]
+    },
+    {
+      "id": "event-007",
+      "name": "Event Timeline Builder",
+      "category": "Event Management",
+      "subcategory": "Operations",
+      "description": "Build day-of event run sheets and production timelines.",
+      "tags": [
+        "timeline",
+        "run-sheet",
+        "event"
+      ]
+    },
+    {
+      "id": "event-008",
+      "name": "Influencer Brief Writer",
+      "category": "Event Management",
+      "subcategory": "Marketing",
+      "description": "Write influencer briefs for event promotion campaigns.",
+      "tags": [
+        "influencer",
+        "brief",
+        "promotion"
+      ]
+    },
+    {
+      "id": "event-009",
+      "name": "Press Release Writer",
+      "category": "Event Management",
+      "subcategory": "PR",
+      "description": "Write press releases for event announcements and post-event coverage.",
+      "tags": [
+        "press release",
+        "pr",
+        "media"
+      ]
+    },
+    {
+      "id": "event-010",
+      "name": "Attendee Experience Designer",
+      "category": "Event Management",
+      "subcategory": "Experience",
+      "description": "Map attendee journeys and touchpoints for maximum experience.",
+      "tags": [
+        "experience",
+        "journey",
+        "attendee"
+      ]
+    },
+    {
+      "id": "mktg-001",
+      "name": "Brand Identity Builder",
+      "category": "Marketing",
+      "subcategory": "Branding",
+      "description": "Build brand identity frameworks \u2014 voice, positioning, and personality.",
+      "tags": [
+        "brand",
+        "identity",
+        "positioning"
+      ]
+    },
+    {
+      "id": "mktg-002",
+      "name": "Competitor Analyst",
+      "category": "Marketing",
+      "subcategory": "Research",
+      "description": "Analyze competitors and identify strategic gaps to exploit.",
+      "tags": [
+        "competitor",
+        "analysis",
+        "strategy"
+      ]
+    },
+    {
+      "id": "mktg-003",
+      "name": "Go-To-Market Strategist",
+      "category": "Marketing",
+      "subcategory": "Strategy",
+      "description": "Build GTM strategies for product and service launches.",
+      "tags": [
+        "gtm",
+        "launch",
+        "strategy"
+      ]
+    },
+    {
+      "id": "mktg-004",
+      "name": "Social Media Calendar Builder",
+      "category": "Marketing",
+      "subcategory": "Social",
+      "description": "Build 30-90 day social media content calendars.",
+      "tags": [
+        "social media",
+        "calendar",
+        "content"
+      ]
+    },
+    {
+      "id": "mktg-005",
+      "name": "PR Crisis Handler",
+      "category": "Marketing",
+      "subcategory": "PR",
+      "description": "Draft crisis comms and manage narrative during PR events.",
+      "tags": [
+        "crisis",
+        "pr",
+        "comms"
+      ]
+    },
+    {
+      "id": "mktg-006",
+      "name": "Audience Persona Builder",
+      "category": "Marketing",
+      "subcategory": "Research",
+      "description": "Build detailed audience personas from market research.",
+      "tags": [
+        "persona",
+        "audience",
+        "research"
+      ]
+    },
+    {
+      "id": "mktg-007",
+      "name": "Ad Copy Writer",
+      "category": "Marketing",
+      "subcategory": "Advertising",
+      "description": "Write ad copy for Meta, Google, and TikTok campaigns.",
+      "tags": [
+        "ads",
+        "copy",
+        "advertising"
+      ]
+    },
+    {
+      "id": "mktg-008",
+      "name": "Funnel Architect",
+      "category": "Marketing",
+      "subcategory": "Conversion",
+      "description": "Design marketing funnels from awareness to conversion.",
+      "tags": [
+        "funnel",
+        "conversion",
+        "marketing"
+      ]
+    },
+    {
+      "id": "mktg-009",
+      "name": "Media Pitch Writer",
+      "category": "Marketing",
+      "subcategory": "PR",
+      "description": "Write media pitches to journalists and publications.",
+      "tags": [
+        "media",
+        "pitch",
+        "pr"
+      ]
+    },
+    {
+      "id": "mktg-010",
+      "name": "Partnership Proposal Writer",
+      "category": "Marketing",
+      "subcategory": "Partnerships",
+      "description": "Write partnership and collaboration proposals.",
+      "tags": [
+        "partnership",
+        "proposal",
+        "collaboration"
+      ]
+    },
+    {
+      "id": "psych-001",
+      "name": "Upstream vs Downstream Analyzer",
+      "category": "Psychology",
+      "subcategory": "Frameworks",
+      "description": "Analyze behavior patterns through the Upstream/Downstream Man framework.",
+      "tags": [
+        "upstream",
+        "downstream",
+        "behavior"
+      ]
+    },
+    {
+      "id": "psych-002",
+      "name": "Cup vs Ocean Economics",
+      "category": "Psychology",
+      "subcategory": "Frameworks",
+      "description": "Reframe scarcity mindsets using the Cup vs Ocean Economics model.",
+      "tags": [
+        "scarcity",
+        "abundance",
+        "economics"
+      ]
+    },
+    {
+      "id": "psych-003",
+      "name": "Direction Protocol Mapper",
+      "category": "Psychology",
+      "subcategory": "Frameworks",
+      "description": "Map decision paths using the Direction Protocol framework.",
+      "tags": [
+        "direction",
+        "decision",
+        "protocol"
+      ]
+    },
+    {
+      "id": "psych-004",
+      "name": "Resilience Engine Activator",
+      "category": "Psychology",
+      "subcategory": "Frameworks",
+      "description": "Build resilience frameworks using the Catalyst Resilience Engine.",
+      "tags": [
+        "resilience",
+        "framework",
+        "adversity"
+      ]
+    },
+    {
+      "id": "psych-005",
+      "name": "Value Alchemy Transformer",
+      "category": "Psychology",
+      "subcategory": "Frameworks",
+      "description": "Transform commodity offerings into high-value propositions.",
+      "tags": [
+        "value",
+        "alchemy",
+        "transformation"
+      ]
+    },
+    {
+      "id": "psych-006",
+      "name": "Shadow Psychology Analyst",
+      "category": "Psychology",
+      "subcategory": "Analysis",
+      "description": "Analyze shadow behaviors and hidden motivations in human behavior.",
+      "tags": [
+        "shadow",
+        "psychology",
+        "motivation"
+      ]
+    },
+    {
+      "id": "psych-007",
+      "name": "Social Engineering Mapper",
+      "category": "Psychology",
+      "subcategory": "Strategy",
+      "description": "Map social dynamics and influence patterns in group settings.",
+      "tags": [
+        "social",
+        "engineering",
+        "influence"
+      ]
+    },
+    {
+      "id": "psych-008",
+      "name": "Phalanx Strategy Builder",
+      "category": "Psychology",
+      "subcategory": "Frameworks",
+      "description": "Build alliance networks using the Phalanx Strategy model.",
+      "tags": [
+        "phalanx",
+        "alliance",
+        "network"
+      ]
+    },
+    {
+      "id": "psych-009",
+      "name": "Efficiency Arbitrage Finder",
+      "category": "Psychology",
+      "subcategory": "Frameworks",
+      "description": "Identify leverage points where minimal effort yields maximum output.",
+      "tags": [
+        "efficiency",
+        "arbitrage",
+        "leverage"
+      ]
+    },
+    {
+      "id": "psych-010",
+      "name": "Culture Psychology Profiler",
+      "category": "Psychology",
+      "subcategory": "Analysis",
+      "description": "Profile cultural dynamics and social codes in Lagos and West Africa.",
+      "tags": [
+        "culture",
+        "psychology",
+        "lagos"
+      ]
+    },
+    {
+      "id": "biz-001",
+      "name": "Revenue Model Builder",
+      "category": "Business",
+      "subcategory": "Finance",
+      "description": "Build multi-stream revenue models for service businesses.",
+      "tags": [
+        "revenue",
+        "model",
+        "finance"
+      ]
+    },
+    {
+      "id": "biz-002",
+      "name": "SOP Writer",
+      "category": "Business",
+      "subcategory": "Operations",
+      "description": "Write Standard Operating Procedures for business processes.",
+      "tags": [
+        "sop",
+        "operations",
+        "process"
+      ]
+    },
+    {
+      "id": "biz-003",
+      "name": "Team Delegation Framework",
+      "category": "Business",
+      "subcategory": "Management",
+      "description": "Build delegation frameworks for multi-role teams.",
+      "tags": [
+        "delegation",
+        "team",
+        "management"
+      ]
+    },
+    {
+      "id": "biz-004",
+      "name": "Client Proposal Writer",
+      "category": "Business",
+      "subcategory": "Sales",
+      "description": "Write winning client proposals and service agreements.",
+      "tags": [
+        "proposal",
+        "client",
+        "sales"
+      ]
+    },
+    {
+      "id": "biz-005",
+      "name": "Invoice & Payment Tracker",
+      "category": "Business",
+      "subcategory": "Finance",
+      "description": "Build invoice templates and payment tracking systems.",
+      "tags": [
+        "invoice",
+        "payment",
+        "finance"
+      ]
+    },
+    {
+      "id": "biz-006",
+      "name": "Business Plan Writer",
+      "category": "Business",
+      "subcategory": "Planning",
+      "description": "Write comprehensive business plans for funding and operations.",
+      "tags": [
+        "business plan",
+        "funding",
+        "planning"
+      ]
+    },
+    {
+      "id": "biz-007",
+      "name": "Onboarding Framework Builder",
+      "category": "Business",
+      "subcategory": "HR",
+      "description": "Build client and team onboarding frameworks.",
+      "tags": [
+        "onboarding",
+        "client",
+        "hr"
+      ]
+    },
+    {
+      "id": "biz-008",
+      "name": "KPI Dashboard Designer",
+      "category": "Business",
+      "subcategory": "Analytics",
+      "description": "Design KPI tracking frameworks for multi-stream businesses.",
+      "tags": [
+        "kpi",
+        "dashboard",
+        "analytics"
+      ]
+    },
+    {
+      "id": "biz-009",
+      "name": "Pricing Strategy Builder",
+      "category": "Business",
+      "subcategory": "Finance",
+      "description": "Build pricing frameworks for consulting and service businesses.",
+      "tags": [
+        "pricing",
+        "strategy",
+        "consulting"
+      ]
+    },
+    {
+      "id": "biz-010",
+      "name": "Network Map Builder",
+      "category": "Business",
+      "subcategory": "Strategy",
+      "description": "Map strategic relationships and alliance opportunities.",
+      "tags": [
+        "network",
+        "alliances",
+        "strategy"
+      ]
+    }
+  ]
+}
