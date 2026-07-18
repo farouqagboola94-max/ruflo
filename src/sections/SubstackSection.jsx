@@ -121,7 +121,7 @@ export default function SubstackSection() {
         <div style={{ display: 'flex', gap: 48, alignItems: 'flex-end', flexWrap: 'wrap', marginBottom: 48 }}>
           <div style={{ flex: '1 1 320px' }}>
             <SectionTag>READ THE CULTURE</SectionTag>
-            <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(44px,7vw,76px)', color: B.white, lineHeight: 0.85, marginBottom: 16 }}>
+            <div className="reveal-3d" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(44px,7vw,76px)', color: B.white, lineHeight: 0.85, marginBottom: 16 }}>
               ON<br />
               <span style={{ color: 'transparent', backgroundImage: `linear-gradient(135deg, ${B.amber}, ${B.neonMagenta})`, WebkitBackgroundClip: 'text', backgroundClip: 'text' }}>SUBSTACK</span>
             </div>
@@ -131,7 +131,7 @@ export default function SubstackSection() {
           </div>
 
           {/* subscriber live count */}
-          <div style={{ flex: '0 0 auto', textAlign: 'center', padding: '24px 36px', background: 'rgba(255,255,255,0.03)', border: `1px solid rgba(255,255,255,0.06)`, borderRadius: 14 }}>
+          <div className="card-3d" style={{ flex: '0 0 auto', textAlign: 'center', padding: '24px 36px', background: 'rgba(255,255,255,0.03)', border: `1px solid rgba(255,255,255,0.06)`, borderRadius: 14 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'center', marginBottom: 4 }}>
               <div style={{ width: 7, height: 7, borderRadius: '50%', background: B.neonLime, boxShadow: `0 0 8px ${B.neonLime}`, animation: 'pulse 1.5s infinite' }} />
               <span style={{ fontFamily: 'Orbitron,monospace', fontSize: 8, color: '#555', letterSpacing: 3 }}>LIVE</span>
@@ -156,7 +156,7 @@ export default function SubstackSection() {
         </div>
 
         {/* subscribe form */}
-        <div style={{ padding: '40px 40px', background: 'rgba(255,255,255,0.025)', border: `1px solid rgba(255,255,255,0.06)`, borderRadius: 16, display: 'flex', gap: 40, alignItems: 'center', flexWrap: 'wrap' }}>
+        <div className="card-3d" style={{ padding: '40px 40px', background: 'rgba(255,255,255,0.025)', border: `1px solid rgba(255,255,255,0.06)`, borderRadius: 16, display: 'flex', gap: 40, alignItems: 'center', flexWrap: 'wrap' }}>
           <div style={{ flex: '1 1 280px' }}>
             <div style={{ fontFamily: 'Bebas Neue,sans-serif', fontSize: 28, color: B.white, letterSpacing: 2, marginBottom: 6 }}>JOIN THE NEWSLETTER</div>
             <div style={{ fontFamily: 'Space Mono,monospace', fontSize: 10, color: '#555' }}>Free forever · Weekly drops · Zero spam</div>
