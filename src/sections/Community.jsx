@@ -259,7 +259,7 @@ export default function Community() {
 
         <div style={{ marginBottom: 16 }}>
           <SectionTag>CONNECT EVERYWHERE</SectionTag>
-          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(40px, 6vw, 72px)", color: B.white, lineHeight: 0.88 }}>
+          <div className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(40px, 6vw, 72px)", color: B.white, lineHeight: 0.88 }}>
             THE COMMUNITY<br />
             <span style={{ color: B.amber }}>LIVES ON EVERY PLATFORM</span>
           </div>

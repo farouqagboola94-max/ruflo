@@ -105,7 +105,7 @@ export default function Stats() {
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '72px 24px 48px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}>
           {STATS.map((s, i) => (
-            <div key={i} style={{
+            <div key={i} className="card-3d" style={{
               padding: '28px 20px', textAlign: 'center',
               borderRight: i < STATS.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
               position: 'relative',
@@ -121,7 +121,7 @@ export default function Stats() {
           ))}
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 36 }}>
+        <div className="reveal-3d" style={{ display: 'flex', justifyContent: 'center', marginTop: 36 }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 18px', background: `${B.neonCyan}08`, border: `1px solid ${B.neonCyan}22`, borderRadius: 20 }}>
             <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: B.neonCyan, letterSpacing: 1 }}>✓</span>
             <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 8, color: B.neonCyan, letterSpacing: 2 }}>COMMUNITY VERIFIED · UPDATED LIVE</span>

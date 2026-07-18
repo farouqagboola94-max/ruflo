@@ -127,7 +127,7 @@ export default function FridayNightProtocol() {
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', flexWrap:'wrap', gap:20, marginBottom:32 }}>
           <div>
             <SectionTag color={B.amber}>COMMUNITY ENGINE</SectionTag>
-            <h2 style={{ fontFamily:"'Bebas Neue'", fontSize:'clamp(2.5rem,7vw,5rem)', color:B.white, letterSpacing:'0.04em', marginBottom:8 }}>
+            <h2 className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue'", fontSize:'clamp(2.5rem,7vw,5rem)', color:B.white, letterSpacing:'0.04em', marginBottom:8 }}>
               THE FRIDAY NIGHT PROTOCOL
             </h2>
             <p style={{ color:B.smoke, fontFamily:"'Space Mono'", fontSize:'0.78rem', marginBottom:10, maxWidth:520, lineHeight:1.7 }}>
@@ -194,7 +194,7 @@ export default function FridayNightProtocol() {
           </div>
           <div ref={archiveRef} style={{ display:'flex', gap:12, overflowX:'auto', paddingBottom:8, scrollbarWidth:'none' }}>
             {PAST.map((s, i) => (
-              <div key={i} style={{ flexShrink:0, width:220, background:B.charcoal, border:`1px solid ${s.color}25`, borderTop:`2px solid ${s.color}`, borderRadius:8, padding:'14px 16px' }}>
+              <div key={i} className="card-3d" style={{ flexShrink:0, width:220, background:B.charcoal, border:`1px solid ${s.color}25`, borderTop:`2px solid ${s.color}`, borderRadius:8, padding:'14px 16px' }}>
                 <div style={{ fontFamily:"'Space Mono'", fontSize:8, color:s.color, letterSpacing:2, marginBottom:4 }}>{s.date} · 2026</div>
                 <div style={{ fontFamily:"'Space Mono'", fontSize:7, color:'#444', letterSpacing:1, marginBottom:8 }}>{s.week}</div>
                 <div style={{ fontFamily:"'Bebas Neue'", fontSize:13, color:B.white, lineHeight:1.3, marginBottom:12 }}>{s.topic}</div>
@@ -273,7 +273,7 @@ export default function FridayNightProtocol() {
         </div>
 
         {/* ── revenue math ── */}
-        <div style={{ marginBottom:36, padding:'28px', background:B.charcoal, borderRadius:10, border:`1px solid ${B.gunmetal}` }}>
+        <div className="card-3d" style={{ marginBottom:36, padding:'28px', background:B.charcoal, borderRadius:10, border:`1px solid ${B.gunmetal}` }}>
           <div style={{ fontFamily:"'Space Mono'", fontSize:'0.62rem', letterSpacing:'0.25em', color:B.amber, marginBottom:20 }}>THE MATH</div>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(180px, 1fr))', gap:20 }}>
             {[

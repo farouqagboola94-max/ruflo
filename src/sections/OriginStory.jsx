@@ -103,7 +103,7 @@ export default function OriginStory() {
         {/* header */}
         <div style={{ maxWidth:760, marginBottom:72 }}>
           <SectionTag>THE ORIGIN STORY</SectionTag>
-          <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(48px,8vw,88px)', color:B.white, lineHeight:0.88, marginBottom:24 }}>
+          <div className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(48px,8vw,88px)', color:B.white, lineHeight:0.88, marginBottom:24 }}>
             WHY I'M BUILDING THE<br />
             <span style={{ color:B.amber }}>FESTIVAL LAGOS NEVER HAD</span>
           </div>
@@ -125,7 +125,7 @@ export default function OriginStory() {
         </div>
 
         {/* mid pull quote */}
-        <div style={{ margin:'0 0 52px', padding:'32px 40px', background:`linear-gradient(135deg, ${B.neonCyan}06, ${B.void})`, border:`1px solid ${B.neonCyan}20`, borderRadius:12, position:'relative', overflow:'hidden' }}>
+        <div className="card-3d" style={{ margin:'0 0 52px', padding:'32px 40px', background:`linear-gradient(135deg, ${B.neonCyan}06, ${B.void})`, border:`1px solid ${B.neonCyan}20`, borderRadius:12, position:'relative', overflow:'hidden' }}>
           <div style={{ position:'absolute', top:0, left:0, bottom:0, width:4, background:`linear-gradient(${B.neonCyan}, ${B.neonCyan}10)`, borderRadius:'4px 0 0 4px' }} />
           <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(22px,3vw,32px)', color:B.neonCyan, lineHeight:1.2, marginBottom:16 }}>
             "NOBODY WHO HAD THE SKILL, THE SENSIBILITY,<br />AND THE FLUENCY HAD BUILT IT YET."
@@ -134,7 +134,7 @@ export default function OriginStory() {
         </div>
 
         {/* why sneakers */}
-        <div style={{ padding:'44px 40px', background:'rgba(255,255,255,0.03)', border:`1px solid ${B.gunmetal}`, borderRadius:10, marginBottom:28, position:'relative', overflow:'hidden' }}>
+        <div className="card-3d" style={{ padding:'44px 40px', background:'rgba(255,255,255,0.03)', border:`1px solid ${B.gunmetal}`, borderRadius:10, marginBottom:28, position:'relative', overflow:'hidden' }}>
           <div style={{ position:'absolute', top:0, left:0, right:0, height:2, background:`linear-gradient(90deg, ${B.amber}, ${B.neonLime}, transparent)` }} />
           <div style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color:B.neonLime, letterSpacing:'0.3em', marginBottom:16 }}>WHY SNEAKERS</div>
           <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(28px,4vw,44px)', color:B.white, lineHeight:1.05, marginBottom:20 }}>SNEAKERS ARE HONEST.</div>
@@ -146,7 +146,7 @@ export default function OriginStory() {
         </div>
 
         {/* lagos deserves this */}
-        <div style={{ padding:'44px 40px', background:`linear-gradient(135deg, ${B.amber}0d, ${B.neonMagenta}06)`, border:`1px solid ${B.amber}35`, borderRadius:10, marginBottom:28, position:'relative', overflow:'hidden' }}>
+        <div className="card-3d" style={{ padding:'44px 40px', background:`linear-gradient(135deg, ${B.amber}0d, ${B.neonMagenta}06)`, border:`1px solid ${B.amber}35`, borderRadius:10, marginBottom:28, position:'relative', overflow:'hidden' }}>
           <div style={{ position:'absolute', top:0, left:0, right:0, height:2, background:`linear-gradient(90deg, ${B.amber}, ${B.neonMagenta}, transparent)` }} />
           <div style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color:B.amber, letterSpacing:'0.3em', marginBottom:16 }}>LAGOS DESERVES THIS</div>
           <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(22px,3.5vw,36px)', color:B.white, lineHeight:1.1, marginBottom:20 }}>THIS ISN'T ABOUT ME.</div>
@@ -172,7 +172,7 @@ export default function OriginStory() {
         </div>
 
         {/* founder card */}
-        <div style={{ padding:'36px 40px', background:'rgba(255,255,255,0.03)', border:`1px solid rgba(255,255,255,0.09)`, borderRadius:12, marginBottom:28, display:'flex', gap:32, alignItems:'flex-start', flexWrap:'wrap' }}>
+        <div className="card-3d" style={{ padding:'36px 40px', background:'rgba(255,255,255,0.03)', border:`1px solid rgba(255,255,255,0.09)`, borderRadius:12, marginBottom:28, display:'flex', gap:32, alignItems:'flex-start', flexWrap:'wrap' }}>
           <div style={{ flexShrink:0 }}>
             <div style={{ width:76, height:76, borderRadius:'50%', background:`linear-gradient(135deg, ${B.amber}30, ${B.neonCyan}20)`, border:`2px solid ${B.amber}40`, display:'flex', alignItems:'center', justifyContent:'center' }}>
               <span style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:30, color:B.amber, letterSpacing:2 }}>TC</span>
@@ -217,7 +217,7 @@ export default function OriginStory() {
         </div>
 
         {/* closing forge */}
-        <div style={{ textAlign:'center', padding:'52px 24px 0' }}>
+        <div className="reveal-3d" style={{ textAlign:'center', padding:'52px 24px 0' }}>
           <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(28px,5vw,56px)', color:B.white, lineHeight:1.1, marginBottom:16 }}>
             THE FIRE HAPPENED.<br />THE TEMPERING IS DONE.<br />
             <span style={{ color:B.amber }}>THE METAL IS READY.</span>
