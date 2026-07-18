@@ -239,7 +239,7 @@ function CoverSlide({ data }) {
       </div>
 
       <div style={{ marginTop: 24 }}>
-        <h1 style={{
+        <h1 className="reveal-3d text-3d" style={{
           fontFamily: "'Clash Display', 'Space Grotesk', sans-serif",
           fontSize: 56,
           fontWeight: 800,
@@ -410,7 +410,7 @@ function MCPSlide({ data, slideIndex }) {
       </div>
 
       <div style={{ marginBottom: 14 }}>
-        <h1 style={{
+        <h1 className="reveal-3d text-3d" style={{
           fontFamily: "'Clash Display', 'Space Grotesk', sans-serif",
           fontSize: 38,
           fontWeight: 800,
@@ -437,7 +437,7 @@ function MCPSlide({ data, slideIndex }) {
         {data.description}
       </p>
 
-      <div style={{
+      <div className="card-3d" style={{
         background: FEATURE_BG,
         border: `1px solid ${CARD_BORDER}`,
         borderRadius: 14,

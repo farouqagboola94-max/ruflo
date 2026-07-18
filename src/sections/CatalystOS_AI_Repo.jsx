@@ -167,7 +167,7 @@ export default function CatalystOSRepo() {
             <div style={{ fontSize: 10, color: "#D4AF37", letterSpacing: 4, marginBottom: 4, textTransform: "uppercase" }}>
               CATALYST OS // AI REPOSITORY
             </div>
-            <div style={{ fontSize: 22, fontWeight: 700, letterSpacing: -0.5, color: "#F5EDD8" }}>
+            <div className="reveal-3d" style={{ fontSize: 22, fontWeight: 700, letterSpacing: -0.5, color: "#F5EDD8" }}>
               68 OPEN SOURCE TOOLS
             </div>
             <div style={{ fontSize: 10, color: "#555", marginTop: 3, letterSpacing: 2 }}>

@@ -292,7 +292,7 @@ export default function CatalystOSObsidian() {
         <div style={{ fontSize: 9, color: GOLD_DIM, letterSpacing: 3, marginBottom: 8 }}>
           CLAUDE + OBSIDIAN · FULL STACK · 5 SETUPS
         </div>
-        <div style={{ fontSize: 26, fontWeight: 800, color: "#fff", letterSpacing: -0.5, lineHeight: 1.1, marginBottom: 8 }}>
+        <div className="reveal-3d" style={{ fontSize: 26, fontWeight: 800, color: "#fff", letterSpacing: -0.5, lineHeight: 1.1, marginBottom: 8 }}>
           Five Setups. One Vault.
         </div>
         <div style={{ fontSize: 11, color: "#666", maxWidth: 520, lineHeight: 1.6 }}>
@@ -382,7 +382,7 @@ export default function CatalystOSObsidian() {
             {/* FEATURE PILLS */}
             <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
               {setup.features.map(f => (
-                <div key={f.title} style={{
+                <div key={f.title} className="card-3d" style={{
                   background: "#0d0d0d",
                   border: `1px solid ${BORDER}`,
                   borderRadius: 4,
@@ -574,7 +574,7 @@ export default function CatalystOSObsidian() {
             { label: "TAGS", val: "31", sub: "active" },
             { label: "MOCs", val: "8", sub: "maps" },
           ].map(s => (
-            <div key={s.label} style={{
+            <div key={s.label} className="card-3d" style={{
               background: PANEL,
               border: `1px solid ${BORDER}`,
               borderRadius: 4,
