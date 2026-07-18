@@ -233,7 +233,7 @@ export default function Gallery() {
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-end', flexWrap:'wrap', gap:20, marginBottom:48 }}>
           <div>
             <SectionTag>COMMUNITY GALLERY</SectionTag>
-            <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(40px, 6vw, 68px)', color:B.white, lineHeight:0.9 }}>
+            <div className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(40px, 6vw, 68px)', color:B.white, lineHeight:0.9 }}>
               THE<br /><span style={{ color:B.neonMagenta }}>COLLECTION</span>
             </div>
             {total > 0 && (

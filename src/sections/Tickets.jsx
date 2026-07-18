@@ -206,7 +206,7 @@ export default function Tickets() {
         {/* Header */}
         <div style={{ textAlign:'center', marginBottom:32 }}>
           <SectionTag>SECURE YOUR SPOT</SectionTag>
-          <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(40px,6vw,68px)', color:B.white, lineHeight:0.9 }}>
+          <div className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(40px,6vw,68px)', color:B.white, lineHeight:0.9 }}>
             GET YOUR<br /><span style={{ color:B.amber }}>TICKETS</span>
           </div>
           <div style={{ fontFamily:"'Syne', sans-serif", fontSize:14, color:B.smoke, marginTop:16 }}>

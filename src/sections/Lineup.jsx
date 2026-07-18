@@ -75,7 +75,7 @@ export default function Lineup() {
       <div style={{ position: "relative", zIndex: 10, maxWidth: 1100, margin: "0 auto" }}>
         <div style={{ marginBottom: 56 }}>
           <SectionTag>MUSIC × CULTURE</SectionTag>
-          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(40px, 6vw, 68px)", color: B.white, lineHeight: 0.9 }}>
+          <div className="reveal-3d" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(40px, 6vw, 68px)", color: B.white, lineHeight: 0.9 }}>
             THE<br /><span style={{ color: B.neonMagenta }}>LINEUP</span>
           </div>
           <div style={{ marginTop: 14 }}>
@@ -102,6 +102,7 @@ export default function Lineup() {
             return (
               <div
                 key={i}
+                className="card-3d"
                 style={{
                   display: "flex", alignItems: "center", gap: 20, padding: "20px 24px",
                   background: act.featured ? `${B.neonMagenta}08` : i % 2 === 0 ? B.charcoal : "transparent",

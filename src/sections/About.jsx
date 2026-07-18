@@ -47,7 +47,7 @@ export default function About() {
           {/* Left: Text */}
           <div style={{ flex: '1 1 400px' }}>
             <SectionTag>WHO WE ARE</SectionTag>
-            <div style={{
+            <div className="reveal-3d text-3d" style={{
               fontFamily: "'Bebas Neue', sans-serif",
               fontSize: 'clamp(40px, 6vw, 68px)',
               color: B.white, lineHeight: 0.9, marginBottom: 24,

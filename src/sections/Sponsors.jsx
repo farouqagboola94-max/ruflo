@@ -120,7 +120,7 @@ export default function Sponsors() {
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: `${B.amber}18`, border: `1px solid ${B.amber}40`, borderRadius: 20, padding: '6px 16px', marginBottom: 28 }}>
             <span style={{ fontFamily: "'Space Mono',monospace", fontSize: 9, color: B.amber, letterSpacing: 3 }}>DECEMBER 12, 2026 · LAGOS</span>
           </div>
-          <h2 style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 'clamp(48px,9vw,96px)', color: B.white, lineHeight: 0.88, letterSpacing: 2, marginBottom: 24 }}>
+          <h2 className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 'clamp(48px,9vw,96px)', color: B.white, lineHeight: 0.88, letterSpacing: 2, marginBottom: 24 }}>
             PARTNER WITH<br /><span style={{ color: B.amber }}>SNEAKERS FEST 2026</span>
           </h2>
           <p style={{ fontFamily: "'Syne',sans-serif", fontSize: 17, color: '#aaa', maxWidth: 560, margin: '0 auto 36px', lineHeight: 1.75 }}>

@@ -238,7 +238,7 @@ export default function Venue() {
         {/* Header */}
         <div style={{ textAlign:'center', marginBottom:52 }}>
           <SectionTag>DEC 12, 2026 · MURI OKUNOLA PARK, V/I</SectionTag>
-          <h2 style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(54px,9vw,100px)', color:B.white, lineHeight:0.88, letterSpacing:2, marginBottom:16 }}>
+          <h2 className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(54px,9vw,100px)', color:B.white, lineHeight:0.88, letterSpacing:2, marginBottom:16 }}>
             EXPLORE<br /><span style={{ color:B.amber }}>THE VENUE</span>
           </h2>
           <p style={{ fontFamily:"'Syne', sans-serif", fontSize:15, color:'#888', maxWidth:460, margin:'0 auto' }}>
