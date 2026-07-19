@@ -71,10 +71,10 @@ export default function Footer() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, letterSpacing: '0.15em' }}>FOUNDED BY <span style={{ color: B.amberGlow }}>OLUWATOBILOBA</span></div>
               <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, letterSpacing: '0.15em' }}>PRINCIPAL, CATALYST CONCEPTS</div>
-              <a href="mailto:press@sneakersfest.com" style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.neonCyan, letterSpacing: '0.12em', textDecoration: 'none' }}
+              <a href="mailto:sneakersfest088@gmail.com" style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.neonCyan, letterSpacing: '0.12em', textDecoration: 'none' }}
                 onMouseEnter={e => e.target.style.textDecoration = 'underline'}
                 onMouseLeave={e => e.target.style.textDecoration = 'none'}
-              >PRESS: press@sneakersfest.com</a>
+              >EMAIL: sneakersfest088@gmail.com</a>
             </div>
           </div>
 

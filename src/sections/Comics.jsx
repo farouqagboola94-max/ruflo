@@ -84,7 +84,7 @@ export default function Comics() {
             </div>
           </div>
           <a
-            href="https://substack.com/@catalyst00555"
+            href="https://catalyst-awakening.netlify.app/"
             target="_blank" rel="noopener noreferrer"
             style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '12px 24px', background: `rgba(245,166,35,0.1)`, border: `1px solid ${B.amber}50`, borderRadius: 4, textDecoration: 'none', fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.amber, letterSpacing: '0.15em', transition: 'all 0.25s' }}
             onMouseEnter={e => { e.currentTarget.style.background = `rgba(245,166,35,0.2)`; e.currentTarget.style.borderColor = B.amber }}
@@ -138,14 +138,14 @@ export default function Comics() {
               </div>
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                 <a
-                  href="https://substack.com/@catalyst00555"
+                  href="https://catalyst-awakening.netlify.app/"
                   target="_blank" rel="noopener noreferrer"
                   style={{ display: 'inline-block', padding: '13px 28px', background: B.amber, color: B.black, fontFamily: "'Space Mono', monospace", fontSize: 9, fontWeight: 700, letterSpacing: '0.2em', textDecoration: 'none', borderRadius: 3, boxShadow: `0 0 24px ${B.amber}40` }}
                 >
                   READ ISSUE #001 →
                 </a>
                 <a
-                  href="https://substack.com/@catalyst00555"
+                  href="https://catalyst-awakening.netlify.app/"
                   target="_blank" rel="noopener noreferrer"
                   style={{ display: 'inline-block', padding: '13px 28px', border: `1px solid ${B.amber}50`, color: B.amber, fontFamily: "'Space Mono', monospace", fontSize: 9, letterSpacing: '0.2em', textDecoration: 'none', borderRadius: 3 }}
                 >
@@ -163,7 +163,7 @@ export default function Comics() {
             {ISSUES.map((issue, i) => (
               <a
                 key={i}
-                href="https://substack.com/@catalyst00555"
+                href="https://catalyst-awakening.netlify.app/"
                 target="_blank" rel="noopener noreferrer"
                 className="card-3d"
                 style={{ textDecoration: 'none', display: 'block', borderRadius: 12, overflow: 'hidden', border: `1px solid ${issue.upcoming ? issue.color + '25' : issue.color + '35'}`, background: B.charcoal, transition: 'border-color 0.3s, box-shadow 0.3s', position: 'relative' }}

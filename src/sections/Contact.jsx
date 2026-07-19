@@ -139,7 +139,7 @@ export default function Contact() {
         {/* Info chips */}
         <div style={{ display: 'flex', justifyContent: 'center', gap: 12, flexWrap: 'wrap', marginBottom: 48 }}>
           {[
-            { icon: '✉', label: 'hello@sneakersfest.ng' },
+            { icon: '✉', label: 'sneakersfest088@gmail.com' },
             { icon: '📞', label: '+234 800 SNEAKERS' },
             { icon: '📍', label: 'Lagos, Nigeria' },
           ].map(({ icon, label: l }) => (
@@ -249,8 +249,8 @@ export default function Contact() {
             <div style={{ marginTop: 24, textAlign: 'center', fontFamily: "'Space Mono', monospace",
               fontSize: 8, color: B.smoke, letterSpacing: '0.15em' }}>
               OR EMAIL DIRECTLY:{'  '}
-              <a href="mailto:hello@sneakersfest.ng" style={{ color: B.neonCyan, textDecoration: 'none' }}>
-                hello@sneakersfest.ng
+              <a href="mailto:sneakersfest088@gmail.com" style={{ color: B.neonCyan, textDecoration: 'none' }}>
+                sneakersfest088@gmail.com
               </a>
             </div>
           </form>

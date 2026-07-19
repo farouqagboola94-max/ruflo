@@ -151,7 +151,7 @@ export default function Press() {
 
             {/* Media inquiry */}
             <a
-              href="mailto:press@sneakersfest.com?subject=Media%20Inquiry%20%E2%80%94%20Sneakers%20Fest%20%2726"
+              href="mailto:sneakersfest088@gmail.com?subject=Media%20Inquiry%20%E2%80%94%20Sneakers%20Fest%20%2726"
               style={{
                 display: 'block', textAlign: 'center',
                 background: B.amber, color: B.black,
