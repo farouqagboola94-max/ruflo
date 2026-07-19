@@ -371,7 +371,7 @@ export default function CommunityWall() {
           {/* Role count badges */}
           <div style={{ display:'flex', flexWrap:'wrap', gap:10, justifyContent:'center', marginTop:28 }}>
             {Object.entries(ROLES).map(([r, cfg]) => (
-              <div key={r} style={{ display:'flex', alignItems:'center', gap:6, padding:'5px 12px',
+              <div key={r} className="card-3d" style={{ display:'flex', alignItems:'center', gap:6, padding:'5px 12px',
                 background:cfg.color+'10', border:`1px solid ${cfg.color}30`, borderRadius:20 }}>
                 <span style={{ fontSize:9 }}>{cfg.symbol}</span>
                 <span style={{ fontFamily:"'Orbitron',monospace", fontSize:8, fontWeight:700,
@@ -381,7 +381,7 @@ export default function CommunityWall() {
                 </span>
               </div>
             ))}
-            <div style={{ display:'flex', alignItems:'center', gap:6, padding:'5px 12px',
+            <div className="card-3d" style={{ display:'flex', alignItems:'center', gap:6, padding:'5px 12px',
               background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:20 }}>
               <span style={{ fontFamily:"'Orbitron',monospace", fontSize:8, fontWeight:700, color:B.white, letterSpacing:2 }}>
                 {all.length}

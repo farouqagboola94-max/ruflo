@@ -143,7 +143,7 @@ export default function Contact() {
             { icon: '📞', label: '+234 800 SNEAKERS' },
             { icon: '📍', label: 'Lagos, Nigeria' },
           ].map(({ icon, label: l }) => (
-            <div key={l} style={{
+            <div key={l} className="card-3d" style={{
               display: 'flex', alignItems: 'center', gap: 8,
               padding: '8px 18px',
               background: 'rgba(255,255,255,0.04)',
@@ -160,7 +160,7 @@ export default function Contact() {
 
         {/* Form / success */}
         {status === 'done' ? (
-          <div style={{
+          <div className="card-3d" style={{
             padding: '60px 32px', textAlign: 'center',
             background: 'rgba(0,255,120,0.03)',
             border: '1px solid rgba(0,255,120,0.18)',
@@ -186,7 +186,7 @@ export default function Contact() {
             </button>
           </div>
         ) : (
-          <form onSubmit={submit} style={{
+          <form onSubmit={submit} className="card-3d" style={{
             background: 'rgba(255,255,255,0.025)',
             border: '1px solid rgba(255,255,255,0.07)',
             borderRadius: 12,

@@ -64,7 +64,7 @@ function PassportContent({ state, tier }) {
 
   return (
     <div>
-      <a href="#leaderboard" style={{
+      <a href="#leaderboard" className="card-3d" style={{
         display: 'block', textDecoration: 'none', marginBottom: 16,
         background: `${B.amber}10`, border: `1px solid ${B.amber}40`, borderRadius: 10,
         padding: '14px 18px', fontFamily: "'Space Mono'", fontSize: '0.72rem', color: B.amber,
@@ -76,7 +76,7 @@ function PassportContent({ state, tier }) {
         🏆 TOP {GRAND_PRIZE_RANK} HIGHEST-XP COLLECTORS WIN GRAND PRIZES AT THE EVENT — CLIMB THE LEADERBOARD →
       </a>
 
-      <a href="#egg-hunt" style={{
+      <a href="#egg-hunt" className="card-3d" style={{
         display: 'block', textDecoration: 'none', marginBottom: 24,
         background: `${B.neonLime}10`, border: `1px solid ${B.neonLime}40`, borderRadius: 10,
         padding: '14px 18px', fontFamily: "'Space Mono'", fontSize: '0.72rem', color: B.neonLime,
@@ -88,7 +88,7 @@ function PassportContent({ state, tier }) {
         🥚 {eggsFound}/{TOTAL_EGGS} HIDDEN EGGS FOUND — 100 EGGS, 100 WINNERS, SCATTERED ACROSS THE WHOLE SITE →
       </a>
 
-      <div style={{
+      <div className="card-3d" style={{
         background: B.charcoal, border: `1px solid ${B.gunmetal}`, borderRadius: 12,
         padding: '20px 24px', marginBottom: 24,
       }}>
@@ -117,7 +117,7 @@ function PassportContent({ state, tier }) {
         </div>
       </div>
 
-      <div style={{
+      <div className="card-3d" style={{
         background: B.charcoal, border: `1px solid ${tier.color}40`, borderRadius: 14,
         padding: '28px 32px', marginBottom: 24,
         boxShadow: `0 0 40px ${tier.color}15`,
@@ -187,7 +187,7 @@ function PassportContent({ state, tier }) {
           {Object.entries(BADGE_INFO).map(([key, b]) => {
             const earned = state.badges.includes(key)
             return (
-              <div key={key} style={{
+              <div key={key} className="card-3d" style={{
                 background: earned ? `${tier.color}10` : 'rgba(255,255,255,0.02)',
                 border: `1px solid ${earned ? tier.color + '50' : 'rgba(255,255,255,0.06)'}`,
                 borderRadius: 10, padding: '16px 14px', textAlign: 'center',
@@ -206,7 +206,7 @@ function PassportContent({ state, tier }) {
         <div style={{ fontFamily: "'Space Mono'", fontSize: '0.65rem', letterSpacing: '0.2em', color: '#555', marginBottom: 16 }}>WAYS TO EARN XP</div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
           {EARN_WAYS.map(w => (
-            <a key={w.href} href={w.href} style={{
+            <a key={w.href} href={w.href} className="card-3d" style={{
               display: 'flex', justifyContent: 'space-between', alignItems: 'center',
               background: B.charcoal, border: `1px solid ${B.gunmetal}`, borderRadius: 8,
               padding: '12px 16px', textDecoration: 'none', transition: 'border-color 0.2s',

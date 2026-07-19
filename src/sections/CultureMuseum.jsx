@@ -249,7 +249,7 @@ function BidModal({ artwork, bids, onBid, onClose }) {
     <div style={{ position:'fixed', inset:0, zIndex:9999, display:'flex', alignItems:'flex-end', justifyContent:'center' }}
       onClick={e => { if (e.target === e.currentTarget) onClose() }}>
       <div style={{ position:'absolute', inset:0, background:'rgba(0,0,0,0.8)' }} />
-      <div style={{
+      <div className="card-3d" style={{
         position:'relative', width:'100%', maxWidth:480, background:B.void,
         border:`1px solid ${B.amber}50`, borderBottom:'none',
         borderRadius:'16px 16px 0 0', padding:28,
@@ -464,7 +464,7 @@ export default function CultureMuseum() {
           ))}
         </div>
 
-        <div style={{ marginTop:48, textAlign:'center', padding:'24px', border:`1px solid ${B.amber}20`, borderRadius:8, background:`${B.amber}05` }}>
+        <div className="card-3d" style={{ marginTop:48, textAlign:'center', padding:'24px', border:`1px solid ${B.amber}20`, borderRadius:8, background:`${B.amber}05` }}>
           <div style={{ fontFamily:'Bebas Neue', fontSize:16, color:B.amber, letterSpacing:3, marginBottom:8 }}>ABOUT THE MUSEUM</div>
           <div style={{ fontFamily:'Syne', fontSize:13, color:B.smoke, maxWidth:600, margin:'0 auto', lineHeight:1.7 }}>
             The Culture Museum is an evolving archive. New works drop closer to December 12.

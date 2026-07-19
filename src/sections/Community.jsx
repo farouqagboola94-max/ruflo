@@ -328,7 +328,7 @@ export default function Community() {
         <div style={{ display:'flex', gap:14, flexWrap:'wrap' }}>
 
           {/* FNP schedule */}
-          <div style={{ flex:'1 1 300px', padding:'24px 28px', background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.07)', borderRadius:8, position:'relative', overflow:'hidden' }}>
+          <div className="card-3d" style={{ flex:'1 1 300px', padding:'24px 28px', background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.07)', borderRadius:8, position:'relative', overflow:'hidden' }}>
             <div style={{ position:'absolute', top:0, left:0, right:0, height:2, background:`linear-gradient(90deg, transparent, ${B.neonLime}, transparent)` }} />
             <div style={{ fontFamily:"'Orbitron',monospace", fontSize:8, color:B.neonLime, letterSpacing:3, marginBottom:4 }}>FRIDAY NIGHT PROTOCOL</div>
             <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:22, color:B.white, letterSpacing:2, marginBottom:14 }}>UPCOMING SESSIONS</div>
@@ -346,7 +346,7 @@ export default function Community() {
           </div>
 
           {/* WhatsApp CTA */}
-          <div style={{ flex:'0 0 auto', minWidth:200, padding:'24px', background:`${B.neonLime}08`, border:`1px solid ${B.neonLime}30`, borderRadius:8, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:12, textAlign:'center' }}>
+          <div className="card-3d" style={{ flex:'0 0 auto', minWidth:200, padding:'24px', background:`${B.neonLime}08`, border:`1px solid ${B.neonLime}30`, borderRadius:8, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:12, textAlign:'center' }}>
             <div style={{ width:52, height:52, borderRadius:'50%', background:`${B.neonLime}15`, border:`2px solid ${B.neonLime}`, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 0 24px ${B.neonLime}25`, animation:'pulse 2s infinite' }}>
               <span style={{ fontFamily:"'Orbitron',monospace", fontSize:10, fontWeight:900, color:B.neonLime }}>WA</span>
             </div>

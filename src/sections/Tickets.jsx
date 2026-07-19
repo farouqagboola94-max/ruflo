@@ -225,7 +225,7 @@ export default function Tickets() {
 
         {/* Early Bird Banner */}
         {daysLeft > 0 && (
-          <div style={{ marginBottom:48, padding:'20px 28px', background:`linear-gradient(135deg,rgba(245,166,35,0.10),rgba(0,240,255,0.04))`, border:`1px solid ${B.amber}35`, borderRadius:12, display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:16, backdropFilter:'blur(12px)' }}>
+          <div className="card-3d" style={{ marginBottom:48, padding:'20px 28px', background:`linear-gradient(135deg,rgba(245,166,35,0.10),rgba(0,240,255,0.04))`, border:`1px solid ${B.amber}35`, borderRadius:12, display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:16, backdropFilter:'blur(12px)' }}>
             <div>
               <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:6 }}>
                 <span style={{ fontSize:14 }}>⚡</span>

@@ -270,7 +270,7 @@ function CartDrawer({ cart, setCart, onClose }) {
                 )}
               </div>
               {/* order recap */}
-              <div style={{ margin:'20px 0', padding:'14px 16px', background:'rgba(255,255,255,0.03)', borderRadius:8, border:'1px solid rgba(255,255,255,0.07)' }}>
+              <div className="card-3d" style={{ margin:'20px 0', padding:'14px 16px', background:'rgba(255,255,255,0.03)', borderRadius:8, border:'1px solid rgba(255,255,255,0.07)' }}>
                 {cart.map((r, i) => (
                   <div key={i} style={{ display:'flex', justifyContent:'space-between', padding:'5px 0', fontFamily:'Space Mono,monospace', fontSize:10 }}>
                     <span style={{ color:'#888' }}>{r.name} × {r.qty} <span style={{ color:'#555' }}>({r.size})</span></span>
@@ -308,7 +308,7 @@ function CartDrawer({ cart, setCart, onClose }) {
               <div style={{ fontFamily:'Syne,sans-serif', fontSize:13, color:'#888', lineHeight:1.7, marginBottom:24 }}>
                 We'll confirm your order via email shortly. Payment is on collection.
               </div>
-              <div style={{ background:`${B.amber}12`, border:`1px solid ${B.amber}40`, borderRadius:12, padding:'20px', marginBottom:20 }}>
+              <div className="card-3d" style={{ background:`${B.amber}12`, border:`1px solid ${B.amber}40`, borderRadius:12, padding:'20px', marginBottom:20 }}>
                 <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', letterSpacing:3, marginBottom:8 }}>ORDER ID</div>
                 <div style={{ fontFamily:'Orbitron,monospace', fontSize:20, color:B.amber, letterSpacing:4, fontWeight:900 }}>{orderId}</div>
               </div>

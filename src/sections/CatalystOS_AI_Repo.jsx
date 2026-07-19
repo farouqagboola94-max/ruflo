@@ -262,7 +262,7 @@ export default function CatalystOSRepo() {
               {catTools.map(tool => (
                 <div
                   key={tool.id}
-                  className="tool-card"
+                  className="tool-card card-3d"
                   onClick={() => setExpanded(expanded === tool.id ? null : tool.id)}
                   style={{
                     background: expanded === tool.id ? "#0F0E0A" : "#0C0B09",

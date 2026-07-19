@@ -271,6 +271,7 @@ export default function Gallery() {
           {PLACEHOLDERS.map((s, i) => (
             <div key={i} style={{ breakInside:'avoid', marginBottom:14 }}>
               <div
+                className="card-3d"
                 style={{ height:s.h, background:B.charcoal, backgroundImage:`linear-gradient(135deg, ${s.accent}12, transparent)`, border:`1px solid ${s.accent}20`, borderRadius:8, overflow:'hidden', position:'relative', transition:'border-color 0.25s' }}
                 onMouseEnter={e => e.currentTarget.style.borderColor = s.accent+'45'}
                 onMouseLeave={e => e.currentTarget.style.borderColor = s.accent+'20'}
@@ -289,6 +290,7 @@ export default function Gallery() {
           {/* CTA add card */}
           <div style={{ breakInside:'avoid', marginBottom:14 }}>
             <div onClick={() => setModal(true)}
+              className="card-3d"
               style={{ height:190, background:'rgba(255,255,255,0.02)', border:`2px dashed ${B.neonMagenta}35`, borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', transition:'all 0.2s' }}
               onMouseEnter={e => { e.currentTarget.style.borderColor=`${B.neonMagenta}70`; e.currentTarget.style.background=`${B.neonMagenta}05` }}
               onMouseLeave={e => { e.currentTarget.style.borderColor=`${B.neonMagenta}35`; e.currentTarget.style.background='rgba(255,255,255,0.02)' }}>

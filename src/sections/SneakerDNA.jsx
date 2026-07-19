@@ -237,7 +237,7 @@ export default function SneakerDNA() {
               {arch.title}
             </h2>
             <p style={{ fontFamily:'Bebas Neue, sans-serif', color:B.smoke, fontSize:15, letterSpacing:5, marginBottom:36 }}>{arch.subtitle}</p>
-            <div style={{ background:`linear-gradient(135deg, ${arch.color}10, transparent)`, border:`1px solid ${arch.color}28`, borderRadius:16, padding:'32px', backdropFilter:'blur(20px)', textAlign:'left', position:'relative', overflow:'hidden', marginBottom:32 }}>
+            <div className="card-3d" style={{ background:`linear-gradient(135deg, ${arch.color}10, transparent)`, border:`1px solid ${arch.color}28`, borderRadius:16, padding:'32px', backdropFilter:'blur(20px)', textAlign:'left', position:'relative', overflow:'hidden', marginBottom:32 }}>
               <div style={{ position:'absolute', top:0, left:0, right:0, height:3, background:`linear-gradient(90deg, ${arch.color}, ${arch.color}30)` }} />
               <p style={{ fontFamily:'Syne, sans-serif', fontSize:16, color:B.white, lineHeight:1.8, marginBottom:28 }}>"{ arch.description}"</p>
               <div style={{ display:'flex', gap:40, flexWrap:'wrap', marginBottom:20 }}>
@@ -250,7 +250,7 @@ export default function SneakerDNA() {
                   <div style={{ fontFamily:'Bebas Neue, sans-serif', fontSize:17, color:arch.color, letterSpacing:4 }}>{arch.frequency}</div>
                 </div>
               </div>
-              <div style={{ padding:'14px 18px', background:arch.color+'12', border:`1px solid ${arch.color}25`, borderRadius:8 }}>
+              <div className="card-3d" style={{ padding:'14px 18px', background:arch.color+'12', border:`1px solid ${arch.color}25`, borderRadius:8 }}>
                 <span style={{ fontFamily:'Bebas Neue, sans-serif', fontSize:14, color:arch.color, letterSpacing:2 }}>{arch.callout}</span>
               </div>
             </div>
