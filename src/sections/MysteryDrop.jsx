@@ -189,7 +189,7 @@ export default function MysteryDrop() {
         <SectionTag color={B.neonMagenta}>MYSTERY DROP</SectionTag>
 
         {/* Live watchers badge */}
-        <div style={{
+        <div className="card-3d" style={{
           display: 'inline-flex', alignItems: 'center', gap: 8,
           background: 'rgba(255,45,123,0.1)', border: `1px solid ${B.neonMagenta}35`,
           borderRadius: 20, padding: '6px 14px', marginBottom: 16,
@@ -299,7 +299,7 @@ export default function MysteryDrop() {
               const unlocked = unlockedClues.includes(i)
               const isNew    = newClue === i
               return (
-                <div key={i} style={{
+                <div key={i} className="card-3d" style={{
                   display: 'flex', alignItems: 'flex-start', gap: 12,
                   padding: '12px 16px',
                   background: unlocked ? `rgba(255,45,123,0.06)` : 'rgba(255,255,255,0.02)',

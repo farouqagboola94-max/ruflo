@@ -301,7 +301,7 @@ export default function EarlyAccess() {
             />
 
             {/* tier badge */}
-            <div style={{ display:'flex', alignItems:'center', gap:14, padding:'16px 20px', background:`${tier.color}12`, border:`1px solid ${tier.color}40`, borderRadius:10, marginBottom:24 }}>
+            <div className="card-3d" style={{ display:'flex', alignItems:'center', gap:14, padding:'16px 20px', background:`${tier.color}12`, border:`1px solid ${tier.color}40`, borderRadius:10, marginBottom:24 }}>
               <span style={{ fontSize:32 }}>{tier.icon}</span>
               <div>
                 <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color:tier.color, letterSpacing:3, marginBottom:2 }}>YOUR STATUS</div>
@@ -330,7 +330,7 @@ export default function EarlyAccess() {
             </div>
 
             {/* perks */}
-            <div style={{ background:'rgba(255,255,255,0.02)', border:`1px solid ${tier.color}25`, borderRadius:10, padding:'16px 20px', marginBottom:24 }}>
+            <div className="card-3d" style={{ background:'rgba(255,255,255,0.02)', border:`1px solid ${tier.color}25`, borderRadius:10, padding:'16px 20px', marginBottom:24 }}>
               <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color:tier.color, letterSpacing:3, marginBottom:12 }}>YOUR PERKS</div>
               <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
                 {tier.perks.map((p, i) => (
@@ -343,7 +343,7 @@ export default function EarlyAccess() {
             </div>
 
             {/* referral link */}
-            <div style={{ background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.07)', borderRadius:10, padding:'16px 20px', marginBottom:24 }}>
+            <div className="card-3d" style={{ background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.07)', borderRadius:10, padding:'16px 20px', marginBottom:24 }}>
               <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color:'#555', letterSpacing:3, marginBottom:4 }}>YOUR REFERRAL LINK</div>
               <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:10 }}>
                 <span style={{ fontFamily:"'Space Mono'", fontSize:'0.65rem', color:B.amber }}>Share to move up the queue</span>

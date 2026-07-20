@@ -274,7 +274,7 @@ export default function VendorReg() {
         </div>
 
         {status === 'success' ? (
-          <div style={{ padding:'44px 36px', background:`rgba(0,240,255,0.03)`, border:`1px solid ${B.neonCyan}25`, borderRadius:16 }}>
+          <div className="card-3d" style={{ padding:'44px 36px', background:`rgba(0,240,255,0.03)`, border:`1px solid ${B.neonCyan}25`, borderRadius:16 }}>
             <div style={{ textAlign:'center', marginBottom:32 }}>
               <div style={{ width:60, height:60, borderRadius:'50%', border:`2px solid ${B.neonLime}`, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px' }}>
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke={B.neonLime} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -366,7 +366,7 @@ export default function VendorReg() {
               ))}
             </div>
 
-            <div style={{ background:'rgba(255,255,255,0.03)', backdropFilter:'blur(20px)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:16, overflow:'hidden' }}>
+            <div className="card-3d" style={{ background:'rgba(255,255,255,0.03)', backdropFilter:'blur(20px)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:16, overflow:'hidden' }}>
               <div style={{ height:3, background:`linear-gradient(90deg, ${B.neonCyan}, ${B.amber}, ${B.neonMagenta})` }} />
               <div style={{ padding:32, display:'flex', flexDirection:'column', gap:24 }}>
 
@@ -472,7 +472,7 @@ export default function VendorReg() {
                     {status === 'error' && (
                       <div style={{ padding:'12px 16px', background:`rgba(255,45,123,0.08)`, border:`1px solid ${B.neonMagenta}30`, borderRadius:8 }}>
                         <div style={{ fontFamily:'Space Mono,monospace', fontSize:10, color:B.neonMagenta }}>
-                          Submission failed. Email <span style={{ color:B.white }}>vendors@sneakersfest.com</span> with "Vendor Application — {form.business}"
+                          Submission failed. Email <span style={{ color:B.white }}>sneakersfest088@gmail.com</span> with "Vendor Application — {form.business}"
                         </div>
                       </div>
                     )}

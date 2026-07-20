@@ -83,7 +83,7 @@ const STATS = [
   { value: '₦50M+',  label: 'COMBINED REACH' },
 ]
 
-const CONTACT_EMAIL = 'sponsors@sneakersfest.com'
+const CONTACT_EMAIL = 'sneakersfest088@gmail.com'
 
 export default function SponsorTiers() {
   const [submitted, setSubmitted] = useState(false)
@@ -232,7 +232,7 @@ export default function SponsorTiers() {
           </div>
 
           {submitted ? (
-            <div style={{ padding: '40px 32px', background: `rgba(0,240,255,0.03)`, border: `1px solid ${B.neonCyan}25`, borderRadius: 16, textAlign: 'center' }}>
+            <div className="card-3d" style={{ padding: '40px 32px', background: `rgba(0,240,255,0.03)`, border: `1px solid ${B.neonCyan}25`, borderRadius: 16, textAlign: 'center' }}>
               <div style={{ width: 52, height: 52, borderRadius: '50%', border: `2px solid ${B.neonLime}`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke={B.neonLime} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </div>
@@ -241,7 +241,7 @@ export default function SponsorTiers() {
               <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: B.smoke, marginTop: 8 }}>Sponsorship deck heading to <span style={{ color: B.amber }}>{form.email}</span> within 24 hours.</div>
             </div>
           ) : (
-            <form onSubmit={submit} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, overflow: 'hidden' }}>
+            <form onSubmit={submit} className="card-3d" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, overflow: 'hidden' }}>
               <div style={{ height: 3, background: `linear-gradient(90deg, ${B.amber}, ${B.neonCyan}, ${B.neonMagenta})` }} />
               <div style={{ padding: 32, display: 'flex', flexDirection: 'column', gap: 20 }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>

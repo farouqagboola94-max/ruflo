@@ -58,6 +58,7 @@ export default function EggHuntTracker() {
               <div
                 key={egg.id}
                 title={isFound ? egg.clue : 'Not found yet'}
+                className="card-3d"
                 style={{
                   aspectRatio: '1', borderRadius: 4,
                   background: isFound ? `${B.amber}30` : `${B.white}08`,

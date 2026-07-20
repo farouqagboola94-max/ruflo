@@ -73,7 +73,7 @@ export default function SoleOfLagos() {
           A History of Sneaker Culture, Identity, and the Streets That Built an Empire
         </div>
 
-        <div style={{ borderLeft: `4px solid ${B.amber}`, paddingLeft: 32, marginBottom: 88 }}>
+        <div className="card-3d" style={{ borderLeft: `4px solid ${B.amber}`, paddingLeft: 32, marginBottom: 88 }}>
           <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 'clamp(15px, 2vw, 19px)', lineHeight: 1.9, color: B.white, marginBottom: 28 }}>
             There is a version of this story that starts with Michael Jordan. Do not believe it.
             The real story starts in a container ship pulling into Apapa Port sometime in the 1970s.
@@ -101,7 +101,7 @@ export default function SoleOfLagos() {
               <p key={j} style={{ fontFamily: "'Syne', sans-serif", fontSize: 'clamp(14px, 1.7vw, 17px)', lineHeight: 1.9, color: 'rgba(240,237,230,0.82)', marginBottom: 20 }}>{para}</p>
             ))}
 
-            <blockquote style={{ borderLeft: `3px solid ${p.color}`, paddingLeft: 24, margin: '32px 0 0', background: p.color + '0A', padding: '18px 24px' }}>
+            <blockquote className="card-3d" style={{ borderLeft: `3px solid ${p.color}`, paddingLeft: 24, margin: '32px 0 0', background: p.color + '0A', padding: '18px 24px' }}>
               <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 'clamp(14px, 1.8vw, 18px)', fontWeight: 700, color: p.color, lineHeight: 1.6, fontStyle: 'italic' }}>
                 &ldquo;{p.pull}&rdquo;
               </div>

@@ -267,7 +267,7 @@ export default function SpinWheel() {
         {/* Spin pool tracker */}
         <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:10, marginBottom:24 }}>
           {/* Registration pool */}
-          <div style={{
+          <div className="card-3d" style={{
             display:'inline-flex', alignItems:'center', gap:12, padding:'9px 20px',
             background: pools.regAllowed > 0 ? `${B.neonLime}08` : 'rgba(255,255,255,0.02)',
             border:`1px solid ${pools.regAllowed > 0 ? B.neonLime + '35' : 'rgba(255,255,255,0.07)'}`,
@@ -292,7 +292,7 @@ export default function SpinWheel() {
           </div>
 
           {/* Ticket pool */}
-          <div style={{
+          <div className="card-3d" style={{
             display:'inline-flex', alignItems:'center', gap:12, padding:'9px 20px',
             background: pools.tktAllowed > 0 ? `${B.amber}08` : 'rgba(255,255,255,0.02)',
             border:`1px solid ${pools.tktAllowed > 0 ? B.amber + '40' : 'rgba(255,255,255,0.07)'}`,
@@ -319,7 +319,7 @@ export default function SpinWheel() {
 
         {/* Unlock prompts */}
         {pools.regAllowed === 0 && (
-          <div style={{ marginBottom:20, padding:'11px 22px', background:`${B.neonLime}07`, border:`1px solid ${B.neonLime}20`, borderRadius:8, animation:'unlockPulse 2.4s ease-in-out infinite' }}>
+          <div className="card-3d" style={{ marginBottom:20, padding:'11px 22px', background:`${B.neonLime}07`, border:`1px solid ${B.neonLime}20`, borderRadius:8, animation:'unlockPulse 2.4s ease-in-out infinite' }}>
             <p style={{ fontFamily:"'Space Mono'", fontSize:9, color:B.neonLime, margin:0, letterSpacing:'0.1em' }}>
               🔓{' '}
               <a href="#waitlist" style={{ color:B.neonLime, textDecoration:'underline' }}>Join the waitlist</a>
@@ -328,7 +328,7 @@ export default function SpinWheel() {
           </div>
         )}
         {pools.regAllowed > 0 && pools.tktAllowed === 0 && (
-          <div style={{ marginBottom:20, padding:'11px 22px', background:`${B.amber}07`, border:`1px solid ${B.amber}20`, borderRadius:8, animation:'unlockPulse 2.4s ease-in-out infinite' }}>
+          <div className="card-3d" style={{ marginBottom:20, padding:'11px 22px', background:`${B.amber}07`, border:`1px solid ${B.amber}20`, borderRadius:8, animation:'unlockPulse 2.4s ease-in-out infinite' }}>
             <p style={{ fontFamily:"'Space Mono'", fontSize:9, color:B.amber, margin:0, letterSpacing:'0.1em' }}>
               🎟{' '}
               <a href="#tickets" style={{ color:B.amber, textDecoration:'underline' }}>Buy a ticket</a>

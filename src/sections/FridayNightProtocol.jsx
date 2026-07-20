@@ -139,7 +139,7 @@ export default function FridayNightProtocol() {
           </div>
 
           {/* countdown to next Friday */}
-          <div style={{ background:'rgba(255,255,255,0.02)', border:`1px solid ${B.amber}30`, borderRadius:10, padding:'18px 22px', textAlign:'center', flexShrink:0 }}>
+          <div className="card-3d" style={{ background:'rgba(255,255,255,0.02)', border:`1px solid ${B.amber}30`, borderRadius:10, padding:'18px 22px', textAlign:'center', flexShrink:0 }}>
             <div style={{ fontFamily:"'Space Mono'", fontSize:8, color:'#555', letterSpacing:3, marginBottom:8 }}>NEXT SESSION IN</div>
             <div style={{ display:'flex', gap:10, alignItems:'flex-start' }}>
               {[['days', cd.days], ['hrs', cd.hours], ['min', cd.minutes], ['sec', cd.seconds]].map(([lbl, val]) => (
@@ -164,7 +164,7 @@ export default function FridayNightProtocol() {
             ))}
           </div>
 
-          <div style={{ background:B.charcoal, borderRadius:10, padding:'28px', border:`1px solid ${B.gunmetal}`, borderTop:`3px solid ${w.color}` }}>
+          <div className="card-3d" style={{ background:B.charcoal, borderRadius:10, padding:'28px', border:`1px solid ${B.gunmetal}`, borderTop:`3px solid ${w.color}` }}>
             <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', letterSpacing:'0.2em', color:w.color, marginBottom:6 }}>{w.week} · MONTHLY ROTATION</div>
             <h3 style={{ fontFamily:"'Bebas Neue'", fontSize:'1.6rem', color:B.white, letterSpacing:'0.04em', marginBottom:16 }}>{w.name}</h3>
             <p style={{ color:B.smoke, fontFamily:"'Syne'", fontSize:'0.88rem', lineHeight:1.75, marginBottom:20 }}>{w.desc}</p>
@@ -208,7 +208,7 @@ export default function FridayNightProtocol() {
         </div>
 
         {/* ── challenge submission ── */}
-        <div style={{ background:B.charcoal, borderRadius:10, padding:'28px', border:`1px solid ${B.gunmetal}`, marginBottom:48 }}>
+        <div className="card-3d" style={{ background:B.charcoal, borderRadius:10, padding:'28px', border:`1px solid ${B.gunmetal}`, marginBottom:48 }}>
           <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:20, flexWrap:'wrap', gap:8 }}>
             <div>
               <div style={{ fontFamily:"'Space Mono'", fontSize:'0.62rem', letterSpacing:'0.25em', color:B.amber, marginBottom:4 }}>THIS WEEK'S FNP</div>

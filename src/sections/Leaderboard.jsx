@@ -355,7 +355,7 @@ export default function Leaderboard() {
 
         {/* summary + filter row */}
         <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:20, flexWrap:'wrap' }}>
-          <div style={{ flex:1, minWidth:180, padding:'12px 18px', background:'rgba(255,255,255,0.02)', border:`1px solid ${accent}20`, borderRadius:10, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+          <div className="card-3d" style={{ flex:1, minWidth:180, padding:'12px 18px', background:'rgba(255,255,255,0.02)', border:`1px solid ${accent}20`, borderRadius:10, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
             <div style={{ fontFamily:'Orbitron,monospace', fontSize:9, color:'#444', letterSpacing:3 }}>TOTAL</div>
             <div style={{ display:'flex', alignItems:'baseline', gap:8 }}>
               <span style={{ fontFamily:'Orbitron,monospace', fontSize:20, color:accent, fontWeight:900 }}>{summaryVal[tab]}</span>
@@ -455,7 +455,7 @@ export default function Leaderboard() {
             const inGrandPrizeZone = rank <= GRAND_PRIZE_RANK
             const spotsAway = rank - GRAND_PRIZE_RANK
             return (
-              <div style={{ marginTop:28, padding:'20px 24px', background: inGrandPrizeZone ? `${B.amber}08` : 'rgba(255,255,255,0.02)', border:`1px solid ${inGrandPrizeZone ? B.amber+'40' : '#C084FC20'}`, borderRadius:12 }}>
+              <div className="card-3d" style={{ marginTop:28, padding:'20px 24px', background: inGrandPrizeZone ? `${B.amber}08` : 'rgba(255,255,255,0.02)', border:`1px solid ${inGrandPrizeZone ? B.amber+'40' : '#C084FC20'}`, borderRadius:12 }}>
                 <div style={{ fontFamily:'Orbitron,monospace', fontSize:8, color:'#444', letterSpacing:3, marginBottom:12 }}>
                   MY RANK · <span style={{ color:tier.color }}>{tier.name}</span> · <span style={{ color:B.neonLime }}>LV {level.level}</span>
                 </div>
