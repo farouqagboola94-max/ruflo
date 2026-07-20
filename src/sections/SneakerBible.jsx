@@ -224,7 +224,7 @@ export default function SneakerBible() {
             <div style={{ marginTop: 48 }}>
               <div style={s.secTitle}>RESELL TIER INTELLIGENCE</div>
               {TIER_STRATEGY.map(item => (
-                <div key={item.t} style={{ background: '#0f0f0f', border: `1px solid ${item.c}30`, borderLeft: `4px solid ${item.c}`, padding: 20, marginBottom: 16 }}>
+                <div key={item.t} className="card-3d" style={{ background: '#0f0f0f', border: `1px solid ${item.c}30`, borderLeft: `4px solid ${item.c}`, padding: 20, marginBottom: 16 }}>
                   <div style={{ fontFamily: mono, fontSize: 10, fontWeight: 700, color: item.c, letterSpacing: '0.2em', marginBottom: 8 }}>{item.t} TIER STRATEGY</div>
                   <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#ccc', lineHeight: 1.6, marginBottom: 10 }}>{item.desc}</div>
                   <div style={{ fontFamily: mono, fontSize: 11, color: '#888', borderTop: `1px solid ${B.gunmetal}`, paddingTop: 10 }}>ACTION: {item.action}</div>
@@ -248,12 +248,12 @@ export default function SneakerBible() {
               { title: 'CURATION STRATEGY -- WHAT TO DISPLAY', items: ['GRAIL TIER (5 pairs): Jordan 1 Chicago, Jordan 1 x Off-White, Air Yeezy 2 Red October, Nike SB Dunk Paris, Air Force 1 x Louis Vuitton.','ELITE TIER (10 pairs): Travis Scott Jordan 1 Low, Jordan 4 Lightning, Chunky Dunky, Kobe 6 Grinch, Fragment Jordan 1.','HEAT TIER (20 pairs): Rotate across brands -- Jordan retros, Yeezy 350 V2 colorways, Nike Sacai, Adidas Samba Wales Bonner, NB Joe Freshgoods.','SOLID TIER: Open market floor -- AF1 White, Panda Dunk, Converse Chuck, Samba OG, Stan Smith, NB 574. These are for purchase, not display.','NIGERIAN STORY CASE: 5 pairs that connect directly to Nigerian cultural moments -- shoes worn by Afrobeats artists, pairs linked to Super Eagles, Lagos fashion week moments.'] },
               { title: 'COMMERCIAL STRATEGY -- HOW TO MAKE MONEY', items: ['CONSIGNMENT MODEL: Lagos collectors bring authenticated pairs. Sneakers Fest takes 15-20% commission on sales. Low risk, high volume potential.','VENDOR BOOTHS: Charge 150K--500K per booth slot for resellers, brands, and boutiques. 30 booth cap.','GRAIL AUCTION: Live auction for 5-10 GRAIL tier pairs during peak hours. Start bids at 80% of current resell price. High energy, high margin.','TICKET REVENUE: General 5K. Collector (early access + zone 2 priority) 25K. VIP (all zones + auction access + brand gifts) 100K.','BRAND ACTIVATIONS: Brands pay for activation space. 2M--10M per brand depending on tier.'] },
             ].map((block, i) => (
-              <div key={i} style={s.exBlock}>
+              <div key={i} className="card-3d" style={s.exBlock}>
                 <div style={s.exTitle}>{block.title}</div>
                 <ul style={s.list}>{block.items.map((item, j) => <li key={j} style={s.listItem}>{item}</li>)}</ul>
               </div>
             ))}
-            <div style={{ ...s.exBlock, background: B.amber + '0A', borderColor: B.amber + '40' }}>
+            <div className="card-3d" style={{ ...s.exBlock, background: B.amber + '0A', borderColor: B.amber + '40' }}>
               <div style={s.exTitle}>SNEAKERS FEST 2026 -- THE CULTURAL DECLARATION</div>
               <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#ccc', lineHeight: 1.8 }}>
                 This is bigger than a market. It is bigger than a convention. Sneakers Fest 2026 is Lagos saying -- in 200 pairs of shoes, in one room, on one day -- that we were here. That we built this culture too, in our own way, with our own economics and our own stories. The world built sneaker culture. Lagos built its own chapter inside it. December 12 is the day we open that chapter for the world to read.

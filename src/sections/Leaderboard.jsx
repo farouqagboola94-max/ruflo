@@ -326,7 +326,7 @@ export default function Leaderboard() {
             WHO'S<br /><span style={{ color:B.neonCyan }}>LEADING THE PACK</span>
           </div>
           {/* live ticker */}
-          <div style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'7px 18px', background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:24, marginTop:8 }}>
+          <div className="card-3d" style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'7px 18px', background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:24, marginTop:8 }}>
             <div style={{ width:5, height:5, borderRadius:'50%', background:B.neonLime, boxShadow:`0 0 6px ${B.neonLime}`, animation:'pulse 1.5s infinite' }} />
             <span key={ticker} style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#888', animation:'fadeUp 0.4s ease' }}>{TICKER_MSGS[ticker]}</span>
           </div>

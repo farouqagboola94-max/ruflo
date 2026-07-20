@@ -59,7 +59,7 @@ function VaultContent() {
 
   return (
     <div>
-      <div style={{
+      <div className="card-3d" style={{
         background: `linear-gradient(135deg, #1A1A1A 0%, #111111 100%)`,
         border: `1px solid ${tier.color}50`,
         borderRadius: 16,
