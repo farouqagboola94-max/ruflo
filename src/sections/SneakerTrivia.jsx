@@ -48,6 +48,23 @@ function shuffle(arr) {
 
 const TODAY = () => new Date().toISOString().slice(0, 10)
 const DAILY_KEY = 'sf26_trivia_daily'
+const FREE_PLAY_KEY = 'sf26_trivia_freeplay_daily'
+const MAX_FREE_PLAYS = 3
+
+function getFreePlayCount() {
+  try {
+    const d = JSON.parse(localStorage.getItem(FREE_PLAY_KEY) || '{}')
+    return d.date === TODAY() ? (d.count || 0) : 0
+  } catch { return 0 }
+}
+
+function incFreePlayCount() {
+  try {
+    const next = getFreePlayCount() + 1
+    localStorage.setItem(FREE_PLAY_KEY, JSON.stringify({ date: TODAY(), count: next }))
+    return next
+  } catch { return 1 }
+}
 const TAUNTS = [
   "That's embarrassing. You sure you're at the right event?",
   "A true sneakerhead would've got that. Study up.",
@@ -91,8 +108,9 @@ export default function SneakerTrivia() {
   const [feedback,   setFeedback]   = useState(null)
   const [commentary, setCommentary] = useState('')
   const [flawless,   setFlawless]   = useState(true)
-  const [isDaily,    setIsDaily]    = useState(false)
-  const [dailyDone,  setDailyDone]  = useState(false)
+  const [isDaily,       setIsDaily]       = useState(false)
+  const [dailyDone,     setDailyDone]     = useState(false)
+  const [freePlaysToday, setFreePlaysToday] = useState(() => getFreePlayCount())
   const [confetti,   setConfetti]   = useState([])
   const timerRef  = useRef(null)
   const lockedRef = useRef(false)
@@ -112,6 +130,8 @@ export default function SneakerTrivia() {
   }
 
   function startGame(daily = false) {
+    if (!daily && freePlaysToday >= MAX_FREE_PLAYS) return
+    if (!daily) setFreePlaysToday(incFreePlayCount())
     const qs = pickQuestions(daily)
     setQuestions(qs)
     setIsDaily(daily)
@@ -264,11 +284,19 @@ export default function SneakerTrivia() {
               3 lives. Clock ticking. No looking it up.
             </p>
             <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 24 }}>
-              <button onClick={() => startGame(false)} style={{
-                background: B.amber, color: B.black, border: 'none', padding: '14px 40px',
+              <button onClick={() => startGame(false)} disabled={freePlaysToday >= MAX_FREE_PLAYS} style={{
+                background: freePlaysToday >= MAX_FREE_PLAYS ? B.gunmetal : B.amber,
+                color: freePlaysToday >= MAX_FREE_PLAYS ? '#555' : B.black,
+                border: 'none', padding: '14px 40px',
                 fontFamily: "'Bebas Neue'", fontSize: '1.4rem', letterSpacing: '0.1em',
-                cursor: 'pointer', borderRadius: 4, boxShadow: `0 0 24px ${B.amber}80`,
-              }}>START TRIVIA</button>
+                cursor: freePlaysToday >= MAX_FREE_PLAYS ? 'not-allowed' : 'pointer',
+                borderRadius: 4,
+                boxShadow: freePlaysToday >= MAX_FREE_PLAYS ? 'none' : `0 0 24px ${B.amber}80`,
+              }}>
+                {freePlaysToday >= MAX_FREE_PLAYS
+                  ? 'FREE PLAYS DONE · COME BACK TOMORROW'
+                  : `START TRIVIA (${MAX_FREE_PLAYS - freePlaysToday} LEFT)`}
+              </button>
               <button onClick={() => startGame(true)} disabled={dailyDone} style={{
                 background: dailyDone ? 'transparent' : `${B.neonCyan}15`,
                 color: dailyDone ? '#444' : B.neonCyan,

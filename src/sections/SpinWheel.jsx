@@ -70,19 +70,6 @@ function labelTransform(i) {
   return `translate(${tx},${ty}) rotate(${mid + 90})`
 }
 
-const SOCIAL = [
-  { name: 'Tunde',  city: 'Lagos',  prize: 'VIP UPGRADE'  },
-  { name: 'Adaeze', city: 'Abuja',  prize: '₦5,000 OFF'   },
-  { name: 'Emeka',  city: 'PH',     prize: 'MEET & GREET' },
-  { name: 'Zara',   city: 'Lagos',  prize: 'MYSTERY DROP' },
-  { name: 'Femi',   city: 'Ibadan', prize: '₦2,000 OFF'   },
-  { name: 'Ngozi',  city: 'Enugu',  prize: 'EARLY ACCESS' },
-  { name: 'Dayo',   city: 'Lagos',  prize: 'VIP UPGRADE'  },
-  { name: 'Kemi',   city: 'Kano',   prize: 'MERCH RAFFLE' },
-  { name: 'Seun',   city: 'Lagos',  prize: '₦5,000 OFF'   },
-  { name: 'Bola',   city: 'Abuja',  prize: 'EARLY ACCESS' },
-]
-
 export default function SpinWheel() {
   const [rotation,   setRotation]   = useState(0)
   const [spinning,   setSpinning]   = useState(false)
@@ -91,23 +78,10 @@ export default function SpinWheel() {
   const [isNearMiss, setIsNearMiss] = useState(false)
   const [nearPrize,  setNearPrize]  = useState(null)
   const [confetti,   setConfetti]   = useState([])
-  const [social,     setSocial]     = useState(null)
   const [pools,      setPools]      = useState(() => getSpinPools())
   const [totalAll,   setTotalAll]   = useState(() => getTotalSpins())
   const [winCopied,  setWinCopied]  = useState(false)
   const winnerRef = useRef(null)
-  const socialRef = useRef(null)
-
-  useEffect(() => {
-    function showSocial() {
-      const item = SOCIAL[Math.floor(Math.random() * SOCIAL.length)]
-      setSocial(item)
-      setTimeout(() => setSocial(null), 3500)
-      socialRef.current = setTimeout(showSocial, 10000 + Math.random() * 8000)
-    }
-    socialRef.current = setTimeout(showSocial, 6000)
-    return () => clearTimeout(socialRef.current)
-  }, [])
 
   function spin() {
     const p = getSpinPools()
@@ -206,10 +180,6 @@ export default function SpinWheel() {
           0%  { transform:translateY(-20px) rotate(0deg); opacity:1; }
           100%{ transform:translateY(120%) rotate(var(--s,540deg)); opacity:0; }
         }
-        @keyframes socialIn {
-          from{ transform:translateY(20px); opacity:0; }
-          to  { transform:translateY(0);    opacity:1; }
-        }
         @keyframes wheelGlow {
           0%,100%{ filter:drop-shadow(0 0 8px ${B.amber}40); }
           50%    { filter:drop-shadow(0 0 28px ${B.amber}90); }
@@ -236,20 +206,6 @@ export default function SpinWheel() {
               boxShadow:`0 0 6px ${p.color}80`,
             }}/>
           ))}
-        </div>
-      )}
-
-      {social && (
-        <div style={{
-          position:'absolute', top:28, left:'50%', transform:'translateX(-50%)',
-          background:'rgba(10,10,14,0.97)', border:`1px solid ${B.amber}40`,
-          borderRadius:8, padding:'8px 20px', zIndex:20,
-          animation:'socialIn 0.4s ease', display:'flex', alignItems:'center', gap:10,
-        }}>
-          <div style={{ width:6, height:6, borderRadius:'50%', background:B.neonLime, boxShadow:`0 0 8px ${B.neonLime}` }}/>
-          <span style={{ fontFamily:"'Space Mono'", fontSize:10, color:B.smoke }}>
-            <span style={{ color:B.amber }}>{social.name} ({social.city})</span> just won <span style={{ color:B.neonCyan }}>{social.prize}</span>
-          </span>
         </div>
       )}
 

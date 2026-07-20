@@ -79,7 +79,6 @@ export default function HypeCounter() {
     } catch {}
   }, [])
 
-  // Live concurrent tappers simulation
   useEffect(() => {
     const t = setInterval(() => {
       setTappers(TAPPER_BASE + Math.floor(Math.random() * 28) - 4)
@@ -201,7 +200,7 @@ export default function HypeCounter() {
           THE CULTURE IS COUNTING
         </h2>
 
-        {/* Live social stats */}
+        {/* Live stats */}
         <div style={{ display: 'flex', justifyContent: 'center', gap: 20, marginBottom: 24, flexWrap: 'wrap' }}>
           <div style={{ fontFamily: "'Space Mono'", fontSize: '0.62rem', color: B.smoke }}>
             <span style={{

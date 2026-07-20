@@ -343,13 +343,13 @@ export default function EarlyAccess() {
             </div>
 
             {/* referral link */}
-            <div className="card-3d" style={{ background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.07)', borderRadius:10, padding:'16px 20px', marginBottom:24 }}>
+            <div className="card-3d" style={{ background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.07)', borderRadius:10, padding:'16px 20px', marginBottom:16 }}>
               <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color:'#555', letterSpacing:3, marginBottom:4 }}>YOUR REFERRAL LINK</div>
               <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:10 }}>
-                <span style={{ fontFamily:"'Space Mono'", fontSize:'0.65rem', color:B.amber }}>Share to move up the queue</span>
+                <span style={{ fontFamily:"'Space Mono'", fontSize:'0.65rem', color:B.amber }}>Refer 5 friends → FREE ticket</span>
                 {refCount !== null && (
-                  <span style={{ fontFamily:"'Orbitron'", fontSize:'0.7rem', color:B.neonLime, fontWeight:700 }}>
-                    {refCount} referral{refCount !== 1 ? 's' : ''}
+                  <span style={{ fontFamily:"'Orbitron'", fontSize:'0.7rem', color:refCount >= 5 ? B.neonLime : B.smoke, fontWeight:700 }}>
+                    {refCount}/5 referrals
                   </span>
                 )}
               </div>
@@ -363,6 +363,43 @@ export default function EarlyAccess() {
                 </button>
               </div>
             </div>
+
+            {/* Referral milestone */}
+            {refCount !== null && (
+              refCount >= 5 ? (
+                <div className="card-3d" style={{ background:`${B.neonLime}10`, border:`2px solid ${B.neonLime}60`, borderRadius:10, padding:'20px', marginBottom:24, textAlign:'center' }}>
+                  <div style={{ fontSize:'2.2rem', marginBottom:8 }}>🎟</div>
+                  <div style={{ fontFamily:"'Bebas Neue'", fontSize:'1.8rem', color:B.neonLime, letterSpacing:'0.08em', marginBottom:6 }}>
+                    FREE TICKET UNLOCKED!
+                  </div>
+                  <p style={{ fontFamily:"'Space Mono'", fontSize:'0.68rem', color:B.smoke, marginBottom:12, lineHeight:1.7 }}>
+                    You referred <strong style={{ color:B.neonLime }}>{refCount} people</strong> — you've earned a free General Admission ticket.
+                  </p>
+                  <div style={{ background:B.charcoal, border:`1px solid ${B.neonLime}30`, borderRadius:8, padding:'10px 16px', fontFamily:"'Space Mono'", fontSize:'0.65rem', color:B.neonLime, marginBottom:8 }}>
+                    Email <strong>sneakersfest088@gmail.com</strong><br />
+                    Subject: FREE TICKET — REF CODE: <strong>{refCode}</strong>
+                  </div>
+                  <p style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color:'#555' }}>Valid for one GA ticket · redeemable at the gate on Dec 12</p>
+                </div>
+              ) : (
+                <div className="card-3d" style={{ background:'rgba(255,255,255,0.02)', border:`1px solid ${B.amber}25`, borderRadius:10, padding:'14px 20px', marginBottom:24 }}>
+                  <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color:'#555', letterSpacing:3, marginBottom:8 }}>REFERRAL PROGRESS</div>
+                  <div style={{ display:'flex', gap:8, marginBottom:8 }}>
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <div key={i} style={{
+                        flex:1, height:6, borderRadius:3,
+                        background: i < refCount ? B.neonLime : 'rgba(255,255,255,0.08)',
+                        boxShadow: i < refCount ? `0 0 6px ${B.neonLime}80` : 'none',
+                        transition:'background 0.3s',
+                      }} />
+                    ))}
+                  </div>
+                  <p style={{ fontFamily:"'Space Mono'", fontSize:'0.62rem', color:B.smoke, margin:0 }}>
+                    <strong style={{ color:B.amber }}>{5 - refCount} more</strong> referral{5 - refCount !== 1 ? 's' : ''} to unlock a free GA ticket
+                  </p>
+                </div>
+              )
+            )}
 
             {/* share CTA */}
             <button onClick={sharePos}

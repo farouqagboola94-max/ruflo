@@ -1,7 +1,6 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 import CountUp from '../components/CountUp'
-import Marquee from '../components/Marquee'
 
 const STATS = [
   { to: 1000, suffix: '+', label: 'EXPECTED ATTENDEES',    color: B.amber },
@@ -10,31 +9,10 @@ const STATS = [
   { to: 12,   suffix: 'H', label: 'OF LIVE CULTURE',       color: B.neonCyan },
 ]
 
-const BRANDS = [
-  'Nike', 'Adidas', 'Jordan Brand', 'New Balance', 'Puma', 'Reebok',
-  'Asics', 'Converse', 'Vans', 'Balenciaga', 'Off-White', 'Dior',
-  'Travis Scott', 'A Bathing Ape', 'Yeezy', 'Fear Of God', 'Palm Angels', 'Supreme',
-]
-
-const ACTIVITY_POOL = [
-  { name: 'Tunde O.',  city: 'Lagos Island', action: 'just checked event details' },
-  { name: 'Chisom A.', city: 'Lekki',        action: 'just viewed ticket tiers' },
-  { name: 'Emeka N.',  city: 'Abuja',        action: 'just joined the waitlist' },
-  { name: 'Seun B.',   city: 'VI',           action: 'just entered a raffle' },
-  { name: 'Adaeze K.', city: 'Ikeja',        action: 'just spun the wheel' },
-  { name: 'Dayo F.',   city: 'Port Harcourt',action: 'just reserved a spot' },
-  { name: 'Kemi L.',   city: 'Yaba',         action: 'just checked vendor slots' },
-  { name: 'Bola R.',   city: 'Surulere',     action: 'just viewed ticket tiers' },
-]
-
 const VIEWER_KEY = 'sf26_stats_viewers'
 
 export default function Stats() {
-  const [viewers,  setViewers]  = useState(142)
-  const [actIdx,   setActIdx]   = useState(0)
-  const [actVis,   setActVis]   = useState(true)
-  const timerRef = useRef(null)
-  const idxRef   = useRef(0)
+  const [viewers, setViewers] = useState(142)
 
   useEffect(() => {
     try {
@@ -53,21 +31,8 @@ export default function Stats() {
       setViewers(v => Math.max(100, Math.min(260, v + Math.floor(Math.random() * 7) - 3)))
     }, 6200)
 
-    function cycle() {
-      setActVis(false)
-      timerRef.current = setTimeout(() => {
-        idxRef.current = (idxRef.current + 1) % ACTIVITY_POOL.length
-        setActIdx(idxRef.current)
-        setActVis(true)
-        timerRef.current = setTimeout(cycle, 4800 + Math.random() * 2200)
-      }, 380)
-    }
-    timerRef.current = setTimeout(cycle, 3500)
-
-    return () => { clearInterval(vId); clearTimeout(timerRef.current) }
+    return () => clearInterval(vId)
   }, [])
-
-  const person = ACTIVITY_POOL[actIdx]
 
   return (
     <section id="stats" style={{
@@ -77,27 +42,19 @@ export default function Stats() {
     }}>
       <style>{`
         @keyframes dotBlink { 0%,100%{ opacity:1 } 50%{ opacity:0.4 } }
-        @keyframes actFade  { from{ opacity:0;transform:translateY(4px) } to{ opacity:1;transform:translateY(0) } }
       `}</style>
 
-      {/* Live activity strip */}
+      {/* Live viewer strip */}
       <div style={{
         borderBottom: '1px solid rgba(255,255,255,0.04)',
         padding: '9px 24px',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <div style={{ width: 7, height: 7, borderRadius: '50%', background: B.neonLime, boxShadow: `0 0 8px ${B.neonLime}`, animation: 'dotBlink 1.8s ease-in-out infinite' }} />
           <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: B.smoke, letterSpacing: 2 }}>
             {viewers} EXPLORING THE EVENT NOW
           </span>
-        </div>
-        <div style={{ height: 18, display: 'flex', alignItems: 'center', opacity: actVis ? 1 : 0, transition: 'opacity 0.38s' }}>
-          {actVis && (
-            <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: B.amber, letterSpacing: 1, animation: 'actFade 0.38s ease' }}>
-              ⚡ {person.name} <span style={{ color: B.smoke }}>({person.city}) {person.action}</span>
-            </span>
-          )}
         </div>
       </div>
 
@@ -123,15 +80,10 @@ export default function Stats() {
 
         <div className="reveal-3d" style={{ display: 'flex', justifyContent: 'center', marginTop: 36 }}>
           <div className="card-3d" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 18px', background: `${B.neonCyan}08`, border: `1px solid ${B.neonCyan}22`, borderRadius: 20 }}>
-            <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: B.neonCyan, letterSpacing: 1 }}>✓</span>
-            <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 8, color: B.neonCyan, letterSpacing: 2 }}>COMMUNITY VERIFIED · UPDATED LIVE</span>
+            <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: B.neonCyan, letterSpacing: 1 }}>○</span>
+            <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 8, color: B.neonCyan, letterSpacing: 2 }}>PROJECTED TARGETS · DEC 12, 2026</span>
           </div>
         </div>
-      </div>
-
-      {/* Brand marquee */}
-      <div style={{ borderTop: '1px solid rgba(255,255,255,0.04)', padding: '18px 0' }}>
-        <Marquee items={BRANDS} speed={42} />
       </div>
     </section>
   )
