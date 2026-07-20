@@ -180,7 +180,7 @@ function InfoPanel({ zone, onClose }) {
     </div>
   )
   return (
-    <div style={{ background:'rgba(255,255,255,0.03)', border:`1px solid ${zone.color}35`, borderRadius:12, padding:'24px 28px', position:'relative' }}>
+    <div className="card-3d" style={{ background:'rgba(255,255,255,0.03)', border:`1px solid ${zone.color}35`, borderRadius:12, padding:'24px 28px', position:'relative' }}>
       <div style={{ position:'absolute', top:0, left:20, right:20, height:1, background:`linear-gradient(90deg, transparent, ${zone.color}60, transparent)` }} />
       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:14 }}>
         <div style={{ display:'flex', alignItems:'center', gap:12 }}>
@@ -334,7 +334,7 @@ export default function Venue() {
             <h3 className="reveal-3d" style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(32px,5vw,56px)', color:B.white, letterSpacing:2, lineHeight:0.9, marginBottom:20 }}>
               PLAN YOUR <span style={{ color:B.neonCyan }}>JOURNEY</span>
             </h3>
-            <div style={{
+            <div className="card-3d" style={{
               display:'inline-flex', alignItems:'center', gap:8,
               padding:'8px 20px',
               background:'rgba(255,255,255,0.04)',

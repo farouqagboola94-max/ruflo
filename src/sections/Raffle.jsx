@@ -371,7 +371,7 @@ export default function Raffle() {
           </p>
 
           {/* countdown */}
-          <div style={{ display:'inline-flex', gap:8, alignItems:'center', background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.07)', borderRadius:12, padding:'12px 20px', marginBottom:12 }}>
+          <div className="card-3d" style={{ display:'inline-flex', gap:8, alignItems:'center', background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.07)', borderRadius:12, padding:'12px 20px', marginBottom:12 }}>
             {[{n:countdown.days,l:'DAYS'},{n:countdown.hours,l:'HRS'},{n:countdown.minutes,l:'MIN'},{n:countdown.seconds,l:'SEC'}].map(({ n, l }, i) => (
               <div key={l} style={{ display:'flex', alignItems:'center', gap:i<3?8:0 }}>
                 <div style={{ textAlign:'center' }}>

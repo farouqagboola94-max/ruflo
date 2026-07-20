@@ -303,7 +303,7 @@ export default function TradeBoard() {
         </div>
 
         {/* filters */}
-        <div style={{ display:'flex', gap:10, flexWrap:'wrap', alignItems:'center', marginBottom:32, padding:'16px 20px', background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.07)', borderRadius:10 }}>
+        <div className="card-3d" style={{ display:'flex', gap:10, flexWrap:'wrap', alignItems:'center', marginBottom:32, padding:'16px 20px', background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.07)', borderRadius:10 }}>
           <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search sneakers…" style={{ padding:'8px 13px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:6, color:B.white, fontFamily:'Space Mono,monospace', fontSize:11, outline:'none', minWidth:160, flex:'1 1 140px' }} />
 
           <select value={brandFilter} onChange={e => setBrandFilter(e.target.value)}

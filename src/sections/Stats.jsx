@@ -122,7 +122,7 @@ export default function Stats() {
         </div>
 
         <div className="reveal-3d" style={{ display: 'flex', justifyContent: 'center', marginTop: 36 }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 18px', background: `${B.neonCyan}08`, border: `1px solid ${B.neonCyan}22`, borderRadius: 20 }}>
+          <div className="card-3d" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 18px', background: `${B.neonCyan}08`, border: `1px solid ${B.neonCyan}22`, borderRadius: 20 }}>
             <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: B.neonCyan, letterSpacing: 1 }}>✓</span>
             <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 8, color: B.neonCyan, letterSpacing: 2 }}>COMMUNITY VERIFIED · UPDATED LIVE</span>
           </div>

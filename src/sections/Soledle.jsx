@@ -198,7 +198,7 @@ export default function Soledle() {
 
         {/* Taunt */}
         {taunt && (
-          <div style={{
+          <div className="card-3d" style={{
             background: `${B.neonMagenta}10`, border: `1px solid ${B.neonMagenta}30`,
             borderRadius: 6, padding: '8px 16px', marginBottom: 12,
             fontFamily: "'Space Mono'", fontSize: '0.6rem', color: B.neonMagenta,
@@ -305,7 +305,7 @@ export default function Soledle() {
 
         {/* Lost */}
         {game.status === 'lost' && (
-          <div style={{ textAlign: 'center', background: 'rgba(255,255,255,0.02)', border: `1px solid ${B.gunmetal}`, borderRadius: 12, padding: '24px' }}>
+          <div className="card-3d" style={{ textAlign: 'center', background: 'rgba(255,255,255,0.02)', border: `1px solid ${B.gunmetal}`, borderRadius: 12, padding: '24px' }}>
             <div style={{ fontSize: '2rem', marginBottom: 10 }}>👟</div>
             <div style={{ fontFamily: "'Bebas Neue'", fontSize: '1.3rem', color: B.smoke, marginBottom: 4 }}>
               IT WAS THE {answer.name.toUpperCase()}

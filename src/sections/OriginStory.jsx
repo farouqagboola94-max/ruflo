@@ -197,7 +197,7 @@ export default function OriginStory() {
         </div>
 
         {/* substack CTA */}
-        <div style={{ padding:'32px 36px', background:`linear-gradient(135deg, rgba(255,103,25,0.08), rgba(0,0,0,0))`, border:'1px solid rgba(255,103,25,0.25)', borderRadius:12, marginBottom:28, display:'flex', gap:28, alignItems:'center', flexWrap:'wrap' }}>
+        <div className="card-3d" style={{ padding:'32px 36px', background:`linear-gradient(135deg, rgba(255,103,25,0.08), rgba(0,0,0,0))`, border:'1px solid rgba(255,103,25,0.25)', borderRadius:12, marginBottom:28, display:'flex', gap:28, alignItems:'center', flexWrap:'wrap' }}>
           <div style={{ flex:1, minWidth:220 }}>
             <div style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color:'#FF6719', letterSpacing:3, marginBottom:10 }}>THE CATALYST SUBSTACK</div>
             <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(20px,3vw,30px)', color:B.white, marginBottom:8, lineHeight:1.1 }}>SNEAKER CULTURE,<br />LAGOS DROPS &amp; THE BUILD JOURNAL</div>
@@ -209,7 +209,7 @@ export default function OriginStory() {
               READ ON SUBSTACK →
             </a>
           </div>
-          <div style={{ flexShrink:0, padding:'18px 20px', background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,103,25,0.2)', borderRadius:8, minWidth:200 }}>
+          <div className="card-3d" style={{ flexShrink:0, padding:'18px 20px', background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,103,25,0.2)', borderRadius:8, minWidth:200 }}>
             <div style={{ fontFamily:"'Space Mono', monospace", fontSize:7, color:'#FF6719', letterSpacing:2, marginBottom:8 }}>LATEST ESSAY</div>
             <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:18, color:B.white, lineHeight:1.2, marginBottom:6 }}>THE VOID AND WHAT CAME AFTER</div>
             <div style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color:'#555' }}>PERSONAL · 8 MIN READ</div>

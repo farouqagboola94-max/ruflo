@@ -103,7 +103,7 @@ export default function MarketContext() {
                 <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.smoke, letterSpacing: '0.15em', marginBottom: 20 }}>{p.type}</div>
                 <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 16 }}>
                   {p.data.map((d, di) => (
-                    <div key={di} style={{ padding: '12px 16px', background: `${p.color}10`, border: `1px solid ${p.color}25`, borderRadius: 6 }}>
+                    <div key={di} className="card-3d" style={{ padding: '12px 16px', background: `${p.color}10`, border: `1px solid ${p.color}25`, borderRadius: 6 }}>
                       <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: p.color, letterSpacing: '0.2em', marginBottom: 4 }}>{d.year}</div>
                       <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 24, color: B.white, lineHeight: 1, marginBottom: 2 }}>{d.n}</div>
                       <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 6, color: B.smoke, letterSpacing: '0.1em' }}>{d.label}</div>
@@ -117,7 +117,7 @@ export default function MarketContext() {
         </div>
 
         {/* Gap statement */}
-        <div style={{ padding: '40px 44px', background: `linear-gradient(135deg, ${B.amber}10, ${B.neonCyan}06)`, border: `1px solid ${B.amber}30`, borderRadius: 10, position: 'relative', overflow: 'hidden' }}>
+        <div className="card-3d" style={{ padding: '40px 44px', background: `linear-gradient(135deg, ${B.amber}10, ${B.neonCyan}06)`, border: `1px solid ${B.amber}30`, borderRadius: 10, position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, ${B.amber}, ${B.neonCyan}, transparent)` }} />
           <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(22px, 3.5vw, 36px)', color: B.white, lineHeight: 1.1, marginBottom: 16 }}>
             EVERY LAGOS EVENT TOUCHES SNEAKERS.<br />
