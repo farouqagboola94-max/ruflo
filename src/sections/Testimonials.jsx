@@ -83,7 +83,7 @@ export default function Testimonials() {
           <div className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(40px, 6vw, 68px)', color: B.white, lineHeight: 0.9 }}>
             THEY WERE<br /><span style={{ color: B.amber }}>THERE</span>
           </div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, marginTop: 20, padding: '6px 14px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20 }}>
+          <div className="card-3d" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, marginTop: 20, padding: '6px 14px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20 }}>
             <div style={{ width: 6, height: 6, borderRadius: '50%', background: B.neonLime, boxShadow: `0 0 6px ${B.neonLime}`, animation: 'dotPulse 2s ease-in-out infinite' }} />
             <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: B.smoke, letterSpacing: 1 }}>{readers} people reading reviews right now</span>
           </div>

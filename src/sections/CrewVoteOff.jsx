@@ -187,6 +187,7 @@ export default function CrewVoteOff() {
                     key={side}
                     onClick={() => vote(side)}
                     disabled={disabled}
+                    className="card-3d"
                     style={{
                       background: voted ? `${B.neonCyan}15` : B.void,
                       border: `1px solid ${voted ? B.neonCyan : B.gunmetal}`,
@@ -226,7 +227,7 @@ export default function CrewVoteOff() {
                 display: 'inline-flex', gap: 8, marginBottom: 12, flexWrap: 'wrap', justifyContent: 'center',
               }}>
                 {hotTake && (
-                  <span style={{
+                  <span className="card-3d" style={{
                     background: `${B.neonMagenta}15`, border: `1px solid ${B.neonMagenta}50`,
                     borderRadius: 20, padding: '4px 14px',
                     fontFamily: "'Orbitron'", fontSize: '0.55rem', color: B.neonMagenta, letterSpacing: '0.1em',
@@ -235,7 +236,7 @@ export default function CrewVoteOff() {
                   </span>
                 )}
                 {controversial && !hotTake && (
-                  <span style={{
+                  <span className="card-3d" style={{
                     background: `${B.amber}12`, border: `1px solid ${B.amber}40`,
                     borderRadius: 20, padding: '4px 14px',
                     fontFamily: "'Orbitron'", fontSize: '0.55rem', color: B.amber, letterSpacing: '0.1em',

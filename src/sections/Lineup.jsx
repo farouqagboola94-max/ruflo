@@ -79,7 +79,7 @@ export default function Lineup() {
             THE<br /><span style={{ color: B.neonMagenta }}>LINEUP</span>
           </div>
           <div style={{ marginTop: 14 }}>
-            <div style={{
+            <div className="card-3d" style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
               background: `${B.neonMagenta}10`, border: `1px solid ${B.neonMagenta}30`,
               borderRadius: 20, padding: '5px 14px',

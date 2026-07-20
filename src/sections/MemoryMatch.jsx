@@ -261,7 +261,7 @@ export default function MemoryMatch() {
 
         {/* LOCKED */}
         {phase === 'locked' && (
-          <div style={{
+          <div className="card-3d" style={{
             padding: '32px 20px', background: 'rgba(255,255,255,0.02)',
             borderRadius: 12, border: '1px solid #333',
           }}>

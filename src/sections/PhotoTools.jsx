@@ -218,6 +218,7 @@ export default function PhotoTools() {
         {/* upload zone */}
         {!img && (
           <div onClick={() => fileRef.current?.click()} onDragOver={e => e.preventDefault()} onDrop={e => { e.preventDefault(); loadFile(e.dataTransfer.files[0]) }}
+            className="card-3d"
             style={{ border:`2px dashed rgba(255,45,123,0.35)`, borderRadius:20, padding:'90px 40px', textAlign:'center', cursor:'pointer', background:'rgba(255,45,123,0.025)', maxWidth:640, margin:'0 auto' }}>
             <input ref={fileRef} type="file" accept="image/*" style={{ display:'none' }} onChange={e => loadFile(e.target.files[0])} />
             <div style={{ fontSize:56, marginBottom:18 }}>👟</div>

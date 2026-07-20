@@ -138,7 +138,7 @@ export default function SneakerBingo() {
 
         {/* Urgency hint */}
         {!fullCard && completedLines === 0 && minToNext <= 2 && closestSquareIdx !== undefined && (
-          <div style={{
+          <div className="card-3d" style={{
             background: `${B.amber}12`, border: `1px solid ${B.amber}30`,
             borderRadius: 8, padding: '8px 16px', marginBottom: 20,
             fontFamily: "'Space Mono'", fontSize: '0.62rem', color: B.amber,

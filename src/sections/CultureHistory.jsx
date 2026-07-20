@@ -215,7 +215,7 @@ function EraContent({ era, open, setOpen }) {
             <p style={{ fontFamily: "'Syne',sans-serif", fontSize: 13, color: B.smoke,
               lineHeight: 1.8, marginBottom: era.lagos ? 12 : 0 }}>{era.body}</p>
             {era.lagos && (
-              <div style={{ padding: '10px 14px', background: era.color + '10',
+              <div className="card-3d" style={{ padding: '10px 14px', background: era.color + '10',
                 border: `1px solid ${era.color}30`, borderRadius: 4 }}>
                 <span style={{ fontFamily: "'Space Mono',monospace", fontSize: 8,
                   color: era.color, letterSpacing: 2 }}>◆ LAGOS — </span>
