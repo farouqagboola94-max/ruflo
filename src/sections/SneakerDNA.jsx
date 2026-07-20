@@ -186,7 +186,7 @@ export default function SneakerDNA() {
             </button>
             <div style={{ display:'flex', gap:10, justifyContent:'center', marginTop:60, flexWrap:'wrap' }}>
               {Object.values(ARCHETYPES).map(a => (
-                <div key={a.title} style={{ padding:'8px 16px', borderRadius:20, border:`1px solid ${a.color}30`, background:a.color+'0a' }}>
+                <div key={a.title} className="card-3d" style={{ padding:'8px 16px', borderRadius:20, border:`1px solid ${a.color}30`, background:a.color+'0a' }}>
                   <span style={{ fontFamily:'Bebas Neue, sans-serif', fontSize:13, color:a.color, letterSpacing:2 }}>{a.badge} {a.title}</span>
                 </div>
               ))}

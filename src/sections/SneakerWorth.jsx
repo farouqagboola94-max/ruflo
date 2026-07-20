@@ -266,7 +266,7 @@ export default function SneakerWorth() {
             }}>
               {formatNaira(displayWorth)}
             </div>
-            <div style={{
+            <div className="card-3d" style={{
               display: 'inline-block', background: `${B.neonLime}12`, border: `1px solid ${B.neonLime}40`,
               borderRadius: 20, padding: '4px 14px', marginBottom: 20,
               fontFamily: "'Space Mono'", fontSize: '0.6rem', color: B.neonLime, letterSpacing: '0.08em',

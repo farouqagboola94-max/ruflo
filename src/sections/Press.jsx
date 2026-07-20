@@ -68,6 +68,7 @@ export default function Press() {
             {OUTLETS.map((m, i) => (
               <div
                 key={i}
+                className="card-3d"
                 style={{
                   padding: '10px 18px', background: 'rgba(255,255,255,0.03)',
                   border: '1px solid rgba(255,255,255,0.07)', borderRadius: 6,

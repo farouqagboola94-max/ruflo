@@ -260,7 +260,7 @@ export default function Comics() {
         </div>
 
         {/* ── CTA strip ── */}
-        <div style={{ marginTop: 44, padding: '24px 32px', background: `linear-gradient(90deg, ${B.amber}08, rgba(255,255,255,0.03), ${B.neonMagenta}06)`, border: `1px solid rgba(255,255,255,0.07)`, borderRadius: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
+        <div className="card-3d" style={{ marginTop: 44, padding: '24px 32px', background: `linear-gradient(90deg, ${B.amber}08, rgba(255,255,255,0.03), ${B.neonMagenta}06)`, border: `1px solid rgba(255,255,255,0.07)`, borderRadius: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
           <div>
             <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 22, color: B.white, letterSpacing: '0.05em' }}>SUBSCRIBE TO CATALYST UNIVERSE</div>
             <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: B.smoke, marginTop: 4 }}>New issues, behind-the-scenes, and exclusive drops — straight to your inbox.</div>

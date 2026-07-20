@@ -177,7 +177,7 @@ export default function Schedule() {
 
         <Timeline items={day === 1 ? DAY1 : DAY2} liveStatus={liveStatus} />
 
-        <div style={{ marginTop:36, padding:'20px 24px', background:B.charcoal, border:`1px solid ${B.gunmetal}`, borderRadius:8, display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:12 }}>
+        <div className="card-3d" style={{ marginTop:36, padding:'20px 24px', background:B.charcoal, border:`1px solid ${B.gunmetal}`, borderRadius:8, display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:12 }}>
           <div style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color:B.smoke, letterSpacing:'0.15em', lineHeight:1.7 }}>
             SCHEDULE SUBJECT TO CHANGE<br />
             <span style={{ color:'#333' }}>FOLLOW @SNEAKERSFEST FOR LIVE UPDATES</span>

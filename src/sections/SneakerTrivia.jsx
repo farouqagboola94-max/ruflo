@@ -298,7 +298,7 @@ export default function SneakerTrivia() {
                 ))}
               </div>
               {streak > 1 && (
-                <div style={{ padding: '4px 10px', background: `${B.amber}20`, border: `1px solid ${B.amber}40`, borderRadius: 20 }}>
+                <div className="card-3d" style={{ padding: '4px 10px', background: `${B.amber}20`, border: `1px solid ${B.amber}40`, borderRadius: 20 }}>
                   <span style={{ fontFamily: "'Orbitron'", fontSize: 8, color: B.amber, fontWeight: 700 }}>🔥 {streak}x STREAK · {getMultiplier(streak)}x PTS</span>
                 </div>
               )}
