@@ -55,7 +55,7 @@ export default function ArtistSpotlight() {
         <h2 className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
           THE ONES ON THE DECKS
         </h2>
-        <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.78rem', marginBottom: 48 }}>
+        <p className="reveal-3d" style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.78rem', marginBottom: 48 }}>
           Three legends. One stage. December 12.
         </p>
 

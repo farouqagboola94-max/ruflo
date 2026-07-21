@@ -247,7 +247,7 @@ export default function PhotoTools() {
               </button>
 
               {/* action bar */}
-              <div style={{ display:'flex', gap:8, marginTop:10, flexWrap:'wrap' }}>
+              <div className="reveal-3d" style={{ display:'flex', gap:8, marginTop:10, flexWrap:'wrap' }}>
                 <button onClick={downloadJpg} style={{ flex:'1 1 100px', padding:'12px 8px', background:`${B.neonLime}12`, border:`1px solid ${B.neonLime}50`, borderRadius:10, color:B.neonLime, fontFamily:'Orbitron,monospace', fontSize:9, fontWeight:700, cursor:'pointer', letterSpacing:1 }}>↓ JPG</button>
                 <button onClick={downloadPng} style={{ flex:'1 1 100px', padding:'12px 8px', background:`${B.neonLime}08`, border:`1px solid ${B.neonLime}30`, borderRadius:10, color:`${B.neonLime}90`, fontFamily:'Orbitron,monospace', fontSize:9, fontWeight:700, cursor:'pointer', letterSpacing:1 }}>↓ PNG</button>
                 <button onClick={shareToGallery} style={{ flex:'2 1 140px', padding:'12px 8px', background:shared ? `${B.neonCyan}18` : `${B.neonCyan}10`, border:`1px solid ${shared ? B.neonCyan : B.neonCyan+'40'}`, borderRadius:10, color:B.neonCyan, fontFamily:'Orbitron,monospace', fontSize:9, fontWeight:700, cursor:'pointer', letterSpacing:1, transition:'all 0.2s' }}>

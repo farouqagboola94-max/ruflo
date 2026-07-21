@@ -369,7 +369,7 @@ export default function CommunityWall() {
           </p>
 
           {/* Role count badges */}
-          <div style={{ display:'flex', flexWrap:'wrap', gap:10, justifyContent:'center', marginTop:28 }}>
+          <div className="reveal-3d" style={{ display:'flex', flexWrap:'wrap', gap:10, justifyContent:'center', marginTop:28 }}>
             {Object.entries(ROLES).map(([r, cfg]) => (
               <div key={r} className="card-3d" style={{ display:'flex', alignItems:'center', gap:6, padding:'5px 12px',
                 background:cfg.color+'10', border:`1px solid ${cfg.color}30`, borderRadius:20 }}>
@@ -394,7 +394,7 @@ export default function CommunityWall() {
         </div>
 
         {/* Masonry card wall */}
-        <div style={{ columns: 'auto 280px', gap: 20, marginBottom: 64, position:'relative' }}>
+        <div className="reveal-3d" style={{ columns: 'auto 280px', gap: 20, marginBottom: 64, position:'relative' }}>
           {all.map((entry, idx) => (
             <WallCard key={entry.id || idx} entry={entry} isNew={newIds.includes(entry.id)} />
           ))}

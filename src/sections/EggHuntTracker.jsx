@@ -29,7 +29,7 @@ export default function EggHuntTracker() {
           watch for anything that doesn't quite belong.
         </p>
 
-        <div style={{ marginBottom: 28 }}>
+        <div className="reveal-3d" style={{ marginBottom: 28 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: "'Space Mono', monospace", fontSize: 12, color: B.amber, marginBottom: 8 }}>
             <span>{count}/{TOTAL_EGGS} FOUND</span>
             <span>{pct}%</span>

@@ -151,7 +151,7 @@ export default function SneakerBingo() {
         )}
 
         {/* Bingo grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 8, marginBottom: 20 }}>
+        <div className="reveal-3d" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 8, marginBottom: 20 }}>
           {SQUARES.map((sq, i) => {
             const isWinning = winningSquares.has(i)
             const isFree = i === 4
@@ -183,7 +183,7 @@ export default function SneakerBingo() {
         </div>
 
         {/* Stats row */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 20, fontFamily: "'Space Mono'", fontSize: '0.65rem', color: '#555', marginBottom: 16 }}>
+        <div className="reveal-3d" style={{ display: 'flex', justifyContent: 'center', gap: 20, fontFamily: "'Space Mono'", fontSize: '0.65rem', color: '#555', marginBottom: 16 }}>
           <span>SQUARES: <strong style={{ color: B.white }}>{filledCount}/9</strong></span>
           <span>LINES: <strong style={{ color: B.amber }}>{completedLines}/8</strong></span>
           {completedLines > 0 && (

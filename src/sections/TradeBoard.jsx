@@ -285,7 +285,7 @@ export default function TradeBoard() {
       <div style={{ position:'relative', zIndex:10, maxWidth:1100, margin:'0 auto' }}>
 
         {/* header */}
-        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-end', flexWrap:'wrap', gap:20, marginBottom:16 }}>
+        <div className="reveal-3d" style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-end', flexWrap:'wrap', gap:20, marginBottom:16 }}>
           <div>
             <SectionTag>COMMUNITY MARKET</SectionTag>
             <div className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(40px,7vw,72px)', color:B.white, lineHeight:0.88 }}>

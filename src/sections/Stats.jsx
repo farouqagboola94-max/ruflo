@@ -60,7 +60,7 @@ export default function Stats() {
 
       {/* Animated counters */}
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '72px 24px 48px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}>
+        <div className="reveal-3d" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}>
           {STATS.map((s, i) => (
             <div key={i} className="card-3d" style={{
               padding: '28px 20px', textAlign: 'center',

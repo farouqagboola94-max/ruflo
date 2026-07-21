@@ -118,7 +118,7 @@ export default function SubstackSection() {
       <div style={{ position: 'relative', zIndex: 10, maxWidth: 1100, margin: '0 auto' }}>
 
         {/* header row */}
-        <div style={{ display: 'flex', gap: 48, alignItems: 'flex-end', flexWrap: 'wrap', marginBottom: 48 }}>
+        <div className="reveal-3d" style={{ display: 'flex', gap: 48, alignItems: 'flex-end', flexWrap: 'wrap', marginBottom: 48 }}>
           <div style={{ flex: '1 1 320px' }}>
             <SectionTag>READ THE CULTURE</SectionTag>
             <div className="reveal-3d" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(44px,7vw,76px)', color: B.white, lineHeight: 0.85, marginBottom: 16 }}>
@@ -142,7 +142,7 @@ export default function SubstackSection() {
         </div>
 
         {/* posts grid — feature card + 2 smaller */}
-        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 40 }}>
+        <div className="reveal-3d" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 40 }}>
           {POSTS.map((p, i) => <PostCard key={p.id} post={p} featured={i === 0} />)}
         </div>
 

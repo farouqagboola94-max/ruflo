@@ -446,7 +446,7 @@ export default function CultureMuseum() {
             </div>
           )}
           <style>{`@keyframes bidTick { 0%,100%{opacity:1} 50%{opacity:0.3} }`}</style>
-          <div style={{ marginTop:14, display:'flex', justifyContent:'center' }}>
+          <div className="reveal-3d" style={{ marginTop:14, display:'flex', justifyContent:'center' }}>
             <div style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(255,255,255,0.025)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:4, padding:'7px 14px', maxWidth:380, overflow:'hidden' }}>
               <span style={{ width:5, height:5, borderRadius:'50%', background:B.neonCyan, flexShrink:0, animation:'bidTick 3s ease infinite' }} />
               <span style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color:'#555', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>
@@ -456,7 +456,7 @@ export default function CultureMuseum() {
           </div>
         </div>
 
-        <div style={{ columns:'auto 280px', columnGap:20, orphans:1, widows:1 }}>
+        <div className="reveal-3d" style={{ columns:'auto 280px', columnGap:20, orphans:1, widows:1 }}>
           {ARTWORKS.map(aw => (
             <div key={aw.id} style={{ breakInside:'avoid', marginBottom:20 }}>
               <ArtCard artwork={aw} bids={bids} onBid={handleBid} watchers={watcherMap[aw.id] || 0} />

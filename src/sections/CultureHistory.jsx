@@ -254,7 +254,7 @@ function StakeQuiz() {
   const cfg = result ? ARCHETYPES[result] : null
 
   return (
-    <div style={{ marginTop: 72, padding: '52px 0' }}>
+    <div className="reveal-3d" style={{ marginTop: 72, padding: '52px 0' }}>
       <div style={{ textAlign: 'center', marginBottom: 40 }}>
         <p style={{ fontFamily: "'Space Mono',monospace", color: B.amber, fontSize: 10, letterSpacing: 5, marginBottom: 12 }}>
           ◈ FIND YOUR STAKE
@@ -361,7 +361,7 @@ export default function CultureHistory() {
         </div>
 
         {/* Timeline — stacked on mobile, alternating on desktop */}
-        <div style={{ position: 'relative' }}>
+        <div className="reveal-3d" style={{ position: 'relative' }}>
           {ERAS.map((era, idx) => (
             <EraCard key={era.id} era={era} idx={idx} />
           ))}

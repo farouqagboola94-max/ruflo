@@ -298,7 +298,7 @@ export default function CatalystOSObsidian() {
         <div style={{ fontSize: 11, color: "#666", maxWidth: 520, lineHeight: 1.6 }}>
           The complete Claude + Obsidian stack. Every setup integrated into CatalystOS and configured for the Lagos operating context.
         </div>
-        <div style={{ display: "flex", gap: 20, marginTop: 16 }}>
+        <div className="reveal-3d" style={{ display: "flex", gap: 20, marginTop: 16 }}>
           {[
             { val: "5", label: "SETUPS" },
             { val: "ALL", label: "ACTIVE" },
