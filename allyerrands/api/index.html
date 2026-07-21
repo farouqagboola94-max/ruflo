@@ -4,11 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Za.allyErrands API — Developer Reference</title>
-  <link rel="canonical" href="https://za-allyerrands.netlify.app/api/" />
-  <meta name="geo.region" content="NG-LA" />
-  <meta name="geo.placename" content="Lagos, Nigeria" />
-  <meta name="geo.position" content="6.5244;3.3792" />
-  <meta name="ICBM" content="6.5244, 3.3792" />
   <meta name="description" content="Za.allyErrands Dispatch API — integrate same-day Lagos delivery into your business. REST endpoints, webhooks, SDKs." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -712,15 +707,15 @@
 <pre><span class="t-fn">curl</span> <span class="t-kw">-X</span> POST <span class="t-str">https://api.zallyerrands.com/v1/dispatch</span> \
   <span class="t-kw">-H</span> <span class="t-str">"Authorization: Bearer za_live_sk_xxxx"</span> \
   <span class="t-kw">-H</span> <span class="t-str">"Content-Type: application/json"</span> \
-  <span class="t-kw">-d</span> <span class="t-str">'{</span>
-<span class="t-str">    "pickup_address": "14 Adeola Odeku Street, Victoria Island, Lagos",</span>
-<span class="t-str">    "dropoff_address": "42 Admiralty Way, Lekki Phase 1, Lagos",</span>
-<span class="t-str">    "item_description": "3 bags of groceries from Shoprite",</span>
-<span class="t-str">    "recipient_name": "Amara Okafor",</span>
-<span class="t-str">    "recipient_phone": "+2348012345678",</span>
-<span class="t-str">    "priority": "standard",</span>
-<span class="t-str">    "reference": "ORD-20260524-001"</span>
-<span class="t-str">  }'</span></pre>
+  <span class="t-kw">-d</span> <span class="t-str">'{
+    "pickup_address": "14 Adeola Odeku Street, Victoria Island, Lagos",
+    "dropoff_address": "42 Admiralty Way, Lekki Phase 1, Lagos",
+    "item_description": "3 bags of groceries from Shoprite",
+    "recipient_name": "Amara Okafor",
+    "recipient_phone": "+2348012345678",
+    "priority": "standard",
+    "reference": "ORD-20260524-001"
+  }'</span></pre>
               </div>
               <div class="code-panel" id="create-js">
 <pre><span class="t-kw">import</span> <span class="t-var">AllyErrands</span> <span class="t-kw">from</span> <span class="t-str">'@zallyerrands/sdk'</span><span class="t-punc">;</span>
@@ -768,7 +763,7 @@
             <div class="code-block-wrap">
               <div class="code-block-wrap__header">
                 <span class="code-block-wrap__label">JSON</span>
-                <button class="copy-btn">Copy</button>
+                <button class="copy-btn" data-copy='{"id":"dsp_01HX3KPQRS","status":"queued","priority":"standard","pickup_address":"14 Adeola Odeku Street, Victoria Island, Lagos","dropoff_address":"42 Admiralty Way, Lekki Phase 1, Lagos","item_description":"3 bags of groceries from Shoprite","recipient_name":"Amara Okafor","recipient_phone":"+2348012345678","reference":"ORD-20260524-001","estimated_pickup":"2026-05-24T10:08:00Z","estimated_delivery":"2026-05-24T10:45:00Z","runner":null,"created_at":"2026-05-24T10:00:00Z"}'>Copy</button>
               </div>
 <pre><span class="t-punc">{</span>
   <span class="t-key">"id"</span><span class="t-punc">:</span> <span class="t-str">"dsp_01HX3KPQRS"</span><span class="t-punc">,</span>
@@ -923,7 +918,7 @@
             <div class="code-block-wrap">
               <div class="code-block-wrap__header">
                 <span class="code-block-wrap__label">cURL</span>
-                <button class="copy-btn" data-copy='curl "https://api.zallyerrands.com/v1/dispatches?status=en_route&amp;limit=10" -H "Authorization: Bearer za_live_sk_xxxx"'>Copy</button>
+                <button class="copy-btn" data-copy='curl "https://api.zallyerrands.com/v1/dispatches?status=en_route&limit=10" -H "Authorization: Bearer za_live_sk_xxxx"'>Copy</button>
               </div>
 <pre><span class="t-fn">curl</span> <span class="t-str">"https://api.zallyerrands.com/v1/dispatches?status=en_route&amp;limit=10"</span> \
   <span class="t-kw">-H</span> <span class="t-str">"Authorization: Bearer za_live_sk_xxxx"</span></pre>

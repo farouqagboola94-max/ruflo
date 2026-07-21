@@ -42,26 +42,6 @@
   status = 200
 
 [[redirects]]
-  from = "/about"
-  to = "/about/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/contact"
-  to = "/contact/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/privacy"
-  to = "/privacy/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/terms"
-  to = "/terms/index.html"
-  status = 200
-
-[[redirects]]
   from = "/workflow"
   to = "/workflow/index.html"
   status = 200
@@ -83,7 +63,7 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://*.supabase.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co https://*.make.com https://graph.facebook.com https://api.flutterwave.com; img-src 'self' data:; frame-ancestors 'none'"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.supabase.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co https://*.make.com https://graph.facebook.com https://api.flutterwave.com; img-src 'self' data:; frame-ancestors 'none'"
 
 [[headers]]
   for = "/assets/*"
