@@ -194,7 +194,7 @@ export default function CatalystOSRepo() {
         />
 
         {/* CAT FILTER */}
-        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
+        <div className="reveal-3d" style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
           {CATS.map(c => (
             <button key={c} onClick={() => setCat(c)} className="filter-btn" style={{
               background: cat === c ? "#D4AF3715" : "transparent",
@@ -238,7 +238,7 @@ export default function CatalystOSRepo() {
         {Object.entries(grouped).map(([catName, catTools]) => (
           <div key={catName} style={{ marginBottom: 48 }}>
             {/* CATEGORY HEADER */}
-            <div style={{
+            <div className="reveal-3d" style={{
               display: "flex", alignItems: "center", gap: 12, marginBottom: 16,
               paddingBottom: 10, borderBottom: "1px solid #1A1714",
             }}>

@@ -57,7 +57,7 @@ export default function ShoeColorizer() {
           Select a zone · tap a color · own the look
         </p>
 
-        <div style={{
+        <div className="reveal-3d" style={{
           display: 'grid',
           gridTemplateColumns: 'minmax(0,1fr) 220px',
           gap: 32, alignItems: 'start',
@@ -161,7 +161,7 @@ export default function ShoeColorizer() {
           </div>
 
           {/* Controls */}
-          <div>
+          <div className="reveal-3d">
             <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.62rem', letterSpacing: '0.15em', marginBottom: 10 }}>SELECT ZONE</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24 }}>
               {ZONES.map(z => (

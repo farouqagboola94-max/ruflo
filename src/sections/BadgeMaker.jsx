@@ -105,7 +105,7 @@ export default function BadgeMaker() {
           background: 'rgba(0,0,0,0.88)', padding: 20,
           animation: 'badgeFadeIn 0.3s ease',
         }}>
-          <div style={{
+          <div className="card-3d" style={{
             background: B.charcoal, border: `2px solid ${tierColor}`,
             borderRadius: 16, padding: '44px 52px', textAlign: 'center',
             boxShadow: `0 0 60px ${tierColor}30`,
@@ -135,7 +135,7 @@ export default function BadgeMaker() {
         </p>
 
         {/* Social proof */}
-        <div style={{
+        <div className="reveal-3d" style={{
           fontFamily: "'Space Mono'", fontSize: '0.58rem', color: '#555', marginBottom: 30,
           animation: 'tierGlow 3.5s ease-in-out infinite',
         }}>
@@ -226,7 +226,7 @@ export default function BadgeMaker() {
           </svg>
         </div>
 
-        <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+        <div className="reveal-3d" style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
           <button
             onClick={download}
             style={{

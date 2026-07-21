@@ -79,7 +79,7 @@ export default function Footer() {
           </div>
 
           {/* Navigate */}
-          <div style={{ flex: '0 1 160px' }}>
+          <div className="reveal-3d" style={{ flex: '0 1 160px' }}>
             <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.neonCyan, letterSpacing: '0.3em', marginBottom: 18 }}>NAVIGATE</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {NAV.map(([label, href]) => (
@@ -116,7 +116,7 @@ export default function Footer() {
           </div>
 
           {/* CTA */}
-          <div style={{ flex: '0 1 180px' }}>
+          <div className="reveal-3d" style={{ flex: '0 1 180px' }}>
             <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.neonCyan, letterSpacing: '0.3em', marginBottom: 18 }}>JOIN NOW</div>
             <a href="#tickets" style={{ display: 'block', padding: '14px 20px', background: B.amber, color: B.black, fontFamily: "'Space Mono', monospace", fontSize: 9, fontWeight: 700, letterSpacing: '0.15em', textDecoration: 'none', borderRadius: 2, textAlign: 'center', boxShadow: `0 0 25px ${B.amber}20`, marginBottom: 8 }}>GET TICKETS</a>
             <a href="#waitlist" style={{ display: 'block', padding: '11px 20px', border: `1px solid ${B.neonMagenta}50`, color: B.neonMagenta, fontFamily: "'Space Mono', monospace", fontSize: 9, fontWeight: 700, letterSpacing: '0.15em', textDecoration: 'none', borderRadius: 2, textAlign: 'center', marginBottom: 8 }}>EARLY ACCESS</a>

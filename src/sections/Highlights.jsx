@@ -40,6 +40,7 @@ export default function Highlights() {
           {FEATURES.map((f, i) => (
             <div
               key={i}
+              className="reveal-3d"
               style={{
                 padding: 28, background: B.charcoal,
                 border: `1px solid ${B.gunmetal}`, borderRadius: 6,

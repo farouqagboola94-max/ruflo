@@ -100,14 +100,14 @@ export default function DropsTimeline() {
           alignItems: 'start',
         }}>
           {/* Year block */}
-          <div style={{ textAlign: 'center' }}>
+          <div className="reveal-3d" style={{ textAlign: 'center' }}>
             <div style={{
               fontFamily: "'Orbitron'", fontSize: '2.2rem', fontWeight: 900,
               color: isLast ? B.amber : B.neonCyan,
               textShadow: `0 0 24px ${isLast ? B.amber : B.neonCyan}80`,
               lineHeight: 1, marginBottom: 6,
             }}>{drop.year}</div>
-            <div style={{
+            <div className="float-3d" style={{
               background: `${(isLast ? B.amber : B.neonCyan)}20`,
               border: `1px solid ${(isLast ? B.amber : B.neonCyan)}40`,
               borderRadius: 20, padding: '3px 10px',

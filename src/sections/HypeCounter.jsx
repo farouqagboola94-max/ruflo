@@ -159,7 +159,7 @@ export default function HypeCounter() {
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           background: 'rgba(0,0,0,0.88)', padding: 20,
         }}>
-          <div style={{
+          <div className="card-3d" style={{
             background: B.charcoal, border: `2px solid ${B.amber}`,
             borderRadius: 16, padding: '36px 40px', textAlign: 'center',
             animation: 'milestoneGlow 2s ease-in-out infinite, milestoneSlide 0.5s cubic-bezier(0.34,1.56,0.64,1)',
@@ -201,7 +201,7 @@ export default function HypeCounter() {
         </h2>
 
         {/* Live stats */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 20, marginBottom: 24, flexWrap: 'wrap' }}>
+        <div className="reveal-3d" style={{ display: 'flex', justifyContent: 'center', gap: 20, marginBottom: 24, flexWrap: 'wrap' }}>
           <div style={{ fontFamily: "'Space Mono'", fontSize: '0.62rem', color: B.smoke }}>
             <span style={{
               display: 'inline-block', width: 6, height: 6, borderRadius: '50%',
@@ -232,7 +232,7 @@ export default function HypeCounter() {
         </div>
 
         {/* Progress to next milestone */}
-        <div style={{ marginBottom: 32 }}>
+        <div className="reveal-3d" style={{ marginBottom: 32 }}>
           <div style={{ fontFamily: "'Space Mono'", fontSize: '0.58rem', color: '#444', marginBottom: 6 }}>
             NEXT MILESTONE: {nextMilestone.toLocaleString()}
           </div>

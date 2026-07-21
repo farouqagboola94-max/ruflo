@@ -59,7 +59,7 @@ export default function ArtistSpotlight() {
           Three legends. One stage. December 12.
         </p>
 
-        <div style={{
+        <div className="reveal-3d" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
           gap: 24,
@@ -149,7 +149,7 @@ export default function ArtistSpotlight() {
               {/* Stats */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                 {[a.stat1, a.stat2].map(s => (
-                  <div key={s.label} style={{
+                  <div key={s.label} className="card-3d" style={{
                     background: B.black, borderRadius: 6,
                     padding: '10px 12px', textAlign: 'center',
                   }}>

@@ -78,7 +78,7 @@ export default function OutfitMatcher() {
         </p>
 
         {[['VIBE', VIBES, vibe, setVibe], ['COLOR LANE', COLORS, color, setColor], ['BUDGET', BUDGETS, budget, setBudget]].map(([label, opts, val, setter]) => (
-          <div key={label} style={{ marginBottom: 24 }}>
+          <div key={label} className="reveal-3d" style={{ marginBottom: 24 }}>
             <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', letterSpacing: '0.2em', color: '#555', marginBottom: 10 }}>{label}</div>
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
               {opts.map(o => {
@@ -111,7 +111,7 @@ export default function OutfitMatcher() {
         </button>
 
         {results && (
-          <div style={{ display: 'grid', gap: 16 }}>
+          <div className="reveal-3d" style={{ display: 'grid', gap: 16 }}>
             {results.map((r, i) => (
               <div key={r.id} className="card-3d" style={{
                 background: B.void, border: `1px solid ${i === 0 ? B.neonCyan + '60' : B.gunmetal}`,

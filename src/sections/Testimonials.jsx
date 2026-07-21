@@ -154,7 +154,7 @@ export default function Testimonials() {
           })}
         </div>
 
-        <div style={{ marginTop: 44, textAlign: 'center' }}>
+        <div className="reveal-3d" style={{ marginTop: 44, textAlign: 'center' }}>
           <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: B.smoke, lineHeight: 1.7 }}>
             Building toward 5,000+ community members by the time the doors open December 12.
           </div>

@@ -242,7 +242,7 @@ export default function Tickets() {
         )}
 
         {/* Tier Cards */}
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(260px, 1fr))', gap:20, alignItems:'center' }}>
+        <div className="reveal-3d" style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(260px, 1fr))', gap:20, alignItems:'center' }}>
           {TIERS.map((tier, i) => {
             const pct      = tier.avail / tier.total
             const sold     = tier.total - tier.avail
@@ -316,7 +316,7 @@ export default function Tickets() {
         </div>
 
         {/* Comparison Table */}
-        <div style={{ marginTop:52, overflowX:'auto' }}>
+        <div className="reveal-3d" style={{ marginTop:52, overflowX:'auto' }}>
           <div style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color:'#555', letterSpacing:3, marginBottom:20, textAlign:'center' }}>FULL TIER COMPARISON</div>
           <table style={{ width:'100%', minWidth:520, borderCollapse:'collapse' }}>
             <thead>
@@ -349,13 +349,13 @@ export default function Tickets() {
         </div>
 
         {/* Ticket FAQ */}
-        <div style={{ marginTop:48 }}>
+        <div className="reveal-3d" style={{ marginTop:48 }}>
           <div style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color:'#555', letterSpacing:3, marginBottom:20, textAlign:'center' }}>TICKET FAQ</div>
           <TicketFAQ items={TICKET_FAQ} />
         </div>
 
         {/* Calendar + Actions */}
-        <div style={{ textAlign:'center', marginTop:44, display:'flex', flexDirection:'column', alignItems:'center', gap:16 }}>
+        <div className="reveal-3d" style={{ textAlign:'center', marginTop:44, display:'flex', flexDirection:'column', alignItems:'center', gap:16 }}>
           <button
             onClick={downloadCalendar}
             style={{ display:'inline-flex', alignItems:'center', gap:10, padding:'13px 28px', background:'rgba(255,255,255,0.04)', border:`1px solid ${B.amber}40`, borderRadius:8, cursor:'pointer', fontFamily:"'Space Mono', monospace", fontSize:10, color:B.amber, letterSpacing:'0.18em', transition:'all 0.2s', backdropFilter:'blur(12px)' }}
