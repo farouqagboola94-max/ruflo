@@ -45,7 +45,7 @@ export default function About() {
         <div style={{ display: 'flex', gap: 80, alignItems: 'flex-start', flexWrap: 'wrap', marginBottom: 72 }}>
 
           {/* Left: Text */}
-          <div style={{ flex: '1 1 400px' }}>
+          <div className="reveal-3d" style={{ flex: '1 1 400px' }}>
             <SectionTag>WHO WE ARE</SectionTag>
             <div className="reveal-3d text-3d" style={{
               fontFamily: "'Bebas Neue', sans-serif",
@@ -96,7 +96,7 @@ export default function About() {
           </div>
 
           {/* Right: Stats */}
-          <div style={{ flex: '1 1 300px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div className="reveal-3d" style={{ flex: '1 1 300px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
             {STATS.map((s, i) => (
               <div key={i} className="card-3d" style={{
                 padding: '24px 20px',
@@ -126,7 +126,7 @@ export default function About() {
         </div>
 
         {/* Three dimensions */}
-        <div>
+        <div className="reveal-3d">
           <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.smoke, letterSpacing: '0.4em', marginBottom: 20 }}>THE THREE DIMENSIONS</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}>
             {DIMENSIONS.map((d, i) => (

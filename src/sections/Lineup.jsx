@@ -92,7 +92,7 @@ export default function Lineup() {
           </div>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+        <div className="reveal-3d" style={{ display: "flex", flexDirection: "column", gap: 3 }}>
           {LINEUP.map((act, i) => {
             const isVoted = voted(i)
             const vc      = voteCount(i)

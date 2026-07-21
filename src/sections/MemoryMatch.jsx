@@ -199,7 +199,7 @@ export default function MemoryMatch() {
         </h2>
 
         {/* Social proof ticker */}
-        <div style={{
+        <div className="reveal-3d" style={{
           display: 'inline-block', background: 'rgba(255,255,255,0.04)',
           borderRadius: 20, padding: '4px 14px', marginBottom: 20,
           fontFamily: "'Space Mono'", fontSize: '0.62rem', color: B.smoke,
@@ -208,7 +208,7 @@ export default function MemoryMatch() {
         </div>
 
         {/* Daily limit + mode toggle */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginBottom: 24, flexWrap: 'wrap', alignItems: 'center' }}>
+        <div className="reveal-3d" style={{ display: 'flex', justifyContent: 'center', gap: 10, marginBottom: 24, flexWrap: 'wrap', alignItems: 'center' }}>
           <div style={{
             fontFamily: "'Space Mono'", fontSize: '0.62rem', color: '#888',
             background: 'rgba(255,255,255,0.04)', borderRadius: 6, padding: '4px 12px',

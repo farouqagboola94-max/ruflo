@@ -68,7 +68,7 @@ export default function FAQ() {
         </div>
 
         {/* Search */}
-        <div style={{ marginBottom: 28, position: 'relative' }}>
+        <div className="reveal-3d" style={{ marginBottom: 28, position: 'relative' }}>
           <span style={{ position: 'absolute', left: 13, top: '50%', transform: 'translateY(-50%)', color: '#555', fontSize: 13, pointerEvents: 'none' }}>🔍</span>
           <input
             value={search} onChange={e => { setSearch(e.target.value); setOpen(null) }}
@@ -90,7 +90,7 @@ export default function FAQ() {
           </div>
         )}
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+        <div className="reveal-3d" style={{ display: "flex", flexDirection: "column", gap: 3 }}>
           {visible.map(item => {
             const i = FAQS.indexOf(item)
             return (

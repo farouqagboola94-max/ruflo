@@ -176,7 +176,7 @@ export default function Newsletter() {
         </p>
 
         {/* perks grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px,1fr))', gap: 12, marginBottom: 44 }}>
+        <div className="reveal-3d" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px,1fr))', gap: 12, marginBottom: 44 }}>
           {PERKS.map(p => (
             <div key={p.label} className="card-3d" style={{ padding: '16px 12px', background: 'rgba(255,255,255,0.03)', border: `1px solid rgba(255,255,255,0.06)`, borderRadius: 12, textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, ${p.color}60, transparent)` }} />
@@ -211,7 +211,7 @@ export default function Newsletter() {
         ) : (
           <form onSubmit={subscribe}>
             {/* interest tags */}
-            <div style={{ marginBottom: 20 }}>
+            <div className="reveal-3d" style={{ marginBottom: 20 }}>
               <div style={{ fontFamily: 'Orbitron,monospace', fontSize: 8, color: '#444', letterSpacing: 3, marginBottom: 12 }}>I'M INTERESTED IN (OPTIONAL)</div>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
                 {INTERESTS.map(t => (

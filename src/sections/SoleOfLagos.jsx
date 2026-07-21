@@ -69,7 +69,7 @@ export default function SoleOfLagos() {
           <div style={{ color: B.amber }}>OF LAGOS</div>
         </div>
 
-        <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, letterSpacing: '0.3em', color: B.smoke, marginBottom: 64, textTransform: 'uppercase' }}>
+        <div className="reveal-3d" style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, letterSpacing: '0.3em', color: B.smoke, marginBottom: 64, textTransform: 'uppercase' }}>
           A History of Sneaker Culture, Identity, and the Streets That Built an Empire
         </div>
 
@@ -87,7 +87,7 @@ export default function SoleOfLagos() {
         </div>
 
         {PARTS.map((p, i) => (
-          <div key={i} style={{ marginBottom: 80 }}>
+          <div key={i} className="reveal-3d" style={{ marginBottom: 80 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
               <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, color: p.color, letterSpacing: '0.3em', flexShrink: 0 }}>{p.num}</div>
               <div style={{ flex: 1, height: 1, background: p.color + '40' }} />

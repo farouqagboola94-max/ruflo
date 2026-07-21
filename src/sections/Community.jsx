@@ -270,7 +270,7 @@ export default function Community() {
           Join whichever platform fits your flow — games, drops, culture debates, and early access are waiting.
         </div>
 
-        <div style={{
+        <div className="reveal-3d" style={{
           display: "flex", gap: 2, flexWrap: "wrap", marginBottom: 52,
           background: "rgba(255,255,255,0.04)",
           backdropFilter: "blur(16px)",
@@ -298,7 +298,7 @@ export default function Community() {
           ))}
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 14, marginBottom: 20 }}>
+        <div className="reveal-3d" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 14, marginBottom: 20 }}>
           {PLATFORMS.map((p, i) => <PlatformCard key={i} p={p} />)}
         </div>
 

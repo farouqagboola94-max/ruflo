@@ -363,7 +363,7 @@ export default function Merch() {
       <div style={{ position:'absolute', top:'50%', right:'-8%', width:400, height:400, background:`radial-gradient(circle, ${B.amber}09 0%, transparent 70%)`, filter:'blur(80px)', pointerEvents:'none' }} />
 
       <div style={{ position:'relative', zIndex:10, maxWidth:1100, margin:'0 auto' }}>
-        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-end', flexWrap:'wrap', gap:20, marginBottom:28 }}>
+        <div className="reveal-3d" style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-end', flexWrap:'wrap', gap:20, marginBottom:28 }}>
           <div>
             <SectionTag>OFFICIAL MERCHANDISE</SectionTag>
             <div className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(40px,6vw,68px)', color:B.white, lineHeight:0.9 }}>THE<br /><span style={{ color:B.amber }}>DROP</span></div>
@@ -378,7 +378,7 @@ export default function Merch() {
         </div>
 
         {/* category filter */}
-        <div style={{ display:'flex', gap:8, flexWrap:'wrap', marginBottom:36 }}>
+        <div className="reveal-3d" style={{ display:'flex', gap:8, flexWrap:'wrap', marginBottom:36 }}>
           {CATS.map(c => (
             <button key={c} onClick={() => setCat(c)}
               style={{ padding:'6px 16px', background: cat===c ? B.amber : 'rgba(255,255,255,0.04)', border:`1px solid ${cat===c ? B.amber : 'rgba(255,255,255,0.1)'}`, borderRadius:20, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:8, color: cat===c ? B.black : '#666', letterSpacing:2, transition:'all 0.15s' }}>{c}</button>
@@ -386,7 +386,7 @@ export default function Merch() {
         </div>
 
         {/* product grid */}
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(280px, 1fr))', gap:20 }}>
+        <div className="reveal-3d" style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(280px, 1fr))', gap:20 }}>
           {visibleItems.map(item => (
             <div key={item.id} style={{ transition:'transform 0.15s', transform: flash===item.id ? 'scale(0.98)' : 'scale(1)' }}>
               <ProductCard

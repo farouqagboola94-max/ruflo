@@ -233,7 +233,7 @@ export default function Countdown() {
           </div>
         </div>
 
-        <div style={{ display:'flex', justifyContent:'center', alignItems:'flex-start', gap:'clamp(10px,3vw,28px)', flexWrap:'wrap', marginBottom:56 }}>
+        <div className="reveal-3d" style={{ display:'flex', justifyContent:'center', alignItems:'flex-start', gap:'clamp(10px,3vw,28px)', flexWrap:'wrap', marginBottom:56 }}>
           {UNITS.map((u, i) => (
             <div key={u.label} style={{ display:'flex', alignItems:'center', gap:'clamp(10px,3vw,28px)' }}>
               <FlipUnit value={u.val} label={u.label} color={u.color} />
