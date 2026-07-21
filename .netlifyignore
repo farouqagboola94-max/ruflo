@@ -1,0 +1,17 @@
+node_modules
+.git
+v2
+v3
+.claude
+.agents
+ruflo
+tests
+docs
+.github
+ai-tools
+agents
+plugin
+plugins
+scripts
+backend
+design-system
