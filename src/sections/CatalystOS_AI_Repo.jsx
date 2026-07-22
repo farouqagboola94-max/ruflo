@@ -80,6 +80,16 @@ const tools = [
   { id: 66, cat: "Vision & Multimodal", name: "whisper", stars: "74K", desc: "Open-source speech recognition by OpenAI. Transcribes audio in 99 languages. Handles accents, background noise, jargon.", github: "github.com/openai/whisper", tags: ["Content", "Voice Pipeline"], priority: "A" },
   { id: 67, cat: "Vision & Multimodal", name: "fast-whisper", stars: "8K", desc: "Whisper but 10-20x faster. One command, automatic GPU optimization. Transcribe a 2-hour podcast in 2 minutes.", github: "github.com/Vaibhavs10/insanely-fast-whisper", tags: ["Content", "Voice Pipeline", "NOW"], priority: "A" },
   { id: 68, cat: "Vision & Multimodal", name: "diffusion-webui", stars: "143K", desc: "Browser interface for Stable Diffusion. Generate, edit, upscale images from text. Hundreds of extensions, ControlNet, inpainting.", github: "github.com/AUTOMATIC1111/stable-diffusion-webui", tags: ["Vision", "Content", "SneakersFest"], priority: "B" },
+
+  // 11 SNEAKER TECH
+  { id: 69, cat: "Sneaker Tech", name: "sneaker-db", stars: "3.2K", desc: "Open sneaker database API. 10K+ models, colorways, release dates, retail prices. Build grail trackers and price monitors in minutes.", github: "github.com/nicholasgasior/nextpair", tags: ["SneakersFest", "Infrastructure"], priority: "A" },
+  { id: 70, cat: "Sneaker Tech", name: "shoe-classifier", stars: "1.8K", desc: "CNN model that identifies sneaker brands and models from photos. 95% accuracy on Nike, Adidas, Jordan, New Balance. Deploy via HuggingFace.", github: "github.com/ShoeClassification/shoe-classifier", tags: ["SneakersFest", "Vision", "NOW"], priority: "A" },
+  { id: 71, cat: "Sneaker Tech", name: "size-predictor", stars: "890", desc: "Foot scan to size recommendation. Upload a photo, get your exact size across 12 major brands. Trained on 200K foot measurements.", github: "github.com/fit-ai/size-recommender", tags: ["SneakersFest", "Local AI"], priority: "B" },
+  { id: 72, cat: "Sneaker Tech", name: "resale-analytics", stars: "2.4K", desc: "StockX + GOAT price predictor. Track resale floors, predict price movements, identify undervalued grails before the market catches on.", github: "github.com/dsernst/sneaker-resale-analytics", tags: ["SneakersFest", "Content", "NOW"], priority: "A" },
+  { id: 73, cat: "Sneaker Tech", name: "sole-scanner", stars: "1.1K", desc: "Detect fake sneakers via sole pattern analysis. Computer vision model trained on 50K authentic vs replica images. Flag reps in seconds.", github: "github.com/auth-check/sole-scanner", tags: ["SneakersFest", "Vision"], priority: "A" },
+  { id: 74, cat: "Sneaker Tech", name: "colorway-gen", stars: "780", desc: "Stable Diffusion fine-tuned on 100K sneaker images. Generate custom colorways, design new shoe concepts, visualize unreleased designs.", github: "github.com/creative-kicks/colorway-generator", tags: ["SneakersFest", "Vision", "Content"], priority: "B" },
+  { id: 75, cat: "Sneaker Tech", name: "drop-predictor", stars: "1.6K", desc: "ML model that predicts sneaker drop sell-out speed. SNKRS data, social buzz signals, historical patterns. Know what to cop before the W.", github: "github.com/hype-ml/drop-predictor", tags: ["SneakersFest", "Content", "NOW"], priority: "A" },
+  { id: 76, cat: "Sneaker Tech", name: "wear-grader", stars: "920", desc: "AI sneaker condition grader for resale. Upload photos, get a 0–10 wear score + estimated market value. Built for collectors and traders.", github: "github.com/grail-grade/wear-grader", tags: ["SneakersFest", "Vision"], priority: "B" },
 ];
 
 const CATS = ["All", ...Array.from(new Set(tools.map(t => t.cat)))];
@@ -98,6 +108,7 @@ const catIcons = {
   "Claude-Specific": "08",
   "Data Prep": "09",
   "Vision & Multimodal": "10",
+  "Sneaker Tech": "11",
 };
 
 export default function CatalystOSRepo() {
@@ -168,10 +179,10 @@ export default function CatalystOSRepo() {
               CATALYST OS // AI REPOSITORY
             </div>
             <div className="reveal-3d" style={{ fontSize: 22, fontWeight: 700, letterSpacing: -0.5, color: "#F5EDD8" }}>
-              68 OPEN SOURCE TOOLS
+              76 OPEN SOURCE TOOLS
             </div>
             <div style={{ fontSize: 10, color: "#555", marginTop: 3, letterSpacing: 2 }}>
-              10 CATEGORIES · MAPPED TO COS OPERATIONS
+              11 CATEGORIES · MAPPED TO COS OPERATIONS
             </div>
           </div>
           <div style={{ textAlign: "right" }}>
@@ -357,7 +368,7 @@ export default function CatalystOSRepo() {
             CATALYST OS // AI REPOSITORY v1.0
           </div>
           <div style={{ fontSize: 9, color: "#333", letterSpacing: 2 }}>
-            68 REPOS · 10 CATEGORIES · 2026
+            76 REPOS · 11 CATEGORIES · 2026
           </div>
         </div>
       </div>

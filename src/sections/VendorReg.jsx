@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
 import { SOCIAL_LINKS } from '../config'
 import { logReferralConversion } from '../lib/referral'
 import Egg from '../components/Egg'
+import { claudeChat, getApiKey, setApiKey } from '../lib/catalystAI'
 
 const FORMSPREE = import.meta.env.VITE_FORMSPREE_ID || ''
 
@@ -128,6 +129,30 @@ export default function VendorReg() {
   const [existingApp,  setExistingApp] = useState(null)
   const [showPrevBanner, setShowPrevBanner] = useState(false)
   const [showStatus, setShowStatus] = useState(false)
+  const [pitchLoading, setPitchLoading] = useState(false)
+  const [pitchError,   setPitchError]   = useState('')
+  const [showApiKey,   setShowApiKey]   = useState(false)
+  const [keyInput,     setKeyInput]     = useState('')
+
+  const generatePitch = useCallback(async () => {
+    if (!getApiKey()) { setShowApiKey(true); return }
+    setPitchLoading(true); setPitchError('')
+    try {
+      const prompt = `Write a compelling 200-word vendor application bio for Sneakers Fest '26 in Lagos.
+Business: ${form.business || 'sneaker vendor'}
+Category: ${form.category || 'sneakers'}
+Booth type: ${form.booth || 'standard'}
+Exclusive drop interest: ${form.exclusiveDrop || 'open to it'}
+${form.instagram ? `Instagram: @${form.instagram}` : ''}
+
+Write in first person, confident but not arrogant. Mention Lagos, the culture, why this event matters to the brand. End with a clear value proposition for event organisers. Max 280 characters.`
+      const result = await claudeChat([{ role:'user', content:prompt }], { model:'balanced', system:'You write punchy vendor pitch bios for Lagos streetwear and sneaker events. Keep it real, culturally aware, and brand-confident.' })
+      setForm(f => ({ ...f, bio: result.slice(0, 300) }))
+    } catch(e) {
+      setPitchError(e.message === 'NO_KEY' ? 'Add your Anthropic API key to use AI.' : e.message)
+    }
+    setPitchLoading(false)
+  }, [form.business, form.category, form.booth, form.exclusiveDrop, form.instagram])
 
   useEffect(() => {
     try {
@@ -425,15 +450,33 @@ export default function VendorReg() {
                       </div>
                     </div>
                     <div>
-                      {lbl(`ABOUT YOUR BRAND * (${form.bio.length}/300 · min 20)`)}
+                      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:7 }}>
+                        {lbl(`ABOUT YOUR BRAND * (${form.bio.length}/300 · min 20)`)}
+                        <button type="button" onClick={generatePitch} disabled={pitchLoading} style={{ padding:'4px 10px', background:pitchLoading ? 'rgba(0,240,255,0.06)' : `${B.neonCyan}15`, border:`1px solid ${B.neonCyan}44`, borderRadius:4, color:pitchLoading ? '#444' : B.neonCyan, fontFamily:'Space Mono,monospace', fontSize:8, cursor:pitchLoading ? 'wait' : 'pointer', letterSpacing:'0.1em', whiteSpace:'nowrap', flexShrink:0 }}>
+                          {pitchLoading ? 'WRITING...' : '✦ AI PITCH'}
+                        </button>
+                      </div>
                       <textarea value={form.bio} onChange={set('bio')} maxLength={300}
-                        placeholder="Describe what you sell, your experience, and why you want to be at Sneakers Fest '26..."
+                        placeholder="Describe what you sell, your experience, and why you want to be at Sneakers Fest '26... or tap ✦ AI PITCH to generate one."
                         rows={5} style={{ ...IS, resize:'vertical', lineHeight:1.6 }}
                         onFocus={e => e.target.style.borderColor = B.neonCyan+'50'} onBlur={onBlur} />
+                      {pitchError && <p style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#ff4444', marginTop:6 }}>{pitchError}</p>}
                       {form.bio.length > 0 && form.bio.length < 20 && (
                         <p style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:B.amber, marginTop:6 }}>{20-form.bio.length} more characters needed</p>
                       )}
                     </div>
+
+                    {/* API key modal for AI pitch */}
+                    {showApiKey && (
+                      <div style={{ background:`${B.amber}08`, border:`1px solid ${B.amber}33`, borderRadius:8, padding:16 }}>
+                        <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:B.amber, letterSpacing:'0.2em', marginBottom:10 }}>ANTHROPIC API KEY REQUIRED</div>
+                        <input type="password" value={keyInput} onChange={e => setKeyInput(e.target.value)} onKeyDown={e => { if(e.key==='Enter'){setApiKey(keyInput.trim());setShowApiKey(false);setKeyInput('')} }} placeholder="sk-ant-..." style={{ ...IS, marginBottom:8, fontSize:11 }} />
+                        <div style={{ display:'flex', gap:8 }}>
+                          <button type="button" onClick={() => { setApiKey(keyInput.trim()); setShowApiKey(false); setKeyInput('') }} style={{ flex:1, padding:'8px', background:B.amber, color:B.black, border:'none', borderRadius:4, fontFamily:'Space Mono,monospace', fontSize:9, fontWeight:700, cursor:'pointer' }}>SAVE & GENERATE</button>
+                          <button type="button" onClick={() => setShowApiKey(false)} style={{ padding:'8px 12px', background:'transparent', color:'#555', border:'1px solid #222', borderRadius:4, fontFamily:'Space Mono,monospace', fontSize:9, cursor:'pointer' }}>SKIP</button>
+                        </div>
+                      </div>
+                    )}
                   </>
                 )}
 

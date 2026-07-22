@@ -63,6 +63,8 @@ const CatalystOS_UGC          = lazy(() => import('./sections/CatalystOS_UGC_Eng
 const CatalystSkillVault      = lazy(() => import('./sections/CatalystSkillVault'))
 const CatalystSkillsOS        = lazy(() => import('./sections/CatalystSkillsOS'))
 const CatalystOSArsenal       = lazy(() => import('./sections/CatalystOSArsenal'))
+const CommunityIntelligence   = lazy(() => import('./sections/CommunityIntelligence'))
+const SneakerKnowledgeVault   = lazy(() => import('./sections/SneakerKnowledgeVault'))
 import EarlyAccess from './sections/EarlyAccess'
 const Comics      = lazy(() => import('./sections/Comics'))
 const Gallery     = lazy(() => import('./sections/Gallery'))
@@ -137,7 +139,9 @@ const SECTION_TITLES = [
   { id: 'catalyst-mcp',      title: "MCP Tools | Sneakers Fest '26" },
   { id: 'catalyst-obsidian', title: "Obsidian + Claude | Sneakers Fest '26" },
   { id: 'catalyst-ugc',      title: "Content Engine | Sneakers Fest '26" },
-  { id: 'catalyst-vault',    title: "Skill Vault | Sneakers Fest '26" },
+  { id: 'catalyst-vault',       title: "Skill Vault | Sneakers Fest '26" },
+  { id: 'community-intelligence', title: "Lagos Intelligence | Sneakers Fest '26" },
+  { id: 'sneaker-vault',        title: "Sneaker Vault | Sneakers Fest '26" },
 ]
 
 export default function App() {
@@ -333,6 +337,7 @@ export default function App() {
         <Reveal><Community /></Reveal>
         <Suspense fallback={null}>
           <Reveal><CommunityWall /></Reveal>
+          <Reveal><CommunityIntelligence /></Reveal>
           <Reveal><MemoryMatch /></Reveal>
         </Suspense>
 
@@ -410,6 +415,7 @@ export default function App() {
           <Reveal><CatalystOS_AI_Repo /></Reveal>
           <Reveal><CatalystOS_MCP_Carousel /></Reveal>
           <Reveal><CatalystOS_Obsidian /></Reveal>
+          <Reveal><SneakerKnowledgeVault /></Reveal>
           <Reveal><CatalystOS_UGC /></Reveal>
           <Reveal><CatalystSkillVault /></Reveal>
         </Suspense>

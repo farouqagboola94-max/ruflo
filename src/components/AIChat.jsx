@@ -1,7 +1,16 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { B } from '../tokens'
+import { claudeChat, getApiKey, routeModel } from '../lib/catalystAI'
 
 const API = import.meta.env.VITE_BACKEND_URL || ''
+
+const SNEAKER_SYSTEM = `You are the official Sneakers Fest '26 AI — a Lagos sneaker culture expert and event concierge. You know everything about:
+- Sneakers Fest '26: December 12, 2026, Lagos Nigeria. Tickets: General ₦5K, VIP ₦10K, VVIP ₦25K, Phalanx ₦50K.
+- Lineup: DJ Spinall headlining. 30-50 vendors. Collector room. Exclusive drops for VIP+.
+- Grail culture, resale market, sneaker history, drop intel, outfit advice.
+- The Lagos streetwear scene, Friday Night Protocol (weekly community sessions), and The Catalyst (@catalyst00555).
+- Contact: WhatsApp button on the site, Instagram @sneakersfest5555, Snapchat sneakersfest, email sneakersfest088@gmail.com.
+Be direct, culturally aware, and helpful. Reference Lagos culture naturally. Keep responses concise.`
 
 // ── keyword fallback ──────────────────────────────────────────────────────────
 const QA = [
@@ -127,7 +136,17 @@ export default function AIChat() {
       } catch {}
     }
 
-    // ── 3. Keyword fallback
+    // ── 3. Direct Claude API (browser, key in localStorage)
+    if (!reply && getApiKey()) {
+      try {
+        const model = routeModel(text)
+        const apiMessages = history.map(m => ({ role: m.role, content: m.content }))
+        reply = await claudeChat(apiMessages, { model, system: SNEAKER_SYSTEM })
+        if (reply) setClaude(true)
+      } catch {}
+    }
+
+    // ── 4. Keyword fallback
     if (!reply) {
       await new Promise(r => setTimeout(r, 480))
       reply = keywordReply(text) || "That's best answered directly by the team — tap the WhatsApp button (bottom right) for a fast reply."

@@ -503,6 +503,90 @@ function MCPSlide({ data, slideIndex }) {
   );
 }
 
+const MCP_ROUTES = [
+  { key: 'shopify', label: 'Shopify MCP', icon: '🛍️', color: '#95bf47', triggers: ['store', 'order', 'product', 'inventory', 'customer', 'shop', 'sales', 'fulfillment', 'stock', 'shopify'] },
+  { key: 'higgsfield', label: 'Higgsfield MCP', icon: '✦', color: '#c8ff00', triggers: ['image', 'video', 'visual', 'create', 'generate', 'cinematic', 'photo', 'film', 'creative', 'design'] },
+  { key: 'adadvisor', label: 'AdAdvisor MCP', icon: '◆', color: ORANGE, triggers: ['ad', 'ads', 'meta', 'facebook', 'campaign', 'budget', 'roas', 'cpc', 'targeting', 'adset', 'reach'] },
+  { key: 'gdrive', label: 'Google Drive MCP', icon: '△', color: '#4285f4', triggers: ['file', 'document', 'sheet', 'spreadsheet', 'folder', 'summary', 'drive', 'pdf', 'report', 'slide'] },
+  { key: 'analytics', label: 'Google Analytics MCP', icon: '▐', color: ORANGE, triggers: ['analytics', 'traffic', 'users', 'conversion', 'website', 'metrics', 'bounce', 'session', 'pageview'] },
+]
+
+function MCPQueryRouter() {
+  const [query, setQuery] = useState('')
+  const [result, setResult] = useState(null)
+
+  function route() {
+    if (!query.trim()) return
+    const lower = query.toLowerCase()
+    let best = null
+    let bestScore = 0
+    for (const mcp of MCP_ROUTES) {
+      const score = mcp.triggers.filter(t => lower.includes(t)).length
+      if (score > bestScore) { bestScore = score; best = mcp }
+    }
+    if (!best) best = MCP_ROUTES[Math.floor(Math.random() * MCP_ROUTES.length)]
+    setResult(best)
+  }
+
+  const EXAMPLES = [
+    'How many orders came in this week?',
+    'Generate a product image for my new sneaker line',
+    'Which ad campaign has the best ROAS?',
+    'Summarize the Q3 report in my Drive',
+    'Where is my website traffic coming from?',
+  ]
+
+  return (
+    <div style={{ width: '100%', maxWidth: 520, marginTop: 24, background: CARD_BG, border: `1px solid ${CARD_BORDER}`, borderRadius: 16, padding: '20px 20px 16px', fontFamily: "'Space Grotesk', sans-serif" }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+        <span style={{ color: ORANGE, fontSize: 14 }}>✦</span>
+        <span style={{ color: '#fff', fontSize: 12, fontWeight: 700, letterSpacing: '0.06em' }}>MCP QUERY ROUTER</span>
+        <span style={{ color: '#555', fontSize: 11, marginLeft: 4 }}>— which MCP handles your request?</span>
+      </div>
+
+      <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
+        <input
+          value={query}
+          onChange={e => { setQuery(e.target.value); setResult(null) }}
+          onKeyDown={e => e.key === 'Enter' && route()}
+          placeholder="Type your business request..."
+          style={{ flex: 1, background: DARK_BG, border: `1px solid ${CARD_BORDER}`, borderRadius: 8, padding: '9px 12px', color: '#ddd', fontSize: 12, fontFamily: 'inherit', outline: 'none' }}
+        />
+        <button onClick={route} style={{ background: ORANGE, border: 'none', borderRadius: 8, padding: '0 16px', color: '#000', fontSize: 12, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' }}>
+          ROUTE →
+        </button>
+      </div>
+
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 14 }}>
+        {EXAMPLES.map((ex, i) => (
+          <button key={i} onClick={() => { setQuery(ex); setResult(null) }} style={{ background: '#1a1a1a', border: `1px solid ${CARD_BORDER}`, borderRadius: 6, padding: '4px 10px', color: '#666', fontSize: 10, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.15s' }}>
+            {ex.slice(0, 28)}…
+          </button>
+        ))}
+      </div>
+
+      {result && (
+        <div style={{ background: DARK_BG, border: `1px solid ${result.color}33`, borderRadius: 10, padding: '14px 16px', animation: 'fadeIn 0.2s ease' }}>
+          <style>{`@keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }`}</style>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+            <div style={{ width: 36, height: 36, borderRadius: 10, background: result.color + '22', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, color: result.color, fontWeight: 700 }}>
+              {result.icon}
+            </div>
+            <div>
+              <div style={{ color: '#fff', fontSize: 13, fontWeight: 700 }}>{result.label}</div>
+              <div style={{ color: '#666', fontSize: 10, marginTop: 2 }}>Best match for this request</div>
+            </div>
+            <div style={{ marginLeft: 'auto', background: result.color + '22', border: `1px solid ${result.color}44`, borderRadius: 6, padding: '4px 10px', color: result.color, fontSize: 10, fontWeight: 700 }}>ROUTED</div>
+          </div>
+          <div style={{ fontSize: 11, color: '#777', lineHeight: 1.5, fontFamily: "'DM Sans', sans-serif" }}>
+            "{query}" → handled by <span style={{ color: result.color }}>{result.label}</span>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function MCPCarousel() {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(0);
@@ -527,14 +611,15 @@ export default function MCPCarousel() {
   const slide = mcpData[current];
 
   return (
-    <div style={{
+    <section id="catalyst-mcp" style={{
       minHeight: "100vh",
       background: "#050505",
       display: "flex",
+      flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
       fontFamily: "'DM Sans', sans-serif",
-      padding: 16,
+      padding: "16px 16px 48px",
     }}>
       <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
@@ -641,6 +726,8 @@ export default function MCPCarousel() {
           </span>
         </div>
       </div>
-    </div>
+
+      <MCPQueryRouter />
+    </section>
   );
 }
