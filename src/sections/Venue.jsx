@@ -315,13 +315,13 @@ export default function Venue() {
         <div style={{ marginTop:48, textAlign:'center' }}>
           <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#444', letterSpacing:3, marginBottom:20 }}>TWO NIGHTS. TWO VENUES. ONE MOVEMENT.</div>
           <div style={{ display:'flex', gap:14, justifyContent:'center', flexWrap:'wrap' }}>
-            <a href={SOCIAL_LINKS.whatsapp} target="_blank" rel="noopener noreferrer"
-              style={{ padding:'14px 32px', background:'#25D366', color:B.black, fontFamily:'Space Mono,monospace', fontSize:10, fontWeight:700, letterSpacing:'0.15em', textDecoration:'none', borderRadius:4, boxShadow:'0 0 28px rgba(37,211,102,0.25)' }}>
-              JOIN WHATSAPP →
+            <a href="#tickets"
+              style={{ padding:'14px 32px', background:B.amber, color:B.black, fontFamily:'Space Mono,monospace', fontSize:10, fontWeight:700, letterSpacing:'0.15em', textDecoration:'none', borderRadius:4, boxShadow:`0 0 30px ${B.amber}25` }}>
+              GET TICKETS →
             </a>
-            <a href="#waitlist"
-              style={{ padding:'14px 32px', background:'rgba(255,255,255,0.05)', color:B.amber, fontFamily:'Space Mono,monospace', fontSize:10, letterSpacing:'0.15em', textDecoration:'none', borderRadius:4, border:`1px solid ${B.amber}40` }}>
-              EARLY ACCESS →
+            <a href={SOCIAL_LINKS.whatsapp} target="_blank" rel="noopener noreferrer"
+              style={{ padding:'14px 32px', background:'rgba(37,211,102,0.08)', color:'#25D366', fontFamily:'Space Mono,monospace', fontSize:10, letterSpacing:'0.15em', textDecoration:'none', borderRadius:4, border:'1px solid rgba(37,211,102,0.3)' }}>
+              JOIN WHATSAPP →
             </a>
           </div>
         </div>

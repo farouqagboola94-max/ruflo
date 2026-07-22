@@ -4,10 +4,10 @@ import { GrainOverlay, AmberGlow, SectionTag } from '../components/Shared'
 import Egg from '../components/Egg'
 
 const LINEUP = [
-  { name: "HEADLINER — TBA", role: "HEADLINER", time: "8PM — 10PM", genre: "AFROBEATS / HIP-HOP", featured: true },
+  { name: "DJ SPINALL", role: "HEADLINER", time: "8PM — 10PM", genre: "AFROBEATS / STREET POP", featured: true },
   { name: "SPECIAL GUEST — TBA", role: "SPECIAL GUEST", time: "6PM — 8PM", genre: "ALT-R&B / ELECTRONIC" },
-  { name: "PRODUCER — TBA", role: "PRODUCER SET", time: "4PM — 6PM", genre: "STREET / TRAP / AFRO" },
-  { name: "OPENING ACT — TBA", role: "OPENING ACT", time: "2PM — 4PM", genre: "AFRO HOUSE / ELECTRONIC" },
+  { name: "SARZ", role: "PRODUCER SET", time: "4PM — 6PM", genre: "STREET / TRAP / AFRO" },
+  { name: "DJ NEPTUNE", role: "OPENING ACT", time: "2PM — 4PM", genre: "AFROBEATS / STREET POP" },
   { name: "SPECIAL GUEST — TBA", role: "SPECIAL GUEST", time: "12PM — 2PM", genre: "AFROBEATS / STREET POP" },
   { name: "+ MORE TBA", role: "SURPRISE GUESTS", time: "THROUGHOUT", genre: "CULTURE × SOUL × FUTURE" },
 ]
@@ -179,8 +179,13 @@ export default function Lineup() {
           })}
         </div>
 
-        <div style={{ marginTop: 28, textAlign: "center", fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing: "0.3em" }}>
-          FULL LINEUP ANNOUNCED 60 DAYS BEFORE THE EVENT
+        <div style={{ marginTop: 28, textAlign: "center" }}>
+          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing: "0.3em", marginBottom: 20 }}>
+            FULL LINEUP ANNOUNCED 60 DAYS BEFORE THE EVENT
+          </div>
+          <a href="#tickets" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '14px 32px', background: B.amber, color: B.black, fontFamily: "'Space Mono', monospace", fontSize: 10, fontWeight: 700, letterSpacing: '0.15em', textDecoration: 'none', borderRadius: 4, boxShadow: `0 0 30px ${B.amber}25` }}>
+            GET TICKETS — FROM ₦5,000 →
+          </a>
         </div>
       </div>
     </section>

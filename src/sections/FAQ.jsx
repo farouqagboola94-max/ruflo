@@ -8,11 +8,11 @@ const HELPFUL_SEEDS = [89, 47, 62, 38, 55, 71]
 
 const FAQS = [
   { q: "When and where is Sneakers Fest 2026?",   popular: true,
-    a: "December 12, 2026 at Eko Atlantic, Lagos, Nigeria. Doors open at 12:00 PM and the event runs until 10:00 PM." },
+    a: "December 12, 2026 at Muri Okunola Park, Victoria Island, Lagos, Nigeria. Doors open at 12:00 PM and the event runs until 10:00 PM." },
   { q: "What is the minimum age for entry?",
     a: "Sneakers Fest is open to attendees aged 16 and above. Under-18s must be accompanied by a responsible adult." },
   { q: "Can I bring sneakers to sell?",
-    a: "Yes! Register as a vendor. Limited booths are available on a first-come first-served basis. DM @SNEAKERSFEST or email info@sneakersfest.com to apply." },
+    a: "Yes! Register as a vendor. Limited booths are available on a first-come first-served basis. DM @SNEAKERSFEST or email sneakersfest088@gmail.com to apply." },
   { q: "Is there parking on-site?",
     a: "Yes. Eko Atlantic has extensive parking facilities. Shuttle services will also run from key drop-off points on Lagos Island and Victoria Island." },
   { q: "Are refunds available?",
@@ -86,7 +86,7 @@ export default function FAQ() {
         {visible.length === 0 && (
           <div style={{ textAlign: 'center', padding: '40px 20px', color: B.smoke, fontFamily: 'Space Mono,monospace', fontSize: 11 }}>
             No match — try different words or{' '}
-            <a href="mailto:info@sneakersfest.com" style={{ color: B.amber, textDecoration: 'none' }}>email us</a>.
+            <a href="mailto:sneakersfest088@gmail.com" style={{ color: B.amber, textDecoration: 'none' }}>email us</a>.
           </div>
         )}
 
@@ -138,8 +138,8 @@ export default function FAQ() {
         <div className="card-3d" style={{ marginTop: 44, padding: "22px 28px", background: B.charcoal, border: `1px solid ${B.gunmetal}`, borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
           <div>
             <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.smoke, letterSpacing: "0.2em", marginBottom: 8 }}>STILL HAVE QUESTIONS?</div>
-            <a href="mailto:info@sneakersfest.com" style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: B.amber, textDecoration: "none", fontWeight: 700 }}>
-              info@sneakersfest.com
+            <a href="mailto:sneakersfest088@gmail.com" style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: B.amber, textDecoration: "none", fontWeight: 700 }}>
+              sneakersfest088@gmail.com
             </a>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '7px 14px', background: `${B.neonLime}07`, border: `1px solid ${B.neonLime}20`, borderRadius: 12 }}>

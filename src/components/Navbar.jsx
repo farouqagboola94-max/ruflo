@@ -3,14 +3,14 @@ import { B } from '../tokens'
 import { useAuth } from '../lib/auth.jsx'
 
 const DESKTOP_LINKS = [
-  { label: 'ABOUT',   href: '#about' },
-  { label: 'ORIGIN',  href: '#origin' },
-  { label: 'FNP',     href: '#fnp' },
-  { label: 'GALLERY', href: '#gallery' },
-  { label: 'LINEUP',  href: '#lineup' },
-  { label: 'MERCH',   href: '#merch' },
-  { label: 'VENDORS', href: '#vendors' },
-  { label: 'FAQ',     href: '#faq' },
+  { label: 'ABOUT',    href: '#about' },
+  { label: 'LINEUP',   href: '#lineup' },
+  { label: 'SCHEDULE', href: '#schedule' },
+  { label: 'VENUE',    href: '#venue' },
+  { label: 'MERCH',    href: '#merch' },
+  { label: 'VENDORS',  href: '#vendors' },
+  { label: 'FAQ',      href: '#faq' },
+  { label: 'CONTACT',  href: '#contact' },
 ]
 
 const MOBILE_LINKS = [

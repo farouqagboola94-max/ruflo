@@ -24,6 +24,8 @@ const NAV = [
   ['Comics',               '#comics'],
   ['Gallery',              '#gallery'],
   ['Lineup',               '#lineup'],
+  ['Schedule',             '#schedule'],
+  ['Venue',                '#venue'],
   ['Merch',                '#merch'],
   ['Tickets',              '#tickets'],
   ['Vendors',              '#vendors'],
