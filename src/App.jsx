@@ -71,6 +71,12 @@ const AITrivia                = lazy(() => import('./sections/AITrivia'))
 const TradeNegotiator         = lazy(() => import('./sections/TradeNegotiator'))
 const AuctionWall             = lazy(() => import('./sections/AuctionWall'))
 const CaptionGenerator        = lazy(() => import('./sections/CaptionGenerator'))
+const FitCheckAI              = lazy(() => import('./sections/FitCheckAI'))
+const PriceNegotiator         = lazy(() => import('./sections/PriceNegotiator'))
+const FakeDetector            = lazy(() => import('./sections/FakeDetector'))
+const StyleArchetype          = lazy(() => import('./sections/StyleArchetype'))
+const VendorMatcher           = lazy(() => import('./sections/VendorMatcher'))
+const StoryGenerator          = lazy(() => import('./sections/StoryGenerator'))
 import EarlyAccess from './sections/EarlyAccess'
 const Comics      = lazy(() => import('./sections/Comics'))
 const Gallery     = lazy(() => import('./sections/Gallery'))
@@ -154,6 +160,12 @@ const SECTION_TITLES = [
   { id: 'trade-negotiator',     title: "Trade Negotiator | Sneakers Fest '26" },
   { id: 'auction-wall',         title: "Grail Auction | Sneakers Fest '26" },
   { id: 'caption-gen',          title: "Caption Studio | Sneakers Fest '26" },
+  { id: 'fit-check',            title: "Fit Check AI | Sneakers Fest '26" },
+  { id: 'price-negotiator',     title: "Price Negotiator | Sneakers Fest '26" },
+  { id: 'fake-detector',        title: "Fake Detector | Sneakers Fest '26" },
+  { id: 'style-archetype',      title: "Style Archetype | Sneakers Fest '26" },
+  { id: 'vendor-matcher',       title: "Vendor Matcher | Sneakers Fest '26" },
+  { id: 'story-gen',            title: "Sneaker Stories | Sneakers Fest '26" },
 ]
 
 export default function App() {
@@ -339,6 +351,7 @@ export default function App() {
           <Reveal><HypeCounter /></Reveal>
           <Reveal><AITrivia /></Reveal>
           <Reveal><SpinWheel /></Reveal>
+          <Reveal><FitCheckAI /></Reveal>
         </Suspense>
 
         {/* FIRST CONVERSION PUSH — catch motivated visitors early */}
@@ -359,6 +372,7 @@ export default function App() {
           <Reveal><SneakerDNA /></Reveal>
           <Reveal><ShoeColorizer /></Reveal>
           <Reveal><OutfitMatcher /></Reveal>
+          <Reveal><StyleArchetype /></Reveal>
           <Reveal><SoleOfLagos /></Reveal>
         </Suspense>
 
@@ -373,12 +387,15 @@ export default function App() {
         {/* ACT 5: DROPS & TRADE — commerce and the marketplace */}
         <Suspense fallback={null}>
           <Reveal><DropsTimeline /></Reveal>
+          <Reveal><VendorMatcher /></Reveal>
           <Reveal><GrailAdvisor /></Reveal>
           <Reveal><MysteryDrop /></Reveal>
           <Reveal><DropAnalyzer /></Reveal>
           <Reveal><TradeBoard /></Reveal>
           <Reveal><TradeNegotiator /></Reveal>
           <Reveal><AuctionWall /></Reveal>
+          <Reveal><FakeDetector /></Reveal>
+          <Reveal><PriceNegotiator /></Reveal>
           <Reveal><SneakerBingo /></Reveal>
           <Reveal><SneakerWorth /></Reveal>
         </Suspense>
@@ -388,6 +405,7 @@ export default function App() {
         <Suspense fallback={null}>
           <Reveal><Gallery /></Reveal>
           <Reveal><CaptionGenerator /></Reveal>
+          <Reveal><StoryGenerator /></Reveal>
           <Reveal><PhotoTools /></Reveal>
           <Reveal><CrewVoteOff /></Reveal>
           <Reveal><BadgeMaker /></Reveal>
