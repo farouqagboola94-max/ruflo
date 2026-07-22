@@ -65,6 +65,12 @@ const CatalystSkillsOS        = lazy(() => import('./sections/CatalystSkillsOS')
 const CatalystOSArsenal       = lazy(() => import('./sections/CatalystOSArsenal'))
 const CommunityIntelligence   = lazy(() => import('./sections/CommunityIntelligence'))
 const SneakerKnowledgeVault   = lazy(() => import('./sections/SneakerKnowledgeVault'))
+const GrailAdvisor            = lazy(() => import('./sections/GrailAdvisor'))
+const DropAnalyzer            = lazy(() => import('./sections/DropAnalyzer'))
+const AITrivia                = lazy(() => import('./sections/AITrivia'))
+const TradeNegotiator         = lazy(() => import('./sections/TradeNegotiator'))
+const AuctionWall             = lazy(() => import('./sections/AuctionWall'))
+const CaptionGenerator        = lazy(() => import('./sections/CaptionGenerator'))
 import EarlyAccess from './sections/EarlyAccess'
 const Comics      = lazy(() => import('./sections/Comics'))
 const Gallery     = lazy(() => import('./sections/Gallery'))
@@ -142,6 +148,12 @@ const SECTION_TITLES = [
   { id: 'catalyst-vault',       title: "Skill Vault | Sneakers Fest '26" },
   { id: 'community-intelligence', title: "Lagos Intelligence | Sneakers Fest '26" },
   { id: 'sneaker-vault',        title: "Sneaker Vault | Sneakers Fest '26" },
+  { id: 'grail-advisor',        title: "Grail Advisor | Sneakers Fest '26" },
+  { id: 'drop-analyzer',        title: "Drop Analyzer | Sneakers Fest '26" },
+  { id: 'ai-trivia',            title: "AI Trivia | Sneakers Fest '26" },
+  { id: 'trade-negotiator',     title: "Trade Negotiator | Sneakers Fest '26" },
+  { id: 'auction-wall',         title: "Grail Auction | Sneakers Fest '26" },
+  { id: 'caption-gen',          title: "Caption Studio | Sneakers Fest '26" },
 ]
 
 export default function App() {
@@ -325,6 +337,7 @@ export default function App() {
           <Reveal><ArtistSpotlight /></Reveal>
           <Reveal><SneakerTrivia /></Reveal>
           <Reveal><HypeCounter /></Reveal>
+          <Reveal><AITrivia /></Reveal>
           <Reveal><SpinWheel /></Reveal>
         </Suspense>
 
@@ -360,8 +373,12 @@ export default function App() {
         {/* ACT 5: DROPS & TRADE — commerce and the marketplace */}
         <Suspense fallback={null}>
           <Reveal><DropsTimeline /></Reveal>
+          <Reveal><GrailAdvisor /></Reveal>
           <Reveal><MysteryDrop /></Reveal>
+          <Reveal><DropAnalyzer /></Reveal>
           <Reveal><TradeBoard /></Reveal>
+          <Reveal><TradeNegotiator /></Reveal>
+          <Reveal><AuctionWall /></Reveal>
           <Reveal><SneakerBingo /></Reveal>
           <Reveal><SneakerWorth /></Reveal>
         </Suspense>
@@ -370,6 +387,7 @@ export default function App() {
         {/* ACT 6: CREATE & COMPETE — make content, go head-to-head */}
         <Suspense fallback={null}>
           <Reveal><Gallery /></Reveal>
+          <Reveal><CaptionGenerator /></Reveal>
           <Reveal><PhotoTools /></Reveal>
           <Reveal><CrewVoteOff /></Reveal>
           <Reveal><BadgeMaker /></Reveal>
