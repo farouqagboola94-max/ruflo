@@ -299,59 +299,96 @@ export default function App() {
         <EventTicker />
         <Stats />
 
+        {/* ACT 1: GET EXCITED — visual, high energy, no reading walls */}
+        <Reveal><Highlights /></Reveal>
+        <Reveal><Lineup /></Reveal>
+        <Suspense fallback={null}>
+          <Reveal><ArtistSpotlight /></Reveal>
+          <Reveal><SneakerTrivia /></Reveal>
+          <Reveal><HypeCounter /></Reveal>
+          <Reveal><SpinWheel /></Reveal>
+        </Suspense>
+
+        {/* FIRST CONVERSION PUSH — catch motivated visitors early */}
+        <Reveal><Countdown /></Reveal>
+        <Reveal><Tickets /></Reveal>
+
+        {/* ACT 2: COMMUNITY — social proof and belonging */}
+        <Reveal><Testimonials /></Reveal>
+        <Reveal><Community /></Reveal>
+        <Suspense fallback={null}>
+          <Reveal><CommunityWall /></Reveal>
+          <Reveal><MemoryMatch /></Reveal>
+        </Suspense>
+
+        {/* ACT 3: IDENTITY — who are you as a sneakerhead? */}
+        <Suspense fallback={null}>
+          <Reveal><SneakerDNA /></Reveal>
+          <Reveal><ShoeColorizer /></Reveal>
+          <Reveal><OutfitMatcher /></Reveal>
+          <Reveal><SoleOfLagos /></Reveal>
+        </Suspense>
+
+        {/* ACT 4: CULTURE — for those who want to go deeper */}
+        <Suspense fallback={null}>
+          <Reveal><CultureHistory /></Reveal>
+          <Reveal><Soledle /></Reveal>
+          <Reveal><CultureMuseum /></Reveal>
+          <Reveal><SneakerBible /></Reveal>
+        </Suspense>
+
+        {/* ACT 5: DROPS & TRADE — commerce and the marketplace */}
+        <Suspense fallback={null}>
+          <Reveal><DropsTimeline /></Reveal>
+          <Reveal><MysteryDrop /></Reveal>
+          <Reveal><TradeBoard /></Reveal>
+          <Reveal><SneakerBingo /></Reveal>
+          <Reveal><SneakerWorth /></Reveal>
+        </Suspense>
+        <Reveal><Merch /></Reveal>
+
+        {/* ACT 6: CREATE & COMPETE — make content, go head-to-head */}
+        <Suspense fallback={null}>
+          <Reveal><Gallery /></Reveal>
+          <Reveal><PhotoTools /></Reveal>
+          <Reveal><CrewVoteOff /></Reveal>
+          <Reveal><BadgeMaker /></Reveal>
+        </Suspense>
+
+        {/* ACT 7: ACHIEVEMENT — progression, rankings, prizes */}
+        <Reveal><Passport /></Reveal>
+        <Suspense fallback={null}>
+          <Reveal><EggHuntTracker /></Reveal>
+        </Suspense>
+        <Reveal><Leaderboard /></Reveal>
+        <Reveal><Raffle /></Reveal>
+
+        {/* EVENT INFO — for those ready to plan the day */}
+        <Reveal><Schedule /></Reveal>
+        <Reveal><Venue /></Reveal>
+
+        {/* PARTICIPATION — vendor and access tiers */}
+        <Reveal><EarlyAccess /></Reveal>
+        <Reveal><VendorReg /></Reveal>
+        <Suspense fallback={null}>
+          <Reveal><ArchitectVault /></Reveal>
+        </Suspense>
+
+        {/* BRAND & HISTORY — for those who want the full story */}
         <Reveal><About /></Reveal>
         <Reveal><OriginStory /></Reveal>
         <Reveal><FridayNightProtocol /></Reveal>
         <Reveal><Press /></Reveal>
         <Reveal><Sponsors /></Reveal>
         <Reveal><SponsorTiers /></Reveal>
-        <Reveal><Highlights /></Reveal>
-        <Reveal><Community /></Reveal>
-        <Reveal><Testimonials /></Reveal>
-        <Reveal><Passport /></Reveal>
-        <Suspense fallback={null}>
-          <Reveal><SneakerDNA /></Reveal>
-          <Reveal><SoleOfLagos /></Reveal>
-          <Reveal><CultureHistory /></Reveal>
-          <Reveal><CultureMuseum /></Reveal>
-          <Reveal><ArchitectVault /></Reveal>
-          <Reveal><SneakerBible /></Reveal>
-          <Reveal><CommunityWall /></Reveal>
-          <Reveal><SneakerTrivia /></Reveal>
-          <Reveal><MemoryMatch /></Reveal>
-          <Reveal><Soledle /></Reveal>
-          <Reveal><ShoeColorizer /></Reveal>
-          <Reveal><OutfitMatcher /></Reveal>
-          <Reveal><HypeCounter /></Reveal>
-          <Reveal><SpinWheel /></Reveal>
-          <Reveal><CrewVoteOff /></Reveal>
-          <Reveal><BadgeMaker /></Reveal>
-          <Reveal><MysteryDrop /></Reveal>
-          <Reveal><SneakerWorth /></Reveal>
-          <Reveal><SneakerBingo /></Reveal>
-          <Reveal><ArtistSpotlight /></Reveal>
-          <Reveal><DropsTimeline /></Reveal>
-        </Suspense>
-        <Reveal><EarlyAccess /></Reveal>
+
+        {/* ECOSYSTEM */}
         <Suspense fallback={null}>
           <Reveal><Comics /></Reveal>
-          <Reveal><Gallery /></Reveal>
-          <Reveal><TradeBoard /></Reveal>
-        </Suspense>
-        <Reveal><Leaderboard /></Reveal>
-        <Suspense fallback={null}>
-          <Reveal><EggHuntTracker /></Reveal>
-          <Reveal><PhotoTools /></Reveal>
         </Suspense>
         <Reveal><Newsletter /></Reveal>
-        <Reveal><Lineup /></Reveal>
-        <Reveal><Schedule /></Reveal>
-        <Reveal><Venue /></Reveal>
-        <Reveal><Merch /></Reveal>
-        <Reveal><Raffle /></Reveal>
-        <Reveal><Countdown /></Reveal>
-        <Reveal><Tickets /></Reveal>
-        <Reveal><VendorReg /></Reveal>
+
+        {/* CLOSE */}
         <Reveal><FAQ /></Reveal>
         <Reveal><Contact /></Reveal>
         <Reveal><Footer /></Reveal>
