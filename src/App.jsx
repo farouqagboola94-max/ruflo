@@ -55,6 +55,14 @@ const SneakerBingo   = lazy(() => import('./sections/SneakerBingo'))
 // Culture & tools — lazy-loaded
 const ArtistSpotlight = lazy(() => import('./sections/ArtistSpotlight'))
 const DropsTimeline   = lazy(() => import('./sections/DropsTimeline'))
+// CatalystOS — AI tools ecosystem
+const CatalystOS_AI_Repo      = lazy(() => import('./sections/CatalystOS_AI_Repo'))
+const CatalystOS_MCP_Carousel = lazy(() => import('./sections/CatalystOS_MCP_Carousel'))
+const CatalystOS_Obsidian     = lazy(() => import('./sections/CatalystOS_Obsidian_Module'))
+const CatalystOS_UGC          = lazy(() => import('./sections/CatalystOS_UGC_Engine'))
+const CatalystSkillVault      = lazy(() => import('./sections/CatalystSkillVault'))
+const CatalystSkillsOS        = lazy(() => import('./sections/CatalystSkillsOS'))
+const CatalystOSArsenal       = lazy(() => import('./sections/CatalystOSArsenal'))
 import EarlyAccess from './sections/EarlyAccess'
 const Comics      = lazy(() => import('./sections/Comics'))
 const Gallery     = lazy(() => import('./sections/Gallery'))
@@ -122,7 +130,14 @@ const SECTION_TITLES = [
   { id: 'tickets',        title: "Tickets | Sneakers Fest '26" },
   { id: 'vendors',        title: "Vendors | Sneakers Fest '26" },
   { id: 'faq',            title: "FAQ | Sneakers Fest '26" },
-  { id: 'contact',        title: "Contact | Sneakers Fest '26" },
+  { id: 'contact',           title: "Contact | Sneakers Fest '26" },
+  { id: 'catalyst-arsenal',  title: "AI Arsenal | Sneakers Fest '26" },
+  { id: 'catalyst-skills-os',title: "Skills OS | Sneakers Fest '26" },
+  { id: 'catalyst-repos',    title: "AI Repos | Sneakers Fest '26" },
+  { id: 'catalyst-mcp',      title: "MCP Tools | Sneakers Fest '26" },
+  { id: 'catalyst-obsidian', title: "Obsidian + Claude | Sneakers Fest '26" },
+  { id: 'catalyst-ugc',      title: "Content Engine | Sneakers Fest '26" },
+  { id: 'catalyst-vault',    title: "Skill Vault | Sneakers Fest '26" },
 ]
 
 export default function App() {
@@ -387,6 +402,17 @@ export default function App() {
           <Reveal><Comics /></Reveal>
         </Suspense>
         <Reveal><Newsletter /></Reveal>
+
+        {/* CATALYST OS — AI Tools Ecosystem */}
+        <Suspense fallback={null}>
+          <Reveal><CatalystOSArsenal /></Reveal>
+          <Reveal><CatalystSkillsOS /></Reveal>
+          <Reveal><CatalystOS_AI_Repo /></Reveal>
+          <Reveal><CatalystOS_MCP_Carousel /></Reveal>
+          <Reveal><CatalystOS_Obsidian /></Reveal>
+          <Reveal><CatalystOS_UGC /></Reveal>
+          <Reveal><CatalystSkillVault /></Reveal>
+        </Suspense>
 
         {/* CLOSE */}
         <Reveal><FAQ /></Reveal>
