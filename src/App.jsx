@@ -77,6 +77,11 @@ const FakeDetector            = lazy(() => import('./sections/FakeDetector'))
 const StyleArchetype          = lazy(() => import('./sections/StyleArchetype'))
 const VendorMatcher           = lazy(() => import('./sections/VendorMatcher'))
 const StoryGenerator          = lazy(() => import('./sections/StoryGenerator'))
+const SneakerRoast            = lazy(() => import('./sections/SneakerRoast'))
+const HeatPredictor           = lazy(() => import('./sections/HeatPredictor'))
+const ColdDMGenerator         = lazy(() => import('./sections/ColdDMGenerator'))
+const SneakerEulogy           = lazy(() => import('./sections/SneakerEulogy'))
+const CollectorCard           = lazy(() => import('./sections/CollectorCard'))
 import EarlyAccess from './sections/EarlyAccess'
 const Comics      = lazy(() => import('./sections/Comics'))
 const Gallery     = lazy(() => import('./sections/Gallery'))
@@ -166,6 +171,11 @@ const SECTION_TITLES = [
   { id: 'style-archetype',      title: "Style Archetype | Sneakers Fest '26" },
   { id: 'vendor-matcher',       title: "Vendor Matcher | Sneakers Fest '26" },
   { id: 'story-gen',            title: "Sneaker Stories | Sneakers Fest '26" },
+  { id: 'sneaker-roast',        title: "Sneaker Roast | Sneakers Fest '26" },
+  { id: 'heat-predictor',       title: "Heat Predictor | Sneakers Fest '26" },
+  { id: 'cold-dm',              title: "Cold DM Generator | Sneakers Fest '26" },
+  { id: 'sneaker-eulogy',       title: "Sneaker Eulogy | Sneakers Fest '26" },
+  { id: 'collector-card',       title: "Collector Card | Sneakers Fest '26" },
 ]
 
 export default function App() {
@@ -373,6 +383,7 @@ export default function App() {
           <Reveal><ShoeColorizer /></Reveal>
           <Reveal><OutfitMatcher /></Reveal>
           <Reveal><StyleArchetype /></Reveal>
+          <Reveal><CollectorCard /></Reveal>
           <Reveal><SoleOfLagos /></Reveal>
         </Suspense>
 
@@ -388,6 +399,7 @@ export default function App() {
         <Suspense fallback={null}>
           <Reveal><DropsTimeline /></Reveal>
           <Reveal><VendorMatcher /></Reveal>
+          <Reveal><ColdDMGenerator /></Reveal>
           <Reveal><GrailAdvisor /></Reveal>
           <Reveal><MysteryDrop /></Reveal>
           <Reveal><DropAnalyzer /></Reveal>
@@ -396,6 +408,7 @@ export default function App() {
           <Reveal><AuctionWall /></Reveal>
           <Reveal><FakeDetector /></Reveal>
           <Reveal><PriceNegotiator /></Reveal>
+          <Reveal><HeatPredictor /></Reveal>
           <Reveal><SneakerBingo /></Reveal>
           <Reveal><SneakerWorth /></Reveal>
         </Suspense>
@@ -406,6 +419,8 @@ export default function App() {
           <Reveal><Gallery /></Reveal>
           <Reveal><CaptionGenerator /></Reveal>
           <Reveal><StoryGenerator /></Reveal>
+          <Reveal><SneakerRoast /></Reveal>
+          <Reveal><SneakerEulogy /></Reveal>
           <Reveal><PhotoTools /></Reveal>
           <Reveal><CrewVoteOff /></Reveal>
           <Reveal><BadgeMaker /></Reveal>
