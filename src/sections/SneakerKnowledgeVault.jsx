@@ -8,7 +8,7 @@ const API_KEY_STORAGE = 'catalyst-vault-api-key'
 const SEED_NOTES = [
   { id: 1, title: 'Air Jordan 1 — Origin Lore', body: 'Nike paid the $5,000 NBA fine every game so MJ could wear the Bred colorway. The banned shoe became the most mythologised sneaker in history.', tags: ['history', 'jordan', 'nike'], date: '2026-07-10' },
   { id: 2, title: 'Lagos Sneaker Grail List', body: 'Top grails circulating in the Lagos market: Yeezy 2 Red October, Off-White Jordan 1 Chicago, Travis AJ1 Low, NOCTA Glide. Price ceiling keeps rising.', tags: ['lagos', 'grails', 'market'], date: '2026-07-14' },
-  { id: 3, title: 'Sneakers Fest \'26 Prep', body: 'Dec 12 at Eko Atlantic. VIP access from 11AM. Collector room has limited drop access. Phalanx tier gets concierge + badge box.', tags: ['sf26', 'event', 'tickets'], date: '2026-07-18' },
+  { id: 3, title: 'Sneakers Fest \'26 Prep', body: 'Dec 12 at Muri Okunola Park, VI. VIP access from 11AM. Collector room has limited drop access. Phalanx tier gets concierge + badge box.', tags: ['sf26', 'event', 'tickets'], date: '2026-07-18' },
   { id: 4, title: 'Resale Psychology', body: 'Scarcity drives 80% of resale premium. But the strongest resale holds are culture-attached shoes — MJ era, Virgil designs, artist collabs — not just limited quantities.', tags: ['resale', 'strategy', 'culture'], date: '2026-07-20' },
 ]
 

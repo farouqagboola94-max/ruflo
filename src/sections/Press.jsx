@@ -30,7 +30,7 @@ const FAST_FACTS = [
   { label: 'Agency',       value: 'Catalyst Concepts, Lagos' },
   { label: 'Category',     value: 'Sneaker culture · streetwear · lifestyle' },
   { label: 'Format',       value: 'Three-dimensional brand (physical + online + community)' },
-  { label: 'Location',     value: 'Eko Atlantic City, Lagos, Nigeria' },
+  { label: 'Location',     value: 'Muri Okunola Park, Victoria Island, Lagos, Nigeria' },
   { label: 'Date',         value: 'December 12, 2026' },
   { label: 'Attendees',    value: '1,000 – 2,500 (Year 1 target)' },
   { label: 'Vendors',      value: '30 – 50 (Year 1)' },

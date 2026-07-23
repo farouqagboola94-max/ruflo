@@ -73,7 +73,7 @@ export default function BadgeMaker() {
   }
 
   function share() {
-    const text = `Just claimed my official ${tier} badge for Sneakers Fest '26 🎟 Dec 12 · Eko Atlantic City · Lagos. The sole community is real — see you there 👟`
+    const text = `Just claimed my official ${tier} badge for Sneakers Fest '26 🎟 Dec 12 · Muri Okunola Park, VI · Lagos. The sole community is real — see you there 👟`
     if (navigator.share) navigator.share({ text }).catch(() => {})
     else { navigator.clipboard.writeText(text).catch(() => {}); setShared(true); setTimeout(() => setShared(false), 2500) }
   }
@@ -205,7 +205,7 @@ export default function BadgeMaker() {
             <rect x="9" y="9" width="602" height="292" rx="8" fill="none" stroke="#F5A62318" strokeWidth="1" />
             <rect x="0" y="0" width="7" height="310" rx="12" fill="#F5A623" />
             <text x="24" y="44" fontFamily="'Courier New', monospace" fontSize="10" fill="#F5A623" letterSpacing="4" fontWeight="bold">SNEAKERS FEST '26</text>
-            <text x="24" y="60" fontFamily="'Courier New', monospace" fontSize="7" fill="#8A8A8A" letterSpacing="3">THE SOLE EXHIBITION · EKO ATLANTIC CITY</text>
+            <text x="24" y="60" fontFamily="'Courier New', monospace" fontSize="7" fill="#8A8A8A" letterSpacing="3">THE SOLE EXHIBITION · MURI OKUNOLA PARK, V/I</text>
             <line x1="24" y1="74" x2="596" y2="74" stroke="#2A2A2A" strokeWidth="1" />
             <g transform="translate(510,30) scale(0.22)" opacity="0.25">
               <path d="M 65 158 L 58 132 Q 52 110 74 94 L 138 72 Q 188 56 248 58 Q 318 58 346 78 L 362 100 Q 372 124 366 148 L 362 158 Z" fill="#F5A623" />
@@ -221,7 +221,7 @@ export default function BadgeMaker() {
               <rect key={i} x={24 + i * 5} y="240" width={i % 4 === 0 ? 3 : 2} height={i % 5 === 0 ? 22 : 14} fill="#2A2A2A" />
             ))}
             <text x="596" y="270" fontFamily="'Courier New', monospace" fontSize="8" fill="#3A3A3A" textAnchor="end" letterSpacing="2">{badgeId}</text>
-            <text x="24" y="298" fontFamily="'Courier New', monospace" fontSize="7" fill="#2A2A2A" letterSpacing="2">EKO ATLANTIC CITY · VICTORIA ISLAND · LAGOS, NIGERIA</text>
+            <text x="24" y="298" fontFamily="'Courier New', monospace" fontSize="7" fill="#2A2A2A" letterSpacing="2">MURI OKUNOLA PARK · VICTORIA ISLAND · LAGOS, NIGERIA</text>
             <text x="596" y="298" fontFamily="'Courier New', monospace" fontSize="7" fill="#2A2A2A" textAnchor="end">sneakersfest26.com</text>
           </svg>
         </div>

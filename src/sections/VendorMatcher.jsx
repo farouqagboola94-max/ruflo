@@ -17,7 +17,7 @@ const TIERS = [
   { label: 'PHALANX', value: 'Phalanx (earliest access)' },
 ]
 
-const SYSTEM = `You are the SF26 (Sneakers Fest '26, Eko Atlantic Lagos) vendor intelligence officer. Match a buyer's wishlist to the right vendor strategy.
+const SYSTEM = `You are the SF26 (Sneakers Fest '26, Muri Okunola Park, Victoria Island, Lagos) vendor intelligence officer. Match a buyer's wishlist to the right vendor strategy.
 
 Respond with ONLY this JSON:
 {

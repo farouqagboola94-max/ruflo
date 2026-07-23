@@ -62,7 +62,7 @@ export default function SplashScreen() {
         {/* Location pill */}
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 32, padding: '5px 16px', background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(10px)', border: `1px solid ${B.neonCyan}30`, borderRadius: 20 }}>
           <div style={{ width: 5, height: 5, borderRadius: '50%', background: B.neonLime, animation: 'pulse 2s infinite', boxShadow: `0 0 6px ${B.neonLime}` }} />
-          <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.neonCyan, letterSpacing: '0.4em' }}>LAGOS, NIGERIA — EKO ATLANTIC</span>
+          <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.neonCyan, letterSpacing: '0.4em' }}>LAGOS, NIGERIA — MURI OKUNOLA PARK</span>
         </div>
 
         {/* Title */}
@@ -88,7 +88,7 @@ export default function SplashScreen() {
 
         <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: B.smoke, lineHeight: 1.65, marginBottom: 36, maxWidth: 340, margin: '0 auto 36px' }}>
           West Africa's biggest sneaker event is coming.<br />
-          <span style={{ color: B.amber }}>December 12, 2026 — Eko Atlantic, Lagos.</span>
+          <span style={{ color: B.amber }}>December 12, 2026 — Muri Okunola Park, Lagos.</span>
         </div>
 
         {/* Enter button */}

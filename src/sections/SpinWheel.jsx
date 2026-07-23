@@ -141,7 +141,7 @@ export default function SpinWheel() {
   }
 
   function shareWin(prize) {
-    const text = `Just spun the wheel at Sneakers Fest '26 and won ${prize.label}! 🎡 Dec 12 · Eko Atlantic · Lagos 👟 sneakersfest26.com`
+    const text = `Just spun the wheel at Sneakers Fest '26 and won ${prize.label}! 🎡 Dec 12 · Muri Okunola Park, VI · Lagos 👟 sneakersfest26.com`
     if (navigator.share) navigator.share({ text }).catch(() => {})
     else {
       navigator.clipboard.writeText(text).catch(() => {})

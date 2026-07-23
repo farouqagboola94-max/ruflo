@@ -15,7 +15,7 @@ const DROPS = [
   { year: '2017', name: 'The Ten Collection',      brand: 'Nike',   desc: 'Virgil Abloh’s Off-White x Nike. Ten silhouettes. Quotation marks changed sneakers forever.' },
   { year: '2021', name: 'Travis Scott AJ1 Low',    brand: 'Nike',   desc: 'Swoosh flipped. Rope laces. Hidden pocket. Cactus Jack made the Easter Egg a language.' },
   { year: '2024', name: 'NOCTA x Certified Lover', brand: 'Nike',   desc: 'Drake’s NOCTA hits an all-time cultural peak with the certified-lover colorways.' },
-  { year: '2026', name: 'SNEAKERS FEST ’26',     brand: 'Lagos',  desc: 'The continent finally has its own stage. Eko Atlantic City. December 12. History in the making.' },
+  { year: '2026', name: "SNEAKERS FEST '26",     brand: 'Lagos',  desc: 'The continent finally has its own stage. Muri Okunola Park, Victoria Island. December 12. History in the making.' },
 ]
 
 export default function DropsTimeline() {

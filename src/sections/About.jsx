@@ -13,7 +13,7 @@ const DIMENSIONS = [
   {
     n: '01',
     title: 'PHYSICAL EXHIBITION',
-    body: 'The event. Eko Atlantic City, December 12. Vendors, drops, DJ sets, community — everything in one space.',
+    body: 'The event. Muri Okunola Park, VI, December 12. Vendors, drops, DJ sets, community — everything in one space.',
     color: B.amber,
   },
   {

@@ -154,7 +154,7 @@ export default function AuctionWall() {
         </div>
 
         <div style={{ marginTop: 20, padding: '12px 16px', background: '#0a0a0a', border: '1px solid #1a1a1a', fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.1em', textAlign: 'center' }}>
-          SF26 DEMO · BIDS ARE SIMULATED · SNEAKERS FEST '26 · EKO ATLANTIC · DEC 12 2026
+          SF26 DEMO · BIDS ARE SIMULATED · SNEAKERS FEST '26 · MURI OKUNOLA PARK, V/I · DEC 12 2026
         </div>
       </div>
     </section>

@@ -24,7 +24,7 @@ const TIERS = [
   { label: 'PHALANX', value: 'Phalanx (ultra-exclusive)' },
 ]
 
-const SYSTEM = `You are a social media copywriter for Lagos sneaker culture and Sneakers Fest '26 (Dec 12 2026, Eko Atlantic, Lagos).
+const SYSTEM = `You are a social media copywriter for Lagos sneaker culture and Sneakers Fest '26 (Dec 12 2026, Muri Okunola Park, Victoria Island, Lagos).
 
 Write ONE caption for the requested platform, mood, and ticket tier. The caption must:
 - Sound authentically Lagos — not generic global sneaker content

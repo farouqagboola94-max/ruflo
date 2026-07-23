@@ -40,7 +40,7 @@ const QUESTIONS = [
     ],
   },
   {
-    q: 'EKO ATLANTIC. DECEMBER 12. YOU WALK IN WEARING...',
+    q: 'MURI OKUNOLA PARK. DECEMBER 12. YOU WALK IN WEARING...',
     options: [
       { text: 'The OG. Nothing else makes sense.', type: 'PURIST' },
       { text: 'Whatever dropped last Friday.', type: 'HYPE' },
@@ -79,7 +79,7 @@ const ARCHETYPES = {
     color: B.neonCyan,
     badge: '📚',
     description:
-      "Every pair tells a chapter. You don't own shoes — you build archives. Your collection could silence an entire room. When people see your shelf, they read your autobiography. Eko Atlantic will feel your presence before you even speak.",
+      "Every pair tells a chapter. You don't own shoes — you build archives. Your collection could silence an entire room. When people see your shelf, they read your autobiography. Muri Okunola Park will feel your presence before you even speak.",
     pair: 'Nike Air Max 97 · Silver Bullet',
     frequency: 'LEGACY',
     callout: 'Your archive expands on December 12.',
@@ -272,7 +272,7 @@ export default function SneakerDNA() {
                 TAKE AGAIN
               </button>
             </div>
-            <p style={{ fontFamily:'Bebas Neue, sans-serif', color:B.smoke+'60', fontSize:13, letterSpacing:3 }}>SEE YOU AT EKO ATLANTIC · DECEMBER 12, 2026</p>
+            <p style={{ fontFamily:'Bebas Neue, sans-serif', color:B.smoke+'60', fontSize:13, letterSpacing:3 }}>SEE YOU AT MURI OKUNOLA PARK · DECEMBER 12, 2026</p>
           </div>
         )}
 

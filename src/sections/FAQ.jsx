@@ -14,7 +14,7 @@ const FAQS = [
   { q: "Can I bring sneakers to sell?",
     a: "Yes! Register as a vendor. Limited booths are available on a first-come first-served basis. DM @SNEAKERSFEST or email sneakersfest088@gmail.com to apply." },
   { q: "Is there parking on-site?",
-    a: "Yes. Eko Atlantic has extensive parking facilities. Shuttle services will also run from key drop-off points on Lagos Island and Victoria Island." },
+    a: "Yes. Muri Okunola Park is on Adeola Odeku Street, Victoria Island, with street parking available in the surrounding area. Shuttle services will also run from key drop-off points on Lagos Island and Victoria Island." },
   { q: "Are refunds available?",
     a: "Tickets are non-refundable. However, you may transfer your ticket to another person up to 48 hours before the event by contacting us directly." },
   { q: "What payment methods are accepted?",

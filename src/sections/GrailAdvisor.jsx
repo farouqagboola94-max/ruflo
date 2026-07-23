@@ -24,7 +24,7 @@ const VIBES = [
   { label: 'INVESTMENT', value: 'investment/resale — pieces likely to appreciate in the Lagos market' },
 ]
 
-const SYSTEM = `You are a Lagos sneaker market expert and grail advisor at Sneakers Fest '26 (December 12, 2026, Eko Atlantic). Help attendees find the perfect sneakers based on their budget, style, and vibe.
+const SYSTEM = `You are a Lagos sneaker market expert and grail advisor at Sneakers Fest '26 (December 12, 2026, Muri Okunola Park, Victoria Island). Help attendees find the perfect sneakers based on their budget, style, and vibe.
 
 Recommend exactly 3 specific sneakers. For each, respond with this JSON array:
 [
