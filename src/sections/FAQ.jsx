@@ -4,21 +4,31 @@ import { SectionTag } from '../components/Shared'
 import Egg from '../components/Egg'
 
 const HELPFUL_KEY   = 'sf26_faq_helpful'
-const HELPFUL_SEEDS = [89, 47, 62, 38, 55, 71]
+const HELPFUL_SEEDS = [89, 47, 62, 38, 55, 71, 44, 61, 33, 58, 27]
 
 const FAQS = [
-  { q: "When and where is Sneakers Fest 2026?",   popular: true,
+  { q: "When and where is Sneakers Fest 2026?", popular: true,
     a: "December 12, 2026 at Muri Okunola Park, Victoria Island, Lagos, Nigeria. Doors open at 12:00 PM and the event runs until 10:00 PM." },
   { q: "What is the minimum age for entry?",
-    a: "Sneakers Fest is open to attendees aged 16 and above. Under-18s must be accompanied by a responsible adult." },
-  { q: "Can I bring sneakers to sell?",
-    a: "Yes! Register as a vendor. Limited booths are available on a first-come first-served basis. DM @SNEAKERSFEST or email sneakersfest088@gmail.com to apply." },
+    a: "Sneakers Fest is open to attendees aged 16 and above. Under-18s must be accompanied by a responsible adult. Valid ID may be requested at the gate." },
+  { q: "Can I bring sneakers to sell or trade?", popular: true,
+    a: "Registered vendors with a confirmed booth can sell on the day. Limited spaces are available on a first-come, first-served basis — DM @SNEAKERSFEST or email sneakersfest088@gmail.com to apply. Walk-in selling is not permitted. Peer-to-peer trading via our SF26 Trade Board is welcome for all ticket holders." },
   { q: "Is there parking on-site?",
-    a: "Yes. Muri Okunola Park is on Adeola Odeku Street, Victoria Island, with street parking available in the surrounding area. Shuttle services will also run from key drop-off points on Lagos Island and Victoria Island." },
+    a: "Yes. Muri Okunola Park is on Adeola Odeku Street, Victoria Island, with street parking available in the surrounding area. We strongly recommend ride-hailing on the day to avoid congestion. A dedicated shuttle will also run from key Lagos Island and VI drop-off points." },
+  { q: "How do I get there by ride-hailing or public transport?",
+    a: "Bolt and Uber both serve Victoria Island. Tell your driver: Muri Okunola Park, Adeola Odeku Street, VI. Danfo buses run along Ozumba Mbadiwe and Adeola Odeku. A free shuttle service will operate from Tafawa Balewa Square (TBS) at regular intervals throughout the day." },
   { q: "Are refunds available?",
-    a: "Tickets are non-refundable. However, you may transfer your ticket to another person up to 48 hours before the event by contacting us directly." },
+    a: "Tickets are non-refundable. However, you may transfer your ticket to another person up to 48 hours before the event by contacting us directly at sneakersfest088@gmail.com. Include your order reference and the new holder's name." },
   { q: "What payment methods are accepted?",
-    a: "We accept debit/credit cards, bank transfer, and USSD payments via Paystack and Flutterwave. International cards are fully supported." },
+    a: "We accept debit/credit cards, bank transfer, and USSD payments via Paystack and Flutterwave. International cards are fully supported. Vendors on the day may accept cash, card, or bank transfer individually." },
+  { q: "What should I bring on the day?",
+    a: "Your ticket (digital screenshot or printed), a valid ID, and comfortable footwear — you will be on your feet for hours. Bring some cash for smaller vendors who may not have POS. A lightweight bag or backpack is fine; oversized luggage may be checked at entry. Sunscreen is recommended for the outdoor sections." },
+  { q: "Is photography allowed at the event?",
+    a: "Personal photography and video for social media is fully welcome. Commercial shoots, media crews, and brand content teams require prior press accreditation. Email sneakersfest088@gmail.com with your outlet name, brief, and expected coverage before the event to receive a media pass." },
+  { q: "Will there be food and drinks on-site?",
+    a: "Yes. A dedicated food and beverage zone runs all day featuring Street Eats Lagos and other curated food vendors — suya, jollof, small chops, fresh drinks, and more. Outside food is permitted; outside glass bottles and alcohol are not. Water will be available at hydration stations throughout the venue." },
+  { q: "How do I apply as a vendor or brand partner?",
+    a: "Vendor applications are open now. Email sneakersfest088@gmail.com or DM @SNEAKERSFEST on Instagram with your brand name, product category, and a short description of what you plan to bring. Brand partnership, sponsorship, and activation decks are available on request. Booth spots are limited and filling fast." },
 ]
 
 export default function FAQ() {

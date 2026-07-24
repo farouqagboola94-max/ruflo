@@ -140,7 +140,7 @@ export default function Contact() {
         <div style={{ display: 'flex', justifyContent: 'center', gap: 12, flexWrap: 'wrap', marginBottom: 48 }}>
           {[
             { icon: '✉', label: 'sneakersfest088@gmail.com' },
-            { icon: '📞', label: '+234 800 SNEAKERS' },
+            { icon: '📸', label: '@sneakersfest' },
             { icon: '📍', label: 'Lagos, Nigeria' },
           ].map(({ icon, label: l }) => (
             <div key={l} className="card-3d" style={{

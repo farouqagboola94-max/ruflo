@@ -3,12 +3,12 @@ import { GrainOverlay, AmberGlow, SectionTag } from '../components/Shared'
 import Egg from '../components/Egg'
 
 const FEATURES = [
-  { label: 'GRAIL PAIRS', title: 'RARE KICKS', desc: '200+ exclusive pairs from collectors across Africa and beyond. Find your grails, see the heat up close.', color: B.amber },
-  { label: '30–50 VENDORS', title: 'CURATED VENDORS', desc: 'Invitation-curated vendors bringing heat, vintage, customs, and everything in between. Year 1 first cohort.', color: B.neonCyan },
-  { label: 'LIVE SETS', title: 'LIVE DJs', desc: 'The best DJs in Lagos keep energy alive from doors open to the very last drop.', color: B.neonMagenta },
-  { label: 'ON-SITE', title: 'CUSTOM ART', desc: 'On-site artists transforming your kicks into one-of-a-kind masterpieces in real time.', color: B.neonLime },
-  { label: 'ALL DAY', title: 'STREET FOOD', desc: "Lagos' finest street food vendors. Eat well, stay long, vibe harder.", color: B.amber },
-  { label: 'LIMITED', title: 'EXCLUSIVE DROPS', desc: "Limited edition releases you won't find anywhere else. First announced in the Friday Night Protocol community.", color: B.neonCyan },
+  { label: '200+ GRAIL PAIRS', title: 'RARE KICKS', desc: 'Collectors from across Africa and beyond bring their grails. Cop, trade, or just soak in the heat — all under one roof.', color: B.amber },
+  { label: '30+ CONFIRMED', title: 'CURATED VENDORS', desc: 'Invitation-only vendors: sneakers, apparel, customs, accessories, and food — handpicked for quality. No random stalls.', color: B.neonCyan },
+  { label: 'LIVE SETS', title: 'DJ CULTURE', desc: 'Classified headliners and producer sets keep energy peaking from the moment doors open to the last drop of the night.', color: B.neonMagenta },
+  { label: 'ON-SITE', title: 'CUSTOM ART', desc: 'Bring your blank pair and watch artists turn them into one-of-a-kind masterpieces in real time. Walkable, watchable, wearable.', color: B.neonLime },
+  { label: 'ALL DAY', title: 'STREET FOOD', desc: "Suya, jollof, small chops, and more — Lagos' finest street food vendors run the food zone so you never have to leave.", color: B.amber },
+  { label: 'VIP PRIORITY', title: 'EXCLUSIVE DROPS', desc: 'Limited-run releases you cannot buy online. VIP and VVIP holders get priority access. General tickets join the queue.', color: B.neonCyan },
 ]
 
 export default function Highlights() {

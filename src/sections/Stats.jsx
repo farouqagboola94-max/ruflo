@@ -4,7 +4,7 @@ import CountUp from '../components/CountUp'
 
 const STATS = [
   { to: 1000, suffix: '+', label: 'EXPECTED ATTENDEES',    color: B.amber },
-  { to: 50,   suffix: '+', label: 'CURATED VENDORS',       color: B.neonCyan },
+  { to: 30,   suffix: '+', label: 'CONFIRMED VENDORS',     color: B.neonCyan },
   { to: 200,  suffix: '+', label: 'RARE SNEAKERS ON SHOW', color: B.amber },
   { to: 12,   suffix: 'H', label: 'OF LIVE CULTURE',       color: B.neonCyan },
 ]
