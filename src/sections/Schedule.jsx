@@ -26,14 +26,14 @@ const DAY1 = [
 const DAY2 = [
   { time: '12:00', period: 'PM', title: 'DOORS OPEN', desc: 'Gates open. Vendor floor live. 30 confirmed vendors around the horseshoe perimeter.', tag: 'OPEN', color: B.neonLime },
   { time: '12:30', period: 'PM', title: 'VENDOR FLOOR', desc: 'Streetwear left flank. Food right flank. Rare kicks, customs, and drops all day.', tag: 'ALL ACCESS', color: B.neonCyan },
-  { time: '1:00',  period: 'PM', title: 'ODUNSI (THE ENGINE)', desc: 'Alt-R&B live set to open the afternoon. Dreamy production, Lagos energy, and fits to match.', tag: 'LIVE', color: B.neonMagenta, featured: true, stage: 'MAIN STAGE' },
-  { time: '2:00',  period: 'PM', title: 'DJ NEPTUNE', desc: 'Opening DJ set — Afrobeats & Street Pop to keep the crowd warm and moving.', tag: 'MUSIC', color: B.amber, stage: 'MAIN STAGE' },
+  { time: '1:00',  period: 'PM', title: '⧡ LIVE ACT — CLASSIFIED', desc: 'A special live performance to open the afternoon. Artist details dropping soon.', tag: 'LIVE', color: B.neonMagenta, featured: true, stage: 'MAIN STAGE' },
+  { time: '2:00',  period: 'PM', title: '⧡ DJ SET — CLASSIFIED', desc: 'Opening DJ set to warm the crowd and keep the energy moving all afternoon.', tag: 'MUSIC', color: B.amber, stage: 'MAIN STAGE' },
   { time: '3:00',  period: 'PM', title: 'CUSTOM ART SHOWCASE', desc: 'On-site artists customise your kicks in real time. Bring your canvas pair.', tag: 'ART', color: B.neonMagenta, stage: 'ART ZONE' },
-  { time: '4:00',  period: 'PM', title: 'SARZ — PRODUCER SET', desc: 'Live production showcase. Beats made in real time, right in front of you.', tag: 'MUSIC', color: B.amber, stage: 'MAIN STAGE' },
+  { time: '4:00',  period: 'PM', title: '⧡ PRODUCER SET — CLASSIFIED', desc: 'Live production showcase. Beats made in real time, right in front of you.', tag: 'MUSIC', color: B.amber, stage: 'MAIN STAGE' },
   { time: '5:00',  period: 'PM', title: 'EXCLUSIVE DROP #1', desc: 'First limited release of the day. VIP ticket holders get priority access.', tag: 'DROP', color: B.neonLime, stage: 'DROP ZONE' },
   { time: '6:00',  period: 'PM', title: 'FRIDAY CHAMPIONS CROWNED', desc: 'The stadium champions are announced live on the main stage — merging the sports and fashion crowds.', tag: 'CROSSOVER', color: B.amber, featured: true, stage: 'MAIN STAGE' },
   { time: '7:00',  period: 'PM', title: 'EXHIBITION FOOTBALL ZONE', desc: 'Saturday night football exhibition next to the stage. The culture stays on the pitch.', tag: 'SPORT', color: B.neonLime, stage: 'SPORT ZONE' },
-  { time: '8:00',  period: 'PM', title: 'DJ SPINALL — HEADLINE', desc: "The main event. Lagos' biggest DJ closes the night with the performance of the year.", tag: 'HEADLINE', color: B.neonMagenta, featured: true, stage: 'MAIN STAGE' },
+  { time: '8:00',  period: 'PM', title: '⧡ HEADLINE ACT — CLASSIFIED', desc: 'The main event. A headline act closes the night with the performance of the year.', tag: 'HEADLINE', color: B.neonMagenta, featured: true, stage: 'MAIN STAGE' },
   { time: '10:00', period: 'PM', title: 'DOORS CLOSE', desc: 'Final vendor rounds. Collect your purchases. See you next year.', tag: 'CLOSE', color: B.smoke },
 ]
 
