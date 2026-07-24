@@ -26,13 +26,14 @@ const DAY1 = [
 const DAY2 = [
   { time: '12:00', period: 'PM', title: 'DOORS OPEN', desc: 'Gates open. Vendor floor live. 30 confirmed vendors around the horseshoe perimeter.', tag: 'OPEN', color: B.neonLime },
   { time: '12:30', period: 'PM', title: 'VENDOR FLOOR', desc: 'Streetwear left flank. Food right flank. Rare kicks, customs, and drops all day.', tag: 'ALL ACCESS', color: B.neonCyan },
-  { time: '2:00',  period: 'PM', title: 'DJ NEPTUNE', desc: 'Opening set — Afrobeats & Street Pop to warm the crowd.', tag: 'MUSIC', color: B.amber },
-  { time: '3:00',  period: 'PM', title: 'CUSTOM ART SHOWCASE', desc: 'On-site artists customise your kicks in real time. Bring your canvas.', tag: 'ART', color: B.neonMagenta },
-  { time: '4:00',  period: 'PM', title: 'SARZ — PRODUCER SET', desc: 'Live production showcase. Beats made in real time, right in front of you.', tag: 'MUSIC', color: B.amber },
-  { time: '5:00',  period: 'PM', title: 'EXCLUSIVE DROP #1', desc: 'First limited release of the day. VIP ticket holders get priority access.', tag: 'DROP', color: B.neonLime },
-  { time: '6:00',  period: 'PM', title: 'FRIDAY CHAMPIONS CROWNED', desc: 'The stadium champions are announced live on the main stage — merging the sports and fashion crowds.', tag: 'CROSSOVER', color: B.amber, featured: true },
-  { time: '7:00',  period: 'PM', title: 'EXHIBITION FOOTBALL ZONE', desc: 'Saturday night football exhibition next to the stage. The culture stays on the pitch.', tag: 'SPORT', color: B.neonLime },
-  { time: '8:00',  period: 'PM', title: 'DJ SPINALL — HEADLINE', desc: "The main event. Lagos' biggest DJ closes the night with the performance of the year.", tag: 'HEADLINE', color: B.neonMagenta, featured: true },
+  { time: '1:00',  period: 'PM', title: 'ODUNSI (THE ENGINE)', desc: 'Alt-R&B live set to open the afternoon. Dreamy production, Lagos energy, and fits to match.', tag: 'LIVE', color: B.neonMagenta, featured: true, stage: 'MAIN STAGE' },
+  { time: '2:00',  period: 'PM', title: 'DJ NEPTUNE', desc: 'Opening DJ set — Afrobeats & Street Pop to keep the crowd warm and moving.', tag: 'MUSIC', color: B.amber, stage: 'MAIN STAGE' },
+  { time: '3:00',  period: 'PM', title: 'CUSTOM ART SHOWCASE', desc: 'On-site artists customise your kicks in real time. Bring your canvas pair.', tag: 'ART', color: B.neonMagenta, stage: 'ART ZONE' },
+  { time: '4:00',  period: 'PM', title: 'SARZ — PRODUCER SET', desc: 'Live production showcase. Beats made in real time, right in front of you.', tag: 'MUSIC', color: B.amber, stage: 'MAIN STAGE' },
+  { time: '5:00',  period: 'PM', title: 'EXCLUSIVE DROP #1', desc: 'First limited release of the day. VIP ticket holders get priority access.', tag: 'DROP', color: B.neonLime, stage: 'DROP ZONE' },
+  { time: '6:00',  period: 'PM', title: 'FRIDAY CHAMPIONS CROWNED', desc: 'The stadium champions are announced live on the main stage — merging the sports and fashion crowds.', tag: 'CROSSOVER', color: B.amber, featured: true, stage: 'MAIN STAGE' },
+  { time: '7:00',  period: 'PM', title: 'EXHIBITION FOOTBALL ZONE', desc: 'Saturday night football exhibition next to the stage. The culture stays on the pitch.', tag: 'SPORT', color: B.neonLime, stage: 'SPORT ZONE' },
+  { time: '8:00',  period: 'PM', title: 'DJ SPINALL — HEADLINE', desc: "The main event. Lagos' biggest DJ closes the night with the performance of the year.", tag: 'HEADLINE', color: B.neonMagenta, featured: true, stage: 'MAIN STAGE' },
   { time: '10:00', period: 'PM', title: 'DOORS CLOSE', desc: 'Final vendor rounds. Collect your purchases. See you next year.', tag: 'CLOSE', color: B.smoke },
 ]
 
@@ -96,6 +97,9 @@ function Timeline({ items, liveStatus = {} }) {
                   )}
                   {isNext && (
                     <span style={{ padding:'2px 8px', background:`${B.amber}15`, border:`1px solid ${B.amber}50`, borderRadius:2, fontFamily:"'Space Mono',monospace", fontSize:7, color:B.amber, letterSpacing:'0.1em' }}>▶ UP NEXT</span>
+                  )}
+                  {item.stage && (
+                    <span style={{ padding:'2px 7px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.12)', borderRadius:2, fontFamily:"'Space Mono',monospace", fontSize:7, color:'#555', letterSpacing:'0.1em', whiteSpace:'nowrap' }}>↗ {item.stage}</span>
                   )}
                 </div>
                 <div style={{ fontFamily:"'Syne',sans-serif", fontSize:12, color:B.smoke, lineHeight:1.6 }}>{item.desc}</div>
@@ -175,6 +179,16 @@ export default function Schedule() {
           </div>
         </div>
 
+        {day === 2 && (
+          <div style={{ display:'flex', gap:16, flexWrap:'wrap', marginBottom:20, paddingLeft:98 }}>
+            {[{label:'MAIN STAGE', color:B.amber},{label:'ART ZONE', color:B.neonMagenta},{label:'SPORT ZONE', color:B.neonLime},{label:'DROP ZONE', color:B.neonCyan}].map(s => (
+              <div key={s.label} style={{ display:'flex', alignItems:'center', gap:6 }}>
+                <div style={{ width:7, height:7, borderRadius:'50%', background:s.color, boxShadow:`0 0 6px ${s.color}80` }} />
+                <span style={{ fontFamily:"'Space Mono',monospace", fontSize:7, color:'#555', letterSpacing:'0.1em' }}>{s.label}</span>
+              </div>
+            ))}
+          </div>
+        )}
         <Timeline items={day === 1 ? DAY1 : DAY2} liveStatus={liveStatus} />
 
         <div className="card-3d" style={{ marginTop:36, padding:'20px 24px', background:B.charcoal, border:`1px solid ${B.gunmetal}`, borderRadius:8, display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:12 }}>

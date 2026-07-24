@@ -241,6 +241,26 @@ export default function Tickets() {
           </div>
         )}
 
+        {/* Perks at a Glance */}
+        <div className="reveal-3d" style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(180px, 1fr))', gap:12, marginBottom:36 }}>
+          {[
+            { emoji:'🎫', tier:'GENERAL',  color:B.neonCyan,    perks:['Gate + vendor floor','Street football zone','All-day access'] },
+            { emoji:'🥂', tier:'VIP',       color:B.amber,       perks:['Priority entry lane','Exclusive VIP lounge','Drop #1 priority'] },
+            { emoji:'🎙', tier:'VVIP',      color:B.neonMagenta, perks:['VIP + backstage pass','Artist meet & greet','Official merch kit'] },
+            { emoji:'👑', tier:'PHALANX',   color:'#C084FC',     perks:['All-access wristband','Founding member badge','Phalanx node status'] },
+          ].map(p => (
+            <div key={p.tier} className="card-3d" style={{ padding:'16px 18px', background:`${p.color}08`, border:`1px solid ${p.color}25`, borderTop:`2px solid ${p.color}60`, borderRadius:8 }}>
+              <div style={{ fontSize:20, marginBottom:8 }}>{p.emoji}</div>
+              <div style={{ fontFamily:"'Orbitron',monospace", fontSize:8, color:p.color, letterSpacing:'0.2em', marginBottom:10 }}>{p.tier}</div>
+              {p.perks.map(pk => (
+                <div key={pk} style={{ fontFamily:"'Space Mono',monospace", fontSize:7, color:'#666', lineHeight:2, display:'flex', alignItems:'center', gap:6 }}>
+                  <span style={{ color:p.color }}>▸</span>{pk}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+
         {/* Tier Cards */}
         <div className="reveal-3d" style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(260px, 1fr))', gap:20, alignItems:'center' }}>
           {TIERS.map((tier, i) => {

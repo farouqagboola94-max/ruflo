@@ -337,6 +337,28 @@ export default function TradeBoard() {
           </div>
         </div>
 
+        {/* Top Wanted strip */}
+        {activeFilters === 0 && (
+          <div style={{ marginBottom:28 }}>
+            <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:B.neonMagenta, letterSpacing:'0.3em', marginBottom:10 }}>🔥 MOST WANTED</div>
+            <div style={{ display:'flex', gap:10, overflowX:'auto', paddingBottom:4 }}>
+              {[...listings].sort((a,b) => (b.wants||0) - (a.wants||0)).slice(0,4).map(l => (
+                <div key={l.id} onClick={() => setContact(l)}
+                  style={{ flexShrink:0, width:200, padding:'12px 14px', background:`${B.neonMagenta}08`, border:`1px solid ${B.neonMagenta}25`, borderRadius:8, cursor:'pointer', transition:'border-color 0.2s' }}
+                  onMouseEnter={e => e.currentTarget.style.borderColor=`${B.neonMagenta}55`}
+                  onMouseLeave={e => e.currentTarget.style.borderColor=`${B.neonMagenta}25`}
+                >
+                  <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:14, color:B.white, lineHeight:1.2, marginBottom:8 }}>{l.name}</div>
+                  <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                    <span style={{ padding:'2px 6px', background:`${COND_COLOR[l.condition]}18`, border:`1px solid ${COND_COLOR[l.condition]}35`, borderRadius:2, fontFamily:'Space Mono,monospace', fontSize:6, color:COND_COLOR[l.condition], letterSpacing:1 }}>{l.condition}</span>
+                    <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:B.neonMagenta, letterSpacing:1 }}>♡ {l.wants||0}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* grid */}
         {filtered.length === 0
           ? <div style={{ textAlign:'center', padding:'80px 0' }}>

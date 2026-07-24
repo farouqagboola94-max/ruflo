@@ -68,10 +68,16 @@ function BoothCard({ booth, selected, onSelect, taken }) {
 }
 
 const CONFIRMED_VENDORS = [
-  { name:'Sole Lagos',      cat:'Sneakers',   city:'Lagos', ig:'@solelagos',    color:B.amber },
-  { name:'Kicksurge NG',    cat:'Sneakers',   city:'Abuja', ig:'@kicksurgeng',  color:B.neonCyan },
-  { name:'Stitch and Sole', cat:'Custom Art', city:'Lagos', ig:'@stitchedsole', color:B.neonMagenta },
-  { name:'Lagos Drip Haus', cat:'Apparel',    city:'Lagos', ig:'@lagosdrip',    color:B.neonLime },
+  { name:'Sole Lagos',         cat:'Sneakers',           city:'Lagos',         ig:'@solelagos',      color:B.amber,       booth:'Premium Corner', bringing:'Deadstock Air Jordan collection + exclusive Lagos colourways' },
+  { name:'Kicksurge NG',       cat:'Sneakers',           city:'Abuja',         ig:'@kicksurgeng',    color:B.neonCyan,    booth:'Double',         bringing:'Rare Adidas and Nike imports and limited edition runners' },
+  { name:'Stitch and Sole',    cat:'Custom Art',         city:'Lagos',         ig:'@stitchedsole',   color:B.neonMagenta, booth:'Standard',       bringing:'Live customisation station — bring your blank canvas pair' },
+  { name:'Lagos Drip Haus',    cat:'Apparel',            city:'Lagos',         ig:'@lagosdrip',      color:B.neonLime,    booth:'Double',         bringing:'Lagos-made streetwear capsule and unreleased collab pieces' },
+  { name:'The Sneaker Lab',    cat:'Sneakers',           city:'Lagos',         ig:'@sneakerlab.ng',  color:B.amber,       booth:'Double',         bringing:'Authentication service + curated grail collection for sale' },
+  { name:'Afro Threads',       cat:'Apparel',            city:'Port Harcourt', ig:'@afrothreads',    color:B.neonCyan,    booth:'Standard',       bringing:'Pan-African streetwear brand debut — first Lagos pop-up ever' },
+  { name:'Lagos Kicks Clinic', cat:'Accessories',        city:'Lagos',         ig:'@kicksclinic',    color:B.neonLime,    booth:'Standard',       bringing:'Sneaker restoration, cleaning, and lace customisation on site' },
+  { name:'NoFilter Lagos',     cat:'Tech / Photography', city:'Lagos',         ig:'@nofilter.lag',   color:B.amber,       booth:'Standard',       bringing:'Event photography + instant print booth for all attendees' },
+  { name:'Street Eats Lagos',  cat:'Food & Beverage',    city:'Lagos',         ig:'@streeteats.lag', color:B.neonLime,    booth:'Standard',       bringing:'Local street food meets gourmet — suya, jollof, and more' },
+  { name:'Chike Creatives',    cat:'Custom Art',         city:'Lagos',         ig:'@chikecreates',   color:B.neonMagenta, booth:'Standard',       bringing:'Limited edition SF26 prints and poster art — only on the day' },
 ]
 
 const MAP_ZONES = [
@@ -133,6 +139,7 @@ export default function VendorReg() {
   const [pitchError,   setPitchError]   = useState('')
   const [showApiKey,   setShowApiKey]   = useState(false)
   const [keyInput,     setKeyInput]     = useState('')
+  const [vendorCatFilter, setVendorCatFilter] = useState('ALL')
 
   const generatePitch = useCallback(async () => {
     if (!getApiKey()) { setShowApiKey(true); return }
@@ -555,13 +562,32 @@ Write in first person, confident but not arrogant. Mention Lagos, the culture, w
           </div>
         )}
         <div style={{ marginTop:48 }}>
-          <div style={{ fontFamily:"'Space Mono'", fontSize:8, letterSpacing:'0.4em', color:B.smoke, marginBottom:16 }}>CONFIRMED VENDORS (PREVIEW)</div>
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(180px, 1fr))', gap:12 }}>
-            {CONFIRMED_VENDORS.map((v, i) => (
-              <div key={i} className="card-3d" style={{ padding:'16px', background:'rgba(255,255,255,0.03)', border:`1px solid ${v.color}30`, borderRadius:8 }}>
-                <div style={{ width:36, height:36, borderRadius:'50%', background:`${v.color}15`, border:`1.5px solid ${v.color}50`, marginBottom:10, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Bebas Neue,sans-serif', fontSize:16, color:v.color }}>{v.name[0]}</div>
-                <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:15, color:B.white }}>{v.name}</div>
-                <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:v.color, marginTop:2 }}>{v.cat} / {v.city} / {v.ig}</div>
+          <div style={{ fontFamily:"'Space Mono'", fontSize:8, letterSpacing:'0.4em', color:B.smoke, marginBottom:14 }}>CONFIRMED VENDORS</div>
+          {/* Category filter */}
+          <div style={{ display:'flex', gap:8, flexWrap:'wrap', marginBottom:18 }}>
+            {['ALL', ...Array.from(new Set(CONFIRMED_VENDORS.map(v => v.cat)))].map(cat => (
+              <button key={cat} onClick={() => setVendorCatFilter(cat)}
+                style={{ padding:'5px 13px', background: vendorCatFilter===cat ? `${B.neonCyan}15` : 'transparent', border:`1px solid ${vendorCatFilter===cat ? B.neonCyan+'55' : 'rgba(255,255,255,0.08)'}`, borderRadius:4, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:7, color: vendorCatFilter===cat ? B.neonCyan : '#555', letterSpacing:1, transition:'all 0.2s' }}>
+                {cat}
+              </button>
+            ))}
+          </div>
+          {/* Vendor cards */}
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(240px, 1fr))', gap:14 }}>
+            {CONFIRMED_VENDORS.filter(v => vendorCatFilter === 'ALL' || v.cat === vendorCatFilter).map((v, i) => (
+              <div key={i} className="card-3d" style={{ padding:'18px', background:'rgba(255,255,255,0.03)', border:`1px solid ${v.color}30`, borderTop:`2px solid ${v.color}50`, borderRadius:8, display:'flex', flexDirection:'column', gap:10 }}>
+                <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+                  <div style={{ width:40, height:40, borderRadius:'50%', background:`${v.color}15`, border:`1.5px solid ${v.color}50`, flexShrink:0, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Bebas Neue,sans-serif', fontSize:18, color:v.color }}>{v.name[0]}</div>
+                  <div>
+                    <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:16, color:B.white, lineHeight:1 }}>{v.name}</div>
+                    <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:v.color, marginTop:3, letterSpacing:1 }}>{v.cat} · {v.city}</div>
+                  </div>
+                </div>
+                <div style={{ fontFamily:'Syne,sans-serif', fontSize:11, color:B.smoke, lineHeight:1.65 }}>{v.bringing}</div>
+                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                  <span style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:v.color, letterSpacing:1 }}>{v.ig}</span>
+                  <span style={{ padding:'2px 8px', background:`${v.color}10`, border:`1px solid ${v.color}25`, borderRadius:3, fontFamily:'Space Mono,monospace', fontSize:7, color:'#555', letterSpacing:1 }}>{v.booth}</span>
+                </div>
               </div>
             ))}
           </div>
