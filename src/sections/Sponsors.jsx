@@ -208,7 +208,7 @@ export default function Sponsors() {
               <div style={{ fontFamily: "'Syne',sans-serif", fontSize: 15, color: B.smoke, maxWidth: 480, margin: '0 auto 28px', lineHeight: 1.75 }}>
                 Your <strong style={{ color: B.amber }}>{form.tier}</strong> application for <strong style={{ color: B.white }}>{form.brand}</strong> is in. We review all applications and come back within 3 business days with a tailored proposal.
               </div>
-              <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 10, color: '#444', letterSpacing: 2 }}>sponsors@sneakersfest.com · Sneakers Fest 2026</div>
+              <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 10, color: '#444', letterSpacing: 2 }}>sneakersfest088@gmail.com · Sneakers Fest 2026</div>
             </div>
           ) : (
             <>
