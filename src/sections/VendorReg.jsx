@@ -295,7 +295,7 @@ Write in first person, confident but not arrogant. Mention Lagos, the culture, w
         <div style={{ display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:12, marginBottom:44 }}>
           {[
             { n:'1K–2.5K', l:'YEAR 1 ATTENDEES',     c:B.neonCyan },
-            { n:'30–50',   l:'VENDOR SPOTS (YEAR 1)', c:B.amber },
+            { n:'30+',     l:'VENDOR SPOTS (YEAR 1)', c:B.amber },
             { n:'DEC 12',  l:'2026 · LAGOS, NIGERIA', c:B.neonMagenta },
           ].map((s, i) => (
             <div key={i} className="card-3d" style={{ padding:'18px 16px', background:B.charcoal, border:`1px solid ${s.c}28`, borderRadius:8, textAlign:'center' }}>

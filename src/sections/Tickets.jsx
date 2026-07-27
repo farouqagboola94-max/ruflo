@@ -125,7 +125,7 @@ function downloadCalendar() {
     'UID:sneakers-fest-26-dec12@sneakersfest.com',
     'DTSTAMP:20260101T000000Z','DTSTART:20261212T120000','DTEND:20261212T220000',
     "SUMMARY:Sneakers Fest '26 — The Sole Exhibition",
-    "DESCRIPTION:West Africa's premier sneaker culture event. 200+ rare kicks\\, 30-50 curated vendors\\, live DJs\\, custom art and street food.",
+    "DESCRIPTION:West Africa's premier sneaker culture event. 200+ rare kicks\\, 30+ confirmed vendors\\, live sets\\, custom art and street food.",
     'LOCATION:Muri Okunola Park\\, Victoria Island\\, Lagos\\, Nigeria',
     'URL:https://sneakers-fest-26.netlify.app','STATUS:CONFIRMED','END:VEVENT','END:VCALENDAR',
   ]
