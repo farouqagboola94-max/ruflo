@@ -63,7 +63,7 @@ const ERAS = [
     id: 'e8', period: 'DECEMBER 12, 2026', color: B.neonMagenta,
     title: 'THE SOLE EXHIBITION',
     sub: 'NOW IT IS OUR TIME',
-    body: "Sneakers Fest '26 is not an imitation of New York or Tokyo. It is Lagos speaking for itself. 30-50 curated vendors. Live performances. Custom art. The museum wall. The sacred wall. The drops. This is the chapter where the city claims its place in the global culture — permanently.",
+    body: "Sneakers Fest '26 is not an imitation of New York or Tokyo. It is Lagos speaking for itself. 30+ confirmed vendors. Live performances. Custom art. The museum wall. The sacred wall. The drops. This is the chapter where the city claims its place in the global culture — permanently.",
     lagos: 'Lagos. December 12. We built this.',
     icon: '◆',
   },
