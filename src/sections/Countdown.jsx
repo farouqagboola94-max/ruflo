@@ -288,7 +288,7 @@ export default function Countdown() {
                     <div style={{ height:'100%', width:`${pct*100}%`, background:`linear-gradient(90deg,${B.amber},${B.neonLime})`, borderRadius:2, transition:'width 0.6s ease' }} />
                   </div>
                   <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:B.smoke, letterSpacing:1, marginTop:6, textAlign:'center' }}>
-                    {left.toLocaleString()} heads to unlock next tier unlock
+                    {left.toLocaleString()} more to reach the next milestone
                   </div>
                 </div>
               )

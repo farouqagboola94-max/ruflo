@@ -6,7 +6,7 @@ import Egg from '../components/Egg'
 const STATS = [
   { value: '2K–3.5K',   label: 'EVENT ATTENDEES' },
   { value: '5,000+',    label: 'FNP COMMUNITY' },
-  { value: '30–50',     label: 'VENDOR SLOTS' },
+  { value: '30+',       label: 'VENDOR SLOTS' },
   { value: 'Year-Round', label: 'PLATFORM REACH' },
 ]
 
@@ -103,7 +103,7 @@ export default function Sponsors() {
       body: encode({ 'form-name': 'partner-application', ...form }),
     })
       .then(() => { setSending(false); setSubmitted(true) })
-      .catch(() => { setSending(false); setErr('Submission failed. Email us directly: sponsors@sneakersfest.com') })
+      .catch(() => { setSending(false); setErr('Submission failed. Email us directly: sneakersfest088@gmail.com') })
   }
 
   return (

@@ -227,7 +227,7 @@ export default function Hero() {
         </div>
 
         <div className="reveal-3d delay-4" style={{ fontFamily:"'Inter','Syne',sans-serif", fontSize:'clamp(13px,1.6vw,17px)', color:'rgba(240,237,230,0.6)', lineHeight:1.75, maxWidth:520, margin:'0 auto 50px', fontWeight:300 }}>
-          Rare kicks · 30–50 curated vendors · Live DJs · Custom art · Street food<br />
+          Rare kicks · 30+ confirmed vendors · Live sets · Custom art · Street food<br />
           <span style={{ color:B.amber, fontWeight:500 }}>West Africa's first dedicated sneaker culture festival.</span>
         </div>
 

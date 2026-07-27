@@ -33,7 +33,7 @@ const FAST_FACTS = [
   { label: 'Location',     value: 'Muri Okunola Park, Victoria Island, Lagos, Nigeria' },
   { label: 'Date',         value: 'December 12, 2026' },
   { label: 'Attendees',    value: '1,000 – 2,500 (Year 1 target)' },
-  { label: 'Vendors',      value: '30 – 50 (Year 1)' },
+  { label: 'Vendors',      value: '30+ confirmed (Year 1 target)' },
   { label: 'Community',    value: '5,000+ by event month' },
   { label: 'Aesthetic',    value: 'Lagos Noir — crushed blacks, amber glows, neon accents, 35mm grain' },
 ]
@@ -165,7 +165,7 @@ export default function Press() {
               MEDIA INQUIRY →
             </a>
             <div style={{ fontFamily: "'Space Mono'", fontSize: '0.58rem', color: B.smoke, textAlign: 'center', marginTop: 8 }}>
-              press@sneakersfest.com · Oluwatobiloba / Catalyst Concepts
+              sneakersfest088@gmail.com · Oluwatobiloba / Catalyst Concepts
             </div>
           </div>
         </div>

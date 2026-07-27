@@ -21,7 +21,7 @@ const QUOTES = [
     name: 'TUNDE B.', role: 'Sneakerhead · Port Harcourt', accent: B.neonMagenta, stars: 5,
   },
   {
-    quote: "DJ Spinall closed the night perfectly. The community that shows up to this event — Lagos at its finest. Nothing else like it.",
+    quote: "The headliner closed the night perfectly. The community that shows up to this event — Lagos at its finest. Nothing else like it.",
     name: 'ADAEZE N.', role: 'Content Creator · Lekki', accent: B.neonLime, stars: 5,
   },
 ]

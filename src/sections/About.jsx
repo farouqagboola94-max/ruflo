@@ -4,7 +4,7 @@ import Egg from '../components/Egg'
 
 const STATS = [
   { num: '1K–2.5K', label: 'YEAR 1 ATTENDEES',    accent: true },
-  { num: '30–50',   label: 'VENDOR SPOTS',         accent: false },
+  { num: '30+',     label: 'VENDOR SPOTS',         accent: false },
   { num: '5,000+', label: 'ONLINE COMMUNITY TARGET', accent: false },
   { num: '3D',     label: 'BRAND DIMENSIONS',       accent: true },
 ]
