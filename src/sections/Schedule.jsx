@@ -11,7 +11,7 @@ const PHASES = [
   { label: 'PHASE 3', dates: 'DEC 11 MIDNIGHT', title: 'LOGISTICS SHIFT', color: B.neonMagenta,
     lines: ['Za.allyErrands freight fleet mobilises', 'Onikan → Muri Okunola Park overnight', 'Audio · lighting · brand backdrops · generators', 'Phalanx node secures park at midnight'] },
   { label: 'PHASE 4', dates: 'DEC 12', title: 'SNEAKER FEST MAIN EVENT', color: B.neonCyan,
-    lines: ['Muri Okunola Park · Victoria Island', '30 vendors · horseshoe perimeter layout', 'Streetwear left flank · food right flank', 'Exhibition football zone next to main stage'] },
+    lines: ['Muri Okunola Park · Victoria Island', '30+ vendors · horseshoe perimeter layout', 'Streetwear left flank · food right flank', 'Exhibition football zone next to main stage'] },
 ]
 
 const DAY1 = [
@@ -24,7 +24,7 @@ const DAY1 = [
 ]
 
 const DAY2 = [
-  { time: '12:00', period: 'PM', title: 'DOORS OPEN', desc: 'Gates open. Vendor floor live. 30 confirmed vendors around the horseshoe perimeter.', tag: 'OPEN', color: B.neonLime },
+  { time: '12:00', period: 'PM', title: 'DOORS OPEN', desc: 'Gates open. Vendor floor live. 30+ confirmed vendors around the horseshoe perimeter.', tag: 'OPEN', color: B.neonLime },
   { time: '12:30', period: 'PM', title: 'VENDOR FLOOR', desc: 'Streetwear left flank. Food right flank. Rare kicks, customs, and drops all day.', tag: 'ALL ACCESS', color: B.neonCyan },
   { time: '1:00',  period: 'PM', title: '⧡ LIVE ACT — CLASSIFIED', desc: 'A special live performance to open the afternoon. Artist details dropping soon.', tag: 'LIVE', color: B.neonMagenta, featured: true, stage: 'MAIN STAGE' },
   { time: '2:00',  period: 'PM', title: '⧡ DJ SET — CLASSIFIED', desc: 'Opening DJ set to warm the crowd and keep the energy moving all afternoon.', tag: 'MUSIC', color: B.amber, stage: 'MAIN STAGE' },
