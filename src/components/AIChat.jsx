@@ -6,7 +6,7 @@ const API = import.meta.env.VITE_BACKEND_URL || ''
 
 const SNEAKER_SYSTEM = `You are the official Sneakers Fest '26 AI — a Lagos sneaker culture expert and event concierge. You know everything about:
 - Sneakers Fest '26: December 12, 2026, Lagos Nigeria. Tickets: General ₦5K, VIP ₦10K, VVIP ₦25K, Phalanx ₦50K.
-- Lineup: DJ Spinall headlining. 30-50 vendors. Collector room. Exclusive drops for VIP+.
+- Lineup: Headliner details classified. 30+ vendor spaces. Collector room. Exclusive drops for VIP+.
 - Grail culture, resale market, sneaker history, drop intel, outfit advice.
 - The Lagos streetwear scene, Friday Night Protocol (weekly community sessions), and The Catalyst (@catalyst00555).
 - Contact: WhatsApp button on the site, Instagram @sneakersfest5555, Snapchat sneakersfest, email sneakersfest088@gmail.com.
@@ -16,10 +16,10 @@ Be direct, culturally aware, and helpful. Reference Lagos culture naturally. Kee
 const QA = [
   { keys: ['ticket','price','cost','how much','buy','purchase'], answer: 'Tickets: General ₦5,000 · VIP ₦10,000 · VVIP ₦25,000 · Phalanx ₦50,000. Head to the Tickets section to grab yours.' },
   { keys: ['date','when','time','december'], answer: 'December 12, 2026. Doors open 12 PM; Phalanx holders from 11 AM. Mark your calendar.' },
-  { keys: ['venue','location','where','address'], answer: 'City: Lagos, Nigeria. Exact venue drops soon — join the WhatsApp community to get the notice first.' },
-  { keys: ['lineup','dj','artist','spinall','music','perform'], answer: 'DJ Spinall is headlining. Full lineup is in the Lineup section.' },
-  { keys: ['vip','vvip','phalanx'], answer: 'VIP (₦10K): Priority entry + lounge + merch bag. VVIP (₦25K): + collector room + artist access. Phalanx (₦50K): private lounge, concierge, badge + collectible box, 11 AM entry.' },
-  { keys: ['vendor','sell','stall','booth','apply'], answer: '30–50 stalls, invitation-curated first cohort. Apply in the Vendors section — reviewed in 3 business days.' },
+  { keys: ['venue','location','where','address'], answer: 'Muri Okunola Park, Victoria Island, Lagos. December 12, 2026 — doors at 12 PM, Phalanx holders from 11 AM.' },
+  { keys: ['lineup','dj','artist','music','perform'], answer: 'Lineup details drop soon — follow @sneakersfest5555 on Instagram and join the WhatsApp inner circle to be first to know.' },
+  { keys: ['vip','vvip','phalanx'], answer: 'VIP (₦10K): Priority entry + lounge + merch bag. VVIP (₦25K): + collector room + exclusive access. Phalanx (₦50K): private lounge, concierge, badge + collectible box, 11 AM entry.' },
+  { keys: ['vendor','sell','stall','booth','apply'], answer: '30+ vendor spaces, invitation-curated first cohort. Apply in the Vendors section — reviewed in 3 business days.' },
   { keys: ['sponsor','partner','sponsorship'], answer: 'Packages from ₦250K to ₦5M+. FNP from ₦100K. Email sneakersfest088@gmail.com.' },
   { keys: ['fnp','friday','protocol','weekly'], answer: 'Friday Night Protocol is a weekly community session — drop discussions, challenges, games. Join WhatsApp for alerts.' },
   { keys: ['drop','exclusive','release','grail','kicks','sneaker'], answer: 'Exclusive drop intel hits the community first. Follow @sneakersfest5555 on Instagram, add sneakersfest on Snapchat, and join the WhatsApp inner circle for early alerts.' },
@@ -46,7 +46,7 @@ function keywordReply(text) {
 
 const SUGGESTIONS = [
   ['Ticket prices', 'Vendor spots', 'What is FNP?', 'Date & venue'],
-  ['VIP perks', 'How do raffles work?', 'Who is headlining?', 'Sponsorships'],
+  ['VIP perks', 'How do raffles work?', 'Exclusive drops', 'Sponsorships'],
 ]
 
 // ── component ─────────────────────────────────────────────────────────────────
