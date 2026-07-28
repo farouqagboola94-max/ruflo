@@ -3,15 +3,26 @@
 // Header: Authorization: Bearer <ADMIN_SECRET>
 // Used at the event entrance to mark a ticket as used.
 
-import { ok, err, preflight } from './lib/cors.js'
+import { timingSafeEqual } from 'crypto'
+import { ok, err, preflight, limitBody } from './lib/cors.js'
 import { get, set, Tickets } from './lib/storage.js'
+
+const TICKET_ID_RE = /^SF26-[A-Z]{3}-[A-F0-9]{6}$/
 
 export const handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return preflight()
   if (event.httpMethod !== 'POST') return err(405, 'Method not allowed')
 
+  const bodyErr = limitBody(event, 512)
+  if (bodyErr) return bodyErr
+
   const adminSecret = process.env.ADMIN_SECRET
-  if (!adminSecret || event.headers.authorization !== `Bearer ${adminSecret}`) {
+  const authHeader  = event.headers.authorization || ''
+  const expected    = `Bearer ${adminSecret}`
+  const authorized  = adminSecret &&
+    authHeader.length === expected.length &&
+    timingSafeEqual(Buffer.from(authHeader, 'utf8'), Buffer.from(expected, 'utf8'))
+  if (!authorized) {
     return err(401, 'Unauthorized')
   }
 
@@ -20,6 +31,7 @@ export const handler = async (event) => {
 
   const { ticketId } = body
   if (!ticketId) return err(400, 'ticketId is required')
+  if (!TICKET_ID_RE.test(String(ticketId))) return err(400, 'Invalid ticket ID format')
 
   const ticket = await get(Tickets, `ticket:${ticketId}`)
   if (!ticket) return err(404, 'Ticket not found')

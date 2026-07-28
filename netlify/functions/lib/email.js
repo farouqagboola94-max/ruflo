@@ -3,7 +3,7 @@ const ORG_EMAIL = process.env.ORGANISER_EMAIL || 'hello@sneakersfest.ng'
 const FROM      = `Sneakers Fest '26 <${FROM_ADDR}>`
 
 // Escape user-supplied strings before injecting into HTML
-const esc = (s) =>
+export const esc = (s) =>
   String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
 export async function sendEmail({ to, subject, html }) {
@@ -40,7 +40,7 @@ const shell = (body) => `<!DOCTYPE html>
     <hr style="border:none;border-top:1px solid #1f1f1f;margin:28px 0 20px;">
     <p style="margin:0;color:#444;font-size:12px;line-height:1.6;">
       Sneakers Fest '26 &middot; Dec 12, 2026 &middot; Muri Okunola Park, V/I Lagos<br>
-      <a href="mailto:hello@sneakersfest.ng" style="color:#F5A623;text-decoration:none;">hello@sneakersfest.ng</a>
+      <a href="mailto:sneakersfest088@gmail.com" style="color:#F5A623;text-decoration:none;">sneakersfest088@gmail.com</a>
     </p>
   </div>
 </div>

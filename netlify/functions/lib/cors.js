@@ -18,3 +18,10 @@ export const err = (code, message) => ({
 })
 
 export const preflight = () => ({ statusCode: 204, headers: CORS, body: '' })
+
+// Reject oversized request bodies before parsing (default 64 KB)
+export const limitBody = (event, maxBytes = 65536) => {
+  const len = Buffer.byteLength(event.body || '', 'utf8')
+  if (len > maxBytes) return err(413, 'Request body too large')
+  return null
+}
