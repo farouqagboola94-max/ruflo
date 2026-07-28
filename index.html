@@ -6,14 +6,14 @@
 
     <!-- Primary Meta -->
     <title>Sneakers Fest '26 — The Sole Exhibition | Lagos, Nigeria</title>
-    <meta name="description" content="West Africa's premier sneaker culture event. 200+ rare kicks, 30–50 curated vendors, live DJs, custom art, street food. Muri Okunola Park, Victoria Island · Lagos, Nigeria · December 12, 2026." />
+    <meta name="description" content="West Africa's premier sneaker culture event. 200+ rare kicks, 30+ curated vendors, live DJs, custom art, street food. Muri Okunola Park, Victoria Island · Lagos, Nigeria · December 12, 2026." />
     <meta name="theme-color" content="#F5A623" />
 
     <!-- Open Graph / Social Sharing -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://sneakers-fest-26.netlify.app/" />
     <meta property="og:title" content="Sneakers Fest '26 — The Sole Exhibition" />
-    <meta property="og:description" content="West Africa's premier sneaker culture event. 200+ rare kicks, 30–50 curated vendors, live DJs. Muri Okunola Park, Victoria Island · Lagos · December 12, 2026." />
+    <meta property="og:description" content="West Africa's premier sneaker culture event. 200+ rare kicks, 30+ curated vendors, live DJs. Muri Okunola Park, Victoria Island · Lagos · December 12, 2026." />
     <meta property="og:image" content="https://sneakers-fest-26.netlify.app/og-image.svg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -56,7 +56,7 @@
         }
       },
       "image": "https://sneakers-fest-26.netlify.app/og-image.svg",
-      "description": "West Africa's premier sneaker culture event. 200+ rare kicks, 30–50 curated vendors, live DJs, custom art, and street food. Featuring DJ Spinall, Sarz, Odunsi and more.",
+      "description": "West Africa's premier sneaker culture event. 200+ rare kicks, 30+ curated vendors, live DJs, custom art, and street food. Muri Okunola Park, Victoria Island, Lagos.",
       "organizer": {
         "@type": "Organization",
         "name": "Sneakers Fest",
@@ -113,6 +113,13 @@
   <body style="margin:0;background:#0A0A0A;">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js').catch(function(){})
+        })
+      }
+    </script>
 
     <!--
       Netlify Forms: static dummy forms for build-time detection.

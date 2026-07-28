@@ -97,6 +97,8 @@ import Raffle from './sections/Raffle'
 import Countdown from './sections/Countdown'
 import Tickets from './sections/Tickets'
 import VendorReg from './sections/VendorReg'
+import VendorDashboard from './sections/VendorDashboard'
+const AppPromo = lazy(() => import('./sections/AppPromo'))
 import FAQ from './sections/FAQ'
 import Contact from './sections/Contact'
 import Footer from './sections/Footer'
@@ -148,6 +150,8 @@ const SECTION_TITLES = [
   { id: 'countdown',      title: "Countdown | Sneakers Fest '26" },
   { id: 'tickets',        title: "Tickets | Sneakers Fest '26" },
   { id: 'vendors',        title: "Vendors | Sneakers Fest '26" },
+  { id: 'vendor-dashboard', title: "Vendor Dashboard | Sneakers Fest '26" },
+  { id: 'app-promo',     title: "SF'26 App | Sneakers Fest '26" },
   { id: 'faq',            title: "FAQ | Sneakers Fest '26" },
   { id: 'contact',           title: "Contact | Sneakers Fest '26" },
   { id: 'catalyst-arsenal',  title: "AI Arsenal | Sneakers Fest '26" },
@@ -441,6 +445,8 @@ export default function App() {
         {/* PARTICIPATION — vendor and access tiers */}
         <Reveal><EarlyAccess /></Reveal>
         <Reveal><VendorReg /></Reveal>
+        <Reveal><VendorDashboard /></Reveal>
+        <Suspense fallback={null}><Reveal><AppPromo /></Reveal></Suspense>
         <Suspense fallback={null}>
           <Reveal><ArchitectVault /></Reveal>
         </Suspense>
