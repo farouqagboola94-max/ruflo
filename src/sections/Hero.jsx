@@ -271,7 +271,7 @@ export default function Hero() {
             GET YOUR TICKET →
           </a>
           <a
-            href="#lineup"
+            href="#vendors"
             onMouseEnter={() => setH2(true)}
             onMouseLeave={() => setH2(false)}
             style={{
@@ -286,7 +286,26 @@ export default function Hero() {
               transition:'all 0.22s ease',
             }}
           >
-            EXPLORE LINEUP
+            VENDOR INFO
+          </a>
+        </div>
+
+        {/* WhatsApp community micro-CTA */}
+        <div className="reveal-3d delay-5" style={{ marginTop:14, display:'flex', justifyContent:'center' }}>
+          <a
+            href="#community"
+            style={{
+              display:'inline-flex', alignItems:'center', gap:8,
+              padding:'7px 18px', borderRadius:100,
+              background:`${B.neonLime}10`,
+              border:`1px solid ${B.neonLime}30`,
+              textDecoration:'none', transition:'all .2s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background=`${B.neonLime}18`; e.currentTarget.style.borderColor=`${B.neonLime}55` }}
+            onMouseLeave={e => { e.currentTarget.style.background=`${B.neonLime}10`; e.currentTarget.style.borderColor=`${B.neonLime}30` }}
+          >
+            <div style={{ width:6, height:6, borderRadius:'50%', background:B.neonLime, boxShadow:`0 0 6px ${B.neonLime}` }} />
+            <span style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color:B.neonLime, letterSpacing:'0.2em' }}>JOIN THE WHATSAPP INNER CIRCLE</span>
           </a>
         </div>
 

@@ -13,13 +13,13 @@ const TABS = [
     ),
   },
   {
-    id: 'lineup',
-    label: 'LINEUP',
+    id: 'schedule',
+    label: 'SCHEDULE',
     icon: (active, color) => (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="12" r="9" stroke={color} strokeWidth={active ? 2 : 1.5}/>
-        <circle cx="12" cy="12" r="3" fill={active ? color : 'none'} stroke={color} strokeWidth={active ? 2 : 1.5}/>
-        <path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
+        <rect x="3" y="4" width="18" height="18" rx="2" stroke={color} strokeWidth={active ? 2 : 1.5} fill={active ? color + '20' : 'none'}/>
+        <path d="M16 2v4M8 2v4M3 10h18" stroke={color} strokeWidth={active ? 2 : 1.5} strokeLinecap="round"/>
+        <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01" stroke={color} strokeWidth="2" strokeLinecap="round"/>
       </svg>
     ),
   },
@@ -35,13 +35,14 @@ const TABS = [
     ),
   },
   {
-    id: 'gallery',
-    label: 'GALLERY',
+    id: 'trades',
+    label: 'TRADE',
     icon: (active, color) => (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-        <rect x="3" y="5" width="18" height="14" rx="2" stroke={color} strokeWidth={active ? 2 : 1.5} fill={active ? color + '20' : 'none'}/>
-        <circle cx="8.5" cy="10" r="1.5" fill={color}/>
-        <path d="M3 16l5-5 4 4 3-3 6 6" stroke={color} strokeWidth={active ? 2 : 1.5} strokeLinejoin="round" strokeLinecap="round"/>
+        <path d="M17 1l4 4-4 4" stroke={color} strokeWidth={active ? 2 : 1.5} strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M3 11V9a4 4 0 014-4h14" stroke={color} strokeWidth={active ? 2 : 1.5} strokeLinecap="round"/>
+        <path d="M7 23l-4-4 4-4" stroke={color} strokeWidth={active ? 2 : 1.5} strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M21 13v2a4 4 0 01-4 4H3" stroke={color} strokeWidth={active ? 2 : 1.5} strokeLinecap="round"/>
       </svg>
     ),
   },

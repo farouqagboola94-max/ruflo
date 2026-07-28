@@ -11,6 +11,7 @@ const DESKTOP_LINKS = [
   { label: 'VENDORS',  href: '#vendors' },
   { label: 'FAQ',      href: '#faq' },
   { label: 'CONTACT',  href: '#contact' },
+  { label: 'APP',      href: '#app-promo' },
 ]
 
 const MOBILE_LINKS = [
@@ -28,9 +29,11 @@ const MOBILE_LINKS = [
   { label: 'EARLY ACCESS',    href: '#waitlist',  num: '12' },
   { label: 'ARCHITECT VAULT', href: '#vault-200', num: '13' },
   { label: 'VENDORS',         href: '#vendors',   num: '14' },
-  { label: 'FAQ',             href: '#faq',       num: '15' },
-  { label: 'CONTACT',         href: '#contact',   num: '16' },
-  { label: 'CATALYST: THE AWAKENING ↗', href: 'https://catalyst-awakening.netlify.app/', num: '17', external: true },
+  { label: 'VENDOR PORTAL',  href: '#vendor-dashboard', num: '15' },
+  { label: 'SF\'26 APP',     href: '#app-promo', num: '16' },
+  { label: 'FAQ',             href: '#faq',       num: '17' },
+  { label: 'CONTACT',         href: '#contact',   num: '18' },
+  { label: 'CATALYST: THE AWAKENING ↗', href: 'https://catalyst-awakening.netlify.app/', num: '19', external: true },
 ]
 
 export default function Navbar() {
@@ -176,7 +179,7 @@ export default function Navbar() {
           <div style={{ position: 'absolute', top: '30%', left: '50%', transform: 'translate(-50%,-50%)', width: 480, height: 360, background: `radial-gradient(ellipse, ${B.amber}06, transparent 70%)`, filter: 'blur(50px)', pointerEvents: 'none' }} />
 
           <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: '#252525', letterSpacing: '0.3em', marginBottom: 22, position: 'relative' }}>
-            NAVIGATE — {MOBILE_LINKS.length - 1} SECTIONS + CATALYST UNIVERSE
+            NAVIGATE — {MOBILE_LINKS.length - 1} SECTIONS + CATALYST
           </div>
 
           <div style={{ flex: 1, position: 'relative' }}>

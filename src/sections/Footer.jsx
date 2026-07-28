@@ -29,6 +29,8 @@ const NAV = [
   ['Merch',                '#merch'],
   ['Tickets',              '#tickets'],
   ['Vendors',              '#vendors'],
+  ['Vendor Portal',        '#vendor-dashboard'],
+  ['SF\'26 App',           '#app-promo'],
   ['FAQ',                  '#faq'],
 ]
 

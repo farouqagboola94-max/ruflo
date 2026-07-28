@@ -5,8 +5,9 @@ import CountUp from '../components/CountUp'
 const STATS = [
   { to: 1000, suffix: '+', label: 'EXPECTED ATTENDEES',    color: B.amber },
   { to: 30,   suffix: '+', label: 'CONFIRMED VENDORS',     color: B.neonCyan },
-  { to: 200,  suffix: '+', label: 'RARE SNEAKERS ON SHOW', color: B.amber },
-  { to: 12,   suffix: 'H', label: 'OF LIVE CULTURE',       color: B.neonCyan },
+  { to: 200,  suffix: '+', label: 'RARE PAIRS ON DISPLAY', color: B.amber },
+  { to: 4,    suffix: '',  label: 'TICKET TIERS',          color: B.neonMagenta },
+  { to: 10,   suffix: 'H', label: 'OF LIVE CULTURE',       color: B.neonCyan },
 ]
 
 const VIEWER_KEY = 'sf26_stats_viewers'
@@ -60,7 +61,7 @@ export default function Stats() {
 
       {/* Animated counters */}
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '72px 24px 48px' }}>
-        <div className="reveal-3d" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}>
+        <div className="reveal-3d" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))' }}>
           {STATS.map((s, i) => (
             <div key={i} className="card-3d" style={{
               padding: '28px 20px', textAlign: 'center',
