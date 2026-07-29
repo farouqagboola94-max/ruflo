@@ -61,6 +61,27 @@ export const handler = async (event) => {
   await store.setJSON(submissionId, record)
   await store.setJSON(counterKey, { count: slotNumber, updatedAt: new Date().toISOString() })
 
+  ;(async () => {
+    try {
+      const statsKey = '_stats'
+      const s        = await store.get(statsKey, { type: 'json' }).catch(() => ({}))
+      const brands   = s.brands   || {}
+      const cities   = s.cities   || {}
+      const topShoes = s.topShoes || {}
+      const recent   = s.recent   || []
+      brands[record.brand]               = (brands[record.brand]               || 0) + 1
+      cities[record.city]                = (cities[record.city]                || 0) + 1
+      topShoes[record.shoe.slice(0, 40)] = (topShoes[record.shoe.slice(0, 40)] || 0) + 1
+      const newRecent = [
+        { display: record.displayName, city: record.city, shoe: record.shoe.slice(0, 40), ts: record.registeredAt },
+        ...recent,
+      ].slice(0, 5)
+      await store.setJSON(statsKey, { brands, cities, topShoes, count: slotNumber, recent: newRecent, lastUpdated: new Date().toISOString() })
+    } catch (e) {
+      console.error('[sole-submit] stats error', e)
+    }
+  })()
+
   if (email) {
     const name = record.displayName
     sendEmail({

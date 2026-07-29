@@ -30,6 +30,7 @@ const NAV = [
   ['Tickets',              '#tickets'],
   ['Vendors',              '#vendors'],
   ['Sole Registry',        '#sole-registry'],
+  ['Culture Index',        '#culture-index'],
   ['Vendor Portal',        '#vendor-dashboard'],
   ['SF\'26 App',           '#app-promo'],
   ['FAQ',                  '#faq'],

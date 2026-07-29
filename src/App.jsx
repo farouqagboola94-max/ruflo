@@ -60,9 +60,6 @@ const CatalystOS_AI_Repo      = lazy(() => import('./sections/CatalystOS_AI_Repo
 const CatalystOS_MCP_Carousel = lazy(() => import('./sections/CatalystOS_MCP_Carousel'))
 const CatalystOS_Obsidian     = lazy(() => import('./sections/CatalystOS_Obsidian_Module'))
 const CatalystOS_UGC          = lazy(() => import('./sections/CatalystOS_UGC_Engine'))
-const CatalystSkillVault      = lazy(() => import('./sections/CatalystSkillVault'))
-const CatalystSkillsOS        = lazy(() => import('./sections/CatalystSkillsOS'))
-const CatalystOSArsenal       = lazy(() => import('./sections/CatalystOSArsenal'))
 const CommunityIntelligence   = lazy(() => import('./sections/CommunityIntelligence'))
 const SneakerKnowledgeVault   = lazy(() => import('./sections/SneakerKnowledgeVault'))
 const GrailAdvisor            = lazy(() => import('./sections/GrailAdvisor'))
@@ -95,6 +92,7 @@ import Venue from './sections/Venue'
 import Merch from './sections/Merch'
 import Raffle from './sections/Raffle'
 import SoleRegistry from './sections/SoleRegistry'
+import CultureIndex from './sections/CultureIndex'
 import Countdown from './sections/Countdown'
 import Tickets from './sections/Tickets'
 import VendorReg from './sections/VendorReg'
@@ -148,6 +146,7 @@ const SECTION_TITLES = [
   { id: 'venue',          title: "Venue | Sneakers Fest '26" },
   { id: 'merch',          title: "Merch | Sneakers Fest '26" },
   { id: 'sole-registry',  title: "Sole Registry | Sneakers Fest '26" },
+  { id: 'culture-index',  title: "Culture Index | Sneakers Fest '26" },
   { id: 'raffle',         title: "Raffle | Sneakers Fest '26" },
   { id: 'countdown',      title: "Countdown | Sneakers Fest '26" },
   { id: 'tickets',        title: "Tickets | Sneakers Fest '26" },
@@ -156,13 +155,10 @@ const SECTION_TITLES = [
   { id: 'app-promo',     title: "SF'26 App | Sneakers Fest '26" },
   { id: 'faq',            title: "FAQ | Sneakers Fest '26" },
   { id: 'contact',           title: "Contact | Sneakers Fest '26" },
-  { id: 'catalyst-arsenal',  title: "AI Arsenal | Sneakers Fest '26" },
-  { id: 'catalyst-skills-os',title: "Skills OS | Sneakers Fest '26" },
   { id: 'catalyst-repos',    title: "AI Repos | Sneakers Fest '26" },
   { id: 'catalyst-mcp',      title: "MCP Tools | Sneakers Fest '26" },
   { id: 'catalyst-obsidian', title: "Obsidian + Claude | Sneakers Fest '26" },
   { id: 'catalyst-ugc',      title: "Content Engine | Sneakers Fest '26" },
-  { id: 'catalyst-vault',       title: "Skill Vault | Sneakers Fest '26" },
   { id: 'community-intelligence', title: "Lagos Intelligence | Sneakers Fest '26" },
   { id: 'sneaker-vault',        title: "Sneaker Vault | Sneakers Fest '26" },
   { id: 'grail-advisor',        title: "Grail Advisor | Sneakers Fest '26" },
@@ -439,6 +435,7 @@ export default function App() {
         </Suspense>
         <Reveal><Leaderboard /></Reveal>
         <Reveal><SoleRegistry /></Reveal>
+        <Reveal><CultureIndex /></Reveal>
         <Reveal><Raffle /></Reveal>
 
         {/* EVENT INFO — for those ready to plan the day */}
@@ -470,14 +467,11 @@ export default function App() {
 
         {/* CATALYST OS — AI Tools Ecosystem */}
         <Suspense fallback={null}>
-          <Reveal><CatalystOSArsenal /></Reveal>
-          <Reveal><CatalystSkillsOS /></Reveal>
           <Reveal><CatalystOS_AI_Repo /></Reveal>
           <Reveal><CatalystOS_MCP_Carousel /></Reveal>
           <Reveal><CatalystOS_Obsidian /></Reveal>
           <Reveal><SneakerKnowledgeVault /></Reveal>
           <Reveal><CatalystOS_UGC /></Reveal>
-          <Reveal><CatalystSkillVault /></Reveal>
         </Suspense>
 
         {/* CLOSE */}
