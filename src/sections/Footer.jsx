@@ -31,6 +31,7 @@ const NAV = [
   ['Vendors',              '#vendors'],
   ['Sole Registry',        '#sole-registry'],
   ['Culture Index',        '#culture-index'],
+  ['Confessional',         '#confessional'],
   ['Vendor Portal',        '#vendor-dashboard'],
   ['SF\'26 App',           '#app-promo'],
   ['FAQ',                  '#faq'],
