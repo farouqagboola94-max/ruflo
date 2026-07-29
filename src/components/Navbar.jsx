@@ -28,12 +28,13 @@ const MOBILE_LINKS = [
   { label: 'COMMUNITY',       href: '#community', num: '11' },
   { label: 'EARLY ACCESS',    href: '#waitlist',  num: '12' },
   { label: 'ARCHITECT VAULT', href: '#vault-200', num: '13' },
-  { label: 'VENDORS',         href: '#vendors',   num: '14' },
-  { label: 'VENDOR PORTAL',  href: '#vendor-dashboard', num: '15' },
-  { label: 'SF\'26 APP',     href: '#app-promo', num: '16' },
-  { label: 'FAQ',             href: '#faq',       num: '17' },
-  { label: 'CONTACT',         href: '#contact',   num: '18' },
-  { label: 'CATALYST: THE AWAKENING ↗', href: 'https://catalyst-awakening.netlify.app/', num: '19', external: true },
+  { label: 'SOLE REGISTRY',   href: '#sole-registry', num: '14' },
+  { label: 'VENDORS',         href: '#vendors',   num: '15' },
+  { label: 'VENDOR PORTAL',  href: '#vendor-dashboard', num: '16' },
+  { label: 'SF\'26 APP',     href: '#app-promo', num: '17' },
+  { label: 'FAQ',             href: '#faq',       num: '18' },
+  { label: 'CONTACT',         href: '#contact',   num: '19' },
+  { label: 'CATALYST: THE AWAKENING ↗', href: 'https://catalyst-awakening.netlify.app/', num: '20', external: true },
 ]
 
 export default function Navbar() {

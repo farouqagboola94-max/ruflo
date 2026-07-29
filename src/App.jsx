@@ -94,6 +94,7 @@ import Schedule from './sections/Schedule'
 import Venue from './sections/Venue'
 import Merch from './sections/Merch'
 import Raffle from './sections/Raffle'
+import SoleRegistry from './sections/SoleRegistry'
 import Countdown from './sections/Countdown'
 import Tickets from './sections/Tickets'
 import VendorReg from './sections/VendorReg'
@@ -146,6 +147,7 @@ const SECTION_TITLES = [
   { id: 'schedule',       title: "Schedule | Sneakers Fest '26" },
   { id: 'venue',          title: "Venue | Sneakers Fest '26" },
   { id: 'merch',          title: "Merch | Sneakers Fest '26" },
+  { id: 'sole-registry',  title: "Sole Registry | Sneakers Fest '26" },
   { id: 'raffle',         title: "Raffle | Sneakers Fest '26" },
   { id: 'countdown',      title: "Countdown | Sneakers Fest '26" },
   { id: 'tickets',        title: "Tickets | Sneakers Fest '26" },
@@ -436,6 +438,7 @@ export default function App() {
           <Reveal><EggHuntTracker /></Reveal>
         </Suspense>
         <Reveal><Leaderboard /></Reveal>
+        <Reveal><SoleRegistry /></Reveal>
         <Reveal><Raffle /></Reveal>
 
         {/* EVENT INFO — for those ready to plan the day */}

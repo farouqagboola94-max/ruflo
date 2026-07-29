@@ -29,6 +29,7 @@ const NAV = [
   ['Merch',                '#merch'],
   ['Tickets',              '#tickets'],
   ['Vendors',              '#vendors'],
+  ['Sole Registry',        '#sole-registry'],
   ['Vendor Portal',        '#vendor-dashboard'],
   ['SF\'26 App',           '#app-promo'],
   ['FAQ',                  '#faq'],
