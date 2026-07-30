@@ -1,6 +1,14 @@
 import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 import { useAuth } from '../lib/auth.jsx'
+import { openPalette } from './CommandPalette'
+
+const SearchIcon = ({ color, size = 14 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0 }}>
+    <circle cx="11" cy="11" r="7" stroke={color} strokeWidth="2" />
+    <path d="M20 20l-3.5-3.5" stroke={color} strokeWidth="2" strokeLinecap="round" />
+  </svg>
+)
 
 const DESKTOP_LINKS = [
   { label: 'ABOUT',    href: '#about' },
@@ -91,6 +99,25 @@ export default function Navbar() {
 
         {!isMobile && (
           <div style={{ display: 'flex', gap: 18, alignItems: 'center' }}>
+            <button
+              onClick={openPalette}
+              aria-label="Search the site"
+              title="Search — press Cmd+K"
+              style={{
+                display: 'flex', alignItems: 'center', gap: 8,
+                background: `${B.charcoal}90`, border: `1px solid ${B.gunmetal}`, borderRadius: 4,
+                padding: '6px 9px 6px 10px', cursor: 'pointer', transition: 'border-color 0.2s, background 0.2s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = `${B.amber}60`; e.currentTarget.style.background = `${B.amber}0D` }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = B.gunmetal; e.currentTarget.style.background = `${B.charcoal}90` }}
+            >
+              <SearchIcon color={B.smoke} size={12} />
+              <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 7.5, color: B.smoke, letterSpacing: '0.16em' }}>SEARCH</span>
+              <kbd style={{
+                fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, letterSpacing: '0.05em',
+                border: `1px solid ${B.gunmetal}`, borderRadius: 2, padding: '2px 4px', background: B.black,
+              }}>⌘K</kbd>
+            </button>
             {DESKTOP_LINKS.map(link => (
               <a key={link.label} href={link.href}
                 style={{ fontFamily: "'Space Mono', monospace", fontSize: 7.5, color: B.smoke, textDecoration: 'none', letterSpacing: '0.18em', transition: 'color 0.2s' }}
@@ -149,6 +176,16 @@ export default function Navbar() {
 
         {isMobile && (
           <button
+            onClick={() => { if (menuOpen) close(); openPalette() }}
+            aria-label="Search the site"
+            style={{ background: 'transparent', border: `1px solid ${B.gunmetal}`, borderRadius: 4, padding: '9px 10px', marginRight: 8, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            <SearchIcon color={B.smoke} size={16} />
+          </button>
+        )}
+
+        {isMobile && (
+          <button
             onClick={() => menuOpen ? close() : setMenuOpen(true)}
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             style={{ background: menuOpen ? `${B.amber}15` : 'transparent', border: `1px solid ${menuOpen ? B.amber + '60' : B.gunmetal}`, borderRadius: 4, padding: '9px 10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}
@@ -178,6 +215,19 @@ export default function Navbar() {
           animation: closing ? 'navMenuOut 0.26s ease forwards' : 'navMenuIn 0.3s ease',
         }}>
           <div style={{ position: 'absolute', top: '30%', left: '50%', transform: 'translate(-50%,-50%)', width: 480, height: 360, background: `radial-gradient(ellipse, ${B.amber}06, transparent 70%)`, filter: 'blur(50px)', pointerEvents: 'none' }} />
+
+          <button
+            onClick={() => { close(); openPalette() }}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 12, width: '100%',
+              padding: '14px 16px', marginBottom: 18, cursor: 'pointer', position: 'relative',
+              background: `${B.amber}0D`, border: `1px solid ${B.amber}35`, borderRadius: 6,
+            }}
+          >
+            <SearchIcon color={B.amber} size={16} />
+            <span style={{ flex: 1, textAlign: 'left', fontFamily: "'Syne', sans-serif", fontSize: 15, color: B.white }}>Search everything</span>
+            <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.amber, letterSpacing: '0.14em' }}>ALL SECTIONS</span>
+          </button>
 
           <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: '#252525', letterSpacing: '0.3em', marginBottom: 22, position: 'relative' }}>
             NAVIGATE — {MOBILE_LINKS.length - 1} SECTIONS + CATALYST

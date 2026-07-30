@@ -19,19 +19,23 @@ import LevelUpToast from './components/LevelUpToast'
 import KonamiCode from './components/KonamiCode'
 import ReactivationBanner from './components/ReactivationBanner'
 import LiveActivity from './components/LiveActivity'
+import CommandPalette from './components/CommandPalette'
+import { SECTIONS } from './lib/siteIndex'
 import { captureReferral, reconcileReferralCredits } from './lib/referral'
+// Above the fold — always eager so first paint is complete.
 import Hero from './sections/Hero'
 import Stats from './sections/Stats'
-import About from './sections/About'
-import OriginStory from './sections/OriginStory'
-import FridayNightProtocol from './sections/FridayNightProtocol'
-import Press from './sections/Press'
-import Sponsors from './sections/Sponsors'
-import SponsorTiers from './sections/SponsorTiers'
 import Highlights from './sections/Highlights'
-import Community from './sections/Community'
-import Testimonials from './sections/Testimonials'
-import Passport from './sections/Passport'
+// Everything below the fold is code-split; it loads as the reader travels.
+const About               = lazy(() => import('./sections/About'))
+const OriginStory         = lazy(() => import('./sections/OriginStory'))
+const FridayNightProtocol = lazy(() => import('./sections/FridayNightProtocol'))
+const Press               = lazy(() => import('./sections/Press'))
+const Sponsors            = lazy(() => import('./sections/Sponsors'))
+const SponsorTiers        = lazy(() => import('./sections/SponsorTiers'))
+const Community           = lazy(() => import('./sections/Community'))
+const Testimonials        = lazy(() => import('./sections/Testimonials'))
+const Passport            = lazy(() => import('./sections/Passport'))
 const SneakerDNA    = lazy(() => import('./sections/SneakerDNA'))
 const SoleOfLagos   = lazy(() => import('./sections/SoleOfLagos'))
 const CultureHistory = lazy(() => import('./sections/CultureHistory'))
@@ -79,108 +83,35 @@ const HeatPredictor           = lazy(() => import('./sections/HeatPredictor'))
 const ColdDMGenerator         = lazy(() => import('./sections/ColdDMGenerator'))
 const SneakerEulogy           = lazy(() => import('./sections/SneakerEulogy'))
 const CollectorCard           = lazy(() => import('./sections/CollectorCard'))
-import EarlyAccess from './sections/EarlyAccess'
-const Comics      = lazy(() => import('./sections/Comics'))
-const Gallery     = lazy(() => import('./sections/Gallery'))
-const TradeBoard  = lazy(() => import('./sections/TradeBoard'))
-import Leaderboard from './sections/Leaderboard'
-const PhotoTools  = lazy(() => import('./sections/PhotoTools'))
-import Newsletter from './sections/Newsletter'
+const EarlyAccess     = lazy(() => import('./sections/EarlyAccess'))
+const Comics          = lazy(() => import('./sections/Comics'))
+const Gallery         = lazy(() => import('./sections/Gallery'))
+const TradeBoard      = lazy(() => import('./sections/TradeBoard'))
+const Leaderboard     = lazy(() => import('./sections/Leaderboard'))
+const PhotoTools      = lazy(() => import('./sections/PhotoTools'))
+const Newsletter      = lazy(() => import('./sections/Newsletter'))
+const Schedule        = lazy(() => import('./sections/Schedule'))
+const Venue           = lazy(() => import('./sections/Venue'))
+const Merch           = lazy(() => import('./sections/Merch'))
+const Raffle          = lazy(() => import('./sections/Raffle'))
+const SoleRegistry    = lazy(() => import('./sections/SoleRegistry'))
+const CultureIndex    = lazy(() => import('./sections/CultureIndex'))
+const Confessional    = lazy(() => import('./sections/Confessional'))
+const VendorReg       = lazy(() => import('./sections/VendorReg'))
+const VendorDashboard = lazy(() => import('./sections/VendorDashboard'))
+const AppPromo        = lazy(() => import('./sections/AppPromo'))
+const FAQ             = lazy(() => import('./sections/FAQ'))
+const Contact         = lazy(() => import('./sections/Contact'))
+const EggHuntTracker  = lazy(() => import('./sections/EggHuntTracker'))
+// Conversion path + footer stay eager: they must never wait on a chunk.
 import Lineup from './sections/Lineup'
-import Schedule from './sections/Schedule'
-import Venue from './sections/Venue'
-import Merch from './sections/Merch'
-import Raffle from './sections/Raffle'
-import SoleRegistry from './sections/SoleRegistry'
-import CultureIndex from './sections/CultureIndex'
-import Confessional from './sections/Confessional'
 import Countdown from './sections/Countdown'
 import Tickets from './sections/Tickets'
-import VendorReg from './sections/VendorReg'
-import VendorDashboard from './sections/VendorDashboard'
-const AppPromo = lazy(() => import('./sections/AppPromo'))
-import FAQ from './sections/FAQ'
-import Contact from './sections/Contact'
 import Footer from './sections/Footer'
-const EggHuntTracker = lazy(() => import('./sections/EggHuntTracker'))
 
-const SECTION_TITLES = [
-  { id: 'about',          title: "About | Sneakers Fest '26" },
-  { id: 'origin',         title: "The Origin | Sneakers Fest '26" },
-  { id: 'fnp',            title: "Friday Night Protocol | Sneakers Fest '26" },
-  { id: 'press',          title: "Press | Sneakers Fest '26" },
-  { id: 'sponsors',       title: "Sponsors | Sneakers Fest '26" },
-  { id: 'sponsor-tiers',  title: "Partner With Us | Sneakers Fest '26" },
-  { id: 'highlights',     title: "Experience | Sneakers Fest '26" },
-  { id: 'community',      title: "Community | Sneakers Fest '26" },
-  { id: 'testimonials',   title: "Stories | Sneakers Fest '26" },
-  { id: 'passport',       title: "Sneaker Passport | Sneakers Fest '26" },
-  { id: 'dna',            title: "Sneaker DNA | Sneakers Fest '26" },
-  { id: 'sole-of-lagos',  title: "The Sole of Lagos | Sneakers Fest '26" },
-  { id: 'culture-history',title: "Art & Culture | Sneakers Fest '26" },
-  { id: 'museum',         title: "The Museum | Sneakers Fest '26" },
-  { id: 'vault-200',      title: "Architect Vault | Sneakers Fest '26" },
-  { id: 'wall',           title: "The Wall | Sneakers Fest '26" },
-  { id: 'trivia',         title: "Trivia | Sneakers Fest '26" },
-  { id: 'memory-match',   title: "Sole Memory | Sneakers Fest '26" },
-  { id: 'soledle',        title: "Soledle | Sneakers Fest '26" },
-  { id: 'colorizer',      title: "Shoe Builder | Sneakers Fest '26" },
-  { id: 'outfit',         title: "Outfit Matcher | Sneakers Fest '26" },
-  { id: 'hype',           title: "Hype | Sneakers Fest '26" },
-  { id: 'spin',           title: "Spin to Win | Sneakers Fest '26" },
-  { id: 'vote-off',       title: "Crew Vote-Off | Sneakers Fest '26" },
-  { id: 'badge',          title: "Badge Maker | Sneakers Fest '26" },
-  { id: 'mystery',        title: "Mystery Drop | Sneakers Fest '26" },
-  { id: 'worth',          title: "Collection Worth | Sneakers Fest '26" },
-  { id: 'bingo',          title: "Sneaker Bingo | Sneakers Fest '26" },
-  { id: 'artists',        title: "Artists | Sneakers Fest '26" },
-  { id: 'timeline',       title: "Drops Timeline | Sneakers Fest '26" },
-  { id: 'waitlist',       title: "Early Access | Sneakers Fest '26" },
-  { id: 'comics',         title: "Catalyst Universe | Sneakers Fest '26" },
-  { id: 'gallery',        title: "Gallery | Sneakers Fest '26" },
-  { id: 'trades',         title: "Trade Board | Sneakers Fest '26" },
-  { id: 'leaderboard',    title: "Rankings | Sneakers Fest '26" },
-  { id: 'egg-hunt',       title: "The Great Sole Hunt | Sneakers Fest '26" },
-  { id: 'photo-tools',    title: "Photo Studio | Sneakers Fest '26" },
-  { id: 'lineup',         title: "Lineup | Sneakers Fest '26" },
-  { id: 'schedule',       title: "Schedule | Sneakers Fest '26" },
-  { id: 'venue',          title: "Venue | Sneakers Fest '26" },
-  { id: 'merch',          title: "Merch | Sneakers Fest '26" },
-  { id: 'sole-registry',  title: "Sole Registry | Sneakers Fest '26" },
-  { id: 'culture-index',  title: "Culture Index | Sneakers Fest '26" },
-  { id: 'confessional',   title: "Confessional | Sneakers Fest '26" },
-  { id: 'raffle',         title: "Raffle | Sneakers Fest '26" },
-  { id: 'countdown',      title: "Countdown | Sneakers Fest '26" },
-  { id: 'tickets',        title: "Tickets | Sneakers Fest '26" },
-  { id: 'vendors',        title: "Vendors | Sneakers Fest '26" },
-  { id: 'vendor-dashboard', title: "Vendor Dashboard | Sneakers Fest '26" },
-  { id: 'app-promo',     title: "SF'26 App | Sneakers Fest '26" },
-  { id: 'faq',            title: "FAQ | Sneakers Fest '26" },
-  { id: 'contact',           title: "Contact | Sneakers Fest '26" },
-  { id: 'catalyst-repos',    title: "AI Repos | Sneakers Fest '26" },
-  { id: 'catalyst-mcp',      title: "MCP Tools | Sneakers Fest '26" },
-  { id: 'catalyst-obsidian', title: "Obsidian + Claude | Sneakers Fest '26" },
-  { id: 'catalyst-ugc',      title: "Content Engine | Sneakers Fest '26" },
-  { id: 'community-intelligence', title: "Lagos Intelligence | Sneakers Fest '26" },
-  { id: 'sneaker-vault',        title: "Sneaker Vault | Sneakers Fest '26" },
-  { id: 'grail-advisor',        title: "Grail Advisor | Sneakers Fest '26" },
-  { id: 'drop-analyzer',        title: "Drop Analyzer | Sneakers Fest '26" },
-  { id: 'ai-trivia',            title: "AI Trivia | Sneakers Fest '26" },
-  { id: 'trade-negotiator',     title: "Trade Negotiator | Sneakers Fest '26" },
-  { id: 'auction-wall',         title: "Grail Auction | Sneakers Fest '26" },
-  { id: 'caption-gen',          title: "Caption Studio | Sneakers Fest '26" },
-  { id: 'fit-check',            title: "Fit Check AI | Sneakers Fest '26" },
-  { id: 'price-negotiator',     title: "Price Negotiator | Sneakers Fest '26" },
-  { id: 'fake-detector',        title: "Fake Detector | Sneakers Fest '26" },
-  { id: 'style-archetype',      title: "Style Archetype | Sneakers Fest '26" },
-  { id: 'vendor-matcher',       title: "Vendor Matcher | Sneakers Fest '26" },
-  { id: 'story-gen',            title: "Sneaker Stories | Sneakers Fest '26" },
-  { id: 'sneaker-roast',        title: "Sneaker Roast | Sneakers Fest '26" },
-  { id: 'heat-predictor',       title: "Heat Predictor | Sneakers Fest '26" },
-  { id: 'cold-dm',              title: "Cold DM Generator | Sneakers Fest '26" },
-  { id: 'sneaker-eulogy',       title: "Sneaker Eulogy | Sneakers Fest '26" },
-  { id: 'collector-card',       title: "Collector Card | Sneakers Fest '26" },
-]
+// Titles are derived from the shared site index so the palette, the nav and
+// the document title can never disagree about what a section is called.
+const SECTION_TITLES = SECTIONS.map(s => ({ id: s.id, title: `${s.t} | Sneakers Fest '26` }))
 
 export default function App() {
   useEffect(() => {
@@ -201,11 +132,25 @@ export default function App() {
       },
       { threshold: 0.35 }
     )
-    SECTION_TITLES.forEach(s => {
-      const el = document.getElementById(s.id)
-      if (el) observer.observe(el)
-    })
-    return () => observer.disconnect()
+    // Most sections are code-split, so they appear in the DOM long after
+    // mount. Rescan as the reader scrolls to pick up whatever has arrived.
+    const seen = new Set()
+    const scan = () => {
+      for (const s of SECTION_TITLES) {
+        if (seen.has(s.id)) continue
+        const el = document.getElementById(s.id)
+        if (el) { seen.add(s.id); observer.observe(el) }
+      }
+    }
+    scan()
+    let scanTimer
+    const onScroll = () => { clearTimeout(scanTimer); scanTimer = setTimeout(scan, 300) }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      clearTimeout(scanTimer)
+      window.removeEventListener('scroll', onScroll)
+      observer.disconnect()
+    }
   }, [])
 
   // Framework 1: Agentic suspend/resume — save scroll state, restore on return within 30 min
@@ -227,8 +172,6 @@ export default function App() {
     const saveSession = () => {
       try { localStorage.setItem(SESSION_KEY, JSON.stringify({ ts: Date.now(), scroll: window.scrollY })) } catch {}
     }
-    const onScroll = () => { clearTimeout(saveTimer); saveTimer = setTimeout(saveSession, 500) }
-    window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('beforeunload', saveSession)
 
     // RL dwell-time observer (Framework 3)
@@ -256,10 +199,23 @@ export default function App() {
       })
     }, { threshold: 0.4 })
 
-    SECTION_TITLES.forEach(s => {
-      const el = document.getElementById(s.id)
-      if (el) rlObserver.observe(el)
-    })
+    // One scroll listener drives both the session save and the rescan for
+    // code-split sections that have only just entered the DOM.
+    const rlSeen = new Set()
+    const scanRL = () => {
+      for (const s of SECTION_TITLES) {
+        if (rlSeen.has(s.id)) continue
+        const el = document.getElementById(s.id)
+        if (el) { rlSeen.add(s.id); rlObserver.observe(el) }
+      }
+    }
+    scanRL()
+
+    const onScroll = () => {
+      clearTimeout(saveTimer)
+      saveTimer = setTimeout(() => { saveSession(); scanRL() }, 500)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
 
     return () => {
       clearTimeout(saveTimer)
@@ -287,11 +243,40 @@ export default function App() {
           ::selection { background: ${B.amber}28; color: ${B.amberGlow}; }
           ::-moz-selection { background: ${B.amber}28; color: ${B.amberGlow}; }
 
-          /* Custom cursor — hide system cursor on pointer devices */
-          @media (hover: hover) {
+          /* Custom cursor — hide system cursor on precise pointer devices only.
+             Coarse pointers and reduced-motion users keep the native cursor. */
+          @media (hover: hover) and (pointer: fine) {
             * { cursor: none !important; }
-            input, textarea { cursor: text !important; }
+            input, textarea, select { cursor: text !important; }
+            button, a, [role="button"] { cursor: none !important; }
           }
+          @media (prefers-reduced-motion: reduce) {
+            @media (hover: hover) and (pointer: fine) {
+              *, button, a, [role="button"] { cursor: auto !important; }
+              input, textarea, select { cursor: text !important; }
+            }
+          }
+
+          /* Honour the OS "reduce motion" setting across the whole site */
+          @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after {
+              animation-duration: 0.001ms !important;
+              animation-iteration-count: 1 !important;
+              transition-duration: 0.001ms !important;
+              scroll-behavior: auto !important;
+            }
+          }
+
+          /* Skip link — first tab stop, invisible until focused */
+          .sf26-skip {
+            position: fixed; top: 8px; left: -9999px; z-index: 5000;
+            padding: 12px 20px; border-radius: 4px;
+            background: ${B.amber}; color: ${B.black};
+            font-family: 'Space Mono', monospace; font-size: 11px;
+            font-weight: 700; letter-spacing: 0.14em; text-decoration: none;
+          }
+          .sf26-skip:focus { left: 8px; }
 
           /* Smooth font rendering */
           body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
@@ -335,6 +320,8 @@ export default function App() {
           }
         `}</style>
 
+        <a href="#tickets" className="sf26-skip">SKIP TO TICKETS</a>
+        <CommandPalette />
         <CustomCursor />
         <SocialProof />
         <ScrollProgress />
@@ -373,9 +360,9 @@ export default function App() {
         <Reveal><Tickets /></Reveal>
 
         {/* ACT 2: COMMUNITY — social proof and belonging */}
-        <Reveal><Testimonials /></Reveal>
-        <Reveal><Community /></Reveal>
         <Suspense fallback={null}>
+          <Reveal><Testimonials /></Reveal>
+          <Reveal><Community /></Reveal>
           <Reveal><CommunityWall /></Reveal>
           <Reveal><CommunityIntelligence /></Reveal>
           <Reveal><MemoryMatch /></Reveal>
@@ -415,8 +402,8 @@ export default function App() {
           <Reveal><HeatPredictor /></Reveal>
           <Reveal><SneakerBingo /></Reveal>
           <Reveal><SneakerWorth /></Reveal>
+          <Reveal><Merch /></Reveal>
         </Suspense>
-        <Reveal><Merch /></Reveal>
 
         {/* ACT 6: CREATE & COMPETE — make content, go head-to-head */}
         <Suspense fallback={null}>
@@ -431,42 +418,38 @@ export default function App() {
         </Suspense>
 
         {/* ACT 7: ACHIEVEMENT — progression, rankings, prizes */}
-        <Reveal><Passport /></Reveal>
         <Suspense fallback={null}>
+          <Reveal><Passport /></Reveal>
           <Reveal><EggHuntTracker /></Reveal>
-        </Suspense>
-        <Reveal><Leaderboard /></Reveal>
-        <Reveal><SoleRegistry /></Reveal>
-        <Reveal><CultureIndex /></Reveal>
-        <Reveal><Confessional /></Reveal>
-        <Reveal><Raffle /></Reveal>
+          <Reveal><Leaderboard /></Reveal>
+          <Reveal><SoleRegistry /></Reveal>
+          <Reveal><CultureIndex /></Reveal>
+          <Reveal><Confessional /></Reveal>
+          <Reveal><Raffle /></Reveal>
 
-        {/* EVENT INFO — for those ready to plan the day */}
-        <Reveal><Schedule /></Reveal>
-        <Reveal><Venue /></Reveal>
+          {/* EVENT INFO — for those ready to plan the day */}
+          <Reveal><Schedule /></Reveal>
+          <Reveal><Venue /></Reveal>
 
-        {/* PARTICIPATION — vendor and access tiers */}
-        <Reveal><EarlyAccess /></Reveal>
-        <Reveal><VendorReg /></Reveal>
-        <Reveal><VendorDashboard /></Reveal>
-        <Suspense fallback={null}><Reveal><AppPromo /></Reveal></Suspense>
-        <Suspense fallback={null}>
+          {/* PARTICIPATION — vendor and access tiers */}
+          <Reveal><EarlyAccess /></Reveal>
+          <Reveal><VendorReg /></Reveal>
+          <Reveal><VendorDashboard /></Reveal>
+          <Reveal><AppPromo /></Reveal>
           <Reveal><ArchitectVault /></Reveal>
-        </Suspense>
 
-        {/* BRAND & HISTORY — for those who want the full story */}
-        <Reveal><About /></Reveal>
-        <Reveal><OriginStory /></Reveal>
-        <Reveal><FridayNightProtocol /></Reveal>
-        <Reveal><Press /></Reveal>
-        <Reveal><Sponsors /></Reveal>
-        <Reveal><SponsorTiers /></Reveal>
+          {/* BRAND & HISTORY — for those who want the full story */}
+          <Reveal><About /></Reveal>
+          <Reveal><OriginStory /></Reveal>
+          <Reveal><FridayNightProtocol /></Reveal>
+          <Reveal><Press /></Reveal>
+          <Reveal><Sponsors /></Reveal>
+          <Reveal><SponsorTiers /></Reveal>
 
-        {/* ECOSYSTEM */}
-        <Suspense fallback={null}>
+          {/* ECOSYSTEM */}
           <Reveal><Comics /></Reveal>
+          <Reveal><Newsletter /></Reveal>
         </Suspense>
-        <Reveal><Newsletter /></Reveal>
 
         {/* CATALYST OS — AI Tools Ecosystem */}
         <Suspense fallback={null}>
@@ -478,8 +461,10 @@ export default function App() {
         </Suspense>
 
         {/* CLOSE */}
-        <Reveal><FAQ /></Reveal>
-        <Reveal><Contact /></Reveal>
+        <Suspense fallback={null}>
+          <Reveal><FAQ /></Reveal>
+          <Reveal><Contact /></Reveal>
+        </Suspense>
         <Reveal><Footer /></Reveal>
       </div>
     </AuthProvider>
