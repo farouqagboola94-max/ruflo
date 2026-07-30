@@ -20,6 +20,7 @@ import KonamiCode from './components/KonamiCode'
 import ReactivationBanner from './components/ReactivationBanner'
 import LiveActivity from './components/LiveActivity'
 import CommandPalette from './components/CommandPalette'
+import SectionBoundary from './components/SectionBoundary'
 import { SECTIONS } from './lib/siteIndex'
 import { captureReferral, reconcileReferralCredits } from './lib/referral'
 // Above the fold — always eager so first paint is complete.
@@ -346,48 +347,48 @@ export default function App() {
         {/* ACT 1: GET EXCITED — visual, high energy, no reading walls */}
         <Reveal><Highlights /></Reveal>
         <Reveal><Lineup /></Reveal>
-        <Suspense fallback={null}>
+        <SectionBoundary><Suspense fallback={null}>
           <Reveal><ArtistSpotlight /></Reveal>
           <Reveal><SneakerTrivia /></Reveal>
           <Reveal><HypeCounter /></Reveal>
           <Reveal><AITrivia /></Reveal>
           <Reveal><SpinWheel /></Reveal>
           <Reveal><FitCheckAI /></Reveal>
-        </Suspense>
+        </Suspense></SectionBoundary>
 
         {/* FIRST CONVERSION PUSH — catch motivated visitors early */}
         <Reveal><Countdown /></Reveal>
         <Reveal><Tickets /></Reveal>
 
         {/* ACT 2: COMMUNITY — social proof and belonging */}
-        <Suspense fallback={null}>
+        <SectionBoundary><Suspense fallback={null}>
           <Reveal><Testimonials /></Reveal>
           <Reveal><Community /></Reveal>
           <Reveal><CommunityWall /></Reveal>
           <Reveal><CommunityIntelligence /></Reveal>
           <Reveal><MemoryMatch /></Reveal>
-        </Suspense>
+        </Suspense></SectionBoundary>
 
         {/* ACT 3: IDENTITY — who are you as a sneakerhead? */}
-        <Suspense fallback={null}>
+        <SectionBoundary><Suspense fallback={null}>
           <Reveal><SneakerDNA /></Reveal>
           <Reveal><ShoeColorizer /></Reveal>
           <Reveal><OutfitMatcher /></Reveal>
           <Reveal><StyleArchetype /></Reveal>
           <Reveal><CollectorCard /></Reveal>
           <Reveal><SoleOfLagos /></Reveal>
-        </Suspense>
+        </Suspense></SectionBoundary>
 
         {/* ACT 4: CULTURE — for those who want to go deeper */}
-        <Suspense fallback={null}>
+        <SectionBoundary><Suspense fallback={null}>
           <Reveal><CultureHistory /></Reveal>
           <Reveal><Soledle /></Reveal>
           <Reveal><CultureMuseum /></Reveal>
           <Reveal><SneakerBible /></Reveal>
-        </Suspense>
+        </Suspense></SectionBoundary>
 
         {/* ACT 5: DROPS & TRADE — commerce and the marketplace */}
-        <Suspense fallback={null}>
+        <SectionBoundary><Suspense fallback={null}>
           <Reveal><DropsTimeline /></Reveal>
           <Reveal><VendorMatcher /></Reveal>
           <Reveal><ColdDMGenerator /></Reveal>
@@ -403,10 +404,10 @@ export default function App() {
           <Reveal><SneakerBingo /></Reveal>
           <Reveal><SneakerWorth /></Reveal>
           <Reveal><Merch /></Reveal>
-        </Suspense>
+        </Suspense></SectionBoundary>
 
         {/* ACT 6: CREATE & COMPETE — make content, go head-to-head */}
-        <Suspense fallback={null}>
+        <SectionBoundary><Suspense fallback={null}>
           <Reveal><Gallery /></Reveal>
           <Reveal><CaptionGenerator /></Reveal>
           <Reveal><StoryGenerator /></Reveal>
@@ -415,10 +416,10 @@ export default function App() {
           <Reveal><PhotoTools /></Reveal>
           <Reveal><CrewVoteOff /></Reveal>
           <Reveal><BadgeMaker /></Reveal>
-        </Suspense>
+        </Suspense></SectionBoundary>
 
         {/* ACT 7: ACHIEVEMENT — progression, rankings, prizes */}
-        <Suspense fallback={null}>
+        <SectionBoundary><Suspense fallback={null}>
           <Reveal><Passport /></Reveal>
           <Reveal><EggHuntTracker /></Reveal>
           <Reveal><Leaderboard /></Reveal>
@@ -449,22 +450,22 @@ export default function App() {
           {/* ECOSYSTEM */}
           <Reveal><Comics /></Reveal>
           <Reveal><Newsletter /></Reveal>
-        </Suspense>
+        </Suspense></SectionBoundary>
 
         {/* CATALYST OS — AI Tools Ecosystem */}
-        <Suspense fallback={null}>
+        <SectionBoundary><Suspense fallback={null}>
           <Reveal><CatalystOS_AI_Repo /></Reveal>
           <Reveal><CatalystOS_MCP_Carousel /></Reveal>
           <Reveal><CatalystOS_Obsidian /></Reveal>
           <Reveal><SneakerKnowledgeVault /></Reveal>
           <Reveal><CatalystOS_UGC /></Reveal>
-        </Suspense>
+        </Suspense></SectionBoundary>
 
         {/* CLOSE */}
-        <Suspense fallback={null}>
+        <SectionBoundary><Suspense fallback={null}>
           <Reveal><FAQ /></Reveal>
           <Reveal><Contact /></Reveal>
-        </Suspense>
+        </Suspense></SectionBoundary>
         <Reveal><Footer /></Reveal>
       </div>
     </AuthProvider>

@@ -1,5 +1,5 @@
 // SF26 Service Worker — offline-first cache strategy
-const CACHE_NAME = 'sf26-v1'
+const CACHE_NAME = 'sf26-v2'
 const CORE_ASSETS = [
   '/',
   '/manifest.json',
@@ -41,7 +41,10 @@ self.addEventListener('fetch', event => {
           caches.open(CACHE_NAME).then(c => c.put(request, clone))
           return res
         })
-        .catch(() => caches.match('/') || caches.match(request))
+        // caches.match() always returns a Promise (truthy), so `a || b` would
+        // never fall through — resolve the request first, then the shell.
+        .catch(async () => (await caches.match(request)) || (await caches.match('/')) ||
+          new Response('<h1>Offline</h1><p>Reconnect and reload.</p>', { headers: { 'Content-Type': 'text/html' }, status: 503 }))
     )
     return
   }
