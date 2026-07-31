@@ -2,23 +2,16 @@
 // Header: Authorization: Bearer <ADMIN_SECRET>
 // Protected admin endpoint — returns live data from Netlify Blobs.
 
-import { timingSafeEqual } from 'crypto'
 import { ok, err, preflight } from './lib/cors.js'
+import { requireAdmin } from './lib/auth.js'
 import { listAll, Tickets, Waitlist, Vendors, Newsletter, Contacts } from './lib/storage.js'
 
 export const handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return preflight()
   if (event.httpMethod !== 'GET') return err(405, 'Method not allowed')
 
-  const adminSecret = process.env.ADMIN_SECRET
-  const authHeader  = event.headers.authorization || ''
-  const expected    = `Bearer ${adminSecret}`
-  const authorized  = adminSecret &&
-    authHeader.length === expected.length &&
-    timingSafeEqual(Buffer.from(authHeader, 'utf8'), Buffer.from(expected, 'utf8'))
-  if (!authorized) {
-    return err(401, 'Unauthorized — set Authorization: Bearer <ADMIN_SECRET>')
-  }
+  const denied = requireAdmin(event)
+  if (denied) return denied
 
   const resource = event.queryStringParameters?.resource || 'summary'
 

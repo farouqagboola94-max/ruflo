@@ -36,7 +36,8 @@ export const handler = async (event) => {
   const secret = process.env.PAYSTACK_SECRET_KEY
   if (!secret) return err(500, 'Payment service not configured')
 
-  const baseUrl = process.env.URL || 'https://sneakers-fest-55.netlify.app'
+  // Netlify sets URL in production; the fallback only matters locally.
+  const baseUrl = process.env.URL || 'https://sneakers-fest-26.netlify.app'
 
   const res = await fetch('https://api.paystack.co/transaction/initialize', {
     method: 'POST',

@@ -2,10 +2,10 @@
 // Configure in Paystack dashboard: webhook URL = https://your-site.netlify.app/.netlify/functions/verify-payment
 // Required env: PAYSTACK_SECRET_KEY, RESEND_API_KEY, ORGANISER_EMAIL
 
-import { createHmac } from 'crypto'
+import { createHmac, timingSafeEqual } from 'crypto'
 import { generateTicketId, getTier } from './lib/ticket.js'
 import { ticketEmail } from './lib/email.js'
-import { sendEmail, notifyOrg } from './lib/email.js'
+import { esc, sendEmail, notifyOrg } from './lib/email.js'
 import { get, set, del, Tickets } from './lib/storage.js'
 
 export const handler = async (event) => {
@@ -23,7 +23,11 @@ export const handler = async (event) => {
   if (!sig) return { statusCode: 400, body: 'Missing x-paystack-signature' }
 
   const expected = createHmac('sha512', secret).update(event.body).digest('hex')
-  if (sig !== expected) return { statusCode: 401, body: 'Invalid signature' }
+  const sigBuf = Buffer.from(String(sig), 'utf8')
+  const expBuf = Buffer.from(expected, 'utf8')
+  if (sigBuf.length !== expBuf.length || !timingSafeEqual(sigBuf, expBuf)) {
+    return { statusCode: 401, body: 'Invalid signature' }
+  }
 
   let payload
   try { payload = JSON.parse(event.body) } catch { return { statusCode: 400, body: 'Bad JSON' } }
@@ -37,13 +41,6 @@ export const handler = async (event) => {
   const ref  = data.reference
   const meta = data.metadata || {}
 
-  // Idempotency: skip if this payment was already processed
-  const existing = await get(Tickets, `ticket:${ref}`)
-  if (existing) {
-    console.log('[verify-payment] already processed:', ref)
-    return { statusCode: 200, body: 'Already processed' }
-  }
-
   // Fall back to the pending record created by ticket-purchase for reliable buyer data
   const pending = await get(Tickets, `pending:${ref}`)
 
@@ -54,6 +51,18 @@ export const handler = async (event) => {
   const tierData = getTier(tier)
 
   const ticketId = generateTicketId(tier, ref)
+
+  // Idempotency. This has to read the key that is actually written below —
+  // `ticket:${ticketId}`. It previously read `ticket:${ref}`, which is never
+  // written, so the guard never fired. generateTicketId is deterministic on
+  // (tier, ref), so a Paystack retry rewrote identical data — harmless for
+  // storage, but it re-sent the buyer's confirmation and the organiser's
+  // "ticket sold" notification on every retry.
+  const existing = await get(Tickets, `ticket:${ticketId}`)
+  if (existing) {
+    console.log('[verify-payment] already processed:', ref, '->', ticketId)
+    return { statusCode: 200, body: 'Already processed' }
+  }
 
   const ticketRecord = {
     ticketId,
@@ -88,14 +97,17 @@ export const handler = async (event) => {
   }
 
   // Notify organiser
+  // The buyer controls `name` (it is echoed back through Paystack metadata),
+  // so everything interpolated here is escaped before it reaches the
+  // organiser's inbox.
   await notifyOrg(
     `New ticket: ${ticketId} | ${(tierData?.label || tier).toUpperCase()} x${qty}`,
     `<h3>New Ticket Sold</h3><ul>
-      <li><strong>Ticket ID:</strong> ${ticketId}</li>
-      <li><strong>Buyer:</strong> ${name} (${email || 'no email'})</li>
-      <li><strong>Tier:</strong> ${tierData?.label || tier} &times;${qty}</li>
+      <li><strong>Ticket ID:</strong> ${esc(ticketId)}</li>
+      <li><strong>Buyer:</strong> ${esc(name)} (${esc(email) || 'no email'})</li>
+      <li><strong>Tier:</strong> ${esc(tierData?.label || tier)} &times;${qty}</li>
       <li><strong>Amount:</strong> &#x20A6;${(data.amount / 100).toLocaleString()}</li>
-      <li><strong>Paystack ref:</strong> ${ref}</li>
+      <li><strong>Paystack ref:</strong> ${esc(ref)}</li>
     </ul>`
   )
 

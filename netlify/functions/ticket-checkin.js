@@ -3,8 +3,8 @@
 // Header: Authorization: Bearer <ADMIN_SECRET>
 // Used at the event entrance to mark a ticket as used.
 
-import { timingSafeEqual } from 'crypto'
 import { ok, err, preflight, limitBody } from './lib/cors.js'
+import { requireAdmin } from './lib/auth.js'
 import { get, set, Tickets } from './lib/storage.js'
 
 const TICKET_ID_RE = /^SF26-[A-Z]{3}-[A-F0-9]{6}$/
@@ -16,15 +16,8 @@ export const handler = async (event) => {
   const bodyErr = limitBody(event, 512)
   if (bodyErr) return bodyErr
 
-  const adminSecret = process.env.ADMIN_SECRET
-  const authHeader  = event.headers.authorization || ''
-  const expected    = `Bearer ${adminSecret}`
-  const authorized  = adminSecret &&
-    authHeader.length === expected.length &&
-    timingSafeEqual(Buffer.from(authHeader, 'utf8'), Buffer.from(expected, 'utf8'))
-  if (!authorized) {
-    return err(401, 'Unauthorized')
-  }
+  const denied = requireAdmin(event)
+  if (denied) return denied
 
   let body
   try { body = JSON.parse(event.body || '{}') } catch { return err(400, 'Invalid JSON') }
