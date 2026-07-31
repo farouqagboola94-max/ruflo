@@ -3,12 +3,16 @@
 // Returns: { success, alreadySubscribed?, memberNum? }
 
 import { ok, err, preflight } from './lib/cors.js'
+import { rateLimit } from './lib/ratelimit.js'
 import { get, set, listAll, Newsletter } from './lib/storage.js'
 import { sendEmail, newsletterEmail } from './lib/email.js'
 
 export const handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return preflight()
   if (event.httpMethod !== 'POST') return err(405, 'Method not allowed')
+
+  const limited = await rateLimit(event, { name: 'newsletter-subscribe', limit: 5, windowSec: 600 })
+  if (limited) return limited
 
   let body
   try { body = JSON.parse(event.body || '{}') } catch { return err(400, 'Invalid JSON') }

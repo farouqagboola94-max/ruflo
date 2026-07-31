@@ -5,12 +5,16 @@
 
 import { createHash } from 'crypto'
 import { ok, err, preflight, limitBody } from './lib/cors.js'
+import { rateLimit } from './lib/ratelimit.js'
 import { set, Vendors } from './lib/storage.js'
 import { sendEmail, vendorEmail, notifyOrg, esc } from './lib/email.js'
 
 export const handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return preflight()
   if (event.httpMethod !== 'POST') return err(405, 'Method not allowed')
+
+  const limited = await rateLimit(event, { name: 'vendor-apply', limit: 3, windowSec: 1800 })
+  if (limited) return limited
 
   const bodyErr = limitBody(event)
   if (bodyErr) return bodyErr

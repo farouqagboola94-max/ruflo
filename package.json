@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "node tests/verify-payment.test.mjs"
+    "test": "node tests/verify-payment.test.mjs && node tests/ratelimit.test.mjs"
   },
   "dependencies": {
     "@netlify/blobs": "^8.1.0",

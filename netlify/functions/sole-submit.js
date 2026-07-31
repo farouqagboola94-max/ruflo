@@ -3,6 +3,7 @@
 // Returns: { success, submissionId, slotNumber, totalRegistered }
 
 import { ok, err, preflight, limitBody } from './lib/cors.js'
+import { rateLimit } from './lib/ratelimit.js'
 import { esc, sendEmail }                from './lib/email.js'
 import { getStore }                      from '@netlify/blobs'
 
@@ -13,6 +14,9 @@ const BRANDS = ['Nike','Jordan','Adidas','New Balance','Puma','Asics','Reebok','
 export const handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return preflight()
   if (event.httpMethod !== 'POST') return err(405, 'Method not allowed')
+
+  const limited = await rateLimit(event, { name: 'sole-submit', limit: 5, windowSec: 600 })
+  if (limited) return limited
 
   const bodyErr = limitBody(event, 4096)
   if (bodyErr) return bodyErr

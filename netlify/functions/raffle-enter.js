@@ -3,6 +3,7 @@
 // Returns: { success, alreadyEntered?, entryNum, totalEntries }
 
 import { ok, err, preflight } from './lib/cors.js'
+import { rateLimit } from './lib/ratelimit.js'
 import { sendEmail, raffleEmail } from './lib/email.js'
 import { getStore } from '@netlify/blobs'
 
@@ -13,6 +14,9 @@ const VALID_RAFFLE_IDS = ['rfl1', 'rfl2', 'rfl3', 'rfl4']
 export const handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return preflight()
   if (event.httpMethod !== 'POST') return err(405, 'Method not allowed')
+
+  const limited = await rateLimit(event, { name: 'raffle-enter', limit: 5, windowSec: 600 })
+  if (limited) return limited
 
   let body
   try { body = JSON.parse(event.body || '{}') } catch { return err(400, 'Invalid JSON') }

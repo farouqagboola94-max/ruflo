@@ -3,7 +3,7 @@
 // Returns: { success, submissionId, slotNumber }
 
 import { ok, err, preflight, limitBody } from './lib/cors.js'
-import { esc, sendEmail }                from './lib/email.js'
+import { rateLimit } from './lib/ratelimit.js'
 import { getStore }                      from '@netlify/blobs'
 
 const Store = () => getStore({ name: 'sf26-confessions', consistency: 'strong' })
@@ -14,6 +14,9 @@ const CITIES = ['Lagos','Abuja','Port Harcourt','Kano','Ibadan','Benin City','En
 export const handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return preflight()
   if (event.httpMethod !== 'POST') return err(405, 'Method not allowed')
+
+  const limited = await rateLimit(event, { name: 'confess', limit: 5, windowSec: 600 })
+  if (limited) return limited
 
   const bodyErr = limitBody(event, 2048)
   if (bodyErr) return bodyErr
