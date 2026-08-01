@@ -99,6 +99,7 @@ const SoleRegistry    = lazy(() => import('./sections/SoleRegistry'))
 const CultureIndex    = lazy(() => import('./sections/CultureIndex'))
 const Confessional    = lazy(() => import('./sections/Confessional'))
 const Crews           = lazy(() => import('./sections/Crews'))
+const GroupTickets    = lazy(() => import('./sections/GroupTickets'))
 const VendorReg       = lazy(() => import('./sections/VendorReg'))
 const VendorDashboard = lazy(() => import('./sections/VendorDashboard'))
 const AppPromo        = lazy(() => import('./sections/AppPromo'))
@@ -360,6 +361,9 @@ export default function App() {
         {/* FIRST CONVERSION PUSH — catch motivated visitors early */}
         <Reveal><Countdown /></Reveal>
         <Reveal><Tickets /></Reveal>
+        <SectionBoundary><Suspense fallback={null}>
+          <Reveal><GroupTickets /></Reveal>
+        </Suspense></SectionBoundary>
 
         {/* ACT 2: COMMUNITY — social proof and belonging */}
         <SectionBoundary><Suspense fallback={null}>

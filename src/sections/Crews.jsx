@@ -213,7 +213,7 @@ export default function Crews() {
                   <Field label="CREW CODE">
                     <input
                       style={{ ...field, fontFamily: "'Orbitron', monospace", fontSize: 18, letterSpacing: '0.18em', textTransform: 'uppercase' }}
-                      value={form.code} maxLength={7} placeholder="AB123"
+                      value={form.code} maxLength={7} placeholder="AC234"
                       onChange={e => set('code', e.target.value.toUpperCase())} />
                   </Field>
                   <Field label="YOUR NAME">

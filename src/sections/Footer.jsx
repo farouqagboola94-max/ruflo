@@ -29,6 +29,7 @@ const NAV = [
   ['Venue',                '#venue'],
   ['Merch',                '#merch'],
   ['Tickets',              '#tickets'],
+  ['Group Tickets',        '#group-tickets'],
   ['Vendors',              '#vendors'],
   ['Sole Registry',        '#sole-registry'],
   ['Culture Index',        '#culture-index'],

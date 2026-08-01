@@ -19,6 +19,7 @@ export const CATEGORIES = {
 export const SECTIONS = [
   // ---- Essentials ----------------------------------------------------
   { id: 'tickets',    t: 'Get Tickets',        c: 'essentials', d: 'GENERAL, VIP, VVIP and PHALANX passes',   k: 'buy pay price cost much admission pass entry ticket naira afford cheap' },
+  { id: 'group-tickets', t: 'Group Tickets',      c: 'essentials', d: 'Come as a group, each pays their own', k: 'group crew together bulk friends multiple book share split code slot' },
   { id: 'schedule',   t: 'Schedule',           c: 'essentials', d: 'Full run of show, 12PM to 10PM',          k: 'time timetable agenda lineup order programme when start begin doors open close hours' },
   { id: 'venue',      t: 'Venue & Directions', c: 'essentials', d: 'Muri Okunola Park, Victoria Island',      k: 'where map location address parking directions vi lagos park muri okunola getting there' },
   { id: 'lineup',     t: 'The Lineup',         c: 'essentials', d: 'Who is on the bill',                      k: 'performers acts stage bill' },

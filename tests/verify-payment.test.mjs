@@ -34,6 +34,26 @@ export const ticketEmail = ({ name, ticketId }) => \`<p>\${esc(name)} \${esc(tic
 
 const dir = await mkdtemp(join(tmpdir(), 'sf26-webhook-'))
 await mkdir(join(dir, 'lib'))
+await mkdir(join(dir, 'node_modules', '@netlify', 'blobs'), { recursive: true })
+
+// verify-payment.js reaches into the groups store to mark a claimed slot
+// paid, so the blobs module has to exist here too.
+await writeFile(join(dir, 'node_modules', '@netlify', 'blobs', 'index.js'), `
+export const _data = new Map()
+export function getStore() {
+  return {
+    async get(k) { return _data.has(k) ? JSON.parse(_data.get(k)) : null },
+    async setJSON(k, v) { _data.set(k, JSON.stringify(v)) },
+    async list() { return { blobs: [..._data.keys()].map(k => ({ key: k })) } },
+  }
+}
+`)
+await writeFile(join(dir, 'node_modules', '@netlify', 'blobs', 'package.json'),
+  JSON.stringify({ name: '@netlify/blobs', version: '0.0.0', type: 'module', main: 'index.js' }))
+await writeFile(join(dir, 'package.json'), JSON.stringify({ type: 'module' }))
+for (const f of ['text.js', 'crew-domain.js', 'group-domain.js']) {
+  await copyFile(join(FN, 'lib', f), join(dir, 'lib', f))
+}
 await writeFile(join(dir, 'lib', 'storage.js'), STORAGE_STUB)
 await writeFile(join(dir, 'lib', 'email.js'), EMAIL_STUB)
 await copyFile(join(FN, 'lib', 'ticket.js'), join(dir, 'lib', 'ticket.js'))
@@ -45,6 +65,7 @@ process.env.PAYSTACK_SECRET_KEY = SECRET
 const { handler } = await import(pathToFileURL(join(dir, 'verify-payment.js')).href)
 const { sent }    = await import(pathToFileURL(join(dir, 'lib', 'email.js')).href)
 const { store }   = await import(pathToFileURL(join(dir, 'lib', 'storage.js')).href)
+const blobs       = await import(pathToFileURL(join(dir, 'node_modules', '@netlify', 'blobs', 'index.js')).href)
 
 const body = JSON.stringify({
   event: 'charge.success',
@@ -92,6 +113,42 @@ check('non-charge events are acknowledged and ignored',
     const b = JSON.stringify({ event: 'charge.failed', data: {} })
     return handler(ev(b, createHmac('sha512', SECRET).update(b).digest('hex')))
   })()).statusCode === 200)
+
+// ── Group reconciliation ──────────────────────────────────────────────
+// A ticket bought against a group code must flip that slot to paid.
+blobs._data.set('group:AC234', JSON.stringify({
+  code: 'AC234', tier: 'vip', size: 3, organiserName: 'Ade',
+  createdAt: '2026-01-01T00:00:00.000Z',
+  claims: [{ name: 'Bola', email: 'b@x.com', reference: 'GRP_REF_1', claimedAt: '2026-01-01T00:00:00.000Z', paid: false, paidAt: null }],
+}))
+
+const groupBody = JSON.stringify({
+  event: 'charge.success',
+  data: {
+    reference: 'GRP_REF_1', amount: 1000000, currency: 'NGN',
+    customer: { email: 'b@x.com', first_name: 'Bola' },
+    metadata: { name: 'Bola', tier: 'vip', qty: 1, groupCode: 'AC234' },
+  },
+})
+const groupSig = createHmac('sha512', SECRET).update(groupBody).digest('hex')
+const gRes = await handler(ev(groupBody, groupSig))
+const savedGroup = JSON.parse(blobs._data.get('group:AC234'))
+
+check('group-claimed ticket still returns 200', gRes.statusCode === 200)
+check('group slot is marked paid on confirmation', savedGroup.claims[0].paid === true)
+
+// A group that cannot be found must not fail the webhook - the ticket is
+// already issued, and a non-2xx would make Paystack retry the whole thing.
+const orphanBody = JSON.stringify({
+  event: 'charge.success',
+  data: {
+    reference: 'ORPHAN_1', amount: 500000, currency: 'NGN',
+    customer: { email: 'z@x.com', first_name: 'Zed' },
+    metadata: { name: 'Zed', tier: 'general', qty: 1, groupCode: 'ZZZZZ' },
+  },
+})
+check('unknown group code does not fail the webhook',
+  (await handler(ev(orphanBody, createHmac('sha512', SECRET).update(orphanBody).digest('hex')))).statusCode === 200)
 
 await rm(dir, { recursive: true, force: true })
 

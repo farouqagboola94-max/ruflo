@@ -7,6 +7,8 @@ import { generateTicketId, getTier } from './lib/ticket.js'
 import { ticketEmail } from './lib/email.js'
 import { esc, sendEmail, notifyOrg } from './lib/email.js'
 import { get, set, del, Tickets } from './lib/storage.js'
+import { getStore } from '@netlify/blobs'
+import { markPaid, normaliseCode, CODE_RE } from './lib/group-domain.js'
 
 export const handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -111,6 +113,30 @@ export const handler = async (event) => {
     </ul>`
   )
 
+  // If this ticket was claimed against a group, mark that slot paid so the
+  // organiser sees progress. Deliberately last and non-fatal: the ticket is
+  // already issued and emailed, so a group bookkeeping failure must never
+  // turn into a non-2xx that makes Paystack retry the whole delivery.
+  if (meta.groupCode) {
+    try {
+      await markGroupSlotPaid(meta.groupCode, ref)
+    } catch (e) {
+      console.error('[verify-payment] group update failed for', meta.groupCode, e.message)
+    }
+  }
+
   console.log('[verify-payment] ticket created:', ticketId, 'for', email)
   return { statusCode: 200, body: 'OK' }
+}
+
+async function markGroupSlotPaid(groupCode, reference) {
+  const code = normaliseCode(groupCode)
+  if (!CODE_RE.test(code)) return
+
+  const store = getStore({ name: 'sf26-groups', consistency: 'strong' })
+  const group = await store.get(`group:${code}`, { type: 'json' }).catch(() => null)
+  if (!group) return
+
+  const result = markPaid(group, reference, new Date().toISOString())
+  if (result.ok) await store.setJSON(`group:${code}`, result.group)
 }

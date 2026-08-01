@@ -6,6 +6,7 @@
 
 import { ok, err, preflight, limitBody } from './lib/cors.js'
 import { getTier } from './lib/ticket.js'
+import { initTransaction } from './lib/paystack.js'
 import { set, Tickets } from './lib/storage.js'
 
 export const handler = async (event) => {
@@ -33,44 +34,30 @@ export const handler = async (event) => {
   const quantity = Math.min(Math.max(parseInt(qty) || 1, 1), 10)
   const amountKobo = tierData.priceNGN * quantity * 100
 
-  const secret = process.env.PAYSTACK_SECRET_KEY
-  if (!secret) return err(500, 'Payment service not configured')
-
-  // Netlify sets URL in production; the fallback only matters locally.
-  const baseUrl = process.env.URL || 'https://sneakers-fest-26.netlify.app'
-
-  const res = await fetch('https://api.paystack.co/transaction/initialize', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${secret}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      email,
-      amount: amountKobo,
-      callback_url: `${baseUrl}/#tickets`,
-      metadata: {
-        name,
-        phone: phone || '',
-        tier,
-        qty: quantity,
-        cancel_action: `${baseUrl}/#tickets`,
-        custom_fields: [
-          { display_name: 'Buyer Name',  variable_name: 'name',  value: name },
-          { display_name: 'Ticket Tier', variable_name: 'tier',  value: tierData.label },
-          { display_name: 'Quantity',    variable_name: 'qty',   value: String(quantity) },
-        ],
-      },
-    }),
+  const payment = await initTransaction({
+    email,
+    amountKobo,
+    metadata: {
+      name,
+      phone: phone || '',
+      tier,
+      qty: quantity,
+      custom_fields: [
+        { display_name: 'Buyer Name',  variable_name: 'name',  value: name },
+        { display_name: 'Ticket Tier', variable_name: 'tier',  value: tierData.label },
+        { display_name: 'Quantity',    variable_name: 'qty',   value: String(quantity) },
+      ],
+    },
   })
-
-  const json = await res.json()
-  if (!json.status) return err(502, json.message || 'Payment initialization failed')
+  if (!payment.ok) return err(payment.status, payment.error)
 
   // Store pending record for reconciliation
-  await set(Tickets, `pending:${json.data.reference}`, {
+  await set(Tickets, `pending:${payment.reference}`, {
     status: 'pending',
-    paystackRef: json.data.reference,
+    paystackRef: payment.reference,
     name, email, phone: phone || '', tier, qty: quantity,
     createdAt: new Date().toISOString(),
   })
 
-  return ok({ payment_url: json.data.authorization_url, reference: json.data.reference })
+  return ok({ payment_url: payment.authorizationUrl, reference: payment.reference })
 }
