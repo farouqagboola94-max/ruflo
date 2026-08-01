@@ -98,6 +98,7 @@ const Raffle          = lazy(() => import('./sections/Raffle'))
 const SoleRegistry    = lazy(() => import('./sections/SoleRegistry'))
 const CultureIndex    = lazy(() => import('./sections/CultureIndex'))
 const Confessional    = lazy(() => import('./sections/Confessional'))
+const Crews           = lazy(() => import('./sections/Crews'))
 const VendorReg       = lazy(() => import('./sections/VendorReg'))
 const VendorDashboard = lazy(() => import('./sections/VendorDashboard'))
 const AppPromo        = lazy(() => import('./sections/AppPromo'))
@@ -364,6 +365,7 @@ export default function App() {
         <SectionBoundary><Suspense fallback={null}>
           <Reveal><Testimonials /></Reveal>
           <Reveal><Community /></Reveal>
+          <Reveal><Crews /></Reveal>
           <Reveal><CommunityWall /></Reveal>
           <Reveal><CommunityIntelligence /></Reveal>
           <Reveal><MemoryMatch /></Reveal>

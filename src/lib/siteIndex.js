@@ -29,6 +29,7 @@ export const SECTIONS = [
   { id: 'app-promo',  t: "SF'26 App",          c: 'essentials', d: 'The companion app',                       k: 'mobile download install ios android' },
 
   // ---- Community -----------------------------------------------------
+  { id: 'crews',          t: 'Crew Codes',           c: 'community', d: 'Roll with your people',                k: 'crew squad team group friends join code together roll' },
   { id: 'community',      t: 'The Community',        c: 'community', d: 'What we are building together',        k: 'join crew people members belong' },
   { id: 'wall',           t: 'The Community Wall',   c: 'community', d: 'Messages from the community',          k: 'posts board shoutout messages' },
   { id: 'confessional',   t: 'The Confessional',     c: 'community', d: 'Anonymous sneaker hot takes',          k: 'confess secret opinion anonymous unpopular takes' },
