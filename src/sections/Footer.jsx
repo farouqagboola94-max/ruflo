@@ -20,6 +20,7 @@ const NAV = [
   ['Friday Night Protocol','#fnp'],
   ['Community',            '#community'],
   ['Crew Codes',           '#crews'],
+  ['Friday Check-In',      '#fnp-checkin'],
   ['Early Access',         '#waitlist'],
   ['Artists',              '#artists'],
   ['Comics',               '#comics'],

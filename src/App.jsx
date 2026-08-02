@@ -99,6 +99,7 @@ const SoleRegistry    = lazy(() => import('./sections/SoleRegistry'))
 const CultureIndex    = lazy(() => import('./sections/CultureIndex'))
 const Confessional    = lazy(() => import('./sections/Confessional'))
 const Crews           = lazy(() => import('./sections/Crews'))
+const FridayProtocol  = lazy(() => import('./sections/FridayProtocol'))
 const GroupTickets    = lazy(() => import('./sections/GroupTickets'))
 const VendorReg       = lazy(() => import('./sections/VendorReg'))
 const VendorDashboard = lazy(() => import('./sections/VendorDashboard'))
@@ -370,6 +371,7 @@ export default function App() {
           <Reveal><Testimonials /></Reveal>
           <Reveal><Community /></Reveal>
           <Reveal><Crews /></Reveal>
+          <Reveal><FridayProtocol /></Reveal>
           <Reveal><CommunityWall /></Reveal>
           <Reveal><CommunityIntelligence /></Reveal>
           <Reveal><MemoryMatch /></Reveal>

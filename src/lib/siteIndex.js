@@ -30,6 +30,7 @@ export const SECTIONS = [
   { id: 'app-promo',  t: "SF'26 App",          c: 'essentials', d: 'The companion app',                       k: 'mobile download install ios android' },
 
   // ---- Community -----------------------------------------------------
+  { id: 'fnp-checkin',    t: 'Friday Check-In',      c: 'community', d: 'Show up, keep your run alive',         k: 'friday checkin check in streak weekly online live protocol attend session tonight' },
   { id: 'crews',          t: 'Crew Codes',           c: 'community', d: 'Roll with your people',                k: 'crew squad team group friends join code together roll' },
   { id: 'community',      t: 'The Community',        c: 'community', d: 'What we are building together',        k: 'join crew people members belong' },
   { id: 'wall',           t: 'The Community Wall',   c: 'community', d: 'Messages from the community',          k: 'posts board shoutout messages' },
