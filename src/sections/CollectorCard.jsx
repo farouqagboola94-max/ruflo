@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { claudeChat, getApiKey } from '../lib/catalystAI'
+import { claudeChat, getApiKey, aiEnabled } from '../lib/catalystAI'
+import AIComingSoon from '../components/AIComingSoon'
 
 const SYSTEM = `You are the official Lagos Sneaker Culture registry. Based on someone's rotation, issue their collector profile.
 
@@ -60,7 +61,7 @@ export default function CollectorCard() {
     const filled = shoes.filter(s => s.trim())
     if (filled.length < 3) return
     if (!getApiKey()) {
-      setError('Add your Anthropic API key in the AI Chat widget to unlock Collector Card.')
+      setError('Collector Card is not live yet. It will be ready before December 12.')
       return
     }
     setLoading(true)
@@ -100,6 +101,7 @@ export default function CollectorCard() {
 
       <div style={{ maxWidth: 700, margin: '0 auto' }}>
         <SectionTag>COLLECTOR REGISTRY</SectionTag>
+        {!aiEnabled() && <AIComingSoon feature="Collector Card" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             COLLECTOR CARD

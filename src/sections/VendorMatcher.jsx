@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { claudeChat, getApiKey } from '../lib/catalystAI'
+import { claudeChat, getApiKey, aiEnabled } from '../lib/catalystAI'
+import AIComingSoon from '../components/AIComingSoon'
 
 const BUDGETS = [
   { label: '₦25K–₦100K', value: '25,000–100,000 Nigerian Naira' },
@@ -67,7 +68,7 @@ export default function VendorMatcher() {
     const filled = wishlist.filter(s => s.trim())
     if (!filled.length || !budget || !tier) return
     if (!getApiKey()) {
-      setError('Add your Anthropic API key in the AI Chat widget to unlock Vendor Matcher.')
+      setError('Vendor Matcher is not live yet. It will be ready before December 12.')
       return
     }
     setLoading(true)
@@ -99,6 +100,7 @@ export default function VendorMatcher() {
 
       <div style={{ maxWidth: 820, margin: '0 auto' }}>
         <SectionTag>VENDOR INTELLIGENCE</SectionTag>
+        {!aiEnabled() && <AIComingSoon feature="Vendor Matcher" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             VENDOR MATCHER

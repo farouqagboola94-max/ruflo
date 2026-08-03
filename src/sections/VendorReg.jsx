@@ -156,7 +156,7 @@ Write in first person, confident but not arrogant. Mention Lagos, the culture, w
       const result = await claudeChat([{ role:'user', content:prompt }], { model:'balanced', system:'You write punchy vendor pitch bios for Lagos streetwear and sneaker events. Keep it real, culturally aware, and brand-confident.' })
       setForm(f => ({ ...f, bio: result.slice(0, 300) }))
     } catch(e) {
-      setPitchError(e.message === 'NO_KEY' ? 'Add your Anthropic API key to use AI.' : e.message)
+      setPitchError(e.message === 'NO_KEY' ? 'This helper is not live yet.' : e.message)
     }
     setPitchLoading(false)
   }, [form.business, form.category, form.booth, form.exclusiveDrop, form.instagram])

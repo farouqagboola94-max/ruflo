@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { claudeChat, getApiKey } from '../lib/catalystAI'
+import { claudeChat, getApiKey, aiEnabled } from '../lib/catalystAI'
+import AIComingSoon from '../components/AIComingSoon'
 
 const VERDICT_CONFIG = {
   FAIR:      { color: B.neonLime, bg: '#0a1a00', label: 'FAIR TRADE' },
@@ -35,7 +36,7 @@ export default function TradeNegotiator() {
   async function analyze() {
     if (!offering.trim() || !getting.trim()) return
     if (!getApiKey()) {
-      setError('Add your Anthropic API key in the AI Chat widget to unlock Trade Negotiator.')
+      setError('Trade Negotiator is not live yet. It will be ready before December 12.')
       return
     }
     setLoading(true)
@@ -74,6 +75,7 @@ export default function TradeNegotiator() {
 
       <div style={{ maxWidth: 760, margin: '0 auto' }}>
         <SectionTag>AI TRADE DESK</SectionTag>
+        {!aiEnabled() && <AIComingSoon feature="Trade Negotiator" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             TRADE NEGOTIATOR

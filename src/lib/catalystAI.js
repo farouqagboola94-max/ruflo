@@ -10,6 +10,14 @@ export function getApiKey() {
   try { return localStorage.getItem(API_KEY_STORAGE) || '' } catch { return '' }
 }
 
+/**
+ * Whether the AI-backed features can actually run. Sections use this to say
+ * so up front rather than failing after the visitor has filled in a form.
+ */
+export function aiEnabled() {
+  return Boolean(getApiKey())
+}
+
 export function setApiKey(k) {
   try { localStorage.setItem(API_KEY_STORAGE, k) } catch {}
 }

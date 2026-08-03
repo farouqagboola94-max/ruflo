@@ -1,7 +1,8 @@
 import { useState, useCallback } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { claudeChat, getApiKey } from '../lib/catalystAI'
+import { claudeChat, getApiKey, aiEnabled } from '../lib/catalystAI'
+import AIComingSoon from '../components/AIComingSoon'
 
 const CATEGORIES = [
   { id: 'history',  label: 'HISTORY',       icon: '📖', desc: 'Jordan era, Nike origins, iconic moments' },
@@ -80,6 +81,7 @@ export default function AITrivia() {
 
       <div style={{ maxWidth: 640, margin: '0 auto' }}>
         <SectionTag>AI TRIVIA</SectionTag>
+        {!aiEnabled() && <AIComingSoon feature="AI Trivia" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             INFINITE SNEAKER TRIVIA
@@ -105,7 +107,7 @@ export default function AITrivia() {
 
         {noKey && (
           <div style={{ background: '#0d0d0d', border: `1px solid ${B.amber}44`, padding: 16, marginBottom: 24, fontFamily: "'Space Mono'", fontSize: 10, color: B.amber }}>
-            ⚠ Add your Anthropic API key in the AI Chat widget to play infinite AI-generated trivia.
+            ⚠ infinite AI-generated trivia is not live yet. It will be ready before December 12.
           </div>
         )}
 

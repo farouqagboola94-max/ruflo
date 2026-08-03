@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { claudeChat, getApiKey } from '../lib/catalystAI'
+import { claudeChat, getApiKey, aiEnabled } from '../lib/catalystAI'
+import AIComingSoon from '../components/AIComingSoon'
 
 const VERDICT_CONFIG = {
   COP:  { color: '#22c55e', bg: '#052e16', label: 'COP IT' },
@@ -41,7 +42,7 @@ export default function DropAnalyzer() {
   async function analyze() {
     if (!input.trim()) return
     if (!getApiKey()) {
-      setError('Add your Anthropic API key in the AI Chat widget to unlock drop analysis.')
+      setError('drop analysis is not live yet. It will be ready before December 12.')
       return
     }
     setLoading(true)
@@ -69,6 +70,7 @@ export default function DropAnalyzer() {
 
       <div style={{ maxWidth: 720, margin: '0 auto' }}>
         <SectionTag>DROP INTELLIGENCE</SectionTag>
+        {!aiEnabled() && <AIComingSoon feature="Drop Analyzer" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             COP · SKIP · WAIT

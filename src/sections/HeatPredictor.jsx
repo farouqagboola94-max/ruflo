@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { claudeChat, getApiKey } from '../lib/catalystAI'
+import { claudeChat, getApiKey, aiEnabled } from '../lib/catalystAI'
+import AIComingSoon from '../components/AIComingSoon'
 
 const POPULAR = [
   'Air Jordan 4 Military Blue', 'Nike Air Max 95 Neon Yellow', 'Adidas Samba OG',
@@ -40,7 +41,7 @@ export default function HeatPredictor() {
   async function predict() {
     if (!shoe.trim()) return
     if (!getApiKey()) {
-      setError('Add your Anthropic API key in the AI Chat widget to unlock Heat Predictor.')
+      setError('Heat Predictor is not live yet. It will be ready before December 12.')
       return
     }
     setLoading(true)
@@ -71,6 +72,7 @@ export default function HeatPredictor() {
 
       <div style={{ maxWidth: 760, margin: '0 auto' }}>
         <SectionTag>MARKET INTELLIGENCE</SectionTag>
+        {!aiEnabled() && <AIComingSoon feature="Heat Predictor" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             HEAT PREDICTOR

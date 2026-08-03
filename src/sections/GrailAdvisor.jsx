@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { claudeChat, getApiKey } from '../lib/catalystAI'
+import { claudeChat, getApiKey, aiEnabled } from '../lib/catalystAI'
+import AIComingSoon from '../components/AIComingSoon'
 
 const BUDGETS = [
   { label: '₦25K – ₦75K', value: '25,000–75,000 Nigerian Naira (budget tier — accessible drops)' },
@@ -52,7 +53,7 @@ export default function GrailAdvisor() {
   async function findGrails() {
     if (!budget || !style || !vibe) return
     if (!getApiKey()) {
-      setError('Add your Anthropic API key in the AI Chat widget to unlock Grail Advisor.')
+      setError('Grail Advisor is not live yet. It will be ready before December 12.')
       return
     }
     setLoading(true)
@@ -84,6 +85,7 @@ export default function GrailAdvisor() {
 
       <div style={{ maxWidth: 820, margin: '0 auto' }}>
         <SectionTag>AI GRAIL FINDER</SectionTag>
+        {!aiEnabled() && <AIComingSoon feature="Grail Advisor" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             FIND YOUR SF26 GRAILS

@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { claudeChat, getApiKey } from '../lib/catalystAI'
+import { claudeChat, getApiKey, aiEnabled } from '../lib/catalystAI'
+import AIComingSoon from '../components/AIComingSoon'
 
 const VIBES = [
   { label: 'NOSTALGIC', value: 'nostalgic — bittersweet, takes you back, time-capsule feeling' },
@@ -45,7 +46,7 @@ export default function StoryGenerator() {
   async function generate() {
     if (!shoe.trim() || !memory.trim()) return
     if (!getApiKey()) {
-      setError('Add your Anthropic API key in the AI Chat widget to unlock Story Generator.')
+      setError('Story Generator is not live yet. It will be ready before December 12.')
       return
     }
     setLoading(true)
@@ -82,6 +83,7 @@ export default function StoryGenerator() {
 
       <div style={{ maxWidth: 720, margin: '0 auto' }}>
         <SectionTag>SNEAKER STORIES</SectionTag>
+        {!aiEnabled() && <AIComingSoon feature="Sneaker Stories" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             STORY GENERATOR

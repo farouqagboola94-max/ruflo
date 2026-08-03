@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { claudeChat, getApiKey } from '../lib/catalystAI'
+import { claudeChat, getApiKey, aiEnabled } from '../lib/catalystAI'
+import AIComingSoon from '../components/AIComingSoon'
 
 const PLATFORMS = [
   { label: 'INSTAGRAM', value: 'Instagram', icon: '📸', hint: 'carousel caption with hashtags, aesthetic, hook first line' },
@@ -47,7 +48,7 @@ export default function CaptionGenerator() {
   async function generate() {
     if (!platform || !mood || !tier) return
     if (!getApiKey()) {
-      setError('Add your Anthropic API key in the AI Chat widget to unlock Caption Generator.')
+      setError('Caption Generator is not live yet. It will be ready before December 12.')
       return
     }
     setLoading(true)
@@ -93,6 +94,7 @@ Write the perfect Sneakers Fest '26 caption.`
 
       <div style={{ maxWidth: 820, margin: '0 auto' }}>
         <SectionTag>AI CAPTION STUDIO</SectionTag>
+        {!aiEnabled() && <AIComingSoon feature="Caption Studio" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             SF26 CAPTION GENERATOR

@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { claudeChat, getApiKey } from '../lib/catalystAI'
+import { claudeChat, getApiKey, aiEnabled } from '../lib/catalystAI'
+import AIComingSoon from '../components/AIComingSoon'
 
 const INTENSITIES = [
   { label: 'MILD', value: 'mild — playful digs, still respectful, one or two solid jokes' },
@@ -40,7 +41,7 @@ export default function SneakerRoast() {
   async function generate() {
     if (!rotation.trim()) return
     if (!getApiKey()) {
-      setError('Add your Anthropic API key in the AI Chat widget to unlock Sneaker Roast.')
+      setError('Sneaker Roast is not live yet. It will be ready before December 12.')
       return
     }
     setLoading(true)
@@ -75,6 +76,7 @@ export default function SneakerRoast() {
 
       <div style={{ maxWidth: 700, margin: '0 auto' }}>
         <SectionTag>COMEDY ROAST</SectionTag>
+        {!aiEnabled() && <AIComingSoon feature="Sneaker Roast" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             SNEAKER ROAST

@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
 import { claudeChat, getApiKey, setApiKey, routeModel } from '../lib/catalystAI'
+import AIComingSoon from '../components/AIComingSoon'
 
 const API_KEY_STORAGE = 'catalyst-vault-api-key'
 
@@ -44,7 +45,7 @@ export default function SneakerKnowledgeVault() {
   })
 
   const analyzeNote = useCallback(async (note) => {
-    if (!hasKey) { setShowKey(true); return }
+    if (!hasKey) { setAiError('AI analysis is not live yet. Your notes still work.'); return }
     setAiLoading(true)
     setAiResult('')
     setAiError('')
@@ -55,14 +56,14 @@ export default function SneakerKnowledgeVault() {
       const result = await claudeChat([{ role: 'user', content: prompt }], { model, system: SYSTEM })
       setAiResult(result)
     } catch (e) {
-      setAiError(e.message === 'NO_KEY' ? 'Enter your Anthropic API key to use AI analysis.' : e.message)
+      setAiError(e.message === 'NO_KEY' ? 'AI analysis is not live yet.' : e.message)
     }
     setAiLoading(false)
   }, [hasKey])
 
   const askAI = useCallback(async () => {
     if (!query.trim()) return
-    if (!hasKey) { setShowKey(true); return }
+    if (!hasKey) { setAiError('AI analysis is not live yet. Your notes still work.'); return }
     setAiLoading(true)
     setAiResult('')
     setAiError('')
@@ -71,7 +72,7 @@ export default function SneakerKnowledgeVault() {
       const result = await claudeChat([{ role: 'user', content: query }], { model, system: SYSTEM })
       setAiResult(result)
     } catch (e) {
-      setAiError(e.message === 'NO_KEY' ? 'Enter your Anthropic API key to use AI analysis.' : e.message)
+      setAiError(e.message === 'NO_KEY' ? 'AI analysis is not live yet.' : e.message)
     }
     setAiLoading(false)
   }, [query, hasKey])
@@ -118,6 +119,7 @@ export default function SneakerKnowledgeVault() {
 
       <div style={{ maxWidth: 1000, margin: '0 auto' }}>
         <SectionTag>SNEAKER KNOWLEDGE VAULT</SectionTag>
+        {!hasKey && <AIComingSoon feature="AI analysis in the Vault" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 32 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             YOUR SOLE DATABASE
@@ -128,9 +130,9 @@ export default function SneakerKnowledgeVault() {
                 {l}
               </button>
             ))}
-            <button onClick={() => setShowKey(true)} title={hasKey ? 'API key saved' : 'Add API key'} style={{ padding: '7px 12px', background: hasKey ? `${B.neonCyan}15` : 'transparent', border: `1px solid ${hasKey ? B.neonCyan : '#222'}`, borderRadius: 4, fontSize: 14, cursor: 'pointer', color: hasKey ? B.neonCyan : '#555' }}>
-              {hasKey ? '🔓' : '🔑'}
-            </button>
+            {hasKey && <button onClick={() => setShowKey(true)} title="API key saved" style={{ padding: '7px 12px', background: hasKey ? `${B.neonCyan}15` : 'transparent', border: `1px solid ${hasKey ? B.neonCyan : '#222'}`, borderRadius: 4, fontSize: 14, cursor: 'pointer', color: hasKey ? B.neonCyan : '#555' }}>
+              🔓
+            </button>}
           </div>
         </div>
 
