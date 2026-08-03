@@ -28,6 +28,12 @@
     Referrer-Policy        = "strict-origin-when-cross-origin"
     Permissions-Policy     = "camera=(), microphone=(), geolocation=()"
     X-XSS-Protection       = "1; mode=block"
+    Cross-Origin-Opener-Policy = "same-origin"
+    # Scoped to what the site actually loads: Google Fonts, the two payment
+    # SDKs, Netlify Identity, and our own functions. 'unsafe-inline' is
+    # required because the app styles inline throughout and index.html
+    # carries inline bootstrap scripts.
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://js.paystack.co https://checkout.flutterwave.com https://identity.netlify.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https://api.paystack.co https://checkout.flutterwave.com https://identity.netlify.com https://api.anthropic.com; frame-src https://js.paystack.co https://checkout.flutterwave.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
 
 # Long-term cache for Vite hashed assets
 [[headers]]

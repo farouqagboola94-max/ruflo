@@ -28,3 +28,26 @@ export function requireAdmin(event) {
   }
   return null
 }
+
+/**
+ * Door-staff authorisation for check-in.
+ *
+ * Gate staff need to admit people; they do not need to read ticket, vendor or
+ * contact dumps. When DOOR_SECRET is set, that is the only thing accepted
+ * here, so a code handed to casual staff cannot reach the admin endpoints.
+ *
+ * Falls back to ADMIN_SECRET when DOOR_SECRET is unset, so existing
+ * deployments keep working until the organiser sets one.
+ */
+export function requireDoor(event) {
+  const door = process.env.DOOR_SECRET
+  if (!door) return requireAdmin(event)
+
+  const provided = Buffer.from(event.headers?.authorization || '', 'utf8')
+
+  for (const secret of [door, process.env.ADMIN_SECRET].filter(Boolean)) {
+    const expected = Buffer.from(`Bearer ${secret}`, 'utf8')
+    if (provided.length === expected.length && timingSafeEqual(provided, expected)) return null
+  }
+  return err(401, 'Unauthorized')
+}

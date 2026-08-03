@@ -31,6 +31,8 @@ const NAV = [
   ['Merch',                '#merch'],
   ['Tickets',              '#tickets'],
   ['Group Tickets',        '#group-tickets'],
+  ['My Pass',              '#my-pass'],
+  ['The Floor',            '#vendor-directory'],
   ['Vendors',              '#vendors'],
   ['Sole Registry',        '#sole-registry'],
   ['Culture Index',        '#culture-index'],

@@ -20,6 +20,7 @@ export const SECTIONS = [
   // ---- Essentials ----------------------------------------------------
   { id: 'tickets',    t: 'Get Tickets',        c: 'essentials', d: 'GENERAL, VIP, VVIP and PHALANX passes',   k: 'buy pay price cost much admission pass entry ticket naira afford cheap' },
   { id: 'group-tickets', t: 'Group Tickets',      c: 'essentials', d: 'Come as a group, each pays their own', k: 'group crew together bulk friends multiple book share split code slot' },
+  { id: 'my-pass',       t: 'My Pass',            c: 'essentials', d: 'Find your ticket and show it at the gate', k: 'ticket pass lost email lookup my find entry qr code scan gate' },
   { id: 'schedule',   t: 'Schedule',           c: 'essentials', d: 'Full run of show, 12PM to 10PM',          k: 'time timetable agenda lineup order programme when start begin doors open close hours' },
   { id: 'venue',      t: 'Venue & Directions', c: 'essentials', d: 'Muri Okunola Park, Victoria Island',      k: 'where map location address parking directions vi lagos park muri okunola getting there' },
   { id: 'lineup',     t: 'The Lineup',         c: 'essentials', d: 'Who is on the bill',                      k: 'performers acts stage bill' },
@@ -81,6 +82,7 @@ export const SECTIONS = [
 
   // ---- Marketplace ---------------------------------------------------
   { id: 'merch',            t: 'Merch',             c: 'market', d: 'Official Sneakers Fest gear',    k: 'shop buy clothing tshirt hoodie store gear merch wear apparel' },
+  { id: 'vendor-directory', t: 'The Floor',         c: 'market', d: 'Every confirmed vendor',           k: 'vendors directory floor sellers shops stalls who list brands confirmed' },
   { id: 'vendors',          t: 'Become a Vendor',   c: 'market', d: 'Apply for a booth',              k: 'apply sell booth stall business vendor trade seller stand pitch' },
   { id: 'vendor-dashboard', t: 'Vendor Portal',     c: 'market', d: 'Check your application status',  k: 'status login portal application vendor check' },
   { id: 'vendor-matcher',   t: 'Vendor Matcher',    c: 'market', d: 'Find the right seller for you',  k: 'find seller match shop recommend' },

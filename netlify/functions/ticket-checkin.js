@@ -4,7 +4,7 @@
 // Used at the event entrance to mark a ticket as used.
 
 import { ok, err, preflight, limitBody } from './lib/cors.js'
-import { requireAdmin } from './lib/auth.js'
+import { requireDoor } from './lib/auth.js'
 import { get, set, Tickets } from './lib/storage.js'
 
 const TICKET_ID_RE = /^SF26-[A-Z]{3}-[A-F0-9]{6}$/
@@ -16,7 +16,9 @@ export const handler = async (event) => {
   const bodyErr = limitBody(event, 512)
   if (bodyErr) return bodyErr
 
-  const denied = requireAdmin(event)
+  // Door staff, not full admin: check-in does not need read access to the
+  // event's data.
+  const denied = requireDoor(event)
   if (denied) return denied
 
   let body

@@ -96,6 +96,8 @@ const Confessional    = lazy(() => import('./sections/Confessional'))
 const Crews           = lazy(() => import('./sections/Crews'))
 const FridayProtocol  = lazy(() => import('./sections/FridayProtocol'))
 const GroupTickets    = lazy(() => import('./sections/GroupTickets'))
+const MyPass          = lazy(() => import('./sections/MyPass'))
+const VendorDirectory = lazy(() => import('./sections/VendorDirectory'))
 const VendorReg       = lazy(() => import('./sections/VendorReg'))
 const VendorDashboard = lazy(() => import('./sections/VendorDashboard'))
 const AppPromo        = lazy(() => import('./sections/AppPromo'))
@@ -359,6 +361,7 @@ export default function App() {
         <Reveal><Tickets /></Reveal>
         <SectionBoundary><Suspense fallback={null}>
           <Reveal><GroupTickets /></Reveal>
+          <Reveal><MyPass /></Reveal>
         </Suspense></SectionBoundary>
 
         {/* ACT 2: COMMUNITY — social proof and belonging */}
@@ -393,6 +396,7 @@ export default function App() {
         {/* ACT 5: DROPS & TRADE — commerce and the marketplace */}
         <SectionBoundary><Suspense fallback={null}>
           <Reveal><DropsTimeline /></Reveal>
+          <Reveal><VendorDirectory /></Reveal>
           <Reveal><VendorMatcher /></Reveal>
           <Reveal><ColdDMGenerator /></Reveal>
           <Reveal><GrailAdvisor /></Reveal>
