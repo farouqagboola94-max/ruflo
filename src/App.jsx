@@ -60,11 +60,6 @@ const SneakerBingo   = lazy(() => import('./sections/SneakerBingo'))
 // Culture & tools — lazy-loaded
 const ArtistSpotlight = lazy(() => import('./sections/ArtistSpotlight'))
 const DropsTimeline   = lazy(() => import('./sections/DropsTimeline'))
-// CatalystOS — AI tools ecosystem
-const CatalystOS_AI_Repo      = lazy(() => import('./sections/CatalystOS_AI_Repo'))
-const CatalystOS_MCP_Carousel = lazy(() => import('./sections/CatalystOS_MCP_Carousel'))
-const CatalystOS_Obsidian     = lazy(() => import('./sections/CatalystOS_Obsidian_Module'))
-const CatalystOS_UGC          = lazy(() => import('./sections/CatalystOS_UGC_Engine'))
 const CommunityIntelligence   = lazy(() => import('./sections/CommunityIntelligence'))
 const SneakerKnowledgeVault   = lazy(() => import('./sections/SneakerKnowledgeVault'))
 const GrailAdvisor            = lazy(() => import('./sections/GrailAdvisor'))
@@ -460,13 +455,9 @@ export default function App() {
           <Reveal><Newsletter /></Reveal>
         </Suspense></SectionBoundary>
 
-        {/* CATALYST OS — AI Tools Ecosystem */}
+        {/* KNOWLEDGE */}
         <SectionBoundary><Suspense fallback={null}>
-          <Reveal><CatalystOS_AI_Repo /></Reveal>
-          <Reveal><CatalystOS_MCP_Carousel /></Reveal>
-          <Reveal><CatalystOS_Obsidian /></Reveal>
           <Reveal><SneakerKnowledgeVault /></Reveal>
-          <Reveal><CatalystOS_UGC /></Reveal>
         </Suspense></SectionBoundary>
 
         {/* CLOSE */}

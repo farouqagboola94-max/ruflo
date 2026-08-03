@@ -108,7 +108,6 @@ export const SECTIONS = [
   { id: 'sponsor-tiers', t: 'Partner With Us',  c: 'brand', d: 'Sponsorship packages',        k: 'sponsor partner brand advertise package invest' },
   { id: 'newsletter',    t: 'Newsletter',       c: 'brand', d: 'Get it in your inbox',        k: 'subscribe email updates newsletter signup' },
   { id: 'raffle',        t: 'Raffle',           c: 'brand', d: 'Enter to win',                k: 'win prize enter giveaway competition raffle free stuff' },
-  { id: 'catalyst-mcp',  t: 'MCP Tools',        c: 'brand', d: 'The Catalyst tool stack',     k: 'tools ai mcp catalyst tech' },
 ]
 
 // Actions that are not sections — external links or page behaviour.
