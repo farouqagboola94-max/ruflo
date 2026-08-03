@@ -5,6 +5,23 @@
 import { ok, err, preflight } from './lib/cors.js'
 import { requireAdmin } from './lib/auth.js'
 import { listAll, Tickets, Waitlist, Vendors, Newsletter, Contacts } from './lib/storage.js'
+import { getStore } from '@netlify/blobs'
+import { publicGroup } from './lib/group-domain.js'
+
+// Stores added alongside the crew, group and protocol features. Without these
+// the organiser cannot see who has paid into a group, who is in a crew, who
+// turned up on a Friday, or what is queued for moderation.
+const Store = name => getStore({ name, consistency: 'strong' })
+
+async function readAll(storeName, prefix) {
+  const store = Store(storeName)
+  const list = await store.list().catch(() => ({ blobs: [] }))
+  const keys = (list.blobs || [])
+    .map(b => b.key)
+    .filter(k => (prefix ? k.startsWith(prefix) : !k.startsWith('_')))
+  const items = await Promise.all(keys.map(k => store.get(k, { type: 'json' }).catch(() => null)))
+  return items.filter(Boolean)
+}
 
 export const handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return preflight()
@@ -59,6 +76,56 @@ export const handler = async (event) => {
     })
   }
 
+  if (resource === 'crews') {
+    const all = await readAll('sf26-crews', 'crew:')
+    return ok({
+      crews: all
+        .map(c => ({ ...c, memberCount: (c.members || []).length }))
+        .sort((a, b) => b.memberCount - a.memberCount),
+      total: all.length,
+      members: all.reduce((n, c) => n + (c.members || []).length, 0),
+    })
+  }
+
+  if (resource === 'groups') {
+    const now = new Date().toISOString()
+    const all = await readAll('sf26-groups', 'group:')
+    return ok({
+      // Full view for the organiser, including who has paid and who is only
+      // holding a slot. Emails stay out: publicGroup is the projection the
+      // rest of the system already trusts.
+      groups: all
+        .map(g => ({
+          ...publicGroup(g, now),
+          claimed: (g.claims || []).length,
+        }))
+        .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt))),
+      total: all.length,
+      seatsPaid: all.reduce((n, g) => n + (g.claims || []).filter(c => c.paid).length, 0),
+    })
+  }
+
+  if (resource === 'fnp') {
+    const all = await readAll('sf26-fnp', 'session:')
+    return ok({
+      sessions: all.sort((a, b) => String(b.sessionId).localeCompare(String(a.sessionId))),
+      total: all.length,
+      totalCheckIns: all.reduce((n, s) => n + (s.count || 0), 0),
+    })
+  }
+
+  if (resource === 'confessions') {
+    const all = await readAll('sf26-confessions', 'SC26-')
+    const sorted = all.sort((a, b) => String(b.submittedAt).localeCompare(String(a.submittedAt)))
+    return ok({
+      // Pending first: this list exists to be worked through.
+      pending:  sorted.filter(c => !c.approved && !c.moderatedAt),
+      approved: sorted.filter(c => c.approved),
+      rejected: sorted.filter(c => !c.approved && c.moderatedAt),
+      total: all.length,
+    })
+  }
+
   // Default: summary dashboard
   const [tickets, waitlist, vendors, newsletter, contacts] = await Promise.all([
     listAll(Tickets, 'ticket:'),
@@ -79,6 +146,13 @@ export const handler = async (event) => {
 
   const pending = await listAll(Tickets, 'pending:')
 
+  const [crews, groups, fnpSessions, confessions] = await Promise.all([
+    readAll('sf26-crews', 'crew:'),
+    readAll('sf26-groups', 'group:'),
+    readAll('sf26-fnp', 'session:'),
+    readAll('sf26-confessions', 'SC26-'),
+  ])
+
   return ok({
     summary: {
       ticketsSold:      tickets.length,
@@ -93,6 +167,13 @@ export const handler = async (event) => {
       approvedVendors:  vendors.filter(v => v.status === 'approved').length,
       subscribers:      newsletter.length,
       contactMessages:  contacts.length,
+      crews:            crews.length,
+      crewMembers:      crews.reduce((n, c) => n + (c.members || []).length, 0),
+      groups:           groups.length,
+      groupSeatsPaid:   groups.reduce((n, g) => n + (g.claims || []).filter(c => c.paid).length, 0),
+      fnpSessions:      fnpSessions.length,
+      fnpCheckIns:      fnpSessions.reduce((n, s) => n + (s.count || 0), 0),
+      confessionsPending: confessions.filter(c => !c.approved && !c.moderatedAt).length,
     },
   })
 }

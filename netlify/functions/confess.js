@@ -13,6 +13,7 @@ const CITIES = ['Lagos','Abuja','Port Harcourt','Kano','Ibadan','Benin City','En
 
 export const handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return preflight()
+  if (event.httpMethod === 'GET')  return listApproved()
   if (event.httpMethod !== 'POST') return err(405, 'Method not allowed')
 
   const limited = await rateLimit(event, { name: 'confess', limit: 5, windowSec: 600 })
@@ -48,10 +49,37 @@ export const handler = async (event) => {
     city: city.trim(),
     submittedAt: new Date().toISOString(),
     relates: 0,
+    // Public user text on the festival's own site: nothing appears on the
+    // wall until an organiser approves it.
+    approved: false,
+    moderatedAt: null,
   }
 
   await store.setJSON(submissionId, record)
   await store.setJSON(counterKey, { count: slotNumber, updatedAt: new Date().toISOString() })
 
   return ok({ success: true, submissionId, slotNumber })
+}
+
+/** Approved confessions only. Never exposes pending or rejected text. */
+async function listApproved() {
+  const store = Store()
+  const list = await store.list().catch(() => ({ blobs: [] }))
+  const keys = (list.blobs || []).map(b => b.key).filter(k => k.startsWith('SC26-')).slice(0, 300)
+
+  const records = (await Promise.all(
+    keys.map(k => store.get(k, { type: 'json' }).catch(() => null))
+  )).filter(r => r && r.approved)
+
+  records.sort((a, b) => String(b.submittedAt).localeCompare(String(a.submittedAt)))
+
+  return ok({
+    confessions: records.slice(0, 60).map(r => ({
+      id: r.submissionId,
+      confession: r.confession,
+      displayName: r.displayName,
+      city: r.city,
+      relates: r.relates || 0,
+    })),
+  })
 }

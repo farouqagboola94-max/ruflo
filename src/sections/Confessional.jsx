@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
 
@@ -67,9 +67,21 @@ function ConfessCard({ item, voted, onRelate }) {
 
 export default function Confessional() {
   const [locals,  setLocals]  = useState(() => readLS(LOCAL_KEY, []))
+  const [live,    setLive]    = useState([])
   const [related, setRelated] = useState(() => new Set(readLS(RELATES_KEY, [])))
   const [form,    setForm]    = useState({ confession: '', displayName: '', city: '' })
   const [status,  setStatus]  = useState('idle')
+
+  // Approved confessions from other people. Submissions are held for
+  // moderation, so this only ever returns what an organiser has cleared.
+  const loadApproved = useCallback(async () => {
+    try {
+      const r = await fetch('/.netlify/functions/confess')
+      if (r.ok) setLive((await r.json()).confessions || [])
+    } catch { /* the wall still has the seeds and your own */ }
+  }, [])
+
+  useEffect(() => { loadApproved() }, [loadApproved])
 
   function toggleRelate(id) {
     setRelated(prev => {
@@ -115,7 +127,8 @@ export default function Confessional() {
     }
   }
 
-  const all = [...locals, ...SEEDS]
+  const seen = new Set(locals.map(c => c.id))
+  const all = [...locals, ...live.filter(c => !seen.has(c.id)), ...SEEDS]
 
   return (
     <section id="confessional" style={{ position: 'relative', overflow: 'hidden', background: B.black, padding: '80px 24px' }}>
@@ -197,7 +210,7 @@ export default function Confessional() {
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
               <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, letterSpacing: '0.15em', minHeight: 16 }}>
-                {status === 'success' && <span style={{ color: B.neonLime }}>CONFESSION RECEIVED. THE WALL HEARD YOU.</span>}
+                {status === 'success' && <span style={{ color: B.neonLime }}>RECEIVED. IT GOES UP ONCE AN ORGANISER CLEARS IT.</span>}
                 {status === 'error'   && <span style={{ color: B.neonMagenta }}>SOMETHING WENT WRONG. TRY AGAIN.</span>}
               </div>
               <button
@@ -231,7 +244,7 @@ export default function Confessional() {
         </div>
 
         <div style={{ marginTop: 32, fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke + '50', letterSpacing: '0.15em', textAlign: 'center' }}>
-          ALL CONFESSIONS ARE ANONYMOUS BY DEFAULT &middot; COMMUNITY VIBES ONLY &middot; SF'26
+          ANONYMOUS BY DEFAULT &middot; REVIEWED BEFORE THEY GO UP &middot; SF'26
         </div>
       </div>
     </section>
