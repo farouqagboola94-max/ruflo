@@ -13,6 +13,7 @@ const VALID_RAFFLE_IDS = ['rfl1', 'rfl2', 'rfl3', 'rfl4']
 
 export const handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return preflight()
+  if (event.httpMethod === 'GET')  return counts()
   if (event.httpMethod !== 'POST') return err(405, 'Method not allowed')
 
   const limited = await rateLimit(event, { name: 'raffle-enter', limit: 5, windowSec: 600 })
@@ -61,4 +62,26 @@ export const handler = async (event) => {
   }
 
   return ok({ success: true, entryNum, totalEntries: entryNum })
+}
+
+/**
+ * Real entry counts per raffle.
+ *
+ * The section used to start each count from a hardcoded seed and present the
+ * total as "entries so far". These are the actual numbers, and they start at
+ * zero like everything else.
+ */
+async function counts() {
+  const store = Raffles()
+  const entries = await Promise.all(
+    VALID_RAFFLE_IDS.map(async id => {
+      const data = await store.get(`${id}:_count`, { type: 'json' }).catch(() => null)
+      return [id, data?.count ?? 0]
+    })
+  )
+  const byRaffle = Object.fromEntries(entries)
+  return ok({
+    counts: byRaffle,
+    total: Object.values(byRaffle).reduce((a, b) => a + b, 0),
+  })
 }

@@ -1,30 +1,15 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
 import { logReferralConversion } from '../lib/referral'
 import Egg from '../components/Egg'
 
 const RAFFLES = [
-  { id:'rfl1', name:'Air Jordan 4 Retro Bred',    edition:'Size 43 · Deadstock',  value:'₦120,000', color:B.amber,       seedCount:287, maxEntries:500 },
-  { id:'rfl2', name:"SF '26 Exclusive Bundle",    edition:'Hoodie + Cap + Tote',   value:'₦28,000',  color:B.neonCyan,    seedCount:412, maxEntries:500 },
-  { id:'rfl3', name:'Nike SB Dunk Low Pro',        edition:'Size 42 · Deadstock',  value:'₦95,000',  color:B.neonMagenta, seedCount:198, maxEntries:500 },
-  { id:'rfl4', name:'VIP Ticket Upgrade',          edition:'General → VIP Access', value:'₦25,000',  color:B.neonLime,    seedCount:156, maxEntries:300 },
+  { id:'rfl1', name:'Air Jordan 4 Retro Bred',    edition:'Size 43 · Deadstock',  value:'₦120,000', color:B.amber, maxEntries:500 },
+  { id:'rfl2', name:"SF '26 Exclusive Bundle",    edition:'Hoodie + Cap + Tote',   value:'₦28,000',  color:B.neonCyan, maxEntries:500 },
+  { id:'rfl3', name:'Nike SB Dunk Low Pro',        edition:'Size 42 · Deadstock',  value:'₦95,000',  color:B.neonMagenta, maxEntries:500 },
+  { id:'rfl4', name:'VIP Ticket Upgrade',          edition:'General → VIP Access', value:'₦25,000',  color:B.neonLime, maxEntries:300 },
 ]
-
-const SEED_POOL = [
-  { name:'Tunde B.',   city:'Lagos'         },
-  { name:'Chisom O.',  city:'Abuja'         },
-  { name:'Adaeze N.',  city:'Port Harcourt' },
-  { name:'Emeka C.',   city:'Enugu'         },
-  { name:'Zara I.',    city:'Lagos'         },
-  { name:'Femi A.',    city:'Ibadan'        },
-  { name:'Ngozi E.',   city:'Benin City'    },
-  { name:'Dayo M.',    city:'Kano'          },
-  { name:'Kemi S.',    city:'Lagos'         },
-  { name:'Bola T.',    city:'Abuja'         },
-]
-
-const sleep = ms => new Promise(r => setTimeout(r, ms))
 
 const DRAW_DATE = new Date('2026-12-12T12:00:00')
 function calcCountdown() {
@@ -43,20 +28,13 @@ const CONFETTI_DOTS = Array.from({ length:18 }, (_, i) => ({
   size:3+(i%5), dur:1.2+(i%4)*0.25, delay:(i%6)*0.08,
 }))
 
-const PACKS = [
-  { id:'single',  label:'1 ENTRY',   count:1, badge:null        },
-  { id:'triple',  label:'3 ENTRIES', count:3, badge:'POPULAR'   },
-  { id:'maxout',  label:'5 ENTRIES', count:5, badge:'BEST ODDS' },
-]
-
 function loadEntries()  { try { return JSON.parse(localStorage.getItem('sf26_raffle_entries') || '{}') } catch { return {} } }
-function loadWinners()  { try { return JSON.parse(localStorage.getItem('sf26_raffle_draws')   || '{}') } catch { return {} } }
-function loadCounts()   { try { return JSON.parse(localStorage.getItem('sf26_raffle_counts')  || '{}') } catch { return {} } }
 
 function EntryModal({ raffle, onEnter, onClose }) {
   const [form,      setForm]      = useState({ name:'', email:'', phone:'', city:'' })
   const [submitted, setSubmitted] = useState(null)
-  const [pack,      setPack]      = useState(PACKS[0])
+  const [busy,      setBusy]      = useState(false)
+  const [error,     setError]     = useState('')
   const inp  = k => e => setForm(f => ({ ...f, [k]:e.target.value }))
   const ok   = form.name.trim() && form.email.includes('@') && form.phone.trim() && form.city.trim()
   const is   = { width:'100%', padding:'11px 14px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:7, color:B.white, fontFamily:'Space Mono,monospace', fontSize:12, outline:'none', boxSizing:'border-box', transition:'border-color 0.2s' }
@@ -64,12 +42,30 @@ function EntryModal({ raffle, onEnter, onClose }) {
   const foc  = e => e.target.style.borderColor = `${raffle.color}60`
   const blur = e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'
 
-  function handleSubmit() {
-    if (!ok) return
-    const num   = Math.floor(Math.random() * 899) + 100
-    const entry = { name:form.name.trim(), city:form.city.trim(), email:form.email, phone:form.phone, entryNum:num, packCount:pack.count, enteredAt:new Date().toISOString() }
-    setSubmitted(entry)
-    onEnter(entry)
+  async function handleSubmit() {
+    if (!ok || busy) return
+    setBusy(true); setError('')
+    try {
+      const r = await fetch('/.netlify/functions/raffle-enter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ raffleId: raffle.id, email: form.email.trim(), name: form.name.trim() }),
+      })
+      const data = await r.json().catch(() => ({}))
+      if (!r.ok) { setError(data.error || 'Could not record your entry'); return }
+
+      // The entry number is the server's, so the stub matches the record.
+      const entry = {
+        name: form.name.trim(), city: form.city.trim(), email: form.email.trim(),
+        phone: form.phone.trim(), entryNum: data.entryNum,
+        alreadyEntered: Boolean(data.alreadyEntered),
+        enteredAt: new Date().toISOString(),
+      }
+      setSubmitted(entry)
+      onEnter(entry)
+    } catch {
+      setError('Network error. Check your connection.')
+    } finally { setBusy(false) }
   }
 
   return (
@@ -97,7 +93,6 @@ function EntryModal({ raffle, onEnter, onClose }) {
                 <div>
                   <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:raffle.color, letterSpacing:2, marginBottom:4 }}>YOUR ENTRY</div>
                   <div style={{ fontFamily:'Orbitron,monospace', fontSize:26, color:raffle.color, fontWeight:900, letterSpacing:3 }}>#{String(submitted.entryNum).padStart(4,'0')}</div>
-                  {submitted.packCount > 1 && <div style={{ fontFamily:'Orbitron,monospace', fontSize:8, color:raffle.color, letterSpacing:2, marginTop:3 }}>{submitted.packCount}× ENTRIES</div>}
                   <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', marginTop:5 }}>{submitted.name} · {submitted.city}</div>
                 </div>
                 <div style={{ borderLeft:'1px dashed rgba(255,255,255,0.08)', paddingLeft:16, display:'flex', flexDirection:'column', alignItems:'center', gap:1 }}>
@@ -117,18 +112,6 @@ function EntryModal({ raffle, onEnter, onClose }) {
             <div style={{ fontFamily:'Orbitron,monospace', fontSize:9, color:raffle.color, letterSpacing:3, marginBottom:6 }}>ENTER RAFFLE</div>
             <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:24, color:B.white, letterSpacing:2, marginBottom:4 }}>{raffle.name}</div>
             <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#555', marginBottom:16 }}>{raffle.edition} · {raffle.value}</div>
-            <div style={{ marginBottom:20 }}>
-              <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#444', letterSpacing:2, marginBottom:8 }}>SELECT ENTRY PACK</div>
-              <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:6 }}>
-                {PACKS.map(p => (
-                  <button key={p.id} onClick={() => setPack(p)} style={{ position:'relative', padding:'10px 6px', background:pack.id===p.id?`${raffle.color}18`:'rgba(255,255,255,0.03)', border:`1px solid ${pack.id===p.id?raffle.color:'rgba(255,255,255,0.08)'}`, borderRadius:8, cursor:'pointer', textAlign:'center', transition:'all 0.15s' }}>
-                    {p.badge && <div style={{ position:'absolute', top:-7, right:4, background:raffle.color, color:B.black, fontFamily:'Orbitron,monospace', fontSize:6, fontWeight:700, padding:'2px 5px', borderRadius:3, letterSpacing:1 }}>{p.badge}</div>}
-                    <div style={{ fontFamily:'Orbitron,monospace', fontSize:11, color:pack.id===p.id?raffle.color:'#555', fontWeight:700, letterSpacing:1 }}>{p.label}</div>
-                    <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:pack.id===p.id?`${raffle.color}80`:'#333', marginTop:3 }}>{p.count}× odds</div>
-                  </button>
-                ))}
-              </div>
-            </div>
             <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
                 <div><label style={lbl}>FULL NAME</label><input value={form.name}  onChange={inp('name')}  placeholder="Your name" style={is} onFocus={foc} onBlur={blur} /></div>
@@ -137,43 +120,13 @@ function EntryModal({ raffle, onEnter, onClose }) {
               <div><label style={lbl}>EMAIL ADDRESS</label><input value={form.email} onChange={inp('email')} type="email" placeholder="you@email.com" style={is} onFocus={foc} onBlur={blur} /></div>
               <div><label style={lbl}>PHONE NUMBER</label> <input value={form.phone} onChange={inp('phone')} type="tel"   placeholder="+234 …"        style={is} onFocus={foc} onBlur={blur} /></div>
             </div>
-            <button onClick={handleSubmit} style={{ width:'100%', marginTop:18, padding:'14px', background:ok?`linear-gradient(90deg,${raffle.color},${raffle.color}BB)`:'#1a1a1a', border:'none', borderRadius:8, color:ok?B.black:'#444', fontFamily:'Bebas Neue,sans-serif', fontSize:20, letterSpacing:3, cursor:ok?'pointer':'default', transition:'all 0.2s', boxShadow:ok?`0 0 28px ${raffle.color}30`:'none' }}>
-              ENTER WITH {pack.count} {pack.count===1?'ENTRY':'ENTRIES'} →
+            {error && <div style={{ marginTop:14, fontFamily:'Space Mono,monospace', fontSize:9, color:B.neonMagenta }}>{error}</div>}
+            <button onClick={handleSubmit} disabled={busy} style={{ width:'100%', marginTop:18, padding:'14px', background:ok?`linear-gradient(90deg,${raffle.color},${raffle.color}BB)`:'#1a1a1a', border:'none', borderRadius:8, color:ok?B.black:'#444', fontFamily:'Bebas Neue,sans-serif', fontSize:20, letterSpacing:3, cursor:ok?'pointer':'default', transition:'all 0.2s', boxShadow:ok?`0 0 28px ${raffle.color}30`:'none' }}>
+              {busy ? 'ENTERING…' : 'ENTER THE DRAW →'}
             </button>
-            <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#333', textAlign:'center', marginTop:10, letterSpacing:1 }}>One pack per person · Draw live Dec 12</div>
+            <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#333', textAlign:'center', marginTop:10, letterSpacing:1 }}>One entry per person · Draw live Dec 12</div>
           </div>
         )}
-      </div>
-    </>
-  )
-}
-
-function WinnerOverlay({ raffle, winner, onClose }) {
-  const dots = Array.from({ length:24 }, (_, i) => ({
-    x:Math.random()*100, y:Math.random()*100,
-    color:[B.amber,B.neonCyan,B.neonMagenta,B.neonLime][i%4],
-    size:4+Math.random()*8, dur:1.5+Math.random()*2,
-  }))
-  return (
-    <>
-      <div onClick={onClose} style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.88)', zIndex:300, backdropFilter:'blur(8px)' }} />
-      <div style={{ position:'fixed', inset:0, zIndex:301, pointerEvents:'none', overflow:'hidden' }}>
-        {dots.map((d, i) => (
-          <div key={i} style={{ position:'absolute', left:`${d.x}%`, top:`${d.y}%`, width:d.size, height:d.size, background:d.color, borderRadius:'50%', opacity:0.7, animation:`confettiFall ${d.dur}s ease-in infinite`, animationDelay:`${Math.random()*2}s` }} />
-        ))}
-      </div>
-      <div style={{ position:'fixed', top:'50%', left:'50%', transform:'translate(-50%,-50%)', width:'min(480px,94vw)', background:'#080810', border:`2px solid ${raffle.color}80`, borderRadius:20, zIndex:302, textAlign:'center', padding:'44px 36px', overflow:'hidden' }}>
-        <div style={{ position:'absolute', top:0, left:0, right:0, height:3, background:`linear-gradient(90deg,transparent,${raffle.color},transparent)` }} />
-        <div style={{ fontFamily:'Orbitron,monospace', fontSize:10, color:raffle.color, letterSpacing:4, marginBottom:12 }}>🎉 WE HAVE A WINNER</div>
-        <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:'clamp(42px,10vw,72px)', color:B.white, lineHeight:0.9, marginBottom:4 }}>{winner.name}</div>
-        <div style={{ fontFamily:'Space Mono,monospace', fontSize:11, color:'#666', marginBottom:24 }}>{winner.city}</div>
-        <div style={{ background:`${raffle.color}12`, border:`1px solid ${raffle.color}40`, borderRadius:12, padding:'20px', marginBottom:24 }}>
-          <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#444', letterSpacing:3, marginBottom:6 }}>WINNING ENTRY</div>
-          <div style={{ fontFamily:'Orbitron,monospace', fontSize:36, color:raffle.color, fontWeight:900 }}>#{String(winner.entryNum).padStart(4,'0')}</div>
-        </div>
-        <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:16, color:'#777', letterSpacing:2, marginBottom:4 }}>{raffle.name}</div>
-        <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#444', marginBottom:28 }}>{raffle.edition}</div>
-        <button onClick={onClose} style={{ padding:'12px 32px', background:'transparent', border:`1px solid ${raffle.color}40`, borderRadius:8, color:raffle.color, fontFamily:'Space Mono,monospace', fontSize:10, cursor:'pointer', letterSpacing:2 }}>CLOSE</button>
       </div>
     </>
   )
@@ -187,7 +140,6 @@ function TicketStub({ raffle, entry }) {
         <div>
           <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:raffle.color, letterSpacing:2, marginBottom:3 }}>YOUR ENTRY</div>
           <div style={{ fontFamily:'Orbitron,monospace', fontSize:20, color:raffle.color, fontWeight:900, letterSpacing:2 }}>#{String(entry.entryNum).padStart(4,'0')}</div>
-          {(entry.packCount||1) > 1 && <div style={{ display:'inline-block', background:`${raffle.color}20`, borderRadius:4, padding:'2px 7px', fontFamily:'Orbitron,monospace', fontSize:7, color:raffle.color, marginTop:3, letterSpacing:1 }}>{entry.packCount}× ENTRIES</div>}
           <div style={{ fontFamily:'Space Mono,monospace', fontSize:7.5, color:'#444', marginTop:3 }}>{entry.name}</div>
         </div>
         <div style={{ borderLeft:'1px dashed rgba(255,255,255,0.07)', paddingLeft:12, display:'flex', flexDirection:'column', alignItems:'center', gap:0 }}>
@@ -203,29 +155,18 @@ function TicketStub({ raffle, entry }) {
   )
 }
 
-function RaffleCard({ raffle, entered, count, spinNum, isSpinning, winner, onEnter, onDraw }) {
+function RaffleCard({ raffle, entered, count = 0, onEnter }) {
   const pct = Math.min(100, (count / raffle.maxEntries) * 100)
+  // Only fires on real numbers now; the counts used to start from a seed.
   const isFilling = pct > 65
   const isNearFull = pct > 80
+
   return (
-    <div className="card-3d" style={{ background:'rgba(255,255,255,0.03)', border:`1px solid ${winner?raffle.color+'60':'rgba(255,255,255,0.08)'}`, borderRadius:14, overflow:'hidden', display:'flex', flexDirection:'column', transition:'border-color 0.3s' }}>
+    <div className="card-3d" style={{ background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:14, overflow:'hidden', display:'flex', flexDirection:'column', transition:'border-color 0.3s' }}>
       <div style={{ height:3, background:`linear-gradient(90deg,${raffle.color},${raffle.color}30)` }} />
       <div style={{ height:160, background:`radial-gradient(ellipse at 50% 60%,${raffle.color}18 0%,transparent 65%)`, display:'flex', alignItems:'center', justifyContent:'center', position:'relative', flexDirection:'column', gap:4 }}>
         <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:56, color:`${raffle.color}25`, lineHeight:1, position:'absolute' }}>WIN</div>
-        {isSpinning ? (
-          <div style={{ textAlign:'center', zIndex:1 }}>
-            <div style={{ fontFamily:'Orbitron,monospace', fontSize:9, color:raffle.color, letterSpacing:3, marginBottom:4 }}>DRAWING…</div>
-            <div style={{ fontFamily:'Orbitron,monospace', fontSize:48, color:raffle.color, fontWeight:900, letterSpacing:4, filter:'blur(1px)' }}>#{String(spinNum).padStart(4,'0')}</div>
-          </div>
-        ) : winner ? (
-          <div style={{ textAlign:'center', zIndex:1 }}>
-            <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:raffle.color, letterSpacing:3, marginBottom:4 }}>WINNER</div>
-            <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:22, color:B.white }}>{winner.name}</div>
-            <div style={{ fontFamily:'Orbitron,monospace', fontSize:14, color:raffle.color }}>#{String(winner.entryNum).padStart(4,'0')}</div>
-          </div>
-        ) : (
-          <div style={{ fontFamily:'Orbitron,monospace', fontSize:28, color:raffle.color, fontWeight:900, zIndex:1, opacity:0.6 }}>{raffle.value}</div>
-        )}
+        <div style={{ fontFamily:'Orbitron,monospace', fontSize:28, color:raffle.color, fontWeight:900, zIndex:1, opacity:0.6 }}>{raffle.value}</div>
       </div>
 
       <div style={{ padding:'18px 20px 22px', flex:1, display:'flex', flexDirection:'column', gap:10 }}>
@@ -234,13 +175,12 @@ function RaffleCard({ raffle, entered, count, spinNum, isSpinning, winner, onEnt
           <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', marginTop:3 }}>{raffle.edition}</div>
         </div>
 
-        {/* entry bar */}
         <div>
           <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:6 }}>
             <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', letterSpacing:1 }}>{count} ENTERED</span>
             <div style={{ display:'flex', alignItems:'center', gap:6 }}>
               {isFilling && (
-                <span style={{ background:`${raffle.color}20`, border:`1px solid ${raffle.color}50`, borderRadius:3, padding:'1px 6px', fontFamily:'Orbitron,monospace', fontSize:6, color:raffle.color, letterSpacing:1 }}>⚡ FILLING FAST</span>
+                <span style={{ background:`${raffle.color}20`, border:`1px solid ${raffle.color}50`, borderRadius:3, padding:'1px 6px', fontFamily:'Orbitron,monospace', fontSize:6, color:raffle.color, letterSpacing:1 }}>FILLING FAST</span>
               )}
               <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#444' }}>{raffle.maxEntries} MAX</span>
             </div>
@@ -250,25 +190,19 @@ function RaffleCard({ raffle, entered, count, spinNum, isSpinning, winner, onEnt
           </div>
         </div>
 
-        {winner ? (
-          <button onClick={onDraw} style={{ padding:'11px', background:`${raffle.color}15`, border:`1px solid ${raffle.color}40`, borderRadius:8, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:9, color:raffle.color, letterSpacing:2 }}>VIEW WINNER →</button>
-        ) : entered ? (
+        {entered ? (
           <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
             <TicketStub raffle={raffle} entry={entered} />
-            <button onClick={onDraw} style={{ padding:'9px', background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:8, cursor:isSpinning?'wait':'pointer', fontFamily:'Space Mono,monospace', fontSize:8, color:isSpinning?'#555':'#888', letterSpacing:1 }} disabled={isSpinning}>
-              {isSpinning ? 'DRAWING…' : 'PREVIEW DRAW'}
-            </button>
+            {/* No draw button. The winner is the organiser's to announce. */}
+            <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:'#444', letterSpacing:1, textAlign:'center' }}>
+              WINNER DRAWN LIVE ON DEC 12
+            </div>
           </div>
         ) : (
-          <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
-            <button onClick={onEnter} style={{ padding:'12px', background:`linear-gradient(90deg,${raffle.color},${raffle.color}BB)`, border:'none', borderRadius:8, cursor:'pointer', fontFamily:'Bebas Neue,sans-serif', fontSize:18, letterSpacing:3, color:B.black, boxShadow:`0 0 24px ${raffle.color}25`, transition:'all 0.2s' }}
-              onMouseEnter={e => e.currentTarget.style.boxShadow=`0 0 40px ${raffle.color}50`}
-              onMouseLeave={e => e.currentTarget.style.boxShadow=`0 0 24px ${raffle.color}25`}
-            >ENTER RAFFLE →</button>
-            <button onClick={onDraw} style={{ padding:'9px', background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:8, cursor:isSpinning?'wait':'pointer', fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', letterSpacing:1 }} disabled={isSpinning}>
-              {isSpinning ? 'DRAWING…' : 'PREVIEW DRAW'}
-            </button>
-          </div>
+          <button onClick={onEnter} style={{ padding:'12px', background:`linear-gradient(90deg,${raffle.color},${raffle.color}BB)`, border:'none', borderRadius:8, cursor:'pointer', fontFamily:'Bebas Neue,sans-serif', fontSize:18, letterSpacing:3, color:B.black, boxShadow:`0 0 24px ${raffle.color}25`, transition:'all 0.2s' }}
+            onMouseEnter={e => e.currentTarget.style.boxShadow=`0 0 40px ${raffle.color}50`}
+            onMouseLeave={e => e.currentTarget.style.boxShadow=`0 0 24px ${raffle.color}25`}
+          >ENTER RAFFLE →</button>
         )}
       </div>
     </div>
@@ -277,72 +211,32 @@ function RaffleCard({ raffle, entered, count, spinNum, isSpinning, winner, onEnt
 
 export default function Raffle() {
   const [entries,      setEntries]      = useState(loadEntries)
-  const [winners,      setWinners]      = useState(loadWinners)
-  const [counts,       setCounts]       = useState(() => {
-    const saved = loadCounts()
-    const init  = {}
-    RAFFLES.forEach(r => { init[r.id] = saved[r.id] ?? r.seedCount })
-    return init
-  })
-  const [spinNums,     setSpinNums]     = useState({})
-  const [spinning,     setSpinning]     = useState({})
+  const [counts,       setCounts]       = useState({})
   const [entering,     setEntering]     = useState(null)
-  const [viewing,      setViewing]      = useState(null)
   const [countdown,    setCountdown]    = useState(calcCountdown)
-  const [liveTicker,   setLiveTicker]   = useState(null)
-  const [tickerVisible,setTickerVisible]= useState(false)
-  const tickerRef  = useRef(null)
-  const tickerIdx  = useRef(0)
 
   useEffect(() => {
     const id = setInterval(() => setCountdown(calcCountdown()), 1000)
     return () => clearInterval(id)
   }, [])
 
-  useEffect(() => {
-    function showTick() {
-      const person = SEED_POOL[tickerIdx.current % SEED_POOL.length]
-      const raffle = RAFFLES[tickerIdx.current % RAFFLES.length]
-      tickerIdx.current++
-      setLiveTicker({ person, raffle })
-      setTickerVisible(true)
-      tickerRef.current = setTimeout(() => {
-        setTickerVisible(false)
-        tickerRef.current = setTimeout(showTick, 5500 + Math.random() * 2500)
-      }, 3500)
-    }
-    tickerRef.current = setTimeout(showTick, 3500)
-    return () => clearTimeout(tickerRef.current)
+  // Entry counts come from the server. They used to start from hardcoded
+  // seeds, which meant the total shown had never been true.
+  const loadCounts = useCallback(async () => {
+    try {
+      const r = await fetch('/.netlify/functions/raffle-enter')
+      if (r.ok) setCounts((await r.json()).counts || {})
+    } catch { /* the cards just show no count */ }
   }, [])
 
-  async function triggerDraw(raffleId) {
-    if (spinning[raffleId]) return
-    setSpinning(s => ({ ...s, [raffleId]:true }))
-    for (let i = 0; i < 32; i++) {
-      setSpinNums(s => ({ ...s, [raffleId]:Math.floor(Math.random()*899)+100 }))
-      await sleep(28 + i * 9)
-    }
-    const localEntry = entries[raffleId]
-    const pool = [...SEED_POOL.map((p, i) => ({ ...p, entryNum:100+i*43 })), ...(localEntry?[localEntry]:[])]
-    const pick = pool[Math.floor(Math.random()*pool.length)]
-    const win  = { name:pick.name, city:pick.city, entryNum:pick.entryNum }
-    setSpinNums(s => ({ ...s, [raffleId]:win.entryNum }))
-    await sleep(300)
-    const next = { ...winners, [raffleId]:win }
-    setWinners(next)
-    setSpinning(s => ({ ...s, [raffleId]:false }))
-    setViewing(RAFFLES.find(r => r.id === raffleId))
-    try { localStorage.setItem('sf26_raffle_draws', JSON.stringify(next)) } catch {}
-  }
+  useEffect(() => { loadCounts() }, [loadCounts])
 
   function handleEnter(raffle, entry) {
-    const nextEntries = { ...entries, [raffle.id]:entry }
+    const nextEntries = { ...entries, [raffle.id]: entry }
     setEntries(nextEntries)
     try { localStorage.setItem('sf26_raffle_entries', JSON.stringify(nextEntries)) } catch {}
-    const nextCounts = { ...counts, [raffle.id]:counts[raffle.id]+(entry.packCount||1) }
-    setCounts(nextCounts)
-    try { localStorage.setItem('sf26_raffle_counts', JSON.stringify(nextCounts)) } catch {}
-    logReferralConversion('raffle', { raffle:raffle.name })
+    loadCounts()
+    logReferralConversion('raffle', { raffle: raffle.name })
   }
 
   const totalEntries = Object.values(counts).reduce((a, b) => a + b, 0)
@@ -387,17 +281,6 @@ export default function Raffle() {
             UNTIL THE DRAW · {totalEntries.toLocaleString()} total entries so far
           </div>
 
-          {/* live entry ticker */}
-          <div style={{ marginTop:14, height:22, display:'flex', alignItems:'center', justifyContent:'center', gap:8, opacity:liveTicker&&tickerVisible?1:0, transition:'opacity 0.4s' }}>
-            {liveTicker && (
-              <>
-                <span style={{ width:5, height:5, borderRadius:'50%', background:liveTicker.raffle.color, boxShadow:`0 0 6px ${liveTicker.raffle.color}`, display:'inline-block', flexShrink:0 }} />
-                <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:liveTicker.raffle.color, letterSpacing:1, animation:'tickFade 0.3s ease' }}>
-                  {liveTicker.person.name} ({liveTicker.person.city}) just entered {liveTicker.raffle.name.split(' ').slice(0,3).join(' ')}…
-                </span>
-              </>
-            )}
-          </div>
         </div>
 
         {/* grid */}
@@ -407,11 +290,7 @@ export default function Raffle() {
               key={raffle.id} raffle={raffle}
               entered={entries[raffle.id]||null}
               count={counts[raffle.id]}
-              spinNum={spinNums[raffle.id]||0}
-              isSpinning={!!spinning[raffle.id]}
-              winner={winners[raffle.id]||null}
               onEnter={() => setEntering(raffle)}
-              onDraw={() => winners[raffle.id] ? setViewing(raffle) : triggerDraw(raffle.id)}
             />
           ))}
         </div>
@@ -425,14 +304,11 @@ export default function Raffle() {
                   <div style={{ fontFamily:'Orbitron,monospace', fontSize:9, color:r.color }}>#{String(entries[r.id].entryNum).padStart(4,'0')}</div>
                   <div style={{ width:1, height:12, background:'rgba(255,255,255,0.08)' }} />
                   <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:'#555' }}>{r.name.split(' ').slice(0,3).join(' ')}</div>
-                  {(entries[r.id].packCount||1) > 1 && (
-                    <div style={{ background:`${r.color}25`, borderRadius:4, padding:'2px 6px', fontFamily:'Orbitron,monospace', fontSize:6, color:r.color }}>{entries[r.id].packCount}×</div>
-                  )}
                 </div>
               ))}
             </div>
             <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#333', letterSpacing:1 }}>
-              {RAFFLES.filter(r => entries[r.id]).reduce((s,r) => s+(entries[r.id].packCount||1),0)} TOTAL ENTRIES · {Object.keys(entries).length} OF {RAFFLES.length} RAFFLES ENTERED
+              {Object.keys(entries).length} OF {RAFFLES.length} RAFFLES ENTERED · ONE ENTRY EACH
             </div>
           </div>
         )}
@@ -443,7 +319,6 @@ export default function Raffle() {
       </div>
 
       {entering && <EntryModal raffle={entering} onEnter={entry => handleEnter(entering, entry)} onClose={() => setEntering(null)} />}
-      {viewing  && winners[viewing.id] && <WinnerOverlay raffle={viewing} winner={winners[viewing.id]} onClose={() => setViewing(null)} />}
     </section>
   )
 }
