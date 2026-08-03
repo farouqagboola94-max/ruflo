@@ -6,7 +6,14 @@
 [functions]
   node_bundler = "esbuild"
 
-# SPA fallback — all routes serve index.html
+# Staff door app. Must come before the SPA fallback, otherwise /door would
+# be swallowed by it and serve the festival site instead.
+[[redirects]]
+  from   = "/door"
+  to     = "/door.html"
+  status = 200
+
+# SPA fallback — all remaining routes serve index.html
 [[redirects]]
   from   = "/*"
   to     = "/index.html"

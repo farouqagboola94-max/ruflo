@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+# Staff-only gate app
+Disallow: /door
+Disallow: /door.html
 
 Sitemap: https://sneakers-fest-26.netlify.app/sitemap.xml

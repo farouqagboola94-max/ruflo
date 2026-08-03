@@ -1,11 +1,21 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { resolve, dirname } from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
   plugins: [react()],
   build: {
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
+      // Two entry points: the festival site, and the staff door app which
+      // must never be bundled into or linked from the public page.
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        door: resolve(__dirname, 'door.html'),
+      },
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
