@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { claudeChat, getApiKey, aiEnabled } from '../lib/catalystAI'
+import { claudeChat, useAiAvailable } from '../lib/catalystAI'
 import AIComingSoon from '../components/AIComingSoon'
 
 const TARGETS = [
@@ -37,6 +37,7 @@ Rules:
 - Short. Every sentence earns its place.`
 
 export default function ColdDMGenerator() {
+  const aiReady = useAiAvailable()
   const [shoe, setShoe] = useState('')
   const [offer, setOffer] = useState('')
   const [target, setTarget] = useState(null)
@@ -49,7 +50,7 @@ export default function ColdDMGenerator() {
 
   async function generate() {
     if (!shoe.trim() || !target || !offer.trim()) return
-    if (!getApiKey()) {
+    if (!aiReady) {
       setError('Cold DM Generator is not live yet. It will be ready before December 12.')
       return
     }
@@ -61,7 +62,7 @@ export default function ColdDMGenerator() {
       const tierContext = tier ? ` I have a ${tier} ticket.` : ''
       const extraContext = context.trim() ? `\nExtra context: ${context}` : ''
       const prompt = `I want: ${shoe}\nI'm DMing: ${target}\nI'm offering: ${offer}${tierContext}${extraContext}\n\nWrite my cold DM.`
-      const raw = await claudeChat([{ role: 'user', content: prompt }], { model: 'balanced', system: SYSTEM, maxTokens: 600 })
+      const raw = await claudeChat([{ role: 'user', content: prompt }], { feature: 'ColdDMGenerator', model: 'balanced', system: SYSTEM, maxTokens: 600 })
       const match = raw.match(/\{[\s\S]*\}/)
       if (match) setResult(JSON.parse(match[0]))
       else setError('Could not parse DM. Try again.')
@@ -96,7 +97,7 @@ export default function ColdDMGenerator() {
 
       <div style={{ maxWidth: 700, margin: '0 auto' }}>
         <SectionTag>NETWORKING</SectionTag>
-        {!aiEnabled() && <AIComingSoon feature="Cold DM Generator" />}
+        {!aiReady && <AIComingSoon feature="Cold DM Generator" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             COLD DM GENERATOR

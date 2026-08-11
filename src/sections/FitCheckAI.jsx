@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { claudeChat, getApiKey, aiEnabled } from '../lib/catalystAI'
+import { claudeChat, useAiAvailable } from '../lib/catalystAI'
 import AIComingSoon from '../components/AIComingSoon'
 
 const CONTEXTS = [
@@ -26,6 +26,7 @@ Respond with ONLY this JSON:
 Be direct. Be specific. Score honestly — don't inflate. A 10 should be rare. Lagos streetwear standards are elite.`
 
 export default function FitCheckAI() {
+  const aiReady = useAiAvailable()
   const [fit, setFit] = useState('')
   const [context, setContext] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -35,7 +36,7 @@ export default function FitCheckAI() {
 
   async function check() {
     if (!fit.trim()) return
-    if (!getApiKey()) {
+    if (!aiReady) {
       setError('Fit Check is not live yet. It will be ready before December 12.')
       return
     }
@@ -46,7 +47,7 @@ export default function FitCheckAI() {
     try {
       const ctx = context ? `\nContext: ${context}` : ''
       const prompt = `Rate this fit for SF26:\n\n${fit}${ctx}`
-      const raw = await claudeChat([{ role: 'user', content: prompt }], { model: 'smart', system: SYSTEM, maxTokens: 600 })
+      const raw = await claudeChat([{ role: 'user', content: prompt }], { feature: 'FitCheckAI', model: 'smart', system: SYSTEM, maxTokens: 600 })
       const match = raw.match(/\{[\s\S]*\}/)
       if (match) setResult(JSON.parse(match[0]))
       else setError('Could not parse rating. Try again.')
@@ -75,7 +76,7 @@ export default function FitCheckAI() {
 
       <div style={{ maxWidth: 720, margin: '0 auto' }}>
         <SectionTag>AI FIT JUDGE</SectionTag>
-        {!aiEnabled() && <AIComingSoon feature="Fit Check AI" />}
+        {!aiReady && <AIComingSoon feature="Fit Check AI" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             FIT CHECK AI

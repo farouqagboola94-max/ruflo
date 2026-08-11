@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { claudeChat, getApiKey, aiEnabled } from '../lib/catalystAI'
+import { claudeChat, useAiAvailable } from '../lib/catalystAI'
 import AIComingSoon from '../components/AIComingSoon'
 
 const BUDGETS = [
@@ -40,6 +40,7 @@ Respond with ONLY this JSON:
 Be specific to SF26 Lagos context. Reference real Lagos sneaker buying culture.`
 
 export default function VendorMatcher() {
+  const aiReady = useAiAvailable()
   const [wishlist, setWishlist] = useState(['', ''])
   const [budget, setBudget] = useState(null)
   const [tier, setTier] = useState(null)
@@ -67,7 +68,7 @@ export default function VendorMatcher() {
   async function match() {
     const filled = wishlist.filter(s => s.trim())
     if (!filled.length || !budget || !tier) return
-    if (!getApiKey()) {
+    if (!aiReady) {
       setError('Vendor Matcher is not live yet. It will be ready before December 12.')
       return
     }
@@ -77,7 +78,7 @@ export default function VendorMatcher() {
     try {
       const list = filled.map((s, i) => `${i + 1}. ${s}`).join('\n')
       const prompt = `Wishlist:\n${list}\n\nBudget: ${budget}\nTicket tier: ${tier}\n\nMatch me to the right SF26 vendors.`
-      const raw = await claudeChat([{ role: 'user', content: prompt }], { model: 'smart', system: SYSTEM, maxTokens: 1000 })
+      const raw = await claudeChat([{ role: 'user', content: prompt }], { feature: 'VendorMatcher', model: 'smart', system: SYSTEM, maxTokens: 1000 })
       const match = raw.match(/\{[\s\S]*\}/)
       if (match) setResult(JSON.parse(match[0]))
       else setError('Could not parse strategy. Try again.')
@@ -100,7 +101,7 @@ export default function VendorMatcher() {
 
       <div style={{ maxWidth: 820, margin: '0 auto' }}>
         <SectionTag>VENDOR INTELLIGENCE</SectionTag>
-        {!aiEnabled() && <AIComingSoon feature="Vendor Matcher" />}
+        {!aiReady && <AIComingSoon feature="Vendor Matcher" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             VENDOR MATCHER

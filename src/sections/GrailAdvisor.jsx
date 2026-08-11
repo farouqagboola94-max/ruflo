@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { claudeChat, getApiKey, aiEnabled } from '../lib/catalystAI'
+import { claudeChat, useAiAvailable } from '../lib/catalystAI'
 import AIComingSoon from '../components/AIComingSoon'
 
 const BUDGETS = [
@@ -41,6 +41,7 @@ Recommend exactly 3 specific sneakers. For each, respond with this JSON array:
 Be specific. Be Lagos-aware. Give real current prices. No generic advice.`
 
 export default function GrailAdvisor() {
+  const aiReady = useAiAvailable()
   const [budget, setBudget] = useState(null)
   const [style, setStyle] = useState(null)
   const [vibe, setVibe] = useState(null)
@@ -52,7 +53,7 @@ export default function GrailAdvisor() {
 
   async function findGrails() {
     if (!budget || !style || !vibe) return
-    if (!getApiKey()) {
+    if (!aiReady) {
       setError('Grail Advisor is not live yet. It will be ready before December 12.')
       return
     }
@@ -61,7 +62,7 @@ export default function GrailAdvisor() {
     setError('')
     try {
       const prompt = `Budget: ${budget}\nStyle: ${style}\nVibe: ${vibe}\n\nFind my 3 perfect grails for Sneakers Fest '26.`
-      const raw = await claudeChat([{ role: 'user', content: prompt }], { model: 'smart', system: SYSTEM, maxTokens: 1100 })
+      const raw = await claudeChat([{ role: 'user', content: prompt }], { feature: 'GrailAdvisor', model: 'smart', system: SYSTEM, maxTokens: 1100 })
       const match = raw.match(/\[[\s\S]*\]/)
       if (match) setResult(JSON.parse(match[0]))
       else setError('Could not parse recommendations. Try again.')
@@ -85,7 +86,7 @@ export default function GrailAdvisor() {
 
       <div style={{ maxWidth: 820, margin: '0 auto' }}>
         <SectionTag>AI GRAIL FINDER</SectionTag>
-        {!aiEnabled() && <AIComingSoon feature="Grail Advisor" />}
+        {!aiReady && <AIComingSoon feature="Grail Advisor" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             FIND YOUR SF26 GRAILS

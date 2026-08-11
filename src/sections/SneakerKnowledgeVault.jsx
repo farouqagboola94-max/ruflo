@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
-import { claudeChat, getApiKey, setApiKey, routeModel } from '../lib/catalystAI'
+import { claudeChat, useAiAvailable } from '../lib/catalystAI'
 import AIComingSoon from '../components/AIComingSoon'
 
 const API_KEY_STORAGE = 'catalyst-vault-api-key'
@@ -23,6 +23,7 @@ const TAG_COLORS = {
 }
 
 export default function SneakerKnowledgeVault() {
+  const aiReady = useAiAvailable()
   const [notes, setNotes] = useState(SEED_NOTES)
   const [activeId, setActiveId] = useState(1)
   const [view, setView] = useState('vault')   // vault | analyze | add
@@ -30,12 +31,10 @@ export default function SneakerKnowledgeVault() {
   const [aiResult, setAiResult] = useState('')
   const [aiLoading, setAiLoading] = useState(false)
   const [aiError, setAiError] = useState('')
-  const [showKey, setShowKey] = useState(false)
-  const [keyInput, setKeyInput] = useState('')
   const [newNote, setNewNote] = useState({ title: '', body: '', tags: '' })
   const [search, setSearch] = useState('')
 
-  const hasKey = !!getApiKey()
+  const hasKey = aiReady
 
   const activeNote = notes.find(n => n.id === activeId)
 
@@ -53,7 +52,7 @@ export default function SneakerKnowledgeVault() {
     try {
       const prompt = `Analyze this sneaker note and expand on it with deeper cultural context, related drops, and actionable insight:\n\nTitle: ${note.title}\n\n${note.body}`
       const model = routeModel(prompt)
-      const result = await claudeChat([{ role: 'user', content: prompt }], { model, system: SYSTEM })
+      const result = await claudeChat([{ role: 'user', content: prompt }], { feature: 'SneakerKnowledgeVault', model, system: SYSTEM })
       setAiResult(result)
     } catch (e) {
       setAiError(e.message === 'NO_KEY' ? 'AI analysis is not live yet.' : e.message)
@@ -69,19 +68,13 @@ export default function SneakerKnowledgeVault() {
     setAiError('')
     try {
       const model = routeModel(query)
-      const result = await claudeChat([{ role: 'user', content: query }], { model, system: SYSTEM })
+      const result = await claudeChat([{ role: 'user', content: query }], { feature: 'SneakerKnowledgeVault', model, system: SYSTEM })
       setAiResult(result)
     } catch (e) {
       setAiError(e.message === 'NO_KEY' ? 'AI analysis is not live yet.' : e.message)
     }
     setAiLoading(false)
   }, [query, hasKey])
-
-  function saveKey() {
-    setApiKey(keyInput.trim())
-    setShowKey(false)
-    setKeyInput('')
-  }
 
   function addNote() {
     if (!newNote.title.trim() || !newNote.body.trim()) return
@@ -102,20 +95,6 @@ export default function SneakerKnowledgeVault() {
         .kv-note:hover { background: rgba(255,255,255,0.04) !important; }
       `}</style>
 
-      {/* API Key modal */}
-      {showKey && (
-        <div style={{ position: 'fixed', inset: 0, zIndex: 9000, background: 'rgba(0,0,0,0.92)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-          <div style={{ background: '#111', border: `1px solid ${B.amber}44`, borderRadius: 8, padding: 32, maxWidth: 400, width: '100%' }}>
-            <div style={{ fontFamily: "'Orbitron'", fontSize: 11, color: B.amber, letterSpacing: '0.2em', marginBottom: 16 }}>ANTHROPIC API KEY</div>
-            <p style={{ fontFamily: "'Space Mono'", fontSize: 10, color: B.smoke, lineHeight: 1.7, marginBottom: 20 }}>AI analysis requires your Anthropic API key. It's stored locally in your browser — never sent anywhere except Anthropic's servers directly.</p>
-            <input type="password" value={keyInput} onChange={e => setKeyInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && saveKey()} placeholder="sk-ant-..." style={{ width: '100%', padding: '10px 14px', background: '#0d0d0d', border: '1px solid #333', borderRadius: 4, color: B.white, fontFamily: "'Space Mono'", fontSize: 11, outline: 'none', boxSizing: 'border-box', marginBottom: 12 }} />
-            <div style={{ display: 'flex', gap: 8 }}>
-              <button onClick={saveKey} style={{ flex: 1, padding: 10, background: B.amber, color: B.black, border: 'none', borderRadius: 4, fontFamily: "'Space Mono'", fontSize: 10, fontWeight: 700, cursor: 'pointer' }}>SAVE KEY</button>
-              <button onClick={() => setShowKey(false)} style={{ padding: '10px 16px', background: 'transparent', color: '#555', border: '1px solid #222', borderRadius: 4, fontFamily: "'Space Mono'", fontSize: 10, cursor: 'pointer' }}>CANCEL</button>
-            </div>
-          </div>
-        </div>
-      )}
 
       <div style={{ maxWidth: 1000, margin: '0 auto' }}>
         <SectionTag>SNEAKER KNOWLEDGE VAULT</SectionTag>
@@ -130,9 +109,6 @@ export default function SneakerKnowledgeVault() {
                 {l}
               </button>
             ))}
-            {hasKey && <button onClick={() => setShowKey(true)} title="API key saved" style={{ padding: '7px 12px', background: hasKey ? `${B.neonCyan}15` : 'transparent', border: `1px solid ${hasKey ? B.neonCyan : '#222'}`, borderRadius: 4, fontSize: 14, cursor: 'pointer', color: hasKey ? B.neonCyan : '#555' }}>
-              🔓
-            </button>}
           </div>
         </div>
 
@@ -183,11 +159,6 @@ export default function SneakerKnowledgeVault() {
               </button>
             </div>
 
-            {!hasKey && (
-              <div style={{ background: `${B.amber}10`, border: `1px solid ${B.amber}33`, borderRadius: 4, padding: '10px 14px', marginBottom: 16 }}>
-                <span style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.amber }}>API key required — tap 🔑 above to add your Anthropic key</span>
-              </div>
-            )}
 
             {aiLoading && (
               <div style={{ display: 'flex', gap: 6, padding: 20 }}>

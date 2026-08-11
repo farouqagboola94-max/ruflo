@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { B } from '../tokens'
-import { claudeChat, getApiKey, routeModel } from '../lib/catalystAI'
+import { claudeChat, aiAvailable } from '../lib/catalystAI'
 
 const API = import.meta.env.VITE_BACKEND_URL || ''
 
@@ -136,12 +136,11 @@ export default function AIChat() {
       } catch {}
     }
 
-    // ── 3. Direct Claude API (browser, key in localStorage)
-    if (!reply && getApiKey()) {
+    // 3. Claude, via the site's own function. No visitor key involved.
+    if (!reply && await aiAvailable()) {
       try {
-        const model = routeModel(text)
         const apiMessages = history.map(m => ({ role: m.role, content: m.content }))
-        reply = await claudeChat(apiMessages, { model, system: SNEAKER_SYSTEM })
+        reply = await claudeChat(apiMessages, { feature: 'AIChat', system: SNEAKER_SYSTEM })
         if (reply) setClaude(true)
       } catch {}
     }

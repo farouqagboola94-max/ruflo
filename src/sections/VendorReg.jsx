@@ -4,7 +4,7 @@ import { GrainOverlay, SectionTag } from '../components/Shared'
 import { SOCIAL_LINKS } from '../config'
 import { logReferralConversion } from '../lib/referral'
 import Egg from '../components/Egg'
-import { claudeChat, getApiKey, setApiKey } from '../lib/catalystAI'
+import { claudeChat, useAiAvailable } from '../lib/catalystAI'
 
 const FORMSPREE = import.meta.env.VITE_FORMSPREE_ID || ''
 
@@ -126,6 +126,7 @@ const STATUS_STEPS = [
 ]
 
 export default function VendorReg() {
+  const aiReady = useAiAvailable()
   const [step,         setStep]        = useState(0)
   const [form,         setForm]        = useState({ booth:'', business:'', contact:'', email:'', phone:'', category:'', instagram:'', twitter:'', website:'', deckUrl:'', exclusiveDrop:'', bio:'' })
   const [status,       setStatus]      = useState('idle')
@@ -137,12 +138,10 @@ export default function VendorReg() {
   const [showStatus, setShowStatus] = useState(false)
   const [pitchLoading, setPitchLoading] = useState(false)
   const [pitchError,   setPitchError]   = useState('')
-  const [showApiKey,   setShowApiKey]   = useState(false)
-  const [keyInput,     setKeyInput]     = useState('')
   const [vendorCatFilter, setVendorCatFilter] = useState('ALL')
 
   const generatePitch = useCallback(async () => {
-    if (!getApiKey()) { setShowApiKey(true); return }
+    if (!aiReady) { setPitchError('The pitch writer is not live yet. Write your own bio below - it works exactly the same.'); return }
     setPitchLoading(true); setPitchError('')
     try {
       const prompt = `Write a compelling 200-word vendor application bio for Sneakers Fest '26 in Lagos.
@@ -153,13 +152,13 @@ Exclusive drop interest: ${form.exclusiveDrop || 'open to it'}
 ${form.instagram ? `Instagram: @${form.instagram}` : ''}
 
 Write in first person, confident but not arrogant. Mention Lagos, the culture, why this event matters to the brand. End with a clear value proposition for event organisers. Max 280 characters.`
-      const result = await claudeChat([{ role:'user', content:prompt }], { model:'balanced', system:'You write punchy vendor pitch bios for Lagos streetwear and sneaker events. Keep it real, culturally aware, and brand-confident.' })
+      const result = await claudeChat([{ role:'user', content:prompt }], { feature:'VendorReg', model:'balanced', system:'You write punchy vendor pitch bios for Lagos streetwear and sneaker events. Keep it real, culturally aware, and brand-confident.' })
       setForm(f => ({ ...f, bio: result.slice(0, 300) }))
     } catch(e) {
-      setPitchError(e.message === 'NO_KEY' ? 'This helper is not live yet.' : e.message)
+      setPitchError(e.message)
     }
     setPitchLoading(false)
-  }, [form.business, form.category, form.booth, form.exclusiveDrop, form.instagram])
+  }, [aiReady, form.business, form.category, form.booth, form.exclusiveDrop, form.instagram])
 
   useEffect(() => {
     try {
@@ -473,17 +472,6 @@ Write in first person, confident but not arrogant. Mention Lagos, the culture, w
                       )}
                     </div>
 
-                    {/* API key modal for AI pitch */}
-                    {showApiKey && (
-                      <div style={{ background:`${B.amber}08`, border:`1px solid ${B.amber}33`, borderRadius:8, padding:16 }}>
-                        <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:B.amber, letterSpacing:'0.2em', marginBottom:10 }}>ANTHROPIC API KEY REQUIRED</div>
-                        <input type="password" value={keyInput} onChange={e => setKeyInput(e.target.value)} onKeyDown={e => { if(e.key==='Enter'){setApiKey(keyInput.trim());setShowApiKey(false);setKeyInput('')} }} placeholder="sk-ant-..." style={{ ...IS, marginBottom:8, fontSize:11 }} />
-                        <div style={{ display:'flex', gap:8 }}>
-                          <button type="button" onClick={() => { setApiKey(keyInput.trim()); setShowApiKey(false); setKeyInput('') }} style={{ flex:1, padding:'8px', background:B.amber, color:B.black, border:'none', borderRadius:4, fontFamily:'Space Mono,monospace', fontSize:9, fontWeight:700, cursor:'pointer' }}>SAVE & GENERATE</button>
-                          <button type="button" onClick={() => setShowApiKey(false)} style={{ padding:'8px 12px', background:'transparent', color:'#555', border:'1px solid #222', borderRadius:4, fontFamily:'Space Mono,monospace', fontSize:9, cursor:'pointer' }}>SKIP</button>
-                        </div>
-                      </div>
-                    )}
                   </>
                 )}
 

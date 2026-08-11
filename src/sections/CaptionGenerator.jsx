@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { claudeChat, getApiKey, aiEnabled } from '../lib/catalystAI'
+import { claudeChat, useAiAvailable } from '../lib/catalystAI'
 import AIComingSoon from '../components/AIComingSoon'
 
 const PLATFORMS = [
@@ -36,6 +36,7 @@ Write ONE caption for the requested platform, mood, and ticket tier. The caption
 Respond with ONLY the caption text. No intro, no explanation, no label, no quotes. Just the caption.`
 
 export default function CaptionGenerator() {
+  const aiReady = useAiAvailable()
   const [platform, setPlatform] = useState(null)
   const [mood, setMood] = useState(null)
   const [tier, setTier] = useState(null)
@@ -47,7 +48,7 @@ export default function CaptionGenerator() {
 
   async function generate() {
     if (!platform || !mood || !tier) return
-    if (!getApiKey()) {
+    if (!aiReady) {
       setError('Caption Generator is not live yet. It will be ready before December 12.')
       return
     }
@@ -64,7 +65,7 @@ Mood: ${mood} — ${moodObj?.hint}
 Ticket tier: ${tier}${shoeContext}
 
 Write the perfect Sneakers Fest '26 caption.`
-      const raw = await claudeChat([{ role: 'user', content: prompt }], { model: 'balanced', system: SYSTEM, maxTokens: 300 })
+      const raw = await claudeChat([{ role: 'user', content: prompt }], { feature: 'CaptionGenerator', model: 'balanced', system: SYSTEM, maxTokens: 300 })
       setCaption(raw.trim())
     } catch (e) {
       setError(e.message || 'Something went wrong.')
@@ -94,7 +95,7 @@ Write the perfect Sneakers Fest '26 caption.`
 
       <div style={{ maxWidth: 820, margin: '0 auto' }}>
         <SectionTag>AI CAPTION STUDIO</SectionTag>
-        {!aiEnabled() && <AIComingSoon feature="Caption Studio" />}
+        {!aiReady && <AIComingSoon feature="Caption Studio" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             SF26 CAPTION GENERATOR

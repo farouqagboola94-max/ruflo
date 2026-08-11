@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { claudeChat, getApiKey, aiEnabled } from '../lib/catalystAI'
+import { claudeChat, useAiAvailable } from '../lib/catalystAI'
 import AIComingSoon from '../components/AIComingSoon'
 
 const VERDICT_CONFIG = {
@@ -25,6 +25,7 @@ Respond with ONLY this JSON:
 Use real Lagos resale prices. Be direct. No fluff.`
 
 export default function TradeNegotiator() {
+  const aiReady = useAiAvailable()
   const [offering, setOffering] = useState('')
   const [getting, setGetting] = useState('')
   const [context, setContext] = useState('')
@@ -35,7 +36,7 @@ export default function TradeNegotiator() {
 
   async function analyze() {
     if (!offering.trim() || !getting.trim()) return
-    if (!getApiKey()) {
+    if (!aiReady) {
       setError('Trade Negotiator is not live yet. It will be ready before December 12.')
       return
     }
@@ -45,7 +46,7 @@ export default function TradeNegotiator() {
     setCopied(false)
     try {
       const prompt = `TRADE PROPOSAL:\nI am giving: ${offering}\nI am getting: ${getting}${context ? `\nExtra context: ${context}` : ''}\n\nIs this trade fair for Lagos market?`
-      const raw = await claudeChat([{ role: 'user', content: prompt }], { model: 'smart', system: SYSTEM, maxTokens: 700 })
+      const raw = await claudeChat([{ role: 'user', content: prompt }], { feature: 'TradeNegotiator', model: 'smart', system: SYSTEM, maxTokens: 700 })
       const match = raw.match(/\{[\s\S]*\}/)
       if (match) setResult(JSON.parse(match[0]))
       else setError('Could not parse analysis. Try again.')
@@ -75,7 +76,7 @@ export default function TradeNegotiator() {
 
       <div style={{ maxWidth: 760, margin: '0 auto' }}>
         <SectionTag>AI TRADE DESK</SectionTag>
-        {!aiEnabled() && <AIComingSoon feature="Trade Negotiator" />}
+        {!aiReady && <AIComingSoon feature="Trade Negotiator" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             TRADE NEGOTIATOR

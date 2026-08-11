@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { claudeChat, getApiKey, aiEnabled } from '../lib/catalystAI'
+import { claudeChat, useAiAvailable } from '../lib/catalystAI'
 import AIComingSoon from '../components/AIComingSoon'
 
 const SYSTEM = `You are a Lagos sneaker culture psychologist. Based on a person's sneaker choices, reveal their true sneaker archetype.
@@ -20,6 +20,7 @@ Respond with ONLY this JSON:
 Be insightful and specific — don't be generic. The archetype should feel earned from the actual shoes listed.`
 
 export default function StyleArchetype() {
+  const aiReady = useAiAvailable()
   const [shoes, setShoes] = useState(['', ''])
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState(null)
@@ -46,7 +47,7 @@ export default function StyleArchetype() {
   async function discover() {
     const filled = shoes.filter(s => s.trim())
     if (filled.length < 2) return
-    if (!getApiKey()) {
+    if (!aiReady) {
       setError('Style Archetype is not live yet. It will be ready before December 12.')
       return
     }
@@ -57,7 +58,7 @@ export default function StyleArchetype() {
     try {
       const list = filled.map((s, i) => `${i + 1}. ${s}`).join('\n')
       const prompt = `My sneakers:\n${list}\n\nReveal my sneaker archetype.`
-      const raw = await claudeChat([{ role: 'user', content: prompt }], { model: 'smart', system: SYSTEM, maxTokens: 700 })
+      const raw = await claudeChat([{ role: 'user', content: prompt }], { feature: 'StyleArchetype', model: 'smart', system: SYSTEM, maxTokens: 700 })
       const match = raw.match(/\{[\s\S]*\}/)
       if (match) setResult(JSON.parse(match[0]))
       else setError('Could not parse archetype. Try again.')
@@ -87,7 +88,7 @@ export default function StyleArchetype() {
 
       <div style={{ maxWidth: 680, margin: '0 auto' }}>
         <SectionTag>IDENTITY ENGINE</SectionTag>
-        {!aiEnabled() && <AIComingSoon feature="Style Archetype" />}
+        {!aiReady && <AIComingSoon feature="Style Archetype" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             YOUR STYLE ARCHETYPE

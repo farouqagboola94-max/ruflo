@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { claudeChat, getApiKey, aiEnabled } from '../lib/catalystAI'
+import { claudeChat, useAiAvailable } from '../lib/catalystAI'
 import AIComingSoon from '../components/AIComingSoon'
 
 const SYSTEM = `You are the official Lagos Sneaker Culture registry. Based on someone's rotation, issue their collector profile.
@@ -34,6 +34,7 @@ const RANK_CONFIG = {
 const ACCENT = [B.amber, B.neonCyan, '#A855F7', B.neonLime, '#f97316']
 
 export default function CollectorCard() {
+  const aiReady = useAiAvailable()
   const [shoes, setShoes] = useState(['', '', ''])
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState(null)
@@ -60,7 +61,7 @@ export default function CollectorCard() {
   async function generate() {
     const filled = shoes.filter(s => s.trim())
     if (filled.length < 3) return
-    if (!getApiKey()) {
+    if (!aiReady) {
       setError('Collector Card is not live yet. It will be ready before December 12.')
       return
     }
@@ -71,7 +72,7 @@ export default function CollectorCard() {
     try {
       const list = filled.map((s, i) => `${i + 1}. ${s}`).join('\n')
       const prompt = `My rotation:\n${list}\n\nIssue my collector card.`
-      const raw = await claudeChat([{ role: 'user', content: prompt }], { model: 'smart', system: SYSTEM, maxTokens: 700 })
+      const raw = await claudeChat([{ role: 'user', content: prompt }], { feature: 'CollectorCard', model: 'smart', system: SYSTEM, maxTokens: 700 })
       const match = raw.match(/\{[\s\S]*\}/)
       if (match) setResult(JSON.parse(match[0]))
       else setError('Could not parse card. Try again.')
@@ -101,7 +102,7 @@ export default function CollectorCard() {
 
       <div style={{ maxWidth: 700, margin: '0 auto' }}>
         <SectionTag>COLLECTOR REGISTRY</SectionTag>
-        {!aiEnabled() && <AIComingSoon feature="Collector Card" />}
+        {!aiReady && <AIComingSoon feature="Collector Card" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             COLLECTOR CARD

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { claudeChat, getApiKey, aiEnabled } from '../lib/catalystAI'
+import { claudeChat, useAiAvailable } from '../lib/catalystAI'
 import AIComingSoon from '../components/AIComingSoon'
 
 const EXAMPLES = [
@@ -26,6 +26,7 @@ Respond with ONLY this JSON:
 Make tactics specific to the shoe and market. Be realistic — some shoes have very little room to move. Say so if needed.`
 
 export default function PriceNegotiator() {
+  const aiReady = useAiAvailable()
   const [shoe, setShoe] = useState('')
   const [asking, setAsking] = useState('')
   const [budget, setBudget] = useState('')
@@ -44,7 +45,7 @@ export default function PriceNegotiator() {
 
   async function generate() {
     if (!shoe.trim() || !asking.trim() || !budget.trim()) return
-    if (!getApiKey()) {
+    if (!aiReady) {
       setError('Price Negotiator is not live yet. It will be ready before December 12.')
       return
     }
@@ -54,7 +55,7 @@ export default function PriceNegotiator() {
     setCopied(false)
     try {
       const prompt = `Shoe: ${shoe}\nVendor asking price: ₦${Number(asking).toLocaleString()}\nMy budget: ₦${Number(budget).toLocaleString()}${extra ? `\nExtra context: ${extra}` : ''}\n\nCoach me through negotiating this at SF26.`
-      const raw = await claudeChat([{ role: 'user', content: prompt }], { model: 'smart', system: SYSTEM, maxTokens: 900 })
+      const raw = await claudeChat([{ role: 'user', content: prompt }], { feature: 'PriceNegotiator', model: 'smart', system: SYSTEM, maxTokens: 900 })
       const match = raw.match(/\{[\s\S]*\}/)
       if (match) setResult(JSON.parse(match[0]))
       else setError('Could not parse script. Try again.')
@@ -84,7 +85,7 @@ export default function PriceNegotiator() {
 
       <div style={{ maxWidth: 760, margin: '0 auto' }}>
         <SectionTag>HAGGLE COACH</SectionTag>
-        {!aiEnabled() && <AIComingSoon feature="Price Negotiator" />}
+        {!aiReady && <AIComingSoon feature="Price Negotiator" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             PRICE NEGOTIATOR

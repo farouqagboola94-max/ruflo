@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { claudeChat, getApiKey, aiEnabled } from '../lib/catalystAI'
+import { claudeChat, useAiAvailable } from '../lib/catalystAI'
 import AIComingSoon from '../components/AIComingSoon'
 
 const VIBES = [
@@ -29,6 +29,7 @@ The story must:
 Write ONLY the story. Three paragraphs. No title, no intro, no label. Just the story.`
 
 export default function StoryGenerator() {
+  const aiReady = useAiAvailable()
   const [shoe, setShoe] = useState('')
   const [memory, setMemory] = useState('')
   const [vibe, setVibe] = useState(null)
@@ -45,7 +46,7 @@ export default function StoryGenerator() {
 
   async function generate() {
     if (!shoe.trim() || !memory.trim()) return
-    if (!getApiKey()) {
+    if (!aiReady) {
       setError('Story Generator is not live yet. It will be ready before December 12.')
       return
     }
@@ -56,7 +57,7 @@ export default function StoryGenerator() {
     try {
       const vibeContext = vibe ? `\nEmotional vibe: ${vibe}` : ''
       const prompt = `Shoe: ${shoe}\nMy memory: ${memory}${vibeContext}\n\nWrite my sneaker story.`
-      const raw = await claudeChat([{ role: 'user', content: prompt }], { model: 'balanced', system: SYSTEM, maxTokens: 500 })
+      const raw = await claudeChat([{ role: 'user', content: prompt }], { feature: 'StoryGenerator', model: 'balanced', system: SYSTEM, maxTokens: 500 })
       setStory(raw.trim())
     } catch (e) {
       setError(e.message || 'Something went wrong.')
@@ -83,7 +84,7 @@ export default function StoryGenerator() {
 
       <div style={{ maxWidth: 720, margin: '0 auto' }}>
         <SectionTag>SNEAKER STORIES</SectionTag>
-        {!aiEnabled() && <AIComingSoon feature="Sneaker Stories" />}
+        {!aiReady && <AIComingSoon feature="Sneaker Stories" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             STORY GENERATOR

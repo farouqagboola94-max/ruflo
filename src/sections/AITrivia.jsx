@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { claudeChat, getApiKey, aiEnabled } from '../lib/catalystAI'
+import { claudeChat, useAiAvailable } from '../lib/catalystAI'
 import AIComingSoon from '../components/AIComingSoon'
 
 const CATEGORIES = [
@@ -24,6 +24,7 @@ Respond with ONLY this JSON — nothing else:
 Make questions genuinely interesting — surprising history, contested facts, Lagos market insights. Perfect difficulty for a Lagos sneakerhead who follows the culture. Vary the correct answer — don't always make A correct.`
 
 export default function AITrivia() {
+  const aiReady = useAiAvailable()
   const [category, setCategory] = useState(null)
   const [question, setQuestion] = useState(null)
   const [selected, setSelected] = useState(null)
@@ -35,7 +36,7 @@ export default function AITrivia() {
   const [noKey, setNoKey] = useState(false)
 
   const loadQuestion = useCallback(async (cat) => {
-    if (!getApiKey()) { setNoKey(true); return }
+    if (!aiReady) { setNoKey(true); return }
     setNoKey(false)
     setLoading(true)
     setQuestion(null)
@@ -43,7 +44,7 @@ export default function AITrivia() {
     setShowFact(false)
     try {
       const prompt = `Generate a ${cat.label} sneaker trivia question for Lagos sneakerheads at Sneakers Fest '26. Focus: ${cat.desc}`
-      const raw = await claudeChat([{ role: 'user', content: prompt }], { model: 'balanced', system: SYSTEM, maxTokens: 400 })
+      const raw = await claudeChat([{ role: 'user', content: prompt }], { feature: 'AITrivia', model: 'balanced', system: SYSTEM, maxTokens: 400 })
       const match = raw.match(/\{[\s\S]*\}/)
       if (match) setQuestion(JSON.parse(match[0]))
     } catch {}
@@ -81,7 +82,7 @@ export default function AITrivia() {
 
       <div style={{ maxWidth: 640, margin: '0 auto' }}>
         <SectionTag>AI TRIVIA</SectionTag>
-        {!aiEnabled() && <AIComingSoon feature="AI Trivia" />}
+        {!aiReady && <AIComingSoon feature="AI Trivia" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             INFINITE SNEAKER TRIVIA

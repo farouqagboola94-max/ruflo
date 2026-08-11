@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
-import { claudeChat, getApiKey, aiEnabled } from '../lib/catalystAI'
+import { claudeChat, useAiAvailable } from '../lib/catalystAI'
 import AIComingSoon from '../components/AIComingSoon'
 
 const REASONS = [
@@ -29,6 +29,7 @@ const EXAMPLES = [
 ]
 
 export default function SneakerEulogy() {
+  const aiReady = useAiAvailable()
   const [shoe, setShoe] = useState('')
   const [duration, setDuration] = useState('')
   const [memory, setMemory] = useState('')
@@ -48,7 +49,7 @@ export default function SneakerEulogy() {
 
   async function generate() {
     if (!shoe.trim() || !memory.trim()) return
-    if (!getApiKey()) {
+    if (!aiReady) {
       setError('Sneaker Eulogy is not live yet. It will be ready before December 12.')
       return
     }
@@ -60,7 +61,7 @@ export default function SneakerEulogy() {
       const durationContext = duration.trim() ? `\nTime owned: ${duration}` : ''
       const reasonContext = reason ? `\nReason for leaving: ${reason}` : ''
       const prompt = `Shoe: ${shoe}${durationContext}\nMemories: ${memory}${reasonContext}\n\nWrite my sneaker eulogy.`
-      const raw = await claudeChat([{ role: 'user', content: prompt }], { model: 'balanced', system: SYSTEM, maxTokens: 450 })
+      const raw = await claudeChat([{ role: 'user', content: prompt }], { feature: 'SneakerEulogy', model: 'balanced', system: SYSTEM, maxTokens: 450 })
       setEulogy(raw.trim())
     } catch (e) {
       setError(e.message || 'Something went wrong.')
@@ -87,7 +88,7 @@ export default function SneakerEulogy() {
 
       <div style={{ maxWidth: 700, margin: '0 auto' }}>
         <SectionTag>FAREWELL</SectionTag>
-        {!aiEnabled() && <AIComingSoon feature="Sneaker Eulogy" />}
+        {!aiReady && <AIComingSoon feature="Sneaker Eulogy" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             SNEAKER EULOGY
