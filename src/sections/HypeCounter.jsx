@@ -3,11 +3,9 @@ import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import Egg from '../components/Egg'
 
-const SEED = 8423
-const KEY = 'sf26_hype'
 const DAILY_KEY = 'sf26_hype_daily'
-const TAPPER_BASE = 127
 const MILESTONE = 1000
+const FLUSH_MS  = 2000
 
 const MILESTONE_COPY = [
   'THE CULTURE IS ALIVE',
@@ -61,37 +59,55 @@ function Confetti({ count = 60 }) {
 }
 
 export default function HypeCounter() {
-  const [count, setCount] = useState(SEED)
+  // null until the shared counter answers. It is one real total in the store now,
+  // not a seed plus whatever this browser had tapped.
+  const [count, setCount] = useState(null)
   const [burst, setBurst] = useState(false)
   const [floats, setFloats] = useState([])
-  const [tappers, setTappers] = useState(TAPPER_BASE)
   const [dailyTaps, setDailyTaps] = useState(() => getDailyTaps())
   const [milestone, setMilestone] = useState(null)
   const [confetti, setConfetti] = useState(false)
   const prevMilestoneRef = useRef(null)
+  const pendingRef = useRef(0)
 
   useEffect(() => {
-    try {
-      const extra = Number(JSON.parse(localStorage.getItem(KEY) || '0'))
-      const total = SEED + extra
-      setCount(total)
-      prevMilestoneRef.current = Math.floor(total / MILESTONE)
-    } catch {}
+    fetch('/.netlify/functions/hype')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (!Number.isFinite(d?.total)) return
+        setCount(d.total)
+        prevMilestoneRef.current = Math.floor(d.total / MILESTONE)
+      })
+      .catch(() => {})
   }, [])
 
+  // Taps are batched so a fast tapper does not fire a request per press.
   useEffect(() => {
-    const t = setInterval(() => {
-      setTappers(TAPPER_BASE + Math.floor(Math.random() * 28) - 4)
-    }, 3500)
-    return () => clearInterval(t)
+    const flush = () => {
+      const taps = pendingRef.current
+      if (!taps) return
+      pendingRef.current = 0
+      fetch('/.netlify/functions/hype', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ taps: Math.min(50, taps) }),
+      })
+        .then(r => r.ok ? r.json() : null)
+        .then(d => { if (Number.isFinite(d?.total)) setCount(d.total) })
+        .catch(() => {})
+    }
+    const id = setInterval(flush, FLUSH_MS)
+    window.addEventListener('pagehide', flush)
+    return () => { clearInterval(id); window.removeEventListener('pagehide', flush); flush() }
   }, [])
 
   function tap() {
-    const add = 1 + Math.floor(Math.random() * 2)
+    const add = 1
+    pendingRef.current += add
 
     setCount(c => {
+      if (c === null) return c
       const next = c + add
-      try { localStorage.setItem(KEY, JSON.stringify(next - SEED)) } catch {}
 
       const curMilestone = Math.floor(next / MILESTONE)
       if (prevMilestoneRef.current === null) {
@@ -124,14 +140,17 @@ export default function HypeCounter() {
   }
 
   function share() {
-    const num = (Math.floor(count / MILESTONE) * MILESTONE).toLocaleString()
-    const text = `I helped push Sneakers Fest '26 hype past ${num}! The sole community is alive 🔥👟`
+    const num = count === null ? null : (Math.floor(count / MILESTONE) * MILESTONE).toLocaleString()
+    const text = num
+      ? `I helped push Sneakers Fest '26 hype past ${num}! The sole community is alive 🔥👟`
+      : `I'm hyping Sneakers Fest '26. The sole community is alive 🔥👟`
     if (navigator.share) { navigator.share({ text }).catch(() => {}) }
     else if (navigator.clipboard) { navigator.clipboard.writeText(text).catch(() => {}) }
   }
 
-  const nextMilestone = (Math.floor(count / MILESTONE) + 1) * MILESTONE
-  const progressPct = ((count % MILESTONE) / MILESTONE) * 100
+  const known = count !== null
+  const nextMilestone = known ? (Math.floor(count / MILESTONE) + 1) * MILESTONE : MILESTONE
+  const progressPct = known ? ((count % MILESTONE) / MILESTONE) * 100 : 0
 
   return (
     <section id="hype" style={{
@@ -208,7 +227,7 @@ export default function HypeCounter() {
               background: '#22ff44', marginRight: 6, verticalAlign: 'middle',
               animation: 'tapperPulse 1.4s ease-in-out infinite',
             }} />
-            <strong style={{ color: B.neonCyan }}>{tappers}</strong> TAPPING RIGHT NOW
+            EVERY TAP HERE IS SOMEONE REAL
           </div>
           <div style={{ fontFamily: "'Space Mono'", fontSize: '0.62rem', color: B.smoke }}>
             YOUR HYPE TODAY: <strong style={{ color: B.amber }}>{dailyTaps.toLocaleString()}</strong>
@@ -227,7 +246,7 @@ export default function HypeCounter() {
             transition: 'transform 0.15s cubic-bezier(0.34,1.56,0.64,1)',
             letterSpacing: '0.04em', lineHeight: 1,
           }}>
-            {count.toLocaleString()}
+            {known ? count.toLocaleString() : '—'}
           </div>
         </div>
 

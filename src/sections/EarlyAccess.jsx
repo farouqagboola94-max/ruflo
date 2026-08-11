@@ -4,10 +4,9 @@ import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import Egg from '../components/Egg'
 import MemberCard from '../components/MemberCard'
 
-const SEED_COUNT = 1847
-const GOAL       = 2500
-const KEY        = 'sf26_waitlist'
-const REF_KEY    = 'sf26_refcode'
+const GOAL    = 2500
+const KEY     = 'sf26_waitlist'
+const REF_KEY = 'sf26_refcode'
 
 const TIERS = [
   {
@@ -62,6 +61,8 @@ export default function EarlyAccess() {
   const [name,        setName]        = useState('')
   const [phase,       setPhase]       = useState('form')
   const [position,    setPosition]    = useState(null)
+  // null until the server answers - we never guess how many people have joined
+  const [total,       setTotal]       = useState(null)
   const [error,       setError]       = useState('')
   const [refCode,     setRefCode]     = useState('')
   const [referredBy,  setReferredBy]  = useState('')
@@ -97,14 +98,19 @@ export default function EarlyAccess() {
       if (urlRef) setReferredBy(urlRef.trim())
     } catch {}
 
+    // Real waitlist size, straight from the store. Count only - no entrant data.
+    fetch('/.netlify/functions/waitlist-signup')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (typeof d?.total === 'number') setTotal(d.total) })
+      .catch(() => {})
+
     // Restore returning user's waitlist state from localStorage
     try {
       const savedCode = localStorage.getItem(REF_KEY)
       if (savedCode) {
-        const stored   = JSON.parse(localStorage.getItem(KEY) || '0')
-        const savedPos = SEED_COUNT + Number(stored)
+        const stored = Number(JSON.parse(localStorage.getItem(KEY) || 'null'))
         setRefCode(savedCode)
-        setPosition(savedPos)
+        if (Number.isFinite(stored) && stored > 0) setPosition(stored)
         setPhase('done')
         fetch(`/.netlify/functions/referral-stats?code=${encodeURIComponent(savedCode)}`)
           .then(r => r.ok ? r.json() : null)
@@ -113,10 +119,6 @@ export default function EarlyAccess() {
       }
     } catch {}
   }, [])
-
-  function getTotal() {
-    try { return SEED_COUNT + Number(JSON.parse(localStorage.getItem(KEY) || '0')) } catch { return SEED_COUNT }
-  }
 
   async function submit(e) {
     e.preventDefault()
@@ -141,8 +143,10 @@ export default function EarlyAccess() {
       })
     } catch {}
 
-    // Netlify Function — stores entry server-side, returns real queue position, sends confirmation email
-    let pos = getTotal() + Math.floor(Math.random() * 8) + 1
+    // Netlify Function - stores the entry and returns the real queue position.
+    // If it does not answer we leave the position unknown rather than invent one:
+    // the number drives which tier of perks the visitor is promised.
+    let pos = null
     try {
       const res = await fetch('/.netlify/functions/waitlist-signup', {
         method: 'POST',
@@ -156,12 +160,13 @@ export default function EarlyAccess() {
       })
       if (res.ok) {
         const data = await res.json()
-        if (data.position && typeof data.position === 'number') pos = data.position
+        if (typeof data.position === 'number' && data.position > 0) pos = data.position
+        if (typeof data.total    === 'number') setTotal(data.total)
       }
     } catch {}
 
     try {
-      localStorage.setItem(KEY,     JSON.stringify(pos - SEED_COUNT))
+      if (pos !== null) localStorage.setItem(KEY, JSON.stringify(pos))
       localStorage.setItem(REF_KEY, code)
     } catch {}
     setPosition(pos); setRefCode(code); setPhase('done')
@@ -179,15 +184,17 @@ export default function EarlyAccess() {
   }
 
   function sharePos() {
-    const text = `I'm #${position?.toLocaleString()} on the Sneakers Fest '26 early access list. Lagos, Dec 12. Grab your spot → sneakersfest26.com?ref=${refCode}`
+    const text = position
+      ? `I'm #${position.toLocaleString()} on the Sneakers Fest '26 early access list. Lagos, Dec 12. Grab your spot → sneakersfest26.com?ref=${refCode}`
+      : `I'm on the Sneakers Fest '26 early access list. Lagos, Dec 12. Grab your spot → sneakersfest26.com?ref=${refCode}`
     if (navigator.share) navigator.share({ text })
     else { navigator.clipboard.writeText(text); setShared(true); setTimeout(() => setShared(false), 2000) }
   }
 
-  const total  = getTotal()
-  const pct    = Math.min(100, Math.round((total / GOAL) * 100))
+  const known  = total !== null
+  const pct    = known ? Math.min(100, Math.round((total / GOAL) * 100)) : 0
   const tier   = position ? getTier(position) : null
-  const ahead  = position ? Math.max(0, total - position) : 0
+  const ahead  = position && known ? Math.max(0, total - position) : null
 
   return (
     <section id="waitlist" style={{ background:`linear-gradient(135deg, ${B.void} 0%, ${B.black} 50%, ${B.charcoal} 100%)`, padding:'80px 20px', position:'relative', overflow:'hidden' }}>
@@ -236,10 +243,10 @@ export default function EarlyAccess() {
         <div style={{ marginBottom:28 }}>
           <div style={{ display:'flex', justifyContent:'space-between', marginBottom:6 }}>
             <span style={{ fontFamily:"'Space Mono'", fontSize:'0.6rem', color:B.amber, letterSpacing:2 }}>
-              {total.toLocaleString()} LOCKED IN
+              {known ? `${total.toLocaleString()} LOCKED IN` : 'COUNTING…'}
             </span>
             <span style={{ fontFamily:"'Space Mono'", fontSize:'0.6rem', color:'#444', letterSpacing:2 }}>
-              GOAL: {GOAL.toLocaleString()} · {pct}% FULL
+              GOAL: {GOAL.toLocaleString()}{known ? ` · ${pct}% FULL` : ''}
             </span>
           </div>
           <div style={{ height:6, background:'rgba(255,255,255,0.05)', borderRadius:3, overflow:'hidden' }}>
@@ -285,6 +292,22 @@ export default function EarlyAccess() {
           </div>
         )}
 
+        {/* DONE, but the queue position never came back - say so plainly */}
+        {phase === 'done' && !tier && (
+          <div className="card-3d" style={{ background:'rgba(255,255,255,0.02)', border:`1px solid ${B.amber}30`, borderRadius:10, padding:'20px 22px', textAlign:'left' }}>
+            <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color:B.amber, letterSpacing:3, marginBottom:8 }}>YOU'RE ON THE LIST</div>
+            <p style={{ fontFamily:"'Syne'", fontSize:'0.85rem', color:B.smoke, lineHeight:1.6, margin:0 }}>
+              We couldn't confirm your queue number just now. Your place is saved — the
+              confirmation email carries your position and the tier that comes with it.
+            </p>
+            {refCode && (
+              <div style={{ marginTop:14, fontFamily:"'Space Mono'", fontSize:'0.6rem', color:'#555', letterSpacing:2 }}>
+                REFERRAL CODE · <span style={{ color:B.neonCyan }}>{refCode}</span>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* DONE */}
         {phase === 'done' && tier && (
           <div>
@@ -318,9 +341,9 @@ export default function EarlyAccess() {
             {/* context stats */}
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:12, marginBottom:24 }}>
               {[
-                { label:'AHEAD OF YOU', val:Math.max(0, position - 1).toLocaleString(), color:B.amber },
-                { label:'BEHIND YOU',   val:ahead.toLocaleString(),                     color:B.neonCyan },
-                { label:'QUEUE FILL',   val:`${pct}%`,                                  color:B.neonLime },
+                { label:'AHEAD OF YOU', val:Math.max(0, position - 1).toLocaleString(),   color:B.amber },
+                { label:'BEHIND YOU',   val:ahead === null ? '—' : ahead.toLocaleString(), color:B.neonCyan },
+                { label:'QUEUE FILL',   val:known ? `${pct}%` : '—',                       color:B.neonLime },
               ].map(s => (
                 <div key={s.label} className="card-3d" style={{ background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:8, padding:'12px 14px', textAlign:'center' }}>
                   <div style={{ fontFamily:"'Orbitron'", fontSize:'1.2rem', fontWeight:900, color:s.color, marginBottom:4 }}>{s.val}</div>

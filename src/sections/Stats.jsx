@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 import CountUp from '../components/CountUp'
 
@@ -10,31 +9,7 @@ const STATS = [
   { to: 10,   suffix: 'H', label: 'OF LIVE CULTURE',       color: B.neonCyan },
 ]
 
-const VIEWER_KEY = 'sf26_stats_viewers'
-
 export default function Stats() {
-  const [viewers, setViewers] = useState(142)
-
-  useEffect(() => {
-    try {
-      const stored = JSON.parse(localStorage.getItem(VIEWER_KEY) || 'null')
-      const today  = new Date().toISOString().slice(0, 10)
-      if (stored?.date === today) {
-        setViewers(stored.count)
-      } else {
-        const v = 120 + Math.floor(Math.random() * 90)
-        localStorage.setItem(VIEWER_KEY, JSON.stringify({ date: today, count: v }))
-        setViewers(v)
-      }
-    } catch {}
-
-    const vId = setInterval(() => {
-      setViewers(v => Math.max(100, Math.min(260, v + Math.floor(Math.random() * 7) - 3)))
-    }, 6200)
-
-    return () => clearInterval(vId)
-  }, [])
-
   return (
     <section id="stats" style={{
       background: B.void,
@@ -45,7 +20,9 @@ export default function Stats() {
         @keyframes dotBlink { 0%,100%{ opacity:1 } 50%{ opacity:0.4 } }
       `}</style>
 
-      {/* Live viewer strip */}
+      {/* Event strip. This was a "142 EXPLORING THE EVENT NOW" counter seeded from
+          a random number - there is no analytics feed behind it, so it said nothing
+          true. The date and venue are the facts worth repeating here. */}
       <div style={{
         borderBottom: '1px solid rgba(255,255,255,0.04)',
         padding: '9px 24px',
@@ -54,7 +31,7 @@ export default function Stats() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <div style={{ width: 7, height: 7, borderRadius: '50%', background: B.neonLime, boxShadow: `0 0 8px ${B.neonLime}`, animation: 'dotBlink 1.8s ease-in-out infinite' }} />
           <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: B.smoke, letterSpacing: 2 }}>
-            {viewers} EXPLORING THE EVENT NOW
+            DECEMBER 12 · MURI OKUNOLA PARK, VICTORIA ISLAND
           </span>
         </div>
       </div>

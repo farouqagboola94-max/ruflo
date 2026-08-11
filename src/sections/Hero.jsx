@@ -59,15 +59,14 @@ const PRICE_TIERS = [
   { t: 'PHALANX', p: '₦50,000', c: B.neonLime     },
 ]
 
-const RECENT_BUYERS = [
-  { name: 'Tunde',  city: 'Lagos',          tier: 'PHALANX', color: B.neonLime    },
-  { name: 'Chisom', city: 'Abuja',          tier: 'VIP',     color: B.amber       },
-  { name: 'Adaeze', city: 'Port Harcourt',  tier: 'VVIP',    color: B.neonMagenta },
-  { name: 'Emeka',  city: 'Lagos',          tier: 'PHALANX', color: B.neonLime    },
-  { name: 'Seun',   city: 'Ibadan',         tier: 'VIP',     color: B.amber       },
-  { name: 'Ngozi',  city: 'Enugu',          tier: 'GENERAL', color: B.neonCyan    },
-  { name: 'Dayo',   city: 'Lagos',          tier: 'VIP',     color: B.amber       },
-  { name: 'Kemi',   city: 'Kano',           tier: 'VVIP',    color: B.neonMagenta },
+// Rotating strip under the CTAs. This used to cycle eight invented people
+// "just securing" tickets - names, cities and tiers that were never real
+// purchases. These are facts about the festival that we can stand behind.
+const HERO_FACTS = [
+  { text: 'Muri Okunola Park, Victoria Island',  color: B.neonCyan    },
+  { text: '12:00 to 22:00 - ten hours',           color: B.amber       },
+  { text: '30+ vendors on the floor',             color: B.neonLime    },
+  { text: 'Four tiers, from 5,000 naira',         color: B.neonMagenta },
 ]
 
 export default function Hero() {
@@ -75,21 +74,17 @@ export default function Hero() {
   const [h1, setH1] = useState(false)
   const [h2, setH2] = useState(false)
   const [hoveredTier, setHoveredTier] = useState(null)
-  const [viewers, setViewers] = useState(338)
-  const [buyerIdx, setBuyerIdx] = useState(0)
-  const [buyerVisible, setBuyerVisible] = useState(true)
+  const [factIdx, setFactIdx] = useState(0)
+  const [factVisible, setFactVisible] = useState(true)
   const [tilt, setTilt] = useState({ rx: 0, ry: 0 })
   const sectionRef = useRef(null)
 
   useEffect(() => {
-    const id1 = setInterval(() => {
-      setViewers(v => Math.max(280, Math.min(520, v + Math.floor(Math.random() * 7) - 3)))
-    }, 4200)
-    const id2 = setInterval(() => {
-      setBuyerVisible(false)
-      setTimeout(() => { setBuyerIdx(i => (i + 1) % RECENT_BUYERS.length); setBuyerVisible(true) }, 350)
+    const id = setInterval(() => {
+      setFactVisible(false)
+      setTimeout(() => { setFactIdx(i => (i + 1) % HERO_FACTS.length); setFactVisible(true) }, 350)
     }, 4800)
-    return () => { clearInterval(id1); clearInterval(id2) }
+    return () => clearInterval(id)
   }, [])
 
   const handleMouseMove = (e) => {
@@ -102,7 +97,7 @@ export default function Hero() {
   }
   const handleMouseLeave = () => setTilt({ rx: 0, ry: 0 })
 
-  const buyer = RECENT_BUYERS[buyerIdx]
+  const fact = HERO_FACTS[factIdx]
 
   return (
     <section
@@ -189,7 +184,9 @@ export default function Hero() {
           </div>
           <div style={{ display:'inline-flex', alignItems:'center', gap:6, padding:'6px 14px', background:'rgba(255,255,255,0.04)', backdropFilter:'blur(14px)', WebkitBackdropFilter:'blur(14px)', border:`1px solid ${B.amber}28`, borderRadius:100 }}>
             <div style={{ width:5, height:5, borderRadius:'50%', background:B.amber, animation:'viewerBlink 1.8s ease-in-out infinite', boxShadow:`0 0 6px ${B.amber}` }} />
-            <span style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color:B.amber, letterSpacing:'0.3em' }}>{viewers} VIEWING NOW</span>
+            <span style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color:B.amber, letterSpacing:'0.3em' }}>
+              {time.days > 0 ? `${time.days} DAYS TO GO` : 'HAPPENING TODAY'}
+            </span>
           </div>
         </div>
 
@@ -309,15 +306,13 @@ export default function Hero() {
           </a>
         </div>
 
-        {/* Live buyer social proof */}
+        {/* Rotating festival facts */}
         <div style={{ marginTop:20, height:28, display:'flex', alignItems:'center', justifyContent:'center' }}>
-          {buyerVisible && (
+          {factVisible && (
             <div style={{ display:'inline-flex', alignItems:'center', gap:8, animation:'buyerSlide 0.35s ease' }}>
-              <div style={{ width:5, height:5, borderRadius:'50%', background:B.neonLime, boxShadow:`0 0 6px ${B.neonLime}`, flexShrink:0 }} />
-              <span style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color:'#666' }}>
-                <span style={{ color:buyer.color }}>{buyer.name} ({buyer.city})</span>
-                {' '}just secured{' '}
-                <span style={{ color:buyer.color }}>{buyer.tier}</span>
+              <div style={{ width:5, height:5, borderRadius:'50%', background:fact.color, boxShadow:`0 0 6px ${fact.color}`, flexShrink:0 }} />
+              <span style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color:fact.color, letterSpacing:'0.12em' }}>
+                {fact.text}
               </span>
             </div>
           )}
