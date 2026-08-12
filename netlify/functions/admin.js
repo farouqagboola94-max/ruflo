@@ -1,4 +1,6 @@
-// GET /.netlify/functions/admin?resource=summary|tickets|pending|waitlist|vendors|newsletter
+// GET /.netlify/functions/admin?resource=summary|tickets|pending|waitlist|vendors
+//                                       |newsletter|contacts|crews|groups|fnp
+//                                       |confessions|raffle|hype
 // Header: Authorization: Bearer <ADMIN_SECRET>
 // Protected admin endpoint — returns live data from Netlify Blobs.
 
@@ -112,6 +114,36 @@ export const handler = async (event) => {
       total: all.length,
       totalCheckIns: all.reduce((n, s) => n + (s.count || 0), 0),
     })
+  }
+
+  if (resource === 'raffle') {
+    const store = Store('sf26-raffles')
+    const list  = await store.list().catch(() => ({ blobs: [] }))
+    // Keys are "<raffleId>:<email>" for entries and "<raffleId>:_count" for
+    // the running total, so the counters have to be filtered out by suffix.
+    const entryKeys = (list.blobs || []).map(b => b.key).filter(k => !k.endsWith(':_count'))
+    const entries = (await Promise.all(
+      entryKeys.map(async k => {
+        const v = await store.get(k, { type: 'json' }).catch(() => null)
+        return v ? { ...v, raffleId: k.split(':')[0] } : null
+      })
+    )).filter(Boolean)
+
+    const byRaffle = entries.reduce((acc, e) => {
+      acc[e.raffleId] = (acc[e.raffleId] || 0) + 1
+      return acc
+    }, {})
+
+    return ok({
+      entries: entries.sort((a, b) => String(b.enteredAt).localeCompare(String(a.enteredAt))),
+      byRaffle,
+      total: entries.length,
+    })
+  }
+
+  if (resource === 'hype') {
+    const data = await Store('sf26-hype').get('total', { type: 'json' }).catch(() => null)
+    return ok({ total: Number(data?.total) || 0 })
   }
 
   if (resource === 'confessions') {

@@ -4,23 +4,18 @@ import { GrainOverlay, SectionTag } from '../components/Shared'
 import Egg from '../components/Egg'
 
 const EVENT_DATE = new Date('2026-12-12T12:00:00')
-const RSVP_SEED  = 1247
-const RSVP_KEY   = 'sf26_rsvp_count'
 const JOINED_KEY = 'sf26_rsvp_joined'
+const COUNTER    = '/.netlify/functions/hype?counter=rsvp'
 
-const MILESTONES = [1500, 2000, 2500]
+const MILESTONES = [250, 500, 1000, 1500, 2000, 2500]
 
-const JOIN_POOL = [
-  { name: 'Tunde O.',  city: 'Lagos Island' },
-  { name: 'Chisom A.', city: 'Lekki' },
-  { name: 'Adaeze N.', city: 'Ikeja' },
-  { name: 'Emeka K.',  city: 'Abuja' },
-  { name: 'Seun B.',   city: 'VI' },
-  { name: 'Ngozi F.',  city: 'Surulere' },
-  { name: 'Dayo L.',   city: 'Yaba' },
-  { name: 'Kemi R.',   city: 'Port Harcourt' },
-  { name: 'Bola J.',   city: 'Ikoyi' },
-  { name: 'Femi S.',   city: 'Festac' },
+// This strip used to cycle ten invented people "just joining" from invented
+// neighbourhoods. These are things about the day that are true.
+const MARQUEE = [
+  'Muri Okunola Park, Victoria Island',
+  'Doors 12:00, last set 22:00',
+  '30+ vendors on the floor',
+  'General, VIP, VVIP, Phalanx',
 ]
 
 // ── countdown logic ──────────────────────────────────────────────────────────────────────────────
@@ -158,7 +153,7 @@ async function downloadHypeCard({ name, daysLeft }) {
 // ── main section ──────────────────────────────────────────────────────────────────────────────
 export default function Countdown() {
   const time = useCountdown()
-  const [rsvp,       setRsvp]       = useState(RSVP_SEED)
+  const [rsvp,       setRsvp]       = useState(null)
   const [joined,     setJoined]     = useState(false)
   const [burst,      setBurst]      = useState(false)
   const [cardName,   setCardName]   = useState('')
@@ -169,17 +164,18 @@ export default function Countdown() {
   const joinIdx = useRef(0)
 
   useEffect(() => {
-    try {
-      const extra = Number(localStorage.getItem(RSVP_KEY) || 0)
-      setRsvp(RSVP_SEED + extra)
-      setJoined(localStorage.getItem(JOINED_KEY) === '1')
-    } catch {}
+    try { setJoined(localStorage.getItem(JOINED_KEY) === '1') } catch {}
+
+    fetch(COUNTER)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (Number.isFinite(d?.total)) setRsvp(d.total) })
+      .catch(() => {})
 
     function showJoin() {
       setJoinVis(false)
       joinRef.current = setTimeout(() => {
-        joinIdx.current = (joinIdx.current + 1) % JOIN_POOL.length
-        setJoinPerson(JOIN_POOL[joinIdx.current])
+        joinIdx.current = (joinIdx.current + 1) % MARQUEE.length
+        setJoinPerson(MARQUEE[joinIdx.current])
         setJoinVis(true)
         joinRef.current = setTimeout(showJoin, 5500 + Math.random() * 3000)
       }, 400)
@@ -192,13 +188,18 @@ export default function Countdown() {
     if (joined) return
     setBurst(true)
     setTimeout(() => setBurst(false), 400)
-    setRsvp(r => {
-      const next = r + 1
-      try { localStorage.setItem(RSVP_KEY, String(next - RSVP_SEED)) } catch {}
-      return next
-    })
     setJoined(true)
     try { localStorage.setItem(JOINED_KEY, '1') } catch {}
+
+    // One RSVP per browser, and the number that comes back is the shared one.
+    fetch('/.netlify/functions/hype', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ counter: 'rsvp', taps: 1 }),
+    })
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (Number.isFinite(d?.total)) setRsvp(d.total) })
+      .catch(() => {})
   }
 
   async function handleCard() {
@@ -253,7 +254,7 @@ export default function Countdown() {
             <div>
               <div style={{ fontFamily:'Orbitron,monospace', fontWeight:900, fontSize:'clamp(36px,7vw,64px)', color:B.white, lineHeight:1,
                 transform: burst ? 'scale(1.1)' : 'scale(1)', transition:'transform 0.2s cubic-bezier(0.34,1.56,0.64,1)' }}>
-                {rsvp.toLocaleString()}
+                {rsvp === null ? '—' : rsvp.toLocaleString()}
               </div>
               <div style={{ fontFamily:'Space Mono,monospace', fontSize:10, color:B.smoke, letterSpacing:3, marginTop:6, textAlign:'center' }}>
                 {joined ? 'HEADS ARE IN · INCLUDING YOU' : 'HEADS ALREADY IN'}
@@ -265,7 +266,7 @@ export default function Countdown() {
                   <>
                     <div style={{ width:6, height:6, borderRadius:'50%', background:B.neonLime, boxShadow:`0 0 6px ${B.neonLime}`, animation:'dotBlink2 1.5s ease-in-out infinite' }} />
                     <span style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:B.neonLime, letterSpacing:1, animation:'joinSlide 0.4s ease' }}>
-                      {joinPerson.name} <span style={{ color:B.smoke }}>({joinPerson.city}) just joined</span>
+                      <span style={{ color:B.smoke }}>{joinPerson}</span>
                     </span>
                   </>
                 )}
@@ -273,7 +274,7 @@ export default function Countdown() {
             </div>
 
             {/* Milestone bar */}
-            {(() => {
+            {rsvp !== null && (() => {
               const next = MILESTONES.find(m => m > rsvp) ?? MILESTONES[MILESTONES.length - 1]
               const prev = MILESTONES[MILESTONES.indexOf(next) - 1] ?? 0
               const pct  = Math.min(1, (rsvp - prev) / (next - prev))
