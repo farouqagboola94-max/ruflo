@@ -97,6 +97,7 @@ const Crews           = lazy(() => import('./sections/Crews'))
 const FridayProtocol  = lazy(() => import('./sections/FridayProtocol'))
 const GroupTickets    = lazy(() => import('./sections/GroupTickets'))
 const MyPass          = lazy(() => import('./sections/MyPass'))
+const Standings       = lazy(() => import('./sections/Standings'))
 const VendorDirectory = lazy(() => import('./sections/VendorDirectory'))
 const VendorReg       = lazy(() => import('./sections/VendorReg'))
 const VendorDashboard = lazy(() => import('./sections/VendorDashboard'))
@@ -362,6 +363,7 @@ export default function App() {
         <SectionBoundary><Suspense fallback={null}>
           <Reveal><GroupTickets /></Reveal>
           <Reveal><MyPass /></Reveal>
+          <Reveal><Standings /></Reveal>
         </Suspense></SectionBoundary>
 
         {/* ACT 2: COMMUNITY — social proof and belonging */}
