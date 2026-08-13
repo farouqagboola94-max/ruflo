@@ -1,6 +1,9 @@
 import { useState, useEffect, useCallback } from 'react'
 import { B } from '../tokens'
-import { fetchResource, verify, getSecret, setSecret, clearSecret, downloadCSV } from './adminData'
+import {
+  fetchResource, verify, getSecret, setSecret, clearSecret, downloadCSV,
+  moderate, moderateMany, moderationKind,
+} from './adminData'
 
 // The organiser's view of everything the site collects. It used to read this
 // browser's localStorage behind a password compiled into the public bundle,
@@ -174,7 +177,7 @@ function Gate({ onAuth }) {
   )
 }
 
-function Table({ cols, rows }) {
+function Table({ cols, rows, onAct, cursor, busyId }) {
   if (!rows?.length) {
     return <div style={{ ...PANEL, padding: 28, fontFamily: MONO, fontSize: 11, color: '#3a3a3a' }}>Nothing here yet.</div>
   }
@@ -189,11 +192,16 @@ function Table({ cols, rows }) {
                 color: '#555', letterSpacing: 2, borderBottom: '1px solid rgba(255,255,255,0.07)', whiteSpace: 'nowrap',
               }}>{label}</th>
             ))}
+            {onAct && <th style={{
+              textAlign: 'right', padding: '12px 14px', fontFamily: MONO, fontSize: 8,
+              color: '#555', letterSpacing: 2, borderBottom: '1px solid rgba(255,255,255,0.07)',
+            }}>REVIEW</th>}
           </tr>
         </thead>
         <tbody>
           {rows.map((r, i) => (
-            <tr key={r.id || r.code || r.ticketId || r.email || i}>
+            <tr key={r.id || r.code || r.ticketId || r.email || i}
+                style={onAct && i === cursor ? { background: 'rgba(245,166,35,0.07)' } : undefined}>
               {cols.map(([key]) => {
                 let v = r[key]
                 if (typeof v === 'boolean') v = v ? 'YES' : '—'
@@ -207,6 +215,31 @@ function Table({ cols, rows }) {
                   }}>{v === undefined || v === null || v === '' ? '—' : String(v)}</td>
                 )
               })}
+              {onAct && (
+                <td style={{
+                  padding: '9px 14px', textAlign: 'right', whiteSpace: 'nowrap',
+                  borderBottom: '1px solid rgba(255,255,255,0.04)',
+                }}>
+                  <button
+                    onClick={() => onAct(r.id, 'approve')} disabled={busyId === r.id}
+                    style={{
+                      padding: '5px 11px', marginRight: 6, borderRadius: 5, cursor: 'pointer',
+                      background: 'transparent', border: `1px solid ${B.neonLime}50`,
+                      color: B.neonLime, fontFamily: MONO, fontSize: 9, letterSpacing: 1,
+                      opacity: busyId === r.id ? 0.4 : 1,
+                    }}
+                  >APPROVE</button>
+                  <button
+                    onClick={() => onAct(r.id, 'reject')} disabled={busyId === r.id}
+                    style={{
+                      padding: '5px 11px', borderRadius: 5, cursor: 'pointer',
+                      background: 'transparent', border: '1px solid #ff444450',
+                      color: '#ff6666', fontFamily: MONO, fontSize: 9, letterSpacing: 1,
+                      opacity: busyId === r.id ? 0.4 : 1,
+                    }}
+                  >REJECT</button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
@@ -221,8 +254,12 @@ export default function Admin() {
   const [data, setData]     = useState(null)
   const [error, setError]   = useState('')
   const [loading, setLoading] = useState(false)
+  const [busyId, setBusyId]   = useState(null)
+  const [cursor, setCursor]   = useState(0)
+  const [notice, setNotice]   = useState('')
 
   const tab = TABS.find(t => t.id === tabId) || TABS[0]
+  const canModerate = Boolean(moderationKind(tab.id))
 
   const load = useCallback(async () => {
     setLoading(true); setError(''); setData(null)
@@ -238,6 +275,62 @@ export default function Admin() {
   }, [tab.resource])
 
   useEffect(() => { if (authed) load() }, [authed, load])
+  useEffect(() => { setCursor(0); setNotice('') }, [tabId])
+
+  const rowsNow = data && tab.rows ? (tab.rows(data) || []) : []
+
+  const act = useCallback(async (id, action) => {
+    if (!id || busyId) return
+    setBusyId(id); setError(''); setNotice('')
+    try {
+      await moderate(tab.id, id, action)
+      setNotice(`${id} ${action === 'approve' ? 'approved' : 'rejected'}.`)
+      // Keep the cursor where it was: the row under it has just left the
+      // queue, so the next item slides into the same position.
+      await load()
+    } catch (e) {
+      setError(e.message)
+      if (e.status === 401) { clearSecret(); setAuthed(false) }
+    } finally {
+      setBusyId(null)
+    }
+  }, [tab.id, busyId, load])
+
+  async function actAllVisible(action) {
+    const ids = rowsNow.map(r => r.id).filter(Boolean)
+    if (!ids.length) return
+    const verb = action === 'approve' ? 'Approve' : 'Reject'
+    if (!window.confirm(`${verb} all ${ids.length} pending items on this tab?`)) return
+
+    setBusyId('bulk'); setError(''); setNotice('')
+    try {
+      const { done, failed } = await moderateMany(tab.id, ids, action)
+      setNotice(failed
+        ? `${done} ${action}d, ${failed} failed. Reload and try the rest.`
+        : `${done} ${action}d.`)
+      await load()
+    } finally {
+      setBusyId(null)
+    }
+  }
+
+  // Working a queue of two hundred posts with a mouse is the slow way.
+  useEffect(() => {
+    if (!authed || !canModerate) return
+    function onKey(e) {
+      if (e.metaKey || e.ctrlKey || e.altKey) return
+      const tag = e.target?.tagName
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return
+
+      const max = rowsNow.length - 1
+      if (e.key === 'j' || e.key === 'ArrowDown') { e.preventDefault(); setCursor(c => Math.min(max, c + 1)) }
+      else if (e.key === 'k' || e.key === 'ArrowUp') { e.preventDefault(); setCursor(c => Math.max(0, c - 1)) }
+      else if (e.key === 'a') { e.preventDefault(); act(rowsNow[cursor]?.id, 'approve') }
+      else if (e.key === 'r') { e.preventDefault(); act(rowsNow[cursor]?.id, 'reject') }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [authed, canModerate, rowsNow, cursor, act])
 
   function logout() { clearSecret(); setAuthed(false); setData(null) }
 
@@ -302,7 +395,35 @@ export default function Admin() {
           </div>
         )}
 
-        {rows && <Table cols={tab.cols} rows={rows} />}
+        {canModerate && rows?.length > 0 && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+            <button onClick={() => actAllVisible('approve')} disabled={busyId} style={{
+              padding: '7px 14px', background: `${B.neonLime}15`, border: `1px solid ${B.neonLime}45`,
+              borderRadius: 6, color: B.neonLime, fontFamily: MONO, fontSize: 9,
+              letterSpacing: 1, cursor: busyId ? 'default' : 'pointer',
+            }}>APPROVE ALL {rows.length}</button>
+            <button onClick={() => actAllVisible('reject')} disabled={busyId} style={{
+              padding: '7px 14px', background: 'transparent', border: '1px solid #ff444445',
+              borderRadius: 6, color: '#ff6666', fontFamily: MONO, fontSize: 9,
+              letterSpacing: 1, cursor: busyId ? 'default' : 'pointer',
+            }}>REJECT ALL</button>
+            <span style={{ fontFamily: MONO, fontSize: 8, color: '#444', letterSpacing: 1 }}>
+              J / K to move · A to approve · R to reject
+            </span>
+          </div>
+        )}
+
+        {notice && (
+          <div style={{ fontFamily: MONO, fontSize: 10, color: B.neonLime, letterSpacing: 1 }}>{notice}</div>
+        )}
+
+        {rows && (
+          <Table
+            cols={tab.cols} rows={rows}
+            onAct={canModerate ? act : null}
+            cursor={cursor} busyId={busyId}
+          />
+        )}
       </div>
     </div>
   )

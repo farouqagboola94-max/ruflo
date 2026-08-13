@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "node tests/verify-payment.test.mjs && node tests/ratelimit.test.mjs && node tests/crew.test.mjs && node tests/group-claim.test.mjs && node tests/fnp.test.mjs && node tests/moderation.test.mjs && node tests/door.test.mjs && node tests/vendors-auth.test.mjs && node tests/raffle.test.mjs && node tests/waitlist.test.mjs && node tests/ai.test.mjs && node tests/admin.test.mjs && node tests/standings.test.mjs && node tests/sole.test.mjs && node tests/board.test.mjs"
+    "test": "node tests/verify-payment.test.mjs && node tests/ratelimit.test.mjs && node tests/crew.test.mjs && node tests/group-claim.test.mjs && node tests/fnp.test.mjs && node tests/moderation.test.mjs && node tests/door.test.mjs && node tests/vendors-auth.test.mjs && node tests/raffle.test.mjs && node tests/waitlist.test.mjs && node tests/ai.test.mjs && node tests/admin.test.mjs && node tests/standings.test.mjs && node tests/sole.test.mjs && node tests/board.test.mjs && node tests/admin-moderation.test.mjs"
   },
   "dependencies": {
     "@netlify/blobs": "^8.1.0",

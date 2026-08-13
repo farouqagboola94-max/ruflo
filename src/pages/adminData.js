@@ -19,6 +19,25 @@ export function clearSecret() {
   try { sessionStorage.removeItem(KEY) } catch {}
 }
 
+/**
+ * Which moderation kind each dashboard tab speaks to.
+ *
+ * This mapping is the whole risk surface of moderating from the UI: send a
+ * wall id under the wrong type and moderate.js goes looking in the confessions
+ * store. The names deliberately do not all match their tab - the trades board
+ * moderates one listing at a time, so its kind is singular.
+ */
+export const MODERATION_KIND = {
+  MODERATE: 'confession',
+  REGISTRY: 'sole',
+  WALL:     'wall',
+  TRADES:   'trade',
+}
+
+export function moderationKind(tabId) {
+  return MODERATION_KIND[tabId] || null
+}
+
 export class AdminError extends Error {
   constructor(status, message) { super(message); this.status = status }
 }
@@ -48,6 +67,46 @@ export async function fetchResource(resource, secret = getSecret()) {
 export async function verify(secret) {
   await fetchResource('summary', secret)
   return true
+}
+
+/**
+ * Approve or reject one item. Returns nothing useful on success - the caller
+ * reloads the queue, so there is no local copy to drift out of date.
+ */
+export async function moderate(tabId, id, action, secret = getSecret()) {
+  const type = moderationKind(tabId)
+  if (!type) throw new AdminError(400, 'That tab has nothing to moderate')
+
+  const res = await fetch('/.netlify/functions/moderate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${secret}` },
+    body: JSON.stringify({ type, id, action }),
+  })
+
+  if (!res.ok) {
+    let message = `Could not ${action} that (${res.status})`
+    if (res.status === 401) message = 'Your session expired. Sign in again.'
+    else {
+      try {
+        const body = await res.json()
+        if (body?.error) message = body.error
+      } catch {}
+    }
+    throw new AdminError(res.status, message)
+  }
+  return true
+}
+
+/**
+ * Work through a list. Each item is attempted even if an earlier one failed,
+ * because a single bad record should not strand the rest of a queue.
+ */
+export async function moderateMany(tabId, ids, action, secret = getSecret()) {
+  const results = await Promise.allSettled(
+    ids.map(id => moderate(tabId, id, action, secret))
+  )
+  const failed = results.filter(r => r.status === 'rejected').length
+  return { done: results.length - failed, failed }
 }
 
 /**
