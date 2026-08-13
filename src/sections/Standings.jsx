@@ -11,12 +11,22 @@ import { getPassport, getTier, getLevel, subscribe } from '../lib/passport'
 
 const ENDPOINT = '/.netlify/functions/standings'
 const HANDLE_KEY = 'sf26_standings_handle'
+// Written by the Crew Codes section when you create or join one. Same key,
+// same object - reading it here is what ties the two features together.
+const CREW_KEY = 'sf26_crew'
 const MONO = "'Space Mono', monospace"
 
 const clean = s => String(s || '').trim().toLowerCase().replace(/^@+/, '')
 
 function storedHandle() {
   try { return localStorage.getItem(HANDLE_KEY) || '' } catch { return '' }
+}
+
+function storedCrew() {
+  try {
+    const c = JSON.parse(localStorage.getItem(CREW_KEY) || 'null')
+    return String(c?.code || '').toUpperCase()
+  } catch { return '' }
 }
 
 function Row({ entry, mine }) {
@@ -73,7 +83,7 @@ export default function Standings() {
       const res = await fetch(ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ handle: h, xp }),
+        body: JSON.stringify({ handle: h, xp, crew: storedCrew() || undefined }),
       })
       if (res.ok) setData(await res.json())
       else {
@@ -95,7 +105,7 @@ export default function Standings() {
       const res = await fetch(ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ handle: h, xp: passport.xp }),
+        body: JSON.stringify({ handle: h, xp: passport.xp, crew: storedCrew() || undefined }),
       })
       const body = await res.json().catch(() => ({}))
       if (!res.ok) { setError(body.error || 'That handle was not accepted.'); return }
@@ -230,6 +240,62 @@ export default function Standings() {
               {data.near.map(e => <Row key={e.handle} entry={e} mine={e.handle === handle} />)}
             </div>
           </>
+        )}
+
+        {/* Crew Wars */}
+        {data?.crewCount > 0 && (
+          <div style={{ marginBottom: 26 }}>
+            <div style={{ fontFamily: MONO, fontSize: 8, color: B.neonMagenta, letterSpacing: 3, marginBottom: 8 }}>
+              CREW WARS · {data.crewCount} {data.crewCount === 1 ? 'CREW' : 'CREWS'} IN
+            </div>
+
+            {data.crewChasing && (
+              <div style={{
+                marginBottom: 10, padding: '11px 13px', background: `${B.neonMagenta}0D`,
+                border: `1px solid ${B.neonMagenta}30`, borderRadius: 7,
+                fontFamily: MONO, fontSize: 10, color: B.neonMagenta, lineHeight: 1.6,
+              }}>
+                {data.crewChasing.gap === 0
+                  ? `Your crew is level with ${data.crewChasing.code}. Next point takes it.`
+                  : `Your crew is ${data.crewChasing.gap.toLocaleString()} XP behind ${data.crewChasing.code}.`}
+              </div>
+            )}
+
+            {data.crews.map(c => {
+              const mine = data.yourCrew && c.code === data.yourCrew.code
+              return (
+                <div key={c.code} style={{
+                  display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px',
+                  background: mine ? `${B.neonMagenta}12` : 'transparent',
+                  border: `1px solid ${mine ? `${B.neonMagenta}40` : 'transparent'}`,
+                  borderRadius: 8, borderBottom: '1px solid rgba(255,255,255,0.05)',
+                }}>
+                  <span style={{
+                    fontFamily: "'Orbitron'", fontSize: 11, fontWeight: 900, minWidth: 34,
+                    color: mine ? B.neonMagenta : '#555',
+                  }}>#{c.rank}</span>
+                  <span style={{ flex: 1, fontFamily: MONO, fontSize: 11, letterSpacing: 2, color: mine ? B.white : '#999' }}>
+                    {c.code}
+                    {mine && <span style={{ color: B.neonMagenta, marginLeft: 8, fontSize: 8 }}>YOUR CREW</span>}
+                  </span>
+                  <span style={{ fontFamily: MONO, fontSize: 9, color: '#444', marginRight: 10 }}>
+                    {c.members} {c.members === 1 ? 'head' : 'heads'}
+                  </span>
+                  <span style={{ fontFamily: "'Orbitron'", fontSize: 12, fontWeight: 900, color: mine ? B.neonMagenta : B.smoke }}>
+                    {c.xp.toLocaleString()}
+                  </span>
+                </div>
+              )
+            })}
+
+            {handle && !data.yourCrew && (
+              <p style={{ fontFamily: MONO, fontSize: 9, color: '#444', marginTop: 10, lineHeight: 1.7 }}>
+                You are riding solo. Join a crew in Crew Codes and your XP counts
+                towards theirs — a crew's score is the sum of what its members earned,
+                so recruiting is worth as much as grinding.
+              </p>
+            )}
+          </div>
         )}
 
         {/* Top of the board */}

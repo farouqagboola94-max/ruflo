@@ -140,8 +140,8 @@ check('the refused scores never joined the board',
 console.log('\nthe board only shows what it should:')
 
 const shown = json(await get('soleking'))
-check('an entry carries handle, xp and rank only',
-  Object.keys(shown.top[0]).sort().join(',') === 'handle,rank,xp')
+check('an entry carries handle, xp, rank and crew only',
+  Object.keys(shown.top[0]).sort().join(',') === 'crew,handle,rank,xp')
 check('timestamps are not published', !shown.top[0].firstSeen && !shown.top[0].updatedAt)
 check('the top is capped', shown.top.length <= D.TOP_N)
 
@@ -153,6 +153,41 @@ check('DELETE is refused',
   (await handler({ httpMethod: 'DELETE', headers: {} })).statusCode === 405)
 check('asking about a handle nobody claimed is not an error',
   json(await get('ghost')).you === null)
+
+console.log('\ncrew wars:')
+
+// A crew's score is the sum of what its members earned, so recruiting counts
+// for as much as grinding. Codes use the crew alphabet: no 0/O, 1/I/L, 5/S, 8/B.
+await post({ handle: 'kemi',  xp: 300, crew: 'AC234' })
+await post({ handle: 'seun',  xp: 250, crew: 'AC234' })
+await post({ handle: 'chidi', xp: 500, crew: 'DEF23' })
+
+const cw = json(await get('kemi'))
+check('a crew appears once its members do', cw.crewCount === 2)
+check('two members out-total one bigger player',
+  cw.crews[0].code === 'AC234' && cw.crews[0].xp === 550)
+check('the crew carries its head count', cw.crews[0].members === 2)
+check('the solo crew ranks second', cw.crews[1].code === 'DEF23')
+check('you are told which crew is yours', cw.yourCrew.code === 'AC234')
+
+const behind = json(await get('chidi'))
+check('a trailing crew is told the gap', behind.crewChasing.code === 'AC234' && behind.crewChasing.gap === 50)
+check('the leading crew chases nobody', cw.crewChasing === null)
+
+check('a code using an excluded letter rides solo', D.normaliseCrew('AB123') === null)
+check('a lowercase code is the same crew', D.normaliseCrew('ac234') === 'AC234')
+check('a malformed crew does not refuse the score',
+  (await post({ handle: 'solo_rider', xp: 10, crew: 'nope' })).statusCode === 200)
+check('and that player is in no crew',
+  json(await get()).crews.every(c => c.xp !== 10 || c.members !== 1 || c.code === 'DEF23'))
+
+const kept = json(await post({ handle: 'kemi', xp: 400 }))
+check('posting without a crew keeps the one you flew',
+  kept.crews.find(c => c.code === 'AC234').members === 2)
+
+await post({ handle: 'kemi', xp: 401, crew: 'DEF23' })
+const moved = json(await get('kemi'))
+check('switching crews moves you', moved.yourCrew.code === 'DEF23')
 
 await rm(dir, { recursive: true, force: true })
 
