@@ -1,6 +1,15 @@
 // POST /.netlify/functions/sole-submit
 // Body: { displayName, city, shoe, brand, colorway?, size?, story }
 // Returns: { success, submissionId, slotNumber, totalRegistered }
+//
+// GET /.netlify/functions/sole-submit
+// Returns: { wall, total } - approved entries only.
+//
+// The section used to POST here and then render eight invented collectors
+// plus whatever this browser had submitted. So a real entry from Lagos went
+// into the store and was never seen by anyone, while the wall showed people
+// who do not exist. Entries wait for moderation before they are published:
+// this is public free text under the festival's name.
 
 import { ok, err, preflight, limitBody } from './lib/cors.js'
 import { rateLimit } from './lib/ratelimit.js'
@@ -11,8 +20,37 @@ const Registry = () => getStore({ name: 'sf26-sole-registry', consistency: 'stro
 
 const BRANDS = ['Nike','Jordan','Adidas','New Balance','Puma','Asics','Reebok','Vans','Converse','Other']
 
+/** What the wall is allowed to show. Emails and raw records never leave here. */
+function publicEntry(e) {
+  return {
+    id:         e.submissionId,
+    slotNumber: e.slotNumber,
+    display:    e.displayName,
+    city:       e.city,
+    shoe:       e.shoe,
+    brand:      e.brand,
+    colorway:   e.colorway,
+    story:      e.story,
+  }
+}
+
+async function wall() {
+  const store = Registry()
+  const list  = await store.list().catch(() => ({ blobs: [] }))
+  const keys  = (list.blobs || []).map(b => b.key).filter(k => !k.startsWith('_'))
+  const rows  = await Promise.all(keys.map(k => store.get(k, { type: 'json' }).catch(() => null)))
+  const approved = rows.filter(r => r && r.approved === true)
+  return ok({
+    wall: approved
+      .sort((a, b) => (b.slotNumber || 0) - (a.slotNumber || 0))
+      .map(publicEntry),
+    total: approved.length,
+  })
+}
+
 export const handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return preflight()
+  if (event.httpMethod === 'GET')  return wall()
   if (event.httpMethod !== 'POST') return err(405, 'Method not allowed')
 
   const limited = await rateLimit(event, { name: 'sole-submit', limit: 5, windowSec: 600 })
@@ -60,6 +98,8 @@ export const handler = async (event) => {
     size:        (size     || '').trim(),
     story:       story.trim(),
     registeredAt: new Date().toISOString(),
+    // Published only once a human has read it.
+    approved:    false,
   }
 
   await store.setJSON(submissionId, record)
@@ -68,7 +108,10 @@ export const handler = async (event) => {
   ;(async () => {
     try {
       const statsKey = '_stats'
-      const s        = await store.get(statsKey, { type: 'json' }).catch(() => ({}))
+      // A missing key resolves to null rather than rejecting, so the catch
+      // never fired and every single submission threw on null.brands. The
+      // registry stats had therefore never been recorded at all.
+      const s        = (await store.get(statsKey, { type: 'json' }).catch(() => null)) || {}
       const brands   = s.brands   || {}
       const cities   = s.cities   || {}
       const topShoes = s.topShoes || {}

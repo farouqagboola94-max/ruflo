@@ -3,21 +3,9 @@ import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 
 const TOTAL_WALL = 200
-const SEED_COUNT = 47
 const MAX_STORY  = 200
 const BRANDS     = ['Nike','Jordan','Adidas','New Balance','Puma','Asics','Reebok','Vans','Converse','Other']
 const CITIES     = ['Lagos','Abuja','Port Harcourt','Kano','Ibadan','Benin City','Enugu','Kaduna','Owerri','Warri','Uyo','Calabar','Jos','Abeokuta','Akure','Other']
-
-const SEED_WALL = [
-  { id:'SW01', display:'Tunde B.',   city:'Lagos',         shoe:'Air Force 1 Shadow',  brand:'Nike',        colorway:'White / Pink',   heat:24, story:'First pair that made me feel like a king on the street.' },
-  { id:'SW02', display:'Chisom O.',  city:'Abuja',         shoe:'Jordan 1 Retro Bred', brand:'Jordan',      colorway:'Black / Red',    heat:18, story:'My grail since secondary school. Finally got it.' },
-  { id:'SW03', display:'Adaeze N.',  city:'Port Harcourt', shoe:'New Balance 2002R',   brand:'New Balance', colorway:'Grey / White',   heat:31, story:'People sleep on NB. These changed my mind about comfort.' },
-  { id:'SW04', display:'Emeka C.',   city:'Enugu',         shoe:'Yeezy Boost 350 V2',  brand:'Adidas',      colorway:'Zebra',          heat:15, story:'Saved three months of allowance. Worth every kobo.' },
-  { id:'SW05', display:'Zara I.',    city:'Lagos',         shoe:'Dunk Low Panda',       brand:'Nike',        colorway:'Black / White',  heat:27, story:'Clean. Versatile. Goes with everything I own.' },
-  { id:'SW06', display:'Femi A.',    city:'Ibadan',        shoe:'Gel-Kayano 14',        brand:'Asics',       colorway:'Cream / Orange', heat:9,  story:'Nobody in my area rocks Asics. That is exactly why I do.' },
-  { id:'SW07', display:'Ngozi E.',   city:'Benin City',    shoe:'Old Skool Classic',    brand:'Vans',        colorway:'Black / White',  heat:12, story:'Started skating in these. Retired them to a shelf now.' },
-  { id:'SW08', display:'Dayo M.',    city:'Kano',          shoe:'Suede Classic',        brand:'Puma',        colorway:'Forest / White', heat:7,  story:'My uncle brought these from abroad. Still fire decades later.' },
-]
 
 const BRAND_ACCENT = {
   Nike:'#F0EDE6', Jordan:'#FF2D7B', Adidas:'#00F0FF', 'New Balance':'#F5A623',
@@ -137,14 +125,23 @@ export default function SoleRegistry() {
   const [pass,      setPass]    = useState(null)
   const [loading,   setLoading] = useState(false)
   const [error,     setError]   = useState('')
-  const [count,     setCount]   = useState(SEED_COUNT)
+  const [count,     setCount]   = useState(null)
+  const [wall,      setWall]    = useState([])
   const [done,      setDone]    = useState(false)
 
   useEffect(() => {
     setHeat(loadHeat())
-    const saved = loadLocal()
-    setLocal(saved)
-    if (saved.length) setCount(SEED_COUNT + saved.length)
+    setLocal(loadLocal())
+
+    // The real wall. Entries appear once the organiser has read them.
+    fetch('/.netlify/functions/sole-submit')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (!d) return
+        setWall(Array.isArray(d.wall) ? d.wall : [])
+        if (Number.isFinite(d.total)) setCount(d.total)
+      })
+      .catch(() => {})
   }, [])
 
   const up = k => e => setForm(f => ({ ...f, [k]: e.target.value }))
@@ -170,7 +167,7 @@ export default function SoleRegistry() {
       const updated  = [newEntry, ...localWall]
       setLocal(updated)
       localStorage.setItem('sf26_sole_entries', JSON.stringify(updated))
-      setCount(data.totalRegistered)
+
       setPass({ ...data, shoe:form.shoe, brand:form.brand, city:form.city, story:form.story })
       setForm({ displayName:'', city:'', shoe:'', brand:'Nike', colorway:'', size:'', story:'', email:'' })
       setDone(true)
@@ -187,9 +184,11 @@ export default function SoleRegistry() {
     localStorage.setItem('sf26_sole_heat', JSON.stringify(next))
   }
 
-  const allWall     = [...localWall, ...SEED_WALL]
-  const claimedPct  = Math.min(100, (count / TOTAL_WALL) * 100).toFixed(1)
-  const remaining   = TOTAL_WALL - count
+  // Your own entry shows to you straight away; everyone else sees it after review.
+  const wallIds     = new Set(wall.map(e => e.id))
+  const allWall     = [...localWall.filter(e => !wallIds.has(e.id)), ...wall]
+  const claimedPct  = count === null ? 0 : Math.min(100, (count / TOTAL_WALL) * 100).toFixed(1)
+  const remaining   = count === null ? null : TOTAL_WALL - count
 
   return (
     <section id="sole-registry" style={{ background:B.black, padding:'96px 24px', position:'relative', overflow:'hidden' }}>
@@ -215,13 +214,13 @@ export default function SoleRegistry() {
           {/* Scarcity bar */}
           <div style={{ maxWidth:460, margin:'0 auto' }}>
             <div style={{ display:'flex', justifyContent:'space-between', marginBottom:8 }}>
-              <span style={{ fontFamily:"'Space Mono',monospace", fontSize:9, color:B.amber, fontWeight:700, letterSpacing:'2px' }}>{count} CLAIMED</span>
-              <span style={{ fontFamily:"'Space Mono',monospace", fontSize:9, color: remaining < 30 ? B.neonMagenta : B.smoke, letterSpacing:'2px' }}>{remaining} REMAINING</span>
+              <span style={{ fontFamily:"'Space Mono',monospace", fontSize:9, color:B.amber, fontWeight:700, letterSpacing:'2px' }}>{count === null ? '—' : count} CLAIMED</span>
+              <span style={{ fontFamily:"'Space Mono',monospace", fontSize:9, color: remaining !== null && remaining < 30 ? B.neonMagenta : B.smoke, letterSpacing:'2px' }}>{remaining === null ? '—' : remaining} REMAINING</span>
             </div>
             <div style={{ height:6, background:B.gunmetal, borderRadius:3, overflow:'hidden', position:'relative' }}>
               <div style={{ height:'100%', width:`${claimedPct}%`, background:`linear-gradient(90deg,${B.amber},#E55C00)`, borderRadius:3, transition:'width .8s ease', boxShadow:`0 0 12px ${B.amber}60` }} />
             </div>
-            <div style={{ fontFamily:"'Space Mono',monospace", fontSize:9, color:B.smoke, textAlign:'center', marginTop:7, letterSpacing:'1px' }}>{count} / {TOTAL_WALL} WALL SPOTS</div>
+            <div style={{ fontFamily:"'Space Mono',monospace", fontSize:9, color:B.smoke, textAlign:'center', marginTop:7, letterSpacing:'1px' }}>{count === null ? '—' : count} / {TOTAL_WALL} WALL SPOTS</div>
           </div>
         </div>
 

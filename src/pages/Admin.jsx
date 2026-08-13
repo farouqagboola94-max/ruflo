@@ -27,7 +27,7 @@ const TABS = [
         ['CREWS',          s.crews,                       `${s.crewMembers || 0} members`],
         ['GROUP SEATS',    s.groupSeatsPaid,              `across ${s.groups || 0} groups`],
         ['FNP CHECK-INS',  s.fnpCheckIns,                 `${s.fnpSessions || 0} sessions`],
-        ['TO MODERATE',    s.confessionsPending,          'confessions pending'],
+        ['TO MODERATE',    (s.confessionsPending || 0) + (s.solePending || 0), 'confessions + registry'],
         ['SUBSCRIBERS',    s.subscribers,                 `${s.contactMessages || 0} messages`],
       ]
     },
@@ -77,6 +77,13 @@ const TABS = [
     cols: [['id', 'ID'], ['text', 'CONFESSION'], ['submittedAt', 'WHEN']],
     stats: d => [['PENDING', (d.pending || []).length,
                   `${(d.approved || []).length} approved · ${(d.rejected || []).length} rejected`]],
+  },
+  {
+    id: 'REGISTRY', resource: 'sole', rows: d => d.pending,
+    cols: [['id', 'REF'], ['display', 'NAME'], ['city', 'CITY'], ['shoe', 'GRAIL'],
+           ['brand', 'BRAND'], ['story', 'STORY'], ['registeredAt', 'WHEN']],
+    stats: d => [['AWAITING REVIEW', (d.pending || []).length,
+                  `${(d.approved || []).length} on the wall · ${(d.rejected || []).length} rejected`]],
   },
   {
     id: 'INBOX', resource: 'contacts', rows: d => d.contacts,

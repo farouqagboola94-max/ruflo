@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react'
 import { B } from '../tokens'
+import { useCounter } from '../lib/counter'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import { addXP, XP_VALUES } from '../lib/passport'
 import Egg from '../components/Egg'
 
 const KEY = 'sf26_soledle'
-const PROOF_KEY = 'sf26_soledle_proof'
 const MAX_GUESSES = 5
-const PROOF_SEED = 1432
 
 const SNEAKERS = [
   { name: 'Air Jordan 1', clues: ['Released by a brand founded in Beaverton, Oregon.', 'First worn in the 1984-85 NBA season and famously banned.', 'Its "Bred" colorway is considered a holy grail.', 'Designed for a Chicago Bulls rookie.'] },
@@ -51,24 +50,6 @@ function readState() {
   try { return JSON.parse(localStorage.getItem(KEY)) } catch { return null }
 }
 
-function getProofCount() {
-  try {
-    const d = JSON.parse(localStorage.getItem(PROOF_KEY) || 'null')
-    const today = new Date().toISOString().slice(0, 10)
-    return d?.date === today ? PROOF_SEED + d.count : PROOF_SEED
-  } catch { return PROOF_SEED }
-}
-
-function addProof() {
-  try {
-    const today = new Date().toISOString().slice(0, 10)
-    const d = JSON.parse(localStorage.getItem(PROOF_KEY) || 'null')
-    const count = d?.date === today ? d.count + 1 : 1
-    localStorage.setItem(PROOF_KEY, JSON.stringify({ date: today, count }))
-    return PROOF_SEED + count
-  } catch { return PROOF_SEED }
-}
-
 function Confetti({ count = 52 }) {
   const COLORS = [B.neonMagenta, B.amber, B.neonLime, B.neonCyan, '#fff']
   return (
@@ -101,7 +82,7 @@ export default function Soledle() {
   })
   const [pick, setPick] = useState('')
   const [confetti, setConfetti] = useState(false)
-  const [solvers, setSolvers] = useState(getProofCount)
+  const [solvers, bumpSolvers] = useCounter('soledle')
   const [copied, setCopied] = useState(false)
 
   useEffect(() => { localStorage.setItem(KEY, JSON.stringify(game)) }, [game])
@@ -117,7 +98,7 @@ export default function Soledle() {
       const xp = Math.round(XP_VALUES.soledleWin * (MAX_GUESSES - guesses.length + 1) / MAX_GUESSES)
       addXP(xp, 'Soledle', badge)
       setGame({ ...game, guesses, status: 'won', xpWon: xp, oracle: isOracle })
-      setSolvers(addProof())
+      bumpSolvers()
       setConfetti(true)
       setTimeout(() => setConfetti(false), 3500)
     } else if (guesses.length >= MAX_GUESSES) {
@@ -176,8 +157,8 @@ export default function Soledle() {
         {/* Social proof */}
         <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', color: B.smoke, marginBottom: 28 }}>
           <span style={{ color: '#22ff44', marginRight: 6 }}>●</span>
-          <strong style={{ color: B.neonMagenta }}>{solvers.toLocaleString()}</strong> players solved today's puzzle ·{' '}
-          <span style={{ color: '#444' }}>resets at midnight</span>
+          <strong style={{ color: B.neonMagenta }}>{solvers === null ? '—' : solvers.toLocaleString()}</strong> puzzles solved ·{' '}
+          <span style={{ color: '#444' }}>new puzzle daily</span>
         </div>
 
         {/* Clue card */}

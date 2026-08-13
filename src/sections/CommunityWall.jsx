@@ -10,48 +10,12 @@ const ROLES = {
   CATALYST:  { color: B.neonLime,    symbol: '◈', desc: 'Innovator · Leader · Pioneer' },
 }
 
-const SEED = [
-  { id:'s1',  name:'TUNDE B.',     city:'LEKKI',            role:'WORDSMITH', rot:-3, date:"APR '26",
-    msg:"Lagos has been waiting for this moment. We are not just wearing shoes — we are wearing culture." },
-  { id:'s2',  name:'CHIOMA A.',    city:'VICTORIA ISLAND',  role:'VISIONARY', rot:2,  date:"APR '26",
-    msg:"Every silhouette I sketch starts with the streets I walk. Lagos is my design studio." },
-  { id:'s3',  name:'EMEKA O.',     city:'ABUJA',            role:'CREATOR',   rot:-1, date:"MAR '26",
-    msg:"I build things that outlast the season. Sneakers Fest is where the next era starts." },
-  { id:'s4',  name:'ADAEZE N.',    city:'GRA IKEJA',        role:'CATALYST',  rot:4,  date:"MAY '26",
-    msg:"The revolution is always in the details. December 12 is a statement, not a date." },
-  { id:'s5',  name:'KEHINDE F.',   city:'SURULERE',         role:'WORDSMITH', rot:-2, date:"MAR '26",
-    msg:"We write the stories they'll teach in classrooms one day. This wall is chapter one." },
-  { id:'s6',  name:'SEGUN A.',     city:'YABA',             role:'CREATOR',   rot:3,  date:"APR '26",
-    msg:"Custom work is a love language. Every pair I touch carries a piece of Lagos in it." },
-  { id:'s7',  name:'FATIMA M.',    city:'KANO',             role:'VISIONARY', rot:-4, date:"FEB '26",
-    msg:"Representation matters. When I design, I design for all of us. No exceptions." },
-  { id:'s8',  name:'DAVID O.',     city:'BANANA ISLAND',    role:'CATALYST',  rot:1,  date:"MAY '26",
-    msg:"Culture is the only currency that multiplies when you share it freely." },
-  { id:'s9',  name:'NGOZI K.',     city:'ENUGU',            role:'WORDSMITH', rot:-3, date:"APR '26",
-    msg:"Poetry and sneakers share the same thing — both speak without speaking a word." },
-  { id:'s10', name:'IBRAHIM Y.',   city:'KADUNA',           role:'CREATOR',   rot:2,  date:"MAR '26",
-    msg:"I came to build something that lasts past the hype cycle. Real craft outlives trends." },
-  { id:'s11', name:'AMARA C.',     city:'IKOYI',            role:'VISIONARY', rot:-1, date:"APR '26",
-    msg:"Good design doesn't whisper — it announces. December 12, I announce myself." },
-  { id:'s12', name:'FELIX O.',     city:'OSHODI',           role:'CATALYST',  rot:4,  date:"FEB '26",
-    msg:"The streets built me. Now I'm building the streets back. That's the whole assignment." },
-  { id:'s13', name:'KEMI A.',      city:'LEKKI PHASE 1',   role:'WORDSMITH', rot:-2, date:"MAY '26",
-    msg:"I'm writing the Lagos chapter they forgot to include. The wall remembers everything." },
-  { id:'s14', name:'OLUMIDE S.',   city:'ONIKAN',           role:'CREATOR',   rot:3,  date:"APR '26",
-    msg:"Heritage is not a museum exhibit. It's alive. It breathes. It walks with us." },
-  { id:'s15', name:'PRECIOUS A.',  city:'UNILAG',           role:'CATALYST',  rot:-4, date:"MAY '26",
-    msg:"We don't wait for permission to be great. Sneakers Fest is proof of what's possible." },
-  { id:'s16', name:'RASHIDA T.',   city:'IBADAN',           role:'VISIONARY', rot:1,  date:"MAR '26",
-    msg:"Color theory. Culture theory. Same discipline if you know where to look." },
-  { id:'s17', name:'VICTOR E.',    city:'GBAGADA',          role:'CREATOR',   rot:-3, date:"APR '26",
-    msg:"Every stitch is intentional. Every drop means something. December 12, we drop together." },
-  { id:'s18', name:'BLESSING U.',  city:'PORT HARCOURT',   role:'WORDSMITH', rot:2,  date:"MAY '26",
-    msg:"The south has stories. I'm here to make sure the wall hears them." },
-  { id:'s19', name:'SULAIMON F.',  city:'ILORIN',           role:'CATALYST',  rot:-1, date:"APR '26",
-    msg:"Grail culture isn't about rarity — it's about meaning. That's what this movement is." },
-  { id:'s20', name:'NKECHI A.',    city:'BENIN CITY',       role:'VISIONARY', rot:3,  date:"MAR '26",
-    msg:"My art is my geography. Lagos to Benin, the canvas is the entire south." },
-]
+// This wall used to open with a dozen invented Lagos residents - names,
+// neighbourhoods and quotes - presented as real community voices. There is no
+// backend behind this section yet, so anything shown here can only come from
+// this browser. Rather than fill the gap with people who do not exist, it
+// starts empty and says so.
+const SEED = []
 
 function getStored() {
   try { return JSON.parse(localStorage.getItem('sf26_sacred_wall') || '[]') } catch { return [] }

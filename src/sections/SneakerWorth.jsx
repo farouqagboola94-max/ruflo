@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
+import { useCounter } from '../lib/counter'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import { addXP, XP_VALUES } from '../lib/passport'
 import Egg from '../components/Egg'
@@ -39,33 +40,14 @@ const QUESTIONS = [
   },
 ]
 
-const PROOF_KEY = 'sf26_worth_daily'
-const SEED = 1847
 const TODAY = () => new Date().toISOString().slice(0, 10)
 
 const PROOF_MSGS = [
-  'collectors revealed their worth today',
+  'collectors revealed their worth',
   'sneakerheads completed this quiz',
   'Lagos collectors checked their value',
-  'people discovered their archetype today',
+  'people discovered their archetype',
 ]
-
-function getCompletions() {
-  try {
-    const d = JSON.parse(localStorage.getItem(PROOF_KEY) || 'null')
-    return d?.date === TODAY() ? SEED + d.count : SEED
-  } catch { return SEED }
-}
-
-function addCompletion() {
-  try {
-    const today = TODAY()
-    const d = JSON.parse(localStorage.getItem(PROOF_KEY) || 'null')
-    const count = d?.date === today ? d.count + 1 : 1
-    localStorage.setItem(PROOF_KEY, JSON.stringify({ date: today, count }))
-    return SEED + count
-  } catch { return SEED }
-}
 
 function percentile(worth) {
   if (worth >= 5000000) return 3
@@ -101,7 +83,7 @@ export default function SneakerWorth() {
   const [copied, setCopied] = useState(false)
   const [displayWorth, setDisplayWorth] = useState(0)
   const [confetti, setConfetti] = useState(false)
-  const [completions, setCompletions] = useState(getCompletions)
+  const [completions, bumpCompletions] = useCounter('worth')
   const [proofIdx, setProofIdx] = useState(0)
   const countRef = useRef(null)
 
@@ -146,7 +128,7 @@ export default function SneakerWorth() {
     }, 35)
 
     addXP(XP_VALUES.quickTask, 'Sneaker Worth', 'worth-revealed')
-    setCompletions(addCompletion())
+    bumpCompletions()
   }
 
   function reset() {
@@ -204,7 +186,7 @@ export default function SneakerWorth() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 28, animation: 'proofPulse 4s ease-in-out infinite' }}>
           <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: '#22ff44', flexShrink: 0 }} />
           <span style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', color: B.smoke }}>
-            <strong style={{ color: B.amber }}>{completions.toLocaleString()}</strong> {PROOF_MSGS[proofIdx]}
+            <strong style={{ color: B.amber }}>{completions === null ? '—' : completions.toLocaleString()}</strong> {PROOF_MSGS[proofIdx]}
           </span>
         </div>
 

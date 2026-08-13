@@ -16,7 +16,10 @@ import { getStore } from '@netlify/blobs'
 const Hype = () => getStore({ name: 'sf26-hype', consistency: 'strong' })
 
 // Named so a caller cannot invent a key and scribble into the store.
-const COUNTERS = { hype: 'total', rsvp: 'rsvp' }
+const COUNTERS = {
+  hype: 'total', rsvp: 'rsvp',
+  worth: 'worth', badge: 'badge', soledle: 'soledle',
+}
 const MAX_BATCH = 50
 
 function keyFor(name) {

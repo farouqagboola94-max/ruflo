@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { B } from '../tokens'
+import { useCounter } from '../lib/counter'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import { addXP, XP_VALUES } from '../lib/passport'
 import Egg from '../components/Egg'
@@ -15,34 +16,13 @@ const TIER_DESC = {
   SPEAKER: 'Stage Access',
 }
 
-const BADGE_KEY = 'sf26_badge_daily'
-const BADGE_SEED = 2341
-const TODAY = () => new Date().toISOString().slice(0, 10)
-
-function getBadgeCount() {
-  try {
-    const d = JSON.parse(localStorage.getItem(BADGE_KEY) || 'null')
-    return d?.date === TODAY() ? BADGE_SEED + d.count : BADGE_SEED
-  } catch { return BADGE_SEED }
-}
-
-function incBadgeCount() {
-  try {
-    const today = TODAY()
-    const d = JSON.parse(localStorage.getItem(BADGE_KEY) || 'null')
-    const count = d?.date === today ? d.count + 1 : 1
-    localStorage.setItem(BADGE_KEY, JSON.stringify({ date: today, count }))
-    return BADGE_SEED + count
-  } catch { return BADGE_SEED }
-}
-
 export default function BadgeMaker() {
   const [name, setName] = useState('')
   const [city, setCity] = useState('')
   const [tier, setTier] = useState('ATTENDEE')
   const [downloaded, setDownloaded] = useState(false)
   const [celebrating, setCelebrating] = useState(false)
-  const [badgeCount, setBadgeCount] = useState(getBadgeCount)
+  const [badgeCount, bumpBadges] = useCounter('badge')
   const [shared, setShared] = useState(false)
   const [badgeId] = useState(() => `SF26-${Math.random().toString(36).slice(2, 7).toUpperCase()}`)
   const svgRef = useRef(null)
@@ -66,7 +46,7 @@ export default function BadgeMaker() {
 
     const xp = TIER_XP[tier]
     addXP(xp, 'Badge Maker', 'badge-creator')
-    setBadgeCount(incBadgeCount())
+    bumpBadges()
     setDownloaded(true)
     setCelebrating(true)
     setTimeout(() => { setCelebrating(false); setDownloaded(false) }, 3200)
@@ -139,7 +119,7 @@ export default function BadgeMaker() {
           fontFamily: "'Space Mono'", fontSize: '0.58rem', color: '#555', marginBottom: 30,
           animation: 'tierGlow 3.5s ease-in-out infinite',
         }}>
-          <span style={{ color: B.amber }}>{badgeCount.toLocaleString()}</span> badges created today
+          <span style={{ color: B.amber }}>{badgeCount === null ? '—' : badgeCount.toLocaleString()}</span> badges created
         </div>
 
         {/* Inputs */}
