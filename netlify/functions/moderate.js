@@ -1,6 +1,6 @@
 // POST /.netlify/functions/moderate
 // Header: Authorization: Bearer <ADMIN_SECRET>
-// Body:   { type: 'confession' | 'sole', id, action: 'approve' | 'reject' }
+// Body:   { type: 'confession'|'sole'|'wall'|'trade', id, action: 'approve'|'reject' }
 //
 // Two moderated walls now: the Confessional and the Sole Registry. Both take
 // free text from the public, so neither is published until someone has read it.
@@ -20,6 +20,8 @@ const Store = name => getStore({ name, consistency: 'strong' })
 const KINDS = {
   confession: { store: 'sf26-confessions',   idRe: /^SC26-\d{4}$/, label: 'confession' },
   sole:       { store: 'sf26-sole-registry', idRe: /^SR26-\d{4}$/, label: 'registry entry' },
+  wall:       { store: 'sf26-boards', idRe: /^CW26-\d{4}$/, label: 'wall post',      key: id => `wall:${id}` },
+  trade:      { store: 'sf26-boards', idRe: /^TB26-\d{4}$/, label: 'trade listing',  key: id => `trades:${id}` },
 }
 
 const ACTIONS = ['approve', 'reject']
@@ -43,8 +45,11 @@ export const handler = async (event) => {
   if (!kind.idRe.test(String(id)))  return err(400, `Invalid ${kind.label} id`)
   if (!ACTIONS.includes(action))    return err(400, "action must be 'approve' or 'reject'")
 
+  // The boards share one store, so their records are reached by a prefixed key.
+  const storeKey = kind.key ? kind.key(id) : id
+
   const store = Store(kind.store)
-  const record = await store.get(id, { type: 'json' }).catch(() => null)
+  const record = await store.get(storeKey, { type: 'json' }).catch(() => null)
   if (!record) return err(404, `No ${kind.label} with that id`)
 
   const updated = {
@@ -52,7 +57,7 @@ export const handler = async (event) => {
     approved: action === 'approve',
     moderatedAt: new Date().toISOString(),
   }
-  await store.setJSON(id, updated)
+  await store.setJSON(storeKey, updated)
 
   return ok({
     success: true,

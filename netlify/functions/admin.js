@@ -1,6 +1,6 @@
 // GET /.netlify/functions/admin?resource=summary|tickets|pending|waitlist|vendors
 //                                       |newsletter|contacts|crews|groups|fnp
-//                                       |confessions|raffle|hype|sole
+//                                       |confessions|raffle|hype|sole|wall|trades
 // Header: Authorization: Bearer <ADMIN_SECRET>
 // Protected admin endpoint — returns live data from Netlify Blobs.
 
@@ -152,6 +152,18 @@ export const handler = async (event) => {
     })
   }
 
+  if (resource === 'wall' || resource === 'trades') {
+    const prefix = resource === 'wall' ? 'wall:' : 'trades:'
+    const all = await readAll('sf26-boards', prefix)
+    const sorted = all.sort((a, b) => String(b.postedAt).localeCompare(String(a.postedAt)))
+    return ok({
+      pending:  sorted.filter(p => !p.approved && !p.moderatedAt),
+      approved: sorted.filter(p => p.approved),
+      rejected: sorted.filter(p => !p.approved && p.moderatedAt),
+      total: all.length,
+    })
+  }
+
   if (resource === 'hype') {
     const data = await Store('sf26-hype').get('total', { type: 'json' }).catch(() => null)
     return ok({ total: Number(data?.total) || 0 })
@@ -189,12 +201,13 @@ export const handler = async (event) => {
 
   const pending = await listAll(Tickets, 'pending:')
 
-  const [crews, groups, fnpSessions, confessions, soleEntries] = await Promise.all([
+  const [crews, groups, fnpSessions, confessions, soleEntries, boardPosts] = await Promise.all([
     readAll('sf26-crews', 'crew:'),
     readAll('sf26-groups', 'group:'),
     readAll('sf26-fnp', 'session:'),
     readAll('sf26-confessions', 'SC26-'),
     readAll('sf26-sole-registry'),
+    readAll('sf26-boards'),
   ])
 
   return ok({
@@ -219,6 +232,7 @@ export const handler = async (event) => {
       fnpCheckIns:      fnpSessions.reduce((n, s) => n + (s.count || 0), 0),
       confessionsPending: confessions.filter(c => !c.approved && !c.moderatedAt).length,
       solePending:        soleEntries.filter(e => !e.approved && !e.moderatedAt).length,
+      boardsPending:      boardPosts.filter(p => !p.approved && !p.moderatedAt).length,
     },
   })
 }

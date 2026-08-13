@@ -27,7 +27,8 @@ const TABS = [
         ['CREWS',          s.crews,                       `${s.crewMembers || 0} members`],
         ['GROUP SEATS',    s.groupSeatsPaid,              `across ${s.groups || 0} groups`],
         ['FNP CHECK-INS',  s.fnpCheckIns,                 `${s.fnpSessions || 0} sessions`],
-        ['TO MODERATE',    (s.confessionsPending || 0) + (s.solePending || 0), 'confessions + registry'],
+        ['TO MODERATE',    (s.confessionsPending || 0) + (s.solePending || 0) + (s.boardsPending || 0),
+                           'confessions, registry, boards'],
         ['SUBSCRIBERS',    s.subscribers,                 `${s.contactMessages || 0} messages`],
       ]
     },
@@ -84,6 +85,19 @@ const TABS = [
            ['brand', 'BRAND'], ['story', 'STORY'], ['registeredAt', 'WHEN']],
     stats: d => [['AWAITING REVIEW', (d.pending || []).length,
                   `${(d.approved || []).length} on the wall · ${(d.rejected || []).length} rejected`]],
+  },
+  {
+    id: 'WALL', resource: 'wall', rows: d => d.pending,
+    cols: [['id', 'REF'], ['name', 'NAME'], ['city', 'CITY'], ['msg', 'MESSAGE'], ['postedAt', 'WHEN']],
+    stats: d => [['AWAITING REVIEW', (d.pending || []).length,
+                  `${(d.approved || []).length} live · ${(d.rejected || []).length} rejected`]],
+  },
+  {
+    id: 'TRADES', resource: 'trades', rows: d => d.pending,
+    cols: [['id', 'REF'], ['name', 'PAIR'], ['brand', 'BRAND'], ['size', 'SIZE'],
+           ['condition', 'COND'], ['asking', 'ASKING'], ['contact', 'PHONE'], ['postedAt', 'WHEN']],
+    stats: d => [['AWAITING REVIEW', (d.pending || []).length,
+                  `${(d.approved || []).length} live · ${(d.rejected || []).length} rejected`]],
   },
   {
     id: 'INBOX', resource: 'contacts', rows: d => d.contacts,

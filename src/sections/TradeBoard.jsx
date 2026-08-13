@@ -1,17 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
+
+const BOARD = '/.netlify/functions/board'
 import { GrainOverlay, SectionTag } from '../components/Shared'
 import Egg from '../components/Egg'
-import { tradesApi } from '../lib/api'
 
-// ── seed listings so the board has content on first visit ─────────────────────
-const SEEDS = [
-  { id:'seed1', name:'Air Jordan 1 Retro High OG', brand:'Nike', size:'44', condition:'VNDS', asking:'Air Max 90 or similar · ₦45,000', price:45000, notes:'Got as a gift, not my colourway. Very clean, box included.', contact:'', instagram:'@kicks_leke', postedAt:'2026-05-20T09:00:00Z', wants:14, photo:'' },
-  { id:'seed2', name:'Yeezy Boost 350 V2 Zebra', brand:'Adidas', size:'42', condition:'DS', asking:'Jordan 4 Bred or ₦85,000', price:85000, notes:'Bought from authorised retailer. All accessories, receipt included.', contact:'08023456789', instagram:'', postedAt:'2026-05-28T15:00:00Z', wants:32, photo:'' },
-  { id:'seed3', name:'New Balance 550 White Green', brand:'New Balance', size:'43', condition:'USED', asking:'NB 574 or NB 1906R in 43', price:0, notes:'Worn twice, very clean. Original laces and box.', contact:'08034567890', instagram:'@nb_collector', postedAt:'2026-06-01T11:00:00Z', wants:8, photo:'' },
-  { id:'seed4', name:'Puma Suede Classic Black', brand:'Puma', size:'41', condition:'VNDS', asking:'₦15,000 firm or swap for any classic silhouette in 41', price:15000, notes:'Classic colourway. Box slightly dented but pair is clean.', contact:'08045678901', instagram:'', postedAt:'2026-06-02T14:00:00Z', wants:5, photo:'' },
-  { id:'seed5', name:'Nike Dunk Low Panda', brand:'Nike', size:'45', condition:'DS', asking:'Jordan 3 Retro or ₦60,000', price:60000, notes:'Copped two pairs. Selling the extra. Deadstock, perfect box.', contact:'', instagram:'@dunks_ng', postedAt:'2026-06-02T18:00:00Z', wants:21, photo:'' },
-]
+
 
 const CONDITIONS = ['DS', 'VNDS', 'USED']
 const COND_COLOR  = { DS: B.neonLime, VNDS: B.neonCyan, USED: B.amber }
@@ -138,7 +132,7 @@ function PostModal({ onPost, onClose }) {
           <button onClick={submit} disabled={!valid || busy} style={{ padding:'15px', background: valid && !busy ? `linear-gradient(90deg, ${B.amber}, #D48000)` : '#1a1a1a', border:'none', borderRadius:8, color: valid && !busy ? B.black : '#444', fontFamily:'Bebas Neue,sans-serif', fontSize:20, letterSpacing:3, cursor: valid && !busy ? 'pointer' : 'default', transition:'all 0.2s', marginTop:4 }}>
             {busy ? 'PROCESSING…' : 'POST TO THE WALL →'}
           </button>
-          <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#333', textAlign:'center', letterSpacing:1 }}>Visible to everyone · You can remove your listing later</div>
+          <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#333', textAlign:'center', letterSpacing:1 }}>Reviewed before it goes live · Your phone number is only shown once approved</div>
         </div>
       </div>
     </>
@@ -208,7 +202,7 @@ function ListingCard({ listing, wanted, onWant, onContact, onRemove, isOwn }) {
 
 // ── main section ───────────────────────────────────────────────────────────────
 export default function TradeBoard() {
-  const [listings,  setListings]  = useState(() => load() ?? SEEDS)
+  const [listings,  setListings]  = useState([])
   const [wants,     setWants]     = useState(loadWants)
   const [mine,      setMine]      = useState(loadMine)
   const [posting,     setPosting]     = useState(false)
@@ -218,32 +212,37 @@ export default function TradeBoard() {
   const [sizeFilter,  setSizeFilter]  = useState('')
   const [query,       setQuery]       = useState('')
   const [sort,        setSort]        = useState('NEWEST')
+  const [postError,   setPostError]   = useState('')
+  const [posted,      setPosted]      = useState(false)
 
-  // Persist to localStorage on every change
-  useEffect(() => { try { localStorage.setItem('sf26_trades', JSON.stringify(listings)) } catch {} }, [listings])
-
-  // Sync with server on mount — pulls any listings added from other devices/sessions
+  // The board itself. Listings used to live only in this browser - you posted,
+  // and nobody else ever saw it, while the form promised "visible to everyone".
   useEffect(() => {
-    tradesApi.getAll().then(serverListings => {
-      if (!Array.isArray(serverListings) || serverListings.length === 0) return
-      setListings(local => {
-        const localIds = new Set(local.map(l => l.id))
-        const seedIds  = new Set(SEEDS.map(s => s.id))
-        const newFromServer = serverListings.filter(l => !localIds.has(l.id) && !seedIds.has(l.id))
-        if (newFromServer.length === 0) return local
-        return [...newFromServer, ...local]
-      })
-    }).catch(() => {})
+    fetch(`${BOARD}?board=trades`)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (Array.isArray(d?.posts)) setListings(d.posts) })
+      .catch(() => {})
   }, [])
 
-  function handlePost(listing) {
-    const next = [listing, ...listings]
-    setListings(next)
-    const nextMine = [...mine, listing.id]
-    setMine(nextMine)
-    try { localStorage.setItem('sf26_my_trades', JSON.stringify(nextMine)) } catch {}
-    tradesApi.add(listing).catch(() => {})
-    setPosting(false)
+  async function handlePost(listing) {
+    setPostError('')
+    try {
+      const res = await fetch(`${BOARD}?board=trades`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(listing),
+      })
+      const body = await res.json().catch(() => ({}))
+      if (!res.ok) { setPostError(body.error || 'That listing was not accepted.'); return }
+
+      const nextMine = [...mine, body.id]
+      setMine(nextMine)
+      try { localStorage.setItem('sf26_my_trades', JSON.stringify(nextMine)) } catch {}
+      setPosting(false)
+      setPosted(true)
+    } catch {
+      setPostError('Could not reach the board. Check your connection and try again.')
+    }
   }
 
   function handleWant(id) {
@@ -255,11 +254,14 @@ export default function TradeBoard() {
     setListings(ls => ls.map(l => l.id === id ? { ...l, wants: l.wants + (alreadyWanted ? -1 : 1) } : l))
   }
 
+  // Taking a listing down is a moderation action, so it goes through the
+  // organiser rather than being something a browser can do to the shared board.
   function handleRemove(id) {
-    const next = listings.filter(l => l.id !== id)
-    setListings(next)
-    setMine(m => { const nm = m.filter(i => i !== id); try { localStorage.setItem('sf26_my_trades', JSON.stringify(nm)) } catch {}; return nm })
-    tradesApi.remove(id).catch(() => {})
+    setMine(m => {
+      const nm = m.filter(i => i !== id)
+      try { localStorage.setItem('sf26_my_trades', JSON.stringify(nm)) } catch {}
+      return nm
+    })
   }
 
   const allBrands = [...new Set(listings.map(l => l.brand).filter(Boolean))].sort()

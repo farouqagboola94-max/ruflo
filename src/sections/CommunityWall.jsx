@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { B } from '../tokens'
+
+const BOARD = '/.netlify/functions/board'
 import Egg from '../components/Egg'
-import { wallApi } from '../lib/api'
+
 
 const ROLES = {
   WORDSMITH: { color: B.neonCyan,    symbol: '❆', desc: 'Writer · Poet · Storyteller' },
@@ -10,12 +12,6 @@ const ROLES = {
   CATALYST:  { color: B.neonLime,    symbol: '◈', desc: 'Innovator · Leader · Pioneer' },
 }
 
-// This wall used to open with a dozen invented Lagos residents - names,
-// neighbourhoods and quotes - presented as real community voices. There is no
-// backend behind this section yet, so anything shown here can only come from
-// this browser. Rather than fill the gap with people who do not exist, it
-// starts empty and says so.
-const SEED = []
 
 function getStored() {
   try { return JSON.parse(localStorage.getItem('sf26_sacred_wall') || '[]') } catch { return [] }
@@ -256,36 +252,33 @@ export default function CommunityWall() {
   const [stored, setStored] = useState(getStored)
   const [modal, setModal]   = useState(false)
   const [newIds, setNewIds]  = useState([])
+  const [posted, setPosted]  = useState(false)
 
-  // Sync with server on mount — additive only, never removes local posts
+  // The wall itself. Posts used to live only in this browser, alongside a
+  // dozen invented Lagos residents presented as community voices.
   useEffect(() => {
-    wallApi.getPosts().then(serverPosts => {
-      if (!Array.isArray(serverPosts) || serverPosts.length === 0) return
-      setStored(local => {
-        const localIds = new Set(local.map(p => p.id))
-        const seedIds  = new Set(SEED.map(s => s.id))
-        const newFromServer = serverPosts.filter(p => !localIds.has(p.id) && !seedIds.has(p.id))
-        if (newFromServer.length === 0) return local
-        const merged = [...local, ...newFromServer]
-        try { localStorage.setItem('sf26_sacred_wall', JSON.stringify(merged)) } catch {}
-        return merged
-      })
-    }).catch(() => {})
+    fetch(`${BOARD}?board=wall`)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (Array.isArray(d?.posts)) setStored(d.posts) })
+      .catch(() => {})
   }, [])
 
-  const all = [...SEED, ...stored]
+  const all = stored
 
   const counts = Object.keys(ROLES).reduce((acc, r) => {
     acc[r] = all.filter(e => e.role === r).length
     return acc
   }, {})
 
-  const handleAdd = (entry) => {
-    const updated = [...stored, entry]
-    try { localStorage.setItem('sf26_sacred_wall', JSON.stringify(updated)) } catch {}
-    setStored(updated)
-    setNewIds(ids => [...ids, entry.id])
-    wallApi.addPost(entry).catch(() => {})
+  const handleAdd = async (entry) => {
+    try {
+      const res = await fetch(`${BOARD}?board=wall`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(entry),
+      })
+      if (res.ok) setPosted(true)
+    } catch { /* the form reports its own failure */ }
   }
 
   return (
