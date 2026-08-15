@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { B } from '../tokens'
+import { loadSDK } from '../lib/loadScript'
 
 const PAYSTACK_KEY = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || ''
 const FLW_KEY      = import.meta.env.VITE_FLUTTERWAVE_PUBLIC_KEY || ''
@@ -157,10 +158,21 @@ export async function downloadTicketPNG({ name, email, tier, tierColor, ref, pri
   })
 }
 
-function payWithPaystack({ name, email, amount, tier, serverRef, onSuccess, onError }) {
+// The payment SDKs used to be script tags in index.html, downloaded on every
+// visit for a checkout most visitors never open. They are fetched here at the
+// moment someone actually pays.
+async function payWithPaystack({ name, email, amount, tier, serverRef, onSuccess, onError }) {
   if (!PAYSTACK_KEY) { onError('Add VITE_PAYSTACK_PUBLIC_KEY in Netlify → Environment Variables.'); return }
-  if (!window.PaystackPop) { onError('Paystack SDK failed to load. Check your connection.'); return }
-  const handler = window.PaystackPop.setup({
+
+  let PaystackPop
+  try {
+    PaystackPop = await loadSDK('paystack', 'PaystackPop')
+  } catch {
+    onError('Could not reach Paystack. Check your connection and try again.')
+    return
+  }
+
+  const handler = PaystackPop.setup({
     key: PAYSTACK_KEY, email, amount: amount * 100, currency: 'NGN',
     ref: serverRef || `SF26_PS_${Date.now()}`,
     metadata: { custom_fields: [
@@ -173,10 +185,18 @@ function payWithPaystack({ name, email, amount, tier, serverRef, onSuccess, onEr
   handler.openIframe()
 }
 
-function payWithFlutterwave({ name, email, amount, tier, onSuccess, onError }) {
+async function payWithFlutterwave({ name, email, amount, tier, onSuccess, onError }) {
   if (!FLW_KEY) { onError('Add VITE_FLUTTERWAVE_PUBLIC_KEY in Netlify → Environment Variables.'); return }
-  if (!window.FlutterwaveCheckout) { onError('Flutterwave SDK failed to load. Check your connection.'); return }
-  window.FlutterwaveCheckout({
+
+  let FlutterwaveCheckout
+  try {
+    FlutterwaveCheckout = await loadSDK('flutterwave', 'FlutterwaveCheckout')
+  } catch {
+    onError('Could not reach Flutterwave. Check your connection and try again.')
+    return
+  }
+
+  FlutterwaveCheckout({
     public_key: FLW_KEY, tx_ref: `SF26_FLW_${Date.now()}`,
     amount, currency: 'NGN', payment_options: 'card,banktransfer,ussd,mobilemoney',
     customer: { email, name, phone_number: '' },
@@ -322,10 +342,10 @@ export default function PaymentModal({ tier, onClose }) {
         }
       } catch {}
       if (serverPaymentUrl) setPaymentUrl(serverPaymentUrl)
-      payWithPaystack(opts)
+      await payWithPaystack(opts)
       setTimeout(() => setLoading(false), 800)
     } else {
-      payWithFlutterwave(opts)
+      await payWithFlutterwave(opts)
       setTimeout(() => setLoading(false), 800)
     }
   }
