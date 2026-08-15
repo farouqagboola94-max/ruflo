@@ -32,6 +32,7 @@ export const SECTIONS = [
 
   // ---- Community -----------------------------------------------------
   { id: 'fnp-checkin',    t: 'Friday Check-In',      c: 'community', d: 'Show up, keep your run alive',         k: 'friday checkin check in streak weekly online live protocol attend session tonight' },
+  { id: 'my-day',         t: 'Build Your Day',       c: 'essentials', d: 'Pick your sets and put them in your phone', k: 'schedule plan my day planner calendar reminder ics timetable lineup times what time when sets picks agenda' },
   { id: 'standings',      t: 'The Standings',        c: 'community', d: 'See exactly who is ahead of you',      k: 'leaderboard rank ranking xp score points board top standings compete beat overtake level tier' },
   { id: 'crews',          t: 'Crew Codes',           c: 'community', d: 'Roll with your people',                k: 'crew squad team group friends join code together roll' },
   { id: 'community',      t: 'The Community',        c: 'community', d: 'What we are building together',        k: 'join crew people members belong' },

@@ -5,20 +5,8 @@ import { GrainOverlay, SectionTag } from '../components/Shared'
 const CITIES = ['Lagos','Abuja','Port Harcourt','Kano','Ibadan','Benin City','Enugu',
   'Kaduna','Owerri','Warri','Uyo','Calabar','Jos','Abeokuta','Akure','Other']
 
-const SEEDS = [
-  { id: 'SC-SEED-01', confession: "I've had my Jordan 1 Chicagos boxed for 2 years. I'm too scared to crease them.",        displayName: 'Anonymous',   city: 'Lagos',         relates: 47  },
-  { id: 'SC-SEED-02', confession: "Honestly, Nike Dunks are overrated. I said what I said and I stand by every word.",       displayName: 'SoleMaven',   city: 'Abuja',         relates: 31  },
-  { id: 'SC-SEED-03', confession: "I spent my rent money on a pair of Yeezys. Absolutely zero regrets.",                     displayName: 'Anonymous',   city: 'Port Harcourt', relates: 88  },
-  { id: 'SC-SEED-04', confession: "I've faked knowing a shoe's release date in conversation at least 10 times.",             displayName: 'Anonymous',   city: 'Lagos',         relates: 55  },
-  { id: 'SC-SEED-05', confession: "My most expensive pair has never left the house. It lives in a glass case.",              displayName: 'CrateDigger', city: 'Kano',          relates: 22  },
-  { id: 'SC-SEED-06', confession: "I judge people by their shoes before I even learn their name. I am not sorry.",           displayName: 'Anonymous',   city: 'Lagos',         relates: 103 },
-  { id: 'SC-SEED-07', confession: "I bought 3 pairs of the same brand because my ex wore them. Petty. Still worth it.",     displayName: 'HeadSpaceG', city: 'Ibadan',         relates: 19  },
-  { id: 'SC-SEED-08', confession: "I've worn reps to a sneaker event and nobody clocked it. Not once.",                     displayName: 'Anonymous',   city: 'Lagos',         relates: 67  },
-  { id: 'SC-SEED-09', confession: "I cancelled a date because they showed up in Crocs. This is not a drill.",               displayName: 'SoleSister',  city: 'Lagos',         relates: 44  },
-  { id: 'SC-SEED-10', confession: "My girlfriend thinks I own 10 pairs. I own 47. The rest live at my cousin's place.",     displayName: 'Anonymous',   city: 'Warri',         relates: 119 },
-  { id: 'SC-SEED-11', confession: "I've cried over a failed SNKRS drop. More than once. It still hurts.",                   displayName: 'Anonymous',   city: 'Lagos',         relates: 76  },
-  { id: 'SC-SEED-12', confession: "I have a spreadsheet of every grail I want. It has 200 rows. I checked it today.",       displayName: 'DataSneaker', city: 'Calabar',       relates: 38  },
-]
+// The eight invented confessions that used to sit here - with invented
+// "relates" counts - are gone. This wall reads real, moderated submissions.
 
 const LOCAL_KEY   = 'sf26_local_confessions'
 const RELATES_KEY = 'sf26_confessional_relates'
@@ -128,7 +116,7 @@ export default function Confessional() {
   }
 
   const seen = new Set(locals.map(c => c.id))
-  const all = [...locals, ...live.filter(c => !seen.has(c.id)), ...SEEDS]
+  const all = [...locals, ...live.filter(c => !seen.has(c.id))]
 
   return (
     <section id="confessional" style={{ position: 'relative', overflow: 'hidden', background: B.black, padding: '80px 24px' }}>
