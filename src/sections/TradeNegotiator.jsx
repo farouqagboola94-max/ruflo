@@ -90,7 +90,7 @@ export default function TradeNegotiator() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 14 }}>
           <div>
             <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.amber, letterSpacing: '0.2em', marginBottom: 8 }}>YOU'RE GIVING →</div>
-            <textarea
+            <textarea aria-label="What you are giving"
               value={offering}
               onChange={e => { setOffering(e.target.value); setResult(null) }}
               placeholder="e.g. Jordan 1 Bred Toe 2019, DS, size 10 UK"
@@ -100,7 +100,7 @@ export default function TradeNegotiator() {
           </div>
           <div>
             <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.neonCyan, letterSpacing: '0.2em', marginBottom: 8 }}>← YOU'RE GETTING</div>
-            <textarea
+            <textarea aria-label="What you are getting"
               value={getting}
               onChange={e => { setGetting(e.target.value); setResult(null) }}
               placeholder="e.g. Yeezy 350 V2 Zebra 2022, VNDS, size 10 UK + ₦30K cash"
@@ -110,7 +110,7 @@ export default function TradeNegotiator() {
           </div>
         </div>
 
-        <textarea
+        <textarea aria-label="Extra context (optional)"
           value={context}
           onChange={e => setContext(e.target.value)}
           placeholder="Optional: any extra context (urgency, relationship, condition notes...)"

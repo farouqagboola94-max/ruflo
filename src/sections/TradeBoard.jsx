@@ -77,22 +77,22 @@ function PostModal({ onPost, onClose }) {
             <div onClick={() => fileRef.current.click()} style={{ height:120, background: photo ? 'transparent' : 'rgba(255,255,255,0.03)', border:`1px dashed ${B.amber}40`, borderRadius:8, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', overflow:'hidden' }}>
               {photo ? <img src={photo} alt="" style={{ width:'100%', height:'100%', objectFit:'cover' }} /> : <span style={{ fontFamily:'Space Mono,monospace', fontSize:10, color: B.dim }}>TAP TO ADD PHOTO</span>}
             </div>
-            <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} style={{ display:'none' }} />
+            <input aria-label="Add a photo of the sneaker" ref={fileRef} type="file" accept="image/*" onChange={handleFile} style={{ display:'none' }} />
           </div>
 
           <div>
             <label style={lbl}>SNEAKER NAME *</label>
-            <input value={form.name} onChange={inp('name')} placeholder="e.g. Air Jordan 1 Retro High Chicago" style={is} onFocus={focus} onBlur={blur} />
+            <input aria-label="Sneaker name" value={form.name} onChange={inp('name')} placeholder="e.g. Air Jordan 1 Retro High Chicago" style={is} onFocus={focus} onBlur={blur} />
           </div>
 
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
             <div>
               <label style={lbl}>BRAND *</label>
-              <input value={form.brand} onChange={inp('brand')} placeholder="Nike, Adidas…" style={is} onFocus={focus} onBlur={blur} />
+              <input aria-label="Brand" value={form.brand} onChange={inp('brand')} placeholder="Nike, Adidas…" style={is} onFocus={focus} onBlur={blur} />
             </div>
             <div>
               <label style={lbl}>SIZE (EU) *</label>
-              <input value={form.size} onChange={inp('size')} placeholder="43" style={is} onFocus={focus} onBlur={blur} />
+              <input aria-label="Size in EU" value={form.size} onChange={inp('size')} placeholder="43" style={is} onFocus={focus} onBlur={blur} />
             </div>
           </div>
 
@@ -110,23 +110,23 @@ function PostModal({ onPost, onClose }) {
 
           <div>
             <label style={lbl}>LOOKING FOR *</label>
-            <input value={form.asking} onChange={inp('asking')} placeholder="Trade target or price — e.g. Jordan 4 or ₦60,000" style={is} onFocus={focus} onBlur={blur} />
+            <input aria-label="What you are looking for" value={form.asking} onChange={inp('asking')} placeholder="Trade target or price — e.g. Jordan 4 or ₦60,000" style={is} onFocus={focus} onBlur={blur} />
           </div>
 
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
             <div>
               <label style={lbl}>WHATSAPP NUMBER</label>
-              <input value={form.contact} onChange={inp('contact')} placeholder="08012345678" style={is} onFocus={focus} onBlur={blur} />
+              <input aria-label="WhatsApp number" value={form.contact} onChange={inp('contact')} placeholder="08012345678" style={is} onFocus={focus} onBlur={blur} />
             </div>
             <div>
               <label style={lbl}>INSTAGRAM</label>
-              <input value={form.instagram} onChange={inp('instagram')} placeholder="@handle" style={is} onFocus={focus} onBlur={blur} />
+              <input aria-label="Instagram handle" value={form.instagram} onChange={inp('instagram')} placeholder="@handle" style={is} onFocus={focus} onBlur={blur} />
             </div>
           </div>
 
           <div>
             <label style={lbl}>NOTES</label>
-            <textarea value={form.notes} onChange={inp('notes')} placeholder="Condition details, what's included, etc." rows={3} style={{ ...is, resize:'none' }} onFocus={focus} onBlur={blur} />
+            <textarea aria-label="Notes" value={form.notes} onChange={inp('notes')} placeholder="Condition details, what's included, etc." rows={3} style={{ ...is, resize:'none' }} onFocus={focus} onBlur={blur} />
           </div>
 
           <button onClick={submit} disabled={!valid || busy} style={{ padding:'15px', background: valid && !busy ? `linear-gradient(90deg, ${B.amber}, #D48000)` : '#1a1a1a', border:'none', borderRadius:8, color: valid && !busy ? B.black : B.dim, fontFamily:'Bebas Neue,sans-serif', fontSize:20, letterSpacing:3, cursor: valid && !busy ? 'pointer' : 'default', transition:'all 0.2s', marginTop:4 }}>
@@ -306,15 +306,15 @@ export default function TradeBoard() {
 
         {/* filters */}
         <div className="card-3d" style={{ display:'flex', gap:10, flexWrap:'wrap', alignItems:'center', marginBottom:32, padding:'16px 20px', background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.07)', borderRadius:10 }}>
-          <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search sneakers…" style={{ padding:'8px 13px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:6, color:B.white, fontFamily:'Space Mono,monospace', fontSize:11, outline:'none', minWidth:160, flex:'1 1 140px' }} />
+          <input aria-label="Search sneakers" value={query} onChange={e => setQuery(e.target.value)} placeholder="Search sneakers…" style={{ padding:'8px 13px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:6, color:B.white, fontFamily:'Space Mono,monospace', fontSize:11, outline:'none', minWidth:160, flex:'1 1 140px' }} />
 
-          <select value={brandFilter} onChange={e => setBrandFilter(e.target.value)}
+          <select aria-label="Filter by brand" value={brandFilter} onChange={e => setBrandFilter(e.target.value)}
             style={{ padding:'8px 12px', background:'rgba(255,255,255,0.05)', border:`1px solid ${brandFilter ? B.neonCyan+'50' : 'rgba(255,255,255,0.1)'}`, borderRadius:6, color: brandFilter ? B.neonCyan : B.smoke, fontFamily:'Space Mono,monospace', fontSize:9, outline:'none', cursor:'pointer', minWidth:110 }}>
             <option value="">ALL BRANDS</option>
             {allBrands.map(b => <option key={b} value={b}>{b}</option>)}
           </select>
 
-          <select value={sizeFilter} onChange={e => setSizeFilter(e.target.value)}
+          <select aria-label="Filter by size" value={sizeFilter} onChange={e => setSizeFilter(e.target.value)}
             style={{ padding:'8px 12px', background:'rgba(255,255,255,0.05)', border:`1px solid ${sizeFilter ? B.neonCyan+'50' : 'rgba(255,255,255,0.1)'}`, borderRadius:6, color: sizeFilter ? B.neonCyan : B.smoke, fontFamily:'Space Mono,monospace', fontSize:9, outline:'none', cursor:'pointer', minWidth:100 }}>
             <option value="">ALL SIZES</option>
             {allSizes.map(s => <option key={s} value={s}>EU {s}</option>)}

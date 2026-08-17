@@ -205,7 +205,7 @@ export default function ShoeColorizer() {
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-              <input
+              <input aria-label="Custom colour"
                 type="color"
                 value={colors[activeZone]}
                 onChange={e => pickColor(e.target.value)}

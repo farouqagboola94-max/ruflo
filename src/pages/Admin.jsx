@@ -148,7 +148,7 @@ function Gate({ onAuth }) {
       <div style={{ ...PANEL, border: `1px solid ${B.amber}30`, padding: '48px 40px', width: '100%', maxWidth: 380, textAlign: 'center' }}>
         <div style={{ fontFamily: "'Orbitron'", fontSize: 10, color: B.amber, letterSpacing: 4, marginBottom: 8 }}>SNEAKERS FEST '26</div>
         <div style={{ fontFamily: "'Bebas Neue'", fontSize: 36, color: B.white, letterSpacing: 3, marginBottom: 28 }}>ORGANISER ACCESS</div>
-        <input
+        <input aria-label="Organiser access code"
           type="password" value={code} autoFocus
           onChange={e => setCode(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && attempt()}

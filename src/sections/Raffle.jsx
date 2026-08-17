@@ -114,11 +114,11 @@ function EntryModal({ raffle, onEnter, onClose }) {
             <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: B.smoke, marginBottom:16 }}>{raffle.edition} · {raffle.value}</div>
             <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
-                <div><label style={lbl}>FULL NAME</label><input value={form.name}  onChange={inp('name')}  placeholder="Your name" style={is} onFocus={foc} onBlur={blur} /></div>
-                <div><label style={lbl}>CITY</label>     <input value={form.city}  onChange={inp('city')}  placeholder="Lagos…"    style={is} onFocus={foc} onBlur={blur} /></div>
+                <div><label style={lbl}>FULL NAME</label><input aria-label="Full name" value={form.name}  onChange={inp('name')}  placeholder="Your name" style={is} onFocus={foc} onBlur={blur} /></div>
+                <div><label style={lbl}>CITY</label>     <input aria-label="City" value={form.city}  onChange={inp('city')}  placeholder="Lagos…"    style={is} onFocus={foc} onBlur={blur} /></div>
               </div>
-              <div><label style={lbl}>EMAIL ADDRESS</label><input value={form.email} onChange={inp('email')} type="email" placeholder="you@email.com" style={is} onFocus={foc} onBlur={blur} /></div>
-              <div><label style={lbl}>PHONE NUMBER</label> <input value={form.phone} onChange={inp('phone')} type="tel"   placeholder="+234 …"        style={is} onFocus={foc} onBlur={blur} /></div>
+              <div><label style={lbl}>EMAIL ADDRESS</label><input aria-label="Email address" value={form.email} onChange={inp('email')} type="email" placeholder="you@email.com" style={is} onFocus={foc} onBlur={blur} /></div>
+              <div><label style={lbl}>PHONE NUMBER</label> <input aria-label="Phone number" value={form.phone} onChange={inp('phone')} type="tel"   placeholder="+234 …"        style={is} onFocus={foc} onBlur={blur} /></div>
             </div>
             {error && <div style={{ marginTop:14, fontFamily:'Space Mono,monospace', fontSize:9, color:B.neonMagenta }}>{error}</div>}
             <button onClick={handleSubmit} disabled={busy} style={{ width:'100%', marginTop:18, padding:'14px', background:ok?`linear-gradient(90deg,${raffle.color},${raffle.color}BB)`:'#1a1a1a', border:'none', borderRadius:8, color:ok?B.black:B.dim, fontFamily:'Bebas Neue,sans-serif', fontSize:20, letterSpacing:3, cursor:ok?'pointer':'default', transition:'all 0.2s', boxShadow:ok?`0 0 28px ${raffle.color}30`:'none' }}>

@@ -98,7 +98,7 @@ function PassportContent({ state, tier }) {
           earn +{XP_VALUES.referralXP} XP. If they buy a ticket, you get a +{XP_VALUES.referralPurchaseBonus} XP bonus.
         </p>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          <input
+          <input aria-label="Your referral link"
             readOnly
             value={getReferralLink()}
             onFocus={e => e.target.select()}

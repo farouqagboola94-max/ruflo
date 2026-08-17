@@ -204,7 +204,7 @@ export default function Standings() {
           }}>
             <div style={{ fontFamily: MONO, fontSize: 8, color: B.amber, letterSpacing: 3, marginBottom: 10 }}>CLAIM YOUR HANDLE</div>
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              <input
+              <input aria-label="Claim your handle"
                 value={draft} onChange={e => setDraft(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && claim()}
                 placeholder="soleking"

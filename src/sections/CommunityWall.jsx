@@ -198,7 +198,7 @@ function AddModal({ onClose, onAdd }) {
               <div>
                 <label style={{ fontFamily: "'Space Mono',monospace", fontSize: 10, color: B.smoke,
                   letterSpacing: 3, display: 'block', marginBottom: 7 }}>YOUR NAME *</label>
-                <input value={name} onChange={e => setName(e.target.value)} placeholder="e.g. TUNDE B."
+                <input aria-label="Your name" value={name} onChange={e => setName(e.target.value)} placeholder="e.g. TUNDE B."
                   maxLength={28} required style={inputStyle}
                   onFocus={e => e.target.style.borderColor = B.amber + '60'}
                   onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.10)'} />
@@ -206,7 +206,7 @@ function AddModal({ onClose, onAdd }) {
               <div>
                 <label style={{ fontFamily: "'Space Mono',monospace", fontSize: 10, color: B.smoke,
                   letterSpacing: 3, display: 'block', marginBottom: 7 }}>CITY / AREA</label>
-                <input value={city} onChange={e => setCity(e.target.value)} placeholder="e.g. LEKKI"
+                <input aria-label="City or area" value={city} onChange={e => setCity(e.target.value)} placeholder="e.g. LEKKI"
                   maxLength={28} style={inputStyle}
                   onFocus={e => e.target.style.borderColor = B.amber + '60'}
                   onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.10)'} />
@@ -224,7 +224,7 @@ function AddModal({ onClose, onAdd }) {
                   {msg.length}/140
                 </span>
               </div>
-              <textarea value={msg} onChange={e => setMsg(e.target.value.slice(0, 140))}
+              <textarea aria-label="Your message to the wall" value={msg} onChange={e => setMsg(e.target.value.slice(0, 140))}
                 placeholder="Write your truth. What does this movement mean to you? What are you creating? What do you stand for?"
                 required rows={4}
                 style={{ ...inputStyle, resize: 'none', lineHeight: 1.6, fontStyle: 'italic' }}

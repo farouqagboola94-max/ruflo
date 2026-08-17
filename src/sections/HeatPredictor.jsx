@@ -94,7 +94,7 @@ export default function HeatPredictor() {
         </div>
 
         <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
-          <input
+          <input aria-label="Sneaker to predict"
             value={shoe}
             onChange={e => { setShoe(e.target.value); setResult(null) }}
             placeholder="e.g. Air Jordan 1 Chicago, Adidas Samba OG, New Balance 992"

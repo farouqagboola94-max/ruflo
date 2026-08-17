@@ -125,7 +125,7 @@ Write the perfect Sneakers Fest '26 caption.`
 
         <div style={{ marginBottom: 16 }}>
           <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>OPTIONAL · SHOE OR FIT</div>
-          <input
+          <input aria-label="Shoe or fit (optional)"
             value={shoe}
             onChange={e => { setShoe(e.target.value); setCaption('') }}
             placeholder="e.g. Air Jordan 4 'Military Blue' + Lagos designer set"

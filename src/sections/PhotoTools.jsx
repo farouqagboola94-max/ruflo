@@ -220,7 +220,7 @@ export default function PhotoTools() {
           <div onClick={() => fileRef.current?.click()} onDragOver={e => e.preventDefault()} onDrop={e => { e.preventDefault(); loadFile(e.dataTransfer.files[0]) }}
             className="card-3d"
             style={{ border:`2px dashed rgba(255,45,123,0.35)`, borderRadius:20, padding:'90px 40px', textAlign:'center', cursor:'pointer', background:'rgba(255,45,123,0.025)', maxWidth:640, margin:'0 auto' }}>
-            <input ref={fileRef} type="file" accept="image/*" style={{ display:'none' }} onChange={e => loadFile(e.target.files[0])} />
+            <input aria-label="Choose a photo to edit" ref={fileRef} type="file" accept="image/*" style={{ display:'none' }} onChange={e => loadFile(e.target.files[0])} />
             <div style={{ fontSize:56, marginBottom:18 }}>👟</div>
             <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:32, color:B.neonMagenta, letterSpacing:3, marginBottom:10 }}>DROP YOUR PHOTO HERE</div>
             <div style={{ fontFamily:'Space Mono,monospace', fontSize:11, color: B.dim }}>or click to browse · JPG, PNG, WEBP</div>
@@ -299,7 +299,7 @@ export default function PhotoTools() {
                           <span style={{ fontFamily:'Orbitron,monospace', fontSize: 9, color:s.color, letterSpacing:2, fontWeight:700 }}>{s.label}</span>
                           <span style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: B.smoke }}>{adjusts[s.key]}{s.unit}</span>
                         </div>
-                        <input type="range" min={s.min} max={s.max} value={adjusts[s.key]}
+                        <input aria-label={s.label} type="range" min={s.min} max={s.max} value={adjusts[s.key]}
                           onChange={e => { setPreset(-1); setAdjusts(a => ({ ...a, [s.key]:Number(e.target.value) })) }}
                           style={{ width:'100%', accentColor:s.color, cursor:'pointer', height:4 }} />
                         {adjusts[s.key] !== s.def && (
@@ -318,7 +318,7 @@ export default function PhotoTools() {
                 {/* TEXT */}
                 {tab==='TEXT' && (
                   <div>
-                    <input value={textIn} onChange={e => setTextIn(e.target.value)} onKeyDown={e => e.key === 'Enter' && addText()}
+                    <input aria-label="Text to add to the photo" value={textIn} onChange={e => setTextIn(e.target.value)} onKeyDown={e => e.key === 'Enter' && addText()}
                       placeholder="Your text here..."
                       style={{ width:'100%', padding:'10px 12px', background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:8, color:B.white, fontFamily:'Space Mono,monospace', fontSize:12, outline:'none', boxSizing:'border-box', marginBottom:12 }} />
 
@@ -338,7 +338,7 @@ export default function PhotoTools() {
                     <div style={{ display:'flex', gap:12, marginBottom:12, alignItems:'flex-end' }}>
                       <div>
                         <div style={{ fontFamily:'Orbitron,monospace', fontSize: 9, color: B.smoke, marginBottom:5, letterSpacing:1 }}>COLOR</div>
-                        <input type="color" value={textCol} onChange={e => setTextCol(e.target.value)}
+                        <input aria-label="Text colour" type="color" value={textCol} onChange={e => setTextCol(e.target.value)}
                           style={{ width:44, height:34, border:'1px solid rgba(255,255,255,0.1)', borderRadius:6, background:'transparent', cursor:'pointer', padding:2 }} />
                       </div>
                       <div style={{ flex:1 }}>
@@ -346,7 +346,7 @@ export default function PhotoTools() {
                           <span style={{ fontFamily:'Orbitron,monospace', fontSize: 9, color: B.smoke, letterSpacing:1 }}>SIZE</span>
                           <span style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: B.smoke }}>{textSz}px</span>
                         </div>
-                        <input type="range" min={14} max={90} value={textSz} onChange={e => setTextSz(Number(e.target.value))} style={{ width:'100%', accentColor:B.neonMagenta }} />
+                        <input aria-label="Text size" type="range" min={14} max={90} value={textSz} onChange={e => setTextSz(Number(e.target.value))} style={{ width:'100%', accentColor:B.neonMagenta }} />
                       </div>
                     </div>
 

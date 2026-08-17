@@ -116,7 +116,7 @@ export default function SneakerKnowledgeVault() {
         {view === 'vault' && (
           <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: 20, minHeight: 420 }}>
             <div>
-              <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search notes..." style={{ width: '100%', padding: '8px 12px', background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: 4, color: B.white, fontFamily: "'Space Mono'", fontSize: 10, outline: 'none', boxSizing: 'border-box', marginBottom: 12 }} />
+              <input aria-label="Search notes" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search notes..." style={{ width: '100%', padding: '8px 12px', background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: 4, color: B.white, fontFamily: "'Space Mono'", fontSize: 10, outline: 'none', boxSizing: 'border-box', marginBottom: 12 }} />
               <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 {filtered.map(n => (
                   <div key={n.id} className="kv-note" onClick={() => setActiveId(n.id)} style={{ padding: '10px 12px', borderRadius: 4, background: activeId === n.id ? 'rgba(255,255,255,0.06)' : 'transparent', border: `1px solid ${activeId === n.id ? B.dim : 'transparent'}`, cursor: 'pointer', transition: 'background 0.15s' }}>
@@ -153,7 +153,7 @@ export default function SneakerKnowledgeVault() {
         {view === 'analyze' && (
           <div style={{ animation: 'kvSlide 0.25s ease' }}>
             <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
-              <input value={query} onChange={e => setQuery(e.target.value)} onKeyDown={e => e.key === 'Enter' && askAI()} placeholder="Ask anything about sneaker culture, drops, Lagos market, resale..." style={{ flex: 1, padding: '12px 16px', background: '#0d0d0d', border: `1px solid ${B.amber}33`, borderRadius: 4, color: B.white, fontFamily: "'Space Mono'", fontSize: 11, outline: 'none' }} />
+              <input aria-label="Ask about sneaker culture" value={query} onChange={e => setQuery(e.target.value)} onKeyDown={e => e.key === 'Enter' && askAI()} placeholder="Ask anything about sneaker culture, drops, Lagos market, resale..." style={{ flex: 1, padding: '12px 16px', background: '#0d0d0d', border: `1px solid ${B.amber}33`, borderRadius: 4, color: B.white, fontFamily: "'Space Mono'", fontSize: 11, outline: 'none' }} />
               <button onClick={askAI} disabled={aiLoading || !query.trim()} style={{ padding: '12px 20px', background: aiLoading ? '#111' : B.amber, color: aiLoading ? B.dim : B.black, border: 'none', borderRadius: 4, fontFamily: "'Space Mono'", fontSize: 10, fontWeight: 700, cursor: aiLoading ? 'wait' : 'pointer', transition: 'all 0.2s', whiteSpace: 'nowrap' }}>
                 {aiLoading ? '···' : 'ASK'}
               </button>
@@ -191,9 +191,9 @@ export default function SneakerKnowledgeVault() {
         {view === 'add' && (
           <div style={{ maxWidth: 560, animation: 'kvSlide 0.25s ease' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              <input value={newNote.title} onChange={e => setNewNote(p => ({ ...p, title: e.target.value }))} placeholder="Note title..." style={{ padding: '10px 14px', background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: 4, color: B.white, fontFamily: "'Space Mono'", fontSize: 11, outline: 'none' }} />
-              <textarea value={newNote.body} onChange={e => setNewNote(p => ({ ...p, body: e.target.value }))} placeholder="Write your note..." rows={6} style={{ padding: '10px 14px', background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: 4, color: B.white, fontFamily: "'Space Mono'", fontSize: 11, outline: 'none', resize: 'vertical', lineHeight: 1.7 }} />
-              <input value={newNote.tags} onChange={e => setNewNote(p => ({ ...p, tags: e.target.value }))} placeholder="Tags (comma-separated): jordan, lagos, resale..." style={{ padding: '10px 14px', background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: 4, color: B.white, fontFamily: "'Space Mono'", fontSize: 10, outline: 'none' }} />
+              <input aria-label="Note title" value={newNote.title} onChange={e => setNewNote(p => ({ ...p, title: e.target.value }))} placeholder="Note title..." style={{ padding: '10px 14px', background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: 4, color: B.white, fontFamily: "'Space Mono'", fontSize: 11, outline: 'none' }} />
+              <textarea aria-label="Note body" value={newNote.body} onChange={e => setNewNote(p => ({ ...p, body: e.target.value }))} placeholder="Write your note..." rows={6} style={{ padding: '10px 14px', background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: 4, color: B.white, fontFamily: "'Space Mono'", fontSize: 11, outline: 'none', resize: 'vertical', lineHeight: 1.7 }} />
+              <input aria-label="Tags, comma separated" value={newNote.tags} onChange={e => setNewNote(p => ({ ...p, tags: e.target.value }))} placeholder="Tags (comma-separated): jordan, lagos, resale..." style={{ padding: '10px 14px', background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: 4, color: B.white, fontFamily: "'Space Mono'", fontSize: 10, outline: 'none' }} />
               <button onClick={addNote} disabled={!newNote.title.trim() || !newNote.body.trim()} style={{ padding: 12, background: newNote.title && newNote.body ? B.amber : '#111', color: newNote.title && newNote.body ? B.black : B.dim, border: 'none', borderRadius: 4, fontFamily: "'Space Mono'", fontSize: 10, fontWeight: 700, cursor: newNote.title && newNote.body ? 'pointer' : 'not-allowed', letterSpacing: '0.1em', transition: 'all 0.2s' }}>
                 SAVE TO VAULT
               </button>

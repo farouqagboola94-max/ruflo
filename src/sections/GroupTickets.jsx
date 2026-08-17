@@ -108,10 +108,10 @@ function GroupPanel({ group, onReset, onClaim, claiming, error }) {
           <div style={{ ...label, color: B.amber }}>CLAIM YOUR SLOT &mdash; YOU PAY FOR YOUR OWN TICKET</div>
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
             <Field label="YOUR NAME">
-              <input style={field} value={name} maxLength={28} onChange={e => setName(e.target.value)} placeholder="Bola" />
+              <input aria-label="Your name" style={field} value={name} maxLength={28} onChange={e => setName(e.target.value)} placeholder="Bola" />
             </Field>
             <Field label="YOUR EMAIL">
-              <input style={field} type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@email.com" />
+              <input aria-label="Email address" style={field} type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@email.com" />
             </Field>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
@@ -264,7 +264,7 @@ export default function GroupTickets() {
             <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               {mode === 'find' ? (
                 <Field label="GROUP CODE">
-                  <input
+                  <input aria-label="Group code"
                     style={{ ...field, fontFamily: "'Orbitron', monospace", fontSize: 18, letterSpacing: '0.18em', textTransform: 'uppercase' }}
                     value={form.code} maxLength={7} placeholder="AC234"
                     onChange={e => set('code', e.target.value.toUpperCase())} />
@@ -273,20 +273,20 @@ export default function GroupTickets() {
                 <>
                   <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
                     <Field label="TICKET TIER">
-                      <select style={{ ...field, fontFamily: "'Space Mono', monospace", fontSize: 12 }}
+                      <select aria-label="Ticket tier" style={{ ...field, fontFamily: "'Space Mono', monospace", fontSize: 12 }}
                         value={form.tier} onChange={e => set('tier', e.target.value)}>
                         {TIERS.map(t => <option key={t.key} value={t.key}>{t.label} — {naira(t.price)}</option>)}
                       </select>
                     </Field>
                     <Field label="HOW MANY OF YOU">
-                      <select style={{ ...field, fontFamily: "'Space Mono', monospace", fontSize: 12 }}
+                      <select aria-label="How many of you" style={{ ...field, fontFamily: "'Space Mono', monospace", fontSize: 12 }}
                         value={form.size} onChange={e => set('size', e.target.value)}>
                         {Array.from({ length: 9 }, (_, i) => i + 2).map(n => <option key={n} value={n}>{n} people</option>)}
                       </select>
                     </Field>
                   </div>
                   <Field label="YOUR NAME">
-                    <input style={field} value={form.organiserName} maxLength={28}
+                    <input aria-label="Your name" style={field} value={form.organiserName} maxLength={28}
                       onChange={e => set('organiserName', e.target.value)} placeholder="Ade" />
                   </Field>
                   <div style={{ ...label, fontSize: 6.5, color: B.smoke + '90' }}>

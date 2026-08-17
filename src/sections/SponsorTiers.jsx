@@ -245,10 +245,10 @@ export default function SponsorTiers() {
               <div style={{ height: 3, background: `linear-gradient(90deg, ${B.amber}, ${B.neonCyan}, ${B.neonMagenta})` }} />
               <div style={{ padding: 32, display: 'flex', flexDirection: 'column', gap: 20 }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-                  <div>{lbl('BRAND / COMPANY *')}<input required value={form.brand} onChange={set('brand')} placeholder="Your brand name" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
-                  <div>{lbl('CONTACT PERSON *')}<input required value={form.contact} onChange={set('contact')} placeholder="Your name" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
+                  <div>{lbl('BRAND / COMPANY *')}<input aria-label="Brand name" required value={form.brand} onChange={set('brand')} placeholder="Your brand name" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
+                  <div>{lbl('CONTACT PERSON *')}<input aria-label="Your name" required value={form.contact} onChange={set('contact')} placeholder="Your name" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
                 </div>
-                <div>{lbl('EMAIL ADDRESS *')}<input required type="email" value={form.email} onChange={set('email')} placeholder="your@email.com" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
+                <div>{lbl('EMAIL ADDRESS *')}<input aria-label="Email address" required type="email" value={form.email} onChange={set('email')} placeholder="your@email.com" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
                 <div>
                   {lbl('INTERESTED TIER *')}
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 8 }}>
@@ -260,7 +260,7 @@ export default function SponsorTiers() {
                     ))}
                   </div>
                 </div>
-                <div>{lbl('NOTES / GOALS (optional)')}<textarea value={form.note} onChange={set('note')} placeholder="What do you want to achieve from this partnership?" rows={3} style={{ ...IS, resize: 'vertical', lineHeight: 1.6 }} onFocus={onFocus} onBlur={onBlur} /></div>
+                <div>{lbl('NOTES / GOALS (optional)')}<textarea aria-label="What you want from this partnership" value={form.note} onChange={set('note')} placeholder="What do you want to achieve from this partnership?" rows={3} style={{ ...IS, resize: 'vertical', lineHeight: 1.6 }} onFocus={onFocus} onBlur={onBlur} /></div>
                 <button type="submit" disabled={loading}
                   style={{ padding: '14px', background: loading ? 'rgba(255,255,255,0.04)' : B.amber, border: 'none', borderRadius: 8, color: loading ? B.dim : B.black, fontFamily: 'Orbitron,monospace', fontSize: 12, fontWeight: 700, letterSpacing: 2, cursor: loading ? 'not-allowed' : 'pointer', boxShadow: loading ? 'none' : `0 0 28px ${B.amber}35`, transition: 'all 0.2s' }}>
                   {loading ? 'SENDING…' : 'REQUEST SPONSORSHIP DECK →'}

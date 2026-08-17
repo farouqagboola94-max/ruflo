@@ -99,7 +99,7 @@ export default function SneakerRoast() {
 
         <div style={{ marginBottom: 18 }}>
           <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>YOUR ROTATION</div>
-          <textarea
+          <textarea aria-label="Your rotation"
             value={rotation}
             onChange={e => { setRotation(e.target.value); setRoast('') }}
             placeholder="List 2–5 shoes you own or rotate. Be honest. Claude will be."

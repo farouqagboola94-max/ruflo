@@ -111,7 +111,7 @@ export default function SneakerEulogy() {
         <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 12, marginBottom: 14 }}>
           <div>
             <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>THE SHOE</div>
-            <input
+            <input aria-label="The shoe"
               value={shoe}
               onChange={e => { setShoe(e.target.value); setEulogy('') }}
               placeholder="e.g. Nike Air Max 97 Silver Bullet, Yeezy 350 Cream"
@@ -120,7 +120,7 @@ export default function SneakerEulogy() {
           </div>
           <div>
             <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>HOW LONG</div>
-            <input
+            <input aria-label="How long you had them"
               value={duration}
               onChange={e => { setDuration(e.target.value); setEulogy('') }}
               placeholder="e.g. 3 years"
@@ -131,7 +131,7 @@ export default function SneakerEulogy() {
 
         <div style={{ marginBottom: 18 }}>
           <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>THE MEMORIES</div>
-          <textarea
+          <textarea aria-label="The memories"
             value={memory}
             onChange={e => { setMemory(e.target.value); setEulogy('') }}
             placeholder="What happened in these shoes? Where did they take you? What do they mean?"

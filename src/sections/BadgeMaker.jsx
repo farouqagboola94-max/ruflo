@@ -124,7 +124,7 @@ export default function BadgeMaker() {
 
         {/* Inputs */}
         <div style={{ display: 'flex', gap: 12, marginBottom: 24, flexWrap: 'wrap' }}>
-          <input
+          <input aria-label="Your name"
             value={name}
             onChange={e => setName(e.target.value)}
             maxLength={24}
@@ -137,7 +137,7 @@ export default function BadgeMaker() {
             onFocus={e => { e.currentTarget.style.borderColor = B.amber }}
             onBlur={e => { e.currentTarget.style.borderColor = B.gunmetal }}
           />
-          <input
+          <input aria-label="Your city"
             value={city}
             onChange={e => setCity(e.target.value)}
             maxLength={20}
@@ -150,7 +150,7 @@ export default function BadgeMaker() {
             onFocus={e => { e.currentTarget.style.borderColor = B.amber }}
             onBlur={e => { e.currentTarget.style.borderColor = B.gunmetal }}
           />
-          <select
+          <select aria-label="Badge style"
             value={tier}
             onChange={e => setTier(e.target.value)}
             style={{

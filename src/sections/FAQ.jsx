@@ -80,7 +80,7 @@ export default function FAQ() {
         {/* Search */}
         <div className="reveal-3d" style={{ marginBottom: 28, position: 'relative' }}>
           <span style={{ position: 'absolute', left: 13, top: '50%', transform: 'translateY(-50%)', color: B.smoke, fontSize: 13, pointerEvents: 'none' }}>🔍</span>
-          <input
+          <input aria-label="Search questions"
             value={search} onChange={e => { setSearch(e.target.value); setOpen(null) }}
             placeholder="Search questions…"
             style={{ width: '100%', padding: '12px 40px 12px 38px', background: 'rgba(255,255,255,0.04)', border: `1px solid rgba(255,255,255,0.1)`, borderRadius: 6, color: B.white, fontFamily: 'Syne,sans-serif', fontSize: 13, outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.2s' }}

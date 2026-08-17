@@ -229,7 +229,7 @@ function CartDrawer({ cart, setCart, onClose }) {
                     ) : (
                       <>
                         <div style={{ display:'flex', gap:8 }}>
-                          <input value={promo.code} onChange={e => setPromo(p => ({...p, code:e.target.value, err:''}))} onKeyDown={e => e.key==='Enter' && applyPromo()} placeholder="PROMO CODE" style={{ flex:1, background:'rgba(255,255,255,0.04)', border:`1px solid ${promo.err ? B.neonMagenta : 'rgba(255,255,255,0.1)'}`, borderRadius:6, padding:'8px 12px', color:B.white, fontFamily:'Space Mono,monospace', fontSize:10, outline:'none', letterSpacing:1 }} />
+                          <input aria-label="Promo code" value={promo.code} onChange={e => setPromo(p => ({...p, code:e.target.value, err:''}))} onKeyDown={e => e.key==='Enter' && applyPromo()} placeholder="PROMO CODE" style={{ flex:1, background:'rgba(255,255,255,0.04)', border:`1px solid ${promo.err ? B.neonMagenta : 'rgba(255,255,255,0.1)'}`, borderRadius:6, padding:'8px 12px', color:B.white, fontFamily:'Space Mono,monospace', fontSize:10, outline:'none', letterSpacing:1 }} />
                           <button onClick={applyPromo} style={{ padding:'8px 16px', background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:6, color:'#888', fontFamily:'Space Mono,monospace', fontSize:9, cursor:'pointer', letterSpacing:1 }}>APPLY</button>
                         </div>
                         {promo.err && <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:B.neonMagenta, marginTop:5 }}>{promo.err}</div>}
@@ -254,9 +254,9 @@ function CartDrawer({ cart, setCart, onClose }) {
             <>
               <button onClick={() => setView('cart')} style={{ background:'transparent', border:'none', color: B.smoke, fontFamily:'Space Mono,monospace', fontSize:9, cursor:'pointer', marginBottom:20, padding:0, letterSpacing:2 }}>← BACK TO CART</button>
               <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
-                <div><label style={LS}>FULL NAME</label><input value={form.name} onChange={inp('name')} placeholder="Your name" style={IS} onFocus={e => e.target.style.borderColor=B.amber+'60'} onBlur={e => e.target.style.borderColor='rgba(255,255,255,0.1)'} /></div>
-                <div><label style={LS}>EMAIL ADDRESS</label><input value={form.email} onChange={inp('email')} type="email" placeholder="you@email.com" style={IS} onFocus={e => e.target.style.borderColor=B.amber+'60'} onBlur={e => e.target.style.borderColor='rgba(255,255,255,0.1)'} /></div>
-                <div><label style={LS}>PHONE NUMBER</label><input value={form.phone} onChange={inp('phone')} type="tel" placeholder="+234 ..." style={IS} onFocus={e => e.target.style.borderColor=B.amber+'60'} onBlur={e => e.target.style.borderColor='rgba(255,255,255,0.1)'} /></div>
+                <div><label style={LS}>FULL NAME</label><input aria-label="Full name" value={form.name} onChange={inp('name')} placeholder="Your name" style={IS} onFocus={e => e.target.style.borderColor=B.amber+'60'} onBlur={e => e.target.style.borderColor='rgba(255,255,255,0.1)'} /></div>
+                <div><label style={LS}>EMAIL ADDRESS</label><input aria-label="Email address" value={form.email} onChange={inp('email')} type="email" placeholder="you@email.com" style={IS} onFocus={e => e.target.style.borderColor=B.amber+'60'} onBlur={e => e.target.style.borderColor='rgba(255,255,255,0.1)'} /></div>
+                <div><label style={LS}>PHONE NUMBER</label><input aria-label="Phone number" value={form.phone} onChange={inp('phone')} type="tel" placeholder="+234 ..." style={IS} onFocus={e => e.target.style.borderColor=B.amber+'60'} onBlur={e => e.target.style.borderColor='rgba(255,255,255,0.1)'} /></div>
                 <div>
                   <label style={LS}>DELIVERY</label>
                   <div style={{ display:'flex', gap:8 }}>
@@ -266,7 +266,7 @@ function CartDrawer({ cart, setCart, onClose }) {
                   </div>
                 </div>
                 {form.delivery === 'delivery' && (
-                  <div><label style={LS}>DELIVERY ADDRESS</label><textarea value={form.address} onChange={inp('address')} placeholder="Full delivery address in Lagos..." rows={3} style={{ ...IS, resize:'none' }} onFocus={e => e.target.style.borderColor=B.amber+'60'} onBlur={e => e.target.style.borderColor='rgba(255,255,255,0.1)'} /></div>
+                  <div><label style={LS}>DELIVERY ADDRESS</label><textarea aria-label="Delivery address" value={form.address} onChange={inp('address')} placeholder="Full delivery address in Lagos..." rows={3} style={{ ...IS, resize:'none' }} onFocus={e => e.target.style.borderColor=B.amber+'60'} onBlur={e => e.target.style.borderColor='rgba(255,255,255,0.1)'} /></div>
                 )}
               </div>
               {/* order recap */}

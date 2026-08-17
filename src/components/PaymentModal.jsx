@@ -435,8 +435,8 @@ export default function PaymentModal({ tier, onClose }) {
               </p>
             </div>
 
-            <div>{label('FULL NAME')}<input value={name} onChange={e => setName(e.target.value)} placeholder="Your full name" style={inputStyle()} /></div>
-            <div>{label('EMAIL ADDRESS')}<input type="email" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => e.key === 'Enter' && handlePay()} placeholder="your@email.com" style={inputStyle(`${tier.color}30`)} /></div>
+            <div>{label('FULL NAME')}<input aria-label="Full name" value={name} onChange={e => setName(e.target.value)} placeholder="Your full name" style={inputStyle()} /></div>
+            <div>{label('EMAIL ADDRESS')}<input aria-label="Email address" type="email" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => e.key === 'Enter' && handlePay()} placeholder="your@email.com" style={inputStyle(`${tier.color}30`)} /></div>
 
             <div>
               {label('PAYMENT METHOD')}

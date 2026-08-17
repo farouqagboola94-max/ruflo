@@ -106,7 +106,7 @@ export default function StoryGenerator() {
 
         <div style={{ marginBottom: 14 }}>
           <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>THE SHOE</div>
-          <input
+          <input aria-label="The shoe"
             value={shoe}
             onChange={e => { setShoe(e.target.value); setStory('') }}
             placeholder="e.g. Air Jordan 1 Bred 2013, Yeezy 700 Wave Runner, Nike Cortez 'Forrest Gump'"
@@ -116,7 +116,7 @@ export default function StoryGenerator() {
 
         <div style={{ marginBottom: 18 }}>
           <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>THE MEMORY</div>
-          <textarea
+          <textarea aria-label="The memory"
             value={memory}
             onChange={e => { setMemory(e.target.value); setStory('') }}
             placeholder="Tell Claude the moment — when you got them, what happened, what they mean to you. The more real, the better the story."

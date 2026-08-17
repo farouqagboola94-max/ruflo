@@ -111,7 +111,7 @@ function UploadModal({ onUpload, onClose }) {
             )
           }
         </div>
-        <input ref={inputRef} type="file" accept="image/*" style={{ display:'none' }} onChange={e => { if (e.target.files?.[0]) handleFile(e.target.files[0]) }} />
+        <input aria-label="Choose a photo to upload" ref={inputRef} type="file" accept="image/*" style={{ display:'none' }} onChange={e => { if (e.target.files?.[0]) handleFile(e.target.files[0]) }} />
 
         <div style={{ display:'flex', flexDirection:'column', gap:11, marginBottom:16 }}>
           {[
@@ -121,7 +121,7 @@ function UploadModal({ onUpload, onClose }) {
           ].map(({ lbl, val, set, ph }) => (
             <div key={lbl}>
               <label style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, letterSpacing:2, display:'block', marginBottom:5 }}>{lbl}</label>
-              <input value={val} onChange={e => set(e.target.value)} placeholder={ph} style={IS} />
+              <input aria-label={lbl} value={val} onChange={e => set(e.target.value)} placeholder={ph} style={IS} />
             </div>
           ))}
         </div>

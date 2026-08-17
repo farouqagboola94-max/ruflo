@@ -265,12 +265,12 @@ export default function EarlyAccess() {
         {phase === 'form' && (
           <form onSubmit={submit}>
             <div style={{ display:'flex', flexDirection:'column', gap:12, marginBottom:16 }}>
-              <input value={name} onChange={e => setName(e.target.value)} placeholder="Your name"
+              <input aria-label="Your name" value={name} onChange={e => setName(e.target.value)} placeholder="Your name"
                 style={{ background:B.charcoal, border:`1px solid ${B.gunmetal}`, borderRadius:6, padding:'12px 16px', color:B.white, fontFamily:"'Space Mono'", fontSize:'0.85rem', outline:'none', transition:'border-color 0.2s' }}
                 onFocus={e => e.target.style.borderColor = B.amber}
                 onBlur={e  => e.target.style.borderColor = B.gunmetal} />
               <div style={{ display:'flex', gap:12 }}>
-                <input type="email" value={email} onChange={e => { setEmail(e.target.value); setError('') }} placeholder="your@email.com" required
+                <input aria-label="Email address" type="email" value={email} onChange={e => { setEmail(e.target.value); setError('') }} placeholder="your@email.com" required
                   style={{ flex:1, background:B.charcoal, border:`1px solid ${error ? B.neonMagenta : B.gunmetal}`, borderRadius:6, padding:'12px 16px', color:B.white, fontFamily:"'Space Mono'", fontSize:'0.85rem', outline:'none', transition:'border-color 0.2s' }}
                   onFocus={e => { if (!error) e.target.style.borderColor = B.amber }}
                   onBlur={e  => { if (!error) e.target.style.borderColor = B.gunmetal }} />

@@ -225,12 +225,12 @@ export default function Newsletter() {
 
             {/* inputs */}
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 12 }}>
-              <input
+              <input aria-label="Your name"
                 type="text" value={name} onChange={e => setName(e.target.value)}
                 placeholder="Your name"
                 style={{ flex: '1 1 140px', padding: '14px 18px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, color: B.white, fontFamily: 'Space Mono,monospace', fontSize: 12, outline: 'none' }}
               />
-              <input
+              <input aria-label="Email address"
                 type="email" value={email} onChange={e => setEmail(e.target.value)}
                 placeholder="your@email.com" required
                 style={{ flex: '2 1 200px', padding: '14px 18px', background: 'rgba(255,255,255,0.04)', border: `1px solid rgba(245,166,35,0.25)`, borderRadius: 12, color: B.white, fontFamily: 'Space Mono,monospace', fontSize: 12, outline: 'none' }}

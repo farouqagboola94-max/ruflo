@@ -87,7 +87,7 @@ export default function FitCheckAI() {
           Describe your SF26 fit · Claude rates it 1–10 · Get the honest Lagos verdict
         </p>
 
-        <textarea
+        <textarea aria-label="Describe your fit"
           value={fit}
           onChange={e => { setFit(e.target.value); setResult(null) }}
           placeholder="Describe every detail — shoes, pants, top, accessories, colours, brand. The more you give, the sharper the read."

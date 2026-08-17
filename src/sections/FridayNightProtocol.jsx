@@ -235,7 +235,7 @@ export default function FridayNightProtocol() {
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14 }}>
                 <div>
                   <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', letterSpacing:'0.15em', color: B.smoke, marginBottom:6 }}>YOUR HANDLE</div>
-                  <input
+                  <input aria-label="Your handle"
                     value={form.handle}
                     onChange={e => setForm(f => ({ ...f, handle:e.target.value }))}
                     placeholder="@yourhandle"
@@ -244,7 +244,7 @@ export default function FridayNightProtocol() {
                 </div>
                 <div>
                   <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', letterSpacing:'0.15em', color: B.smoke, marginBottom:6 }}>CATEGORY</div>
-                  <select
+                  <select aria-label="Category"
                     value={form.category}
                     onChange={e => setForm(f => ({ ...f, category:e.target.value }))}
                     style={{ width:'100%', background:'#1a1a1a', border:'1px solid rgba(255,255,255,0.1)', borderRadius:6, color:B.white, padding:'10px 14px', fontFamily:"'Space Mono'", fontSize:'0.72rem', outline:'none', cursor:'pointer', boxSizing:'border-box' }}>
@@ -254,7 +254,7 @@ export default function FridayNightProtocol() {
               </div>
               <div>
                 <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', letterSpacing:'0.15em', color: B.smoke, marginBottom:6 }}>YOUR SUBMISSION</div>
-                <textarea
+                <textarea aria-label="Your submission"
                   value={form.text}
                   onChange={e => setForm(f => ({ ...f, text:e.target.value }))}
                   placeholder="Drop your response, entry, or answer here..."

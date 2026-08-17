@@ -191,16 +191,16 @@ export default function Crews() {
               {mode === 'create' ? (
                 <>
                   <Field label="CREW NAME">
-                    <input style={field} value={form.crewName} maxLength={32}
+                    <input aria-label="Crew name" style={field} value={form.crewName} maxLength={32}
                       onChange={e => set('crewName', e.target.value)} placeholder="Sole Battalion" />
                   </Field>
                   <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
                     <Field label="YOUR NAME">
-                      <input style={field} value={form.founderName} maxLength={28}
+                      <input aria-label="Your name" style={field} value={form.founderName} maxLength={28}
                         onChange={e => set('founderName', e.target.value)} placeholder="Ade" />
                     </Field>
                     <Field label="CITY">
-                      <select style={{ ...field, fontFamily: "'Space Mono', monospace", fontSize: 12 }}
+                      <select aria-label="Crew city" style={{ ...field, fontFamily: "'Space Mono', monospace", fontSize: 12 }}
                         value={form.city} onChange={e => set('city', e.target.value)}>
                         <option value="">Select city</option>
                         {CITIES.map(c => <option key={c} value={c}>{c}</option>)}
@@ -211,13 +211,13 @@ export default function Crews() {
               ) : (
                 <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
                   <Field label="CREW CODE">
-                    <input
+                    <input aria-label="Crew code"
                       style={{ ...field, fontFamily: "'Orbitron', monospace", fontSize: 18, letterSpacing: '0.18em', textTransform: 'uppercase' }}
                       value={form.code} maxLength={7} placeholder="AC234"
                       onChange={e => set('code', e.target.value.toUpperCase())} />
                   </Field>
                   <Field label="YOUR NAME">
-                    <input style={field} value={form.memberName} maxLength={28}
+                    <input aria-label="Your name" style={field} value={form.memberName} maxLength={28}
                       onChange={e => set('memberName', e.target.value)} placeholder="Bola" />
                   </Field>
                 </div>

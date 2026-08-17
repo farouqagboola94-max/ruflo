@@ -145,7 +145,7 @@ export default function Confessional() {
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
 
             <div>
-              <textarea
+              <textarea aria-label="Your confession"
                 value={form.confession}
                 onChange={e => setForm(f => ({ ...f, confession: e.target.value.slice(0, MAX) }))}
                 placeholder="I've never actually cleaned my Air Forces..."
@@ -169,7 +169,7 @@ export default function Confessional() {
             </div>
 
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              <input
+              <input aria-label="Name or handle (optional)"
                 type="text"
                 value={form.displayName}
                 onChange={e => setForm(f => ({ ...f, displayName: e.target.value.slice(0, 32) }))}
@@ -181,7 +181,7 @@ export default function Confessional() {
                 onFocus={e => { e.target.style.borderColor = B.neonCyan + '50' }}
                 onBlur={e => { e.target.style.borderColor = B.gunmetal }}
               />
-              <select
+              <select aria-label="Confession category"
                 value={form.city}
                 onChange={e => setForm(f => ({ ...f, city: e.target.value }))}
                 style={{

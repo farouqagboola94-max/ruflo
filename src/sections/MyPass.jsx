@@ -136,7 +136,7 @@ export default function MyPass() {
             <label htmlFor="pass-ticket-id" style={{ ...label, display: 'block', marginBottom: 8 }}>
               TICKET ID
             </label>
-            <input
+            <input aria-label="Ticket ID"
               id="pass-ticket-id"
               value={code}
               onChange={e => setCode(e.target.value.toUpperCase())}

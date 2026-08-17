@@ -417,12 +417,12 @@ Write in first person, confident but not arrogant. Mention Lagos, the culture, w
                 {step === 1 && (
                   <>
                     <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 }}>
-                      <div>{lbl('BUSINESS / BRAND NAME *')}<input value={form.business} onChange={set('business')} placeholder="e.g. Lagos Kicks Co." style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
-                      <div>{lbl('CONTACT PERSON *')}<input value={form.contact} onChange={set('contact')} placeholder="Your full name" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
+                      <div>{lbl('BUSINESS / BRAND NAME *')}<input aria-label="Brand name" value={form.business} onChange={set('business')} placeholder="e.g. Lagos Kicks Co." style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
+                      <div>{lbl('CONTACT PERSON *')}<input aria-label="Your full name" value={form.contact} onChange={set('contact')} placeholder="Your full name" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
                     </div>
                     <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 }}>
-                      <div>{lbl('EMAIL ADDRESS *')}<input type="email" value={form.email} onChange={set('email')} placeholder="your@email.com" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
-                      <div>{lbl('PHONE NUMBER *')}<input type="tel" value={form.phone} onChange={set('phone')} placeholder="+234 800 000 0000" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
+                      <div>{lbl('EMAIL ADDRESS *')}<input aria-label="Email address" type="email" value={form.email} onChange={set('email')} placeholder="your@email.com" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
+                      <div>{lbl('PHONE NUMBER *')}<input aria-label="Phone number" type="tel" value={form.phone} onChange={set('phone')} placeholder="+234 800 000 0000" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
                     </div>
                     <div>
                       {lbl('PRODUCT CATEGORY *')}
@@ -441,11 +441,11 @@ Write in first person, confident but not arrogant. Mention Lagos, the culture, w
                 {step === 2 && (
                   <>
                     <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 }}>
-                      <div>{lbl('INSTAGRAM (optional)')}<input value={form.instagram} onChange={set('instagram')} placeholder="@yourhandle" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
-                      <div>{lbl('TWITTER / X (optional)')}<input value={form.twitter} onChange={set('twitter')} placeholder="@yourhandle" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
+                      <div>{lbl('INSTAGRAM (optional)')}<input aria-label="Instagram handle" value={form.instagram} onChange={set('instagram')} placeholder="@yourhandle" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
+                      <div>{lbl('TWITTER / X (optional)')}<input aria-label="X / Twitter handle" value={form.twitter} onChange={set('twitter')} placeholder="@yourhandle" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
                     </div>
-                    <div>{lbl('WEBSITE (optional)')}<input value={form.website} onChange={set('website')} placeholder="https://yourbrand.com" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
-                    <div>{lbl('BRAND DECK / PORTFOLIO LINK (optional)')}<input value={form.deckUrl} onChange={set('deckUrl')} placeholder="Google Drive, Notion, Behance, PDF link..." style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
+                    <div>{lbl('WEBSITE (optional)')}<input aria-label="Website" value={form.website} onChange={set('website')} placeholder="https://yourbrand.com" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
+                    <div>{lbl('BRAND DECK / PORTFOLIO LINK (optional)')}<input aria-label="Lookbook or portfolio link" value={form.deckUrl} onChange={set('deckUrl')} placeholder="Google Drive, Notion, Behance, PDF link..." style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
                     <div>
                       {lbl('EXCLUSIVE DROP INTEREST')}
                       <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
@@ -462,7 +462,7 @@ Write in first person, confident but not arrogant. Mention Lagos, the culture, w
                           {pitchLoading ? 'WRITING...' : '✦ AI PITCH'}
                         </button>
                       </div>
-                      <textarea value={form.bio} onChange={set('bio')} maxLength={300}
+                      <textarea aria-label="About your brand" value={form.bio} onChange={set('bio')} maxLength={300}
                         placeholder="Describe what you sell, your experience, and why you want to be at Sneakers Fest '26... or tap ✦ AI PITCH to generate one."
                         rows={5} style={{ ...IS, resize:'vertical', lineHeight:1.6 }}
                         onFocus={e => e.target.style.borderColor = B.neonCyan+'50'} onBlur={onBlur} />

@@ -82,7 +82,7 @@ export default function DropAnalyzer() {
           Paste any sneaker drop · Claude reads the Lagos market · Instant verdict
         </p>
 
-        <textarea
+        <textarea aria-label="Drop details to analyse"
           value={input}
           onChange={e => { setInput(e.target.value); setResult(null) }}
           placeholder="Paste the drop — name, colourway, release date, retail price, limited or general release, where it's available..."

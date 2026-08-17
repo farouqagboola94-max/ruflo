@@ -230,7 +230,7 @@ export default function Sponsors() {
                   ].map(({ field, label, ph }) => (
                     <div key={field}>
                       <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 8, color: B.smoke, letterSpacing: 2, marginBottom: 7 }}>{label}</div>
-                      <input
+                      <input aria-label={label}
                         name={field} value={form[field]}
                         onChange={e => setForm(f => ({ ...f, [field]: e.target.value }))}
                         placeholder={ph}
@@ -243,14 +243,14 @@ export default function Sponsors() {
                 </div>
                 <div>
                   <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 8, color: B.smoke, letterSpacing: 2, marginBottom: 7 }}>WEBSITE (OPTIONAL)</div>
-                  <input name="website" value={form.website} onChange={e => setForm(f => ({ ...f, website: e.target.value }))} placeholder="https://yourbrand.com"
+                  <input aria-label="Website (optional)" name="website" value={form.website} onChange={e => setForm(f => ({ ...f, website: e.target.value }))} placeholder="https://yourbrand.com"
                     style={{ width: '100%', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6, color: B.white, padding: '11px 14px', fontFamily: "'Syne',sans-serif", fontSize: 14, outline: 'none', boxSizing: 'border-box' }}
                     onFocus={e => e.target.style.borderColor = `${B.amber}60`}
                     onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'} />
                 </div>
                 <div>
                   <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 8, color: B.smoke, letterSpacing: 2, marginBottom: 7 }}>PARTNERSHIP LEVEL OF INTEREST *</div>
-                  <select name="tier" value={form.tier} onChange={e => setForm(f => ({ ...f, tier: e.target.value }))}
+                  <select aria-label="Partnership level of interest" name="tier" value={form.tier} onChange={e => setForm(f => ({ ...f, tier: e.target.value }))}
                     style={{ width: '100%', background: '#111', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6, color: B.white, padding: '11px 14px', fontFamily: "'Syne',sans-serif", fontSize: 14, outline: 'none', cursor: 'pointer', boxSizing: 'border-box' }}>
                     {PARTNER_LEVELS.map(t => <option key={t.tier} value={t.tier}>{t.tier}</option>)}
                   </select>
@@ -261,7 +261,7 @@ export default function Sponsors() {
                 ].map(({ field, label, ph, rows }) => (
                   <div key={field}>
                     <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 8, color: B.smoke, letterSpacing: 2, marginBottom: 7 }}>{label}</div>
-                    <textarea name={field} value={form[field]} onChange={e => setForm(f => ({ ...f, [field]: e.target.value }))} placeholder={ph} rows={rows}
+                    <textarea aria-label={label} name={field} value={form[field]} onChange={e => setForm(f => ({ ...f, [field]: e.target.value }))} placeholder={ph} rows={rows}
                       style={{ width: '100%', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6, color: B.white, padding: '11px 14px', fontFamily: "'Syne',sans-serif", fontSize: 14, outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}
                       onFocus={e => e.target.style.borderColor = `${B.amber}60`}
                       onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'} />

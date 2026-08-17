@@ -107,7 +107,7 @@ export default function PriceNegotiator() {
 
         <div style={{ marginBottom: 14 }}>
           <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>SHOE / COLOURWAY</div>
-          <input
+          <input aria-label="Shoe or colourway"
             value={shoe}
             onChange={e => { setShoe(e.target.value); setResult(null) }}
             placeholder="e.g. Air Jordan 1 Retro High OG 'Bred Toe'"
@@ -118,7 +118,7 @@ export default function PriceNegotiator() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 14 }}>
           <div>
             <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#ef4444', letterSpacing: '0.2em', marginBottom: 8 }}>VENDOR ASKING (₦)</div>
-            <input
+            <input aria-label="Vendor asking price in naira"
               type="number"
               value={asking}
               onChange={e => { setAsking(e.target.value); setResult(null) }}
@@ -128,7 +128,7 @@ export default function PriceNegotiator() {
           </div>
           <div>
             <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.neonLime, letterSpacing: '0.2em', marginBottom: 8 }}>MY BUDGET (₦)</div>
-            <input
+            <input aria-label="My budget in naira"
               type="number"
               value={budget}
               onChange={e => { setBudget(e.target.value); setResult(null) }}
@@ -140,7 +140,7 @@ export default function PriceNegotiator() {
 
         {gap > 0 && <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, marginBottom: 14 }}>GAP TO CLOSE → <span style={{ color: B.amber }}>₦{gap.toLocaleString()}</span></div>}
 
-        <input
+        <input aria-label="Extra context (optional)"
           value={extra}
           onChange={e => setExtra(e.target.value)}
           placeholder="Optional: any context (DS pair, vendor has multiples, end of day, you have cash, etc.)"

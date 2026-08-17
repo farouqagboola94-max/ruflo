@@ -244,7 +244,7 @@ export default function AIChat() {
 
           {/* input */}
           <div style={{ padding: '10px 12px 14px', borderTop: '1px solid rgba(255,255,255,0.07)', display: 'flex', gap: 8 }}>
-            <input
+            <input aria-label="Ask about Sneakers Fest"
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}

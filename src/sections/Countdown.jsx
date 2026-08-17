@@ -326,7 +326,7 @@ export default function Countdown() {
           <div style={{ maxWidth:360, margin:'0 auto', display:'flex', flexDirection:'column', gap:14 }}>
             <div>
               <label style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, letterSpacing:2, display:'block', marginBottom:6 }}>YOUR NAME (OPTIONAL)</label>
-              <input
+              <input aria-label="Your name (optional)"
                 value={cardName} onChange={e => setCardName(e.target.value)}
                 placeholder="e.g. FAROUQ"
                 style={{ width:'100%', padding:'11px 14px', background:'rgba(255,255,255,0.04)', border:`1px solid ${B.amber}30`, borderRadius:6, color:B.white, fontFamily:'Syne,sans-serif', fontSize:13, outline:'none', boxSizing:'border-box' }}

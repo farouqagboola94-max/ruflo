@@ -97,7 +97,7 @@ export default function FakeDetector() {
         </div>
 
         <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
-          <input
+          <input aria-label="Sneaker to check"
             value={shoe}
             onChange={e => { setShoe(e.target.value); setResult(null) }}
             placeholder="e.g. Yeezy Boost 350 V2 'Zebra' or Nike Dunk Low 'Panda'"

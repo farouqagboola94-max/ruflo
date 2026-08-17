@@ -111,7 +111,7 @@ export default function ColdDMGenerator() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 16 }}>
           <div>
             <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>SHOE YOU WANT</div>
-            <input
+            <input aria-label="Shoe you want"
               value={shoe}
               onChange={e => { setShoe(e.target.value); setResult(null) }}
               placeholder="e.g. Travis Scott AJ1 Low, Yeezy 700 Mauve"
@@ -120,7 +120,7 @@ export default function ColdDMGenerator() {
           </div>
           <div>
             <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>WHAT YOU'RE OFFERING</div>
-            <input
+            <input aria-label="What you are offering"
               value={offer}
               onChange={e => { setOffer(e.target.value); setResult(null) }}
               placeholder="e.g. ₦380K cash, trade + cash, trade for AJ4..."
@@ -150,7 +150,7 @@ export default function ColdDMGenerator() {
 
         <div style={{ marginBottom: 20 }}>
           <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>EXTRA CONTEXT (OPTIONAL)</div>
-          <input
+          <input aria-label="Extra context (optional)"
             value={context}
             onChange={e => { setContext(e.target.value); setResult(null) }}
             placeholder="e.g. I know their IG, I have 2 pairs to trade, we've spoken before..."

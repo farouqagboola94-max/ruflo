@@ -241,12 +241,12 @@ export default function SoleRegistry() {
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12 }}>
                 <div>
                   <label style={LBL}>Name (optional)</label>
-                  <input value={form.displayName} onChange={up('displayName')} maxLength={40} placeholder="Anonymous" style={INP} />
+                  <input aria-label="Name (optional)" value={form.displayName} onChange={up('displayName')} maxLength={40} placeholder="Anonymous" style={INP} />
                 </div>
                 <div>
                   <label style={LBL}>Your City *</label>
                   <div style={{ position:'relative' }}>
-                    <select value={form.city} onChange={up('city')} required style={SEL}>
+                    <select aria-label="Your city" value={form.city} onChange={up('city')} required style={SEL}>
                       <option value="">Select city</option>
                       {CITIES.map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
@@ -257,14 +257,14 @@ export default function SoleRegistry() {
 
               <div>
                 <label style={LBL}>Shoe Name / Grail *</label>
-                <input value={form.shoe} onChange={up('shoe')} maxLength={80} required placeholder="e.g. Air Jordan 4 Retro Bred" style={INP} />
+                <input aria-label="Shoe name or grail" value={form.shoe} onChange={up('shoe')} maxLength={80} required placeholder="e.g. Air Jordan 4 Retro Bred" style={INP} />
               </div>
 
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12 }}>
                 <div>
                   <label style={LBL}>Brand *</label>
                   <div style={{ position:'relative' }}>
-                    <select value={form.brand} onChange={up('brand')} required style={SEL}>
+                    <select aria-label="Brand" value={form.brand} onChange={up('brand')} required style={SEL}>
                       {BRANDS.map(b => <option key={b} value={b}>{b}</option>)}
                     </select>
                     <span style={{ position:'absolute', right:10, top:'50%', transform:'translateY(-50%)', pointerEvents:'none', color:B.smoke, fontSize:10 }}>&#9660;</span>
@@ -272,13 +272,13 @@ export default function SoleRegistry() {
                 </div>
                 <div>
                   <label style={LBL}>Size (optional)</label>
-                  <input value={form.size} onChange={up('size')} maxLength={10} placeholder="e.g. 42 EU" style={INP} />
+                  <input aria-label="Size (optional)" value={form.size} onChange={up('size')} maxLength={10} placeholder="e.g. 42 EU" style={INP} />
                 </div>
               </div>
 
               <div>
                 <label style={LBL}>Colorway (optional)</label>
-                <input value={form.colorway} onChange={up('colorway')} maxLength={60} placeholder="e.g. Black / Red / White" style={INP} />
+                <input aria-label="Colourway (optional)" value={form.colorway} onChange={up('colorway')} maxLength={60} placeholder="e.g. Black / Red / White" style={INP} />
               </div>
 
               <div>
@@ -286,7 +286,7 @@ export default function SoleRegistry() {
                   <label style={{ ...LBL, marginBottom:0 }}>Your Story *</label>
                   <span style={{ fontFamily:"'Space Mono',monospace", fontSize:9, color: form.story.length > 170 ? B.neonMagenta : B.smoke }}>{form.story.length}/{MAX_STORY}</span>
                 </div>
-                <textarea
+                <textarea aria-label="Your story"
                   value={form.story} onChange={up('story')} maxLength={MAX_STORY} required rows={3}
                   placeholder="Why is this your grail?"
                   style={{ ...INP, resize:'vertical', lineHeight:1.6 }}
@@ -295,7 +295,7 @@ export default function SoleRegistry() {
 
               <div>
                 <label style={LBL}>Email (optional &mdash; get your Sole Pass)</label>
-                <input value={form.email} onChange={up('email')} type="email" placeholder="you@example.com" style={INP} />
+                <input aria-label="Email (optional)" value={form.email} onChange={up('email')} type="email" placeholder="you@example.com" style={INP} />
               </div>
 
               {error && (

@@ -161,7 +161,7 @@ function Gate({ secret, onLoseAuth }) {
       <Result result={result} />
 
       <form onSubmit={scan} style={{ marginBottom: 20 }}>
-        <input
+        <input aria-label="Ticket ID"
           ref={inputRef}
           value={ticket}
           onChange={e => setTicket(e.target.value.toUpperCase())}
@@ -295,7 +295,7 @@ export default function DoorApp() {
         <form onSubmit={e => { e.preventDefault(); if (entry.trim()) saveSecret(entry.trim()) }} style={{ width: '100%', maxWidth: 360 }}>
           <div style={{ fontFamily: "'Orbitron', monospace", fontWeight: 900, fontSize: 20, color: B.amber, marginBottom: 6 }}>THE DOOR LIST</div>
           <div style={{ ...mono, fontSize: 8, color: B.smoke, letterSpacing: '0.22em', marginBottom: 22 }}>SNEAKERS FEST '26 - STAFF ONLY</div>
-          <input
+          <input aria-label="Door code"
             type="password" value={entry} onChange={e => setEntry(e.target.value)} placeholder="Door code"
             style={{ width: '100%', boxSizing: 'border-box', padding: '14px', background: B.charcoal, border: `1px solid ${B.gunmetal}`, borderRadius: 8, color: B.white, outline: 'none', ...mono, fontSize: 14 }} />
           <button type="submit" style={{ width: '100%', marginTop: 10, padding: '14px', border: 'none', borderRadius: 8, background: B.amber, color: B.black, cursor: 'pointer', ...mono, fontSize: 11, fontWeight: 700, letterSpacing: '0.2em' }}>UNLOCK</button>

@@ -111,7 +111,7 @@ function LoginScreen({ onLogin }) {
         </p>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <input
+          <input aria-label="Vendor ID"
             ref={inputRef}
             type="text"
             placeholder="e.g. SF26-001  or  DEMO"
@@ -281,17 +281,17 @@ function ProfileTab({ vendor }) {
             {[['@Instagram', 'instagram'], ['X / Twitter', 'twitter']].map(([label, key]) => (
               <div key={key}>
                 <p style={{ fontSize: 11, color: B.smoke, marginBottom: 6 }}>{label}</p>
-                <input style={inputStyle(form[key])} value={form[key]} onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))} placeholder={`@handle`} />
+                <input aria-label={label} style={inputStyle(form[key])} value={form[key]} onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))} placeholder={`@handle`} />
               </div>
             ))}
           </div>
           <div>
             <p style={{ fontSize: 11, color: B.smoke, marginBottom: 6 }}>Website / Linktree</p>
-            <input style={inputStyle(form.website)} value={form.website} onChange={e => setForm(f => ({ ...f, website: e.target.value }))} placeholder="https://..." />
+            <input aria-label="Website or Linktree" style={inputStyle(form.website)} value={form.website} onChange={e => setForm(f => ({ ...f, website: e.target.value }))} placeholder="https://..." />
           </div>
           <div>
             <p style={{ fontSize: 11, color: B.smoke, marginBottom: 6 }}>Brand bio (max 160 chars)</p>
-            <textarea
+            <textarea aria-label="Brand bio"
               maxLength={160}
               rows={3}
               value={form.bio}
@@ -302,7 +302,7 @@ function ProfileTab({ vendor }) {
           </div>
           <div>
             <p style={{ fontSize: 11, color: B.smoke, marginBottom: 6 }}>Day-of specials / deals</p>
-            <textarea
+            <textarea aria-label="Day-of specials"
               rows={2}
               value={form.specials}
               onChange={e => setForm(f => ({ ...f, specials: e.target.value }))}
@@ -405,11 +405,11 @@ function ProductsTab({ vendor }) {
         }}>
           <p style={{ fontSize: 12, color: B.amber, marginBottom: 14, fontFamily: 'Space Mono, monospace', letterSpacing: 1 }}>NEW ITEM</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <input style={iStyle} placeholder="Product name / model" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
+            <input aria-label="Product name or model" style={iStyle} placeholder="Product name / model" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
-              <input style={iStyle} placeholder="Size" value={form.size} onChange={e => setForm(f => ({ ...f, size: e.target.value }))} />
-              <input style={iStyle} placeholder="Price (NGN)" type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} />
-              <input style={iStyle} placeholder="Qty" type="number" min="1" value={form.qty} onChange={e => setForm(f => ({ ...f, qty: e.target.value }))} />
+              <input aria-label="Size" style={iStyle} placeholder="Size" value={form.size} onChange={e => setForm(f => ({ ...f, size: e.target.value }))} />
+              <input aria-label="Price in naira" style={iStyle} placeholder="Price (NGN)" type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} />
+              <input aria-label="Quantity" style={iStyle} placeholder="Qty" type="number" min="1" value={form.qty} onChange={e => setForm(f => ({ ...f, qty: e.target.value }))} />
             </div>
             <div style={{ display: 'flex', gap: 8 }}>
               {CONDITIONS.map(c => (

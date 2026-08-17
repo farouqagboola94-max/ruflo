@@ -202,7 +202,7 @@ export default function FridayProtocol() {
             </div>
           ) : canCheckIn ? (
             <form onSubmit={checkin} style={{ paddingTop: 18, borderTop: `1px solid ${B.gunmetal}`, display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-              <input
+              <input aria-label="Your name"
                 value={name} onChange={e => setName(e.target.value)} maxLength={28} placeholder="Your name"
                 style={{
                   flex: '1 1 180px', background: B.black, border: `1px solid ${B.gunmetal}`, borderRadius: 4,

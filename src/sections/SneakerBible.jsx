@@ -149,10 +149,10 @@ export default function SneakerBible() {
             </div>
             <div className="reveal-3d text-3d" style={{ ...s.hed, fontSize: 36, color: B.amber, marginBottom: 24 }}>THE 200</div>
             <div style={s.filters}>
-              <input style={s.searchBox} placeholder="SEARCH BY NAME OR COLORWAY..." value={search} onChange={e => setSearch(e.target.value)} />
-              <select style={s.sel} value={brand} onChange={e => setBrand(e.target.value)}>{BRANDS.map(b => <option key={b}>{b}</option>)}</select>
-              <select style={s.sel} value={tier} onChange={e => setTier(e.target.value)}>{TIERS.map(t => <option key={t}>{t}</option>)}</select>
-              <select style={s.sel} value={sort} onChange={e => setSort(e.target.value)}>
+              <input aria-label="Search by name or colourway" style={s.searchBox} placeholder="SEARCH BY NAME OR COLORWAY..." value={search} onChange={e => setSearch(e.target.value)} />
+              <select aria-label="Filter by brand" style={s.sel} value={brand} onChange={e => setBrand(e.target.value)}>{BRANDS.map(b => <option key={b}>{b}</option>)}</select>
+              <select aria-label="Filter by tier" style={s.sel} value={tier} onChange={e => setTier(e.target.value)}>{TIERS.map(t => <option key={t}>{t}</option>)}</select>
+              <select aria-label="Sort order" style={s.sel} value={sort} onChange={e => setSort(e.target.value)}>
                 <option value="id">ORDER: DEFAULT</option>
                 <option value="rarity">ORDER: RARITY</option>
                 <option value="priceDesc">ORDER: RESELL HIGH</option>
@@ -160,7 +160,7 @@ export default function SneakerBible() {
                 <option value="retail">ORDER: RETAIL</option>
                 <option value="year">ORDER: YEAR</option>
               </select>
-              <select style={s.sel} value={rarity} onChange={e => setRarity(Number(e.target.value))}>
+              <select aria-label="Filter by rarity" style={s.sel} value={rarity} onChange={e => setRarity(Number(e.target.value))}>
                 <option value={0}>RARITY: ALL</option>
                 <option value={3}>RARITY: 3+ STARS</option>
                 <option value={4}>RARITY: 4+ STARS</option>

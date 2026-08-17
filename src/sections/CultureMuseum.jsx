@@ -272,7 +272,7 @@ function BidModal({ artwork, bids, onBid, onClose }) {
 
         <div style={{ marginBottom:16 }}>
           <label style={{ fontFamily:'Syne', fontSize:12, color:B.smoke, display:'block', marginBottom:6 }}>YOUR BID (₦)</label>
-          <input
+          <input aria-label="Your bid in naira"
             type="text" value={amount} placeholder={min.toLocaleString()}
             onChange={e => { setAmount(e.target.value); setErr('') }}
             onKeyDown={e => e.key === 'Enter' && submit()}

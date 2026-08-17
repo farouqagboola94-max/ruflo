@@ -118,7 +118,7 @@ export default function CollectorCard() {
           {shoes.map((s, i) => (
             <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 8, alignItems: 'center' }}>
               <div style={{ fontFamily: "'Orbitron'", fontSize: 11, color: ACCENT[i % ACCENT.length], fontWeight: 900, width: 20, flexShrink: 0 }}>0{i + 1}</div>
-              <input
+              <input aria-label={`Shoe ${i + 1}`}
                 value={s}
                 onChange={e => updateShoe(i, e.target.value)}
                 placeholder={`Shoe ${i + 1}`}

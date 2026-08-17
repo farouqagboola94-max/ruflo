@@ -210,7 +210,7 @@ export default function Soledle() {
         {game.status === 'playing' && (
           <>
             <div style={{ display: 'flex', gap: 10, marginBottom: 10 }}>
-              <select
+              <select aria-label="Pick a sneaker to guess"
                 value={pick}
                 onChange={e => setPick(e.target.value)}
                 style={{

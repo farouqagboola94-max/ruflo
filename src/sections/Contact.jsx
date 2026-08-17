@@ -197,23 +197,23 @@ export default function Contact() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 22, marginBottom: 22 }}>
               <div>
                 <label style={labelStyle}>FULL NAME *</label>
-                <input type="text" value={form.name} onChange={update('name')}
+                <input aria-label="Full name" type="text" value={form.name} onChange={update('name')}
                   placeholder="Your name" required style={fieldStyle} />
               </div>
               <div>
                 <label style={labelStyle}>EMAIL ADDRESS *</label>
-                <input type="email" value={form.email} onChange={update('email')}
+                <input aria-label="Email address" type="email" value={form.email} onChange={update('email')}
                   placeholder="you@example.com" required style={fieldStyle} />
               </div>
             </div>
             <div style={{ marginBottom: 22 }}>
               <label style={labelStyle}>PHONE NUMBER</label>
-              <input type="tel" value={form.phone} onChange={update('phone')}
+              <input aria-label="Phone number" type="tel" value={form.phone} onChange={update('phone')}
                 placeholder="+234 xxx xxx xxxx" style={fieldStyle} />
             </div>
             <div style={{ marginBottom: 28 }}>
               <label style={labelStyle}>YOUR MESSAGE *</label>
-              <textarea value={form.message} onChange={update('message')}
+              <textarea aria-label="Your message" value={form.message} onChange={update('message')}
                 placeholder="Tell us what's on your mind..." required rows={5}
                 style={{ ...fieldStyle, resize: 'vertical', minHeight: 130, display: 'block' }} />
             </div>
