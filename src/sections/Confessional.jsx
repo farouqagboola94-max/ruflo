@@ -30,7 +30,7 @@ function ConfessCard({ item, voted, onRelate }) {
         <span style={{ color: B.amber, fontSize: 18, marginLeft: 3, fontFamily: "'Orbitron', monospace", lineHeight: 1 }}>"</span>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
-        <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.neonCyan, letterSpacing: '0.12em' }}>
+        <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.neonCyan, letterSpacing: '0.12em' }}>
           {item.displayName.toUpperCase()} &middot; {item.city.toUpperCase()}
         </div>
         <button
@@ -44,7 +44,7 @@ function ConfessCard({ item, voted, onRelate }) {
           onMouseLeave={e => { if (!voted) e.currentTarget.style.borderColor = B.gunmetal }}
         >
           <span style={{ fontSize: 13, lineHeight: 1 }}>{voted ? '♥' : '♡'}</span>
-          <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, letterSpacing: '0.1em' }}>
+          <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, letterSpacing: '0.1em' }}>
             {count} RELATE
           </span>
         </button>
@@ -134,7 +134,7 @@ export default function Confessional() {
               Anonymous hot takes. Unpopular opinions. Sneaker sins confessed in public. Drop yours — no judgment, just vibes.
             </p>
           </div>
-          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke + '60', letterSpacing: '0.15em', textAlign: 'right' }}>
+          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke + '60', letterSpacing: '0.15em', textAlign: 'right' }}>
             {all.length} CONFESSIONS<br />ON THE WALL
           </div>
         </div>
@@ -160,7 +160,7 @@ export default function Confessional() {
                 onBlur={e => { e.target.style.borderColor = form.confession.length > MAX - 20 ? B.neonMagenta : B.gunmetal }}
               />
               <div style={{
-                fontFamily: "'Space Mono', monospace", fontSize: 7, letterSpacing: '0.1em',
+                fontFamily: "'Space Mono', monospace", fontSize: 9, letterSpacing: '0.1em',
                 color: form.confession.length > MAX - 20 ? B.neonMagenta : B.smoke,
                 marginTop: 4, textAlign: 'right',
               }}>
@@ -231,7 +231,7 @@ export default function Confessional() {
           ))}
         </div>
 
-        <div style={{ marginTop: 32, fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke + '50', letterSpacing: '0.15em', textAlign: 'center' }}>
+        <div style={{ marginTop: 32, fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke + '50', letterSpacing: '0.15em', textAlign: 'center' }}>
           ANONYMOUS BY DEFAULT &middot; REVIEWED BEFORE THEY GO UP &middot; SF'26
         </div>
       </div>

@@ -93,16 +93,16 @@ export default function SneakerEulogy() {
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             SNEAKER EULOGY
           </h2>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#444', letterSpacing: '0.15em' }}>POWERED BY CLAUDE</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.15em' }}>POWERED BY CLAUDE</div>
         </div>
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.72rem', marginBottom: 36, letterSpacing: '0.04em' }}>
           A pair + the memories · Claude writes the farewell · Ready to post when you let them go
         </p>
 
         <div style={{ display: 'flex', gap: 8, marginBottom: 16, alignItems: 'center' }}>
-          <span style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.1em' }}>EXAMPLES →</span>
+          <span style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.1em' }}>EXAMPLES →</span>
           {EXAMPLES.map((ex, i) => (
-            <button key={i} onClick={() => loadExample(ex)} style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', color: '#444', fontFamily: "'Space Mono'", fontSize: 8, padding: '5px 12px', cursor: 'pointer' }}>
+            <button key={i} onClick={() => loadExample(ex)} style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', color: B.dim, fontFamily: "'Space Mono'", fontSize: 8, padding: '5px 12px', cursor: 'pointer' }}>
               EX {i + 1}
             </button>
           ))}
@@ -110,7 +110,7 @@ export default function SneakerEulogy() {
 
         <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 12, marginBottom: 14 }}>
           <div>
-            <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 8 }}>THE SHOE</div>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>THE SHOE</div>
             <input
               value={shoe}
               onChange={e => { setShoe(e.target.value); setEulogy('') }}
@@ -119,7 +119,7 @@ export default function SneakerEulogy() {
             />
           </div>
           <div>
-            <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 8 }}>HOW LONG</div>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>HOW LONG</div>
             <input
               value={duration}
               onChange={e => { setDuration(e.target.value); setEulogy('') }}
@@ -130,7 +130,7 @@ export default function SneakerEulogy() {
         </div>
 
         <div style={{ marginBottom: 18 }}>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 8 }}>THE MEMORIES</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>THE MEMORIES</div>
           <textarea
             value={memory}
             onChange={e => { setMemory(e.target.value); setEulogy('') }}
@@ -141,17 +141,17 @@ export default function SneakerEulogy() {
         </div>
 
         <div style={{ marginBottom: 22 }}>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 10 }}>WHY THEY'RE LEAVING</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 10 }}>WHY THEY'RE LEAVING</div>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             {REASONS.map(r => (
-              <button key={r.label} onClick={() => { setReason(reason === r.value ? null : r.value); setEulogy('') }} style={{ padding: '7px 14px', background: reason === r.value ? `${B.neonCyan}14` : '#0d0d0d', border: `1px solid ${reason === r.value ? B.neonCyan : '#1a1a1a'}`, color: reason === r.value ? B.neonCyan : '#444', fontFamily: "'Space Mono'", fontSize: 8, letterSpacing: '0.1em', cursor: 'pointer', transition: 'all 0.15s' }}>
+              <button key={r.label} onClick={() => { setReason(reason === r.value ? null : r.value); setEulogy('') }} style={{ padding: '7px 14px', background: reason === r.value ? `${B.neonCyan}14` : '#0d0d0d', border: `1px solid ${reason === r.value ? B.neonCyan : '#1a1a1a'}`, color: reason === r.value ? B.neonCyan : B.dim, fontFamily: "'Space Mono'", fontSize: 8, letterSpacing: '0.1em', cursor: 'pointer', transition: 'all 0.15s' }}>
                 {r.label}
               </button>
             ))}
           </div>
         </div>
 
-        <button onClick={generate} disabled={!ready || loading} style={{ width: '100%', padding: '14px', background: ready && !loading ? B.amber : '#111', color: ready && !loading ? B.black : '#333', border: 'none', fontFamily: "'Space Mono'", fontSize: 11, letterSpacing: '0.2em', fontWeight: 700, cursor: ready && !loading ? 'pointer' : 'default', marginBottom: 24, transition: 'all 0.2s' }}>
+        <button onClick={generate} disabled={!ready || loading} style={{ width: '100%', padding: '14px', background: ready && !loading ? B.amber : '#111', color: ready && !loading ? B.black : B.dim, border: 'none', fontFamily: "'Space Mono'", fontSize: 11, letterSpacing: '0.2em', fontWeight: 700, cursor: ready && !loading ? 'pointer' : 'default', marginBottom: 24, transition: 'all 0.2s' }}>
           {loading ? '⟳ WRITING THE FAREWELL...' : 'WRITE MY EULOGY →'}
         </button>
 
@@ -160,7 +160,7 @@ export default function SneakerEulogy() {
         {eulogy && (
           <div style={{ animation: 'euSlide 0.35s ease' }}>
             <div style={{ background: '#0a0a0a', border: `1px solid ${B.neonCyan}22`, padding: '28px 28px', marginBottom: 14 }}>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.25em', marginBottom: 18 }}>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.25em', marginBottom: 18 }}>
                 {shoe.toUpperCase()} · FAREWELL
               </div>
               <div style={{ fontFamily: "'Space Mono'", fontSize: 11, color: B.white, lineHeight: 2.1, whiteSpace: 'pre-wrap' }}>{eulogy}</div>

@@ -21,7 +21,7 @@ export default function AIComingSoon({ feature }) {
       <span style={{
         flexShrink: 0, padding: '3px 9px', borderRadius: 3, background: B.amber,
         color: B.black, fontFamily: "'Space Mono', monospace",
-        fontSize: 7, fontWeight: 700, letterSpacing: '0.2em',
+        fontSize: 9, fontWeight: 700, letterSpacing: '0.2em',
       }}>COMING SOON</span>
       <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: B.mist, lineHeight: 1.6 }}>
         {feature ? `${feature} is` : 'This is'} still being wired up. Have a look around &mdash; it will be

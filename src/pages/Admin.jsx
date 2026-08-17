@@ -119,7 +119,7 @@ function Stat({ label, value, sub, color }) {
       <div style={{ fontFamily: "'Bebas Neue'", fontSize: 40, color: B.white, lineHeight: 1 }}>
         {value === undefined || value === null ? '—' : Number.isFinite(value) ? value.toLocaleString() : value}
       </div>
-      {sub && <div style={{ fontFamily: MONO, fontSize: 9, color: '#555', marginTop: 6 }}>{sub}</div>}
+      {sub && <div style={{ fontFamily: MONO, fontSize: 9, color: B.smoke, marginTop: 6 }}>{sub}</div>}
     </div>
   )
 }
@@ -162,13 +162,13 @@ function Gate({ onAuth }) {
         <button
           onClick={attempt} disabled={busy}
           style={{
-            width: '100%', padding: 13, background: busy ? '#333' : B.amber, color: busy ? '#888' : B.black,
+            width: '100%', padding: 13, background: busy ? B.dim : B.amber, color: busy ? '#888' : B.black,
             border: 'none', borderRadius: 8, fontFamily: MONO, fontSize: 11, fontWeight: 700,
             letterSpacing: 2, cursor: busy ? 'default' : 'pointer',
           }}
         >{busy ? 'CHECKING…' : 'ENTER'}</button>
         {error && <p style={{ fontFamily: MONO, fontSize: 10, color: '#ff5555', marginTop: 14, lineHeight: 1.6 }}>{error}</p>}
-        <p style={{ fontFamily: MONO, fontSize: 8, color: '#3a3a3a', marginTop: 22, lineHeight: 1.7 }}>
+        <p style={{ fontFamily: MONO, fontSize: 8, color: B.dim, marginTop: 22, lineHeight: 1.7 }}>
           This is the ADMIN_SECRET set in Netlify. It is checked on the server and
           never stored beyond this browser tab.
         </p>
@@ -179,7 +179,7 @@ function Gate({ onAuth }) {
 
 function Table({ cols, rows, onAct, cursor, busyId }) {
   if (!rows?.length) {
-    return <div style={{ ...PANEL, padding: 28, fontFamily: MONO, fontSize: 11, color: '#3a3a3a' }}>Nothing here yet.</div>
+    return <div style={{ ...PANEL, padding: 28, fontFamily: MONO, fontSize: 11, color: B.dim }}>Nothing here yet.</div>
   }
   return (
     <div style={{ ...PANEL, overflowX: 'auto' }}>
@@ -189,12 +189,12 @@ function Table({ cols, rows, onAct, cursor, busyId }) {
             {cols.map(([, label]) => (
               <th key={label} style={{
                 textAlign: 'left', padding: '12px 14px', fontFamily: MONO, fontSize: 8,
-                color: '#555', letterSpacing: 2, borderBottom: '1px solid rgba(255,255,255,0.07)', whiteSpace: 'nowrap',
+                color: B.smoke, letterSpacing: 2, borderBottom: '1px solid rgba(255,255,255,0.07)', whiteSpace: 'nowrap',
               }}>{label}</th>
             ))}
             {onAct && <th style={{
               textAlign: 'right', padding: '12px 14px', fontFamily: MONO, fontSize: 8,
-              color: '#555', letterSpacing: 2, borderBottom: '1px solid rgba(255,255,255,0.07)',
+              color: B.smoke, letterSpacing: 2, borderBottom: '1px solid rgba(255,255,255,0.07)',
             }}>REVIEW</th>}
           </tr>
         </thead>
@@ -352,7 +352,7 @@ export default function Admin() {
                   padding: '6px 12px', cursor: 'pointer', fontFamily: MONO, fontSize: 9, letterSpacing: 1.5,
                   background: tabId === t.id ? `${B.amber}18` : 'transparent',
                   border: `1px solid ${tabId === t.id ? `${B.amber}40` : 'transparent'}`,
-                  borderRadius: 6, color: tabId === t.id ? B.amber : '#555',
+                  borderRadius: 6, color: tabId === t.id ? B.amber : B.smoke,
                 }}>{t.id}</button>
               ))}
             </div>
@@ -360,7 +360,7 @@ export default function Admin() {
           <div style={{ display: 'flex', gap: 8 }}>
             <button onClick={load} disabled={loading} style={{
               padding: '6px 12px', background: 'transparent', border: '1px solid #2a2a2a',
-              borderRadius: 6, color: '#666', fontFamily: MONO, fontSize: 9, cursor: 'pointer',
+              borderRadius: 6, color: B.smoke, fontFamily: MONO, fontSize: 9, cursor: 'pointer',
             }}>{loading ? '…' : 'REFRESH'}</button>
             {rows?.length > 0 && (
               <button onClick={() => downloadCSV(`SF26-${tab.id.toLowerCase()}`, rows)} style={{
@@ -370,7 +370,7 @@ export default function Admin() {
             )}
             <button onClick={logout} style={{
               padding: '6px 12px', background: 'transparent', border: '1px solid #2a2a2a',
-              borderRadius: 6, color: '#555', fontFamily: MONO, fontSize: 9, cursor: 'pointer',
+              borderRadius: 6, color: B.smoke, fontFamily: MONO, fontSize: 9, cursor: 'pointer',
             }}>LOG OUT</button>
           </div>
         </div>
@@ -384,7 +384,7 @@ export default function Admin() {
         )}
 
         {loading && !data && (
-          <div style={{ ...PANEL, padding: 28, fontFamily: MONO, fontSize: 11, color: '#3a3a3a' }}>Loading…</div>
+          <div style={{ ...PANEL, padding: 28, fontFamily: MONO, fontSize: 11, color: B.dim }}>Loading…</div>
         )}
 
         {stats.length > 0 && (
@@ -407,7 +407,7 @@ export default function Admin() {
               borderRadius: 6, color: '#ff6666', fontFamily: MONO, fontSize: 9,
               letterSpacing: 1, cursor: busyId ? 'default' : 'pointer',
             }}>REJECT ALL</button>
-            <span style={{ fontFamily: MONO, fontSize: 8, color: '#444', letterSpacing: 1 }}>
+            <span style={{ fontFamily: MONO, fontSize: 8, color: B.dim, letterSpacing: 1 }}>
               J / K to move · A to approve · R to reject
             </span>
           </div>

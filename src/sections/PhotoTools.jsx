@@ -210,7 +210,7 @@ export default function PhotoTools() {
           <div className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(44px,8vw,80px)', color:B.white, lineHeight:0.88, marginBottom:12 }}>
             SHOE<br /><span style={{ color:B.neonMagenta }}>PHOTO STUDIO</span>
           </div>
-          <p style={{ color:'#666', fontFamily:'Space Mono,monospace', fontSize:12, maxWidth:480, margin:'0 auto', lineHeight:1.8 }}>
+          <p style={{ color: B.smoke, fontFamily:'Space Mono,monospace', fontSize:12, maxWidth:480, margin:'0 auto', lineHeight:1.8 }}>
             Drop a photo, apply filters, add text and stickers, stamp the event brand — then download or share to the community gallery.
           </p>
         </div>
@@ -223,7 +223,7 @@ export default function PhotoTools() {
             <input ref={fileRef} type="file" accept="image/*" style={{ display:'none' }} onChange={e => loadFile(e.target.files[0])} />
             <div style={{ fontSize:56, marginBottom:18 }}>👟</div>
             <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:32, color:B.neonMagenta, letterSpacing:3, marginBottom:10 }}>DROP YOUR PHOTO HERE</div>
-            <div style={{ fontFamily:'Space Mono,monospace', fontSize:11, color:'#444' }}>or click to browse · JPG, PNG, WEBP</div>
+            <div style={{ fontFamily:'Space Mono,monospace', fontSize:11, color: B.dim }}>or click to browse · JPG, PNG, WEBP</div>
           </div>
         )}
 
@@ -241,7 +241,7 @@ export default function PhotoTools() {
 
               {/* event stamp toggle */}
               <button onClick={() => setShowStamp(v => !v)}
-                style={{ width:'100%', marginTop:10, padding:'10px', background:showStamp ? `${B.amber}18` : 'rgba(255,255,255,0.02)', border:`1px solid ${showStamp ? B.amber+'50' : 'rgba(255,255,255,0.07)'}`, borderRadius:8, color:showStamp ? B.amber : '#555', fontFamily:'Orbitron,monospace', fontSize:9, cursor:'pointer', letterSpacing:1.5, transition:'all 0.2s', display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
+                style={{ width:'100%', marginTop:10, padding:'10px', background:showStamp ? `${B.amber}18` : 'rgba(255,255,255,0.02)', border:`1px solid ${showStamp ? B.amber+'50' : 'rgba(255,255,255,0.07)'}`, borderRadius:8, color:showStamp ? B.amber : B.smoke, fontFamily:'Orbitron,monospace', fontSize:9, cursor:'pointer', letterSpacing:1.5, transition:'all 0.2s', display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
                 <span style={{ fontSize:14 }}>🏷️</span>
                 {showStamp ? 'EVENT STAMP ON ✓' : 'ADD EVENT STAMP'}
               </button>
@@ -254,13 +254,13 @@ export default function PhotoTools() {
                   {shared ? '✓ SHARED!' : '↑ GALLERY'}
                 </button>
                 <button onClick={() => { setImg(null); setImgSrc(null); if (fileRef.current) fileRef.current.value = '' }}
-                  style={{ padding:'12px 14px', background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:10, color:'#555', fontFamily:'Orbitron,monospace', fontSize:9, cursor:'pointer' }}>
+                  style={{ padding:'12px 14px', background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:10, color: B.smoke, fontFamily:'Orbitron,monospace', fontSize:9, cursor:'pointer' }}>
                   NEW
                 </button>
               </div>
               {shared && <div style={{ marginTop:8, textAlign:'center', fontFamily:'Space Mono,monospace', fontSize:10, color:B.neonCyan }}>Added to gallery — check the Gallery section!</div>}
               {(tab==='TEXT'||tab==='STICKERS') && texts.length > 0 && (
-                <div style={{ marginTop:8, textAlign:'center', fontFamily:'Space Mono,monospace', fontSize:9, color:'#444' }}>Drag text/stickers on the canvas to reposition</div>
+                <div style={{ marginTop:8, textAlign:'center', fontFamily:'Space Mono,monospace', fontSize:9, color: B.dim }}>Drag text/stickers on the canvas to reposition</div>
               )}
             </div>
 
@@ -268,7 +268,7 @@ export default function PhotoTools() {
             <div className="card-3d" style={panel}>
               <div style={{ display:'flex', borderBottom:'1px solid rgba(255,255,255,0.06)' }}>
                 {TABS.map(t => (
-                  <button key={t} onClick={() => setTab(t)} style={{ flex:1, padding:'12px 2px', background:tab===t ? 'rgba(255,45,123,0.1)' : 'transparent', border:'none', color:tab===t ? B.neonMagenta : '#444', fontFamily:'Orbitron,monospace', fontSize:6, fontWeight:700, cursor:'pointer', letterSpacing:0.5, borderBottom:tab===t ? `2px solid ${B.neonMagenta}` : '2px solid transparent', transition:'all 0.2s' }}>
+                  <button key={t} onClick={() => setTab(t)} style={{ flex:1, padding:'12px 2px', background:tab===t ? 'rgba(255,45,123,0.1)' : 'transparent', border:'none', color:tab===t ? B.neonMagenta : B.dim, fontFamily:'Orbitron,monospace', fontSize: 9, fontWeight:700, cursor:'pointer', letterSpacing:0.5, borderBottom:tab===t ? `2px solid ${B.neonMagenta}` : '2px solid transparent', transition:'all 0.2s' }}>
                     {t}
                   </button>
                 ))}
@@ -284,7 +284,7 @@ export default function PhotoTools() {
                         <div style={{ height:52, overflow:'hidden' }}>
                           {imgSrc && <img src={imgSrc} alt="" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block', filter:buildFilter(p.vals) }} />}
                         </div>
-                        <div style={{ padding:'5px 7px', fontFamily:'Orbitron,monospace', fontSize:6.5, color:preset===i ? B.neonMagenta : '#666', letterSpacing:0.8, fontWeight:700 }}>{p.name}</div>
+                        <div style={{ padding:'5px 7px', fontFamily:'Orbitron,monospace', fontSize:6.5, color:preset===i ? B.neonMagenta : B.smoke, letterSpacing:0.8, fontWeight:700 }}>{p.name}</div>
                       </button>
                     ))}
                   </div>
@@ -296,20 +296,20 @@ export default function PhotoTools() {
                     {SLIDERS.map(s => (
                       <div key={s.key}>
                         <div style={{ display:'flex', justifyContent:'space-between', marginBottom:5 }}>
-                          <span style={{ fontFamily:'Orbitron,monospace', fontSize:7, color:s.color, letterSpacing:2, fontWeight:700 }}>{s.label}</span>
-                          <span style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#555' }}>{adjusts[s.key]}{s.unit}</span>
+                          <span style={{ fontFamily:'Orbitron,monospace', fontSize: 9, color:s.color, letterSpacing:2, fontWeight:700 }}>{s.label}</span>
+                          <span style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: B.smoke }}>{adjusts[s.key]}{s.unit}</span>
                         </div>
                         <input type="range" min={s.min} max={s.max} value={adjusts[s.key]}
                           onChange={e => { setPreset(-1); setAdjusts(a => ({ ...a, [s.key]:Number(e.target.value) })) }}
                           style={{ width:'100%', accentColor:s.color, cursor:'pointer', height:4 }} />
                         {adjusts[s.key] !== s.def && (
                           <button onClick={() => { setPreset(-1); setAdjusts(a => ({ ...a, [s.key]:s.def })) }}
-                            style={{ fontSize:9, color:'#444', background:'none', border:'none', cursor:'pointer', fontFamily:'Space Mono,monospace', padding:'1px 0' }}>reset</button>
+                            style={{ fontSize:9, color: B.dim, background:'none', border:'none', cursor:'pointer', fontFamily:'Space Mono,monospace', padding:'1px 0' }}>reset</button>
                         )}
                       </div>
                     ))}
                     <button onClick={() => { setPreset(0); setAdjusts(DEFAULT_ADJUSTS) }}
-                      style={{ padding:'10px', background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.07)', borderRadius:8, color:'#555', fontFamily:'Orbitron,monospace', fontSize:8, cursor:'pointer', letterSpacing:1 }}>
+                      style={{ padding:'10px', background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.07)', borderRadius:8, color: B.smoke, fontFamily:'Orbitron,monospace', fontSize:8, cursor:'pointer', letterSpacing:1 }}>
                       RESET ALL
                     </button>
                   </div>
@@ -324,11 +324,11 @@ export default function PhotoTools() {
 
                     {/* font selector */}
                     <div style={{ marginBottom:12 }}>
-                      <div style={{ fontFamily:'Orbitron,monospace', fontSize:7, color:'#555', letterSpacing:1, marginBottom:6 }}>FONT</div>
+                      <div style={{ fontFamily:'Orbitron,monospace', fontSize: 9, color: B.smoke, letterSpacing:1, marginBottom:6 }}>FONT</div>
                       <div style={{ display:'flex', gap:6 }}>
                         {FONTS.map((f, i) => (
                           <button key={f.label} onClick={() => setTextFont(i)}
-                            style={{ flex:1, padding:'8px 4px', background:textFont===i ? 'rgba(255,45,123,0.12)' : 'rgba(255,255,255,0.03)', border:`1px solid ${textFont===i ? B.neonMagenta+'60' : 'rgba(255,255,255,0.07)'}`, borderRadius:6, cursor:'pointer', fontFamily:f.stack, fontSize:13, color:textFont===i ? B.neonMagenta : '#666' }}>
+                            style={{ flex:1, padding:'8px 4px', background:textFont===i ? 'rgba(255,45,123,0.12)' : 'rgba(255,255,255,0.03)', border:`1px solid ${textFont===i ? B.neonMagenta+'60' : 'rgba(255,255,255,0.07)'}`, borderRadius:6, cursor:'pointer', fontFamily:f.stack, fontSize:13, color:textFont===i ? B.neonMagenta : B.smoke }}>
                             {f.label}
                           </button>
                         ))}
@@ -337,14 +337,14 @@ export default function PhotoTools() {
 
                     <div style={{ display:'flex', gap:12, marginBottom:12, alignItems:'flex-end' }}>
                       <div>
-                        <div style={{ fontFamily:'Orbitron,monospace', fontSize:7, color:'#555', marginBottom:5, letterSpacing:1 }}>COLOR</div>
+                        <div style={{ fontFamily:'Orbitron,monospace', fontSize: 9, color: B.smoke, marginBottom:5, letterSpacing:1 }}>COLOR</div>
                         <input type="color" value={textCol} onChange={e => setTextCol(e.target.value)}
                           style={{ width:44, height:34, border:'1px solid rgba(255,255,255,0.1)', borderRadius:6, background:'transparent', cursor:'pointer', padding:2 }} />
                       </div>
                       <div style={{ flex:1 }}>
                         <div style={{ display:'flex', justifyContent:'space-between', marginBottom:5 }}>
-                          <span style={{ fontFamily:'Orbitron,monospace', fontSize:7, color:'#555', letterSpacing:1 }}>SIZE</span>
-                          <span style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#555' }}>{textSz}px</span>
+                          <span style={{ fontFamily:'Orbitron,monospace', fontSize: 9, color: B.smoke, letterSpacing:1 }}>SIZE</span>
+                          <span style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: B.smoke }}>{textSz}px</span>
                         </div>
                         <input type="range" min={14} max={90} value={textSz} onChange={e => setTextSz(Number(e.target.value))} style={{ width:'100%', accentColor:B.neonMagenta }} />
                       </div>
@@ -352,7 +352,7 @@ export default function PhotoTools() {
 
                     {/* outline toggle */}
                     <button onClick={() => setTextOutline(v => !v)}
-                      style={{ width:'100%', marginBottom:12, padding:'8px', background:textOutline ? `${B.neonCyan}14` : 'rgba(255,255,255,0.03)', border:`1px solid ${textOutline ? B.neonCyan+'50' : 'rgba(255,255,255,0.07)'}`, borderRadius:6, color:textOutline ? B.neonCyan : '#555', fontFamily:'Orbitron,monospace', fontSize:8, cursor:'pointer', letterSpacing:1, transition:'all 0.15s' }}>
+                      style={{ width:'100%', marginBottom:12, padding:'8px', background:textOutline ? `${B.neonCyan}14` : 'rgba(255,255,255,0.03)', border:`1px solid ${textOutline ? B.neonCyan+'50' : 'rgba(255,255,255,0.07)'}`, borderRadius:6, color:textOutline ? B.neonCyan : B.smoke, fontFamily:'Orbitron,monospace', fontSize:8, cursor:'pointer', letterSpacing:1, transition:'all 0.15s' }}>
                       {textOutline ? '✓ OUTLINE ON' : 'ADD OUTLINE'}
                     </button>
 
@@ -362,7 +362,7 @@ export default function PhotoTools() {
                     </button>
 
                     <div style={{ marginTop:14 }}>
-                      <div style={{ fontFamily:'Orbitron,monospace', fontSize:7, color:'#444', letterSpacing:2, marginBottom:8 }}>QUICK STAMPS</div>
+                      <div style={{ fontFamily:'Orbitron,monospace', fontSize: 9, color: B.dim, letterSpacing:2, marginBottom:8 }}>QUICK STAMPS</div>
                       <div style={{ display:'flex', flexWrap:'wrap', gap:6 }}>
                         {QUICK_STAMPS.map(q => (
                           <button key={q} onClick={() => addText(q)}
@@ -375,12 +375,12 @@ export default function PhotoTools() {
 
                     {texts.length > 0 && (
                       <div style={{ marginTop:16 }}>
-                        <div style={{ fontFamily:'Orbitron,monospace', fontSize:7, color:'#444', letterSpacing:2, marginBottom:8 }}>LAYERS ({texts.length})</div>
+                        <div style={{ fontFamily:'Orbitron,monospace', fontSize: 9, color: B.dim, letterSpacing:2, marginBottom:8 }}>LAYERS ({texts.length})</div>
                         {texts.map(t => (
                           <div key={t.id} style={{ display:'flex', alignItems:'center', gap:8, padding:'7px 0', borderBottom:'1px solid rgba(255,255,255,0.04)' }}>
                             <div style={{ width:10, height:10, borderRadius:2, background:t.color, flexShrink:0, border:'1px solid rgba(255,255,255,0.12)' }} />
-                            <span style={{ flex:1, fontFamily:'Space Mono,monospace', fontSize:9, color:'#777', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{t.text}</span>
-                            <button onClick={() => removeText(t.id)} style={{ background:'none', border:'none', color:'#444', cursor:'pointer', fontSize:16, lineHeight:1, padding:'0 4px' }}>×</button>
+                            <span style={{ flex:1, fontFamily:'Space Mono,monospace', fontSize:9, color:B.smoke, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{t.text}</span>
+                            <button onClick={() => removeText(t.id)} style={{ background:'none', border:'none', color: B.dim, cursor:'pointer', fontSize:16, lineHeight:1, padding:'0 4px' }}>×</button>
                           </div>
                         ))}
                       </div>
@@ -391,7 +391,7 @@ export default function PhotoTools() {
                 {/* STICKERS */}
                 {tab==='STICKERS' && (
                   <div>
-                    <p style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#555', marginBottom:14, lineHeight:1.7 }}>Tap to add. Drag on canvas to reposition.</p>
+                    <p style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: B.smoke, marginBottom:14, lineHeight:1.7 }}>Tap to add. Drag on canvas to reposition.</p>
                     <div style={{ display:'grid', gridTemplateColumns:'repeat(5,1fr)', gap:8 }}>
                       {STICKERS.map(s => (
                         <button key={s} onClick={() => setTexts(prev => [...prev, { id:Date.now(), text:s, x:30 + Math.random()*60, y:70 + Math.random()*40, color:'#fff', size:42, fontStack:FONTS[0].stack, outline:false }])}
@@ -402,12 +402,12 @@ export default function PhotoTools() {
                     </div>
                     {texts.filter(t => STICKERS.includes(t.text)).length > 0 && (
                       <div style={{ marginTop:14 }}>
-                        <div style={{ fontFamily:'Orbitron,monospace', fontSize:7, color:'#444', letterSpacing:2, marginBottom:8 }}>ON CANVAS</div>
+                        <div style={{ fontFamily:'Orbitron,monospace', fontSize: 9, color: B.dim, letterSpacing:2, marginBottom:8 }}>ON CANVAS</div>
                         <div style={{ display:'flex', flexWrap:'wrap', gap:6 }}>
                           {texts.filter(t => STICKERS.includes(t.text)).map(t => (
                             <div key={t.id} style={{ display:'flex', alignItems:'center', gap:4, padding:'4px 8px', background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.07)', borderRadius:6 }}>
                               <span style={{ fontSize:14 }}>{t.text}</span>
-                              <button onClick={() => removeText(t.id)} style={{ background:'none', border:'none', color:'#444', cursor:'pointer', fontSize:13, lineHeight:1, padding:0 }}>×</button>
+                              <button onClick={() => removeText(t.id)} style={{ background:'none', border:'none', color: B.dim, cursor:'pointer', fontSize:13, lineHeight:1, padding:0 }}>×</button>
                             </div>
                           ))}
                         </div>
@@ -422,7 +422,7 @@ export default function PhotoTools() {
           </div>
         )}
 
-        <div style={{ textAlign:'center', marginTop:40, fontFamily:'Space Mono,monospace', fontSize:8, color:'#2a2a2a', letterSpacing:2 }}>
+        <div style={{ textAlign:'center', marginTop:40, fontFamily:'Space Mono,monospace', fontSize:8, color:B.dim, letterSpacing:2 }}>
           ALL EDITING RUNS IN YOUR BROWSER — NO UPLOAD, NO SERVER
         </div>
       </div>

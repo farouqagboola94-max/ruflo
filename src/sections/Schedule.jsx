@@ -44,8 +44,8 @@ function Timeline({ items, liveStatus = {} }) {
           return (
             <div key={i} style={{ display:'flex', alignItems:'flex-start', marginBottom: i < items.length - 1 ? 8 : 0 }}>
               <div style={{ width:86, flexShrink:0, paddingTop:18, paddingRight:18, textAlign:'right' }}>
-                <div style={{ fontFamily:"'Orbitron',monospace", fontSize:11, fontWeight:700, color: isNow ? item.color : item.featured ? item.color : item.tag==='CLOSE' ? '#333' : B.smoke, lineHeight:1.2, textShadow: isNow||item.featured ? `0 0 12px ${item.color}50` : 'none' }}>{item.time}</div>
-                <div style={{ fontFamily:"'Space Mono',monospace", fontSize:7, color:'#333', letterSpacing:'0.1em' }}>{item.period}</div>
+                <div style={{ fontFamily:"'Orbitron',monospace", fontSize:11, fontWeight:700, color: isNow ? item.color : item.featured ? item.color : item.tag==='CLOSE' ? B.dim : B.smoke, lineHeight:1.2, textShadow: isNow||item.featured ? `0 0 12px ${item.color}50` : 'none' }}>{item.time}</div>
+                <div style={{ fontFamily:"'Space Mono',monospace", fontSize: 9, color: B.dim, letterSpacing:'0.1em' }}>{item.period}</div>
               </div>
               <div style={{ flexShrink:0, paddingTop:22, display:'flex', alignItems:'center', justifyContent:'center', width:12 }}>
                 <div style={{ width:11, height:11, borderRadius:'50%', background: isNow ? item.color : item.featured ? item.color : item.tag==='CLOSE' ? B.gunmetal : B.charcoal, border:`2px solid ${isNow ? item.color : item.featured ? item.color : item.tag==='CLOSE' ? B.gunmetal : item.color+'60'}`, boxShadow: isNow||item.featured ? `0 0 18px ${item.color}80` : 'none', flexShrink:0 }} />
@@ -59,15 +59,15 @@ function Timeline({ items, liveStatus = {} }) {
                 {(item.featured || isNow) && <div style={{ position:'absolute', left:0, top:0, bottom:0, width:3, background:item.color, boxShadow:`0 0 12px ${item.color}` }} />}
                 <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:5, flexWrap:'wrap' }}>
                   <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:18, color:item.tag==='CLOSE' ? B.smoke : B.white, letterSpacing:'0.04em', lineHeight:1 }}>{item.title}</div>
-                  <span style={{ padding:'2px 7px', background:item.color+'18', border:`1px solid ${item.color}40`, borderRadius:2, fontFamily:"'Space Mono',monospace", fontSize:7, color:item.color, letterSpacing:'0.12em', whiteSpace:'nowrap' }}>{item.tag}</span>
+                  <span style={{ padding:'2px 7px', background:item.color+'18', border:`1px solid ${item.color}40`, borderRadius:2, fontFamily:"'Space Mono',monospace", fontSize: 9, color:item.color, letterSpacing:'0.12em', whiteSpace:'nowrap' }}>{item.tag}</span>
                   {isNow && (
-                    <span style={{ padding:'2px 8px', background:`${B.neonLime}20`, border:`1px solid ${B.neonLime}60`, borderRadius:2, fontFamily:"'Space Mono',monospace", fontSize:7, color:B.neonLime, letterSpacing:'0.1em', animation:'liveNow 2s ease infinite' }}>● LIVE NOW</span>
+                    <span style={{ padding:'2px 8px', background:`${B.neonLime}20`, border:`1px solid ${B.neonLime}60`, borderRadius:2, fontFamily:"'Space Mono',monospace", fontSize: 9, color:B.neonLime, letterSpacing:'0.1em', animation:'liveNow 2s ease infinite' }}>● LIVE NOW</span>
                   )}
                   {isNext && (
-                    <span style={{ padding:'2px 8px', background:`${B.amber}15`, border:`1px solid ${B.amber}50`, borderRadius:2, fontFamily:"'Space Mono',monospace", fontSize:7, color:B.amber, letterSpacing:'0.1em' }}>▶ UP NEXT</span>
+                    <span style={{ padding:'2px 8px', background:`${B.amber}15`, border:`1px solid ${B.amber}50`, borderRadius:2, fontFamily:"'Space Mono',monospace", fontSize: 9, color:B.amber, letterSpacing:'0.1em' }}>▶ UP NEXT</span>
                   )}
                   {item.stage && (
-                    <span style={{ padding:'2px 7px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.12)', borderRadius:2, fontFamily:"'Space Mono',monospace", fontSize:7, color:'#555', letterSpacing:'0.1em', whiteSpace:'nowrap' }}>↗ {item.stage}</span>
+                    <span style={{ padding:'2px 7px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.12)', borderRadius:2, fontFamily:"'Space Mono',monospace", fontSize: 9, color: B.smoke, letterSpacing:'0.1em', whiteSpace:'nowrap' }}>↗ {item.stage}</span>
                   )}
                 </div>
                 <div style={{ fontFamily:"'Syne',sans-serif", fontSize:12, color:B.smoke, lineHeight:1.6 }}>{item.desc}</div>
@@ -116,12 +116,12 @@ export default function Schedule() {
             {PHASES.map((ph, i) => (
               <div key={i} className="card-3d" style={{ background:'rgba(255,255,255,0.025)', border:`1px solid ${ph.color}30`, borderTop:`2px solid ${ph.color}`, borderRadius:8, padding:'18px 16px' }}>
                 <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:8 }}>
-                  <div style={{ fontFamily:"'Space Mono',monospace", fontSize:7, color:ph.color, letterSpacing:2 }}>{ph.label}</div>
-                  <div style={{ fontFamily:"'Orbitron',monospace", fontSize:7, color:'#444', letterSpacing:1 }}>{ph.dates}</div>
+                  <div style={{ fontFamily:"'Space Mono',monospace", fontSize: 9, color:ph.color, letterSpacing:2 }}>{ph.label}</div>
+                  <div style={{ fontFamily:"'Orbitron',monospace", fontSize: 9, color: B.dim, letterSpacing:1 }}>{ph.dates}</div>
                 </div>
                 <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:14, color:B.white, letterSpacing:'0.05em', marginBottom:10 }}>{ph.title}</div>
                 {ph.lines.map((l, j) => (
-                  <div key={j} style={{ fontFamily:"'Space Mono',monospace", fontSize:7, color:'#555', lineHeight:1.9, borderLeft:`1px solid ${ph.color}25`, paddingLeft:8 }}>{l}</div>
+                  <div key={j} style={{ fontFamily:"'Space Mono',monospace", fontSize: 9, color: B.smoke, lineHeight:1.9, borderLeft:`1px solid ${ph.color}25`, paddingLeft:8 }}>{l}</div>
                 ))}
               </div>
             ))}
@@ -141,7 +141,7 @@ export default function Schedule() {
             ].map(({ d, label, venue }) => (
               <button key={d} onClick={() => setDay(d)} style={{ padding:'10px 20px', background:day===d ? `${B.amber}15` : 'transparent', border:`1px solid ${day===d ? B.amber : B.gunmetal}`, borderRadius:6, cursor:'pointer', textAlign:'left' }}>
                 <div style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color:day===d ? B.amber : B.smoke, letterSpacing:2, marginBottom:3 }}>{label}</div>
-                <div style={{ fontFamily:"'Syne',sans-serif", fontSize:11, color:day===d ? B.white : '#444' }}>{venue}</div>
+                <div style={{ fontFamily:"'Syne',sans-serif", fontSize:11, color:day===d ? B.white : B.dim }}>{venue}</div>
               </button>
             ))}
           </div>
@@ -152,7 +152,7 @@ export default function Schedule() {
             {[{label:'MAIN STAGE', color:B.amber},{label:'ART ZONE', color:B.neonMagenta},{label:'SPORT ZONE', color:B.neonLime},{label:'DROP ZONE', color:B.neonCyan}].map(s => (
               <div key={s.label} style={{ display:'flex', alignItems:'center', gap:6 }}>
                 <div style={{ width:7, height:7, borderRadius:'50%', background:s.color, boxShadow:`0 0 6px ${s.color}80` }} />
-                <span style={{ fontFamily:"'Space Mono',monospace", fontSize:7, color:'#555', letterSpacing:'0.1em' }}>{s.label}</span>
+                <span style={{ fontFamily:"'Space Mono',monospace", fontSize: 9, color: B.smoke, letterSpacing:'0.1em' }}>{s.label}</span>
               </div>
             ))}
           </div>
@@ -162,7 +162,7 @@ export default function Schedule() {
         <div className="card-3d" style={{ marginTop:36, padding:'20px 24px', background:B.charcoal, border:`1px solid ${B.gunmetal}`, borderRadius:8, display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:12 }}>
           <div style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color:B.smoke, letterSpacing:'0.15em', lineHeight:1.7 }}>
             SCHEDULE SUBJECT TO CHANGE<br />
-            <span style={{ color:'#333' }}>FOLLOW @SNEAKERSFEST FOR LIVE UPDATES</span>
+            <span style={{ color: B.dim }}>FOLLOW @SNEAKERSFEST FOR LIVE UPDATES</span>
           </div>
           <a href="#tickets" style={{ padding:'10px 20px', background:B.amber, color:B.black, fontFamily:"'Space Mono',monospace", fontSize:8, fontWeight:700, letterSpacing:'0.15em', textDecoration:'none', borderRadius:2, whiteSpace:'nowrap' }}>SECURE YOUR SPOT →</a>
         </div>

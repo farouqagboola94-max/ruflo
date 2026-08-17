@@ -112,7 +112,7 @@ export default function SponsorTiers() {
   }
 
   const IS = { width: '100%', padding: '11px 14px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 8, color: B.white, fontFamily: 'Space Mono,monospace', fontSize: 13, outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.2s' }
-  const lbl = t => <label style={{ fontFamily: 'Space Mono,monospace', fontSize: 8, color: '#555', letterSpacing: '0.25em', display: 'block', marginBottom: 7 }}>{t}</label>
+  const lbl = t => <label style={{ fontFamily: 'Space Mono,monospace', fontSize: 8, color: B.smoke, letterSpacing: '0.25em', display: 'block', marginBottom: 7 }}>{t}</label>
   const onFocus = e => e.target.style.borderColor = B.amber + '60'
   const onBlur  = e => e.target.style.borderColor = 'rgba(255,255,255,0.09)'
 
@@ -143,7 +143,7 @@ export default function SponsorTiers() {
           {STATS.map((s, i) => (
             <div key={i} className="card-3d" style={{ padding: '20px 16px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 10, textAlign: 'center' }}>
               <div style={{ fontFamily: "'Orbitron', monospace", fontWeight: 900, fontSize: 22, color: B.amber, marginBottom: 6 }}>{s.value}</div>
-              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: '#555', letterSpacing: '0.2em' }}>{s.label}</div>
+              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing: '0.2em' }}>{s.label}</div>
             </div>
           ))}
         </div>
@@ -169,21 +169,21 @@ export default function SponsorTiers() {
               >
                 <div style={{ height: 3, background: `linear-gradient(90deg, ${tier.color}, ${tier.color}30)` }} />
                 {tier.featured && (
-                  <div style={{ position: 'absolute', top: 14, right: 14, padding: '3px 10px', background: `${tier.color}20`, border: `1px solid ${tier.color}50`, borderRadius: 3, fontFamily: 'Space Mono,monospace', fontSize: 7, color: tier.color, letterSpacing: '0.2em' }}>MOST POPULAR</div>
+                  <div style={{ position: 'absolute', top: 14, right: 14, padding: '3px 10px', background: `${tier.color}20`, border: `1px solid ${tier.color}50`, borderRadius: 3, fontFamily: 'Space Mono,monospace', fontSize: 9, color: tier.color, letterSpacing: '0.2em' }}>MOST POPULAR</div>
                 )}
                 <div style={{ padding: 28 }}>
                   <div style={{ marginBottom: 10 }}>
-                    <span style={{ padding: '3px 10px', borderRadius: 2, background: tier.color + '18', border: `1px solid ${tier.color}40`, fontFamily: 'Space Mono,monospace', fontSize: 7, color: tier.color, letterSpacing: '0.18em' }}>{tier.tag}</span>
+                    <span style={{ padding: '3px 10px', borderRadius: 2, background: tier.color + '18', border: `1px solid ${tier.color}40`, fontFamily: 'Space Mono,monospace', fontSize: 9, color: tier.color, letterSpacing: '0.18em' }}>{tier.tag}</span>
                   </div>
                   <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 34, color: B.white, letterSpacing: '0.06em', marginBottom: 16 }}>{tier.name}</div>
 
                   {/* availability bar */}
                   <div style={{ marginBottom: 20 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
-                      <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 7, color: urgColor, letterSpacing: 1 }}>
+                      <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: urgColor, letterSpacing: 1 }}>
                         {pct >= 1 ? 'SOLD OUT' : pct >= 0.6 ? 'FILLING FAST' : 'AVAILABLE'}
                       </span>
-                      <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 7, color: '#444' }}>{left} of {tier.capacity} left</span>
+                      <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: B.dim }}>{left} of {tier.capacity} left</span>
                     </div>
                     <div style={{ height: 3, background: 'rgba(255,255,255,0.06)', borderRadius: 2, overflow: 'hidden' }}>
                       <div style={{ height: '100%', width: `${Math.min(pct * 100, 100)}%`, background: urgColor, borderRadius: 2 }} />
@@ -226,7 +226,7 @@ export default function SponsorTiers() {
         {/* Enquiry form */}
         <div style={{ maxWidth: 640, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 36 }}>
-            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: '#555', letterSpacing: '0.3em', marginBottom: 10 }}>SEND US A BRIEF</div>
+            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.smoke, letterSpacing: '0.3em', marginBottom: 10 }}>SEND US A BRIEF</div>
             <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 36, color: B.white }}>GET THE FULL DECK</div>
             <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: B.smoke, marginTop: 8 }}>Drop your details and we'll send the official sponsorship deck within 24 hours.</div>
           </div>
@@ -254,7 +254,7 @@ export default function SponsorTiers() {
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 8 }}>
                     {TIERS.map(t => (
                       <button key={t.id} type="button" onClick={() => setForm(f => ({ ...f, tier: t.name }))}
-                        style={{ padding: '9px 6px', background: form.tier === t.name ? `${t.color}18` : 'rgba(255,255,255,0.03)', border: `1px solid ${form.tier === t.name ? t.color : 'rgba(255,255,255,0.09)'}`, borderRadius: 6, cursor: 'pointer', fontFamily: 'Space Mono,monospace', fontSize: 9, color: form.tier === t.name ? t.color : '#555', letterSpacing: 1, transition: 'all 0.2s' }}>
+                        style={{ padding: '9px 6px', background: form.tier === t.name ? `${t.color}18` : 'rgba(255,255,255,0.03)', border: `1px solid ${form.tier === t.name ? t.color : 'rgba(255,255,255,0.09)'}`, borderRadius: 6, cursor: 'pointer', fontFamily: 'Space Mono,monospace', fontSize: 9, color: form.tier === t.name ? t.color : B.smoke, letterSpacing: 1, transition: 'all 0.2s' }}>
                         {t.name}
                       </button>
                     ))}
@@ -262,7 +262,7 @@ export default function SponsorTiers() {
                 </div>
                 <div>{lbl('NOTES / GOALS (optional)')}<textarea value={form.note} onChange={set('note')} placeholder="What do you want to achieve from this partnership?" rows={3} style={{ ...IS, resize: 'vertical', lineHeight: 1.6 }} onFocus={onFocus} onBlur={onBlur} /></div>
                 <button type="submit" disabled={loading}
-                  style={{ padding: '14px', background: loading ? 'rgba(255,255,255,0.04)' : B.amber, border: 'none', borderRadius: 8, color: loading ? '#444' : B.black, fontFamily: 'Orbitron,monospace', fontSize: 12, fontWeight: 700, letterSpacing: 2, cursor: loading ? 'not-allowed' : 'pointer', boxShadow: loading ? 'none' : `0 0 28px ${B.amber}35`, transition: 'all 0.2s' }}>
+                  style={{ padding: '14px', background: loading ? 'rgba(255,255,255,0.04)' : B.amber, border: 'none', borderRadius: 8, color: loading ? B.dim : B.black, fontFamily: 'Orbitron,monospace', fontSize: 12, fontWeight: 700, letterSpacing: 2, cursor: loading ? 'not-allowed' : 'pointer', boxShadow: loading ? 'none' : `0 0 28px ${B.amber}35`, transition: 'all 0.2s' }}>
                   {loading ? 'SENDING…' : 'REQUEST SPONSORSHIP DECK →'}
                 </button>
               </div>
@@ -270,7 +270,7 @@ export default function SponsorTiers() {
           )}
 
           <div style={{ textAlign: 'center', marginTop: 28, display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <div style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: '#444' }}>Or reach us directly</div>
+            <div style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: B.dim }}>Or reach us directly</div>
             <div style={{ display: 'flex', justifyContent: 'center', gap: 20, flexWrap: 'wrap' }}>
               <a href={`mailto:${CONTACT_EMAIL}`} style={{ fontFamily: 'Space Mono,monospace', fontSize: 10, color: B.amber, textDecoration: 'none', letterSpacing: 1 }}>{CONTACT_EMAIL}</a>
               <a href={SOCIAL_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'Space Mono,monospace', fontSize: 10, color: B.neonLime, textDecoration: 'none', letterSpacing: 1 }}>WhatsApp →</a>

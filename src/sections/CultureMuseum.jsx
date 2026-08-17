@@ -320,7 +320,7 @@ function ArtCard({ artwork, bids, onBid, watchers }) {
         )}
 
         {watchers > 0 && (
-          <div style={{ position:'absolute', top:12, left:12, zIndex:2, background:'rgba(0,0,0,0.75)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:3, padding:'3px 9px', fontFamily:'Space Mono', fontSize:8, color:'#555', whiteSpace:'nowrap' }}>
+          <div style={{ position:'absolute', top:12, left:12, zIndex:2, background:'rgba(0,0,0,0.75)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:3, padding:'3px 9px', fontFamily:'Space Mono', fontSize:8, color: B.smoke, whiteSpace:'nowrap' }}>
             👁 {watchers}
           </div>
         )}
@@ -344,7 +344,7 @@ function ArtCard({ artwork, bids, onBid, watchers }) {
             <div style={{ textAlign:'right' }}>
               <div style={{ fontFamily:'Space Mono', fontSize:9, color:B.amber, letterSpacing:1 }}>{artwork.edition}</div>
               {editionUrgency(artwork.edition) && (
-                <div style={{ fontFamily:'Space Mono', fontSize:7, color:B.neonMagenta, letterSpacing:1, marginTop:2 }}>
+                <div style={{ fontFamily:'Space Mono', fontSize: 9, color:B.neonMagenta, letterSpacing:1, marginTop:2 }}>
                   ⚡ {editionUrgency(artwork.edition)}
                 </div>
               )}
@@ -449,7 +449,7 @@ export default function CultureMuseum() {
           <div className="reveal-3d" style={{ marginTop:14, display:'flex', justifyContent:'center' }}>
             <div style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(255,255,255,0.025)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:4, padding:'7px 14px', maxWidth:380, overflow:'hidden' }}>
               <span style={{ width:5, height:5, borderRadius:'50%', background:B.neonCyan, flexShrink:0, animation:'bidTick 3s ease infinite' }} />
-              <span style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color:'#555', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>
+              <span style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color: B.smoke, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>
                 {BID_ACTIVITY[tickerIdx]}
               </span>
             </div>

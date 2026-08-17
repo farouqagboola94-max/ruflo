@@ -46,7 +46,7 @@ const CountBox = ({ value, label }) => (
       </span>
     </div>
     <div style={{
-      fontFamily: "'Space Mono', monospace", fontSize: 7,
+      fontFamily: "'Space Mono', monospace", fontSize: 9,
       color: B.smoke, marginTop: 10, letterSpacing: '0.42em',
     }}>{label}</div>
   </div>
@@ -160,10 +160,10 @@ export default function Hero() {
       <div style={{ position:'absolute', bottom:80, right:24, zIndex:3, width:40, height:40, borderBottom:`1.5px solid ${B.neonCyan}38`, borderRight:`1.5px solid ${B.neonCyan}38`,  pointerEvents:'none' }} />
 
       {/* Vertical editorial labels */}
-      <div style={{ position:'absolute', left:18, top:'50%', zIndex:3, transform:'translateX(-50%) rotate(-90deg)', fontFamily:"'Space Mono',monospace", fontSize:7, letterSpacing:'0.42em', color:B.smoke, opacity:0.32, whiteSpace:'nowrap', pointerEvents:'none' }}>
+      <div style={{ position:'absolute', left:18, top:'50%', zIndex:3, transform:'translateX(-50%) rotate(-90deg)', fontFamily:"'Space Mono',monospace", fontSize: 9, letterSpacing:'0.42em', color:B.smoke, opacity:0.32, whiteSpace:'nowrap', pointerEvents:'none' }}>
         WEST AFRICA'S PREMIER SNEAKER CULTURE EVENT
       </div>
-      <div style={{ position:'absolute', right:18, top:'50%', zIndex:3, transform:'translateX(50%) rotate(90deg)', fontFamily:"'Space Mono',monospace", fontSize:7, letterSpacing:'0.42em', color:B.smoke, opacity:0.32, whiteSpace:'nowrap', pointerEvents:'none' }}>
+      <div style={{ position:'absolute', right:18, top:'50%', zIndex:3, transform:'translateX(50%) rotate(90deg)', fontFamily:"'Space Mono',monospace", fontSize: 9, letterSpacing:'0.42em', color:B.smoke, opacity:0.32, whiteSpace:'nowrap', pointerEvents:'none' }}>
         LAGOS · DECEMBER 12 · 2026 · SF26
       </div>
 
@@ -191,7 +191,15 @@ export default function Hero() {
         </div>
 
         {/* SNEAKERS — extruded 3D shimmer */}
+        <h1 style={{
+          position: 'absolute', width: 1, height: 1, padding: 0, margin: -1,
+          overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap', border: 0,
+        }}>
+          Sneakers Fest '26 — Lagos, December 12
+        </h1>
+
         <div
+          aria-hidden="true"
           className="text-3d reveal-3d delay-2"
           style={{
             fontFamily:"'Bebas Neue',sans-serif",
@@ -337,7 +345,7 @@ export default function Hero() {
                 transition:'background 0.18s,border-color 0.18s,transform 0.18s,box-shadow 0.18s',
               }}
             >
-              <span style={{ fontFamily:'Space Mono,monospace', fontSize:7.5, color:'#666', letterSpacing:'0.12em' }}>{t}</span>
+              <span style={{ fontFamily:'Space Mono,monospace', fontSize:7.5, color: B.smoke, letterSpacing:'0.12em' }}>{t}</span>
               <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, fontWeight:700, color: hoveredTier === t ? c : '#888', letterSpacing:'0.08em', transition:'color 0.18s' }}>{p}</span>
             </a>
           ))}
@@ -345,13 +353,13 @@ export default function Hero() {
 
         <div style={{ marginTop:14, fontFamily:"'Space Mono',monospace", fontSize:8, letterSpacing:'0.1em' }}>
           <span style={{ color:B.neonLime }}>⚡ Only 12 PHALANX slots remain</span>
-          <span style={{ color:'#555' }}> · Prices increase December 1</span>
+          <span style={{ color: B.smoke }}> · Prices increase December 1</span>
         </div>
       </div>
 
       {/* Scroll indicator */}
       <div style={{ position:'absolute', bottom:32, left:'50%', transform:'translateX(-50%)', zIndex:10, display:'flex', flexDirection:'column', alignItems:'center', gap:8, animation:'pulse 2.5s infinite' }}>
-        <div style={{ fontFamily:"'Space Mono',monospace", fontSize:7, color:B.smoke, letterSpacing:'0.4em' }}>SCROLL</div>
+        <div style={{ fontFamily:"'Space Mono',monospace", fontSize: 9, color:B.smoke, letterSpacing:'0.4em' }}>SCROLL</div>
         <div style={{ width:1, height:40, background:`linear-gradient(${B.amber},transparent)` }} />
       </div>
     </section>

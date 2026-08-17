@@ -92,7 +92,7 @@ function PassportContent({ state, tier }) {
         background: B.charcoal, border: `1px solid ${B.gunmetal}`, borderRadius: 12,
         padding: '20px 24px', marginBottom: 24,
       }}>
-        <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', letterSpacing: '0.2em', color: '#555', marginBottom: 10 }}>INVITE & EARN</div>
+        <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', letterSpacing: '0.2em', color: B.smoke, marginBottom: 10 }}>INVITE & EARN</div>
         <p style={{ fontFamily: "'Syne'", fontSize: '0.78rem', color: B.white, marginBottom: 14, lineHeight: 1.5 }}>
           Share your link. When someone you invite signs up, enters a raffle, or registers, you
           earn +{XP_VALUES.referralXP} XP. If they buy a ticket, you get a +{XP_VALUES.referralPurchaseBonus} XP bonus.
@@ -124,7 +124,7 @@ function PassportContent({ state, tier }) {
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16, marginBottom: 20 }}>
           <div>
-            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', letterSpacing: '0.25em', color: '#555', marginBottom: 6 }}>CURRENT TIER</div>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', letterSpacing: '0.25em', color: B.smoke, marginBottom: 6 }}>CURRENT TIER</div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
               <div style={{ fontFamily: "'Bebas Neue'", fontSize: '2.4rem', color: tier.color, letterSpacing: '0.04em' }}>{tier.name}</div>
               <div style={{
@@ -135,7 +135,7 @@ function PassportContent({ state, tier }) {
             </div>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', letterSpacing: '0.25em', color: '#555', marginBottom: 6 }}>TOTAL XP</div>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', letterSpacing: '0.25em', color: B.smoke, marginBottom: 6 }}>TOTAL XP</div>
             <div style={{ fontFamily: "'Orbitron'", fontSize: '2rem', color: B.white, fontWeight: 900 }}>{state.xp.toLocaleString()}</div>
           </div>
         </div>
@@ -143,14 +143,14 @@ function PassportContent({ state, tier }) {
         <div style={{ height: 8, background: B.gunmetal, borderRadius: 4, overflow: 'hidden', marginBottom: 8 }}>
           <div style={{ height: '100%', width: `${pct}%`, background: tier.color, transition: 'width 0.6s ease', boxShadow: `0 0 10px ${tier.color}` }} />
         </div>
-        <div style={{ fontFamily: "'Space Mono'", fontSize: '0.65rem', color: '#555', marginBottom: 18 }}>
+        <div style={{ fontFamily: "'Space Mono'", fontSize: '0.65rem', color: B.smoke, marginBottom: 18 }}>
           {next ? `${next.min - state.xp} XP to ${next.name}` : 'Max tier reached — Catalyst Elite'}
         </div>
 
         <div style={{ height: 5, background: B.gunmetal, borderRadius: 3, overflow: 'hidden', marginBottom: 6 }}>
           <div style={{ height: '100%', width: `${level.pct}%`, background: B.neonLime, transition: 'width 0.6s ease', boxShadow: `0 0 8px ${B.neonLime}` }} />
         </div>
-        <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', color: '#555' }}>
+        <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', color: B.smoke }}>
           {level.level >= 50 ? 'Max card level reached' : `${level.xpToNext} XP to Level ${level.level + 1}`}
         </div>
       </div>
@@ -160,7 +160,7 @@ function PassportContent({ state, tier }) {
         borderRadius: 12, padding: '16px 20px', marginBottom: 32, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap',
       }}>
         <div>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', letterSpacing: '0.2em', color: comboDone ? B.amber : '#555', marginBottom: 4 }}>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', letterSpacing: '0.2em', color: comboDone ? B.amber : B.smoke, marginBottom: 4 }}>
             {comboDone ? '✓ DAILY COMBO BONUS CLAIMED' : "TODAY'S COMBO BONUS"}
           </div>
           <div style={{ fontFamily: "'Syne'", fontSize: '0.78rem', color: B.white }}>
@@ -182,7 +182,7 @@ function PassportContent({ state, tier }) {
       <Divider color={tier.color} />
 
       <div style={{ marginTop: 32, marginBottom: 32 }}>
-        <div style={{ fontFamily: "'Space Mono'", fontSize: '0.65rem', letterSpacing: '0.2em', color: '#555', marginBottom: 16 }}>BADGES EARNED ({state.badges.filter(b => BADGE_INFO[b]).length}/{Object.keys(BADGE_INFO).length})</div>
+        <div style={{ fontFamily: "'Space Mono'", fontSize: '0.65rem', letterSpacing: '0.2em', color: B.smoke, marginBottom: 16 }}>BADGES EARNED ({state.badges.filter(b => BADGE_INFO[b]).length}/{Object.keys(BADGE_INFO).length})</div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(140px,1fr))', gap: 12 }}>
           {Object.entries(BADGE_INFO).map(([key, b]) => {
             const earned = state.badges.includes(key)
@@ -195,7 +195,7 @@ function PassportContent({ state, tier }) {
               }}>
                 <div style={{ fontSize: '1.6rem', marginBottom: 8 }}>{b.emoji}</div>
                 <div style={{ fontFamily: "'Bebas Neue'", fontSize: '0.85rem', color: B.white, marginBottom: 4 }}>{b.label}</div>
-                <div style={{ fontFamily: "'Space Mono'", fontSize: '0.55rem', color: '#555', lineHeight: 1.4 }}>{b.desc}</div>
+                <div style={{ fontFamily: "'Space Mono'", fontSize: '0.55rem', color: B.smoke, lineHeight: 1.4 }}>{b.desc}</div>
               </div>
             )
           })}
@@ -203,7 +203,7 @@ function PassportContent({ state, tier }) {
       </div>
 
       <div>
-        <div style={{ fontFamily: "'Space Mono'", fontSize: '0.65rem', letterSpacing: '0.2em', color: '#555', marginBottom: 16 }}>WAYS TO EARN XP</div>
+        <div style={{ fontFamily: "'Space Mono'", fontSize: '0.65rem', letterSpacing: '0.2em', color: B.smoke, marginBottom: 16 }}>WAYS TO EARN XP</div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
           {EARN_WAYS.map(w => (
             <a key={w.href} href={w.href} className="card-3d" style={{

@@ -172,7 +172,7 @@ export default function SneakerBingo() {
                 <div style={{ fontSize: '1.5rem' }}>{sq.emoji}</div>
                 <div style={{
                   fontFamily: "'Space Mono'", fontSize: '0.48rem',
-                  color: isWinning ? B.neonLime : filled[i] ? B.amber : '#555',
+                  color: isWinning ? B.neonLime : filled[i] ? B.amber : B.smoke,
                   letterSpacing: '0.04em', textAlign: 'center', lineHeight: 1.3,
                 }}>
                   {sq.label}
@@ -183,7 +183,7 @@ export default function SneakerBingo() {
         </div>
 
         {/* Stats row */}
-        <div className="reveal-3d" style={{ display: 'flex', justifyContent: 'center', gap: 20, fontFamily: "'Space Mono'", fontSize: '0.65rem', color: '#555', marginBottom: 16 }}>
+        <div className="reveal-3d" style={{ display: 'flex', justifyContent: 'center', gap: 20, fontFamily: "'Space Mono'", fontSize: '0.65rem', color: B.smoke, marginBottom: 16 }}>
           <span>SQUARES: <strong style={{ color: B.white }}>{filledCount}/9</strong></span>
           <span>LINES: <strong style={{ color: B.amber }}>{completedLines}/8</strong></span>
           {completedLines > 0 && (
@@ -219,7 +219,7 @@ export default function SneakerBingo() {
 
         {/* Next action hint when no full card */}
         {!fullCard && minToNext > 0 && completedLines === 0 && (
-          <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', color: '#444', marginTop: 4 }}>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', color: B.dim, marginTop: 4 }}>
             HINT: {ACTIONS_MAP[closestSquareIdx] || 'Complete more activities across the site'}
           </div>
         )}

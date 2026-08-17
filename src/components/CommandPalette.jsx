@@ -180,7 +180,7 @@ export default function CommandPalette() {
           )}
         </div>
         {on && (
-          <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: accent, letterSpacing: '0.16em', flexShrink: 0 }}>ENTER ↵</span>
+          <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: accent, letterSpacing: '0.16em', flexShrink: 0 }}>ENTER ↵</span>
         )}
       </button>
     )
@@ -189,7 +189,7 @@ export default function CommandPalette() {
   const GroupLabel = text => (
     <div key={`h-${text}`} style={{
       padding: '14px 16px 6px', fontFamily: "'Space Mono', monospace",
-      fontSize: 7, color: B.smoke + '80', letterSpacing: '0.3em',
+      fontSize: 9, color: B.smoke + '80', letterSpacing: '0.3em',
     }}>{text}</div>
   )
 
@@ -256,7 +256,7 @@ export default function CommandPalette() {
               style={{
                 flexShrink: 0, background: 'transparent', border: `1px solid ${B.gunmetal}`,
                 borderRadius: 3, padding: '4px 8px', cursor: 'pointer',
-                fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, letterSpacing: '0.12em',
+                fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing: '0.12em',
               }}
             >ESC</button>
           </div>
@@ -289,7 +289,7 @@ export default function CommandPalette() {
             flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             gap: 10, flexWrap: 'wrap', padding: '9px 16px',
             borderTop: `1px solid ${B.gunmetal}`, background: B.black,
-            fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke + '90', letterSpacing: '0.14em',
+            fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke + '90', letterSpacing: '0.14em',
           }}>
             <span>↑↓ NAVIGATE &nbsp;·&nbsp; ↵ OPEN &nbsp;·&nbsp; ESC CLOSE</span>
             <span style={{ color: B.amber + 'AA' }}>{SECTIONS.length} SECTIONS INDEXED</span>

@@ -172,7 +172,7 @@ export default function CrewVoteOff() {
         {matchup ? (
           <>
             {/* Matchup counter */}
-            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.58rem', color: '#444', marginBottom: 12 }}>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.58rem', color: B.dim, marginBottom: 12 }}>
               MATCHUP {cursor + 1} OF {order.length} · {voteStreak > 0 ? `${voteStreak}-VOTE STREAK` : 'SETTLE THE DEBATE'}
             </div>
 
@@ -204,15 +204,15 @@ export default function CrewVoteOff() {
                     {row.voted && revealBars && (
                       <div style={{ animation: 'resultSlide 0.4s ease' }}>
                         <div style={{ height: 6, background: B.gunmetal, borderRadius: 3, overflow: 'hidden', marginBottom: 6 }}>
-                          <div style={{ height: '100%', width: `${sidePct}%`, background: voted ? B.neonCyan : '#555', transition: 'width 0.7s cubic-bezier(0.4,0,0.2,1)' }} />
+                          <div style={{ height: '100%', width: `${sidePct}%`, background: voted ? B.neonCyan : B.smoke, transition: 'width 0.7s cubic-bezier(0.4,0,0.2,1)' }} />
                         </div>
-                        <div style={{ fontFamily: "'Orbitron'", fontSize: '0.85rem', color: voted ? B.neonCyan : '#555', fontWeight: 900 }}>
+                        <div style={{ fontFamily: "'Orbitron'", fontSize: '0.85rem', color: voted ? B.neonCyan : B.smoke, fontWeight: 900 }}>
                           {sidePct}%
                         </div>
                       </div>
                     )}
                     {row.voted && !revealBars && (
-                      <div style={{ fontFamily: "'Space Mono'", fontSize: '0.55rem', color: '#555', marginTop: 8 }}>
+                      <div style={{ fontFamily: "'Space Mono'", fontSize: '0.55rem', color: B.smoke, marginTop: 8 }}>
                         counting votes…
                       </div>
                     )}
@@ -247,7 +247,7 @@ export default function CrewVoteOff() {
               </div>
             )}
 
-            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.62rem', color: '#555', marginBottom: 24 }}>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.62rem', color: B.smoke, marginBottom: 24 }}>
               {row.voted
                 ? (capReached ? 'XP cap reached — keep voting for the culture' : `+${XP_VALUES.vote} XP earned`)
                 : `${XP_VALUES.vote} XP per vote · ${Math.max(0, XP_VALUES.voteDailyCap - daily.count)} bonus votes left today`}

@@ -139,8 +139,8 @@ export default function MobileCTA() {
         {TABS.map(tab => {
           const isActive  = active === tab.id
           const isPressed = pressed === tab.id
-          const color = tab.accent ? B.amber : isActive ? B.white : '#3a3a4a'
-          const labelColor = tab.accent ? B.amber : isActive ? B.white : '#3a3a4a'
+          const color = tab.accent ? B.amber : isActive ? B.white : B.smoke
+          const labelColor = tab.accent ? B.amber : isActive ? B.white : B.smoke
           const showDot = tab.accent && !isActive
           const showPriceHint = tab.accent
 

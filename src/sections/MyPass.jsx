@@ -12,7 +12,7 @@ const TICKET_RE = /^SF26-[A-Z]{3}-[A-F0-9]{6}$/
 const readLS = () => { try { return JSON.parse(localStorage.getItem(STORE_KEY)) || null } catch { return null } }
 const writeLS = v => { try { localStorage.setItem(STORE_KEY, JSON.stringify(v)) } catch {} }
 
-const label = { fontFamily: "'Space Mono', monospace", fontSize: 7, letterSpacing: '0.22em', color: B.smoke }
+const label = { fontFamily: "'Space Mono', monospace", fontSize: 9, letterSpacing: '0.22em', color: B.smoke }
 
 const normalise = raw => String(raw || '').toUpperCase().replace(/\s/g, '')
 

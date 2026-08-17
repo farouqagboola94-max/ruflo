@@ -116,7 +116,7 @@ export default function BadgeMaker() {
 
         {/* Social proof */}
         <div className="reveal-3d" style={{
-          fontFamily: "'Space Mono'", fontSize: '0.58rem', color: '#555', marginBottom: 30,
+          fontFamily: "'Space Mono'", fontSize: '0.58rem', color: B.smoke, marginBottom: 30,
           animation: 'tierGlow 3.5s ease-in-out infinite',
         }}>
           <span style={{ color: B.amber }}>{badgeCount === null ? '—' : badgeCount.toLocaleString()}</span> badges created

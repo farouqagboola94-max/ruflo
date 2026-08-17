@@ -117,7 +117,7 @@ export default function About() {
                 }}>
                   {s.num}
                 </div>
-                <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, letterSpacing: '0.15em', marginTop: 8, lineHeight: 1.5 }}>
+                <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing: '0.15em', marginTop: 8, lineHeight: 1.5 }}>
                   {s.label}
                 </div>
               </div>

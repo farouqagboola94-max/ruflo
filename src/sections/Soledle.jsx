@@ -158,12 +158,12 @@ export default function Soledle() {
         <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', color: B.smoke, marginBottom: 28 }}>
           <span style={{ color: '#22ff44', marginRight: 6 }}>●</span>
           <strong style={{ color: B.neonMagenta }}>{solvers === null ? '—' : solvers.toLocaleString()}</strong> puzzles solved ·{' '}
-          <span style={{ color: '#444' }}>new puzzle daily</span>
+          <span style={{ color: B.dim }}>new puzzle daily</span>
         </div>
 
         {/* Clue card */}
         <div className="card-3d" style={{ background: B.charcoal, border: `1px solid ${B.gunmetal}`, borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: '0.52rem', color: '#444', letterSpacing: '0.12em', marginBottom: 12 }}>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: '0.52rem', color: B.dim, letterSpacing: '0.12em', marginBottom: 12 }}>
             PUZZLE #{dayNumber()} · {cluesRevealed} OF {answer.clues.length} CLUES REVEALED
           </div>
           {answer.clues.slice(0, cluesRevealed).map((clue, i) => (
@@ -197,7 +197,7 @@ export default function Soledle() {
                 fontFamily: "'Space Mono'", fontSize: '0.65rem', padding: '5px 12px', borderRadius: 20,
                 background: g === answer.name ? `${B.neonLime}15` : `${B.neonMagenta}08`,
                 border: `1px solid ${g === answer.name ? B.neonLime : B.neonMagenta}35`,
-                color: g === answer.name ? B.neonLime : '#555',
+                color: g === answer.name ? B.neonLime : B.smoke,
                 textDecoration: g === answer.name ? 'none' : 'line-through',
               }}>
                 {g === answer.name ? '🟩' : '🟥'} {g}
@@ -235,7 +235,7 @@ export default function Soledle() {
                 GUESS
               </button>
             </div>
-            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.62rem', color: triesLeft <= 1 ? B.neonMagenta : '#555', marginBottom: 12 }}>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.62rem', color: triesLeft <= 1 ? B.neonMagenta : B.smoke, marginBottom: 12 }}>
               {triesLeft === 1 ? '⚡ FINAL GUESS' : `${triesLeft} guesses remaining`}
             </div>
           </>
@@ -291,7 +291,7 @@ export default function Soledle() {
             <div style={{ fontFamily: "'Bebas Neue'", fontSize: '1.3rem', color: B.smoke, marginBottom: 4 }}>
               IT WAS THE {answer.name.toUpperCase()}
             </div>
-            <div style={{ fontFamily: "'Syne'", fontSize: '0.82rem', color: '#555', lineHeight: 1.5, marginBottom: 14 }}>
+            <div style={{ fontFamily: "'Syne'", fontSize: '0.82rem', color: B.smoke, lineHeight: 1.5, marginBottom: 14 }}>
               Not everyone knows them all. Tomorrow's another chance to prove yourself.
             </div>
             <button
@@ -307,7 +307,7 @@ export default function Soledle() {
           </div>
         )}
 
-        <div style={{ fontFamily: "'Space Mono'", fontSize: '0.55rem', color: '#333', marginTop: 16, textAlign: 'center' }}>
+        <div style={{ fontFamily: "'Space Mono'", fontSize: '0.55rem', color: B.dim, marginTop: 16, textAlign: 'center' }}>
           ONE PUZZLE PER DAY · NEW SNEAKER AT MIDNIGHT
         </div>
       </div>

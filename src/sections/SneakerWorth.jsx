@@ -201,7 +201,7 @@ export default function SneakerWorth() {
                 }} />
               ))}
             </div>
-            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.55rem', color: '#444', marginBottom: 22 }}>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.55rem', color: B.dim, marginBottom: 22 }}>
               QUESTION {current + 1} OF {QUESTIONS.length}
             </div>
 
@@ -273,7 +273,7 @@ export default function SneakerWorth() {
               </div>
             </div>
 
-            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.53rem', color: '#444', marginBottom: 28 }}>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.53rem', color: B.dim, marginBottom: 28 }}>
               +{XP_VALUES.quickTask} XP EARNED · approximate street value based on your answers
             </div>
 

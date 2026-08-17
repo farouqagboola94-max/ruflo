@@ -101,7 +101,7 @@ export default function SocialProof() {
           </div>
           <div style={{
             fontFamily: "'Space Mono',monospace", fontSize: 8,
-            color: '#444', marginTop: 2,
+            color: B.dim, marginTop: 2,
           }}>
             {notif.area} · {notif.mins}m ago
           </div>
@@ -109,7 +109,7 @@ export default function SocialProof() {
 
         <button
           onClick={() => { setVisible(false); clearTimeout(t2.current) }}
-          style={{ background: 'none', border: 'none', color: '#333', cursor: 'pointer', padding: '2px', lineHeight: 1, flexShrink: 0, fontSize: 13 }}
+          style={{ background: 'none', border: 'none', color: B.dim, cursor: 'pointer', padding: '2px', lineHeight: 1, flexShrink: 0, fontSize: 13 }}
         >✕</button>
       </div>
     </div>

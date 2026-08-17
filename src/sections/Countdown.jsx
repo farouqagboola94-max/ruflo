@@ -325,7 +325,7 @@ export default function Countdown() {
 
           <div style={{ maxWidth:360, margin:'0 auto', display:'flex', flexDirection:'column', gap:14 }}>
             <div>
-              <label style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', letterSpacing:2, display:'block', marginBottom:6 }}>YOUR NAME (OPTIONAL)</label>
+              <label style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, letterSpacing:2, display:'block', marginBottom:6 }}>YOUR NAME (OPTIONAL)</label>
               <input
                 value={cardName} onChange={e => setCardName(e.target.value)}
                 placeholder="e.g. FAROUQ"
@@ -337,9 +337,9 @@ export default function Countdown() {
               <div style={{ fontFamily:'Orbitron,monospace', fontSize:9, color:B.amber, letterSpacing:2 }}>SNEAKERS FEST '26</div>
               <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:'clamp(28px,7vw,48px)', color:B.white, lineHeight:0.9 }}>I'M</div>
               <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:'clamp(36px,9vw,64px)', color:B.amber, lineHeight:0.9 }}>GOING</div>
-              <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', letterSpacing:1, marginTop:4 }}>MURI OKUNOLA PARK, V/I</div>
+              <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, letterSpacing:1, marginTop:4 }}>MURI OKUNOLA PARK, V/I</div>
               <div style={{ fontFamily:'Orbitron,monospace', fontSize:'clamp(20px,5vw,36px)', color:B.amber, fontWeight:900, marginTop:4 }}>{time.days}</div>
-              <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', letterSpacing:2 }}>DAYS AWAY</div>
+              <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, letterSpacing:2 }}>DAYS AWAY</div>
               {cardName && <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:B.smoke, marginTop:4 }}>{cardName.toUpperCase()}</div>}
             </div>
 

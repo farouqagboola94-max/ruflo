@@ -50,7 +50,7 @@ export default function Highlights() {
               onMouseLeave={e => { e.currentTarget.style.borderColor = B.gunmetal; e.currentTarget.style.transform = "translateY(0)" }}
             >
               <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, ${f.color}, transparent)`, opacity: 0.5 }} />
-              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: f.color, letterSpacing: "0.2em", marginBottom: 10 }}>{f.label}</div>
+              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: f.color, letterSpacing: "0.2em", marginBottom: 10 }}>{f.label}</div>
               <div style={{ fontFamily: "'Orbitron', monospace", fontWeight: 700, fontSize: 12, color: f.color, letterSpacing: "0.1em", marginBottom: 10 }}>
                 {f.title}
               </div>

@@ -110,7 +110,7 @@ export default function ArtistSpotlight() {
             display: 'flex', alignItems: 'center', gap: 12,
           }}>
             <div style={{ fontFamily: "'Orbitron'", fontSize: 11, color: B.amber, fontWeight: 900, letterSpacing: '0.1em', animation: 'artistPulse 2s infinite' }}>⬡ CLASSIFIED</div>
-            <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#555', flex: 1 }}>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.smoke, flex: 1 }}>
               Full lineup is locked for loyal community members.
               {daysLeft > 0
                 ? ` Come back in ${daysLeft} more day${daysLeft !== 1 ? 's' : ''} to unlock.`
@@ -169,7 +169,7 @@ export default function ArtistSpotlight() {
                   gap: 8, borderRadius: 12,
                 }}>
                   <div style={{ fontFamily: "'Orbitron'", fontSize: 28, color: '#222', fontWeight: 900 }}>?</div>
-                  <div style={{ fontFamily: "'Space Mono'", fontSize: 7, color: '#333', letterSpacing: '0.25em', textAlign: 'center', padding: '0 16px' }}>
+                  <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.25em', textAlign: 'center', padding: '0 16px' }}>
                     CLASSIFIED<br />LOYAL FANS ONLY
                   </div>
                 </div>
@@ -257,7 +257,7 @@ export default function ArtistSpotlight() {
 
         {!revealed && (
           <p className="reveal-3d" style={{
-            fontFamily: "'Space Mono'", fontSize: 8, color: '#333',
+            fontFamily: "'Space Mono'", fontSize: 8, color: B.dim,
             textAlign: 'center', marginTop: 24, letterSpacing: '0.15em',
           }}>
             RETURN REGULARLY · LOYALTY UNLOCKS THE LINEUP · {daysLeft} DAY{daysLeft !== 1 ? 'S' : ''} REMAINING

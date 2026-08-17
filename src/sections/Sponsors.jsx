@@ -208,7 +208,7 @@ export default function Sponsors() {
               <div style={{ fontFamily: "'Syne',sans-serif", fontSize: 15, color: B.smoke, maxWidth: 480, margin: '0 auto 28px', lineHeight: 1.75 }}>
                 Your <strong style={{ color: B.amber }}>{form.tier}</strong> application for <strong style={{ color: B.white }}>{form.brand}</strong> is in. We review all applications and come back within 3 business days with a tailored proposal.
               </div>
-              <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 10, color: '#444', letterSpacing: 2 }}>sneakersfest088@gmail.com · Sneakers Fest 2026</div>
+              <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 10, color: B.dim, letterSpacing: 2 }}>sneakersfest088@gmail.com · Sneakers Fest 2026</div>
             </div>
           ) : (
             <>
@@ -229,7 +229,7 @@ export default function Sponsors() {
                     { field: 'phone',   label: 'PHONE (OPTIONAL)',          ph: '+234 ...' },
                   ].map(({ field, label, ph }) => (
                     <div key={field}>
-                      <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 8, color: '#555', letterSpacing: 2, marginBottom: 7 }}>{label}</div>
+                      <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 8, color: B.smoke, letterSpacing: 2, marginBottom: 7 }}>{label}</div>
                       <input
                         name={field} value={form[field]}
                         onChange={e => setForm(f => ({ ...f, [field]: e.target.value }))}
@@ -242,14 +242,14 @@ export default function Sponsors() {
                   ))}
                 </div>
                 <div>
-                  <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 8, color: '#555', letterSpacing: 2, marginBottom: 7 }}>WEBSITE (OPTIONAL)</div>
+                  <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 8, color: B.smoke, letterSpacing: 2, marginBottom: 7 }}>WEBSITE (OPTIONAL)</div>
                   <input name="website" value={form.website} onChange={e => setForm(f => ({ ...f, website: e.target.value }))} placeholder="https://yourbrand.com"
                     style={{ width: '100%', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6, color: B.white, padding: '11px 14px', fontFamily: "'Syne',sans-serif", fontSize: 14, outline: 'none', boxSizing: 'border-box' }}
                     onFocus={e => e.target.style.borderColor = `${B.amber}60`}
                     onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'} />
                 </div>
                 <div>
-                  <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 8, color: '#555', letterSpacing: 2, marginBottom: 7 }}>PARTNERSHIP LEVEL OF INTEREST *</div>
+                  <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 8, color: B.smoke, letterSpacing: 2, marginBottom: 7 }}>PARTNERSHIP LEVEL OF INTEREST *</div>
                   <select name="tier" value={form.tier} onChange={e => setForm(f => ({ ...f, tier: e.target.value }))}
                     style={{ width: '100%', background: '#111', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6, color: B.white, padding: '11px 14px', fontFamily: "'Syne',sans-serif", fontSize: 14, outline: 'none', cursor: 'pointer', boxSizing: 'border-box' }}>
                     {PARTNER_LEVELS.map(t => <option key={t.tier} value={t.tier}>{t.tier}</option>)}
@@ -260,7 +260,7 @@ export default function Sponsors() {
                   { field: 'ideas', label: 'ACTIVATION IDEAS (OPTIONAL)', ph: 'Any specific ideas you bring? Giveaways, exclusive drops, live demos, challenges...', rows: 3 },
                 ].map(({ field, label, ph, rows }) => (
                   <div key={field}>
-                    <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 8, color: '#555', letterSpacing: 2, marginBottom: 7 }}>{label}</div>
+                    <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 8, color: B.smoke, letterSpacing: 2, marginBottom: 7 }}>{label}</div>
                     <textarea name={field} value={form[field]} onChange={e => setForm(f => ({ ...f, [field]: e.target.value }))} placeholder={ph} rows={rows}
                       style={{ width: '100%', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6, color: B.white, padding: '11px 14px', fontFamily: "'Syne',sans-serif", fontSize: 14, outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}
                       onFocus={e => e.target.style.borderColor = `${B.amber}60`}
@@ -273,7 +273,7 @@ export default function Sponsors() {
                     style={{ background: sending ? B.gunmetal : B.amber, color: B.black, border: 'none', padding: '14px 44px', fontFamily: "'Bebas Neue',sans-serif", fontSize: 18, letterSpacing: 3, borderRadius: 6, cursor: sending ? 'not-allowed' : 'pointer', boxShadow: sending ? 'none' : `0 0 32px ${B.amber}40`, transition: 'all 0.2s' }}>
                     {sending ? 'SENDING...' : 'SUBMIT APPLICATION →'}
                   </button>
-                  <span style={{ fontFamily: "'Space Mono',monospace", fontSize: 9, color: '#333', letterSpacing: 1 }}>We reply within 3 business days</span>
+                  <span style={{ fontFamily: "'Space Mono',monospace", fontSize: 9, color: B.dim, letterSpacing: 1 }}>We reply within 3 business days</span>
                 </div>
               </form>
             </>

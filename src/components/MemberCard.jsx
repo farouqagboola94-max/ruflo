@@ -96,7 +96,7 @@ export default function MemberCard({ name, refCode, position, tier, tierIcon, re
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 22, position: 'relative', zIndex: 1 }}>
           <div>
             <div style={{ fontFamily: "'Bebas Neue'", fontSize: 11, color: B.amber, letterSpacing: 4 }}>SNEAKERS FEST '26</div>
-            <div style={{ fontFamily: "'Space Mono'", fontSize: 7, color: '#444', letterSpacing: 3, marginTop: 3 }}>THE SOLE EXHIBITION · LAGOS · DEC 12</div>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: 3, marginTop: 3 }}>THE SOLE EXHIBITION · LAGOS · DEC 12</div>
           </div>
           {/* refCode badge */}
           <div style={{
@@ -143,7 +143,7 @@ export default function MemberCard({ name, refCode, position, tier, tierIcon, re
               <span style={{ fontSize: 13 }}>{tierIcon || chainEntry.icon}</span>
               <span style={{ fontFamily: "'Space Mono'", fontSize: 8, color: tierColor, letterSpacing: 2 }}>{tier}</span>
             </div>
-            <div style={{ fontFamily: "'Space Mono'", fontSize: 7, color: '#3a3a3a', marginTop: 3, letterSpacing: 1 }}>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, marginTop: 3, letterSpacing: 1 }}>
               MOVEMENT RANK #{chainEntry.rank} OF 5
             </div>
           </div>
@@ -156,7 +156,7 @@ export default function MemberCard({ name, refCode, position, tier, tierIcon, re
             { label: 'REFERRALS', val: String(referralCount ?? 0),              color: B.neonCyan },
             { label: ticket ? 'TIER'  : 'STATUS',
               val:   ticket ? ticket.tier : 'PRE-SALE',
-              color: ticket ? B.neonLime : '#555' },
+              color: ticket ? B.neonLime : B.smoke },
           ].map(s => (
             <div key={s.label} style={{
               background: 'rgba(255,255,255,0.025)',
@@ -166,14 +166,14 @@ export default function MemberCard({ name, refCode, position, tier, tierIcon, re
               textAlign: 'center',
             }}>
               <div style={{ fontFamily: "'Orbitron'", fontSize: 14, fontWeight: 900, color: s.color, marginBottom: 4 }}>{s.val}</div>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 7, color: '#444', letterSpacing: 2 }}>{s.label}</div>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: 2 }}>{s.label}</div>
             </div>
           ))}
         </div>
 
         {/* ── CHAIN OF COMMAND ── */}
         <div style={{ marginBottom: 20, position: 'relative', zIndex: 1 }}>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 7, color: '#333', letterSpacing: 3, marginBottom: 9, textTransform: 'uppercase' }}>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: 3, marginBottom: 9, textTransform: 'uppercase' }}>
             Chain of Command
           </div>
           <div style={{ display: 'flex', gap: 4, alignItems: 'center', overflowX: 'auto', paddingBottom: 2 }}>
@@ -188,7 +188,7 @@ export default function MemberCard({ name, refCode, position, tier, tierIcon, re
                     border: `1px solid ${isMe ? c.color + '65' : isAbove ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.03)'}`,
                     fontFamily: "'Space Mono'",
                     fontSize: isMe ? 7 : 6,
-                    color: isMe ? c.color : isAbove ? '#3a3a3a' : '#222',
+                    color: isMe ? c.color : isAbove ? B.dim : '#222',
                     letterSpacing: 1,
                     fontWeight: isMe ? 700 : 400,
                     whiteSpace: 'nowrap',
@@ -212,7 +212,7 @@ export default function MemberCard({ name, refCode, position, tier, tierIcon, re
           background: copied ? `${tierColor}18` : 'rgba(255,255,255,0.03)',
           border: `1px solid ${copied ? tierColor + '55' : 'rgba(255,255,255,0.07)'}`,
           borderRadius: 8,
-          color: copied ? tierColor : '#555',
+          color: copied ? tierColor : B.smoke,
           fontFamily: "'Space Mono'",
           fontSize: '0.6rem',
           letterSpacing: 2,
@@ -262,10 +262,10 @@ export default function MemberCard({ name, refCode, position, tier, tierIcon, re
           display: 'flex', justifyContent: 'space-between', alignItems: 'center',
           position: 'relative', zIndex: 1,
         }}>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 7, color: '#2a2a2a', letterSpacing: 2 }}>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: 2 }}>
             VIC. ISLAND · LAGOS
           </div>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 7, color: '#2a2a2a', letterSpacing: 2 }}>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: 2 }}>
             {ticket ? `${ticket.tier} HOLDER` : 'TICKET PENDING'}
           </div>
         </div>

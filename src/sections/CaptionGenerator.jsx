@@ -100,7 +100,7 @@ Write the perfect Sneakers Fest '26 caption.`
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             SF26 CAPTION GENERATOR
           </h2>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#444', letterSpacing: '0.15em' }}>POWERED BY CLAUDE</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.15em' }}>POWERED BY CLAUDE</div>
         </div>
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.72rem', marginBottom: 40, letterSpacing: '0.04em' }}>
           Pick your platform + vibe · Claude writes the caption · Copy and post instantly
@@ -113,9 +113,9 @@ Write the perfect Sneakers Fest '26 caption.`
             { label: '03 · YOUR TICKET', items: TIERS, val: tier, set: (v) => { setTier(v); setCaption('') }, color: B.amber },
           ].map(({ label, items, val, set, color, icon }) => (
             <div key={label}>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#444', letterSpacing: '0.2em', marginBottom: 10 }}>{label}</div>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.2em', marginBottom: 10 }}>{label}</div>
               {items.map(item => (
-                <button key={item.label} className="cg-btn" onClick={() => set(item.value)} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 14px', marginBottom: 6, background: val === item.value ? `${color}14` : '#0d0d0d', border: `1px solid ${val === item.value ? color : '#1a1a1a'}`, color: val === item.value ? color : '#555', fontFamily: "'Space Mono'", fontSize: 10, letterSpacing: '0.08em', cursor: 'pointer', transition: 'all 0.15s' }}>
+                <button key={item.label} className="cg-btn" onClick={() => set(item.value)} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 14px', marginBottom: 6, background: val === item.value ? `${color}14` : '#0d0d0d', border: `1px solid ${val === item.value ? color : '#1a1a1a'}`, color: val === item.value ? color : B.smoke, fontFamily: "'Space Mono'", fontSize: 10, letterSpacing: '0.08em', cursor: 'pointer', transition: 'all 0.15s' }}>
                   {icon ? `${item.icon} ` : ''}{item.label}
                 </button>
               ))}
@@ -124,7 +124,7 @@ Write the perfect Sneakers Fest '26 caption.`
         </div>
 
         <div style={{ marginBottom: 16 }}>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 8 }}>OPTIONAL · SHOE OR FIT</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>OPTIONAL · SHOE OR FIT</div>
           <input
             value={shoe}
             onChange={e => { setShoe(e.target.value); setCaption('') }}
@@ -133,7 +133,7 @@ Write the perfect Sneakers Fest '26 caption.`
           />
         </div>
 
-        <button onClick={generate} disabled={!ready || loading} style={{ width: '100%', padding: '14px', background: ready && !loading ? B.amber : '#111', color: ready && !loading ? B.black : '#333', border: 'none', fontFamily: "'Space Mono'", fontSize: 11, letterSpacing: '0.2em', fontWeight: 700, cursor: ready && !loading ? 'pointer' : 'default', marginBottom: 24, transition: 'all 0.2s' }}>
+        <button onClick={generate} disabled={!ready || loading} style={{ width: '100%', padding: '14px', background: ready && !loading ? B.amber : '#111', color: ready && !loading ? B.black : B.dim, border: 'none', fontFamily: "'Space Mono'", fontSize: 11, letterSpacing: '0.2em', fontWeight: 700, cursor: ready && !loading ? 'pointer' : 'default', marginBottom: 24, transition: 'all 0.2s' }}>
           {loading ? '⟳ WRITING YOUR CAPTION...' : ready ? 'GENERATE CAPTION →' : 'SELECT PLATFORM · MOOD · TIER'}
         </button>
 
@@ -142,7 +142,7 @@ Write the perfect Sneakers Fest '26 caption.`
         {caption && (
           <div style={{ animation: 'cgSlide 0.3s ease' }}>
             <div style={{ background: '#0a0a0a', border: `1px solid ${B.amber}22`, padding: '20px 24px', marginBottom: 14 }}>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 12 }}>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 12 }}>
                 {PLATFORMS.find(p => p.value === platform)?.icon} {platform} · {mood?.toUpperCase()} · {tier?.toUpperCase()}
               </div>
               <div style={{ fontFamily: "'Space Mono'", fontSize: 11, color: B.white, lineHeight: 1.9, whiteSpace: 'pre-wrap' }}>{caption}</div>

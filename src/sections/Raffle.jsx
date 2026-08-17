@@ -38,7 +38,7 @@ function EntryModal({ raffle, onEnter, onClose }) {
   const inp  = k => e => setForm(f => ({ ...f, [k]:e.target.value }))
   const ok   = form.name.trim() && form.email.includes('@') && form.phone.trim() && form.city.trim()
   const is   = { width:'100%', padding:'11px 14px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:7, color:B.white, fontFamily:'Space Mono,monospace', fontSize:12, outline:'none', boxSizing:'border-box', transition:'border-color 0.2s' }
-  const lbl  = { fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', letterSpacing:2, display:'block', marginBottom:6 }
+  const lbl  = { fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, letterSpacing:2, display:'block', marginBottom:6 }
   const foc  = e => e.target.style.borderColor = `${raffle.color}60`
   const blur = e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'
 
@@ -91,18 +91,18 @@ function EntryModal({ raffle, onEnter, onClose }) {
               <div style={{ height:2, background:`linear-gradient(90deg,${raffle.color},${raffle.color}40)` }} />
               <div style={{ padding:'14px 18px', display:'flex', justifyContent:'space-between', alignItems:'center', gap:12 }}>
                 <div>
-                  <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:raffle.color, letterSpacing:2, marginBottom:4 }}>YOUR ENTRY</div>
+                  <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color:raffle.color, letterSpacing:2, marginBottom:4 }}>YOUR ENTRY</div>
                   <div style={{ fontFamily:'Orbitron,monospace', fontSize:26, color:raffle.color, fontWeight:900, letterSpacing:3 }}>#{String(submitted.entryNum).padStart(4,'0')}</div>
-                  <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', marginTop:5 }}>{submitted.name} · {submitted.city}</div>
+                  <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, marginTop:5 }}>{submitted.name} · {submitted.city}</div>
                 </div>
                 <div style={{ borderLeft:'1px dashed rgba(255,255,255,0.08)', paddingLeft:16, display:'flex', flexDirection:'column', alignItems:'center', gap:1 }}>
-                  <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:'#444' }}>DEC</div>
+                  <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color: B.dim }}>DEC</div>
                   <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:24, color:raffle.color, lineHeight:1 }}>12</div>
-                  <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:'#444' }}>2026</div>
+                  <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color: B.dim }}>2026</div>
                 </div>
               </div>
               <div style={{ borderTop:'1px dashed rgba(255,255,255,0.06)', padding:'7px 18px' }}>
-                <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:'#333', letterSpacing:1 }}>DRAW LIVE AT EVENT · WINNERS EMAILED</div>
+                <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color: B.dim, letterSpacing:1 }}>DRAW LIVE AT EVENT · WINNERS EMAILED</div>
               </div>
             </div>
             <button onClick={onClose} style={{ width:'100%', padding:'13px', background:raffle.color, border:'none', borderRadius:8, color:B.black, fontFamily:'Orbitron,monospace', fontSize:11, fontWeight:700, letterSpacing:2, cursor:'pointer', boxShadow:`0 0 24px ${raffle.color}40` }}>GOT IT →</button>
@@ -111,7 +111,7 @@ function EntryModal({ raffle, onEnter, onClose }) {
           <div style={{ padding:'28px 28px 32px' }}>
             <div style={{ fontFamily:'Orbitron,monospace', fontSize:9, color:raffle.color, letterSpacing:3, marginBottom:6 }}>ENTER RAFFLE</div>
             <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:24, color:B.white, letterSpacing:2, marginBottom:4 }}>{raffle.name}</div>
-            <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#555', marginBottom:16 }}>{raffle.edition} · {raffle.value}</div>
+            <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: B.smoke, marginBottom:16 }}>{raffle.edition} · {raffle.value}</div>
             <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
                 <div><label style={lbl}>FULL NAME</label><input value={form.name}  onChange={inp('name')}  placeholder="Your name" style={is} onFocus={foc} onBlur={blur} /></div>
@@ -121,10 +121,10 @@ function EntryModal({ raffle, onEnter, onClose }) {
               <div><label style={lbl}>PHONE NUMBER</label> <input value={form.phone} onChange={inp('phone')} type="tel"   placeholder="+234 …"        style={is} onFocus={foc} onBlur={blur} /></div>
             </div>
             {error && <div style={{ marginTop:14, fontFamily:'Space Mono,monospace', fontSize:9, color:B.neonMagenta }}>{error}</div>}
-            <button onClick={handleSubmit} disabled={busy} style={{ width:'100%', marginTop:18, padding:'14px', background:ok?`linear-gradient(90deg,${raffle.color},${raffle.color}BB)`:'#1a1a1a', border:'none', borderRadius:8, color:ok?B.black:'#444', fontFamily:'Bebas Neue,sans-serif', fontSize:20, letterSpacing:3, cursor:ok?'pointer':'default', transition:'all 0.2s', boxShadow:ok?`0 0 28px ${raffle.color}30`:'none' }}>
+            <button onClick={handleSubmit} disabled={busy} style={{ width:'100%', marginTop:18, padding:'14px', background:ok?`linear-gradient(90deg,${raffle.color},${raffle.color}BB)`:'#1a1a1a', border:'none', borderRadius:8, color:ok?B.black:B.dim, fontFamily:'Bebas Neue,sans-serif', fontSize:20, letterSpacing:3, cursor:ok?'pointer':'default', transition:'all 0.2s', boxShadow:ok?`0 0 28px ${raffle.color}30`:'none' }}>
               {busy ? 'ENTERING…' : 'ENTER THE DRAW →'}
             </button>
-            <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#333', textAlign:'center', marginTop:10, letterSpacing:1 }}>One entry per person · Draw live Dec 12</div>
+            <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.dim, textAlign:'center', marginTop:10, letterSpacing:1 }}>One entry per person · Draw live Dec 12</div>
           </div>
         )}
       </div>
@@ -138,18 +138,18 @@ function TicketStub({ raffle, entry }) {
       <div style={{ height:2, background:`linear-gradient(90deg,${raffle.color},${raffle.color}30)` }} />
       <div style={{ padding:'10px 14px', display:'flex', justifyContent:'space-between', alignItems:'center', gap:10 }}>
         <div>
-          <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:raffle.color, letterSpacing:2, marginBottom:3 }}>YOUR ENTRY</div>
+          <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color:raffle.color, letterSpacing:2, marginBottom:3 }}>YOUR ENTRY</div>
           <div style={{ fontFamily:'Orbitron,monospace', fontSize:20, color:raffle.color, fontWeight:900, letterSpacing:2 }}>#{String(entry.entryNum).padStart(4,'0')}</div>
-          <div style={{ fontFamily:'Space Mono,monospace', fontSize:7.5, color:'#444', marginTop:3 }}>{entry.name}</div>
+          <div style={{ fontFamily:'Space Mono,monospace', fontSize:7.5, color: B.dim, marginTop:3 }}>{entry.name}</div>
         </div>
         <div style={{ borderLeft:'1px dashed rgba(255,255,255,0.07)', paddingLeft:12, display:'flex', flexDirection:'column', alignItems:'center', gap:0 }}>
-          <div style={{ fontFamily:'Space Mono,monospace', fontSize:6, color:'#333' }}>DEC</div>
+          <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color: B.dim }}>DEC</div>
           <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:20, color:raffle.color, lineHeight:1 }}>12</div>
-          <div style={{ fontFamily:'Space Mono,monospace', fontSize:6, color:'#333' }}>2026</div>
+          <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color: B.dim }}>2026</div>
         </div>
       </div>
       <div style={{ borderTop:'1px dashed rgba(255,255,255,0.05)', padding:'5px 14px' }}>
-        <div style={{ fontFamily:'Space Mono,monospace', fontSize:6.5, color:'#2a2a2a', letterSpacing:1 }}>✓ CONFIRMED · DRAW LIVE AT EVENT</div>
+        <div style={{ fontFamily:'Space Mono,monospace', fontSize:6.5, color:B.dim, letterSpacing:1 }}>✓ CONFIRMED · DRAW LIVE AT EVENT</div>
       </div>
     </div>
   )
@@ -172,17 +172,17 @@ function RaffleCard({ raffle, entered, count = 0, onEnter }) {
       <div style={{ padding:'18px 20px 22px', flex:1, display:'flex', flexDirection:'column', gap:10 }}>
         <div>
           <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:20, color:B.white, letterSpacing:1, lineHeight:1.1 }}>{raffle.name}</div>
-          <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', marginTop:3 }}>{raffle.edition}</div>
+          <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, marginTop:3 }}>{raffle.edition}</div>
         </div>
 
         <div>
           <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:6 }}>
-            <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', letterSpacing:1 }}>{count} ENTERED</span>
+            <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, letterSpacing:1 }}>{count} ENTERED</span>
             <div style={{ display:'flex', alignItems:'center', gap:6 }}>
               {isFilling && (
-                <span style={{ background:`${raffle.color}20`, border:`1px solid ${raffle.color}50`, borderRadius:3, padding:'1px 6px', fontFamily:'Orbitron,monospace', fontSize:6, color:raffle.color, letterSpacing:1 }}>FILLING FAST</span>
+                <span style={{ background:`${raffle.color}20`, border:`1px solid ${raffle.color}50`, borderRadius:3, padding:'1px 6px', fontFamily:'Orbitron,monospace', fontSize: 9, color:raffle.color, letterSpacing:1 }}>FILLING FAST</span>
               )}
-              <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#444' }}>{raffle.maxEntries} MAX</span>
+              <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.dim }}>{raffle.maxEntries} MAX</span>
             </div>
           </div>
           <div style={{ height:3, background:'rgba(255,255,255,0.06)', borderRadius:2 }}>
@@ -194,7 +194,7 @@ function RaffleCard({ raffle, entered, count = 0, onEnter }) {
           <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
             <TicketStub raffle={raffle} entry={entered} />
             {/* No draw button. The winner is the organiser's to announce. */}
-            <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:'#444', letterSpacing:1, textAlign:'center' }}>
+            <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color: B.dim, letterSpacing:1, textAlign:'center' }}>
               WINNER DRAWN LIVE ON DEC 12
             </div>
           </div>
@@ -260,7 +260,7 @@ export default function Raffle() {
           <div className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(44px,8vw,84px)', color:B.white, lineHeight:0.88, marginBottom:12 }}>
             ENTER.<br /><span style={{ color:B.amber }}>WIN. COLLECT.</span>
           </div>
-          <p style={{ fontFamily:"'Syne', sans-serif", fontSize:14, color:'#777', maxWidth:440, margin:'0 auto 16px' }}>
+          <p style={{ fontFamily:"'Syne', sans-serif", fontSize:14, color:B.smoke, maxWidth:440, margin:'0 auto 16px' }}>
             Four exclusive draws. One entry per person. Winners announced live at Sneakers Fest '26.
           </p>
 
@@ -270,14 +270,14 @@ export default function Raffle() {
               <div key={l} style={{ display:'flex', alignItems:'center', gap:i<3?8:0 }}>
                 <div style={{ textAlign:'center' }}>
                   <div style={{ fontFamily:'Orbitron,monospace', fontWeight:900, fontSize:'clamp(20px,4vw,28px)', color:B.amber, lineHeight:1, minWidth:38, textShadow:`0 0 16px ${B.amber}50` }}>{String(n).padStart(2,'0')}</div>
-                  <div style={{ fontFamily:'Space Mono,monospace', fontSize:6.5, color:'#444', letterSpacing:2, marginTop:3 }}>{l}</div>
+                  <div style={{ fontFamily:'Space Mono,monospace', fontSize:6.5, color: B.dim, letterSpacing:2, marginTop:3 }}>{l}</div>
                 </div>
                 {i < 3 && <div style={{ fontFamily:'Orbitron,monospace', fontSize:18, color:`${B.amber}50`, marginBottom:16 }}>:</div>}
               </div>
             ))}
           </div>
 
-          <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#444', letterSpacing:2 }}>
+          <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: B.dim, letterSpacing:2 }}>
             UNTIL THE DRAW · {totalEntries.toLocaleString()} total entries so far
           </div>
 
@@ -297,23 +297,23 @@ export default function Raffle() {
 
         {Object.keys(entries).length > 0 && (
           <div className="card-3d" style={{ marginTop:28, padding:'20px 24px', background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:12 }}>
-            <div style={{ fontFamily:'Orbitron,monospace', fontSize:8, color:'#444', letterSpacing:3, marginBottom:12 }}>MY ENTRIES</div>
+            <div style={{ fontFamily:'Orbitron,monospace', fontSize:8, color: B.dim, letterSpacing:3, marginBottom:12 }}>MY ENTRIES</div>
             <div style={{ display:'flex', flexWrap:'wrap', gap:8, marginBottom:12 }}>
               {RAFFLES.filter(r => entries[r.id]).map(r => (
                 <div key={r.id} style={{ background:`${r.color}10`, border:`1px solid ${r.color}30`, borderRadius:8, padding:'8px 14px', display:'flex', alignItems:'center', gap:8 }}>
                   <div style={{ fontFamily:'Orbitron,monospace', fontSize:9, color:r.color }}>#{String(entries[r.id].entryNum).padStart(4,'0')}</div>
                   <div style={{ width:1, height:12, background:'rgba(255,255,255,0.08)' }} />
-                  <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:'#555' }}>{r.name.split(' ').slice(0,3).join(' ')}</div>
+                  <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color: B.smoke }}>{r.name.split(' ').slice(0,3).join(' ')}</div>
                 </div>
               ))}
             </div>
-            <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#333', letterSpacing:1 }}>
+            <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.dim, letterSpacing:1 }}>
               {Object.keys(entries).length} OF {RAFFLES.length} RAFFLES ENTERED · ONE ENTRY EACH
             </div>
           </div>
         )}
 
-        <div style={{ textAlign:'center', marginTop:24, fontFamily:'Space Mono,monospace', fontSize:8, color:'#333', letterSpacing:2 }}>
+        <div style={{ textAlign:'center', marginTop:24, fontFamily:'Space Mono,monospace', fontSize:8, color: B.dim, letterSpacing:2 }}>
           DRAWS CONDUCTED LIVE ON DEC 12 · WINNERS CONTACTED VIA EMAIL
         </div>
       </div>

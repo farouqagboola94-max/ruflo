@@ -260,7 +260,7 @@ export default function MysteryDrop() {
             <span style={{ fontFamily: "'Space Mono'", fontSize: '0.58rem', color: B.neonMagenta, letterSpacing: 1, fontWeight: 700 }}>
               77% ALREADY SPOKEN FOR
             </span>
-            <span style={{ fontFamily: "'Space Mono'", fontSize: '0.55rem', color: '#444', letterSpacing: 1 }}>
+            <span style={{ fontFamily: "'Space Mono'", fontSize: '0.55rem', color: B.dim, letterSpacing: 1 }}>
               ONLY {23}% AVAILABLE
             </span>
           </div>
@@ -285,11 +285,11 @@ export default function MysteryDrop() {
         {/* Progressive clue system */}
         <div style={{ textAlign: 'left', marginBottom: 32 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.65rem', color: '#444', letterSpacing: 3 }}>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.65rem', color: B.dim, letterSpacing: 3 }}>
               INTEL DROPS — {unlockedClues.length}/{CLUES.length} UNLOCKED
             </div>
             {nextClueDelay !== null && nextClueDelay > 0 && (
-              <div style={{ fontFamily: "'Space Mono'", fontSize: '0.55rem', color: '#333', letterSpacing: 2 }}>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: '0.55rem', color: B.dim, letterSpacing: 2 }}>
                 NEXT IN {Math.ceil(nextClueDelay / 1000)}s
               </div>
             )}
@@ -317,7 +317,7 @@ export default function MysteryDrop() {
                         {isNew && <span style={{ marginLeft: 8, fontFamily: "'Space Mono'", fontSize: '0.55rem', color: B.neonMagenta, letterSpacing: 2, animation: 'glowPulse 1s ease-in-out 3' }}>NEW</span>}
                       </div>
                     ) : (
-                      <div style={{ fontFamily: "'Space Mono'", fontSize: '0.7rem', color: '#333', letterSpacing: 2 }}>
+                      <div style={{ fontFamily: "'Space Mono'", fontSize: '0.7rem', color: B.dim, letterSpacing: 2 }}>
                         {'▓'.repeat(Math.floor(clue.text.length * 0.5))} [CLASSIFIED]
                       </div>
                     )}
@@ -327,7 +327,7 @@ export default function MysteryDrop() {
             })}
           </div>
           {unlockedClues.length < CLUES.length && (
-            <p style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', color: '#333', letterSpacing: 2, marginTop: 12, textAlign: 'center' }}>
+            <p style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', color: B.dim, letterSpacing: 2, marginTop: 12, textAlign: 'center' }}>
               STAY ON THIS PAGE — MORE INTEL UNLOCKS OVER TIME
             </p>
           )}
@@ -372,7 +372,7 @@ export default function MysteryDrop() {
           </div>
         </div>
 
-        <p style={{ color: '#555', fontFamily: "'Space Mono'", fontSize: '0.65rem', letterSpacing: '0.1em' }}>
+        <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.65rem', letterSpacing: '0.1em' }}>
           Every hour that passes is a pair you won't get. Be there or miss history.
         </p>
       </div>

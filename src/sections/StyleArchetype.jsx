@@ -93,14 +93,14 @@ export default function StyleArchetype() {
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             YOUR STYLE ARCHETYPE
           </h2>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#444', letterSpacing: '0.15em' }}>POWERED BY CLAUDE</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.15em' }}>POWERED BY CLAUDE</div>
         </div>
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.72rem', marginBottom: 36, letterSpacing: '0.04em' }}>
           List 2–5 shoes you own or love · Claude reads your taste · Reveals who you really are
         </p>
 
         <div style={{ marginBottom: 20 }}>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 12 }}>YOUR SHOES (2–5)</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 12 }}>YOUR SHOES (2–5)</div>
           {shoes.map((s, i) => (
             <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 8, alignItems: 'center' }}>
               <div style={{ fontFamily: "'Orbitron'", fontSize: 11, color: ACCENT[i % ACCENT.length], fontWeight: 900, width: 20, flexShrink: 0 }}>0{i + 1}</div>
@@ -111,18 +111,18 @@ export default function StyleArchetype() {
                 style={{ flex: 1, background: '#0d0d0d', border: `1px solid ${s.trim() ? ACCENT[i % ACCENT.length] + '44' : '#1a1a1a'}`, color: B.white, padding: '11px 14px', fontFamily: "'Space Mono'", fontSize: 10, outline: 'none', transition: 'border-color 0.15s' }}
               />
               {shoes.length > 2 && (
-                <button onClick={() => removeShoe(i)} style={{ background: 'none', border: '1px solid #1a1a1a', color: '#333', padding: '11px 12px', cursor: 'pointer', fontFamily: "'Space Mono'", fontSize: 10 }}>✕</button>
+                <button onClick={() => removeShoe(i)} style={{ background: 'none', border: '1px solid #1a1a1a', color: B.dim, padding: '11px 12px', cursor: 'pointer', fontFamily: "'Space Mono'", fontSize: 10 }}>✕</button>
               )}
             </div>
           ))}
           {shoes.length < 5 && (
-            <button onClick={addShoe} style={{ background: 'transparent', border: '1px dashed #2a2a2a', color: '#333', fontFamily: "'Space Mono'", fontSize: 8, letterSpacing: '0.15em', padding: '9px 16px', cursor: 'pointer', marginTop: 4, transition: 'border-color 0.15s' }}>
+            <button onClick={addShoe} style={{ background: 'transparent', border: '1px dashed #2a2a2a', color: B.dim, fontFamily: "'Space Mono'", fontSize: 8, letterSpacing: '0.15em', padding: '9px 16px', cursor: 'pointer', marginTop: 4, transition: 'border-color 0.15s' }}>
               + ADD ANOTHER SHOE
             </button>
           )}
         </div>
 
-        <button onClick={discover} disabled={filled.length < 2 || loading} style={{ width: '100%', padding: '14px', background: filled.length >= 2 && !loading ? B.amber : '#111', color: filled.length >= 2 && !loading ? B.black : '#333', border: 'none', fontFamily: "'Space Mono'", fontSize: 11, letterSpacing: '0.2em', fontWeight: 700, cursor: filled.length >= 2 && !loading ? 'pointer' : 'default', marginBottom: 24, transition: 'all 0.2s' }}>
+        <button onClick={discover} disabled={filled.length < 2 || loading} style={{ width: '100%', padding: '14px', background: filled.length >= 2 && !loading ? B.amber : '#111', color: filled.length >= 2 && !loading ? B.black : B.dim, border: 'none', fontFamily: "'Space Mono'", fontSize: 11, letterSpacing: '0.2em', fontWeight: 700, cursor: filled.length >= 2 && !loading ? 'pointer' : 'default', marginBottom: 24, transition: 'all 0.2s' }}>
           {loading ? '⟳ READING YOUR DNA...' : filled.length < 2 ? 'ADD AT LEAST 2 SHOES' : 'DISCOVER MY ARCHETYPE →'}
         </button>
 
@@ -131,7 +131,7 @@ export default function StyleArchetype() {
         {result && (
           <div style={{ animation: 'saSlide 0.4s ease' }}>
             <div style={{ background: '#0a0a0a', border: `2px solid ${B.amber}33`, padding: '28px 28px', marginBottom: 20, textAlign: 'center' }}>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.25em', marginBottom: 12 }}>YOUR ARCHETYPE</div>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.25em', marginBottom: 12 }}>YOUR ARCHETYPE</div>
               <div style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(1.6rem,4vw,2.8rem)', color: B.amber, letterSpacing: '0.05em', marginBottom: 10 }}>{result.archetype}</div>
               <div style={{ fontFamily: "'Space Mono'", fontSize: 11, color: B.white, lineHeight: 1.7, maxWidth: 480, margin: '0 auto' }}>{result.tagline}</div>
             </div>
@@ -162,14 +162,14 @@ export default function StyleArchetype() {
             </div>
 
             <div style={{ background: '#0a0a0a', border: `2px solid ${B.amber}33`, padding: '16px 20px', marginBottom: 14 }}>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 8 }}>YOUR IDENTITY STATEMENT</div>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>YOUR IDENTITY STATEMENT</div>
               <div style={{ fontFamily: "'Bebas Neue'", fontSize: 18, color: B.white, letterSpacing: '0.04em', marginBottom: 14, lineHeight: 1.4 }}>{result.share_line}</div>
               <button onClick={copy} style={{ background: copied ? '#052e16' : B.amber, border: 'none', color: copied ? '#22c55e' : B.black, fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.15em', fontWeight: 700, padding: '9px 20px', cursor: 'pointer', transition: 'all 0.2s' }}>
                 {copied ? '✓ COPIED' : 'COPY → POST IT'}
               </button>
             </div>
 
-            <button onClick={() => { setResult(null); setShoes(['', '']) }} style={{ width: '100%', background: 'transparent', border: '1px solid #1a1a1a', color: '#333', fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.15em', padding: '10px', cursor: 'pointer' }}>
+            <button onClick={() => { setResult(null); setShoes(['', '']) }} style={{ width: '100%', background: 'transparent', border: '1px solid #1a1a1a', color: B.dim, fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.15em', padding: '10px', cursor: 'pointer' }}>
               RESET — TRY DIFFERENT SHOES
             </button>
           </div>

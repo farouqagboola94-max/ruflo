@@ -89,23 +89,23 @@ export default function StoryGenerator() {
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             STORY GENERATOR
           </h2>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#444', letterSpacing: '0.15em' }}>POWERED BY CLAUDE</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.15em' }}>POWERED BY CLAUDE</div>
         </div>
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.72rem', marginBottom: 36, letterSpacing: '0.04em' }}>
           A shoe + a memory · Claude writes the cinematic Lagos story · Ready to post
         </p>
 
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16, alignItems: 'center' }}>
-          <span style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.1em' }}>EXAMPLES →</span>
+          <span style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.1em' }}>EXAMPLES →</span>
           {EXAMPLES.map((ex, i) => (
-            <button key={i} onClick={() => loadExample(ex)} style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', color: '#444', fontFamily: "'Space Mono'", fontSize: 8, padding: '5px 12px', cursor: 'pointer' }}>
+            <button key={i} onClick={() => loadExample(ex)} style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', color: B.dim, fontFamily: "'Space Mono'", fontSize: 8, padding: '5px 12px', cursor: 'pointer' }}>
               EX {i + 1}
             </button>
           ))}
         </div>
 
         <div style={{ marginBottom: 14 }}>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 8 }}>THE SHOE</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>THE SHOE</div>
           <input
             value={shoe}
             onChange={e => { setShoe(e.target.value); setStory('') }}
@@ -115,7 +115,7 @@ export default function StoryGenerator() {
         </div>
 
         <div style={{ marginBottom: 18 }}>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 8 }}>THE MEMORY</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>THE MEMORY</div>
           <textarea
             value={memory}
             onChange={e => { setMemory(e.target.value); setStory('') }}
@@ -126,17 +126,17 @@ export default function StoryGenerator() {
         </div>
 
         <div style={{ marginBottom: 20 }}>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 10 }}>VIBE (OPTIONAL)</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 10 }}>VIBE (OPTIONAL)</div>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             {VIBES.map(v => (
-              <button key={v.label} onClick={() => { setVibe(vibe === v.value ? null : v.value); setStory('') }} style={{ padding: '7px 14px', background: vibe === v.value ? `${B.neonCyan}14` : '#0d0d0d', border: `1px solid ${vibe === v.value ? B.neonCyan : '#1a1a1a'}`, color: vibe === v.value ? B.neonCyan : '#444', fontFamily: "'Space Mono'", fontSize: 8, letterSpacing: '0.1em', cursor: 'pointer', transition: 'all 0.15s' }}>
+              <button key={v.label} onClick={() => { setVibe(vibe === v.value ? null : v.value); setStory('') }} style={{ padding: '7px 14px', background: vibe === v.value ? `${B.neonCyan}14` : '#0d0d0d', border: `1px solid ${vibe === v.value ? B.neonCyan : '#1a1a1a'}`, color: vibe === v.value ? B.neonCyan : B.dim, fontFamily: "'Space Mono'", fontSize: 8, letterSpacing: '0.1em', cursor: 'pointer', transition: 'all 0.15s' }}>
                 {v.label}
               </button>
             ))}
           </div>
         </div>
 
-        <button onClick={generate} disabled={!ready || loading} style={{ width: '100%', padding: '14px', background: ready && !loading ? B.amber : '#111', color: ready && !loading ? B.black : '#333', border: 'none', fontFamily: "'Space Mono'", fontSize: 11, letterSpacing: '0.2em', fontWeight: 700, cursor: ready && !loading ? 'pointer' : 'default', marginBottom: 24, transition: 'all 0.2s' }}>
+        <button onClick={generate} disabled={!ready || loading} style={{ width: '100%', padding: '14px', background: ready && !loading ? B.amber : '#111', color: ready && !loading ? B.black : B.dim, border: 'none', fontFamily: "'Space Mono'", fontSize: 11, letterSpacing: '0.2em', fontWeight: 700, cursor: ready && !loading ? 'pointer' : 'default', marginBottom: 24, transition: 'all 0.2s' }}>
           {loading ? '⟳ WRITING YOUR STORY...' : 'WRITE MY STORY →'}
         </button>
 
@@ -145,7 +145,7 @@ export default function StoryGenerator() {
         {story && (
           <div style={{ animation: 'sgSlide 0.35s ease' }}>
             <div style={{ background: '#0a0a0a', border: `1px solid ${B.amber}22`, padding: '24px 28px', marginBottom: 14 }}>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 18 }}>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 18 }}>
                 {shoe.toUpperCase()} · YOUR STORY
               </div>
               <div style={{ fontFamily: "'Space Mono'", fontSize: 11, color: B.white, lineHeight: 2.1, whiteSpace: 'pre-wrap' }}>{story}</div>

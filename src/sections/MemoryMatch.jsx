@@ -228,7 +228,7 @@ export default function MemoryMatch() {
                     cursor: phase === 'playing' ? 'default' : 'pointer',
                     background: mode === m ? B.amber : 'transparent',
                     color: mode === m ? B.black : B.smoke,
-                    border: `1px solid ${mode === m ? B.amber : '#444'}`,
+                    border: `1px solid ${mode === m ? B.amber : B.dim}`,
                   }}>
                   {m === 'easy' ? '8 PAIRS' : '12 PAIRS ⚡'}
                 </button>
@@ -244,7 +244,7 @@ export default function MemoryMatch() {
             <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.72rem', marginBottom: 6 }}>
               {PAIRS} pairs · fewer moves = more XP
             </p>
-            <p style={{ color: '#555', fontFamily: "'Space Mono'", fontSize: '0.6rem', marginBottom: 24 }}>
+            <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.6rem', marginBottom: 24 }}>
               {mode === 'expert'
                 ? 'EXPERT MODE ACTIVE · 1.8× XP MULTIPLIER'
                 : 'GET PERFECT or PLAY 2× to unlock EXPERT MODE'}
@@ -272,7 +272,7 @@ export default function MemoryMatch() {
             <div style={{ fontFamily: "'Space Mono'", fontSize: '0.7rem', color: B.smoke, marginBottom: 4 }}>
               You played {MAX_DAILY} games today. The greats know when to rest.
             </div>
-            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.62rem', color: '#444', marginTop: 14 }}>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.62rem', color: B.dim, marginTop: 14 }}>
               COME BACK TOMORROW FOR FRESH GAMES
             </div>
           </div>
@@ -285,7 +285,7 @@ export default function MemoryMatch() {
               <span>
                 MOVES: <strong style={{ color: moves <= PERFECT_MOVES ? B.neonCyan : B.white }}>{moves}</strong>
                 {moves > 0 && (
-                  <span style={{ color: moves <= PERFECT_MOVES ? B.neonCyan : '#666', marginLeft: 6, fontSize: '0.56rem' }}>
+                  <span style={{ color: moves <= PERFECT_MOVES ? B.neonCyan : B.smoke, marginLeft: 6, fontSize: '0.56rem' }}>
                     {moves <= PERFECT_MOVES ? '✓ PERFECT PACE' : `+${moves - PERFECT_MOVES} over par`}
                   </span>
                 )}
@@ -378,7 +378,7 @@ export default function MemoryMatch() {
               </button>
             )}
             {gamesLeft <= 0 && (
-              <div style={{ fontFamily: "'Space Mono'", fontSize: '0.65rem', color: '#555' }}>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: '0.65rem', color: B.smoke }}>
                 Daily limit reached — come back tomorrow
               </div>
             )}

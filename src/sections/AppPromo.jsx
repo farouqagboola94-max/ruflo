@@ -240,7 +240,7 @@ export default function AppPromo() {
                     {[['137', 'DAYS'], ['12', 'HRS'], ['00', 'MIN']].map(([n, l]) => (
                       <div key={l} style={{ flex: 1, textAlign: 'center' }}>
                         <p style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 22, color: B.amber, lineHeight: 1 }}>{n}</p>
-                        <p style={{ fontSize: 7, color: B.smoke, letterSpacing: 1 }}>{l}</p>
+                        <p style={{ fontSize: 9, color: B.smoke, letterSpacing: 1 }}>{l}</p>
                       </div>
                     ))}
                   </div>

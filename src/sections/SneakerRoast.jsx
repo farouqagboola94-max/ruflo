@@ -82,23 +82,23 @@ export default function SneakerRoast() {
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             SNEAKER ROAST
           </h2>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#444', letterSpacing: '0.15em' }}>POWERED BY CLAUDE</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.15em' }}>POWERED BY CLAUDE</div>
         </div>
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.72rem', marginBottom: 36, letterSpacing: '0.04em' }}>
           Describe your rotation · Claude roasts you like a Lagos elder · Screenshot and post
         </p>
 
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16, alignItems: 'center' }}>
-          <span style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.1em' }}>EXAMPLES →</span>
+          <span style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.1em' }}>EXAMPLES →</span>
           {EXAMPLES.map((ex, i) => (
-            <button key={i} onClick={() => { setRotation(ex); setRoast('') }} style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', color: '#444', fontFamily: "'Space Mono'", fontSize: 8, padding: '5px 12px', cursor: 'pointer' }}>
+            <button key={i} onClick={() => { setRotation(ex); setRoast('') }} style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', color: B.dim, fontFamily: "'Space Mono'", fontSize: 8, padding: '5px 12px', cursor: 'pointer' }}>
               EX {i + 1}
             </button>
           ))}
         </div>
 
         <div style={{ marginBottom: 18 }}>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 8 }}>YOUR ROTATION</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>YOUR ROTATION</div>
           <textarea
             value={rotation}
             onChange={e => { setRotation(e.target.value); setRoast('') }}
@@ -109,17 +109,17 @@ export default function SneakerRoast() {
         </div>
 
         <div style={{ marginBottom: 24 }}>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 10 }}>INTENSITY</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 10 }}>INTENSITY</div>
           <div style={{ display: 'flex', gap: 8 }}>
             {INTENSITIES.map(v => (
-              <button key={v.label} onClick={() => { setIntensity(vibe => vibe === v.value ? null : v.value); setRoast('') }} style={{ flex: 1, padding: '9px 8px', background: intensity === v.value ? `${B.amber}14` : '#0d0d0d', border: `1px solid ${intensity === v.value ? B.amber : '#1a1a1a'}`, color: intensity === v.value ? B.amber : '#444', fontFamily: "'Space Mono'", fontSize: 8, letterSpacing: '0.08em', cursor: 'pointer', transition: 'all 0.15s' }}>
+              <button key={v.label} onClick={() => { setIntensity(vibe => vibe === v.value ? null : v.value); setRoast('') }} style={{ flex: 1, padding: '9px 8px', background: intensity === v.value ? `${B.amber}14` : '#0d0d0d', border: `1px solid ${intensity === v.value ? B.amber : '#1a1a1a'}`, color: intensity === v.value ? B.amber : B.dim, fontFamily: "'Space Mono'", fontSize: 8, letterSpacing: '0.08em', cursor: 'pointer', transition: 'all 0.15s' }}>
                 {v.label}
               </button>
             ))}
           </div>
         </div>
 
-        <button onClick={generate} disabled={!rotation.trim() || loading} style={{ width: '100%', padding: '14px', background: rotation.trim() && !loading ? '#ef4444' : '#111', color: rotation.trim() && !loading ? B.white : '#333', border: 'none', fontFamily: "'Space Mono'", fontSize: 11, letterSpacing: '0.2em', fontWeight: 700, cursor: rotation.trim() && !loading ? 'pointer' : 'default', marginBottom: 24, transition: 'all 0.2s' }}>
+        <button onClick={generate} disabled={!rotation.trim() || loading} style={{ width: '100%', padding: '14px', background: rotation.trim() && !loading ? '#ef4444' : '#111', color: rotation.trim() && !loading ? B.white : B.dim, border: 'none', fontFamily: "'Space Mono'", fontSize: 11, letterSpacing: '0.2em', fontWeight: 700, cursor: rotation.trim() && !loading ? 'pointer' : 'default', marginBottom: 24, transition: 'all 0.2s' }}>
           {loading ? '⟳ LOADING THE BARS...' : 'ROAST ME →'}
         </button>
 

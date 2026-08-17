@@ -94,7 +94,7 @@ export default function Navbar() {
       }}>
         <a href="#" onClick={() => menuOpen && close()} style={{ textDecoration: 'none', flex: 1 }}>
           <div style={{ fontFamily: "'Orbitron', monospace", fontWeight: 900, fontSize: 14, color: B.amber, textShadow: `0 0 10px ${B.amber}40`, letterSpacing: '0.08em' }}>SNEAKERS FEST</div>
-          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 6, color: B.smoke, letterSpacing: '0.3em' }}>LAGOS '26</div>
+          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing: '0.3em' }}>LAGOS '26</div>
         </a>
 
         {!isMobile && (
@@ -114,7 +114,7 @@ export default function Navbar() {
               <SearchIcon color={B.smoke} size={12} />
               <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 7.5, color: B.smoke, letterSpacing: '0.16em' }}>SEARCH</span>
               <kbd style={{
-                fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, letterSpacing: '0.05em',
+                fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing: '0.05em',
                 border: `1px solid ${B.gunmetal}`, borderRadius: 2, padding: '2px 4px', background: B.black,
               }}>⌘K</kbd>
             </button>
@@ -155,10 +155,10 @@ export default function Navbar() {
             >GET TICKETS</a>
             {user ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, maxWidth: 72, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{displayName}</span>
+                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, maxWidth: 72, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{displayName}</span>
                 <button
                   onClick={logout}
-                  style={{ background: 'transparent', border: `1px solid ${B.gunmetal}`, borderRadius: 3, padding: '5px 10px', cursor: 'pointer', fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, letterSpacing: '0.12em', transition: 'border-color 0.2s, color 0.2s' }}
+                  style={{ background: 'transparent', border: `1px solid ${B.gunmetal}`, borderRadius: 3, padding: '5px 10px', cursor: 'pointer', fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing: '0.12em', transition: 'border-color 0.2s, color 0.2s' }}
                   onMouseEnter={e => { e.currentTarget.style.borderColor = '#FF2D7B'; e.currentTarget.style.color = '#FF2D7B' }}
                   onMouseLeave={e => { e.currentTarget.style.borderColor = B.gunmetal; e.currentTarget.style.color = B.smoke }}
                 >EXIT</button>
@@ -226,7 +226,7 @@ export default function Navbar() {
           >
             <SearchIcon color={B.amber} size={16} />
             <span style={{ flex: 1, textAlign: 'left', fontFamily: "'Syne', sans-serif", fontSize: 15, color: B.white }}>Search everything</span>
-            <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.amber, letterSpacing: '0.14em' }}>ALL SECTIONS</span>
+            <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.amber, letterSpacing: '0.14em' }}>ALL SECTIONS</span>
           </button>
 
           <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: '#252525', letterSpacing: '0.3em', marginBottom: 22, position: 'relative' }}>
@@ -311,7 +311,7 @@ export default function Navbar() {
                 }}
               >SIGN IN / REGISTER</button>
             )}
-            <div style={{ marginTop: 4, fontFamily: "'Space Mono', monospace", fontSize: 7, color: '#1e1e1e', letterSpacing: '0.22em', textAlign: 'center' }}>
+            <div style={{ marginTop: 4, fontFamily: "'Space Mono', monospace", fontSize: 9, color: '#1e1e1e', letterSpacing: '0.22em', textAlign: 'center' }}>
               DEC 12, 2026 · MURI OKUNOLA PARK · LAGOS
             </div>
           </div>

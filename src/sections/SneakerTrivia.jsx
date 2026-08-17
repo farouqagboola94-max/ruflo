@@ -286,7 +286,7 @@ export default function SneakerTrivia() {
             <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 24 }}>
               <button onClick={() => startGame(false)} disabled={freePlaysToday >= MAX_FREE_PLAYS} style={{
                 background: freePlaysToday >= MAX_FREE_PLAYS ? B.gunmetal : B.amber,
-                color: freePlaysToday >= MAX_FREE_PLAYS ? '#555' : B.black,
+                color: freePlaysToday >= MAX_FREE_PLAYS ? B.smoke : B.black,
                 border: 'none', padding: '14px 40px',
                 fontFamily: "'Bebas Neue'", fontSize: '1.4rem', letterSpacing: '0.1em',
                 cursor: freePlaysToday >= MAX_FREE_PLAYS ? 'not-allowed' : 'pointer',
@@ -299,8 +299,8 @@ export default function SneakerTrivia() {
               </button>
               <button onClick={() => startGame(true)} disabled={dailyDone} style={{
                 background: dailyDone ? 'transparent' : `${B.neonCyan}15`,
-                color: dailyDone ? '#444' : B.neonCyan,
-                border: `1px solid ${dailyDone ? '#333' : B.neonCyan}55`,
+                color: dailyDone ? B.dim : B.neonCyan,
+                border: `1px solid ${dailyDone ? B.dim : B.neonCyan}55`,
                 padding: '14px 40px', fontFamily: "'Bebas Neue'", fontSize: '1.4rem',
                 letterSpacing: '0.1em', cursor: dailyDone ? 'not-allowed' : 'pointer', borderRadius: 4,
               }}>
@@ -332,7 +332,7 @@ export default function SneakerTrivia() {
               )}
               <div style={{ textAlign: 'right' }}>
                 <div style={{ fontFamily: "'Orbitron'", fontSize: 16, color: B.neonCyan, fontWeight: 900 }}>{points}</div>
-                <div style={{ fontFamily: "'Space Mono'", fontSize: 7, color: '#555', letterSpacing: 1 }}>{current + 1}/{qLen}</div>
+                <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.smoke, letterSpacing: 1 }}>{current + 1}/{qLen}</div>
               </div>
             </div>
 
@@ -428,11 +428,11 @@ export default function SneakerTrivia() {
             <div className="card-3d" style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${rank.color}30`, borderRadius: 12, padding: '20px 24px', marginBottom: 20, textAlign: 'left' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: maxStreak > 0 ? 14 : 0 }}>
                 <div>
-                  <div style={{ fontFamily: "'Space Mono'", fontSize: 7, color: '#444', letterSpacing: 2, marginBottom: 4 }}>TOTAL POINTS</div>
+                  <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: 2, marginBottom: 4 }}>TOTAL POINTS</div>
                   <div style={{ fontFamily: "'Orbitron'", fontSize: 28, color: rank.color, fontWeight: 900, lineHeight: 1 }}>{points}</div>
                 </div>
                 <div>
-                  <div style={{ fontFamily: "'Space Mono'", fontSize: 7, color: '#444', letterSpacing: 2, marginBottom: 4 }}>CORRECT</div>
+                  <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: 2, marginBottom: 4 }}>CORRECT</div>
                   <div style={{ fontFamily: "'Orbitron'", fontSize: 28, color: B.white, fontWeight: 900, lineHeight: 1 }}>{score}/{qLen}</div>
                 </div>
               </div>
@@ -441,7 +441,7 @@ export default function SneakerTrivia() {
                   <span style={{ fontSize: 18 }}>🔥</span>
                   <div>
                     <div style={{ fontFamily: "'Orbitron'", fontSize: 10, color: B.amber, fontWeight: 700 }}>BEST STREAK: {maxStreak}x</div>
-                    <div style={{ fontFamily: "'Space Mono'", fontSize: 7, color: '#555' }}>
+                    <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.smoke }}>
                       {maxStreak >= 5 ? '3x BONUS UNLOCKED' : maxStreak >= 3 ? '2x BONUS UNLOCKED' : 'STREAK 3+ = BONUS POINTS'}
                     </div>
                   </div>

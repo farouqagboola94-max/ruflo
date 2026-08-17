@@ -183,7 +183,7 @@ function Gate({ secret, onLoseAuth }) {
         }}>{busy ? 'CHECKING...' : 'CHECK IN'}</button>
       </form>
 
-      <div style={{ ...mono, fontSize: 7, color: B.smoke, letterSpacing: '0.24em', marginBottom: 10 }}>RECENT</div>
+      <div style={{ ...mono, fontSize: 9, color: B.smoke, letterSpacing: '0.24em', marginBottom: 10 }}>RECENT</div>
       {log.slice(0, 25).map((e, i) => (
         <div key={`${e.ticketId}-${e.at}-${i}`} style={{
           display: 'flex', justifyContent: 'space-between', gap: 10,
@@ -252,7 +252,7 @@ function Moderation({ secret, onLoseAuth }) {
       {pending.map(c => (
         <div key={c.submissionId} style={{ background: B.charcoal, border: `1px solid ${B.gunmetal}`, borderRadius: 8, padding: '16px 15px', marginBottom: 12 }}>
           <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: B.white, lineHeight: 1.6 }}>{c.confession}</div>
-          <div style={{ ...mono, fontSize: 7, color: B.neonCyan, letterSpacing: '0.12em', margin: '10px 0 14px' }}>
+          <div style={{ ...mono, fontSize: 9, color: B.neonCyan, letterSpacing: '0.12em', margin: '10px 0 14px' }}>
             {String(c.displayName || '').toUpperCase()} - {String(c.city || '').toUpperCase()} - {c.submissionId}
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
@@ -299,7 +299,7 @@ export default function DoorApp() {
             type="password" value={entry} onChange={e => setEntry(e.target.value)} placeholder="Door code"
             style={{ width: '100%', boxSizing: 'border-box', padding: '14px', background: B.charcoal, border: `1px solid ${B.gunmetal}`, borderRadius: 8, color: B.white, outline: 'none', ...mono, fontSize: 14 }} />
           <button type="submit" style={{ width: '100%', marginTop: 10, padding: '14px', border: 'none', borderRadius: 8, background: B.amber, color: B.black, cursor: 'pointer', ...mono, fontSize: 11, fontWeight: 700, letterSpacing: '0.2em' }}>UNLOCK</button>
-          <div style={{ ...mono, fontSize: 7, color: B.smoke, letterSpacing: '0.14em', marginTop: 16, lineHeight: 1.8 }}>
+          <div style={{ ...mono, fontSize: 9, color: B.smoke, letterSpacing: '0.14em', marginTop: 16, lineHeight: 1.8 }}>
             HELD FOR THIS TAB ONLY. CLOSING IT SIGNS YOU OUT.
           </div>
         </form>

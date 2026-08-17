@@ -164,7 +164,7 @@ function PlatformCard({ p }) {
               <div style={{ fontFamily: "'Orbitron', monospace", fontWeight: 900, fontSize: 11, color: p.color, letterSpacing: "0.12em", marginBottom: 3 }}>
                 {p.name}
               </div>
-              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, letterSpacing: "0.15em" }}>
+              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing: "0.15em" }}>
                 {p.handle}
               </div>
             </div>
@@ -185,7 +185,7 @@ function PlatformCard({ p }) {
                   boxShadow: p.pulse ? `0 0 6px ${B.neonLime}` : "none",
                   animation: p.pulse ? "pulse 1.5s infinite" : "none",
                 }} />
-                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 6, color: B.smoke, letterSpacing: "0.1em" }}>
+                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing: "0.1em" }}>
                   {p.activity}
                 </span>
               </div>
@@ -206,7 +206,7 @@ function PlatformCard({ p }) {
                 background: p.color + "12",
                 border: `1px solid ${p.color}30`,
                 borderRadius: 2,
-                fontFamily: "'Space Mono', monospace", fontSize: 6, color: p.color, letterSpacing: "0.12em",
+                fontFamily: "'Space Mono', monospace", fontSize: 9, color: p.color, letterSpacing: "0.12em",
               }}>{tag}</span>
             ))}
           </div>
@@ -291,7 +291,7 @@ export default function Community() {
                   textShadow: `0 0 15px ${s.pulse ? B.neonLime : B.amber}40`,
                 }}>{s.value}</div>
               </div>
-              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, letterSpacing: "0.15em", marginTop: 4 }}>
+              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing: "0.15em", marginTop: 4 }}>
                 {s.label}
               </div>
             </div>
@@ -306,9 +306,9 @@ export default function Community() {
         <div style={{ marginBottom:16, padding:'14px 20px', background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:10, display:'flex', alignItems:'center', gap:16, flexWrap:'wrap' }}>
           <div style={{ display:'flex', alignItems:'center', gap:8, flexShrink:0 }}>
             <div style={{ width:36, height:36, borderRadius:'50%', background:`${B.amber}15`, border:`2px solid ${B.amber}60`, display:'flex', alignItems:'center', justifyContent:'center' }}>
-              <span style={{ fontFamily:'Orbitron,monospace', fontSize:7, fontWeight:900, color:B.amber }}>SC</span>
+              <span style={{ fontFamily:'Orbitron,monospace', fontSize: 9, fontWeight:900, color:B.amber }}>SC</span>
             </div>
-            <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:'#444', letterSpacing:1, lineHeight:1.6 }}>SNAPCHAT<br/>HIGHLIGHTS</div>
+            <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color: B.dim, letterSpacing:1, lineHeight:1.6 }}>SNAPCHAT<br/>HIGHLIGHTS</div>
           </div>
           <div style={{ display:'flex', gap:12, overflowX:'auto', paddingBottom:2 }}>
             {SNAP_STORIES.map((s,i) => (
@@ -316,7 +316,7 @@ export default function Community() {
                 <div style={{ width:46, height:46, borderRadius:'50%', background:`${s.color}12`, border:`2px solid ${s.color}80`, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 0 10px ${s.color}18` }}>
                   <div style={{ width:34, height:34, borderRadius:'50%', background:`${s.color}10` }} />
                 </div>
-                <div style={{ fontFamily:'Space Mono,monospace', fontSize:6, color:'#444', letterSpacing:1, textAlign:'center', maxWidth:52 }}>{s.label}</div>
+                <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color: B.dim, letterSpacing:1, textAlign:'center', maxWidth:52 }}>{s.label}</div>
               </a>
             ))}
           </div>
@@ -337,12 +337,12 @@ export default function Community() {
                 <div key={i} style={{ display:'flex', alignItems:'center', gap:12, padding:'8px 12px', background: i === 0 ? `${s.color}10` : 'transparent', border:`1px solid ${i === 0 ? s.color+'40' : 'rgba(255,255,255,0.04)'}`, borderRadius:6 }}>
                   <div style={{ fontFamily:"'Orbitron',monospace", fontSize:9, color:s.color, fontWeight:700, minWidth:44 }}>{s.date}</div>
                   <div style={{ width:1, height:12, background:'rgba(255,255,255,0.08)', flexShrink:0 }} />
-                  <div style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color: i === 0 ? B.white : '#555', letterSpacing:1 }}>{s.theme}</div>
-                  {i === 0 && <div style={{ marginLeft:'auto', fontFamily:"'Space Mono',monospace", fontSize:6, color:s.color, letterSpacing:2 }}>NEXT UP</div>}
+                  <div style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color: i === 0 ? B.white : B.smoke, letterSpacing:1 }}>{s.theme}</div>
+                  {i === 0 && <div style={{ marginLeft:'auto', fontFamily:"'Space Mono',monospace", fontSize: 9, color:s.color, letterSpacing:2 }}>NEXT UP</div>}
                 </div>
               ))}
             </div>
-            <div style={{ fontFamily:"'Space Mono',monospace", fontSize:7, color:'#333', letterSpacing:1, marginTop:12 }}>EVERY FRIDAY · ALL PLATFORMS · YEAR-ROUND</div>
+            <div style={{ fontFamily:"'Space Mono',monospace", fontSize: 9, color: B.dim, letterSpacing:1, marginTop:12 }}>EVERY FRIDAY · ALL PLATFORMS · YEAR-ROUND</div>
           </div>
 
           {/* WhatsApp CTA */}
@@ -354,7 +354,7 @@ export default function Community() {
               <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:18, color:B.white, letterSpacing:2, lineHeight:1.1 }}>JOIN THE</div>
               <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:18, color:B.neonLime, letterSpacing:2, lineHeight:1.1 }}>INNER CIRCLE</div>
             </div>
-            <div style={{ fontFamily:"'Space Mono',monospace", fontSize:7, color:'#555', letterSpacing:1 }}>FNP alerts · drop access · polls</div>
+            <div style={{ fontFamily:"'Space Mono',monospace", fontSize: 9, color: B.smoke, letterSpacing:1 }}>FNP alerts · drop access · polls</div>
             <a href={LINKS.whatsapp} target="_blank" rel="noopener noreferrer" style={{ textDecoration:'none', width:'100%' }}>
               <div style={{ padding:'12px', background:B.neonLime, borderRadius:6, fontFamily:"'Bebas Neue',sans-serif", fontSize:17, color:B.black, letterSpacing:2, cursor:'pointer', boxShadow:`0 0 24px ${B.neonLime}30` }}>JOIN NOW →</div>
             </a>

@@ -41,7 +41,7 @@ function Row({ entry, mine }) {
     }}>
       <span style={{
         fontFamily: "'Orbitron'", fontSize: 11, fontWeight: 900, minWidth: 38,
-        color: mine ? B.amber : entry.rank <= 3 ? B.neonCyan : '#555',
+        color: mine ? B.amber : entry.rank <= 3 ? B.neonCyan : B.smoke,
       }}>{medal || `#${entry.rank}`}</span>
       <span style={{
         flex: 1, fontFamily: MONO, fontSize: 11, letterSpacing: 1,
@@ -160,11 +160,11 @@ export default function Standings() {
             </div>
             {you && (
               <div style={{ textAlign: 'right' }}>
-                <div style={{ fontFamily: MONO, fontSize: 8, color: '#555', letterSpacing: 2, marginBottom: 4 }}>YOUR RANK</div>
+                <div style={{ fontFamily: MONO, fontSize: 8, color: B.smoke, letterSpacing: 2, marginBottom: 4 }}>YOUR RANK</div>
                 <div style={{ fontFamily: "'Orbitron'", fontSize: '1.8rem', fontWeight: 900, color: B.amber }}>
                   #{you.rank}
                 </div>
-                <div style={{ fontFamily: MONO, fontSize: 8, color: '#444', marginTop: 2 }}>of {data.total}</div>
+                <div style={{ fontFamily: MONO, fontSize: 8, color: B.dim, marginTop: 2 }}>of {data.total}</div>
               </div>
             )}
           </div>
@@ -173,7 +173,7 @@ export default function Standings() {
           <div style={{ height: 5, background: 'rgba(255,255,255,0.05)', borderRadius: 3, overflow: 'hidden', margin: '14px 0 8px' }}>
             <div style={{ height: '100%', width: `${level.pct}%`, background: tier.color, borderRadius: 3, transition: 'width 0.6s ease' }} />
           </div>
-          <div style={{ fontFamily: MONO, fontSize: 8, color: '#555', letterSpacing: 1 }}>
+          <div style={{ fontFamily: MONO, fontSize: 8, color: B.smoke, letterSpacing: 1 }}>
             {level.xpToNext > 0 ? `${level.xpToNext} XP TO LEVEL ${level.level + 1}` : 'MAX LEVEL'}
           </div>
 
@@ -190,7 +190,7 @@ export default function Standings() {
             </div>
           )}
           {data?.chasedBy && (
-            <div style={{ marginTop: 8, fontFamily: MONO, fontSize: 9, color: '#555', lineHeight: 1.6 }}>
+            <div style={{ marginTop: 8, fontFamily: MONO, fontSize: 9, color: B.smoke, lineHeight: 1.6 }}>
               @{data.chasedBy.handle} is {data.chasedBy.gap.toLocaleString()} XP behind you.
             </div>
           )}
@@ -216,12 +216,12 @@ export default function Standings() {
                 }}
               />
               <button onClick={claim} disabled={busy} style={{
-                padding: '11px 22px', background: busy ? '#333' : B.amber, color: busy ? '#888' : B.black,
+                padding: '11px 22px', background: busy ? B.dim : B.amber, color: busy ? '#888' : B.black,
                 border: 'none', borderRadius: 7, fontFamily: MONO, fontSize: 10,
                 fontWeight: 700, letterSpacing: 2, cursor: busy ? 'default' : 'pointer',
               }}>{busy ? '…' : 'CLAIM'}</button>
             </div>
-            <p style={{ fontFamily: MONO, fontSize: 8, color: '#3a3a3a', marginTop: 10, lineHeight: 1.7 }}>
+            <p style={{ fontFamily: MONO, fontSize: 8, color: B.dim, marginTop: 10, lineHeight: 1.7 }}>
               Letters, numbers and underscores. No email needed — the handle is all
               anyone sees.
             </p>
@@ -235,7 +235,7 @@ export default function Standings() {
         {/* Your neighbourhood */}
         {handle && data?.near?.length > 1 && (
           <>
-            <div style={{ fontFamily: MONO, fontSize: 8, color: '#555', letterSpacing: 3, margin: '4px 0 8px' }}>AROUND YOU</div>
+            <div style={{ fontFamily: MONO, fontSize: 8, color: B.smoke, letterSpacing: 3, margin: '4px 0 8px' }}>AROUND YOU</div>
             <div style={{ marginBottom: 24 }}>
               {data.near.map(e => <Row key={e.handle} entry={e} mine={e.handle === handle} />)}
             </div>
@@ -272,13 +272,13 @@ export default function Standings() {
                 }}>
                   <span style={{
                     fontFamily: "'Orbitron'", fontSize: 11, fontWeight: 900, minWidth: 34,
-                    color: mine ? B.neonMagenta : '#555',
+                    color: mine ? B.neonMagenta : B.smoke,
                   }}>#{c.rank}</span>
                   <span style={{ flex: 1, fontFamily: MONO, fontSize: 11, letterSpacing: 2, color: mine ? B.white : '#999' }}>
                     {c.code}
                     {mine && <span style={{ color: B.neonMagenta, marginLeft: 8, fontSize: 8 }}>YOUR CREW</span>}
                   </span>
-                  <span style={{ fontFamily: MONO, fontSize: 9, color: '#444', marginRight: 10 }}>
+                  <span style={{ fontFamily: MONO, fontSize: 9, color: B.dim, marginRight: 10 }}>
                     {c.members} {c.members === 1 ? 'head' : 'heads'}
                   </span>
                   <span style={{ fontFamily: "'Orbitron'", fontSize: 12, fontWeight: 900, color: mine ? B.neonMagenta : B.smoke }}>
@@ -289,7 +289,7 @@ export default function Standings() {
             })}
 
             {handle && !data.yourCrew && (
-              <p style={{ fontFamily: MONO, fontSize: 9, color: '#444', marginTop: 10, lineHeight: 1.7 }}>
+              <p style={{ fontFamily: MONO, fontSize: 9, color: B.dim, marginTop: 10, lineHeight: 1.7 }}>
                 You are riding solo. Join a crew in Crew Codes and your XP counts
                 towards theirs — a crew's score is the sum of what its members earned,
                 so recruiting is worth as much as grinding.
@@ -299,14 +299,14 @@ export default function Standings() {
         )}
 
         {/* Top of the board */}
-        <div style={{ fontFamily: MONO, fontSize: 8, color: '#555', letterSpacing: 3, marginBottom: 8 }}>TOP OF THE BOARD</div>
+        <div style={{ fontFamily: MONO, fontSize: 8, color: B.smoke, letterSpacing: 3, marginBottom: 8 }}>TOP OF THE BOARD</div>
         {data?.top?.length
           ? data.top.map(e => <Row key={e.handle} entry={e} mine={e.handle === handle} />)
-          : <div style={{ fontFamily: MONO, fontSize: 11, color: '#333', padding: '18px 0' }}>
+          : <div style={{ fontFamily: MONO, fontSize: 11, color: B.dim, padding: '18px 0' }}>
               Nobody has claimed a handle yet. Be first.
             </div>}
 
-        <p style={{ fontFamily: MONO, fontSize: 8, color: '#333', marginTop: 22, lineHeight: 1.8 }}>
+        <p style={{ fontFamily: MONO, fontSize: 8, color: B.dim, marginTop: 22, lineHeight: 1.8 }}>
           Scores are worked out in your browser, so treat this as bragging rights
           rather than a scoreboard we can certify. Prizes get checked by hand.
         </p>

@@ -57,7 +57,7 @@ function PostModal({ onPost, onClose }) {
   }
 
   const is = { width:'100%', padding:'10px 13px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:7, color:B.white, fontFamily:'Space Mono,monospace', fontSize:12, outline:'none', boxSizing:'border-box', transition:'border-color 0.2s' }
-  const lbl = { fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', letterSpacing:2, display:'block', marginBottom:5 }
+  const lbl = { fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, letterSpacing:2, display:'block', marginBottom:5 }
   const focus = e => e.target.style.borderColor = `${B.amber}60`
   const blur  = e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'
 
@@ -67,7 +67,7 @@ function PostModal({ onPost, onClose }) {
       <div style={{ position:'fixed', top:0, right:0, bottom:0, width:'min(460px,100vw)', background:'#0A0A10', borderLeft:'1px solid rgba(255,255,255,0.1)', zIndex:201, overflowY:'auto' }}>
         <div style={{ padding:'18px 24px', borderBottom:'1px solid rgba(255,255,255,0.08)', display:'flex', justifyContent:'space-between', alignItems:'center', position:'sticky', top:0, background:'#0A0A10', zIndex:1 }}>
           <div style={{ fontFamily:'Orbitron,monospace', fontSize:11, color:B.white, letterSpacing:3 }}>POST A LISTING</div>
-          <button onClick={onClose} style={{ background:'transparent', border:'none', color:'#555', fontSize:20, cursor:'pointer' }}>✕</button>
+          <button onClick={onClose} style={{ background:'transparent', border:'none', color: B.smoke, fontSize:20, cursor:'pointer' }}>✕</button>
         </div>
 
         <div style={{ padding:'24px', display:'flex', flexDirection:'column', gap:14 }}>
@@ -75,7 +75,7 @@ function PostModal({ onPost, onClose }) {
           <div>
             <label style={lbl}>PHOTO (OPTIONAL)</label>
             <div onClick={() => fileRef.current.click()} style={{ height:120, background: photo ? 'transparent' : 'rgba(255,255,255,0.03)', border:`1px dashed ${B.amber}40`, borderRadius:8, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', overflow:'hidden' }}>
-              {photo ? <img src={photo} alt="" style={{ width:'100%', height:'100%', objectFit:'cover' }} /> : <span style={{ fontFamily:'Space Mono,monospace', fontSize:10, color:'#444' }}>TAP TO ADD PHOTO</span>}
+              {photo ? <img src={photo} alt="" style={{ width:'100%', height:'100%', objectFit:'cover' }} /> : <span style={{ fontFamily:'Space Mono,monospace', fontSize:10, color: B.dim }}>TAP TO ADD PHOTO</span>}
             </div>
             <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} style={{ display:'none' }} />
           </div>
@@ -100,9 +100,9 @@ function PostModal({ onPost, onClose }) {
             <label style={lbl}>CONDITION *</label>
             <div style={{ display:'flex', gap:6 }}>
               {CONDITIONS.map(c => (
-                <button key={c} onClick={() => setForm(f => ({ ...f, condition: f.condition===c ? '' : c }))} style={{ flex:1, padding:'9px 4px', background: form.condition===c ? `${COND_COLOR[c]}22` : 'rgba(255,255,255,0.03)', border:`1px solid ${form.condition===c ? COND_COLOR[c]+'80' : 'rgba(255,255,255,0.1)'}`, borderRadius:6, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:9, color: form.condition===c ? COND_COLOR[c] : '#555', transition:'all 0.15s' }}>
+                <button key={c} onClick={() => setForm(f => ({ ...f, condition: f.condition===c ? '' : c }))} style={{ flex:1, padding:'9px 4px', background: form.condition===c ? `${COND_COLOR[c]}22` : 'rgba(255,255,255,0.03)', border:`1px solid ${form.condition===c ? COND_COLOR[c]+'80' : 'rgba(255,255,255,0.1)'}`, borderRadius:6, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:9, color: form.condition===c ? COND_COLOR[c] : B.smoke, transition:'all 0.15s' }}>
                   {c}
-                  <div style={{ fontSize:7, opacity:0.6, marginTop:2 }}>{COND_LABEL[c]}</div>
+                  <div style={{ fontSize: 9, opacity:0.6, marginTop:2 }}>{COND_LABEL[c]}</div>
                 </button>
               ))}
             </div>
@@ -129,10 +129,10 @@ function PostModal({ onPost, onClose }) {
             <textarea value={form.notes} onChange={inp('notes')} placeholder="Condition details, what's included, etc." rows={3} style={{ ...is, resize:'none' }} onFocus={focus} onBlur={blur} />
           </div>
 
-          <button onClick={submit} disabled={!valid || busy} style={{ padding:'15px', background: valid && !busy ? `linear-gradient(90deg, ${B.amber}, #D48000)` : '#1a1a1a', border:'none', borderRadius:8, color: valid && !busy ? B.black : '#444', fontFamily:'Bebas Neue,sans-serif', fontSize:20, letterSpacing:3, cursor: valid && !busy ? 'pointer' : 'default', transition:'all 0.2s', marginTop:4 }}>
+          <button onClick={submit} disabled={!valid || busy} style={{ padding:'15px', background: valid && !busy ? `linear-gradient(90deg, ${B.amber}, #D48000)` : '#1a1a1a', border:'none', borderRadius:8, color: valid && !busy ? B.black : B.dim, fontFamily:'Bebas Neue,sans-serif', fontSize:20, letterSpacing:3, cursor: valid && !busy ? 'pointer' : 'default', transition:'all 0.2s', marginTop:4 }}>
             {busy ? 'PROCESSING…' : 'POST TO THE WALL →'}
           </button>
-          <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#333', textAlign:'center', letterSpacing:1 }}>Reviewed before it goes live · Your phone number is only shown once approved</div>
+          <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.dim, textAlign:'center', letterSpacing:1 }}>Reviewed before it goes live · Your phone number is only shown once approved</div>
         </div>
       </div>
     </>
@@ -147,13 +147,13 @@ function ContactPop({ listing, onClose }) {
       <div onClick={onClose} style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.6)', zIndex:300 }} />
       <div style={{ position:'fixed', top:'50%', left:'50%', transform:'translate(-50%,-50%)', background:'#0E0E18', border:`1px solid ${B.amber}40`, borderRadius:14, padding:'28px 32px', zIndex:301, width:'min(360px,90vw)', textAlign:'center' }}>
         <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:22, color:B.white, letterSpacing:2, marginBottom:4 }}>{listing.name}</div>
-        <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#555', marginBottom:20 }}>Size {listing.size} · {listing.condition}</div>
+        <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: B.smoke, marginBottom:20 }}>Size {listing.size} · {listing.condition}</div>
         <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
           {wa && <a href={wa} target="_blank" rel="noopener noreferrer" style={{ padding:'13px', background:'#25D366', borderRadius:8, color:B.black, fontFamily:'Bebas Neue,sans-serif', fontSize:18, letterSpacing:2, textDecoration:'none', display:'block' }}>WHATSAPP →</a>}
           {listing.instagram && <div style={{ padding:'13px', background:`${B.neonMagenta}18`, border:`1px solid ${B.neonMagenta}40`, borderRadius:8, fontFamily:'Bebas Neue,sans-serif', fontSize:18, letterSpacing:2, color:B.neonMagenta }}>{listing.instagram}</div>}
-          {!wa && !listing.instagram && <div style={{ fontFamily:'Space Mono,monospace', fontSize:11, color:'#555' }}>No contact info provided</div>}
+          {!wa && !listing.instagram && <div style={{ fontFamily:'Space Mono,monospace', fontSize:11, color: B.smoke }}>No contact info provided</div>}
         </div>
-        <button onClick={onClose} style={{ marginTop:16, background:'transparent', border:'none', color:'#555', fontFamily:'Space Mono,monospace', fontSize:9, cursor:'pointer', letterSpacing:2 }}>CLOSE</button>
+        <button onClick={onClose} style={{ marginTop:16, background:'transparent', border:'none', color: B.smoke, fontFamily:'Space Mono,monospace', fontSize:9, cursor:'pointer', letterSpacing:2 }}>CLOSE</button>
       </div>
     </>
   )
@@ -174,20 +174,20 @@ function ListingCard({ listing, wanted, onWant, onContact, onRemove, isOwn }) {
       }
       <div style={{ padding:'14px 16px', display:'flex', flexDirection:'column', gap:8, flex:1 }}>
         <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
-          <span style={{ padding:'2px 7px', background:`${c}18`, border:`1px solid ${c}50`, borderRadius:3, fontFamily:'Space Mono,monospace', fontSize:7, color:c, letterSpacing:2 }}>{listing.condition}</span>
-          <span style={{ padding:'2px 7px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:3, fontFamily:'Space Mono,monospace', fontSize:7, color:'#777' }}>EU {listing.size}</span>
-          {isOwn && <span style={{ padding:'2px 7px', background:`${B.neonLime}15`, border:`1px solid ${B.neonLime}40`, borderRadius:3, fontFamily:'Space Mono,monospace', fontSize:7, color:B.neonLime }}>YOURS</span>}
+          <span style={{ padding:'2px 7px', background:`${c}18`, border:`1px solid ${c}50`, borderRadius:3, fontFamily:'Space Mono,monospace', fontSize: 9, color:c, letterSpacing:2 }}>{listing.condition}</span>
+          <span style={{ padding:'2px 7px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:3, fontFamily:'Space Mono,monospace', fontSize: 9, color:B.smoke }}>EU {listing.size}</span>
+          {isOwn && <span style={{ padding:'2px 7px', background:`${B.neonLime}15`, border:`1px solid ${B.neonLime}40`, borderRadius:3, fontFamily:'Space Mono,monospace', fontSize: 9, color:B.neonLime }}>YOURS</span>}
         </div>
         <div>
           <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:18, color:B.white, lineHeight:1.1 }}>{listing.name}</div>
-          <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#555', marginTop:2 }}>{listing.brand}</div>
+          <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: B.smoke, marginTop:2 }}>{listing.brand}</div>
         </div>
         <div style={{ fontFamily:'Syne,sans-serif', fontSize:12, color:B.amber, lineHeight:1.5 }}>
-          <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555' }}>WANTS: </span>{listing.asking}
+          <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke }}>WANTS: </span>{listing.asking}
         </div>
-        {listing.notes && <div style={{ fontFamily:'Syne,sans-serif', fontSize:11, color:'#666', lineHeight:1.5, display:'-webkit-box', WebkitLineClamp:2, WebkitBoxOrient:'vertical', overflow:'hidden' }}>{listing.notes}</div>}
+        {listing.notes && <div style={{ fontFamily:'Syne,sans-serif', fontSize:11, color: B.smoke, lineHeight:1.5, display:'-webkit-box', WebkitLineClamp:2, WebkitBoxOrient:'vertical', overflow:'hidden' }}>{listing.notes}</div>}
         <div style={{ display:'flex', gap:6, marginTop:4 }}>
-          <button onClick={() => onWant(listing.id)} style={{ flex:1, padding:'9px 6px', background: wanted ? `${B.neonLime}18` : 'rgba(255,255,255,0.04)', border:`1px solid ${wanted ? B.neonLime+'50' : 'rgba(255,255,255,0.1)'}`, borderRadius:6, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:9, color: wanted ? B.neonLime : '#666', letterSpacing:1 }}>
+          <button onClick={() => onWant(listing.id)} style={{ flex:1, padding:'9px 6px', background: wanted ? `${B.neonLime}18` : 'rgba(255,255,255,0.04)', border:`1px solid ${wanted ? B.neonLime+'50' : 'rgba(255,255,255,0.1)'}`, borderRadius:6, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:9, color: wanted ? B.neonLime : B.smoke, letterSpacing:1 }}>
             🔥 {listing.wants} {wanted ? 'WANTED' : 'WANT'}
           </button>
           <button onClick={() => onContact(listing)} style={{ flex:1, padding:'9px 6px', background:`${B.amber}15`, border:`1px solid ${B.amber}40`, borderRadius:6, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:9, color:B.amber, letterSpacing:1 }}>
@@ -295,7 +295,7 @@ export default function TradeBoard() {
             </div>
           </div>
           <div style={{ display:'flex', flexDirection:'column', alignItems:'flex-end', gap:12 }}>
-            <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#444', letterSpacing:2 }}>
+            <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: B.dim, letterSpacing:2 }}>
               {activeFilters > 0 ? `${filtered.length} of ` : ''}{listings.length} listings · 🔥 {totalWants} total interest
             </div>
             <button onClick={() => setPosting(true)} style={{ padding:'13px 24px', background:`linear-gradient(90deg, ${B.neonCyan}, #00B8CC)`, border:'none', borderRadius:8, color:B.black, fontFamily:'Bebas Neue,sans-serif', fontSize:18, letterSpacing:3, cursor:'pointer', boxShadow:`0 0 28px ${B.neonCyan}30` }}>
@@ -309,20 +309,20 @@ export default function TradeBoard() {
           <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search sneakers…" style={{ padding:'8px 13px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:6, color:B.white, fontFamily:'Space Mono,monospace', fontSize:11, outline:'none', minWidth:160, flex:'1 1 140px' }} />
 
           <select value={brandFilter} onChange={e => setBrandFilter(e.target.value)}
-            style={{ padding:'8px 12px', background:'rgba(255,255,255,0.05)', border:`1px solid ${brandFilter ? B.neonCyan+'50' : 'rgba(255,255,255,0.1)'}`, borderRadius:6, color: brandFilter ? B.neonCyan : '#666', fontFamily:'Space Mono,monospace', fontSize:9, outline:'none', cursor:'pointer', minWidth:110 }}>
+            style={{ padding:'8px 12px', background:'rgba(255,255,255,0.05)', border:`1px solid ${brandFilter ? B.neonCyan+'50' : 'rgba(255,255,255,0.1)'}`, borderRadius:6, color: brandFilter ? B.neonCyan : B.smoke, fontFamily:'Space Mono,monospace', fontSize:9, outline:'none', cursor:'pointer', minWidth:110 }}>
             <option value="">ALL BRANDS</option>
             {allBrands.map(b => <option key={b} value={b}>{b}</option>)}
           </select>
 
           <select value={sizeFilter} onChange={e => setSizeFilter(e.target.value)}
-            style={{ padding:'8px 12px', background:'rgba(255,255,255,0.05)', border:`1px solid ${sizeFilter ? B.neonCyan+'50' : 'rgba(255,255,255,0.1)'}`, borderRadius:6, color: sizeFilter ? B.neonCyan : '#666', fontFamily:'Space Mono,monospace', fontSize:9, outline:'none', cursor:'pointer', minWidth:100 }}>
+            style={{ padding:'8px 12px', background:'rgba(255,255,255,0.05)', border:`1px solid ${sizeFilter ? B.neonCyan+'50' : 'rgba(255,255,255,0.1)'}`, borderRadius:6, color: sizeFilter ? B.neonCyan : B.smoke, fontFamily:'Space Mono,monospace', fontSize:9, outline:'none', cursor:'pointer', minWidth:100 }}>
             <option value="">ALL SIZES</option>
             {allSizes.map(s => <option key={s} value={s}>EU {s}</option>)}
           </select>
 
           <div style={{ display:'flex', gap:4 }}>
             {['ALL', ...CONDITIONS].map(c => (
-              <button key={c} onClick={() => setCond(c)} style={{ padding:'7px 12px', background: cond===c ? `${(COND_COLOR[c]||B.white)}22` : 'transparent', border:`1px solid ${cond===c ? (COND_COLOR[c]||B.white)+'60' : 'rgba(255,255,255,0.08)'}`, borderRadius:5, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:8, color: cond===c ? (COND_COLOR[c]||B.white) : '#555', letterSpacing:1 }}>{c}</button>
+              <button key={c} onClick={() => setCond(c)} style={{ padding:'7px 12px', background: cond===c ? `${(COND_COLOR[c]||B.white)}22` : 'transparent', border:`1px solid ${cond===c ? (COND_COLOR[c]||B.white)+'60' : 'rgba(255,255,255,0.08)'}`, borderRadius:5, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:8, color: cond===c ? (COND_COLOR[c]||B.white) : B.smoke, letterSpacing:1 }}>{c}</button>
             ))}
           </div>
 
@@ -334,7 +334,7 @@ export default function TradeBoard() {
               </button>
             )}
             {['NEWEST','MOST WANTED'].map(s => (
-              <button key={s} onClick={() => setSort(s)} style={{ padding:'7px 12px', background: sort===s ? `${B.amber}15` : 'transparent', border:`1px solid ${sort===s ? B.amber+'40' : 'rgba(255,255,255,0.08)'}`, borderRadius:5, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:8, color: sort===s ? B.amber : '#555', letterSpacing:1 }}>{s}</button>
+              <button key={s} onClick={() => setSort(s)} style={{ padding:'7px 12px', background: sort===s ? `${B.amber}15` : 'transparent', border:`1px solid ${sort===s ? B.amber+'40' : 'rgba(255,255,255,0.08)'}`, borderRadius:5, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:8, color: sort===s ? B.amber : B.smoke, letterSpacing:1 }}>{s}</button>
             ))}
           </div>
         </div>
@@ -342,7 +342,7 @@ export default function TradeBoard() {
         {/* Top Wanted strip */}
         {activeFilters === 0 && (
           <div style={{ marginBottom:28 }}>
-            <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:B.neonMagenta, letterSpacing:'0.3em', marginBottom:10 }}>🔥 MOST WANTED</div>
+            <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color:B.neonMagenta, letterSpacing:'0.3em', marginBottom:10 }}>🔥 MOST WANTED</div>
             <div style={{ display:'flex', gap:10, overflowX:'auto', paddingBottom:4 }}>
               {[...listings].sort((a,b) => (b.wants||0) - (a.wants||0)).slice(0,4).map(l => (
                 <div key={l.id} onClick={() => setContact(l)}
@@ -352,7 +352,7 @@ export default function TradeBoard() {
                 >
                   <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:14, color:B.white, lineHeight:1.2, marginBottom:8 }}>{l.name}</div>
                   <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                    <span style={{ padding:'2px 6px', background:`${COND_COLOR[l.condition]}18`, border:`1px solid ${COND_COLOR[l.condition]}35`, borderRadius:2, fontFamily:'Space Mono,monospace', fontSize:6, color:COND_COLOR[l.condition], letterSpacing:1 }}>{l.condition}</span>
+                    <span style={{ padding:'2px 6px', background:`${COND_COLOR[l.condition]}18`, border:`1px solid ${COND_COLOR[l.condition]}35`, borderRadius:2, fontFamily:'Space Mono,monospace', fontSize: 9, color:COND_COLOR[l.condition], letterSpacing:1 }}>{l.condition}</span>
                     <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:B.neonMagenta, letterSpacing:1 }}>♡ {l.wants||0}</span>
                   </div>
                 </div>
@@ -364,7 +364,7 @@ export default function TradeBoard() {
         {/* grid */}
         {filtered.length === 0
           ? <div style={{ textAlign:'center', padding:'80px 0' }}>
-              <div style={{ fontFamily:'Space Mono,monospace', fontSize:11, color:'#333', letterSpacing:2, marginBottom:12 }}>NO LISTINGS MATCH YOUR FILTERS</div>
+              <div style={{ fontFamily:'Space Mono,monospace', fontSize:11, color: B.dim, letterSpacing:2, marginBottom:12 }}>NO LISTINGS MATCH YOUR FILTERS</div>
               {activeFilters > 0 && <button onClick={() => { setCond('ALL'); setBrandFilter(''); setSizeFilter(''); setQuery('') }} style={{ padding:'9px 18px', background:'transparent', border:`1px solid ${B.neonCyan}30`, borderRadius:6, color:B.neonCyan, fontFamily:'Space Mono,monospace', fontSize:9, cursor:'pointer', letterSpacing:2 }}>CLEAR FILTERS</button>}
             </div>
           : <div style={{ columns:'auto 280px', columnGap:14 }}>

@@ -38,7 +38,7 @@ function BoothCard({ booth, selected, onSelect, taken }) {
   const isFull      = pct >= 1
   return (
     <div onClick={() => !isFull && onSelect(booth.id)}
-      style={{ padding:16, borderRadius:8, cursor:isFull ? 'not-allowed' : 'pointer', border:`1px solid ${selected ? B.neonCyan : isFull ? '#333' : 'rgba(255,255,255,0.09)'}`, background:selected ? `${B.neonCyan}08` : isFull ? 'rgba(255,255,255,0.02)' : 'rgba(255,255,255,0.03)', transition:'all 0.2s', opacity:isFull ? 0.5 : 1 }}
+      style={{ padding:16, borderRadius:8, cursor:isFull ? 'not-allowed' : 'pointer', border:`1px solid ${selected ? B.neonCyan : isFull ? B.dim : 'rgba(255,255,255,0.09)'}`, background:selected ? `${B.neonCyan}08` : isFull ? 'rgba(255,255,255,0.02)' : 'rgba(255,255,255,0.03)', transition:'all 0.2s', opacity:isFull ? 0.5 : 1 }}
     >
       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:8 }}>
         <div>
@@ -59,7 +59,7 @@ function BoothCard({ booth, selected, onSelect, taken }) {
       <ul style={{ listStyle:'none', padding:0, margin:0, display:'flex', flexDirection:'column', gap:4 }}>
         {booth.features.map(f => (
           <li key={f} style={{ fontFamily:'Syne,sans-serif', fontSize:11, color:selected ? B.white : B.smoke, display:'flex', gap:6, alignItems:'center' }}>
-            <span style={{ color:selected ? B.neonCyan : '#444', flexShrink:0 }}>◆</span>{f}
+            <span style={{ color:selected ? B.neonCyan : B.dim, flexShrink:0 }}>◆</span>{f}
           </li>
         ))}
       </ul>
@@ -89,7 +89,7 @@ const MAP_ZONES = [
 function BoothMap({ taken, selected, onSelect }) {
   return (
     <div style={{ marginBottom:16 }}>
-      <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:'#444', letterSpacing:2, marginBottom:8 }}>VENUE FLOOR PLAN</div>
+      <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color: B.dim, letterSpacing:2, marginBottom:8 }}>VENUE FLOOR PLAN</div>
       <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gridTemplateRows:'70px 90px', gap:4 }}>
         {MAP_ZONES.map(z => {
           const booth = BOOTHS.find(b => b.id === z.id)
@@ -98,10 +98,10 @@ function BoothMap({ taken, selected, onSelect }) {
           const isSel = selected === z.id
           return (
             <div key={z.id} onClick={() => pct < 1 && onSelect(z.id)} style={{ padding:'8px 10px', borderRadius:6, cursor:pct >= 1 ? 'not-allowed' : 'pointer', background:isSel ? `${col}15` : 'rgba(255,255,255,0.02)', border:`1px solid ${isSel ? col : col + '35'}`, opacity:pct >= 1 ? 0.4 : 1, transition:'all 0.2s', display:'flex', flexDirection:'column', justifyContent:'space-between' }}>
-              <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:col, letterSpacing:1 }}>{z.label}</div>
+              <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color:col, letterSpacing:1 }}>{z.label}</div>
               <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-end' }}>
-                <div style={{ fontFamily:'Space Mono,monospace', fontSize:6, color:'#444' }}>{z.hint}</div>
-                <div style={{ fontFamily:'Orbitron,monospace', fontSize:8, color:isSel ? col : '#555' }}>{(booth ? booth.capacity : 0) - (taken[z.id] || 0)} LEFT</div>
+                <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color: B.dim }}>{z.hint}</div>
+                <div style={{ fontFamily:'Orbitron,monospace', fontSize:8, color:isSel ? col : B.smoke }}>{(booth ? booth.capacity : 0) - (taken[z.id] || 0)} LEFT</div>
               </div>
             </div>
           )
@@ -267,7 +267,7 @@ Write in first person, confident but not arrogant. Mention Lagos, the culture, w
   }
 
   const IS  = { width:'100%', padding:'12px 14px', background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.09)', borderRadius:8, color:B.white, fontFamily:'Space Mono,monospace', fontSize:13, outline:'none', boxSizing:'border-box', transition:'border-color 0.2s' }
-  const lbl = text => <label style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', letterSpacing:'0.25em', display:'block', marginBottom:7 }}>{text}</label>
+  const lbl = text => <label style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, letterSpacing:'0.25em', display:'block', marginBottom:7 }}>{text}</label>
   const onFocus = e => e.target.style.borderColor = B.neonCyan + '60'
   const onBlur  = e => e.target.style.borderColor = 'rgba(255,255,255,0.09)'
 
@@ -299,7 +299,7 @@ Write in first person, confident but not arrogant. Mention Lagos, the culture, w
           ].map((s, i) => (
             <div key={i} className="card-3d" style={{ padding:'18px 16px', background:B.charcoal, border:`1px solid ${s.c}28`, borderRadius:8, textAlign:'center' }}>
               <div style={{ fontFamily:"'Orbitron', monospace", fontWeight:900, fontSize:22, color:s.c, textShadow:`0 0 16px ${s.c}30` }}>{s.n}</div>
-              <div style={{ fontFamily:"'Space Mono', monospace", fontSize:7, color:B.smoke, letterSpacing:'0.15em', marginTop:6 }}>{s.l}</div>
+              <div style={{ fontFamily:"'Space Mono', monospace", fontSize: 9, color:B.smoke, letterSpacing:'0.15em', marginTop:6 }}>{s.l}</div>
             </div>
           ))}
         </div>
@@ -323,16 +323,16 @@ Write in first person, confident but not arrogant. Mention Lagos, the culture, w
             </div>
 
             <div style={{ marginBottom:28 }}>
-              <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#555', letterSpacing:2, marginBottom:20 }}>APPLICATION STATUS</div>
+              <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: B.smoke, letterSpacing:2, marginBottom:20 }}>APPLICATION STATUS</div>
               <div style={{ display:'flex', alignItems:'flex-start' }}>
                 {STATUS_STEPS.map((s, i) => (
                   <div key={i} style={{ display:'flex', alignItems:'flex-start', flex: i < STATUS_STEPS.length-1 ? 1 : 0 }}>
                     <div style={{ display:'flex', flexDirection:'column', alignItems:'center', minWidth:56 }}>
-                      <div style={{ width:36, height:36, borderRadius:'50%', background:s.done ? s.color : 'rgba(255,255,255,0.05)', border:`1.5px solid ${s.done ? s.color : 'rgba(255,255,255,0.1)'}`, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Orbitron,monospace', fontSize:10, color:s.done ? B.black : '#555', marginBottom:8 }}>
+                      <div style={{ width:36, height:36, borderRadius:'50%', background:s.done ? s.color : 'rgba(255,255,255,0.05)', border:`1.5px solid ${s.done ? s.color : 'rgba(255,255,255,0.1)'}`, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Orbitron,monospace', fontSize:10, color:s.done ? B.black : B.smoke, marginBottom:8 }}>
                         {s.done ? '✓' : s.num}
                       </div>
-                      <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:s.done ? s.color : '#444', letterSpacing:1, textAlign:'center', lineHeight:1.4 }}>{s.title}</div>
-                      <div style={{ fontFamily:'Space Mono,monospace', fontSize:6, color:'#333', textAlign:'center', marginTop:3, lineHeight:1.4 }}>{s.desc}</div>
+                      <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color:s.done ? s.color : B.dim, letterSpacing:1, textAlign:'center', lineHeight:1.4 }}>{s.title}</div>
+                      <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color: B.dim, textAlign:'center', marginTop:3, lineHeight:1.4 }}>{s.desc}</div>
                     </div>
                     {i < STATUS_STEPS.length-1 && (
                       <div style={{ flex:1, height:1, background:s.done ? `${s.color}50` : 'rgba(255,255,255,0.06)', marginTop:18, marginLeft:4, marginRight:4 }} />
@@ -355,23 +355,23 @@ Write in first person, confident but not arrogant. Mention Lagos, the culture, w
                   <div>
                     <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:B.amber, letterSpacing:2, marginBottom:4 }}>APPLICATION ON FILE</div>
                     <div style={{ fontFamily:'Orbitron,monospace', fontSize:14, color:B.white, letterSpacing:2 }}>{existingApp.applicationId}</div>
-                    <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', marginTop:2 }}>{existingApp.business} / {existingApp.booth}</div>
+                    <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, marginTop:2 }}>{existingApp.business} / {existingApp.booth}</div>
                   </div>
                   <div style={{ display:'flex', gap:8 }}>
                     <button onClick={() => setShowStatus(s => !s)} style={{ padding:'7px 14px', background:showStatus ? `${B.amber}20` : 'transparent', border:`1px solid ${B.amber}40`, borderRadius:6, color:B.amber, fontFamily:'Space Mono,monospace', fontSize:8, cursor:'pointer', letterSpacing:1 }}>
                       {showStatus ? 'HIDE' : 'VIEW STATUS'}
                     </button>
-                    <button onClick={() => setShowPrevBanner(false)} style={{ padding:'7px 14px', background:'transparent', border:'1px solid rgba(255,255,255,0.1)', borderRadius:6, color:'#666', fontFamily:'Space Mono,monospace', fontSize:8, cursor:'pointer', letterSpacing:1 }}>DISMISS</button>
+                    <button onClick={() => setShowPrevBanner(false)} style={{ padding:'7px 14px', background:'transparent', border:'1px solid rgba(255,255,255,0.1)', borderRadius:6, color: B.smoke, fontFamily:'Space Mono,monospace', fontSize:8, cursor:'pointer', letterSpacing:1 }}>DISMISS</button>
                   </div>
                 </div>
                 {showStatus && (
                   <div style={{ borderTop:`1px solid ${B.amber}20`, padding:'16px 20px' }}>
-                    <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#555', letterSpacing:2, marginBottom:16 }}>APPLICATION STATUS</div>
+                    <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: B.smoke, letterSpacing:2, marginBottom:16 }}>APPLICATION STATUS</div>
                     <div style={{ display:'flex', alignItems:'flex-start' }}>
                       {STATUS_STEPS.map((s, i) => <div key={i} style={{ display:'flex', alignItems:'flex-start', flex: i < STATUS_STEPS.length-1 ? 1 : 0 }}>
                         <div style={{ display:'flex', flexDirection:'column', alignItems:'center', minWidth:52 }}>
-                          <div style={{ width:30, height:30, borderRadius:'50%', background:s.done ? s.color : 'rgba(255,255,255,0.05)', border:`1.5px solid ${s.done ? s.color : 'rgba(255,255,255,0.1)'}`, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Orbitron,monospace', fontSize:8, color:s.done ? B.black : '#555', marginBottom:6 }}>{s.done ? 'OK' : s.num}</div>
-                          <div style={{ fontFamily:'Space Mono,monospace', fontSize:6, color:s.done ? s.color : '#444', letterSpacing:1, textAlign:'center', lineHeight:1.4 }}>{s.title}</div>
+                          <div style={{ width:30, height:30, borderRadius:'50%', background:s.done ? s.color : 'rgba(255,255,255,0.05)', border:`1.5px solid ${s.done ? s.color : 'rgba(255,255,255,0.1)'}`, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Orbitron,monospace', fontSize:8, color:s.done ? B.black : B.smoke, marginBottom:6 }}>{s.done ? 'OK' : s.num}</div>
+                          <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color:s.done ? s.color : B.dim, letterSpacing:1, textAlign:'center', lineHeight:1.4 }}>{s.title}</div>
                         </div>
                         {i < STATUS_STEPS.length-1 && <div style={{ flex:1, height:1, background:s.done ? `${s.color}50` : 'rgba(255,255,255,0.06)', marginTop:15, marginLeft:4, marginRight:4 }} />}
                       </div>)}
@@ -385,10 +385,10 @@ Write in first person, confident but not arrogant. Mention Lagos, the culture, w
               {STEPS.map((s, i) => (
                 <div key={i} style={{ display:'flex', alignItems:'center', flex: i < STEPS.length-1 ? 1 : 0 }}>
                   <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:5 }}>
-                    <div style={{ width:34, height:34, borderRadius:'50%', background:i<step ? B.neonCyan : i===step ? B.amber : 'rgba(255,255,255,0.04)', border:`1.5px solid ${i<step ? B.neonCyan : i===step ? B.amber : 'rgba(255,255,255,0.1)'}`, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Orbitron,monospace', fontSize:10, fontWeight:700, color:i<=step ? B.black : '#444', transition:'all 0.3s', flexShrink:0 }}>
+                    <div style={{ width:34, height:34, borderRadius:'50%', background:i<step ? B.neonCyan : i===step ? B.amber : 'rgba(255,255,255,0.04)', border:`1.5px solid ${i<step ? B.neonCyan : i===step ? B.amber : 'rgba(255,255,255,0.1)'}`, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Orbitron,monospace', fontSize:10, fontWeight:700, color:i<=step ? B.black : B.dim, transition:'all 0.3s', flexShrink:0 }}>
                       {i < step ? '✓' : i+1}
                     </div>
-                    <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:i===step ? B.amber : i<step ? B.neonCyan : '#444', letterSpacing:1, whiteSpace:'nowrap', transition:'color 0.3s' }}>{s.label}</div>
+                    <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color:i===step ? B.amber : i<step ? B.neonCyan : B.dim, letterSpacing:1, whiteSpace:'nowrap', transition:'color 0.3s' }}>{s.label}</div>
                   </div>
                   {i < STEPS.length-1 && (
                     <div style={{ flex:1, height:1, background:i<step ? `${B.neonCyan}60` : 'rgba(255,255,255,0.07)', marginBottom:18, marginLeft:8, marginRight:8, transition:'background 0.3s' }} />
@@ -451,14 +451,14 @@ Write in first person, confident but not arrogant. Mention Lagos, the culture, w
                       <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
                         {['YES — I WANT A DROP', 'MAYBE — OPEN TO IT', 'NO — STANDARD ONLY'].map(opt => (
                           <button key={opt} type="button" onClick={() => setForm(f => ({...f, exclusiveDrop:opt}))}
-                            style={{ flex:1, minWidth:100, padding:'9px 10px', background:form.exclusiveDrop===opt ? `${B.amber}18` : 'rgba(255,255,255,0.04)', border:`1px solid ${form.exclusiveDrop===opt ? B.amber+'60' : 'rgba(255,255,255,0.1)'}`, borderRadius:6, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:8, color:form.exclusiveDrop===opt ? B.amber : '#666', letterSpacing:0, transition:'all 0.2s', textAlign:'center', lineHeight:1.5 }}>{opt}</button>
+                            style={{ flex:1, minWidth:100, padding:'9px 10px', background:form.exclusiveDrop===opt ? `${B.amber}18` : 'rgba(255,255,255,0.04)', border:`1px solid ${form.exclusiveDrop===opt ? B.amber+'60' : 'rgba(255,255,255,0.1)'}`, borderRadius:6, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:8, color:form.exclusiveDrop===opt ? B.amber : B.smoke, letterSpacing:0, transition:'all 0.2s', textAlign:'center', lineHeight:1.5 }}>{opt}</button>
                         ))}
                       </div>
                     </div>
                     <div>
                       <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:7 }}>
                         {lbl(`ABOUT YOUR BRAND * (${form.bio.length}/300 · min 20)`)}
-                        <button type="button" onClick={generatePitch} disabled={pitchLoading} style={{ padding:'4px 10px', background:pitchLoading ? 'rgba(0,240,255,0.06)' : `${B.neonCyan}15`, border:`1px solid ${B.neonCyan}44`, borderRadius:4, color:pitchLoading ? '#444' : B.neonCyan, fontFamily:'Space Mono,monospace', fontSize:8, cursor:pitchLoading ? 'wait' : 'pointer', letterSpacing:'0.1em', whiteSpace:'nowrap', flexShrink:0 }}>
+                        <button type="button" onClick={generatePitch} disabled={pitchLoading} style={{ padding:'4px 10px', background:pitchLoading ? 'rgba(0,240,255,0.06)' : `${B.neonCyan}15`, border:`1px solid ${B.neonCyan}44`, borderRadius:4, color:pitchLoading ? B.dim : B.neonCyan, fontFamily:'Space Mono,monospace', fontSize:8, cursor:pitchLoading ? 'wait' : 'pointer', letterSpacing:'0.1em', whiteSpace:'nowrap', flexShrink:0 }}>
                           {pitchLoading ? 'WRITING...' : '✦ AI PITCH'}
                         </button>
                       </div>
@@ -495,13 +495,13 @@ Write in first person, confident but not arrogant. Mention Lagos, the culture, w
                         form.exclusiveDrop ? { label:'EXCL. DROP', value:form.exclusiveDrop }                    : null,
                       ].filter(Boolean).map((item, i) => (
                         <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'10px 16px', borderBottom:'1px solid rgba(255,255,255,0.04)' }}>
-                          <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', letterSpacing:2 }}>{item.label}</span>
+                          <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, letterSpacing:2 }}>{item.label}</span>
                           <span style={{ fontFamily:'Syne,sans-serif', fontSize:13, color:item.color||B.white, textAlign:'right', maxWidth:'65%', wordBreak:'break-all' }}>{item.value}</span>
                         </div>
                       ))}
                     </div>
                     <div style={{ padding:'14px 16px', background:'rgba(255,255,255,0.02)', borderRadius:8, border:'1px solid rgba(255,255,255,0.06)' }}>
-                      <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', letterSpacing:2, marginBottom:8 }}>BRAND BIO</div>
+                      <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, letterSpacing:2, marginBottom:8 }}>BRAND BIO</div>
                       <div style={{ fontFamily:'Syne,sans-serif', fontSize:12, color:B.smoke, lineHeight:1.7 }}>{form.bio}</div>
                     </div>
                     <div style={{ padding:'10px 14px', background:`${B.neonCyan}08`, border:`1px solid ${B.neonCyan}20`, borderRadius:8 }}>
@@ -528,12 +528,12 @@ Write in first person, confident but not arrogant. Mention Lagos, the culture, w
                   <div style={{ flex:1 }} />
                   {step < 3 ? (
                     <button onClick={() => canNext() && setStep(s => s+1)} disabled={!canNext()}
-                      style={{ padding:'13px 28px', background:canNext() ? B.neonCyan : 'rgba(255,255,255,0.04)', border:'none', borderRadius:8, color:canNext() ? B.black : '#444', fontFamily:'Orbitron,monospace', fontSize:11, fontWeight:700, letterSpacing:2, cursor:canNext() ? 'pointer' : 'not-allowed', boxShadow:canNext() ? `0 0 24px ${B.neonCyan}35` : 'none', transition:'all 0.2s' }}>
+                      style={{ padding:'13px 28px', background:canNext() ? B.neonCyan : 'rgba(255,255,255,0.04)', border:'none', borderRadius:8, color:canNext() ? B.black : B.dim, fontFamily:'Orbitron,monospace', fontSize:11, fontWeight:700, letterSpacing:2, cursor:canNext() ? 'pointer' : 'not-allowed', boxShadow:canNext() ? `0 0 24px ${B.neonCyan}35` : 'none', transition:'all 0.2s' }}>
                       NEXT →
                     </button>
                   ) : (
                     <button onClick={submit} disabled={status === 'loading'}
-                      style={{ padding:'14px 32px', background:status==='loading' ? 'rgba(255,255,255,0.04)' : B.neonCyan, border:'none', borderRadius:8, color:status==='loading' ? '#444' : B.black, fontFamily:'Orbitron,monospace', fontSize:12, fontWeight:700, letterSpacing:2, cursor:status==='loading' ? 'wait' : 'pointer', boxShadow:status==='loading' ? 'none' : `0 0 30px ${B.neonCyan}35`, transition:'all 0.2s' }}>
+                      style={{ padding:'14px 32px', background:status==='loading' ? 'rgba(255,255,255,0.04)' : B.neonCyan, border:'none', borderRadius:8, color:status==='loading' ? B.dim : B.black, fontFamily:'Orbitron,monospace', fontSize:12, fontWeight:700, letterSpacing:2, cursor:status==='loading' ? 'wait' : 'pointer', boxShadow:status==='loading' ? 'none' : `0 0 30px ${B.neonCyan}35`, transition:'all 0.2s' }}>
                       {status === 'loading'
                         ? <span style={{ display:'flex', alignItems:'center', gap:10 }}><span style={{ width:12, height:12, border:`2px solid #555`, borderTopColor:B.neonCyan, borderRadius:'50%', display:'inline-block', animation:'spin 0.8s linear infinite' }} />SUBMITTING…</span>
                         : 'SUBMIT APPLICATION →'}
@@ -542,8 +542,8 @@ Write in first person, confident but not arrogant. Mention Lagos, the culture, w
                 </div>
 
                 <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                  <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:'#2a2a2a', letterSpacing:1 }}>● DRAFT AUTO-SAVED</div>
-                  <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#333', letterSpacing:'0.15em' }}>INVITATION-CURATED / REVIEWED IN 3 DAYS</div>
+                  <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color:B.dim, letterSpacing:1 }}>● DRAFT AUTO-SAVED</div>
+                  <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.dim, letterSpacing:'0.15em' }}>INVITATION-CURATED / REVIEWED IN 3 DAYS</div>
                 </div>
               </div>
             </div>
@@ -555,7 +555,7 @@ Write in first person, confident but not arrogant. Mention Lagos, the culture, w
           <div style={{ display:'flex', gap:8, flexWrap:'wrap', marginBottom:18 }}>
             {['ALL', ...Array.from(new Set(CONFIRMED_VENDORS.map(v => v.cat)))].map(cat => (
               <button key={cat} onClick={() => setVendorCatFilter(cat)}
-                style={{ padding:'5px 13px', background: vendorCatFilter===cat ? `${B.neonCyan}15` : 'transparent', border:`1px solid ${vendorCatFilter===cat ? B.neonCyan+'55' : 'rgba(255,255,255,0.08)'}`, borderRadius:4, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:7, color: vendorCatFilter===cat ? B.neonCyan : '#555', letterSpacing:1, transition:'all 0.2s' }}>
+                style={{ padding:'5px 13px', background: vendorCatFilter===cat ? `${B.neonCyan}15` : 'transparent', border:`1px solid ${vendorCatFilter===cat ? B.neonCyan+'55' : 'rgba(255,255,255,0.08)'}`, borderRadius:4, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize: 9, color: vendorCatFilter===cat ? B.neonCyan : B.smoke, letterSpacing:1, transition:'all 0.2s' }}>
                 {cat}
               </button>
             ))}
@@ -568,13 +568,13 @@ Write in first person, confident but not arrogant. Mention Lagos, the culture, w
                   <div style={{ width:40, height:40, borderRadius:'50%', background:`${v.color}15`, border:`1.5px solid ${v.color}50`, flexShrink:0, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Bebas Neue,sans-serif', fontSize:18, color:v.color }}>{v.name[0]}</div>
                   <div>
                     <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:16, color:B.white, lineHeight:1 }}>{v.name}</div>
-                    <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:v.color, marginTop:3, letterSpacing:1 }}>{v.cat} · {v.city}</div>
+                    <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color:v.color, marginTop:3, letterSpacing:1 }}>{v.cat} · {v.city}</div>
                   </div>
                 </div>
                 <div style={{ fontFamily:'Syne,sans-serif', fontSize:11, color:B.smoke, lineHeight:1.65 }}>{v.bringing}</div>
                 <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                  <span style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:v.color, letterSpacing:1 }}>{v.ig}</span>
-                  <span style={{ padding:'2px 8px', background:`${v.color}10`, border:`1px solid ${v.color}25`, borderRadius:3, fontFamily:'Space Mono,monospace', fontSize:7, color:'#555', letterSpacing:1 }}>{v.booth}</span>
+                  <span style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color:v.color, letterSpacing:1 }}>{v.ig}</span>
+                  <span style={{ padding:'2px 8px', background:`${v.color}10`, border:`1px solid ${v.color}25`, borderRadius:3, fontFamily:'Space Mono,monospace', fontSize: 9, color: B.smoke, letterSpacing:1 }}>{v.booth}</span>
                 </div>
               </div>
             ))}

@@ -102,7 +102,7 @@ export default function ColdDMGenerator() {
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             COLD DM GENERATOR
           </h2>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#444', letterSpacing: '0.15em' }}>SF26 NETWORK PLAYS</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.15em' }}>SF26 NETWORK PLAYS</div>
         </div>
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.72rem', marginBottom: 36, letterSpacing: '0.04em' }}>
           Tell Claude what you want · Who you're hitting up · What you're offering · Get a cold DM that lands
@@ -110,7 +110,7 @@ export default function ColdDMGenerator() {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 16 }}>
           <div>
-            <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 8 }}>SHOE YOU WANT</div>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>SHOE YOU WANT</div>
             <input
               value={shoe}
               onChange={e => { setShoe(e.target.value); setResult(null) }}
@@ -119,7 +119,7 @@ export default function ColdDMGenerator() {
             />
           </div>
           <div>
-            <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 8 }}>WHAT YOU'RE OFFERING</div>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>WHAT YOU'RE OFFERING</div>
             <input
               value={offer}
               onChange={e => { setOffer(e.target.value); setResult(null) }}
@@ -131,17 +131,17 @@ export default function ColdDMGenerator() {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 16 }}>
           <div>
-            <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 10 }}>WHO YOU'RE HITTING UP</div>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 10 }}>WHO YOU'RE HITTING UP</div>
             {TARGETS.map(t => (
-              <button key={t.label} onClick={() => { setTarget(target === t.value ? null : t.value); setResult(null) }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px', marginBottom: 5, background: target === t.value ? `${B.amber}14` : '#0d0d0d', border: `1px solid ${target === t.value ? B.amber : '#1a1a1a'}`, color: target === t.value ? B.amber : '#555', fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.06em', cursor: 'pointer', transition: 'all 0.15s' }}>
+              <button key={t.label} onClick={() => { setTarget(target === t.value ? null : t.value); setResult(null) }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px', marginBottom: 5, background: target === t.value ? `${B.amber}14` : '#0d0d0d', border: `1px solid ${target === t.value ? B.amber : '#1a1a1a'}`, color: target === t.value ? B.amber : B.smoke, fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.06em', cursor: 'pointer', transition: 'all 0.15s' }}>
                 {t.label}
               </button>
             ))}
           </div>
           <div>
-            <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 10 }}>YOUR TICKET TIER</div>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 10 }}>YOUR TICKET TIER</div>
             {TIERS.map(t => (
-              <button key={t.label} onClick={() => { setTier(tier === t.value ? null : t.value); setResult(null) }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px', marginBottom: 5, background: tier === t.value ? `${B.neonCyan}12` : '#0d0d0d', border: `1px solid ${tier === t.value ? B.neonCyan : '#1a1a1a'}`, color: tier === t.value ? B.neonCyan : '#555', fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.06em', cursor: 'pointer', transition: 'all 0.15s' }}>
+              <button key={t.label} onClick={() => { setTier(tier === t.value ? null : t.value); setResult(null) }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px', marginBottom: 5, background: tier === t.value ? `${B.neonCyan}12` : '#0d0d0d', border: `1px solid ${tier === t.value ? B.neonCyan : '#1a1a1a'}`, color: tier === t.value ? B.neonCyan : B.smoke, fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.06em', cursor: 'pointer', transition: 'all 0.15s' }}>
                 {t.label}
               </button>
             ))}
@@ -149,7 +149,7 @@ export default function ColdDMGenerator() {
         </div>
 
         <div style={{ marginBottom: 20 }}>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 8 }}>EXTRA CONTEXT (OPTIONAL)</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>EXTRA CONTEXT (OPTIONAL)</div>
           <input
             value={context}
             onChange={e => { setContext(e.target.value); setResult(null) }}
@@ -158,7 +158,7 @@ export default function ColdDMGenerator() {
           />
         </div>
 
-        <button onClick={generate} disabled={!ready || loading} style={{ width: '100%', padding: '14px', background: ready && !loading ? B.amber : '#111', color: ready && !loading ? B.black : '#333', border: 'none', fontFamily: "'Space Mono'", fontSize: 11, letterSpacing: '0.2em', fontWeight: 700, cursor: ready && !loading ? 'pointer' : 'default', marginBottom: 24, transition: 'all 0.2s' }}>
+        <button onClick={generate} disabled={!ready || loading} style={{ width: '100%', padding: '14px', background: ready && !loading ? B.amber : '#111', color: ready && !loading ? B.black : B.dim, border: 'none', fontFamily: "'Space Mono'", fontSize: 11, letterSpacing: '0.2em', fontWeight: 700, cursor: ready && !loading ? 'pointer' : 'default', marginBottom: 24, transition: 'all 0.2s' }}>
           {loading ? '⟳ WRITING YOUR DM...' : ready ? 'GENERATE MY DM →' : 'FILL SHOE + OFFER + TARGET'}
         </button>
 
@@ -173,7 +173,7 @@ export default function ColdDMGenerator() {
             </div>
 
             <div style={{ background: '#0a0a0a', border: '1px solid #1a1a1a', padding: '16px 24px', marginBottom: 12 }}>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 10 }}>THE BODY</div>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 10 }}>THE BODY</div>
               <div style={{ fontFamily: "'Space Mono'", fontSize: 10, color: B.smoke, lineHeight: 1.8, marginBottom: 12 }}>{result.body}</div>
               <div style={{ fontFamily: "'Space Mono'", fontSize: 10, color: B.white, lineHeight: 1.8, borderTop: '1px solid #1a1a1a', paddingTop: 12 }}>{result.ask}</div>
             </div>
@@ -183,7 +183,7 @@ export default function ColdDMGenerator() {
             </div>
 
             <div style={{ background: '#0a0a1a', border: `1px solid ${B.neonCyan}22`, padding: '12px 16px', marginBottom: 16 }}>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 7, color: B.neonCyan, letterSpacing: '0.15em', marginBottom: 4 }}>HOW TO SEND IT</div>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.neonCyan, letterSpacing: '0.15em', marginBottom: 4 }}>HOW TO SEND IT</div>
               <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.smoke }}>{result.tone_tip}</div>
             </div>
 

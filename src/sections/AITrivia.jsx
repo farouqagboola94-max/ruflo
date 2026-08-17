@@ -91,12 +91,12 @@ export default function AITrivia() {
             <div style={{ display: 'flex', gap: 16 }}>
               <div style={{ textAlign: 'right' }}>
                 <div style={{ fontFamily: "'Orbitron'", fontSize: 18, color: B.amber, fontWeight: 900 }}>{score}/{total}</div>
-                <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#444', letterSpacing: '0.1em' }}>SCORE</div>
+                <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.1em' }}>SCORE</div>
               </div>
               {streak > 1 && (
                 <div style={{ textAlign: 'right' }}>
                   <div style={{ fontFamily: "'Orbitron'", fontSize: 18, color: B.neonLime, fontWeight: 900 }}>{streak} 🔥</div>
-                  <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#444', letterSpacing: '0.1em' }}>STREAK</div>
+                  <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.1em' }}>STREAK</div>
                 </div>
               )}
             </div>
@@ -116,20 +116,20 @@ export default function AITrivia() {
           {CATEGORIES.map(cat => (
             <button key={cat.id} onClick={() => pickCategory(cat)} style={{ background: category?.id === cat.id ? `${B.amber}10` : '#0d0d0d', border: `1px solid ${category?.id === cat.id ? B.amber : '#1a1a1a'}`, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', transition: 'all 0.15s' }}>
               <div style={{ fontSize: 20, marginBottom: 4 }}>{cat.icon}</div>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 10, color: category?.id === cat.id ? B.amber : '#555', letterSpacing: '0.1em', fontWeight: 700 }}>{cat.label}</div>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', marginTop: 2 }}>{cat.desc}</div>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: 10, color: category?.id === cat.id ? B.amber : B.smoke, letterSpacing: '0.1em', fontWeight: 700 }}>{cat.label}</div>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, marginTop: 2 }}>{cat.desc}</div>
             </button>
           ))}
         </div>
 
         {loading && (
-          <div style={{ textAlign: 'center', padding: 40, fontFamily: "'Space Mono'", fontSize: 10, color: '#444', letterSpacing: '0.15em' }}>
+          <div style={{ textAlign: 'center', padding: 40, fontFamily: "'Space Mono'", fontSize: 10, color: B.dim, letterSpacing: '0.15em' }}>
             ⟳ CLAUDE IS GENERATING YOUR QUESTION...
           </div>
         )}
 
         {!loading && !category && (
-          <div style={{ textAlign: 'center', padding: 40, fontFamily: "'Space Mono'", fontSize: 10, color: '#2a2a2a', letterSpacing: '0.15em' }}>
+          <div style={{ textAlign: 'center', padding: 40, fontFamily: "'Space Mono'", fontSize: 10, color: B.dim, letterSpacing: '0.15em' }}>
             SELECT A CATEGORY TO START
           </div>
         )}
@@ -137,7 +137,7 @@ export default function AITrivia() {
         {question && !loading && (
           <div style={{ animation: 'atSlide 0.3s ease' }}>
             <div style={{ background: '#0a0a0a', border: '1px solid #1a1a1a', padding: '20px 24px', marginBottom: 14 }}>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 12 }}>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 12 }}>
                 {category?.icon} {category?.label}
               </div>
               <div style={{ fontFamily: "'Space Mono'", fontSize: 13, color: B.white, lineHeight: 1.8 }}>{question.question}</div>

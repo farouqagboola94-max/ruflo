@@ -104,7 +104,7 @@ export default function CommunityIntelligence() {
             {[['8', 'SUBREDDITS'], ['4.2K', 'POSTS/WEEK'], ['97%', 'LAGOS ORIGIN']].map(([n, l]) => (
               <div key={l} style={{ textAlign: 'right' }}>
                 <div style={{ fontFamily: "'Orbitron'", fontSize: 22, fontWeight: 900, color: B.amber, lineHeight: 1 }}>{n}</div>
-                <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#444', letterSpacing: '0.15em' }}>{l}</div>
+                <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.15em' }}>{l}</div>
               </div>
             ))}
           </div>
@@ -118,8 +118,8 @@ export default function CommunityIntelligence() {
           <div style={{ background: '#0d0d0d', border: `1px solid ${sentColor}22`, borderRadius: 8, padding: 24, position: 'relative', animation: pulse ? 'ciSlide 0.3s ease' : 'none' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
               <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#22ff44', animation: 'ciPulse 1.5s ease infinite' }} />
-              <span style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#444', letterSpacing: '0.15em' }}>LIVE FEED</span>
-              <span style={{ marginLeft: 'auto', fontFamily: "'Space Mono'", fontSize: 9, color: '#333' }}>{feed.sub}</span>
+              <span style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.15em' }}>LIVE FEED</span>
+              <span style={{ marginLeft: 'auto', fontFamily: "'Space Mono'", fontSize: 9, color: B.dim }}>{feed.sub}</span>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
@@ -140,24 +140,24 @@ export default function CommunityIntelligence() {
               <div style={{ fontFamily: "'Space Mono'", fontSize: 10, color: B.smoke }}>{feed.psychology}</div>
             </div>
 
-            <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.08em' }}>{feed.post}</div>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.08em' }}>{feed.post}</div>
 
             <div style={{ display: 'flex', gap: 6, marginTop: 12, flexWrap: 'wrap' }}>
               {FEEDS.map((_, i) => (
-                <button key={i} onClick={() => setActiveIdx(i)} style={{ width: 8, height: 8, borderRadius: '50%', border: 'none', background: i === activeIdx ? sentColor : '#222', cursor: 'pointer', padding: 0, transition: 'background 0.2s' }} />
+                <button key={i} onClick={() => setActiveIdx(i)} aria-label={`Show item ${i + 1}`} aria-current={i === activeIdx} style={{ width: 8, height: 8, borderRadius: '50%', border: 'none', background: i === activeIdx ? sentColor : '#222', cursor: 'pointer', padding: 0, transition: 'background 0.2s' }} />
               ))}
             </div>
           </div>
 
           {/* Analysis runner */}
           <div style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: 8, padding: 24 }}>
-            <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#444', letterSpacing: '0.2em', marginBottom: 16 }}>INTELLIGENCE ENGINE</div>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.2em', marginBottom: 16 }}>INTELLIGENCE ENGINE</div>
 
             <div style={{ marginBottom: 20 }}>
               {['r/Nigeria', 'r/Lagos', 'r/Naija', 'r/FashionNigeria', 'r/NaijaSnark', 'r/NigerianGamers'].map((sub, i) => (
                 <div key={sub} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '5px 0', borderBottom: '1px solid #111' }}>
                   <div style={{ width: 6, height: 6, borderRadius: '50%', background: running && analyzed > i ? B.neonLime : '#222', transition: 'background 0.3s', flexShrink: 0 }} />
-                  <span style={{ fontFamily: "'Space Mono'", fontSize: 9, color: running && analyzed > i ? B.smoke : '#333' }}>{sub}</span>
+                  <span style={{ fontFamily: "'Space Mono'", fontSize: 9, color: running && analyzed > i ? B.smoke : B.dim }}>{sub}</span>
                   {running && analyzed > i && <span style={{ marginLeft: 'auto', fontFamily: "'Space Mono'", fontSize: 8, color: B.neonLime }}>✓ DONE</span>}
                 </div>
               ))}
@@ -166,7 +166,7 @@ export default function CommunityIntelligence() {
             {running && (
               <div style={{ marginBottom: 16 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-                  <span style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#444' }}>ANALYZING</span>
+                  <span style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim }}>ANALYZING</span>
                   <span style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.amber }}>{progress}%</span>
                 </div>
                 <div style={{ height: 2, background: '#1a1a1a', borderRadius: 2 }}>
@@ -178,11 +178,11 @@ export default function CommunityIntelligence() {
             <button
               onClick={runAnalysis}
               disabled={running}
-              style={{ width: '100%', padding: '12px', background: running ? 'rgba(255,255,255,0.04)' : B.amber, color: running ? '#444' : B.black, border: 'none', borderRadius: 4, fontFamily: "'Space Mono'", fontSize: 10, letterSpacing: '0.15em', fontWeight: 700, cursor: running ? 'wait' : 'pointer', transition: 'all 0.2s' }}
+              style={{ width: '100%', padding: '12px', background: running ? 'rgba(255,255,255,0.04)' : B.amber, color: running ? B.dim : B.black, border: 'none', borderRadius: 4, fontFamily: "'Space Mono'", fontSize: 10, letterSpacing: '0.15em', fontWeight: 700, cursor: running ? 'wait' : 'pointer', transition: 'all 0.2s' }}
             >
               {running ? `SCANNING ${analyzed}/8 POSTS...` : 'RUN ANALYSIS'}
             </button>
-            <p style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', textAlign: 'center', marginTop: 8 }}>
+            <p style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, textAlign: 'center', marginTop: 8 }}>
               Pulls from 6 Lagos subreddits · Claude sentiment scoring
             </p>
           </div>
@@ -191,7 +191,7 @@ export default function CommunityIntelligence() {
         {/* Strategy output */}
         {showResults && (
           <div style={{ background: '#0a0a0a', border: '1px solid #1a1a1a', borderRadius: 8, padding: 24, animation: 'ciSlide 0.4s ease' }}>
-            <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#444', letterSpacing: '0.2em', marginBottom: 20 }}>CONTENT STRATEGY OUTPUT</div>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.2em', marginBottom: 20 }}>CONTENT STRATEGY OUTPUT</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
               {STRATEGY.map(s => (
                 <div key={s.label} style={{ borderLeft: `2px solid ${s.color}`, paddingLeft: 12 }}>

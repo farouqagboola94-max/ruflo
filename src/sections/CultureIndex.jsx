@@ -25,8 +25,8 @@ function StatBox({ label, value, color, sub }) {
   return (
     <div className="card-3d" style={{ flex: '1 1 200px', background: B.charcoal, border: `1px solid ${color}30`, borderRadius: 6, padding: '24px 20px', textAlign: 'center' }}>
       <div style={{ fontFamily: "'Orbitron', monospace", fontSize: 38, fontWeight: 900, color, textShadow: `0 0 20px ${color}40`, lineHeight: 1 }}>{value}</div>
-      {sub && <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: color + '90', letterSpacing: '0.2em', marginTop: 4 }}>{sub}</div>}
-      <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, letterSpacing: '0.22em', marginTop: 8 }}>{label}</div>
+      {sub && <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: color + '90', letterSpacing: '0.2em', marginTop: 4 }}>{sub}</div>}
+      <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing: '0.22em', marginTop: 8 }}>{label}</div>
     </div>
   )
 }
@@ -90,7 +90,7 @@ export default function CultureIndex() {
                 opacity: pulse ? 1 : 0.25,
                 transition: 'opacity 0.3s',
               }} />
-              <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: live ? B.neonLime : B.smoke, letterSpacing: '0.3em' }}>
+              <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: live ? B.neonLime : B.smoke, letterSpacing: '0.3em' }}>
                 {live ? 'LIVE' : 'CONNECTING...'}
               </span>
             </div>
@@ -103,7 +103,7 @@ export default function CultureIndex() {
             </p>
           </div>
           {data.lastUpdated && (
-            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke + '60', letterSpacing: '0.15em', textAlign: 'right' }}>
+            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke + '60', letterSpacing: '0.15em', textAlign: 'right' }}>
               LAST UPDATE<br />
               {new Date(data.lastUpdated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </div>
@@ -143,7 +143,7 @@ export default function CultureIndex() {
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: B.white, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{shoe}</div>
-                      <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke }}>{count} {count === 1 ? 'reg' : 'regs'}</div>
+                      <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke }}>{count} {count === 1 ? 'reg' : 'regs'}</div>
                     </div>
                   </div>
                 ))
@@ -158,7 +158,7 @@ export default function CultureIndex() {
                 ? <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: B.smoke }}>Map loading...</div>
                 : data.cities.map(([city, count], i) => (
                     <div key={city} style={{ padding: '5px 10px', background: B.black, border: `1px solid ${B.neonLime}${i === 0 ? '60' : '22'}`, borderRadius: 3 }}>
-                      <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: i === 0 ? B.neonLime : B.smoke, letterSpacing: '0.1em' }}>
+                      <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: i === 0 ? B.neonLime : B.smoke, letterSpacing: '0.1em' }}>
                         {city.toUpperCase()}{count > 1 ? ` x${count}` : ''}
                       </span>
                     </div>
@@ -177,9 +177,9 @@ export default function CultureIndex() {
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 16, padding: '9px 0', borderBottom: i < data.recent.length - 1 ? `1px solid ${B.gunmetal}50` : 'none' }}>
                   <div style={{ width: 6, height: 6, borderRadius: '50%', background: i === 0 ? B.neonLime : B.gunmetal, flexShrink: 0 }} />
                   <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: B.white, flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.shoe}</span>
-                  <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, letterSpacing: '0.1em', flexShrink: 0 }}>{(r.city || '').toUpperCase()}</span>
+                  <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing: '0.1em', flexShrink: 0 }}>{(r.city || '').toUpperCase()}</span>
                   {r.ts && (
-                    <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke + '50', letterSpacing: '0.08em', flexShrink: 0 }}>
+                    <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke + '50', letterSpacing: '0.08em', flexShrink: 0 }}>
                       {new Date(r.ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   )}
@@ -190,7 +190,7 @@ export default function CultureIndex() {
         )}
 
         {/* Footer note */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke + '50', letterSpacing: '0.15em' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke + '50', letterSpacing: '0.15em' }}>
           <span>DATA: SF'26 SOLE REGISTRY &amp; WAITLIST</span>
           <span>AUTO-REFRESHES EVERY 60 SECONDS</span>
         </div>

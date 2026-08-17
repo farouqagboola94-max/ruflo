@@ -175,7 +175,7 @@ function ZoneRect({ zone, active, hovered, onEnter, onLeave, onClick }) {
 // ── info panel ─────────────────────────────────────────────────────────────────
 function InfoPanel({ zone, onClose }) {
   if (!zone) return (
-    <div style={{ textAlign:'center', padding:'36px 0', fontFamily:'Space Mono,monospace', fontSize:11, color:'#333' }}>
+    <div style={{ textAlign:'center', padding:'36px 0', fontFamily:'Space Mono,monospace', fontSize:11, color: B.dim }}>
       ← tap any zone to explore the floor plan
     </div>
   )
@@ -190,14 +190,14 @@ function InfoPanel({ zone, onClose }) {
             <div style={{ fontFamily:'Syne,sans-serif', fontSize:13, color:zone.color, marginTop:2 }}>{zone.tagline}</div>
           </div>
         </div>
-        <button onClick={onClose} style={{ background:'transparent', border:'none', color:'#555', fontFamily:'Space Mono,monospace', fontSize:16, cursor:'pointer', padding:'0 4px' }}>✕</button>
+        <button onClick={onClose} style={{ background:'transparent', border:'none', color: B.smoke, fontFamily:'Space Mono,monospace', fontSize:16, cursor:'pointer', padding:'0 4px' }}>✕</button>
       </div>
       <p style={{ fontFamily:'Syne,sans-serif', fontSize:13, color:'#aaa', lineHeight:1.75, marginBottom:16 }}>{zone.desc}</p>
       <div style={{ display:'flex', gap:16, flexWrap:'wrap' }}>
         <div style={{ flex:'1 1 180px' }}>
-          <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#444', letterSpacing:3, marginBottom:8 }}>SCHEDULE</div>
+          <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.dim, letterSpacing:3, marginBottom:8 }}>SCHEDULE</div>
           {zone.schedule.map(s => (
-            <div key={s} style={{ fontFamily:'Space Mono,monospace', fontSize:10, color:'#777', padding:'4px 0', borderBottom:'1px solid rgba(255,255,255,0.04)' }}>{s}</div>
+            <div key={s} style={{ fontFamily:'Space Mono,monospace', fontSize:10, color:B.smoke, padding:'4px 0', borderBottom:'1px solid rgba(255,255,255,0.04)' }}>{s}</div>
           ))}
         </div>
         <div style={{ flex:'0 0 auto', alignSelf:'flex-end' }}>
@@ -255,7 +255,7 @@ export default function Venue() {
             { label:'DAY 1',   value:'Mobolaji Johnson Arena · Dec 11', color:B.neonMagenta },
           ].map(({ label, value, color }) => (
             <div key={label} style={{ padding:'18px 20px', background:'rgba(255,255,255,0.025)' }}>
-              <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:'#444', letterSpacing:3, marginBottom:6 }}>{label}</div>
+              <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color: B.dim, letterSpacing:3, marginBottom:6 }}>{label}</div>
               <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:16, color, letterSpacing:1, lineHeight:1.3 }}>{value}</div>
             </div>
           ))}
@@ -303,7 +303,7 @@ export default function Venue() {
           {LEGEND.map(({ color, label }) => (
             <div key={label} style={{ display:'flex', alignItems:'center', gap:6 }}>
               <div style={{ width:10, height:10, borderRadius:2, background:`${color}30`, border:`1px solid ${color}80` }} />
-              <span style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#555' }}>{label}</span>
+              <span style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: B.smoke }}>{label}</span>
             </div>
           ))}
         </div>
@@ -313,7 +313,7 @@ export default function Venue() {
 
         {/* CTAs */}
         <div style={{ marginTop:48, textAlign:'center' }}>
-          <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#444', letterSpacing:3, marginBottom:20 }}>TWO NIGHTS. TWO VENUES. ONE MOVEMENT.</div>
+          <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.dim, letterSpacing:3, marginBottom:20 }}>TWO NIGHTS. TWO VENUES. ONE MOVEMENT.</div>
           <div style={{ display:'flex', gap:14, justifyContent:'center', flexWrap:'wrap' }}>
             <a href="#tickets"
               style={{ padding:'14px 32px', background:B.amber, color:B.black, fontFamily:'Space Mono,monospace', fontSize:10, fontWeight:700, letterSpacing:'0.15em', textDecoration:'none', borderRadius:4, boxShadow:`0 0 30px ${B.amber}25` }}>
@@ -330,7 +330,7 @@ export default function Venue() {
         <div style={{ marginTop:80 }}>
           {/* Address pill */}
           <div style={{ textAlign:'center', marginBottom:36 }}>
-            <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#444', letterSpacing:3, marginBottom:18 }}>GETTING THERE</div>
+            <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.dim, letterSpacing:3, marginBottom:18 }}>GETTING THERE</div>
             <h3 className="reveal-3d" style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(32px,5vw,56px)', color:B.white, letterSpacing:2, lineHeight:0.9, marginBottom:20 }}>
               PLAN YOUR <span style={{ color:B.neonCyan }}>JOURNEY</span>
             </h3>
@@ -375,7 +375,7 @@ export default function Venue() {
                   <div style={{ position:'absolute', top:0, left:24, right:24, height:1, background:`linear-gradient(90deg,transparent,${accent}60,transparent)` }} />
                   <div style={{ fontSize:28, marginBottom:12 }}>{icon}</div>
                   <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:accent, letterSpacing:'0.2em', fontWeight:700, marginBottom:10 }}>{title}</div>
-                  <p style={{ fontFamily:'Syne,sans-serif', fontSize:13, color:'#777', lineHeight:1.7, margin:0 }}>{desc}</p>
+                  <p style={{ fontFamily:'Syne,sans-serif', fontSize:13, color:B.smoke, lineHeight:1.7, margin:0 }}>{desc}</p>
                 </div>
               )
             })}

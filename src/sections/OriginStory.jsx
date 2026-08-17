@@ -73,9 +73,9 @@ function Chapter({ c, i }) {
       {/* content */}
       <div style={{ flex:'1 1 320px', paddingBottom:52 }}>
         <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:16 }}>
-          <div style={{ fontFamily:"'Space Mono', monospace", fontSize:7, color:c.color, letterSpacing:'0.3em' }}>{c.label}</div>
+          <div style={{ fontFamily:"'Space Mono', monospace", fontSize: 9, color:c.color, letterSpacing:'0.3em' }}>{c.label}</div>
           <div style={{ padding:'2px 8px', background:c.color+'15', border:`1px solid ${c.color}30`, borderRadius:20 }}>
-            <span style={{ fontFamily:"'Space Mono', monospace", fontSize:6, color:c.color, letterSpacing:'0.2em' }}>{c.year}</span>
+            <span style={{ fontFamily:"'Space Mono', monospace", fontSize: 9, color:c.color, letterSpacing:'0.2em' }}>{c.year}</span>
           </div>
         </div>
         <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(24px,3.5vw,36px)', color:B.white, lineHeight:1.05, marginBottom:20 }}>{c.headline}</div>
@@ -130,7 +130,7 @@ export default function OriginStory() {
           <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(22px,3vw,32px)', color:B.neonCyan, lineHeight:1.2, marginBottom:16 }}>
             "NOBODY WHO HAD THE SKILL, THE SENSIBILITY,<br />AND THE FLUENCY HAD BUILT IT YET."
           </div>
-          <div style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color:'#555', letterSpacing:'0.2em' }}>THE CATALYST — ON THE GAP IN THE MARKET</div>
+          <div style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color: B.smoke, letterSpacing:'0.2em' }}>THE CATALYST — ON THE GAP IN THE MARKET</div>
         </div>
 
         {/* why sneakers */}
@@ -181,7 +181,7 @@ export default function OriginStory() {
           <div style={{ flex:1, minWidth:220 }}>
             <div style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color:B.amber, letterSpacing:3, marginBottom:6 }}>THE CATALYST</div>
             <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:28, color:B.white, letterSpacing:'0.04em', marginBottom:4 }}>OLUWATOBILOBA</div>
-            <div style={{ fontFamily:"'Space Mono', monospace", fontSize:9, color:'#555', letterSpacing:2, marginBottom:14 }}>PRINCIPAL · CATALYST CONCEPTS · LAGOS</div>
+            <div style={{ fontFamily:"'Space Mono', monospace", fontSize:9, color: B.smoke, letterSpacing:2, marginBottom:14 }}>PRINCIPAL · CATALYST CONCEPTS · LAGOS</div>
             <div style={{ fontFamily:"'Syne', sans-serif", fontSize:13, color:B.smoke, lineHeight:1.75, marginBottom:18, maxWidth:520 }}>
               Event builder, brand strategist, and principal of Catalyst Concepts. Former startup operator. Currently channeling five years of pattern recognition, cultural obsession, and a very deliberate Void into building Lagos's first dedicated sneaker festival.
             </div>
@@ -210,9 +210,9 @@ export default function OriginStory() {
             </a>
           </div>
           <div className="card-3d" style={{ flexShrink:0, padding:'18px 20px', background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,103,25,0.2)', borderRadius:8, minWidth:200 }}>
-            <div style={{ fontFamily:"'Space Mono', monospace", fontSize:7, color:'#FF6719', letterSpacing:2, marginBottom:8 }}>LATEST ESSAY</div>
+            <div style={{ fontFamily:"'Space Mono', monospace", fontSize: 9, color:'#FF6719', letterSpacing:2, marginBottom:8 }}>LATEST ESSAY</div>
             <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:18, color:B.white, lineHeight:1.2, marginBottom:6 }}>THE VOID AND WHAT CAME AFTER</div>
-            <div style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color:'#555' }}>PERSONAL · 8 MIN READ</div>
+            <div style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color: B.smoke }}>PERSONAL · 8 MIN READ</div>
           </div>
         </div>
 

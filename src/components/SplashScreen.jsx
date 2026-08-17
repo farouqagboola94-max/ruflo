@@ -81,7 +81,7 @@ export default function SplashScreen() {
               <div style={{ width: 68, height: 78, background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)' }}>
                 <span style={{ fontFamily: "'Orbitron', monospace", fontSize: 26, fontWeight: 900, color: B.amber, textShadow: `0 0 20px ${B.amber}50` }}>{String(v).padStart(2, '0')}</span>
               </div>
-              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, marginTop: 6, letterSpacing: '0.35em' }}>{l}</div>
+              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, marginTop: 6, letterSpacing: '0.35em' }}>{l}</div>
             </div>
           ))}
         </div>
@@ -99,7 +99,7 @@ export default function SplashScreen() {
           onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = `0 0 40px ${B.amber}30` }}
         >ENTER SITE →</button>
 
-        <div style={{ marginTop: 16, fontFamily: "'Space Mono', monospace", fontSize: 8, color: '#333', letterSpacing: '0.2em' }}>THE SOLE EXHIBITION</div>
+        <div style={{ marginTop: 16, fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.dim, letterSpacing: '0.2em' }}>THE SOLE EXHIBITION</div>
       </div>
     </div>
   )

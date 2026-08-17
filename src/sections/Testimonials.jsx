@@ -41,7 +41,7 @@ export default function Testimonials() {
               The first Sneakers Fest is on {EVENT}. Anyone claiming to have been
               is lying, so there is nothing to quote here yet.
             </p>
-            <p style={{ fontFamily: "'Space Mono', monospace", fontSize: '0.72rem', color: '#555', letterSpacing: 1, lineHeight: 2 }}>
+            <p style={{ fontFamily: "'Space Mono', monospace", fontSize: '0.72rem', color: B.smoke, letterSpacing: 1, lineHeight: 2 }}>
               COME ON THE DAY. TELL US AFTERWARDS.<br />
               THIS SPACE IS FOR WHAT YOU SAY THEN.
             </p>
@@ -60,7 +60,7 @@ export default function Testimonials() {
                   {q.name}
                 </div>
                 {q.role && (
-                  <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: '#555', letterSpacing: 1, marginTop: 3 }}>
+                  <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.smoke, letterSpacing: 1, marginTop: 3 }}>
                     {q.role}
                   </div>
                 )}

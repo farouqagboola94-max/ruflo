@@ -117,7 +117,7 @@ function VaultContent() {
       </div>
 
       <div style={{ marginBottom: 40 }}>
-        <div style={{ fontFamily: "'Space Mono', monospace", fontSize: '0.6rem', letterSpacing: '0.22em', color: '#555', marginBottom: 16 }}>
+        <div style={{ fontFamily: "'Space Mono', monospace", fontSize: '0.6rem', letterSpacing: '0.22em', color: B.smoke, marginBottom: 16 }}>
           EXCLUSIVE DROPS INTEL — VAULT MEMBERS ONLY
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))', gap: 14 }}>
@@ -134,13 +134,13 @@ function VaultContent() {
                 position: 'absolute', top: 0, left: 0, right: 0, height: 2,
                 background: `linear-gradient(90deg, ${drop.color}, transparent)`,
               }} />
-              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: '0.52rem', color: '#444', letterSpacing: '0.15em', marginBottom: 10 }}>{drop.code}</div>
+              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: '0.52rem', color: B.dim, letterSpacing: '0.15em', marginBottom: 10 }}>{drop.code}</div>
               <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '1.15rem', color: '#F0EDE6', letterSpacing: '0.04em', marginBottom: 4, lineHeight: 1.1 }}>{drop.name}</div>
               <div style={{ fontFamily: "'Space Mono', monospace", fontSize: '0.58rem', color: '#8A8A8A', marginBottom: 14 }}>{drop.brand}</div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
                 <div>
                   <div style={{ fontFamily: "'Orbitron', monospace", fontSize: '0.58rem', color: drop.color, fontWeight: 700 }}>{drop.release}</div>
-                  <div style={{ fontFamily: "'Space Mono', monospace", fontSize: '0.5rem', color: '#555', marginTop: 2 }}>{drop.qty}</div>
+                  <div style={{ fontFamily: "'Space Mono', monospace", fontSize: '0.5rem', color: B.smoke, marginTop: 2 }}>{drop.qty}</div>
                 </div>
                 <span style={{
                   fontFamily: "'Space Mono', monospace", fontSize: '0.5rem',
@@ -154,7 +154,7 @@ function VaultContent() {
       </div>
 
       <div>
-        <div style={{ fontFamily: "'Space Mono', monospace", fontSize: '0.6rem', letterSpacing: '0.22em', color: '#555', marginBottom: 16 }}>
+        <div style={{ fontFamily: "'Space Mono', monospace", fontSize: '0.6rem', letterSpacing: '0.22em', color: B.smoke, marginBottom: 16 }}>
           VAULT MEMBER PERKS
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: 12 }}>

@@ -81,7 +81,7 @@ export default function TradeNegotiator() {
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             TRADE NEGOTIATOR
           </h2>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#444', letterSpacing: '0.15em' }}>LAGOS FAIR-DEAL ENGINE</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.15em' }}>LAGOS FAIR-DEAL ENGINE</div>
         </div>
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.72rem', marginBottom: 36, letterSpacing: '0.04em' }}>
           Describe the trade · Claude reads the Lagos market · Get a verdict + ready-to-send offer
@@ -118,7 +118,7 @@ export default function TradeNegotiator() {
           style={{ width: '100%', background: '#0d0d0d', border: '1px solid #1a1a1a', color: B.white, padding: '12px 14px', fontFamily: "'Space Mono'", fontSize: 10, lineHeight: 1.7, marginBottom: 14, resize: 'vertical', outline: 'none' }}
         />
 
-        <button onClick={analyze} disabled={!ready || loading} style={{ width: '100%', padding: '14px', background: ready && !loading ? B.amber : '#111', color: ready && !loading ? B.black : '#333', border: 'none', fontFamily: "'Space Mono'", fontSize: 11, letterSpacing: '0.2em', fontWeight: 700, cursor: ready && !loading ? 'pointer' : 'default', marginBottom: 24, transition: 'all 0.2s' }}>
+        <button onClick={analyze} disabled={!ready || loading} style={{ width: '100%', padding: '14px', background: ready && !loading ? B.amber : '#111', color: ready && !loading ? B.black : B.dim, border: 'none', fontFamily: "'Space Mono'", fontSize: 11, letterSpacing: '0.2em', fontWeight: 700, cursor: ready && !loading ? 'pointer' : 'default', marginBottom: 24, transition: 'all 0.2s' }}>
           {loading ? '⟳ EVALUATING THE TRADE...' : 'ANALYSE THIS TRADE →'}
         </button>
 
@@ -130,12 +130,12 @@ export default function TradeNegotiator() {
               <div style={{ fontFamily: "'Orbitron'", fontSize: 28, fontWeight: 900, color: vc.color, lineHeight: 1 }}>{vc.label}</div>
               <div style={{ display: 'flex', gap: 24 }}>
                 <div>
-                  <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#444', letterSpacing: '0.15em', marginBottom: 2 }}>YOU GIVE</div>
+                  <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.15em', marginBottom: 2 }}>YOU GIVE</div>
                   <div style={{ fontFamily: "'Orbitron'", fontSize: 13, color: B.amber, fontWeight: 700 }}>{result.your_value}</div>
                 </div>
-                <div style={{ fontFamily: "'Space Mono'", fontSize: 18, color: '#333', alignSelf: 'center' }}>⇄</div>
+                <div style={{ fontFamily: "'Space Mono'", fontSize: 18, color: B.dim, alignSelf: 'center' }}>⇄</div>
                 <div>
-                  <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#444', letterSpacing: '0.15em', marginBottom: 2 }}>YOU GET</div>
+                  <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.15em', marginBottom: 2 }}>YOU GET</div>
                   <div style={{ fontFamily: "'Orbitron'", fontSize: 13, color: B.neonCyan, fontWeight: 700 }}>{result.their_value}</div>
                 </div>
               </div>
@@ -153,14 +153,14 @@ export default function TradeNegotiator() {
             </div>
 
             <div style={{ background: '#0a0a0a', border: '1px solid #1a1a1a', padding: '16px 20px', marginBottom: 14 }}>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 8 }}>READY-TO-SEND OFFER MESSAGE</div>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>READY-TO-SEND OFFER MESSAGE</div>
               <div style={{ fontFamily: "'Space Mono'", fontSize: 10, color: B.smoke, lineHeight: 1.8, marginBottom: 14 }}>{result.offer_message}</div>
               <button onClick={copyOffer} style={{ background: copied ? '#052e16' : B.amber, border: 'none', color: copied ? '#22c55e' : B.black, fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.15em', fontWeight: 700, padding: '9px 20px', cursor: 'pointer', transition: 'all 0.2s' }}>
                 {copied ? '✓ COPIED' : 'COPY MESSAGE →'}
               </button>
             </div>
 
-            <button onClick={() => { setResult(null); setOffering(''); setGetting(''); setContext('') }} style={{ width: '100%', background: 'transparent', border: '1px solid #1a1a1a', color: '#333', fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.15em', padding: '10px', cursor: 'pointer' }}>
+            <button onClick={() => { setResult(null); setOffering(''); setGetting(''); setContext('') }} style={{ width: '100%', background: 'transparent', border: '1px solid #1a1a1a', color: B.dim, fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.15em', padding: '10px', cursor: 'pointer' }}>
               ANALYSE ANOTHER TRADE
             </button>
           </div>

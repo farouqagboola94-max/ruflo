@@ -39,7 +39,7 @@ export default function SneakerBible() {
     hed: { fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(28px, 5vw, 56px)', lineHeight: 0.88, textTransform: 'uppercase', letterSpacing: '-0.01em' },
     sub: { fontFamily: mono, color: B.smoke, fontSize: 11, letterSpacing: '0.2em' },
     tabBar: { display: 'flex', gap: 0, borderBottom: `1px solid ${B.gunmetal}`, background: B.charcoal, overflowX: 'auto' },
-    tab: (a) => ({ padding: '14px 22px', background: 'none', border: 'none', color: a ? B.amber : '#555', fontSize: 10, fontWeight: 700, letterSpacing: '0.2em', cursor: 'pointer', textTransform: 'uppercase', borderBottom: a ? `2px solid ${B.amber}` : '2px solid transparent', fontFamily: mono, whiteSpace: 'nowrap' }),
+    tab: (a) => ({ padding: '14px 22px', background: 'none', border: 'none', color: a ? B.amber : B.smoke, fontSize: 10, fontWeight: 700, letterSpacing: '0.2em', cursor: 'pointer', textTransform: 'uppercase', borderBottom: a ? `2px solid ${B.amber}` : '2px solid transparent', fontFamily: mono, whiteSpace: 'nowrap' }),
     page: { padding: '32px', maxWidth: 1400, margin: '0 auto' },
     storySection: { borderLeft: `3px solid ${B.amber}`, paddingLeft: 24, marginBottom: 36 },
     storyTitle: { fontSize: 12, fontWeight: 700, color: B.amber, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 10, fontFamily: mono },
@@ -52,22 +52,22 @@ export default function SneakerBible() {
     filters: { display: 'flex', gap: 10, marginBottom: 24, flexWrap: 'wrap', alignItems: 'center' },
     searchBox: { background: B.charcoal, border: `1px solid ${B.gunmetal}`, color: B.white, padding: '10px 16px', fontSize: 12, fontFamily: mono, flex: '1 1 200px', outline: 'none', letterSpacing: '0.05em' },
     sel: { background: B.charcoal, border: `1px solid ${B.gunmetal}`, color: B.smoke, padding: '10px 12px', fontSize: 10, fontFamily: mono, letterSpacing: '0.1em', cursor: 'pointer' },
-    count: { color: '#444', fontSize: 10, letterSpacing: '0.15em', fontFamily: mono },
+    count: { color: B.dim, fontSize: 10, letterSpacing: '0.15em', fontFamily: mono },
     grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 },
     card: (t) => ({ background: '#0f0f0f', border: `1px solid ${B.gunmetal}`, borderTop: `3px solid ${TIER_COLORS[t] || '#333'}`, overflow: 'hidden' }),
     cardHd: (br) => ({ background: `${BRAND_COLORS[br] || B.charcoal}15`, borderBottom: `1px solid ${B.gunmetal}`, padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }),
     tierBadge: (t) => ({ fontSize: 9, fontWeight: 700, letterSpacing: '0.2em', color: TIER_COLORS[t], background: `${TIER_COLORS[t]}18`, padding: '3px 8px', border: `1px solid ${TIER_COLORS[t]}45`, fontFamily: mono }),
-    brandLbl: { fontSize: 10, color: '#555', letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: mono },
+    brandLbl: { fontSize: 10, color: B.smoke, letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: mono },
     cardBd: { padding: 16 },
     snkrName: { fontSize: 13, fontWeight: 700, color: B.white, lineHeight: 1.3, marginBottom: 4 },
-    clrwy: { fontSize: 10, color: '#555', letterSpacing: '0.1em', marginBottom: 14, fontFamily: mono },
+    clrwy: { fontSize: 10, color: B.smoke, letterSpacing: '0.1em', marginBottom: 14, fontFamily: mono },
     priceRow: { display: 'flex', gap: 10, marginBottom: 12, flexWrap: 'wrap' },
     priceBox: { flex: 1, background: B.charcoal, padding: '8px 10px', minWidth: 80 },
-    priceLbl: { fontSize: 9, color: '#444', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 2, fontFamily: mono },
+    priceLbl: { fontSize: 9, color: B.dim, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 2, fontFamily: mono },
     priceVal: { fontSize: 13, fontWeight: 700, color: B.white },
     nairaBox: { background: B.amber + '12', border: `1px solid ${B.amber}35`, padding: '6px 10px', fontSize: 11, color: B.amber, letterSpacing: '0.05em', marginBottom: 12, fontFamily: mono },
     stars: { color: B.amber, fontSize: 12, marginBottom: 10 },
-    expandBtn: { fontSize: 9, color: '#555', letterSpacing: '0.15em', background: 'none', border: `1px solid ${B.gunmetal}`, padding: '6px 12px', cursor: 'pointer', fontFamily: mono, width: '100%', textAlign: 'center', marginTop: 8 },
+    expandBtn: { fontSize: 9, color: B.smoke, letterSpacing: '0.15em', background: 'none', border: `1px solid ${B.gunmetal}`, padding: '6px 12px', cursor: 'pointer', fontFamily: mono, width: '100%', textAlign: 'center', marginTop: 8 },
     expandContent: { padding: '0 16px 16px', borderTop: `1px solid ${B.gunmetal}` },
     noteText: { fontSize: 12, color: '#999', lineHeight: 1.6, paddingTop: 14, marginBottom: 12, fontFamily: "'Syne', sans-serif" },
     stockxLink: { display: 'block', fontSize: 10, color: B.amber, letterSpacing: '0.15em', textDecoration: 'none', border: `1px solid ${B.amber}45`, padding: '8px 12px', textAlign: 'center', marginTop: 8, fontFamily: mono },
@@ -75,8 +75,8 @@ export default function SneakerBible() {
     mktCard: { background: '#0f0f0f', border: `1px solid ${B.gunmetal}`, padding: 20 },
     mktLbl: { fontSize: 10, color: B.amber, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 8, fontFamily: mono },
     mktVal: { fontFamily: "'Bebas Neue', sans-serif", fontSize: 22, color: B.white, marginBottom: 8 },
-    mktNote: { fontSize: 11, color: '#555', lineHeight: 1.5, fontFamily: mono },
-    secTitle: { fontFamily: mono, fontSize: 10, letterSpacing: '0.3em', color: '#555', textTransform: 'uppercase', marginBottom: 24, paddingBottom: 12, borderBottom: `1px solid ${B.gunmetal}` },
+    mktNote: { fontSize: 11, color: B.smoke, lineHeight: 1.5, fontFamily: mono },
+    secTitle: { fontFamily: mono, fontSize: 10, letterSpacing: '0.3em', color: B.smoke, textTransform: 'uppercase', marginBottom: 24, paddingBottom: 12, borderBottom: `1px solid ${B.gunmetal}` },
     exBlock: { background: '#0f0f0f', border: `1px solid ${B.gunmetal}`, padding: 24, marginBottom: 20 },
     exTitle: { fontFamily: mono, fontSize: 10, color: B.amber, letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: 16 },
     exBody: { fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#ccc', lineHeight: 1.75 },
@@ -103,8 +103,8 @@ export default function SneakerBible() {
           <div style={{ ...s.sub, marginTop: 6 }}>Exhibition Bible · Market Intelligence · Cultural Archive</div>
         </div>
         <div style={{ textAlign: 'right' }}>
-          <div style={{ fontFamily: mono, fontSize: 10, color: '#444', letterSpacing: '0.15em' }}>DEC 12 2026</div>
-          <div style={{ fontFamily: mono, fontSize: 10, color: '#444', letterSpacing: '0.15em' }}>MURI OKUNOLA PARK, V/I</div>
+          <div style={{ fontFamily: mono, fontSize: 10, color: B.dim, letterSpacing: '0.15em' }}>DEC 12 2026</div>
+          <div style={{ fontFamily: mono, fontSize: 10, color: B.dim, letterSpacing: '0.15em' }}>MURI OKUNOLA PARK, V/I</div>
           <div style={{ fontFamily: mono, fontSize: 10, color: B.amber, letterSpacing: '0.15em', marginTop: 4 }}>200 SILHOUETTES</div>
         </div>
       </div>
@@ -174,7 +174,7 @@ export default function SneakerBible() {
                   <div style={s.cardHd(sn.brand)}>
                     <div>
                       <div style={s.brandLbl}>{sn.brand}</div>
-                      <div style={{ fontFamily: mono, fontSize: 9, color: '#333', letterSpacing: '0.1em' }}>#{String(sn.id).padStart(3,'0')} · {sn.year}{sn.retro ? ` (Retro ${sn.retro})` : ''}</div>
+                      <div style={{ fontFamily: mono, fontSize: 9, color: B.dim, letterSpacing: '0.1em' }}>#{String(sn.id).padStart(3,'0')} · {sn.year}{sn.retro ? ` (Retro ${sn.retro})` : ''}</div>
                     </div>
                     <div style={s.tierBadge(sn.tier)}>{sn.tier}</div>
                   </div>
@@ -186,14 +186,14 @@ export default function SneakerBible() {
                       <div style={s.priceBox}><div style={s.priceLbl}>Resell Range</div><div style={s.priceVal}>${sn.rsLow.toLocaleString()}--${sn.rsHigh.toLocaleString()}</div></div>
                     </div>
                     <div style={s.nairaBox}>Lagos Est: {sn.naira}</div>
-                    <div style={s.stars}>{'★'.repeat(sn.rarity)}{'☆'.repeat(5 - sn.rarity)} <span style={{ fontFamily: mono, fontSize: 9, color: '#444', letterSpacing: '0.1em' }}>RARITY</span></div>
+                    <div style={s.stars}>{'★'.repeat(sn.rarity)}{'☆'.repeat(5 - sn.rarity)} <span style={{ fontFamily: mono, fontSize: 9, color: B.dim, letterSpacing: '0.1em' }}>RARITY</span></div>
                     <button style={s.expandBtn} onClick={() => setExpanded(expanded === sn.id ? null : sn.id)}>
                       {expanded === sn.id ? '▲ CLOSE' : '▼ CULTURAL NOTE + IMAGE SOURCE'}
                     </button>
                     {expanded === sn.id && (
                       <div style={s.expandContent}>
                         <div style={s.noteText}>{sn.note}</div>
-                        <div style={{ fontFamily: mono, fontSize: 10, color: '#555', letterSpacing: '0.1em', marginBottom: 8 }}>FIND IMAGE WITH THIS SEARCH:</div>
+                        <div style={{ fontFamily: mono, fontSize: 10, color: B.smoke, letterSpacing: '0.1em', marginBottom: 8 }}>FIND IMAGE WITH THIS SEARCH:</div>
                         <div style={{ background: B.charcoal, padding: '8px 12px', fontSize: 11, color: B.amber, letterSpacing: '0.05em', fontFamily: mono }}>{sn.stockx}</div>
                         <a href={`https://stockx.com/search?s=${encodeURIComponent(sn.stockx)}`} target="_blank" rel="noopener noreferrer" style={s.stockxLink}>→ VERIFY PRICE ON STOCKX</a>
                         <a href={`https://www.goat.com/sneakers/?query=${encodeURIComponent(sn.stockx)}`} target="_blank" rel="noopener noreferrer" style={{ ...s.stockxLink, color: B.smoke, borderColor: B.gunmetal }}>→ VERIFY ON GOAT</a>
@@ -263,7 +263,7 @@ export default function SneakerBible() {
           </div>
         )}
 
-        <div style={{ borderTop: `1px solid ${B.gunmetal}`, marginTop: 64, paddingTop: 24, fontFamily: mono, fontSize: 10, color: '#333', letterSpacing: '0.15em', lineHeight: 1.8 }}>
+        <div style={{ borderTop: `1px solid ${B.gunmetal}`, marginTop: 64, paddingTop: 24, fontFamily: mono, fontSize: 10, color: B.dim, letterSpacing: '0.15em', lineHeight: 1.8 }}>
           SNEAKERS FEST 2026 EXHIBITION BIBLE · THE CATALYST · CATALYST CONCEPTS LAGOS · ALL PRICES APPROXIMATE AS OF MID-2025 · VERIFY ALL FIGURES BEFORE COMMERCIAL USE · NGN ESTIMATES BASED ON ~1,600/USD -- RATE IS VOLATILE
         </div>
       </div>

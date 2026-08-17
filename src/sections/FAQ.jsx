@@ -79,7 +79,7 @@ export default function FAQ() {
 
         {/* Search */}
         <div className="reveal-3d" style={{ marginBottom: 28, position: 'relative' }}>
-          <span style={{ position: 'absolute', left: 13, top: '50%', transform: 'translateY(-50%)', color: '#555', fontSize: 13, pointerEvents: 'none' }}>🔍</span>
+          <span style={{ position: 'absolute', left: 13, top: '50%', transform: 'translateY(-50%)', color: B.smoke, fontSize: 13, pointerEvents: 'none' }}>🔍</span>
           <input
             value={search} onChange={e => { setSearch(e.target.value); setOpen(null) }}
             placeholder="Search questions…"
@@ -89,7 +89,7 @@ export default function FAQ() {
           />
           {search && (
             <button onClick={() => { setSearch(''); setOpen(null) }}
-              style={{ position: 'absolute', right: 11, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#555', cursor: 'pointer', fontSize: 16, lineHeight: 1, padding: '2px 5px' }}>×</button>
+              style={{ position: 'absolute', right: 11, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: B.smoke, cursor: 'pointer', fontSize: 16, lineHeight: 1, padding: '2px 5px' }}>×</button>
           )}
         </div>
 
@@ -112,7 +112,7 @@ export default function FAQ() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1, flexWrap: 'wrap' }}>
                     {item.popular && (
                       <div style={{ flexShrink: 0, padding: '2px 7px', background: `${B.amber}18`, border: `1px solid ${B.amber}40`, borderRadius: 10 }}>
-                        <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 7, color: B.amber, letterSpacing: 1 }}>🔥 POPULAR</span>
+                        <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: B.amber, letterSpacing: 1 }}>🔥 POPULAR</span>
                       </div>
                     )}
                     <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 14, color: B.white }}>{item.q}</span>

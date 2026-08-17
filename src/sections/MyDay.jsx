@@ -76,7 +76,7 @@ export default function MyDay() {
           Ten hours, sixteen things happening. Tap what you are not missing, then
           put it in your phone.
         </p>
-        <p style={{ fontFamily: MONO, fontSize: 9, color: '#444', letterSpacing: 1, marginBottom: 24 }}>
+        <p style={{ fontFamily: MONO, fontSize: 9, color: B.dim, letterSpacing: 1, marginBottom: 24 }}>
           SAVED ON THIS DEVICE. NO SIGN-UP.
         </p>
 
@@ -100,12 +100,12 @@ export default function MyDay() {
               >
                 <span style={{
                   flexShrink: 0, width: 18, height: 18, marginTop: 2, borderRadius: 4,
-                  border: `1px solid ${on ? color : '#333'}`,
+                  border: `1px solid ${on ? color : B.dim}`,
                   background: on ? color : 'transparent',
                   color: B.black, fontSize: 12, fontWeight: 900, lineHeight: '17px', textAlign: 'center',
                 }}>{on ? '✓' : ''}</span>
 
-                <span style={{ flexShrink: 0, width: 62, fontFamily: MONO, fontSize: 10, color: on ? color : '#555' }}>
+                <span style={{ flexShrink: 0, width: 62, fontFamily: MONO, fontSize: 10, color: on ? color : B.smoke }}>
                   {s.time}{s.period.toLowerCase()}
                 </span>
 
@@ -115,7 +115,7 @@ export default function MyDay() {
                     letterSpacing: '0.04em', color: on ? B.white : B.mist, lineHeight: 1.25,
                   }}>{s.title}</span>
                   {s.stage && (
-                    <span style={{ display: 'block', fontFamily: MONO, fontSize: 8, color: '#4a4a4a', letterSpacing: 1.5, marginTop: 3 }}>
+                    <span style={{ display: 'block', fontFamily: MONO, fontSize: 8, color: B.dim, letterSpacing: 1.5, marginTop: 3 }}>
                       {s.stage}
                     </span>
                   )}
@@ -132,7 +132,7 @@ export default function MyDay() {
           borderRadius: 12, padding: '20px 22px',
         }}>
           {chosen.length === 0 ? (
-            <p style={{ fontFamily: MONO, fontSize: 11, color: '#444', lineHeight: 1.7, margin: 0 }}>
+            <p style={{ fontFamily: MONO, fontSize: 11, color: B.dim, lineHeight: 1.7, margin: 0 }}>
               Nothing picked yet. Tap anything above and it lands here.
             </p>
           ) : (
@@ -141,7 +141,7 @@ export default function MyDay() {
                 <div style={{ fontFamily: MONO, fontSize: 8, color: B.amber, letterSpacing: 3 }}>
                   YOUR DAY — {chosen.length} {chosen.length === 1 ? 'THING' : 'THINGS'}
                 </div>
-                <div style={{ fontFamily: MONO, fontSize: 9, color: '#555' }}>{window_}</div>
+                <div style={{ fontFamily: MONO, fontSize: 9, color: B.smoke }}>{window_}</div>
               </div>
 
               <button
@@ -153,7 +153,7 @@ export default function MyDay() {
                 }}
               >ADD TO MY CALENDAR</button>
 
-              <p style={{ fontFamily: MONO, fontSize: 8, color: '#3a3a3a', lineHeight: 1.8, margin: 0 }}>
+              <p style={{ fontFamily: MONO, fontSize: 8, color: B.dim, lineHeight: 1.8, margin: 0 }}>
                 {saved
                   ? 'DOWNLOADED. OPEN THE FILE AND YOUR CALENDAR WILL TAKE IT.'
                   : 'DOWNLOADS A CALENDAR FILE. EACH PICK GETS A 30-MINUTE REMINDER.'}
@@ -162,7 +162,7 @@ export default function MyDay() {
           )}
         </div>
 
-        <p style={{ fontFamily: MONO, fontSize: 8, color: '#333', marginTop: 18, lineHeight: 1.8 }}>
+        <p style={{ fontFamily: MONO, fontSize: 8, color: B.dim, marginTop: 18, lineHeight: 1.8 }}>
           Times are Lagos time on December 12. Some acts are still classified —
           they will fill in on this page as they are announced, and your picks
           keep their place.

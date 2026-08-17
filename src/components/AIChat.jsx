@@ -198,10 +198,10 @@ export default function AIChat() {
             <span style={{ color: accent, fontFamily: 'Orbitron,sans-serif', fontSize: 9, fontWeight: 700, letterSpacing: 2 }}>
               {claude ? 'CLAUDE AI' : 'SNEAKERS FEST AI'}
             </span>
-            {claude && <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 7, color: `${B.neonCyan}55` }}>
+            {claude && <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: `${B.neonCyan}55` }}>
               {streaming ? 'streaming…' : 'claude-haiku'}
             </span>}
-            <button onClick={clearChat} title="Clear chat" style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#333', cursor: 'pointer', fontSize: 14, padding: '1px 4px', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#888'} onMouseLeave={e => e.currentTarget.style.color = '#333'}>↺</button>
+            <button onClick={clearChat} title="Clear chat" style={{ marginLeft: 'auto', background: 'none', border: 'none', color: B.dim, cursor: 'pointer', fontSize: 14, padding: '1px 4px', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#888'} onMouseLeave={e => e.currentTarget.style.color = '#333'}>↺</button>
           </div>
 
           {/* messages */}
@@ -253,7 +253,7 @@ export default function AIChat() {
               style={{ flex: 1, background: 'rgba(255,255,255,0.04)', border: `1px solid rgba(245,166,35,0.18)`, borderRadius: 10, color: B.white, padding: '9px 12px', fontSize: 12, fontFamily: 'Space Mono,monospace', outline: 'none', opacity: isActive ? 0.5 : 1 }}
             />
             <button onClick={send} disabled={isActive || !input.trim()}
-              style={{ background: isActive || !input.trim() ? 'rgba(255,255,255,0.05)' : accent, border: 'none', borderRadius: 10, padding: '9px 14px', cursor: isActive || !input.trim() ? 'not-allowed' : 'pointer', color: isActive || !input.trim() ? '#333' : B.black, fontFamily: 'Orbitron,sans-serif', fontSize: 10, fontWeight: 700, letterSpacing: 1, transition: 'all 0.2s' }}
+              style={{ background: isActive || !input.trim() ? 'rgba(255,255,255,0.05)' : accent, border: 'none', borderRadius: 10, padding: '9px 14px', cursor: isActive || !input.trim() ? 'not-allowed' : 'pointer', color: isActive || !input.trim() ? B.dim : B.black, fontFamily: 'Orbitron,sans-serif', fontSize: 10, fontWeight: 700, letterSpacing: 1, transition: 'all 0.2s' }}
             >GO</button>
           </div>
 

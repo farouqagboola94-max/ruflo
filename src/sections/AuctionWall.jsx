@@ -99,11 +99,11 @@ export default function AuctionWall() {
           <div style={{ display: 'flex', gap: 20 }}>
             <div style={{ textAlign: 'right' }}>
               <div style={{ fontFamily: "'Orbitron'", fontSize: 16, color: B.neonLime, fontWeight: 900 }}>{activeLots.length}</div>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 7, color: '#444', letterSpacing: '0.1em' }}>LIVE</div>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.1em' }}>LIVE</div>
             </div>
             <div style={{ textAlign: 'right' }}>
-              <div style={{ fontFamily: "'Orbitron'", fontSize: 16, color: '#555', fontWeight: 900 }}>{closedLots.length}</div>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 7, color: '#444', letterSpacing: '0.1em' }}>CLOSED</div>
+              <div style={{ fontFamily: "'Orbitron'", fontSize: 16, color: B.smoke, fontWeight: 900 }}>{closedLots.length}</div>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.1em' }}>CLOSED</div>
             </div>
           </div>
         </div>
@@ -114,28 +114,28 @@ export default function AuctionWall() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 14 }}>
           {lots.map(lot => {
             const urgent = !lot.locked && lot.timeLeft <= 20
-            const borderColor = lot.locked ? '#1a1a1a' : urgent ? '#ef4444' : lot.flash ? B.amber : '#2a2a2a'
+            const borderColor = lot.locked ? '#1a1a1a' : urgent ? '#ef4444' : lot.flash ? B.amber : B.dim
             return (
               <div key={lot.id} style={{ background: lot.flash ? undefined : '#0a0a0a', border: `1px solid ${borderColor}`, padding: '18px 20px', transition: 'border-color 0.2s', animation: lot.flash ? 'awFlash 0.4s ease' : undefined, position: 'relative', opacity: lot.locked ? 0.55 : 1 }}>
                 {lot.locked && (
                   <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(4,4,4,0.65)', zIndex: 2 }}>
-                    <div style={{ fontFamily: "'Orbitron'", fontSize: 14, color: '#555', letterSpacing: '0.15em' }}>AUCTION CLOSED</div>
+                    <div style={{ fontFamily: "'Orbitron'", fontSize: 14, color: B.smoke, letterSpacing: '0.15em' }}>AUCTION CLOSED</div>
                   </div>
                 )}
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
-                  <div style={{ fontFamily: "'Space Mono'", fontSize: 7, color: '#333', letterSpacing: '0.2em' }}>LOT {String(lot.id).padStart(2, '0')}</div>
-                  <div style={{ fontFamily: "'Orbitron'", fontSize: 12, color: urgent ? '#ef4444' : lot.locked ? '#333' : '#555', fontWeight: 900, letterSpacing: '0.05em' }}>
+                  <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.2em' }}>LOT {String(lot.id).padStart(2, '0')}</div>
+                  <div style={{ fontFamily: "'Orbitron'", fontSize: 12, color: urgent ? '#ef4444' : lot.locked ? B.dim : B.smoke, fontWeight: 900, letterSpacing: '0.05em' }}>
                     {lot.locked ? '00:00' : formatTime(lot.timeLeft)}
                   </div>
                 </div>
 
                 <div style={{ fontFamily: "'Bebas Neue'", fontSize: 14, color: B.white, letterSpacing: '0.04em', marginBottom: 4, lineHeight: 1.3 }}>{lot.name}</div>
                 <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.amber, letterSpacing: '0.1em', marginBottom: 8 }}>{lot.condition} · SZ {lot.size}</div>
-                <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#444', lineHeight: 1.6, marginBottom: 14 }}>{lot.description}</div>
+                <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, lineHeight: 1.6, marginBottom: 14 }}>{lot.description}</div>
 
                 <div style={{ marginBottom: 14 }}>
-                  <div style={{ fontFamily: "'Space Mono'", fontSize: 7, color: '#333', letterSpacing: '0.15em', marginBottom: 3 }}>CURRENT BID · {lot.bidCount} BID{lot.bidCount !== 1 ? 'S' : ''}</div>
+                  <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.15em', marginBottom: 3 }}>CURRENT BID · {lot.bidCount} BID{lot.bidCount !== 1 ? 'S' : ''}</div>
                   <div style={{ fontFamily: "'Orbitron'", fontSize: 20, color: B.amber, fontWeight: 900, animation: lot.flash ? 'awPop 0.3s ease' : undefined }}>
                     {formatNaira(lot.currentBid)}
                   </div>
@@ -144,7 +144,7 @@ export default function AuctionWall() {
                 <button
                   onClick={() => placeBid(lot.id)}
                   disabled={lot.locked}
-                  style={{ width: '100%', padding: '10px', background: lot.locked ? '#111' : B.amber, color: lot.locked ? '#333' : B.black, border: 'none', fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.15em', fontWeight: 700, cursor: lot.locked ? 'default' : 'pointer', transition: 'all 0.2s' }}
+                  style={{ width: '100%', padding: '10px', background: lot.locked ? '#111' : B.amber, color: lot.locked ? B.dim : B.black, border: 'none', fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.15em', fontWeight: 700, cursor: lot.locked ? 'default' : 'pointer', transition: 'all 0.2s' }}
                 >
                   {lot.locked ? 'CLOSED' : `BID ${formatNaira(Math.round(lot.currentBid * 1.05))} →`}
                 </button>
@@ -153,7 +153,7 @@ export default function AuctionWall() {
           })}
         </div>
 
-        <div style={{ marginTop: 20, padding: '12px 16px', background: '#0a0a0a', border: '1px solid #1a1a1a', fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.1em', textAlign: 'center' }}>
+        <div style={{ marginTop: 20, padding: '12px 16px', background: '#0a0a0a', border: '1px solid #1a1a1a', fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.1em', textAlign: 'center' }}>
           SF26 DEMO · BIDS ARE SIMULATED · SNEAKERS FEST '26 · MURI OKUNOLA PARK, V/I · DEC 12 2026
         </div>
       </div>

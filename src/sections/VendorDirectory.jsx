@@ -4,7 +4,7 @@ import { GrainOverlay, SectionTag } from '../components/Shared'
 
 const API = '/.netlify/functions/vendors-public'
 
-const label = { fontFamily: "'Space Mono', monospace", fontSize: 7, letterSpacing: '0.22em', color: B.smoke }
+const label = { fontFamily: "'Space Mono', monospace", fontSize: 9, letterSpacing: '0.22em', color: B.smoke }
 
 const ACCENTS = [B.amber, B.neonCyan, B.neonLime, B.neonMagenta, B.neonBlue, B.electricPurple]
 // Stable per-category colour so the grid reads as grouped without a legend.
@@ -41,7 +41,7 @@ function Card({ vendor, accent }) {
 
       {vendor.exclusiveDrop && (
         <div style={{ padding: '9px 11px', borderRadius: 4, background: `${accent}12`, border: `1px solid ${accent}33` }}>
-          <div style={{ ...label, fontSize: 6, color: accent, marginBottom: 3 }}>EXCLUSIVE ON THE DAY</div>
+          <div style={{ ...label, fontSize: 9, color: accent, marginBottom: 3 }}>EXCLUSIVE ON THE DAY</div>
           <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: B.mist }}>{vendor.exclusiveDrop}</div>
         </div>
       )}
@@ -50,11 +50,11 @@ function Card({ vendor, accent }) {
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 'auto', paddingTop: 4 }}>
           {handle && (
             <a href={`https://instagram.com/${handle}`} target="_blank" rel="noopener noreferrer"
-              style={{ ...label, fontSize: 7, color: B.neonCyan, textDecoration: 'none' }}>@{handle} &#8599;</a>
+              style={{ ...label, fontSize: 9, color: B.neonCyan, textDecoration: 'none' }}>@{handle} &#8599;</a>
           )}
           {vendor.website && (
             <a href={vendor.website} target="_blank" rel="noopener noreferrer"
-              style={{ ...label, fontSize: 7, color: B.smoke, textDecoration: 'none' }}>WEBSITE &#8599;</a>
+              style={{ ...label, fontSize: 9, color: B.smoke, textDecoration: 'none' }}>WEBSITE &#8599;</a>
           )}
         </div>
       )}

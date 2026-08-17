@@ -98,7 +98,7 @@ function UploadModal({ onUpload, onClose }) {
           onDragLeave={() => setDrag(false)}
           onDrop={onDrop}
           onClick={() => inputRef.current?.click()}
-          style={{ border:`2px dashed ${drag ? B.neonMagenta : preview ? B.neonMagenta + '70' : '#2a2a2a'}`, borderRadius:10, marginBottom:16, cursor:'pointer', background: drag ? `${B.neonMagenta}08` : 'rgba(255,255,255,0.02)', transition:'all 0.2s', overflow:'hidden', minHeight: preview ? 'auto' : 130, display:'flex', alignItems:'center', justifyContent:'center' }}
+          style={{ border:`2px dashed ${drag ? B.neonMagenta : preview ? B.neonMagenta + '70' : B.dim}`, borderRadius:10, marginBottom:16, cursor:'pointer', background: drag ? `${B.neonMagenta}08` : 'rgba(255,255,255,0.02)', transition:'all 0.2s', overflow:'hidden', minHeight: preview ? 'auto' : 130, display:'flex', alignItems:'center', justifyContent:'center' }}
         >
           {preview
             ? <img src={preview} alt="preview" style={{ width:'100%', maxHeight:260, objectFit:'cover', display:'block' }} />
@@ -106,7 +106,7 @@ function UploadModal({ onUpload, onClose }) {
               <div style={{ textAlign:'center', padding:'24px 16px' }}>
                 <div style={{ fontSize:28, marginBottom:8 }}>📸</div>
                 <div style={{ fontFamily:'Syne,sans-serif', fontSize:13, color:B.smoke }}>Drop your photo here or tap to browse</div>
-                <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#444', marginTop:4 }}>JPG · PNG · WEBP · Max 12 MB</div>
+                <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: B.dim, marginTop:4 }}>JPG · PNG · WEBP · Max 12 MB</div>
               </div>
             )
           }
@@ -120,7 +120,7 @@ function UploadModal({ onUpload, onClose }) {
             { lbl:'YOUR CITY',    val:city,    set:setCity,    ph:'e.g. Lagos' },
           ].map(({ lbl, val, set, ph }) => (
             <div key={lbl}>
-              <label style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', letterSpacing:2, display:'block', marginBottom:5 }}>{lbl}</label>
+              <label style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, letterSpacing:2, display:'block', marginBottom:5 }}>{lbl}</label>
               <input value={val} onChange={e => set(e.target.value)} placeholder={ph} style={IS} />
             </div>
           ))}
@@ -132,7 +132,7 @@ function UploadModal({ onUpload, onClose }) {
           style={{ width:'100%', padding:'14px 0', background: !preview ? '#1a1a1a' : B.neonMagenta, border:'none', borderRadius:8, color: !preview ? B.smoke : B.white, fontFamily:'Bebas Neue,sans-serif', fontSize:18, letterSpacing:3, cursor: !preview ? 'not-allowed' : 'pointer', transition:'all 0.2s' }}>
           {busy ? 'ADDING…' : 'ADD TO THE WALL →'}
         </button>
-        <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#2a2a2a', textAlign:'center', marginTop:8 }}>
+        <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:B.dim, textAlign:'center', marginTop:8 }}>
           Stored locally on your device · Part of the movement
         </div>
       </div>
@@ -281,7 +281,7 @@ export default function Gallery() {
                   <SneakerSVG color={s.accent} />
                 </div>
                 <div style={{ position:'absolute', bottom:12, left:14 }}>
-                  <span style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:s.accent+'80', letterSpacing:2 }}>{s.cat}</span>
+                  <span style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color:s.accent+'80', letterSpacing:2 }}>{s.cat}</span>
                 </div>
               </div>
             </div>

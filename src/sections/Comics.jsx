@@ -109,7 +109,7 @@ export default function Comics() {
                 <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.black, background: B.amber, padding: '4px 10px', borderRadius: 2, letterSpacing: '0.15em', fontWeight: 700 }}>ISSUE #001</span>
               </div>
               <div style={{ position: 'absolute', top: 16, right: 16 }}>
-                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.amber, background: `${B.amber}18`, border: `1px solid ${B.amber}50`, padding: '3px 8px', borderRadius: 2, letterSpacing: '0.1em' }}>OFFICIAL COVER</span>
+                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.amber, background: `${B.amber}18`, border: `1px solid ${B.amber}50`, padding: '3px 8px', borderRadius: 2, letterSpacing: '0.1em' }}>OFFICIAL COVER</span>
               </div>
               {/* Seamless blend into info panel */}
               <div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, width: 60, background: `linear-gradient(90deg, transparent, ${B.charcoal})` }} />
@@ -179,10 +179,10 @@ export default function Comics() {
                   />
                   <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to top, ${B.charcoal} 0%, transparent 60%)` }} />
                   <div style={{ position: 'absolute', top: 12, left: 14 }}>
-                    <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: issue.color, padding: '3px 8px', background: issue.color + '18', border: `1px solid ${issue.color}50`, borderRadius: 2, letterSpacing: '0.15em' }}>ISSUE #{issue.num}</span>
+                    <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: issue.color, padding: '3px 8px', background: issue.color + '18', border: `1px solid ${issue.color}50`, borderRadius: 2, letterSpacing: '0.15em' }}>ISSUE #{issue.num}</span>
                   </div>
                   <div style={{ position: 'absolute', top: 12, right: 14 }}>
-                    <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: issue.upcoming ? issue.color : B.black, padding: '3px 8px', background: issue.upcoming ? issue.color + '15' : issue.color, borderRadius: 2, border: `1px solid ${issue.color}${issue.upcoming ? '40' : ''}`, letterSpacing: '0.1em' }}>{issue.tag}</span>
+                    <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: issue.upcoming ? issue.color : B.black, padding: '3px 8px', background: issue.upcoming ? issue.color + '15' : issue.color, borderRadius: 2, border: `1px solid ${issue.color}${issue.upcoming ? '40' : ''}`, letterSpacing: '0.1em' }}>{issue.tag}</span>
                   </div>
                   <div style={{ position: 'absolute', bottom: 14, left: 14, right: 14 }}>
                     <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 26, color: B.white, lineHeight: 0.9, letterSpacing: '0.04em', textShadow: '0 2px 12px rgba(0,0,0,0.95)' }}>{issue.title}</div>
@@ -193,7 +193,7 @@ export default function Comics() {
                   <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: issue.color, letterSpacing: '0.15em', marginBottom: 6 }}>{issue.sub.toUpperCase()}</div>
                   <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: B.smoke, lineHeight: 1.65, marginBottom: 14 }}>{issue.desc}</div>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: issue.upcoming ? '#333' : issue.color }}>
+                    <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: issue.upcoming ? B.dim : issue.color }}>
                       {issue.upcoming ? 'COMING SOON' : 'READ NOW →'}
                     </span>
                     {!issue.upcoming && (

@@ -78,7 +78,7 @@ export default function Press() {
                 onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)' }}
               >
                 <div style={{ fontFamily: "'Bebas Neue'", fontSize: 14, color: m.color, letterSpacing: '0.1em', opacity: 0.85 }}>{m.name}</div>
-                <div style={{ fontFamily: "'Space Mono'", fontSize: 6, color: '#444', letterSpacing: '0.1em', marginTop: 3, whiteSpace: 'nowrap' }}>{m.angle}</div>
+                <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.1em', marginTop: 3, whiteSpace: 'nowrap' }}>{m.angle}</div>
               </div>
             ))}
           </div>

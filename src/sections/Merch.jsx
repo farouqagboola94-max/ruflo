@@ -44,11 +44,11 @@ function ProductCard({ item, selSize, onPickSize, onAdd, cartQty, onOpen }) {
       {/* visual — click to open modal */}
       <div onClick={() => onOpen(item)} style={{ height:150, background:`radial-gradient(ellipse at 50% 70%, ${item.color}14 0%, transparent 70%)`, display:'flex', alignItems:'center', justifyContent:'center', position:'relative', cursor:'pointer' }}>
         <div style={{ position:'absolute', top:12, right:12 }}>
-          <span style={{ padding:'3px 8px', background:`${item.color}20`, border:`1px solid ${item.color}50`, borderRadius:2, fontFamily:'Space Mono,monospace', fontSize:7, color:item.color, letterSpacing:2 }}>{item.badge}</span>
+          <span style={{ padding:'3px 8px', background:`${item.color}20`, border:`1px solid ${item.color}50`, borderRadius:2, fontFamily:'Space Mono,monospace', fontSize: 9, color:item.color, letterSpacing:2 }}>{item.badge}</span>
         </div>
         {sa && (
           <div style={{ position:'absolute', top:12, left:12 }}>
-            <span style={{ padding:'3px 7px', background:`${sa.color}15`, border:`1px solid ${sa.color}50`, borderRadius:2, fontFamily:'Space Mono,monospace', fontSize:7, color:sa.color, letterSpacing:1 }}>⚡ {sa.text}</span>
+            <span style={{ padding:'3px 7px', background:`${sa.color}15`, border:`1px solid ${sa.color}50`, borderRadius:2, fontFamily:'Space Mono,monospace', fontSize: 9, color:sa.color, letterSpacing:1 }}>⚡ {sa.text}</span>
           </div>
         )}
         <div style={{ textAlign:'center', opacity:0.75, pointerEvents:'none' }}>
@@ -58,14 +58,14 @@ function ProductCard({ item, selSize, onPickSize, onAdd, cartQty, onOpen }) {
         {cartQty > 0 && (
           <div style={{ position:'absolute', bottom:10, right:10, background:B.neonLime, borderRadius:99, padding:'2px 8px', fontFamily:'Space Mono,monospace', fontSize:8, color:B.black, fontWeight:700 }}>✓ {cartQty}</div>
         )}
-        <div style={{ position:'absolute', bottom:10, left:'50%', transform:'translateX(-50%)', fontFamily:'Space Mono,monospace', fontSize:6, color:item.color+'60', letterSpacing:2, whiteSpace:'nowrap' }}>TAP FOR DETAILS</div>
+        <div style={{ position:'absolute', bottom:10, left:'50%', transform:'translateX(-50%)', fontFamily:'Space Mono,monospace', fontSize: 9, color:item.color+'60', letterSpacing:2, whiteSpace:'nowrap' }}>TAP FOR DETAILS</div>
       </div>
 
       {/* info */}
       <div style={{ padding:'18px 20px 22px', display:'flex', flexDirection:'column', flex:1 }}>
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:6 }}>
           <div>
-            <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:item.color, letterSpacing:3, marginBottom:3 }}>{item.tag}</div>
+            <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color:item.color, letterSpacing:3, marginBottom:3 }}>{item.tag}</div>
             <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:22, color:B.white }}>{item.name}</div>
           </div>
           <div style={{ fontFamily:'Orbitron,monospace', fontWeight:900, fontSize:16, color:item.color }}>{fmt(item.priceNum)}</div>
@@ -79,7 +79,7 @@ function ProductCard({ item, selSize, onPickSize, onAdd, cartQty, onOpen }) {
         </div>
 
         <button onClick={() => ready && onAdd(item, selSize)}
-          style={{ padding:'12px', background: ready ? (item.featured ? item.color : `${item.color}18`) : 'transparent', border:`1px solid ${ready ? item.color : 'rgba(255,255,255,0.1)'}`, borderRadius:6, cursor: ready ? 'pointer' : 'default', fontFamily:'Space Mono,monospace', fontSize:9, fontWeight:700, color: ready ? (item.featured ? B.black : item.color) : '#444', letterSpacing:2, transition:'all 0.2s' }}
+          style={{ padding:'12px', background: ready ? (item.featured ? item.color : `${item.color}18`) : 'transparent', border:`1px solid ${ready ? item.color : 'rgba(255,255,255,0.1)'}`, borderRadius:6, cursor: ready ? 'pointer' : 'default', fontFamily:'Space Mono,monospace', fontSize:9, fontWeight:700, color: ready ? (item.featured ? B.black : item.color) : B.dim, letterSpacing:2, transition:'all 0.2s' }}
           onMouseEnter={e => { if (ready) { e.currentTarget.style.background = item.color; e.currentTarget.style.color = B.black } }}
           onMouseLeave={e => { if (ready) { e.currentTarget.style.background = item.featured ? item.color : `${item.color}18`; e.currentTarget.style.color = item.featured ? B.black : item.color } }}
         >{ready ? 'ADD TO CART →' : 'SELECT A SIZE'}</button>
@@ -98,7 +98,7 @@ function ProductModal({ item, selSize, onPickSize, onAdd, onClose }) {
         <div style={{ height:4, background:`linear-gradient(90deg, ${item.color}, ${item.color}20)` }} />
         <div style={{ padding:'14px 20px', display:'flex', justifyContent:'space-between', alignItems:'center', borderBottom:'1px solid rgba(255,255,255,0.07)' }}>
           <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:item.color, letterSpacing:3 }}>{item.tag}</div>
-          <button onClick={onClose} style={{ background:'none', border:'none', color:'#555', fontSize:20, cursor:'pointer', lineHeight:1 }}>✕</button>
+          <button onClick={onClose} style={{ background:'none', border:'none', color: B.smoke, fontSize:20, cursor:'pointer', lineHeight:1 }}>✕</button>
         </div>
         <div style={{ height:200, background:`radial-gradient(ellipse, ${item.color}22 0%, transparent 70%)`, display:'flex', alignItems:'center', justifyContent:'center' }}>
           <div style={{ textAlign:'center' }}>
@@ -113,7 +113,7 @@ function ProductModal({ item, selSize, onPickSize, onAdd, onClose }) {
           </div>
           {sa && <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:sa.color, letterSpacing:2, marginBottom:12 }}>⚡ {sa.text}</div>}
           <div style={{ fontFamily:'Syne,sans-serif', fontSize:14, color:B.smoke, lineHeight:1.75, marginBottom:22 }}>{item.desc}</div>
-          <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', letterSpacing:2, marginBottom:10 }}>SELECT SIZE</div>
+          <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, letterSpacing:2, marginBottom:10 }}>SELECT SIZE</div>
           <div style={{ display:'flex', gap:8, flexWrap:'wrap', marginBottom:24 }}>
             {item.sizes.map(sz => (
               <button key={sz} onClick={() => onPickSize(item.id, selSize===sz ? null : sz)}
@@ -121,7 +121,7 @@ function ProductModal({ item, selSize, onPickSize, onAdd, onClose }) {
             ))}
           </div>
           <button onClick={() => { if (selSize) { onAdd(item, selSize); onClose() } }}
-            style={{ width:'100%', padding:'15px', background: selSize ? item.color : '#1c1c1c', border:'none', borderRadius:8, cursor: selSize ? 'pointer' : 'default', fontFamily:'Bebas Neue,sans-serif', fontSize:20, letterSpacing:3, color: selSize ? B.black : '#444', transition:'all 0.2s', boxShadow: selSize ? `0 0 24px ${item.color}30` : 'none' }}>
+            style={{ width:'100%', padding:'15px', background: selSize ? item.color : '#1c1c1c', border:'none', borderRadius:8, cursor: selSize ? 'pointer' : 'default', fontFamily:'Bebas Neue,sans-serif', fontSize:20, letterSpacing:3, color: selSize ? B.black : B.dim, transition:'all 0.2s', boxShadow: selSize ? `0 0 24px ${item.color}30` : 'none' }}>
             {selSize ? 'ADD TO CART →' : 'SELECT A SIZE FIRST'}
           </button>
         </div>
@@ -178,7 +178,7 @@ function CartDrawer({ cart, setCart, onClose }) {
   }
 
   const IS = { width:'100%', padding:'11px 14px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:8, color:B.white, fontFamily:'Space Mono,monospace', fontSize:12, outline:'none', boxSizing:'border-box', transition:'border-color 0.2s' }
-  const LS = { fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', letterSpacing:2, display:'block', marginBottom:6 }
+  const LS = { fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, letterSpacing:2, display:'block', marginBottom:6 }
 
   return (
     <>
@@ -190,7 +190,7 @@ function CartDrawer({ cart, setCart, onClose }) {
             {view==='form' && 'CHECKOUT'}
             {view==='done' && 'ORDER PLACED'}
           </div>
-          <button onClick={onClose} style={{ background:'transparent', border:'none', color:'#555', fontSize:20, cursor:'pointer', lineHeight:1 }}>✕</button>
+          <button onClick={onClose} style={{ background:'transparent', border:'none', color: B.smoke, fontSize:20, cursor:'pointer', lineHeight:1 }}>✕</button>
         </div>
 
         <div style={{ padding:'24px', flex:1 }}>
@@ -198,7 +198,7 @@ function CartDrawer({ cart, setCart, onClose }) {
           {view === 'cart' && (
             <>
               {cart.length === 0 && (
-                <div style={{ textAlign:'center', padding:'60px 0', fontFamily:'Space Mono,monospace', fontSize:11, color:'#333' }}>Your cart is empty</div>
+                <div style={{ textAlign:'center', padding:'60px 0', fontFamily:'Space Mono,monospace', fontSize:11, color: B.dim }}>Your cart is empty</div>
               )}
               {cart.map((row, i) => (
                 <div key={i} style={{ display:'flex', gap:14, padding:'14px 0', borderBottom:'1px solid rgba(255,255,255,0.06)', alignItems:'center' }}>
@@ -207,7 +207,7 @@ function CartDrawer({ cart, setCart, onClose }) {
                   </div>
                   <div style={{ flex:1, minWidth:0 }}>
                     <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:16, color:B.white }}>{row.name}</div>
-                    <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#555' }}>{row.size} · {fmt(row.priceNum)}</div>
+                    <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: B.smoke }}>{row.size} · {fmt(row.priceNum)}</div>
                   </div>
                   <div style={{ display:'flex', alignItems:'center', gap:6 }}>
                     <button onClick={() => changeQty(i,-1)} style={{ width:26, height:26, background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:4, color:B.white, cursor:'pointer', fontFamily:'monospace', fontSize:14, lineHeight:1 }}>−</button>
@@ -237,10 +237,10 @@ function CartDrawer({ cart, setCart, onClose }) {
                     )}
                   </div>
                   <div style={{ display:'flex', justifyContent:'space-between', padding:'18px 0 8px' }}>
-                    <span style={{ fontFamily:'Space Mono,monospace', fontSize:10, color:'#555', letterSpacing:2 }}>SUBTOTAL</span>
+                    <span style={{ fontFamily:'Space Mono,monospace', fontSize:10, color: B.smoke, letterSpacing:2 }}>SUBTOTAL</span>
                     <span style={{ fontFamily:'Orbitron,monospace', fontSize:18, color:B.amber, fontWeight:900 }}>{fmt(subtotal)}</span>
                   </div>
-                  <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#444', textAlign:'center', padding:'10px 0 16px', letterSpacing:2 }}>FREE PICKUP AT EVENT · ₦2,500 LAGOS DELIVERY</div>
+                  <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.dim, textAlign:'center', padding:'10px 0 16px', letterSpacing:2 }}>FREE PICKUP AT EVENT · ₦2,500 LAGOS DELIVERY</div>
                   <button onClick={() => setView('form')} style={{ width:'100%', padding:'16px', background:`linear-gradient(90deg, ${B.amber}, #D48000)`, border:'none', borderRadius:8, color:B.black, fontFamily:'Bebas Neue,sans-serif', fontSize:20, letterSpacing:3, cursor:'pointer', boxShadow:`0 0 32px ${B.amber}30` }}>
                     PLACE ORDER →
                   </button>
@@ -252,7 +252,7 @@ function CartDrawer({ cart, setCart, onClose }) {
           {/* ── CHECKOUT ── */}
           {view === 'form' && (
             <>
-              <button onClick={() => setView('cart')} style={{ background:'transparent', border:'none', color:'#555', fontFamily:'Space Mono,monospace', fontSize:9, cursor:'pointer', marginBottom:20, padding:0, letterSpacing:2 }}>← BACK TO CART</button>
+              <button onClick={() => setView('cart')} style={{ background:'transparent', border:'none', color: B.smoke, fontFamily:'Space Mono,monospace', fontSize:9, cursor:'pointer', marginBottom:20, padding:0, letterSpacing:2 }}>← BACK TO CART</button>
               <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
                 <div><label style={LS}>FULL NAME</label><input value={form.name} onChange={inp('name')} placeholder="Your name" style={IS} onFocus={e => e.target.style.borderColor=B.amber+'60'} onBlur={e => e.target.style.borderColor='rgba(255,255,255,0.1)'} /></div>
                 <div><label style={LS}>EMAIL ADDRESS</label><input value={form.email} onChange={inp('email')} type="email" placeholder="you@email.com" style={IS} onFocus={e => e.target.style.borderColor=B.amber+'60'} onBlur={e => e.target.style.borderColor='rgba(255,255,255,0.1)'} /></div>
@@ -261,7 +261,7 @@ function CartDrawer({ cart, setCart, onClose }) {
                   <label style={LS}>DELIVERY</label>
                   <div style={{ display:'flex', gap:8 }}>
                     {['pickup','delivery'].map(opt => (
-                      <button key={opt} onClick={() => setForm(f => ({...f, delivery:opt}))} style={{ flex:1, padding:'10px', background: form.delivery===opt ? `${B.amber}18` : 'rgba(255,255,255,0.04)', border:`1px solid ${form.delivery===opt ? B.amber+'60' : 'rgba(255,255,255,0.1)'}`, borderRadius:6, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:9, color: form.delivery===opt ? B.amber : '#666', letterSpacing:1, textTransform:'uppercase' }}>{opt==='pickup' ? '📦 Event Pickup' : '🚚 Lagos Delivery'}</button>
+                      <button key={opt} onClick={() => setForm(f => ({...f, delivery:opt}))} style={{ flex:1, padding:'10px', background: form.delivery===opt ? `${B.amber}18` : 'rgba(255,255,255,0.04)', border:`1px solid ${form.delivery===opt ? B.amber+'60' : 'rgba(255,255,255,0.1)'}`, borderRadius:6, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:9, color: form.delivery===opt ? B.amber : B.smoke, letterSpacing:1, textTransform:'uppercase' }}>{opt==='pickup' ? '📦 Event Pickup' : '🚚 Lagos Delivery'}</button>
                     ))}
                   </div>
                 </div>
@@ -273,7 +273,7 @@ function CartDrawer({ cart, setCart, onClose }) {
               <div className="card-3d" style={{ margin:'20px 0', padding:'14px 16px', background:'rgba(255,255,255,0.03)', borderRadius:8, border:'1px solid rgba(255,255,255,0.07)' }}>
                 {cart.map((r, i) => (
                   <div key={i} style={{ display:'flex', justifyContent:'space-between', padding:'5px 0', fontFamily:'Space Mono,monospace', fontSize:10 }}>
-                    <span style={{ color:'#888' }}>{r.name} × {r.qty} <span style={{ color:'#555' }}>({r.size})</span></span>
+                    <span style={{ color:'#888' }}>{r.name} × {r.qty} <span style={{ color: B.smoke }}>({r.size})</span></span>
                     <span style={{ color:B.smoke }}>{fmt(r.qty * r.priceNum)}</span>
                   </div>
                 ))}
@@ -284,7 +284,7 @@ function CartDrawer({ cart, setCart, onClose }) {
                 )}
                 {form.delivery === 'delivery' && (
                   <div style={{ display:'flex', justifyContent:'space-between', padding:'5px 0', fontFamily:'Space Mono,monospace', fontSize:10, borderTop:'1px solid rgba(255,255,255,0.06)', marginTop:6, paddingTop:8 }}>
-                    <span style={{ color:'#555' }}>DELIVERY</span><span style={{ color:B.smoke }}>₦2,500</span>
+                    <span style={{ color: B.smoke }}>DELIVERY</span><span style={{ color:B.smoke }}>₦2,500</span>
                   </div>
                 )}
                 <div style={{ display:'flex', justifyContent:'space-between', padding:'8px 0 0', marginTop:4, borderTop:'1px solid rgba(255,255,255,0.08)', fontFamily:'Orbitron,monospace', fontSize:14 }}>
@@ -293,10 +293,10 @@ function CartDrawer({ cart, setCart, onClose }) {
                 </div>
               </div>
               {err && <div style={{ fontFamily:'Space Mono,monospace', fontSize:10, color:B.neonMagenta, marginBottom:12 }}>{err}</div>}
-              <button onClick={placeOrder} disabled={!fValid || busy} style={{ width:'100%', padding:'16px', background: fValid && !busy ? `linear-gradient(90deg, ${B.amber}, #D48000)` : '#1a1a1a', border:'none', borderRadius:8, color: fValid && !busy ? B.black : '#444', fontFamily:'Bebas Neue,sans-serif', fontSize:20, letterSpacing:3, cursor: fValid && !busy ? 'pointer' : 'default', transition:'all 0.2s', boxShadow: fValid && !busy ? `0 0 32px ${B.amber}25` : 'none' }}>
+              <button onClick={placeOrder} disabled={!fValid || busy} style={{ width:'100%', padding:'16px', background: fValid && !busy ? `linear-gradient(90deg, ${B.amber}, #D48000)` : '#1a1a1a', border:'none', borderRadius:8, color: fValid && !busy ? B.black : B.dim, fontFamily:'Bebas Neue,sans-serif', fontSize:20, letterSpacing:3, cursor: fValid && !busy ? 'pointer' : 'default', transition:'all 0.2s', boxShadow: fValid && !busy ? `0 0 32px ${B.amber}25` : 'none' }}>
                 {busy ? 'PLACING ORDER…' : 'CONFIRM ORDER →'}
               </button>
-              <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#333', textAlign:'center', marginTop:12, letterSpacing:1 }}>Payment collected at pickup / on delivery</div>
+              <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.dim, textAlign:'center', marginTop:12, letterSpacing:1 }}>Payment collected at pickup / on delivery</div>
             </>
           )}
 
@@ -309,10 +309,10 @@ function CartDrawer({ cart, setCart, onClose }) {
                 We'll confirm your order via email shortly. Payment is on collection.
               </div>
               <div className="card-3d" style={{ background:`${B.amber}12`, border:`1px solid ${B.amber}40`, borderRadius:12, padding:'20px', marginBottom:20 }}>
-                <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', letterSpacing:3, marginBottom:8 }}>ORDER ID</div>
+                <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, letterSpacing:3, marginBottom:8 }}>ORDER ID</div>
                 <div style={{ fontFamily:'Orbitron,monospace', fontSize:20, color:B.amber, letterSpacing:4, fontWeight:900 }}>{orderId}</div>
               </div>
-              <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#444', letterSpacing:2, marginBottom:20 }}>SAVE YOUR ORDER ID FOR COLLECTION</div>
+              <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: B.dim, letterSpacing:2, marginBottom:20 }}>SAVE YOUR ORDER ID FOR COLLECTION</div>
               <a href={SOCIAL_LINKS.whatsapp} target="_blank" rel="noopener noreferrer"
                 style={{ display:'block', width:'100%', padding:'14px', background:B.neonLime, borderRadius:8, color:B.black, fontFamily:'Bebas Neue,sans-serif', fontSize:18, letterSpacing:3, textDecoration:'none', boxShadow:`0 0 24px ${B.neonLime}30` }}>
                 CONFIRM ON WHATSAPP →
@@ -381,7 +381,7 @@ export default function Merch() {
         <div className="reveal-3d" style={{ display:'flex', gap:8, flexWrap:'wrap', marginBottom:36 }}>
           {CATS.map(c => (
             <button key={c} onClick={() => setCat(c)}
-              style={{ padding:'6px 16px', background: cat===c ? B.amber : 'rgba(255,255,255,0.04)', border:`1px solid ${cat===c ? B.amber : 'rgba(255,255,255,0.1)'}`, borderRadius:20, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:8, color: cat===c ? B.black : '#666', letterSpacing:2, transition:'all 0.15s' }}>{c}</button>
+              style={{ padding:'6px 16px', background: cat===c ? B.amber : 'rgba(255,255,255,0.04)', border:`1px solid ${cat===c ? B.amber : 'rgba(255,255,255,0.1)'}`, borderRadius:20, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:8, color: cat===c ? B.black : B.smoke, letterSpacing:2, transition:'all 0.15s' }}>{c}</button>
           ))}
         </div>
 

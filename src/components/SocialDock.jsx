@@ -63,7 +63,7 @@ export default function SocialDock() {
               flexDirection: 'column',
               alignItems: 'flex-end',
             }}>
-              <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, fontWeight: 700, color: p.color, letterSpacing: '0.15em', whiteSpace: 'nowrap' }}>{p.label}</span>
+              <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, fontWeight: 700, color: p.color, letterSpacing: '0.15em', whiteSpace: 'nowrap' }}>{p.label}</span>
               <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 9, color: B.smoke, whiteSpace: 'nowrap' }}>{p.tip}</span>
             </div>
           </div>

@@ -131,14 +131,14 @@ export default function Lineup() {
                   <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 22, color: B.white, lineHeight: 1 }}>
                     {act.name}
                   </div>
-                  <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, letterSpacing: "0.15em", marginTop: 3 }}>
+                  <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing: "0.15em", marginTop: 3 }}>
                     {act.genre}
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginTop: 7, flexWrap: 'wrap' }}>
-                    <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: '#555' }}>
+                    <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke }}>
                       👁 {wc} watching
                     </span>
-                    <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.neonMagenta + 'AA' }}>
+                    <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.neonMagenta + 'AA' }}>
                       🔥 {vc.toLocaleString()} hype
                     </span>
                   </div>
@@ -149,7 +149,7 @@ export default function Lineup() {
                     display: "inline-block", padding: "3px 10px", borderRadius: 2,
                     background: act.featured ? B.neonMagenta + "20" : "transparent",
                     border: `1px solid ${act.featured ? B.neonMagenta + "60" : B.gunmetal}`,
-                    fontFamily: "'Space Mono', monospace", fontSize: 7,
+                    fontFamily: "'Space Mono', monospace", fontSize: 9,
                     color: act.featured ? B.neonMagenta : B.smoke, letterSpacing: "0.1em",
                   }}>
                     {act.role}
@@ -165,7 +165,7 @@ export default function Lineup() {
                       background: isVoted ? `${B.neonMagenta}20` : 'transparent',
                       border: `1px solid ${isVoted ? B.neonMagenta + '70' : B.neonMagenta + '40'}`,
                       color: isVoted ? B.neonMagenta : B.smoke,
-                      fontFamily: "'Space Mono', monospace", fontSize: 7, cursor: isVoted ? 'default' : 'pointer',
+                      fontFamily: "'Space Mono', monospace", fontSize: 9, cursor: isVoted ? 'default' : 'pointer',
                       letterSpacing: '0.1em', transition: 'all 0.2s', whiteSpace: 'nowrap',
                     }}
                     onMouseEnter={e => { if (!isVoted) { e.currentTarget.style.background = `${B.neonMagenta}20`; e.currentTarget.style.borderColor = B.neonMagenta + '70'; e.currentTarget.style.color = B.neonMagenta } }}

@@ -140,12 +140,12 @@ export default function FridayNightProtocol() {
 
           {/* countdown to next Friday */}
           <div className="card-3d" style={{ background:'rgba(255,255,255,0.02)', border:`1px solid ${B.amber}30`, borderRadius:10, padding:'18px 22px', textAlign:'center', flexShrink:0 }}>
-            <div style={{ fontFamily:"'Space Mono'", fontSize:8, color:'#555', letterSpacing:3, marginBottom:8 }}>NEXT SESSION IN</div>
+            <div style={{ fontFamily:"'Space Mono'", fontSize:8, color: B.smoke, letterSpacing:3, marginBottom:8 }}>NEXT SESSION IN</div>
             <div style={{ display:'flex', gap:10, alignItems:'flex-start' }}>
               {[['days', cd.days], ['hrs', cd.hours], ['min', cd.minutes], ['sec', cd.seconds]].map(([lbl, val]) => (
                 <div key={lbl} style={{ textAlign:'center' }}>
                   <div style={{ fontFamily:"'Orbitron',monospace", fontSize:28, fontWeight:900, color:B.amber, lineHeight:1, minWidth:40 }}>{pad(val)}</div>
-                  <div style={{ fontFamily:"'Space Mono'", fontSize:7, color:'#444', letterSpacing:2, marginTop:3 }}>{lbl.toUpperCase()}</div>
+                  <div style={{ fontFamily:"'Space Mono'", fontSize: 9, color: B.dim, letterSpacing:2, marginTop:3 }}>{lbl.toUpperCase()}</div>
                 </div>
               ))}
             </div>
@@ -190,17 +190,17 @@ export default function FridayNightProtocol() {
         <div style={{ marginBottom:48 }}>
           <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
             <div style={{ fontFamily:"'Space Mono'", fontSize:'0.62rem', letterSpacing:'0.25em', color:B.smoke }}>PAST SESSIONS</div>
-            <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color:'#333', letterSpacing:2 }}>scroll →</div>
+            <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color: B.dim, letterSpacing:2 }}>scroll →</div>
           </div>
           <div ref={archiveRef} style={{ display:'flex', gap:12, overflowX:'auto', paddingBottom:8, scrollbarWidth:'none' }}>
             {PAST.map((s, i) => (
               <div key={i} className="card-3d" style={{ flexShrink:0, width:220, background:B.charcoal, border:`1px solid ${s.color}25`, borderTop:`2px solid ${s.color}`, borderRadius:8, padding:'14px 16px' }}>
                 <div style={{ fontFamily:"'Space Mono'", fontSize:8, color:s.color, letterSpacing:2, marginBottom:4 }}>{s.date} · 2026</div>
-                <div style={{ fontFamily:"'Space Mono'", fontSize:7, color:'#444', letterSpacing:1, marginBottom:8 }}>{s.week}</div>
+                <div style={{ fontFamily:"'Space Mono'", fontSize: 9, color: B.dim, letterSpacing:1, marginBottom:8 }}>{s.week}</div>
                 <div style={{ fontFamily:"'Bebas Neue'", fontSize:13, color:B.white, lineHeight:1.3, marginBottom:12 }}>{s.topic}</div>
                 <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-end' }}>
                   <div style={{ fontFamily:"'Orbitron',monospace", fontSize:10, color:s.color, fontWeight:700 }}>{s.stat}</div>
-                  <div style={{ fontFamily:"'Space Mono'", fontSize:7, color:'#444' }}>{s.winner}</div>
+                  <div style={{ fontFamily:"'Space Mono'", fontSize: 9, color: B.dim }}>{s.winner}</div>
                 </div>
               </div>
             ))}
@@ -234,7 +234,7 @@ export default function FridayNightProtocol() {
             <form onSubmit={handleSubmit} style={{ display:'flex', flexDirection:'column', gap:14 }}>
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14 }}>
                 <div>
-                  <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', letterSpacing:'0.15em', color:'#555', marginBottom:6 }}>YOUR HANDLE</div>
+                  <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', letterSpacing:'0.15em', color: B.smoke, marginBottom:6 }}>YOUR HANDLE</div>
                   <input
                     value={form.handle}
                     onChange={e => setForm(f => ({ ...f, handle:e.target.value }))}
@@ -243,7 +243,7 @@ export default function FridayNightProtocol() {
                   />
                 </div>
                 <div>
-                  <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', letterSpacing:'0.15em', color:'#555', marginBottom:6 }}>CATEGORY</div>
+                  <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', letterSpacing:'0.15em', color: B.smoke, marginBottom:6 }}>CATEGORY</div>
                   <select
                     value={form.category}
                     onChange={e => setForm(f => ({ ...f, category:e.target.value }))}
@@ -253,7 +253,7 @@ export default function FridayNightProtocol() {
                 </div>
               </div>
               <div>
-                <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', letterSpacing:'0.15em', color:'#555', marginBottom:6 }}>YOUR SUBMISSION</div>
+                <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', letterSpacing:'0.15em', color: B.smoke, marginBottom:6 }}>YOUR SUBMISSION</div>
                 <textarea
                   value={form.text}
                   onChange={e => setForm(f => ({ ...f, text:e.target.value }))}

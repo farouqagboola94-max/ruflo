@@ -262,12 +262,12 @@ export function TicketCard({ name, tier, tierColor, ticketRef, price, qrData }) 
           ['PRICE',    price, tierColor],
         ].map(([label, val, col]) => (
           <div key={label}>
-            <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#444', letterSpacing:2, marginBottom:3 }}>{label}</div>
+            <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.dim, letterSpacing:2, marginBottom:3 }}>{label}</div>
             <div style={{ fontFamily:'Syne,sans-serif', fontSize:13, color:col, fontWeight:600 }}>{val}</div>
           </div>
         ))}
         <div style={{ gridColumn:'1/-1' }}>
-          <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#444', letterSpacing:2, marginBottom:3 }}>REFERENCE</div>
+          <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.dim, letterSpacing:2, marginBottom:3 }}>REFERENCE</div>
           <div style={{ fontFamily:'Space Mono,monospace', fontSize:11, color:tierColor }}>{ticketRef}</div>
         </div>
       </div>
@@ -363,7 +363,7 @@ export default function PaymentModal({ tier, onClose }) {
     outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.2s',
   })
   const label = (text) => (
-    <label style={{ color:'#555', fontFamily:'Space Mono,monospace', fontSize:9, letterSpacing:2, display:'block', marginBottom:6 }}>{text}</label>
+    <label style={{ color: B.smoke, fontFamily:'Space Mono,monospace', fontSize:9, letterSpacing:2, display:'block', marginBottom:6 }}>{text}</label>
   )
 
   return (
@@ -404,7 +404,7 @@ export default function PaymentModal({ tier, onClose }) {
 
             {/* Email status */}
             <div style={{ textAlign:'center' }}>
-              <p style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#444' }}>
+              <p style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: B.dim }}>
                 A confirmation email will be sent to <span style={{ color:B.smoke }}>{email}</span>
               </p>
             </div>
@@ -420,14 +420,14 @@ export default function PaymentModal({ tier, onClose }) {
               DONE →
             </button>
 
-            <p style={{ color:'#333', fontFamily:'Space Mono,monospace', fontSize:9, textAlign:'center' }}>Powered by {success.gateway}</p>
+            <p style={{ color: B.dim, fontFamily:'Space Mono,monospace', fontSize:9, textAlign:'center' }}>Powered by {success.gateway}</p>
           </div>
         ) : (
           /* —— PAYMENT FORM —— */
           <div style={{ padding:24, display:'flex', flexDirection:'column', gap:16 }}>
             <div style={{ padding:'12px 16px', background:`${tier.color}08`, border:`1px solid ${tier.color}20`, borderRadius:10, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
               <div>
-                <p style={{ color:'#555', fontFamily:'Space Mono,monospace', fontSize:9, letterSpacing:1, marginBottom:2 }}>{quantity} × {tier.name} TICKET</p>
+                <p style={{ color: B.smoke, fontFamily:'Space Mono,monospace', fontSize:9, letterSpacing:1, marginBottom:2 }}>{quantity} × {tier.name} TICKET</p>
                 <p style={{ color:B.smoke, fontFamily:'Space Mono,monospace', fontSize:10 }}>The Sole Exhibition · December 12 2026</p>
               </div>
               <p style={{ color:tier.color, fontFamily:'Orbitron,sans-serif', fontSize:20, fontWeight:900, textShadow:`0 0 16px ${tier.color}60` }}>
@@ -447,8 +447,8 @@ export default function PaymentModal({ tier, onClose }) {
                 ].map(m => (
                   <button key={m.id} onClick={() => setMethod(m.id)} style={{ padding:'13px 10px', borderRadius:10, cursor:'pointer', background: method === m.id ? `${m.color}12` : 'rgba(255,255,255,0.03)', border:`1.5px solid ${method === m.id ? m.color : 'rgba(255,255,255,0.08)'}`, textAlign:'center', transition:'all 0.2s' }}>
                     <p style={{ color: method === m.id ? m.color : B.smoke, fontFamily:'Orbitron,sans-serif', fontSize:10, fontWeight:700, marginBottom:3 }}>{m.label}</p>
-                    <p style={{ color:'#555', fontFamily:'Space Mono,monospace', fontSize:9 }}>{m.sub}</p>
-                    {!m.ok && <p style={{ color:'#333', fontFamily:'Space Mono,monospace', fontSize:8, marginTop:3 }}>key not set</p>}
+                    <p style={{ color: B.smoke, fontFamily:'Space Mono,monospace', fontSize:9 }}>{m.sub}</p>
+                    {!m.ok && <p style={{ color: B.dim, fontFamily:'Space Mono,monospace', fontSize:8, marginTop:3 }}>key not set</p>}
                   </button>
                 ))}
               </div>
@@ -463,7 +463,7 @@ export default function PaymentModal({ tier, onClose }) {
             {/* Fallback link if popup was blocked */}
             {paymentUrl && !success && (
               <div style={{ padding:'10px 14px', background:'rgba(0,195,247,0.06)', border:'1px solid rgba(0,195,247,0.2)', borderRadius:8, textAlign:'center' }}>
-                <p style={{ color:'#555', fontFamily:'Space Mono,monospace', fontSize:9, marginBottom:6 }}>POPUP BLOCKED?</p>
+                <p style={{ color: B.smoke, fontFamily:'Space Mono,monospace', fontSize:9, marginBottom:6 }}>POPUP BLOCKED?</p>
                 <a href={paymentUrl} target="_blank" rel="noopener noreferrer"
                   style={{ color:'#00C3F7', fontFamily:'Orbitron,sans-serif', fontSize:10, fontWeight:700, letterSpacing:1, textDecoration:'none' }}>
                   OPEN PAYMENT PAGE →
@@ -478,7 +478,7 @@ export default function PaymentModal({ tier, onClose }) {
                 : `PAY ₦${amount.toLocaleString()} →`}
             </button>
 
-            <p style={{ color:'#333', fontFamily:'Space Mono,monospace', fontSize:9, textAlign:'center', letterSpacing:1 }}>
+            <p style={{ color: B.dim, fontFamily:'Space Mono,monospace', fontSize:9, textAlign:'center', letterSpacing:1 }}>
               SECURED BY {method === 'paystack' ? 'PAYSTACK' : 'FLUTTERWAVE'} · 256-BIT SSL
             </p>
           </div>

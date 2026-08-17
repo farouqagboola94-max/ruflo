@@ -217,7 +217,7 @@ export default function Tickets() {
         {/* Live buyer ticker */}
         <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:10, marginBottom:28, minHeight:22 }}>
           <span style={{ width:6, height:6, borderRadius:'50%', background:B.neonLime, boxShadow:`0 0 8px ${B.neonLime}`, display:'inline-block', animation:'viewBlink 1.2s ease-in-out infinite', flexShrink:0 }} />
-          <span style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color:'#444', letterSpacing:2 }}>JUST PURCHASED:</span>
+          <span style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color: B.dim, letterSpacing:2 }}>JUST PURCHASED:</span>
           <span style={{ fontFamily:"'Space Mono', monospace", fontSize:8, letterSpacing:1, color:buyer.color, opacity:buyerVisible?1:0, transition:'opacity 0.3s', animation:buyerVisible?'buyerSlide 0.35s ease':undefined }}>
             {buyer.name} ({buyer.city}) → {buyer.tier}
           </span>
@@ -253,7 +253,7 @@ export default function Tickets() {
               <div style={{ fontSize:20, marginBottom:8 }}>{p.emoji}</div>
               <div style={{ fontFamily:"'Orbitron',monospace", fontSize:8, color:p.color, letterSpacing:'0.2em', marginBottom:10 }}>{p.tier}</div>
               {p.perks.map(pk => (
-                <div key={pk} style={{ fontFamily:"'Space Mono',monospace", fontSize:7, color:'#666', lineHeight:2, display:'flex', alignItems:'center', gap:6 }}>
+                <div key={pk} style={{ fontFamily:"'Space Mono',monospace", fontSize: 9, color: B.smoke, lineHeight:2, display:'flex', alignItems:'center', gap:6 }}>
                   <span style={{ color:p.color }}>▸</span>{pk}
                 </div>
               ))}
@@ -281,8 +281,8 @@ export default function Tickets() {
                 <div style={{ padding:28 }}>
                   {/* Tag row + viewer chip */}
                   <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14 }}>
-                    <span style={{ padding:'3px 10px', borderRadius:2, background:tier.color+'18', border:`1px solid ${tier.color}50`, fontFamily:"'Space Mono', monospace", fontSize:7, color:tier.color, letterSpacing:'0.2em' }}>{tier.tag}</span>
-                    <span style={{ display:'flex', alignItems:'center', gap:5, fontFamily:"'Space Mono', monospace", fontSize:7, color:'#555', letterSpacing:1 }}>
+                    <span style={{ padding:'3px 10px', borderRadius:2, background:tier.color+'18', border:`1px solid ${tier.color}50`, fontFamily:"'Space Mono', monospace", fontSize: 9, color:tier.color, letterSpacing:'0.2em' }}>{tier.tag}</span>
+                    <span style={{ display:'flex', alignItems:'center', gap:5, fontFamily:"'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing:1 }}>
                       <span style={{ width:5, height:5, borderRadius:'50%', background:B.neonCyan, boxShadow:`0 0 5px ${B.neonCyan}`, display:'inline-block', animation:'viewBlink 2s ease-in-out infinite' }} />
                       {tierViewers[tier.name]} viewing
                     </span>
@@ -292,16 +292,16 @@ export default function Tickets() {
 
                   <div style={{ margin:'14px 0 16px', padding:'12px 16px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:8, display:'inline-block' }}>
                     <div style={{ fontFamily:"'Orbitron', monospace", fontWeight:900, fontSize:32, color:tier.color, lineHeight:1, textShadow:`0 0 20px ${tier.color}50` }}>{tier.price}</div>
-                    <div style={{ fontFamily:"'Space Mono', monospace", fontSize:7, color:B.smoke, letterSpacing:'0.2em', marginTop:4 }}>EARLY BIRD PRICE</div>
+                    <div style={{ fontFamily:"'Space Mono', monospace", fontSize: 9, color:B.smoke, letterSpacing:'0.2em', marginTop:4 }}>EARLY BIRD PRICE</div>
                   </div>
 
                   {/* Scarcity bar */}
                   <div style={{ marginBottom:16 }}>
                     <div style={{ display:'flex', justifyContent:'space-between', marginBottom:5 }}>
-                      <span style={{ fontFamily:"'Space Mono', monospace", fontSize:7, color:urgColor, letterSpacing:1 }}>
+                      <span style={{ fontFamily:"'Space Mono', monospace", fontSize: 9, color:urgColor, letterSpacing:1 }}>
                         {pct < 0.15 ? '⚡ ALMOST GONE' : pct < 0.4 ? 'SELLING FAST' : 'AVAILABLE'}
                       </span>
-                      <span style={{ fontFamily:"'Space Mono', monospace", fontSize:7, color:'#555', letterSpacing:1 }}>{sold} / {tier.total} SOLD</span>
+                      <span style={{ fontFamily:"'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing:1 }}>{sold} / {tier.total} SOLD</span>
                     </div>
                     <div style={{ height:3, background:'rgba(255,255,255,0.06)', borderRadius:2, overflow:'hidden' }}>
                       <div style={{ height:'100%', width:`${(sold/tier.total)*100}%`, background:urgColor, borderRadius:2 }} />
@@ -337,11 +337,11 @@ export default function Tickets() {
 
         {/* Comparison Table */}
         <div className="reveal-3d" style={{ marginTop:52, overflowX:'auto' }}>
-          <div style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color:'#555', letterSpacing:3, marginBottom:20, textAlign:'center' }}>FULL TIER COMPARISON</div>
+          <div style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color: B.smoke, letterSpacing:3, marginBottom:20, textAlign:'center' }}>FULL TIER COMPARISON</div>
           <table style={{ width:'100%', minWidth:520, borderCollapse:'collapse' }}>
             <thead>
               <tr>
-                <th style={{ padding:'10px 16px', fontFamily:"'Space Mono', monospace", fontSize:8, color:'#444', letterSpacing:2, textAlign:'left', borderBottom:'1px solid rgba(255,255,255,0.07)', width:'40%' }}>FEATURE</th>
+                <th style={{ padding:'10px 16px', fontFamily:"'Space Mono', monospace", fontSize:8, color: B.dim, letterSpacing:2, textAlign:'left', borderBottom:'1px solid rgba(255,255,255,0.07)', width:'40%' }}>FEATURE</th>
                 {TIERS.map(t => (
                   <th key={t.name} style={{ padding:'10px 12px', fontFamily:"'Space Mono', monospace", fontSize:9, color:t.color, letterSpacing:2, textAlign:'center', borderBottom:'1px solid rgba(255,255,255,0.07)' }}>{t.name}</th>
                 ))}
@@ -353,13 +353,13 @@ export default function Tickets() {
                   <td style={{ padding:'9px 16px', fontFamily:"'Syne', sans-serif", fontSize:12, color:B.smoke, borderBottom:'1px solid rgba(255,255,255,0.04)' }}>{row.feature}</td>
                   {row.tiers.map((has, j) => (
                     <td key={j} style={{ padding:'9px 12px', textAlign:'center', borderBottom:'1px solid rgba(255,255,255,0.04)' }}>
-                      {has ? <span style={{ color:TIERS[j].color, fontSize:13 }}>✓</span> : <span style={{ color:'#2a2a2a', fontSize:13 }}>&mdash;</span>}
+                      {has ? <span style={{ color:TIERS[j].color, fontSize:13 }}>✓</span> : <span style={{ color:B.dim, fontSize:13 }}>&mdash;</span>}
                     </td>
                   ))}
                 </tr>
               ))}
               <tr style={{ background:'rgba(255,255,255,0.02)' }}>
-                <td style={{ padding:'12px 16px', fontFamily:"'Space Mono', monospace", fontSize:9, color:'#555', letterSpacing:2 }}>PRICE</td>
+                <td style={{ padding:'12px 16px', fontFamily:"'Space Mono', monospace", fontSize:9, color: B.smoke, letterSpacing:2 }}>PRICE</td>
                 {TIERS.map(t => (
                   <td key={t.name} style={{ padding:'12px 12px', textAlign:'center', fontFamily:"'Orbitron', monospace", fontSize:11, fontWeight:900, color:t.color }}>{t.price}</td>
                 ))}
@@ -370,7 +370,7 @@ export default function Tickets() {
 
         {/* Ticket FAQ */}
         <div className="reveal-3d" style={{ marginTop:48 }}>
-          <div style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color:'#555', letterSpacing:3, marginBottom:20, textAlign:'center' }}>TICKET FAQ</div>
+          <div style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color: B.smoke, letterSpacing:3, marginBottom:20, textAlign:'center' }}>TICKET FAQ</div>
           <TicketFAQ items={TICKET_FAQ} />
         </div>
 
@@ -428,7 +428,7 @@ export default function Tickets() {
                       disabled={dlRef===order.ref}
                       style={{ width:'100%', padding:'12px', borderRadius:10, border:`1px solid ${order.tierColor}`, background:`${order.tierColor}15`, color:order.tierColor, fontFamily:"'Orbitron', monospace", fontSize:10, fontWeight:700, letterSpacing:2, cursor:dlRef===order.ref?'wait':'pointer', transition:'all 0.2s' }}
                     >{dlRef===order.ref?'SAVING…':'DOWNLOAD TICKET PNG →'}</button>
-                    <p style={{ fontFamily:"'Space Mono', monospace", fontSize:9, color:'#333', textAlign:'center' }}>
+                    <p style={{ fontFamily:"'Space Mono', monospace", fontSize:9, color: B.dim, textAlign:'center' }}>
                       Purchased {new Date(order.purchasedAt).toLocaleDateString('en-NG')} via {order.gateway}
                     </p>
                   </div>

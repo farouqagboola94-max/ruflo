@@ -91,7 +91,7 @@ export default function GrailAdvisor() {
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             FIND YOUR SF26 GRAILS
           </h2>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#444', letterSpacing: '0.15em' }}>POWERED BY CLAUDE</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.15em' }}>POWERED BY CLAUDE</div>
         </div>
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.72rem', marginBottom: 40, letterSpacing: '0.04em' }}>
           Tell Claude your vibe · Get 3 personalised picks · Lagos market prices included
@@ -104,9 +104,9 @@ export default function GrailAdvisor() {
             { label: '03 · VIBE', items: VIBES, val: vibe, set: setVibe, color: '#A855F7' },
           ].map(({ label, items, val, set, color }) => (
             <div key={label}>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#444', letterSpacing: '0.2em', marginBottom: 10 }}>{label}</div>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.2em', marginBottom: 10 }}>{label}</div>
               {items.map(item => (
-                <button key={item.label} className="ga-btn" onClick={() => { set(item.value); setResult(null) }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 14px', marginBottom: 6, background: val === item.value ? `${color}14` : '#0d0d0d', border: `1px solid ${val === item.value ? color : '#1a1a1a'}`, color: val === item.value ? color : '#555', fontFamily: "'Space Mono'", fontSize: 10, letterSpacing: '0.08em', cursor: 'pointer', transition: 'all 0.15s' }}>
+                <button key={item.label} className="ga-btn" onClick={() => { set(item.value); setResult(null) }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 14px', marginBottom: 6, background: val === item.value ? `${color}14` : '#0d0d0d', border: `1px solid ${val === item.value ? color : '#1a1a1a'}`, color: val === item.value ? color : B.smoke, fontFamily: "'Space Mono'", fontSize: 10, letterSpacing: '0.08em', cursor: 'pointer', transition: 'all 0.15s' }}>
                   {item.label}
                 </button>
               ))}
@@ -114,7 +114,7 @@ export default function GrailAdvisor() {
           ))}
         </div>
 
-        <button onClick={findGrails} disabled={!ready || loading} style={{ width: '100%', padding: '14px', background: ready && !loading ? B.amber : '#111', color: ready && !loading ? B.black : '#333', border: 'none', fontFamily: "'Space Mono'", fontSize: 11, letterSpacing: '0.2em', fontWeight: 700, cursor: ready && !loading ? 'pointer' : 'default', marginBottom: 24, transition: 'all 0.2s' }}>
+        <button onClick={findGrails} disabled={!ready || loading} style={{ width: '100%', padding: '14px', background: ready && !loading ? B.amber : '#111', color: ready && !loading ? B.black : B.dim, border: 'none', fontFamily: "'Space Mono'", fontSize: 11, letterSpacing: '0.2em', fontWeight: 700, cursor: ready && !loading ? 'pointer' : 'default', marginBottom: 24, transition: 'all 0.2s' }}>
           {loading ? '⟳ SCANNING LAGOS MARKET...' : ready ? 'FIND MY GRAILS →' : 'SELECT ALL THREE TO CONTINUE'}
         </button>
 
@@ -136,17 +136,17 @@ export default function GrailAdvisor() {
                 <div style={{ fontFamily: "'Space Mono'", fontSize: 10, color: B.smoke, lineHeight: 1.8, marginBottom: 12 }}>{shoe.why}</div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                   <div style={{ background: 'rgba(255,255,255,0.03)', padding: '10px 12px' }}>
-                    <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#444', letterSpacing: '0.15em', marginBottom: 4 }}>WHERE TO FIND AT SF26</div>
+                    <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.15em', marginBottom: 4 }}>WHERE TO FIND AT SF26</div>
                     <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.smoke, lineHeight: 1.7 }}>{shoe.at_sf26}</div>
                   </div>
                   <div style={{ background: 'rgba(255,255,255,0.03)', padding: '10px 12px' }}>
-                    <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#444', letterSpacing: '0.15em', marginBottom: 4 }}>LAGOS INTEL</div>
+                    <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.15em', marginBottom: 4 }}>LAGOS INTEL</div>
                     <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.smoke, lineHeight: 1.7 }}>{shoe.lagos_intel}</div>
                   </div>
                 </div>
               </div>
             ))}
-            <button onClick={() => { setResult(null); setBudget(null); setStyle(null); setVibe(null) }} style={{ background: 'transparent', border: '1px solid #1a1a1a', color: '#333', fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.15em', padding: '10px', cursor: 'pointer', width: '100%' }}>
+            <button onClick={() => { setResult(null); setBudget(null); setStyle(null); setVibe(null) }} style={{ background: 'transparent', border: '1px solid #1a1a1a', color: B.dim, fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.15em', padding: '10px', cursor: 'pointer', width: '100%' }}>
               RESET — TRY DIFFERENT PREFERENCES
             </button>
           </div>

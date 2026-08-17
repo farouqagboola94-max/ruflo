@@ -57,8 +57,8 @@ export default function Footer() {
           <div style={{ flex: '1 1 240px' }}>
             <div className="reveal-3d" style={{ fontFamily: "'Orbitron', monospace", fontWeight: 900, fontSize: 20, color: B.amber, textShadow: `0 0 15px ${B.amber}30`, marginBottom: 6 }}>SNEAKERS FEST '26</div>
             <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.smoke, letterSpacing: '0.3em', marginBottom: 6 }}>THE SOLE EXHIBITION — LAGOS, NIGERIA</div>
-            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.neonCyan, letterSpacing: '0.25em', marginBottom: 4 }}>ONLINE COMMUNITY. PHYSICAL PRESENCE.</div>
-            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: '#FF6719', letterSpacing: '0.2em', marginBottom: 10 }}>A CATALYST CONCEPTS PROPERTY</div>
+            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.neonCyan, letterSpacing: '0.25em', marginBottom: 4 }}>ONLINE COMMUNITY. PHYSICAL PRESENCE.</div>
+            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: '#FF6719', letterSpacing: '0.2em', marginBottom: 10 }}>A CATALYST CONCEPTS PROPERTY</div>
             <a href={CT_HREF} target="_blank" rel="noopener noreferrer"
               style={{ display: 'inline-flex', alignItems: 'center', gap: 7, textDecoration: 'none', marginBottom: 16,
                 padding: '5px 10px', border: '1px solid #D4A01728', borderRadius: 3,
@@ -67,7 +67,7 @@ export default function Footer() {
               onMouseLeave={e => e.currentTarget.style.borderColor = '#D4A01728'}
             >
               <span style={{ fontFamily: "'Orbitron', monospace", fontSize: 9, fontWeight: 900, color: '#D4A017', letterSpacing: 1 }}>CT</span>
-              <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 6, color: B.smoke, letterSpacing: '0.18em' }}>CATALYST TALENTS ↗</span>
+              <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing: '0.18em' }}>CATALYST TALENTS ↗</span>
             </a>
             <a href="https://catalyst-awakening.netlify.app/" target="_blank" rel="noopener noreferrer"
               style={{ display: 'inline-flex', alignItems: 'center', gap: 7, textDecoration: 'none', marginBottom: 16,
@@ -77,13 +77,13 @@ export default function Footer() {
               onMouseLeave={e => e.currentTarget.style.borderColor = '#9B59FF28'}
             >
               <span style={{ fontFamily: "'Orbitron', monospace", fontSize: 10, fontWeight: 900, color: '#9B59FF', letterSpacing: 1 }}>⚡</span>
-              <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 6, color: B.smoke, letterSpacing: '0.18em' }}>CATALYST: THE AWAKENING ↗</span>
+              <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing: '0.18em' }}>CATALYST: THE AWAKENING ↗</span>
             </a>
             <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: B.smoke, lineHeight: 1.75, maxWidth: 260, marginBottom: 16 }}>West Africa's premier sneaker culture festival. Online every Friday. In person December 12, 2026.</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, letterSpacing: '0.15em' }}>FOUNDED BY <span style={{ color: B.amberGlow }}>OLUWATOBILOBA</span></div>
-              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, letterSpacing: '0.15em' }}>PRINCIPAL, CATALYST CONCEPTS</div>
-              <a href="mailto:sneakersfest088@gmail.com" style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.neonCyan, letterSpacing: '0.12em', textDecoration: 'none' }}
+              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing: '0.15em' }}>FOUNDED BY <span style={{ color: B.amberGlow }}>OLUWATOBILOBA</span></div>
+              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing: '0.15em' }}>PRINCIPAL, CATALYST CONCEPTS</div>
+              <a href="mailto:sneakersfest088@gmail.com" style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.neonCyan, letterSpacing: '0.12em', textDecoration: 'none' }}
                 onMouseEnter={e => e.target.style.textDecoration = 'underline'}
                 onMouseLeave={e => e.target.style.textDecoration = 'none'}
               >EMAIL: sneakersfest088@gmail.com</a>
@@ -118,7 +118,7 @@ export default function Footer() {
                     <span style={{ fontFamily: "'Orbitron', monospace", fontSize: s.icon === 'X' ? 11 : 8, fontWeight: 900, color: s.color }}>{s.icon}</span>
                   </div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 7, color: s.color, letterSpacing: '0.12em' }}>{s.platform}</div>
+                    <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: s.color, letterSpacing: '0.12em' }}>{s.platform}</div>
                     <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 11, color: B.smoke }}>{s.handle} · {s.tip}</div>
                   </div>
                   <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: s.color + '80' }}>→</span>
@@ -140,7 +140,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div style={{ borderTop: `1px solid ${B.gunmetal}`, paddingTop: 20, display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, fontFamily: "'Space Mono', monospace", fontSize: 7, color: B.smoke, letterSpacing: '0.18em' }}>
+        <div style={{ borderTop: `1px solid ${B.gunmetal}`, paddingTop: 20, display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing: '0.18em' }}>
           <span>© 2026 SNEAKERS FEST · CATALYST CONCEPTS. ALL RIGHTS RESERVED.</span>
           <span>ONLINE COMMUNITY. PHYSICAL PRESENCE. LAGOS NOIR.</span>
         </div>

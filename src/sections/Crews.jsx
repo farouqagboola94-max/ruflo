@@ -15,7 +15,7 @@ function writeStored(v) {
   try { localStorage.setItem(STORE_KEY, JSON.stringify(v)) } catch {}
 }
 
-const label = { fontFamily: "'Space Mono', monospace", fontSize: 7, letterSpacing: '0.22em', color: B.smoke }
+const label = { fontFamily: "'Space Mono', monospace", fontSize: 9, letterSpacing: '0.22em', color: B.smoke }
 const field = {
   width: '100%', background: B.black, border: `1px solid ${B.gunmetal}`, borderRadius: 4,
   padding: '10px 13px', color: B.white, outline: 'none', fontFamily: "'Syne', sans-serif", fontSize: 14,

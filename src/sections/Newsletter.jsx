@@ -171,7 +171,7 @@ export default function Newsletter() {
           JOIN THE{' '}
           <span style={{ color: B.amber, textShadow: `0 0 40px ${B.amber}70` }}>INNER CIRCLE</span>
         </div>
-        <p style={{ color: '#666', fontFamily: 'Space Mono,monospace', fontSize: 12, lineHeight: 1.9, margin: '0 auto 40px', maxWidth: 500 }}>
+        <p style={{ color: B.smoke, fontFamily: 'Space Mono,monospace', fontSize: 12, lineHeight: 1.9, margin: '0 auto 40px', maxWidth: 500 }}>
           Exclusive drops, early ticket access, community challenges, and event intel — delivered before it hits the feeds.
         </p>
 
@@ -181,8 +181,8 @@ export default function Newsletter() {
             <div key={p.label} className="card-3d" style={{ padding: '16px 12px', background: 'rgba(255,255,255,0.03)', border: `1px solid rgba(255,255,255,0.06)`, borderRadius: 12, textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, ${p.color}60, transparent)` }} />
               <div style={{ fontSize: 20, marginBottom: 8 }}>{p.icon}</div>
-              <div style={{ fontFamily: 'Orbitron,monospace', fontSize: 7, color: p.color, letterSpacing: 2, marginBottom: 4, fontWeight: 700 }}>{p.label}</div>
-              <div style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: '#555', lineHeight: 1.5 }}>{p.desc}</div>
+              <div style={{ fontFamily: 'Orbitron,monospace', fontSize: 9, color: p.color, letterSpacing: 2, marginBottom: 4, fontWeight: 700 }}>{p.label}</div>
+              <div style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: B.smoke, lineHeight: 1.5 }}>{p.desc}</div>
             </div>
           ))}
         </div>
@@ -196,7 +196,7 @@ export default function Newsletter() {
             <div style={{ marginTop: 24, fontFamily: 'Bebas Neue,sans-serif', fontSize: 28, color: B.amber, letterSpacing: 3 }}>
               YOU'RE INNER CIRCLE
             </div>
-            <div style={{ fontFamily: 'Space Mono,monospace', fontSize: 10, color: '#666', marginTop: 8 }}>
+            <div style={{ fontFamily: 'Space Mono,monospace', fontSize: 10, color: B.smoke, marginTop: 8 }}>
               {memberNum ? `Member #${memberNum}` : 'Check your inbox to confirm'}
             </div>
             <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center', gap: 16, flexWrap: 'wrap' }}>
@@ -212,11 +212,11 @@ export default function Newsletter() {
           <form onSubmit={subscribe}>
             {/* interest tags */}
             <div className="reveal-3d" style={{ marginBottom: 20 }}>
-              <div style={{ fontFamily: 'Orbitron,monospace', fontSize: 8, color: '#444', letterSpacing: 3, marginBottom: 12 }}>I'M INTERESTED IN (OPTIONAL)</div>
+              <div style={{ fontFamily: 'Orbitron,monospace', fontSize: 8, color: B.dim, letterSpacing: 3, marginBottom: 12 }}>I'M INTERESTED IN (OPTIONAL)</div>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
                 {INTERESTS.map(t => (
                   <button type="button" key={t.id} onClick={() => toggleInterest(t.id)}
-                    style={{ padding: '7px 14px', background: interests.has(t.id) ? `${B.amber}18` : 'rgba(255,255,255,0.03)', border: `1px solid ${interests.has(t.id) ? B.amber + '60' : 'rgba(255,255,255,0.08)'}`, borderRadius: 20, color: interests.has(t.id) ? B.amber : '#666', fontFamily: 'Space Mono,monospace', fontSize: 10, cursor: 'pointer', transition: 'all 0.15s' }}>
+                    style={{ padding: '7px 14px', background: interests.has(t.id) ? `${B.amber}18` : 'rgba(255,255,255,0.03)', border: `1px solid ${interests.has(t.id) ? B.amber + '60' : 'rgba(255,255,255,0.08)'}`, borderRadius: 20, color: interests.has(t.id) ? B.amber : B.smoke, fontFamily: 'Space Mono,monospace', fontSize: 10, cursor: 'pointer', transition: 'all 0.15s' }}>
                     {t.label}
                   </button>
                 ))}
@@ -239,7 +239,7 @@ export default function Newsletter() {
 
             <button
               type="submit" disabled={status === 'loading'}
-              style={{ width: '100%', padding: '16px', borderRadius: 12, border: 'none', background: status === 'loading' ? 'rgba(255,255,255,0.06)' : B.amber, color: status === 'loading' ? '#555' : B.black, fontFamily: 'Orbitron,sans-serif', fontSize: 13, fontWeight: 700, letterSpacing: 2, cursor: status === 'loading' ? 'not-allowed' : 'pointer', boxShadow: status === 'loading' ? 'none' : `0 0 30px ${B.amber}35`, transition: 'all 0.2s' }}
+              style={{ width: '100%', padding: '16px', borderRadius: 12, border: 'none', background: status === 'loading' ? 'rgba(255,255,255,0.06)' : B.amber, color: status === 'loading' ? B.smoke : B.black, fontFamily: 'Orbitron,sans-serif', fontSize: 13, fontWeight: 700, letterSpacing: 2, cursor: status === 'loading' ? 'not-allowed' : 'pointer', boxShadow: status === 'loading' ? 'none' : `0 0 30px ${B.amber}35`, transition: 'all 0.2s' }}
             >
               {status === 'loading'
                 ? <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
@@ -251,7 +251,7 @@ export default function Newsletter() {
             </button>
 
             {status === 'error' && <p style={{ color: B.neonMagenta, fontFamily: 'Space Mono,monospace', fontSize: 11, marginTop: 12 }}>{err}</p>}
-            <p style={{ color: '#333', fontFamily: 'Space Mono,monospace', fontSize: 10, marginTop: 14 }}>No spam · Unsubscribe anytime · Your badge is waiting</p>
+            <p style={{ color: B.dim, fontFamily: 'Space Mono,monospace', fontSize: 10, marginTop: 14 }}>No spam · Unsubscribe anytime · Your badge is waiting</p>
           </form>
         )}
 
@@ -267,7 +267,7 @@ export default function Newsletter() {
               <div style={{ fontFamily: 'Orbitron,monospace', fontSize: 20, fontWeight: 900, color: s.color, marginBottom: 4 }}>
                 {s.fmt ? s.fmt(s.val) : <Counter target={s.val} />}
               </div>
-              <div style={{ fontFamily: 'Space Mono,monospace', fontSize: 8, color: '#444', letterSpacing: 2 }}>{s.label}</div>
+              <div style={{ fontFamily: 'Space Mono,monospace', fontSize: 8, color: B.dim, letterSpacing: 2 }}>{s.label}</div>
             </div>
           ))}
         </div>

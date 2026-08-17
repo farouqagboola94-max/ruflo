@@ -11,7 +11,7 @@ const PRIZES = [
   { label: 'MEET & GREET', sub: 'backstage access pass',      color: '#B8FF00', icon: 'M&G',   xp: 250, rare: true  },
   { label: 'EARLY ACCESS', sub: '1hr before doors open',      color: '#7B2FBE', icon: 'EARLY', xp: 120, rare: false },
   { label: 'MYSTERY DROP', sub: 'secret collab at the event', color: '#FF6B35', icon: 'DROP',  xp: 200, rare: true  },
-  { label: 'TRY AGAIN',   sub: 'better luck next time',       color: '#333',    icon: '↩',     xp: 15,  rare: false },
+  { label: 'TRY AGAIN',   sub: 'better luck next time',       color: B.dim,    icon: '↩',     xp: 15,  rare: false },
   { label: '₦5,000 OFF',  sub: 'off any ticket tier',         color: '#FFD080', icon: '₦5K',   xp: 130, rare: false },
 ]
 
@@ -216,7 +216,7 @@ export default function SpinWheel() {
         <h2 className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue'", fontSize:'clamp(2.5rem,7vw,5rem)', color:B.white, letterSpacing:'0.05em', marginBottom:8 }}>
           TEST YOUR{' '}<span style={{ color:B.amber, textShadow:`0 0 40px ${B.amber}70` }}>LUCK</span>
         </h2>
-        <p style={{ fontFamily:"'Space Mono'", fontSize:9, color:'#444', letterSpacing:'0.15em', marginBottom:28 }}>
+        <p style={{ fontFamily:"'Space Mono'", fontSize:9, color: B.dim, letterSpacing:'0.15em', marginBottom:28 }}>
           3 TRIALS ON REGISTRATION · 3 MORE AFTER TICKET PURCHASE
         </p>
 
@@ -229,20 +229,20 @@ export default function SpinWheel() {
             border:`1px solid ${pools.regAllowed > 0 ? B.neonLime + '35' : 'rgba(255,255,255,0.07)'}`,
             borderRadius:40,
           }}>
-            <span style={{ fontFamily:"'Space Mono'", fontSize:7, color: pools.regAllowed > 0 ? B.neonLime : '#2a2a2a', letterSpacing:'0.15em' }}>
+            <span style={{ fontFamily:"'Space Mono'", fontSize: 9, color: pools.regAllowed > 0 ? B.neonLime : B.dim, letterSpacing:'0.15em' }}>
               {pools.regAllowed > 0 ? '✓ REGISTERED' : '○ WAITLIST'}
             </span>
             <div style={{ display:'flex', gap:6 }}>
               {Array.from({ length: REG_GRANT }).map((_, i) => (
                 <div key={i} style={{
                   width:9, height:9, borderRadius:'50%',
-                  background: pools.regAllowed === 0 ? '#161616' : i < pools.regUsed ? '#2a2a2a' : B.neonLime,
+                  background: pools.regAllowed === 0 ? '#161616' : i < pools.regUsed ? B.dim : B.neonLime,
                   boxShadow: pools.regAllowed > 0 && i >= pools.regUsed ? `0 0 7px ${B.neonLime}80` : 'none',
                   transition:'all 0.3s',
                 }}/>
               ))}
             </div>
-            <span style={{ fontFamily:"'Space Mono'", fontSize:7, color: pools.regAllowed > 0 ? (pools.regLeft > 0 ? B.neonLime : '#444') : '#2a2a2a', letterSpacing:'0.1em' }}>
+            <span style={{ fontFamily:"'Space Mono'", fontSize: 9, color: pools.regAllowed > 0 ? (pools.regLeft > 0 ? B.neonLime : B.dim) : B.dim, letterSpacing:'0.1em' }}>
               {pools.regAllowed > 0 ? `${pools.regLeft}/${REG_GRANT}` : '3 FREE'}
             </span>
           </div>
@@ -254,20 +254,20 @@ export default function SpinWheel() {
             border:`1px solid ${pools.tktAllowed > 0 ? B.amber + '40' : 'rgba(255,255,255,0.07)'}`,
             borderRadius:40,
           }}>
-            <span style={{ fontFamily:"'Space Mono'", fontSize:7, color: pools.tktAllowed > 0 ? B.amber : '#2a2a2a', letterSpacing:'0.15em' }}>
+            <span style={{ fontFamily:"'Space Mono'", fontSize: 9, color: pools.tktAllowed > 0 ? B.amber : B.dim, letterSpacing:'0.15em' }}>
               {pools.tktAllowed > 0 ? '🎟 TICKET HOLDER' : '🎟 BUY TICKET'}
             </span>
             <div style={{ display:'flex', gap:6 }}>
               {Array.from({ length: TKT_GRANT }).map((_, i) => (
                 <div key={i} style={{
                   width:9, height:9, borderRadius:'50%',
-                  background: pools.tktAllowed === 0 ? '#161616' : i < pools.tktUsed ? '#2a2a2a' : B.amber,
+                  background: pools.tktAllowed === 0 ? '#161616' : i < pools.tktUsed ? B.dim : B.amber,
                   boxShadow: pools.tktAllowed > 0 && i >= pools.tktUsed ? `0 0 7px ${B.amber}80` : 'none',
                   transition:'all 0.3s',
                 }}/>
               ))}
             </div>
-            <span style={{ fontFamily:"'Space Mono'", fontSize:7, color: pools.tktAllowed > 0 ? (pools.tktLeft > 0 ? B.amber : '#444') : '#2a2a2a', letterSpacing:'0.1em' }}>
+            <span style={{ fontFamily:"'Space Mono'", fontSize: 9, color: pools.tktAllowed > 0 ? (pools.tktLeft > 0 ? B.amber : B.dim) : B.dim, letterSpacing:'0.1em' }}>
               {pools.tktAllowed > 0 ? `${pools.tktLeft}/${TKT_GRANT}` : '3 BONUS'}
             </span>
           </div>
@@ -344,7 +344,7 @@ export default function SpinWheel() {
             disabled={!canSpin}
             style={{
               background: canSpin ? (isLastSpin ? B.neonMagenta : B.amber) : B.gunmetal,
-              color: canSpin ? B.black : '#444',
+              color: canSpin ? B.black : B.dim,
               border: 'none', padding:'16px 56px',
               fontFamily:"'Bebas Neue'", fontSize:'1.6rem', letterSpacing:'0.12em',
               cursor: canSpin ? 'pointer' : 'default',
@@ -368,7 +368,7 @@ export default function SpinWheel() {
         </div>
 
         {totalAll > 0 && (
-          <p style={{ color:'#333', fontFamily:"'Space Mono'", fontSize:8, marginTop:14, letterSpacing:1 }}>
+          <p style={{ color: B.dim, fontFamily:"'Space Mono'", fontSize:8, marginTop:14, letterSpacing:1 }}>
             {totalAll} total spin{totalAll !== 1 ? 's' : ''} · prizes redeemable at the gate · Dec 12
           </p>
         )}
@@ -393,14 +393,14 @@ export default function SpinWheel() {
           >
             {isNearMiss && prize.label === 'TRY AGAIN' && nearPrize ? (
               <>
-                <div style={{ fontFamily:"'Space Mono'", fontSize:9, letterSpacing:3, color:'#555', marginBottom:8 }}>YOU WERE THIS CLOSE</div>
+                <div style={{ fontFamily:"'Space Mono'", fontSize:9, letterSpacing:3, color: B.smoke, marginBottom:8 }}>YOU WERE THIS CLOSE</div>
                 <div style={{ fontFamily:"'Bebas Neue'", fontSize:'2.8rem', color:B.neonMagenta, letterSpacing:3, textShadow:`0 0 40px ${B.neonMagenta}60`, marginBottom:6 }}>SO CLOSE!</div>
-                <p style={{ fontFamily:"'Space Mono'", fontSize:10, color:'#666', marginBottom:20 }}>
+                <p style={{ fontFamily:"'Space Mono'", fontSize:10, color: B.smoke, marginBottom:20 }}>
                   One segment away from <span style={{ color:nearPrize.color }}>{nearPrize.label}</span>
                 </p>
                 <div style={{ width:64, height:64, borderRadius:'50%', background:`${prize.color}15`, border:`2px solid ${prize.color}50`, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 20px', fontFamily:"'Orbitron'", fontSize:'1rem', color:prize.color }}>↩</div>
                 <div style={{ fontFamily:"'Bebas Neue'", fontSize:'2rem', color:B.white, marginBottom:6 }}>TRY AGAIN</div>
-                <p style={{ color:'#555', fontFamily:"'Space Mono'", fontSize:9, marginBottom:24 }}>
+                <p style={{ color: B.smoke, fontFamily:"'Space Mono'", fontSize:9, marginBottom:24 }}>
                   {pools.totalLeft > 0
                     ? `${pools.totalLeft} spin${pools.totalLeft !== 1 ? 's' : ''} remaining`
                     : 'No more spins — see you Dec 12!'}
@@ -438,7 +438,7 @@ export default function SpinWheel() {
               <>
                 <div style={{ fontSize:'3rem', marginBottom:16 }}>😬</div>
                 <div style={{ fontFamily:"'Bebas Neue'", fontSize:'2rem', color:B.white, marginBottom:8 }}>TRY AGAIN</div>
-                <p style={{ color:'#555', fontFamily:"'Space Mono'", fontSize:9, marginBottom:24 }}>
+                <p style={{ color: B.smoke, fontFamily:"'Space Mono'", fontSize:9, marginBottom:24 }}>
                   {pools.totalLeft > 0
                     ? `${pools.totalLeft} spin${pools.totalLeft !== 1 ? 's' : ''} remaining — go again!`
                     : 'All spins used · see you at the event on Dec 12!'}

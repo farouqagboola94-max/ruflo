@@ -252,7 +252,7 @@ export default function HypeCounter() {
 
         {/* Progress to next milestone */}
         <div className="reveal-3d" style={{ marginBottom: 32 }}>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: '0.58rem', color: '#444', marginBottom: 6 }}>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: '0.58rem', color: B.dim, marginBottom: 6 }}>
             NEXT MILESTONE: {nextMilestone.toLocaleString()}
           </div>
           <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 4, height: 3, overflow: 'hidden', maxWidth: 220, margin: '0 auto' }}>
@@ -291,7 +291,7 @@ export default function HypeCounter() {
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.58rem', marginTop: 20 }}>
           every tap is permanent · your hype lives forever
         </p>
-        <p style={{ color: '#444', fontFamily: "'Space Mono'", fontSize: '0.55rem', marginTop: 4 }}>
+        <p style={{ color: B.dim, fontFamily: "'Space Mono'", fontSize: '0.55rem', marginTop: 4 }}>
           next milestone celebration at {nextMilestone.toLocaleString()}
         </p>
       </div>

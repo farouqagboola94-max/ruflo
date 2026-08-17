@@ -245,7 +245,7 @@ export default function EarlyAccess() {
             <span style={{ fontFamily:"'Space Mono'", fontSize:'0.6rem', color:B.amber, letterSpacing:2 }}>
               {known ? `${total.toLocaleString()} LOCKED IN` : 'COUNTING…'}
             </span>
-            <span style={{ fontFamily:"'Space Mono'", fontSize:'0.6rem', color:'#444', letterSpacing:2 }}>
+            <span style={{ fontFamily:"'Space Mono'", fontSize:'0.6rem', color: B.dim, letterSpacing:2 }}>
               GOAL: {GOAL.toLocaleString()}{known ? ` · ${pct}% FULL` : ''}
             </span>
           </div>
@@ -301,7 +301,7 @@ export default function EarlyAccess() {
               confirmation email carries your position and the tier that comes with it.
             </p>
             {refCode && (
-              <div style={{ marginTop:14, fontFamily:"'Space Mono'", fontSize:'0.6rem', color:'#555', letterSpacing:2 }}>
+              <div style={{ marginTop:14, fontFamily:"'Space Mono'", fontSize:'0.6rem', color: B.smoke, letterSpacing:2 }}>
                 REFERRAL CODE · <span style={{ color:B.neonCyan }}>{refCode}</span>
               </div>
             )}
@@ -331,7 +331,7 @@ export default function EarlyAccess() {
                 <div style={{ fontFamily:"'Bebas Neue'", fontSize:'1.6rem', color:B.white, letterSpacing:'0.06em' }}>{tier.label}</div>
               </div>
               <div style={{ marginLeft:'auto', textAlign:'right' }}>
-                <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color:'#555', letterSpacing:2, marginBottom:2 }}>QUEUE #</div>
+                <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color: B.smoke, letterSpacing:2, marginBottom:2 }}>QUEUE #</div>
                 <div style={{ fontFamily:"'Orbitron'", fontSize:'1.5rem', fontWeight:900, color:tier.color, textShadow:`0 0 20px ${tier.color}60` }}>
                   {animPos.toLocaleString()}
                 </div>
@@ -347,7 +347,7 @@ export default function EarlyAccess() {
               ].map(s => (
                 <div key={s.label} className="card-3d" style={{ background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:8, padding:'12px 14px', textAlign:'center' }}>
                   <div style={{ fontFamily:"'Orbitron'", fontSize:'1.2rem', fontWeight:900, color:s.color, marginBottom:4 }}>{s.val}</div>
-                  <div style={{ fontFamily:"'Space Mono'", fontSize:'0.55rem', color:'#444', letterSpacing:2 }}>{s.label}</div>
+                  <div style={{ fontFamily:"'Space Mono'", fontSize:'0.55rem', color: B.dim, letterSpacing:2 }}>{s.label}</div>
                 </div>
               ))}
             </div>
@@ -367,7 +367,7 @@ export default function EarlyAccess() {
 
             {/* referral link */}
             <div className="card-3d" style={{ background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.07)', borderRadius:10, padding:'16px 20px', marginBottom:16 }}>
-              <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color:'#555', letterSpacing:3, marginBottom:4 }}>YOUR REFERRAL LINK</div>
+              <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color: B.smoke, letterSpacing:3, marginBottom:4 }}>YOUR REFERRAL LINK</div>
               <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:10 }}>
                 <span style={{ fontFamily:"'Space Mono'", fontSize:'0.65rem', color:B.amber }}>Refer 5 friends → FREE ticket</span>
                 {refCount !== null && (
@@ -381,7 +381,7 @@ export default function EarlyAccess() {
                   sneakersfest26.com?ref=<span style={{ color:B.amber }}>{refCode}</span>
                 </div>
                 <button onClick={copyRef}
-                  style={{ padding:'10px 18px', background:refCopied ? `${B.amber}20` : 'rgba(255,255,255,0.05)', border:`1px solid ${refCopied ? B.amber+'50' : 'rgba(255,255,255,0.1)'}`, borderRadius:6, color:refCopied ? B.amber : '#666', fontFamily:"'Orbitron'", fontSize:9, cursor:'pointer', letterSpacing:1, whiteSpace:'nowrap', transition:'all 0.2s' }}>
+                  style={{ padding:'10px 18px', background:refCopied ? `${B.amber}20` : 'rgba(255,255,255,0.05)', border:`1px solid ${refCopied ? B.amber+'50' : 'rgba(255,255,255,0.1)'}`, borderRadius:6, color:refCopied ? B.amber : B.smoke, fontFamily:"'Orbitron'", fontSize:9, cursor:'pointer', letterSpacing:1, whiteSpace:'nowrap', transition:'all 0.2s' }}>
                   {refCopied ? '✓ COPIED' : 'COPY'}
                 </button>
               </div>
@@ -402,11 +402,11 @@ export default function EarlyAccess() {
                     Email <strong>sneakersfest088@gmail.com</strong><br />
                     Subject: FREE TICKET — REF CODE: <strong>{refCode}</strong>
                   </div>
-                  <p style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color:'#555' }}>Valid for one GA ticket · redeemable at the gate on Dec 12</p>
+                  <p style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color: B.smoke }}>Valid for one GA ticket · redeemable at the gate on Dec 12</p>
                 </div>
               ) : (
                 <div className="card-3d" style={{ background:'rgba(255,255,255,0.02)', border:`1px solid ${B.amber}25`, borderRadius:10, padding:'14px 20px', marginBottom:24 }}>
-                  <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color:'#555', letterSpacing:3, marginBottom:8 }}>REFERRAL PROGRESS</div>
+                  <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color: B.smoke, letterSpacing:3, marginBottom:8 }}>REFERRAL PROGRESS</div>
                   <div style={{ display:'flex', gap:8, marginBottom:8 }}>
                     {Array.from({ length: 5 }).map((_, i) => (
                       <div key={i} style={{
@@ -429,7 +429,7 @@ export default function EarlyAccess() {
               style={{ width:'100%', background:B.amber, color:B.black, border:'none', padding:'14px', fontFamily:"'Bebas Neue'", fontSize:'1.2rem', letterSpacing:'0.1em', cursor:'pointer', borderRadius:6, boxShadow:`0 0 24px ${B.amber}50` }}>
               {shared ? '✓ LINK COPIED!' : 'SHARE & MOVE UP THE QUEUE'}
             </button>
-            <p style={{ color:'#444', fontFamily:"'Space Mono'", fontSize:'0.6rem', marginTop:10, textAlign:'center' }}>
+            <p style={{ color: B.dim, fontFamily:"'Space Mono'", fontSize:'0.6rem', marginTop:10, textAlign:'center' }}>
               {name ? `${name}, check` : 'Check'} your email for confirmation · early access tickets drop to you first
             </p>
           </div>

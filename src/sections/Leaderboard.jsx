@@ -115,7 +115,7 @@ function readAll() {
 function DeltaBadge({ delta }) {
   if (delta === null || delta === undefined) return null
   if (delta === 0) return (
-    <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#333', letterSpacing:0 }}>—</span>
+    <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.dim, letterSpacing:0 }}>—</span>
   )
   const up   = delta > 0
   const color = up ? B.neonLime : B.neonMagenta
@@ -156,7 +156,7 @@ function RankRow({ rank, label, sub, metric, metricSub, color, maxMetric, metric
           ? <span style={{ fontSize:20, filter: rank === 1 ? `drop-shadow(0 0 6px ${color})` : 'none' }}>{MEDAL[rank]}</span>
           : grandPrize
             ? <span style={{ fontFamily:'Orbitron,monospace', fontSize:9, color:B.amber, fontWeight:700 }}>🏆{rank}</span>
-            : <span style={{ fontFamily:'Orbitron,monospace', fontSize:11, color:'#444', fontWeight:700 }}>#{rank}</span>
+            : <span style={{ fontFamily:'Orbitron,monospace', fontSize:11, color: B.dim, fontWeight:700 }}>#{rank}</span>
         }
       </div>
 
@@ -173,7 +173,7 @@ function RankRow({ rank, label, sub, metric, metricSub, color, maxMetric, metric
       {/* label */}
       <div style={{ flex:1, minWidth:0, zIndex:1 }}>
         <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:isTop ? 19 : 15, color:isTop ? B.white : '#bbb', letterSpacing:1, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{label}</div>
-        {sub && <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#555', marginTop:1 }}>{sub}</div>}
+        {sub && <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, marginTop:1 }}>{sub}</div>}
       </div>
 
       {/* delta */}
@@ -184,7 +184,7 @@ function RankRow({ rank, label, sub, metric, metricSub, color, maxMetric, metric
       {/* metric */}
       <div style={{ textAlign:'right', flexShrink:0, zIndex:1 }}>
         <div style={{ fontFamily:'Orbitron,monospace', fontSize:isTop ? 16 : 13, color:isTop ? color : `${color}90`, fontWeight:700 }}>{metric}</div>
-        {metricSub && <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:'#444', marginTop:1 }}>{metricSub}</div>}
+        {metricSub && <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color: B.dim, marginTop:1 }}>{metricSub}</div>}
       </div>
     </div>
   )
@@ -347,7 +347,7 @@ export default function Leaderboard() {
             return (
               <button key={t.id} onClick={() => switchTab(t.id)} style={{ flex:'1 1 120px', padding:'12px 8px', background:active ? `${c}18` : 'rgba(255,255,255,0.03)', border:`1px solid ${active ? c+'60' : 'rgba(255,255,255,0.07)'}`, borderRadius:8, cursor:'pointer', transition:'all 0.2s' }}>
                 <div style={{ fontSize:18, marginBottom:4 }}>{t.emoji}</div>
-                <div style={{ fontFamily:'Orbitron,monospace', fontSize:8, color:active ? c : '#555', letterSpacing:2 }}>{t.label}</div>
+                <div style={{ fontFamily:'Orbitron,monospace', fontSize:8, color:active ? c : B.smoke, letterSpacing:2 }}>{t.label}</div>
               </button>
             )
           })}
@@ -356,16 +356,16 @@ export default function Leaderboard() {
         {/* summary + filter row */}
         <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:20, flexWrap:'wrap' }}>
           <div className="card-3d" style={{ flex:1, minWidth:180, padding:'12px 18px', background:'rgba(255,255,255,0.02)', border:`1px solid ${accent}20`, borderRadius:10, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-            <div style={{ fontFamily:'Orbitron,monospace', fontSize:9, color:'#444', letterSpacing:3 }}>TOTAL</div>
+            <div style={{ fontFamily:'Orbitron,monospace', fontSize:9, color: B.dim, letterSpacing:3 }}>TOTAL</div>
             <div style={{ display:'flex', alignItems:'baseline', gap:8 }}>
               <span style={{ fontFamily:'Orbitron,monospace', fontSize:20, color:accent, fontWeight:900 }}>{summaryVal[tab]}</span>
-              <span style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#444' }}>{summaryLbl[tab]}</span>
+              <span style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: B.dim }}>{summaryLbl[tab]}</span>
             </div>
           </div>
           {/* weekly reset */}
           <div style={{ padding:'8px 12px', background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:6, flexShrink:0 }}>
-            <div style={{ fontFamily:'Space Mono,monospace', fontSize:6, color:'#333', letterSpacing:2 }}>RESETS IN</div>
-            <div style={{ fontFamily:'Orbitron,monospace', fontSize:10, color:'#555', fontWeight:700 }}>{getWeeklyReset()}</div>
+            <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color: B.dim, letterSpacing:2 }}>RESETS IN</div>
+            <div style={{ fontFamily:'Orbitron,monospace', fontSize:10, color: B.smoke, fontWeight:700 }}>{getWeeklyReset()}</div>
           </div>
           {/* count filter pills */}
           <div style={{ display:'flex', gap:4 }}>
@@ -373,7 +373,7 @@ export default function Leaderboard() {
               const active = showCount === opt.value
               return (
                 <button key={opt.value} onClick={() => setShowCount(opt.value)}
-                  style={{ padding:'8px 12px', background:active ? `${accent}20` : 'rgba(255,255,255,0.03)', border:`1px solid ${active ? accent+'60' : 'rgba(255,255,255,0.07)'}`, borderRadius:6, cursor:'pointer', fontFamily:'Orbitron,monospace', fontSize:8, color:active ? accent : '#444', letterSpacing:1.5, transition:'all 0.18s', whiteSpace:'nowrap' }}>
+                  style={{ padding:'8px 12px', background:active ? `${accent}20` : 'rgba(255,255,255,0.03)', border:`1px solid ${active ? accent+'60' : 'rgba(255,255,255,0.07)'}`, borderRadius:6, cursor:'pointer', fontFamily:'Orbitron,monospace', fontSize:8, color:active ? accent : B.dim, letterSpacing:1.5, transition:'all 0.18s', whiteSpace:'nowrap' }}>
                   {opt.label}
                 </button>
               )
@@ -385,15 +385,15 @@ export default function Leaderboard() {
         <div style={{ display:'flex', alignItems:'center', gap:12, padding:'0 0 8px', borderBottom:`1px solid ${accent}20`, marginBottom:4 }}>
           <div style={{ width:36, flexShrink:0 }} />
           {tab === 'gallery' && <div style={{ width:38, flexShrink:0 }} />}
-          <div style={{ flex:1, fontFamily:'Space Mono,monospace', fontSize:8, color:'#333', letterSpacing:2 }}>NAME</div>
-          <div style={{ width:28, textAlign:'center', fontFamily:'Space Mono,monospace', fontSize:8, color:'#333', letterSpacing:1 }}>MOVE</div>
-          <div style={{ textAlign:'right', fontFamily:'Space Mono,monospace', fontSize:8, color:'#333', letterSpacing:2 }}>SCORE</div>
+          <div style={{ flex:1, fontFamily:'Space Mono,monospace', fontSize:8, color: B.dim, letterSpacing:2 }}>NAME</div>
+          <div style={{ width:28, textAlign:'center', fontFamily:'Space Mono,monospace', fontSize:8, color: B.dim, letterSpacing:1 }}>MOVE</div>
+          <div style={{ textAlign:'right', fontFamily:'Space Mono,monospace', fontSize:8, color: B.dim, letterSpacing:2 }}>SCORE</div>
         </div>
 
         {/* rows */}
         <div key={tabKey}>
           {allRows.length === 0 ? (
-            <div style={{ textAlign:'center', padding:'60px 0', fontFamily:'Space Mono,monospace', fontSize:11, color:'#333' }}>
+            <div style={{ textAlign:'center', padding:'60px 0', fontFamily:'Space Mono,monospace', fontSize:11, color: B.dim }}>
               {emptyMsg[tab] || 'No data yet.'}
             </div>
           ) : (
@@ -414,7 +414,7 @@ export default function Leaderboard() {
         {allRows.length > showCount && (
           <div style={{ textAlign:'center', marginTop:16 }}>
             <button onClick={() => setShowCount(99)}
-              style={{ padding:'8px 24px', background:'rgba(255,255,255,0.03)', border:`1px solid ${accent}30`, borderRadius:20, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:9, color:'#555', letterSpacing:1, transition:'all 0.2s' }}
+              style={{ padding:'8px 24px', background:'rgba(255,255,255,0.03)', border:`1px solid ${accent}30`, borderRadius:20, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:9, color: B.smoke, letterSpacing:1, transition:'all 0.2s' }}
               onMouseEnter={e => { e.currentTarget.style.color = accent; e.currentTarget.style.borderColor = accent+'60' }}
               onMouseLeave={e => { e.currentTarget.style.color = '#555'; e.currentTarget.style.borderColor = accent+'30' }}>
               SHOW ALL {allRows.length} →
@@ -426,7 +426,7 @@ export default function Leaderboard() {
         {allRows.length > 0 && (
           <div style={{ textAlign:'center', marginTop:32 }}>
             <button onClick={() => handleShare(allRows)}
-              style={{ display:'inline-flex', alignItems:'center', gap:10, padding:'12px 28px', background:copied ? `${accent}20` : 'rgba(255,255,255,0.03)', border:`1px solid ${copied ? accent+'60' : 'rgba(255,255,255,0.1)'}`, borderRadius:10, cursor:'pointer', fontFamily:'Orbitron,monospace', fontSize:9, color:copied ? accent : '#555', letterSpacing:2, transition:'all 0.25s' }}
+              style={{ display:'inline-flex', alignItems:'center', gap:10, padding:'12px 28px', background:copied ? `${accent}20` : 'rgba(255,255,255,0.03)', border:`1px solid ${copied ? accent+'60' : 'rgba(255,255,255,0.1)'}`, borderRadius:10, cursor:'pointer', fontFamily:'Orbitron,monospace', fontSize:9, color:copied ? accent : B.smoke, letterSpacing:2, transition:'all 0.25s' }}
               onMouseEnter={e => { if (!copied) { e.currentTarget.style.color = accent; e.currentTarget.style.borderColor = accent+'50' } }}
               onMouseLeave={e => { if (!copied) { e.currentTarget.style.color = '#555'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)' } }}>
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -456,36 +456,36 @@ export default function Leaderboard() {
             const spotsAway = rank - GRAND_PRIZE_RANK
             return (
               <div className="card-3d" style={{ marginTop:28, padding:'20px 24px', background: inGrandPrizeZone ? `${B.amber}08` : 'rgba(255,255,255,0.02)', border:`1px solid ${inGrandPrizeZone ? B.amber+'40' : '#C084FC20'}`, borderRadius:12 }}>
-                <div style={{ fontFamily:'Orbitron,monospace', fontSize:8, color:'#444', letterSpacing:3, marginBottom:12 }}>
+                <div style={{ fontFamily:'Orbitron,monospace', fontSize:8, color: B.dim, letterSpacing:3, marginBottom:12 }}>
                   MY RANK · <span style={{ color:tier.color }}>{tier.name}</span> · <span style={{ color:B.neonLime }}>LV {level.level}</span>
                 </div>
                 <div style={{ display:'flex', alignItems:'center', gap:16, flexWrap:'wrap' }}>
                   <div style={{ display:'flex', alignItems:'baseline', gap:6 }}>
                     <span style={{ fontFamily:'Orbitron,monospace', fontSize:32, color:'#C084FC', fontWeight:900 }}>#{rank}</span>
-                    <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#444' }}>of {COLLECTOR_SEEDS.length + 1}</span>
+                    <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.dim }}>of {COLLECTOR_SEEDS.length + 1}</span>
                   </div>
                   <div style={{ flex:1, minWidth:120 }}>
                     {myName && <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:18, color:B.white, letterSpacing:1 }}>{myName}</div>}
                     <div style={{ fontFamily:'Orbitron,monospace', fontSize:14, color:'#C084FC', fontWeight:700 }}>{total.toLocaleString()} PTS</div>
                   </div>
                   <div style={{ display:'flex', gap:12, flexWrap:'wrap' }}>
-                    {rafflePts > 0 && <div style={{ textAlign:'center' }}><div style={{ fontFamily:'Orbitron,monospace', fontSize:11, color:B.amber }}>{rafflePts}</div><div style={{ fontFamily:'Space Mono,monospace', fontSize:6, color:'#444' }}>RAFFLE</div></div>}
-                    {galPts > 0 && <div style={{ textAlign:'center' }}><div style={{ fontFamily:'Orbitron,monospace', fontSize:11, color:B.neonCyan }}>{galPts}</div><div style={{ fontFamily:'Space Mono,monospace', fontSize:6, color:'#444' }}>GALLERY</div></div>}
-                    {bidPts > 0 && <div style={{ textAlign:'center' }}><div style={{ fontFamily:'Orbitron,monospace', fontSize:11, color:B.neonLime }}>{bidPts}</div><div style={{ fontFamily:'Space Mono,monospace', fontSize:6, color:'#444' }}>BIDS</div></div>}
+                    {rafflePts > 0 && <div style={{ textAlign:'center' }}><div style={{ fontFamily:'Orbitron,monospace', fontSize:11, color:B.amber }}>{rafflePts}</div><div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color: B.dim }}>RAFFLE</div></div>}
+                    {galPts > 0 && <div style={{ textAlign:'center' }}><div style={{ fontFamily:'Orbitron,monospace', fontSize:11, color:B.neonCyan }}>{galPts}</div><div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color: B.dim }}>GALLERY</div></div>}
+                    {bidPts > 0 && <div style={{ textAlign:'center' }}><div style={{ fontFamily:'Orbitron,monospace', fontSize:11, color:B.neonLime }}>{bidPts}</div><div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color: B.dim }}>BIDS</div></div>}
                   </div>
                 </div>
-                <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: inGrandPrizeZone ? B.amber : '#666', letterSpacing:1, marginTop:14 }}>
+                <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: inGrandPrizeZone ? B.amber : B.smoke, letterSpacing:1, marginTop:14 }}>
                   {inGrandPrizeZone
                     ? `🏆 YOU'RE IN THE GRAND PRIZE ZONE — TOP ${GRAND_PRIZE_RANK} XP EARNERS WIN AT THE EVENT`
                     : `${spotsAway} spot${spotsAway === 1 ? '' : 's'} from the Grand Prize Zone (top ${GRAND_PRIZE_RANK})`}
                 </div>
-                <div style={{ fontFamily:'Space Mono,monospace', fontSize:7, color:'#2a2a2a', letterSpacing:1, marginTop:8 }}>XP SOURCED FROM YOUR SNEAKER PASSPORT · SEE FULL BREAKDOWN IN THE PASSPORT SECTION</div>
+                <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color:B.dim, letterSpacing:1, marginTop:8 }}>XP SOURCED FROM YOUR SNEAKER PASSPORT · SEE FULL BREAKDOWN IN THE PASSPORT SECTION</div>
               </div>
             )
           } catch { return null }
         })()}
 
-        <div style={{ textAlign:'center', marginTop:24, fontFamily:'Space Mono,monospace', fontSize:8, color:'#2a2a2a', letterSpacing:2 }}>
+        <div style={{ textAlign:'center', marginTop:24, fontFamily:'Space Mono,monospace', fontSize:8, color:B.dim, letterSpacing:2 }}>
           RANKINGS UPDATE IN REAL TIME FROM COMMUNITY ACTIVITY
         </div>
       </div>

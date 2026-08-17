@@ -81,7 +81,7 @@ export default function FitCheckAI() {
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             FIT CHECK AI
           </h2>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#444', letterSpacing: '0.15em' }}>LAGOS STYLE CRITIC</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.15em' }}>LAGOS STYLE CRITIC</div>
         </div>
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.72rem', marginBottom: 36, letterSpacing: '0.04em' }}>
           Describe your SF26 fit · Claude rates it 1–10 · Get the honest Lagos verdict
@@ -96,17 +96,17 @@ export default function FitCheckAI() {
         />
 
         <div style={{ marginBottom: 20 }}>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 10 }}>CONTEXT (OPTIONAL)</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 10 }}>CONTEXT (OPTIONAL)</div>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             {CONTEXTS.map(c => (
-              <button key={c.label} onClick={() => { setContext(c.value === context ? null : c.value); setResult(null) }} style={{ padding: '7px 14px', background: context === c.value ? `${B.amber}18` : '#0d0d0d', border: `1px solid ${context === c.value ? B.amber : '#1a1a1a'}`, color: context === c.value ? B.amber : '#444', fontFamily: "'Space Mono'", fontSize: 8, letterSpacing: '0.1em', cursor: 'pointer', transition: 'all 0.15s' }}>
+              <button key={c.label} onClick={() => { setContext(c.value === context ? null : c.value); setResult(null) }} style={{ padding: '7px 14px', background: context === c.value ? `${B.amber}18` : '#0d0d0d', border: `1px solid ${context === c.value ? B.amber : '#1a1a1a'}`, color: context === c.value ? B.amber : B.dim, fontFamily: "'Space Mono'", fontSize: 8, letterSpacing: '0.1em', cursor: 'pointer', transition: 'all 0.15s' }}>
                 {c.label}
               </button>
             ))}
           </div>
         </div>
 
-        <button onClick={check} disabled={!fit.trim() || loading} style={{ width: '100%', padding: '14px', background: fit.trim() && !loading ? B.amber : '#111', color: fit.trim() && !loading ? B.black : '#333', border: 'none', fontFamily: "'Space Mono'", fontSize: 11, letterSpacing: '0.2em', fontWeight: 700, cursor: fit.trim() && !loading ? 'pointer' : 'default', marginBottom: 24, transition: 'all 0.2s' }}>
+        <button onClick={check} disabled={!fit.trim() || loading} style={{ width: '100%', padding: '14px', background: fit.trim() && !loading ? B.amber : '#111', color: fit.trim() && !loading ? B.black : B.dim, border: 'none', fontFamily: "'Space Mono'", fontSize: 11, letterSpacing: '0.2em', fontWeight: 700, cursor: fit.trim() && !loading ? 'pointer' : 'default', marginBottom: 24, transition: 'all 0.2s' }}>
           {loading ? '⟳ READING THE FIT...' : 'CHECK MY FIT →'}
         </button>
 
@@ -116,11 +116,11 @@ export default function FitCheckAI() {
           <div style={{ animation: 'fcSlide 0.35s ease' }}>
             <div style={{ display: 'flex', gap: 20, alignItems: 'center', background: '#0a0a0a', border: `2px solid ${scoreColor}44`, padding: '20px 24px', marginBottom: 16, flexWrap: 'wrap' }}>
               <div style={{ fontFamily: "'Orbitron'", fontSize: 56, fontWeight: 900, color: scoreColor, lineHeight: 1, flexShrink: 0 }}>
-                {result.score}<span style={{ fontSize: 20, color: '#333' }}>/10</span>
+                {result.score}<span style={{ fontSize: 20, color: B.dim }}>/10</span>
               </div>
               <div>
                 <div style={{ fontFamily: "'Bebas Neue'", fontSize: 18, color: B.white, letterSpacing: '0.05em', marginBottom: 4 }}>{result.headline}</div>
-                <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#555', lineHeight: 1.6 }}>{result.Lagos_context}</div>
+                <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.smoke, lineHeight: 1.6 }}>{result.Lagos_context}</div>
               </div>
             </div>
 
@@ -135,19 +135,19 @@ export default function FitCheckAI() {
                 <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#ef4444', letterSpacing: '0.15em', marginBottom: 8 }}>WHAT TO FIX ✗</div>
                 {(result.fixes || []).length ? (result.fixes || []).map((f, i) => (
                   <div key={i} style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.smoke, lineHeight: 1.7, marginBottom: 6 }}>· {f}</div>
-                )) : <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#333' }}>Nothing major to fix.</div>}
+                )) : <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim }}>Nothing major to fix.</div>}
               </div>
             </div>
 
             <div style={{ background: '#0a0a0a', border: `1px solid ${scoreColor}22`, padding: '16px 20px', marginBottom: 14 }}>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 8 }}>SCREENSHOT THIS</div>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>SCREENSHOT THIS</div>
               <div style={{ fontFamily: "'Bebas Neue'", fontSize: 18, color: scoreColor, letterSpacing: '0.04em', marginBottom: 14 }}>{result.verdict_line}</div>
               <button onClick={copy} style={{ background: copied ? '#052e16' : B.amber, border: 'none', color: copied ? '#22c55e' : B.black, fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.15em', fontWeight: 700, padding: '9px 20px', cursor: 'pointer', transition: 'all 0.2s' }}>
                 {copied ? '✓ COPIED' : 'COPY LINE →'}
               </button>
             </div>
 
-            <button onClick={() => { setResult(null); setFit('') }} style={{ width: '100%', background: 'transparent', border: '1px solid #1a1a1a', color: '#333', fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.15em', padding: '10px', cursor: 'pointer' }}>
+            <button onClick={() => { setResult(null); setFit('') }} style={{ width: '100%', background: 'transparent', border: '1px solid #1a1a1a', color: B.dim, fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.15em', padding: '10px', cursor: 'pointer' }}>
               CHECK ANOTHER FIT
             </button>
           </div>

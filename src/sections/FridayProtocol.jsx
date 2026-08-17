@@ -9,7 +9,7 @@ const CREW_KEY = 'sf26_crew'
 const readLS = k => { try { return JSON.parse(localStorage.getItem(k)) || null } catch { return null } }
 const writeLS = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch {} }
 
-const label = { fontFamily: "'Space Mono', monospace", fontSize: 7, letterSpacing: '0.22em', color: B.smoke }
+const label = { fontFamily: "'Space Mono', monospace", fontSize: 9, letterSpacing: '0.22em', color: B.smoke }
 
 /** Countdown to the next session, refreshed once a second. */
 function useCountdown(targetIso) {

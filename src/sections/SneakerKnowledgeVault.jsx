@@ -105,7 +105,7 @@ export default function SneakerKnowledgeVault() {
           </h2>
           <div style={{ display: 'flex', gap: 8 }}>
             {[['vault', 'VAULT'], ['analyze', 'AI SEARCH'], ['add', '+ NOTE']].map(([v, l]) => (
-              <button key={v} onClick={() => setView(v)} style={{ padding: '7px 14px', background: view === v ? B.amber : 'transparent', color: view === v ? B.black : '#555', border: `1px solid ${view === v ? B.amber : '#222'}`, borderRadius: 4, fontFamily: "'Space Mono'", fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', cursor: 'pointer', transition: 'all 0.15s' }}>
+              <button key={v} onClick={() => setView(v)} style={{ padding: '7px 14px', background: view === v ? B.amber : 'transparent', color: view === v ? B.black : B.smoke, border: `1px solid ${view === v ? B.amber : '#222'}`, borderRadius: 4, fontFamily: "'Space Mono'", fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', cursor: 'pointer', transition: 'all 0.15s' }}>
                 {l}
               </button>
             ))}
@@ -119,9 +119,9 @@ export default function SneakerKnowledgeVault() {
               <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search notes..." style={{ width: '100%', padding: '8px 12px', background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: 4, color: B.white, fontFamily: "'Space Mono'", fontSize: 10, outline: 'none', boxSizing: 'border-box', marginBottom: 12 }} />
               <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 {filtered.map(n => (
-                  <div key={n.id} className="kv-note" onClick={() => setActiveId(n.id)} style={{ padding: '10px 12px', borderRadius: 4, background: activeId === n.id ? 'rgba(255,255,255,0.06)' : 'transparent', border: `1px solid ${activeId === n.id ? '#2a2a2a' : 'transparent'}`, cursor: 'pointer', transition: 'background 0.15s' }}>
+                  <div key={n.id} className="kv-note" onClick={() => setActiveId(n.id)} style={{ padding: '10px 12px', borderRadius: 4, background: activeId === n.id ? 'rgba(255,255,255,0.06)' : 'transparent', border: `1px solid ${activeId === n.id ? B.dim : 'transparent'}`, cursor: 'pointer', transition: 'background 0.15s' }}>
                     <div style={{ fontFamily: "'Space Mono'", fontSize: 10, color: activeId === n.id ? B.white : '#888', marginBottom: 3, lineHeight: 1.3 }}>{n.title}</div>
-                    <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333' }}>{n.date}</div>
+                    <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim }}>{n.date}</div>
                   </div>
                 ))}
               </div>
@@ -132,7 +132,7 @@ export default function SneakerKnowledgeVault() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
                   <div>
                     <h3 style={{ fontFamily: "'Space Mono'", fontSize: 14, color: B.white, margin: '0 0 6px', fontWeight: 700 }}>{activeNote.title}</h3>
-                    <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333' }}>{activeNote.date}</div>
+                    <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim }}>{activeNote.date}</div>
                   </div>
                   <button onClick={() => analyzeNote(activeNote)} style={{ padding: '7px 14px', background: `${B.neonCyan}15`, border: `1px solid ${B.neonCyan}44`, borderRadius: 4, color: B.neonCyan, fontFamily: "'Space Mono'", fontSize: 9, cursor: 'pointer', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>
                     AI EXPAND →
@@ -154,7 +154,7 @@ export default function SneakerKnowledgeVault() {
           <div style={{ animation: 'kvSlide 0.25s ease' }}>
             <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
               <input value={query} onChange={e => setQuery(e.target.value)} onKeyDown={e => e.key === 'Enter' && askAI()} placeholder="Ask anything about sneaker culture, drops, Lagos market, resale..." style={{ flex: 1, padding: '12px 16px', background: '#0d0d0d', border: `1px solid ${B.amber}33`, borderRadius: 4, color: B.white, fontFamily: "'Space Mono'", fontSize: 11, outline: 'none' }} />
-              <button onClick={askAI} disabled={aiLoading || !query.trim()} style={{ padding: '12px 20px', background: aiLoading ? '#111' : B.amber, color: aiLoading ? '#333' : B.black, border: 'none', borderRadius: 4, fontFamily: "'Space Mono'", fontSize: 10, fontWeight: 700, cursor: aiLoading ? 'wait' : 'pointer', transition: 'all 0.2s', whiteSpace: 'nowrap' }}>
+              <button onClick={askAI} disabled={aiLoading || !query.trim()} style={{ padding: '12px 20px', background: aiLoading ? '#111' : B.amber, color: aiLoading ? B.dim : B.black, border: 'none', borderRadius: 4, fontFamily: "'Space Mono'", fontSize: 10, fontWeight: 700, cursor: aiLoading ? 'wait' : 'pointer', transition: 'all 0.2s', whiteSpace: 'nowrap' }}>
                 {aiLoading ? '···' : 'ASK'}
               </button>
             </div>
@@ -178,7 +178,7 @@ export default function SneakerKnowledgeVault() {
             {!aiResult && !aiLoading && !aiError && (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 8 }}>
                 {['What grails are most likely to hold value?', 'Explain the Off-White x Nike collaboration', 'How does the Lagos sneaker resale market compare to London?', 'What makes a sneaker culturally important?'].map(q => (
-                  <button key={q} onClick={() => { setQuery(q); askAI() }} style={{ padding: '12px 14px', background: 'rgba(255,255,255,0.02)', border: '1px solid #1a1a1a', borderRadius: 4, color: '#555', fontFamily: "'Space Mono'", fontSize: 9, cursor: 'pointer', textAlign: 'left', lineHeight: 1.5, transition: 'all 0.15s' }} onMouseEnter={e => { e.currentTarget.style.borderColor = `${B.amber}44`; e.currentTarget.style.color = B.smoke }} onMouseLeave={e => { e.currentTarget.style.borderColor = '#1a1a1a'; e.currentTarget.style.color = '#555' }}>
+                  <button key={q} onClick={() => { setQuery(q); askAI() }} style={{ padding: '12px 14px', background: 'rgba(255,255,255,0.02)', border: '1px solid #1a1a1a', borderRadius: 4, color: B.smoke, fontFamily: "'Space Mono'", fontSize: 9, cursor: 'pointer', textAlign: 'left', lineHeight: 1.5, transition: 'all 0.15s' }} onMouseEnter={e => { e.currentTarget.style.borderColor = `${B.amber}44`; e.currentTarget.style.color = B.smoke }} onMouseLeave={e => { e.currentTarget.style.borderColor = '#1a1a1a'; e.currentTarget.style.color = '#555' }}>
                     {q}
                   </button>
                 ))}
@@ -194,7 +194,7 @@ export default function SneakerKnowledgeVault() {
               <input value={newNote.title} onChange={e => setNewNote(p => ({ ...p, title: e.target.value }))} placeholder="Note title..." style={{ padding: '10px 14px', background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: 4, color: B.white, fontFamily: "'Space Mono'", fontSize: 11, outline: 'none' }} />
               <textarea value={newNote.body} onChange={e => setNewNote(p => ({ ...p, body: e.target.value }))} placeholder="Write your note..." rows={6} style={{ padding: '10px 14px', background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: 4, color: B.white, fontFamily: "'Space Mono'", fontSize: 11, outline: 'none', resize: 'vertical', lineHeight: 1.7 }} />
               <input value={newNote.tags} onChange={e => setNewNote(p => ({ ...p, tags: e.target.value }))} placeholder="Tags (comma-separated): jordan, lagos, resale..." style={{ padding: '10px 14px', background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: 4, color: B.white, fontFamily: "'Space Mono'", fontSize: 10, outline: 'none' }} />
-              <button onClick={addNote} disabled={!newNote.title.trim() || !newNote.body.trim()} style={{ padding: 12, background: newNote.title && newNote.body ? B.amber : '#111', color: newNote.title && newNote.body ? B.black : '#333', border: 'none', borderRadius: 4, fontFamily: "'Space Mono'", fontSize: 10, fontWeight: 700, cursor: newNote.title && newNote.body ? 'pointer' : 'not-allowed', letterSpacing: '0.1em', transition: 'all 0.2s' }}>
+              <button onClick={addNote} disabled={!newNote.title.trim() || !newNote.body.trim()} style={{ padding: 12, background: newNote.title && newNote.body ? B.amber : '#111', color: newNote.title && newNote.body ? B.black : B.dim, border: 'none', borderRadius: 4, fontFamily: "'Space Mono'", fontSize: 10, fontWeight: 700, cursor: newNote.title && newNote.body ? 'pointer' : 'not-allowed', letterSpacing: '0.1em', transition: 'all 0.2s' }}>
                 SAVE TO VAULT
               </button>
             </div>

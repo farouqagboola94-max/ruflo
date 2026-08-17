@@ -81,16 +81,16 @@ export default function FakeDetector() {
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             FAKE DETECTOR
           </h2>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#444', letterSpacing: '0.15em' }}>LEGIT CHECK ENGINE</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.15em' }}>LEGIT CHECK ENGINE</div>
         </div>
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.72rem', marginBottom: 36, letterSpacing: '0.04em' }}>
           Enter any sneaker model · Get a model-specific authentication checklist · Never buy fakes at SF26
         </p>
 
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16, alignItems: 'center' }}>
-          <span style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.1em' }}>QUICK SELECT →</span>
+          <span style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.1em' }}>QUICK SELECT →</span>
           {POPULAR.map(s => (
-            <button key={s} onClick={() => { setShoe(s); setResult(null) }} style={{ background: shoe === s ? `${B.amber}15` : '#0d0d0d', border: `1px solid ${shoe === s ? B.amber : '#1a1a1a'}`, color: shoe === s ? B.amber : '#444', fontFamily: "'Space Mono'", fontSize: 8, padding: '5px 12px', cursor: 'pointer', transition: 'all 0.15s' }}>
+            <button key={s} onClick={() => { setShoe(s); setResult(null) }} style={{ background: shoe === s ? `${B.amber}15` : '#0d0d0d', border: `1px solid ${shoe === s ? B.amber : '#1a1a1a'}`, color: shoe === s ? B.amber : B.dim, fontFamily: "'Space Mono'", fontSize: 8, padding: '5px 12px', cursor: 'pointer', transition: 'all 0.15s' }}>
               {s.length > 22 ? s.slice(0, 22) + '…' : s}
             </button>
           ))}
@@ -103,7 +103,7 @@ export default function FakeDetector() {
             placeholder="e.g. Yeezy Boost 350 V2 'Zebra' or Nike Dunk Low 'Panda'"
             style={{ flex: 1, background: '#0d0d0d', border: '1px solid #1a1a1a', color: B.white, padding: '12px 14px', fontFamily: "'Space Mono'", fontSize: 11, outline: 'none' }}
           />
-          <button onClick={check} disabled={!shoe.trim() || loading} style={{ padding: '12px 24px', background: shoe.trim() && !loading ? B.amber : '#111', color: shoe.trim() && !loading ? B.black : '#333', border: 'none', fontFamily: "'Space Mono'", fontSize: 10, letterSpacing: '0.15em', fontWeight: 700, cursor: shoe.trim() && !loading ? 'pointer' : 'default', whiteSpace: 'nowrap', transition: 'all 0.2s' }}>
+          <button onClick={check} disabled={!shoe.trim() || loading} style={{ padding: '12px 24px', background: shoe.trim() && !loading ? B.amber : '#111', color: shoe.trim() && !loading ? B.black : B.dim, border: 'none', fontFamily: "'Space Mono'", fontSize: 10, letterSpacing: '0.15em', fontWeight: 700, cursor: shoe.trim() && !loading ? 'pointer' : 'default', whiteSpace: 'nowrap', transition: 'all 0.2s' }}>
             {loading ? '⟳ CHECKING...' : 'LEGIT CHECK →'}
           </button>
         </div>
@@ -125,7 +125,7 @@ export default function FakeDetector() {
                     <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.amber, letterSpacing: '0.1em', fontWeight: 700 }}>{item.area?.toUpperCase()}</div>
                   </div>
                   <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.white, lineHeight: 1.7, marginBottom: 6 }}>{item.what_to_check}</div>
-                  <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#555', lineHeight: 1.7, marginBottom: 6 }}>{item.real_vs_fake}</div>
+                  <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.smoke, lineHeight: 1.7, marginBottom: 6 }}>{item.real_vs_fake}</div>
                   {item.lagos_tip && <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.neonCyan, lineHeight: 1.6, borderTop: '1px solid #1a1a1a', paddingTop: 8, marginTop: 4 }}>🇳🇬 {item.lagos_tip}</div>}
                 </div>
               ))}
@@ -145,7 +145,7 @@ export default function FakeDetector() {
               <div style={{ fontFamily: "'Space Mono'", fontSize: 10, color: B.smoke, lineHeight: 1.7 }}>{result.buy_safe_tip}</div>
             </div>
 
-            <button onClick={() => { setResult(null); setShoe('') }} style={{ width: '100%', background: 'transparent', border: '1px solid #1a1a1a', color: '#333', fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.15em', padding: '10px', cursor: 'pointer' }}>
+            <button onClick={() => { setResult(null); setShoe('') }} style={{ width: '100%', background: 'transparent', border: '1px solid #1a1a1a', color: B.dim, fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.15em', padding: '10px', cursor: 'pointer' }}>
               CHECK ANOTHER SHOE
             </button>
           </div>

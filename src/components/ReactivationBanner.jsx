@@ -125,7 +125,7 @@ export default function ReactivationBanner() {
             </div>
             <button onClick={dismiss} aria-label="Dismiss" style={{
               background: 'transparent', border: 'none', cursor: 'pointer',
-              color: '#444', fontSize: 17, lineHeight: 1, padding: '0 2px',
+              color: B.dim, fontSize: 17, lineHeight: 1, padding: '0 2px',
               transition: 'color 0.2s',
             }}
               onMouseEnter={e => e.currentTarget.style.color = B.smoke}
@@ -187,7 +187,7 @@ export default function ReactivationBanner() {
                   <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: B.smoke }}>
                     {SECTION_LABELS[s.section] || s.section}
                   </span>
-                  <span style={{ marginLeft: 'auto', fontFamily: "'Space Mono', monospace", fontSize: 7, color: '#333', whiteSpace: 'nowrap' }}>
+                  <span style={{ marginLeft: 'auto', fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.dim, whiteSpace: 'nowrap' }}>
                     {Math.round(s.duration / 1000)}s
                   </span>
                 </a>

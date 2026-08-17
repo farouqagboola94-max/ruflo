@@ -79,7 +79,7 @@ export default function OutfitMatcher() {
 
         {[['VIBE', VIBES, vibe, setVibe], ['COLOR LANE', COLORS, color, setColor], ['BUDGET', BUDGETS, budget, setBudget]].map(([label, opts, val, setter]) => (
           <div key={label} className="reveal-3d" style={{ marginBottom: 24 }}>
-            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', letterSpacing: '0.2em', color: '#555', marginBottom: 10 }}>{label}</div>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', letterSpacing: '0.2em', color: B.smoke, marginBottom: 10 }}>{label}</div>
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
               {opts.map(o => {
                 const active = val === o

@@ -108,7 +108,7 @@ export default function StreakToast() {
           <div style={{ fontFamily: "'Syne'", fontSize: '0.78rem', color: B.white, lineHeight: 1.5 }}>
             {msg.body}
           </div>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: '0.52rem', color: '#555', marginTop: 6 }}>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: '0.52rem', color: B.smoke, marginTop: 6 }}>
             {streak > 1 ? `${streak}-DAY STREAK` : 'START YOUR STREAK TODAY'} · {STREAK_XP.daily} XP/DAY BASE
           </div>
         </div>

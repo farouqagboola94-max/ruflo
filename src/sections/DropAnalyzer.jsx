@@ -76,7 +76,7 @@ export default function DropAnalyzer() {
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             COP · SKIP · WAIT
           </h2>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#444', letterSpacing: '0.15em' }}>LAGOS MARKET INTEL</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.15em' }}>LAGOS MARKET INTEL</div>
         </div>
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.72rem', marginBottom: 32, letterSpacing: '0.04em' }}>
           Paste any sneaker drop · Claude reads the Lagos market · Instant verdict
@@ -91,15 +91,15 @@ export default function DropAnalyzer() {
         />
 
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 18, alignItems: 'center' }}>
-          <span style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.15em' }}>EXAMPLES →</span>
+          <span style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.15em' }}>EXAMPLES →</span>
           {EXAMPLES.map((ex, i) => (
-            <button key={i} onClick={() => { setInput(ex); setResult(null) }} style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', color: '#444', fontFamily: "'Space Mono'", fontSize: 8, padding: '5px 12px', cursor: 'pointer', letterSpacing: '0.05em' }}>
+            <button key={i} onClick={() => { setInput(ex); setResult(null) }} style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', color: B.dim, fontFamily: "'Space Mono'", fontSize: 8, padding: '5px 12px', cursor: 'pointer', letterSpacing: '0.05em' }}>
               EX {i + 1}
             </button>
           ))}
         </div>
 
-        <button onClick={analyze} disabled={!input.trim() || loading} style={{ width: '100%', padding: '14px', background: input.trim() && !loading ? B.amber : '#111', color: input.trim() && !loading ? B.black : '#333', border: 'none', fontFamily: "'Space Mono'", fontSize: 11, letterSpacing: '0.2em', fontWeight: 700, cursor: input.trim() && !loading ? 'pointer' : 'default', marginBottom: 24, transition: 'all 0.2s' }}>
+        <button onClick={analyze} disabled={!input.trim() || loading} style={{ width: '100%', padding: '14px', background: input.trim() && !loading ? B.amber : '#111', color: input.trim() && !loading ? B.black : B.dim, border: 'none', fontFamily: "'Space Mono'", fontSize: 11, letterSpacing: '0.2em', fontWeight: 700, cursor: input.trim() && !loading ? 'pointer' : 'default', marginBottom: 24, transition: 'all 0.2s' }}>
           {loading ? '⟳ READING THE MARKET...' : 'ANALYZE THIS DROP →'}
         </button>
 
@@ -111,7 +111,7 @@ export default function DropAnalyzer() {
               <div style={{ fontFamily: "'Orbitron'", fontSize: 34, fontWeight: 900, color: vc.color, lineHeight: 1 }}>{vc.label}</div>
               <div>
                 <div style={{ fontFamily: "'Space Mono'", fontSize: 11, color: vc.color, fontWeight: 700, marginBottom: 4 }}>{result.headline}</div>
-                <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#444', letterSpacing: '0.15em' }}>{result.confidence}% CONFIDENCE</div>
+                <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.15em' }}>{result.confidence}% CONFIDENCE</div>
               </div>
             </div>
 
@@ -130,14 +130,14 @@ export default function DropAnalyzer() {
             </div>
 
             <div style={{ background: '#0a0a0a', border: '1px solid #1a1a1a', padding: '12px 18px', display: 'flex', alignItems: 'center', gap: 14, marginBottom: 14 }}>
-              <div style={{ fontFamily: "'Orbitron'", fontSize: 20, fontWeight: 900, color: B.neonLime }}>{result.culture_score?.split('/')[0]}<span style={{ fontSize: 11, color: '#333' }}>/10</span></div>
+              <div style={{ fontFamily: "'Orbitron'", fontSize: 20, fontWeight: 900, color: B.neonLime }}>{result.culture_score?.split('/')[0]}<span style={{ fontSize: 11, color: B.dim }}>/10</span></div>
               <div>
-                <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.15em', marginBottom: 2 }}>LAGOS CULTURE SCORE</div>
-                <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#555' }}>{result.culture_score?.split('—')[1]?.trim() || ''}</div>
+                <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.15em', marginBottom: 2 }}>LAGOS CULTURE SCORE</div>
+                <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.smoke }}>{result.culture_score?.split('—')[1]?.trim() || ''}</div>
               </div>
             </div>
 
-            <button onClick={() => { setResult(null); setInput('') }} style={{ width: '100%', background: 'transparent', border: '1px solid #1a1a1a', color: '#333', fontFamily: "'Space Mono'", fontSize: 9, padding: '10px', cursor: 'pointer', letterSpacing: '0.15em' }}>
+            <button onClick={() => { setResult(null); setInput('') }} style={{ width: '100%', background: 'transparent', border: '1px solid #1a1a1a', color: B.dim, fontFamily: "'Space Mono'", fontSize: 9, padding: '10px', cursor: 'pointer', letterSpacing: '0.15em' }}>
               ANALYZE ANOTHER DROP
             </button>
           </div>

@@ -106,7 +106,7 @@ export default function VendorMatcher() {
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             VENDOR MATCHER
           </h2>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#444', letterSpacing: '0.15em' }}>SF26 WISHLIST STRATEGY</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.15em' }}>SF26 WISHLIST STRATEGY</div>
         </div>
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.72rem', marginBottom: 36, letterSpacing: '0.04em' }}>
           Enter your SF26 wishlist · Claude maps the vendor strategy · Know where to go before you arrive
@@ -114,7 +114,7 @@ export default function VendorMatcher() {
 
         <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 24, marginBottom: 28 }}>
           <div>
-            <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 12 }}>YOUR WISHLIST (UP TO 5)</div>
+            <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 12 }}>YOUR WISHLIST (UP TO 5)</div>
             {wishlist.map((s, i) => (
               <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 8, alignItems: 'center' }}>
                 <div style={{ fontFamily: "'Orbitron'", fontSize: 11, color: ACCENT[i % ACCENT.length], fontWeight: 900, width: 20, flexShrink: 0 }}>0{i + 1}</div>
@@ -125,12 +125,12 @@ export default function VendorMatcher() {
                   style={{ flex: 1, background: '#0d0d0d', border: `1px solid ${s.trim() ? ACCENT[i % ACCENT.length] + '44' : '#1a1a1a'}`, color: B.white, padding: '10px 13px', fontFamily: "'Space Mono'", fontSize: 10, outline: 'none', transition: 'border-color 0.15s' }}
                 />
                 {wishlist.length > 1 && (
-                  <button onClick={() => removeShoe(i)} style={{ background: 'none', border: '1px solid #1a1a1a', color: '#333', padding: '10px 11px', cursor: 'pointer', fontFamily: "'Space Mono'", fontSize: 10 }}>✕</button>
+                  <button onClick={() => removeShoe(i)} style={{ background: 'none', border: '1px solid #1a1a1a', color: B.dim, padding: '10px 11px', cursor: 'pointer', fontFamily: "'Space Mono'", fontSize: 10 }}>✕</button>
                 )}
               </div>
             ))}
             {wishlist.length < 5 && (
-              <button onClick={addShoe} style={{ background: 'transparent', border: '1px dashed #2a2a2a', color: '#333', fontFamily: "'Space Mono'", fontSize: 8, letterSpacing: '0.15em', padding: '8px 14px', cursor: 'pointer', marginTop: 4 }}>
+              <button onClick={addShoe} style={{ background: 'transparent', border: '1px dashed #2a2a2a', color: B.dim, fontFamily: "'Space Mono'", fontSize: 8, letterSpacing: '0.15em', padding: '8px 14px', cursor: 'pointer', marginTop: 4 }}>
                 + ADD SHOE
               </button>
             )}
@@ -138,17 +138,17 @@ export default function VendorMatcher() {
 
           <div>
             <div style={{ marginBottom: 20 }}>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 10 }}>BUDGET</div>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 10 }}>BUDGET</div>
               {BUDGETS.map(b => (
-                <button key={b.label} onClick={() => { setBudget(b.value); setResult(null) }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '9px 12px', marginBottom: 6, background: budget === b.value ? `${B.amber}14` : '#0d0d0d', border: `1px solid ${budget === b.value ? B.amber : '#1a1a1a'}`, color: budget === b.value ? B.amber : '#555', fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.05em', cursor: 'pointer', transition: 'all 0.15s' }}>
+                <button key={b.label} onClick={() => { setBudget(b.value); setResult(null) }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '9px 12px', marginBottom: 6, background: budget === b.value ? `${B.amber}14` : '#0d0d0d', border: `1px solid ${budget === b.value ? B.amber : '#1a1a1a'}`, color: budget === b.value ? B.amber : B.smoke, fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.05em', cursor: 'pointer', transition: 'all 0.15s' }}>
                   {b.label}
                 </button>
               ))}
             </div>
             <div>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 10 }}>TICKET TIER</div>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 10 }}>TICKET TIER</div>
               {TIERS.map(t => (
-                <button key={t.label} onClick={() => { setTier(t.value); setResult(null) }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '9px 12px', marginBottom: 6, background: tier === t.value ? `${B.neonCyan}12` : '#0d0d0d', border: `1px solid ${tier === t.value ? B.neonCyan : '#1a1a1a'}`, color: tier === t.value ? B.neonCyan : '#555', fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.05em', cursor: 'pointer', transition: 'all 0.15s' }}>
+                <button key={t.label} onClick={() => { setTier(t.value); setResult(null) }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '9px 12px', marginBottom: 6, background: tier === t.value ? `${B.neonCyan}12` : '#0d0d0d', border: `1px solid ${tier === t.value ? B.neonCyan : '#1a1a1a'}`, color: tier === t.value ? B.neonCyan : B.smoke, fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.05em', cursor: 'pointer', transition: 'all 0.15s' }}>
                   {t.label}
                 </button>
               ))}
@@ -156,7 +156,7 @@ export default function VendorMatcher() {
           </div>
         </div>
 
-        <button onClick={match} disabled={!ready || loading} style={{ width: '100%', padding: '14px', background: ready && !loading ? B.amber : '#111', color: ready && !loading ? B.black : '#333', border: 'none', fontFamily: "'Space Mono'", fontSize: 11, letterSpacing: '0.2em', fontWeight: 700, cursor: ready && !loading ? 'pointer' : 'default', marginBottom: 24, transition: 'all 0.2s' }}>
+        <button onClick={match} disabled={!ready || loading} style={{ width: '100%', padding: '14px', background: ready && !loading ? B.amber : '#111', color: ready && !loading ? B.black : B.dim, border: 'none', fontFamily: "'Space Mono'", fontSize: 11, letterSpacing: '0.2em', fontWeight: 700, cursor: ready && !loading ? 'pointer' : 'default', marginBottom: 24, transition: 'all 0.2s' }}>
           {loading ? '⟳ MAPPING YOUR STRATEGY...' : ready ? 'GET VENDOR STRATEGY →' : 'FILL WISHLIST + BUDGET + TIER'}
         </button>
 
@@ -165,7 +165,7 @@ export default function VendorMatcher() {
         {result && (
           <div style={{ animation: 'vmSlide 0.4s ease' }}>
             <div style={{ background: '#0a0a0a', border: `2px solid ${B.amber}22`, padding: '18px 24px', marginBottom: 16 }}>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.2em', marginBottom: 6 }}>OVERALL STRATEGY</div>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 6 }}>OVERALL STRATEGY</div>
               <div style={{ fontFamily: "'Space Mono'", fontSize: 11, color: B.white, lineHeight: 1.8 }}>{result.overall_strategy}</div>
             </div>
 
@@ -190,7 +190,7 @@ export default function VendorMatcher() {
                       { label: 'PAYMENT', val: item.cash_or_card },
                     ].map(col => (
                       <div key={col.label} style={{ background: 'rgba(255,255,255,0.02)', padding: '8px 10px' }}>
-                        <div style={{ fontFamily: "'Space Mono'", fontSize: 7, color: '#444', letterSpacing: '0.15em', marginBottom: 3 }}>{col.label}</div>
+                        <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.15em', marginBottom: 3 }}>{col.label}</div>
                         <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#888', lineHeight: 1.6 }}>{col.val}</div>
                       </div>
                     ))}
@@ -202,7 +202,7 @@ export default function VendorMatcher() {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 14 }}>
               <div style={{ background: '#0a0a0a', border: '1px solid #1a1a1a', padding: '14px 16px' }}>
-                <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: '#333', letterSpacing: '0.15em', marginBottom: 8 }}>WHAT TO BRING</div>
+                <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.15em', marginBottom: 8 }}>WHAT TO BRING</div>
                 {(result.bring_list || []).map((b, i) => (
                   <div key={i} style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.smoke, lineHeight: 1.7, marginBottom: 4 }}>· {b}</div>
                 ))}
@@ -213,7 +213,7 @@ export default function VendorMatcher() {
               </div>
             </div>
 
-            <button onClick={() => { setResult(null); setWishlist(['', '']); setBudget(null); setTier(null) }} style={{ width: '100%', background: 'transparent', border: '1px solid #1a1a1a', color: '#333', fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.15em', padding: '10px', cursor: 'pointer' }}>
+            <button onClick={() => { setResult(null); setWishlist(['', '']); setBudget(null); setTier(null) }} style={{ width: '100%', background: 'transparent', border: '1px solid #1a1a1a', color: B.dim, fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.15em', padding: '10px', cursor: 'pointer' }}>
               NEW WISHLIST
             </button>
           </div>
