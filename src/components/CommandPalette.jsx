@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { B } from '../tokens'
 import { SECTIONS, ACTIONS, CATEGORIES, searchIndex } from '../lib/siteIndex'
+import { goToSection } from './Defer'
 
 const RECENT_KEY = 'sf26_palette_recent'
 const MAX_RECENT = 5
@@ -25,14 +26,7 @@ const byId = id => SECTIONS.find(s => s.id === id) || ACTIONS.find(a => a.id ===
  * Sections are lazy-loaded, so an anchor may not exist the instant it is
  * requested. Retry briefly while the chunk resolves before giving up.
  */
-function scrollToSection(id, attempt = 0) {
-  const el = document.getElementById(id)
-  if (el) {
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    return
-  }
-  if (attempt < 12) setTimeout(() => scrollToSection(id, attempt + 1), 120)
-}
+const scrollToSection = goToSection
 
 export default function CommandPalette() {
   const [open,     setOpen]     = useState(false)

@@ -93,7 +93,7 @@ export default function SneakerBible() {
   ]
 
   return (
-    <section id="vault-200" style={{ ...s.root, position: 'relative', overflow: 'hidden' }}>
+    <section id="the-200" style={{ ...s.root, position: 'relative', overflow: 'hidden' }}>
       <Egg id="egg-033" corner="top-right" />
       <Egg id="egg-034" corner="bottom-left" />
       <div style={s.hdr}>

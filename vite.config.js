@@ -22,6 +22,24 @@ export default defineConfig({
             if (id.includes('react-dom') || id.includes('react/')) return 'react-vendor'
             return 'vendor'
           }
+
+          // The shared core must be named BEFORE the section groups below.
+          // Without this rule Rollup has nowhere obvious to put tokens.js,
+          // Shared.jsx and auth.jsx - every lazy section imports them - so it
+          // folds them into whichever manual chunk it reaches first. That was
+          // sections-culture, which dragged the 200-sneaker dataset onto the
+          // critical path: 247 kB downloaded before a single section could
+          // paint, on a page most visitors scroll two screens of.
+          if (
+            id.includes('/src/tokens.js') ||
+            id.includes('/src/components/') ||
+            id.includes('/src/lib/')
+          ) return 'core'
+
+          // Big datasets belong with nothing. Only the section that reads a
+          // dataset should pay to download it.
+          if (id.includes('/src/data/')) return 'data'
+
           const gameSections = [
             'SneakerTrivia', 'MemoryMatch', 'Soledle', 'ShoeColorizer',
             'OutfitMatcher', 'SpinWheel', 'CrewVoteOff', 'BadgeMaker',

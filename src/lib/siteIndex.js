@@ -75,6 +75,7 @@ export const SECTIONS = [
   { id: 'sole-of-lagos',   t: 'The Sole of Lagos', c: 'culture', d: 'This city on foot',              k: 'lagos city culture streets story' },
   { id: 'culture-history', t: 'Art & Culture',     c: 'culture', d: 'Where the culture came from',    k: 'history art heritage roots timeline' },
   { id: 'museum',          t: 'The Museum',        c: 'culture', d: 'Curated pieces of history',      k: 'exhibit archive gallery history rare' },
+  { id: 'the-200',         t: 'The 200',           c: 'culture', d: 'The canon, ranked',              k: 'bible 200 canon list ranking grails brands tiers' },
   { id: 'vault-200',       t: 'Architect Vault',   c: 'culture', d: 'For the deepest heads',          k: 'vault secret locked exclusive 200 architect' },
   { id: 'sneaker-vault',   t: 'Sneaker Vault',     c: 'culture', d: 'The knowledge base',             k: 'knowledge learn encyclopedia reference vault' },
   { id: 'artists',         t: 'Artists',           c: 'culture', d: 'The creatives on the bill',      k: 'creators art performers spotlight' },

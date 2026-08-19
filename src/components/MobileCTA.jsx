@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
+import { goToSection as scrollToSection } from './Defer'
 
 const TABS = [
   {
@@ -60,11 +61,6 @@ const TABS = [
   },
 ]
 
-function scrollToSection(id) {
-  if (id === 'hero') { window.scrollTo({ top: 0, behavior: 'smooth' }); return }
-  const el = document.getElementById(id)
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-}
 
 export default function MobileCTA() {
   const [isMobile, setIsMobile] = useState(false)

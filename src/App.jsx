@@ -21,6 +21,7 @@ import ReactivationBanner from './components/ReactivationBanner'
 import LiveActivity from './components/LiveActivity'
 import CommandPalette from './components/CommandPalette'
 import SectionBoundary from './components/SectionBoundary'
+import Defer, { mountAll, goToSection } from './components/Defer'
 import { SECTIONS } from './lib/siteIndex'
 import { captureReferral, reconcileReferralCredits } from './lib/referral'
 // Above the fold — always eager so first paint is complete.
@@ -120,6 +121,58 @@ export default function App() {
   useEffect(() => {
     captureReferral()
     reconcileReferralCredits()
+  }, [])
+
+  // Sections below the fold are held out of the DOM until the reader nears
+  // them, which is what stops the whole site downloading on first paint. But
+  // anything that jumps straight to a section by id needs that section to
+  // exist, so those routes put the entire page back first.
+  useEffect(() => {
+    // Arriving on a deep link, or following one from elsewhere on the page.
+    // The browser's own hash scroll has already happened and missed, because
+    // the section it was aiming at had not mounted yet.
+    if (window.location.hash) goToSection(window.location.hash.slice(1))
+    const onHash = () => goToSection(window.location.hash.slice(1))
+
+    // Find-in-page only searches what is rendered. Someone pressing Ctrl-F
+    // expects to search the site, not the four sections they have scrolled
+    // past, so give them the site.
+    const onKey = e => {
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'f' || e.key === 'k')) mountAll()
+    }
+
+    // Reaching the bottom means they are reading it all anyway.
+    const onScroll = () => {
+      const left = document.body.scrollHeight - (window.scrollY + window.innerHeight)
+      if (left < 2000) mountAll()
+    }
+
+    // Plain <a href="#id"> links - the navbar, the footer - are handled here
+    // rather than in each component. The browser gives up scrolling the
+    // instant it cannot find the target, and by the time hashchange fires and
+    // React re-renders that moment has passed, so the click has to be taken
+    // over before the default behaviour runs.
+    const onClick = e => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+      const a = e.target.closest?.('a[href^="#"]')
+      if (!a) return
+      const id = a.getAttribute('href').slice(1)
+      if (!id) return
+      e.preventDefault()
+      history.replaceState(null, '', `#${id}`)
+      goToSection(id)
+    }
+
+    document.addEventListener('click', onClick)
+    window.addEventListener('hashchange', onHash)
+    window.addEventListener('keydown', onKey)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      document.removeEventListener('click', onClick)
+      window.removeEventListener('hashchange', onHash)
+      window.removeEventListener('keydown', onKey)
+      window.removeEventListener('scroll', onScroll)
+    }
   }, [])
 
   useEffect(() => {
@@ -349,130 +402,150 @@ export default function App() {
         {/* ACT 1: GET EXCITED — visual, high energy, no reading walls */}
         <Reveal><Highlights /></Reveal>
         <Reveal><Lineup /></Reveal>
-        <SectionBoundary><Suspense fallback={null}>
-          <Reveal><ArtistSpotlight /></Reveal>
-          <Reveal><SneakerTrivia /></Reveal>
-          <Reveal><HypeCounter /></Reveal>
-          <Reveal><AITrivia /></Reveal>
-          <Reveal><SpinWheel /></Reveal>
-          <Reveal><FitCheckAI /></Reveal>
-        </Suspense></SectionBoundary>
+        <Defer sections={6}>
+          <SectionBoundary><Suspense fallback={null}>
+            <Reveal><ArtistSpotlight /></Reveal>
+            <Reveal><SneakerTrivia /></Reveal>
+            <Reveal><HypeCounter /></Reveal>
+            <Reveal><AITrivia /></Reveal>
+            <Reveal><SpinWheel /></Reveal>
+            <Reveal><FitCheckAI /></Reveal>
+          </Suspense></SectionBoundary>
+        </Defer>
 
         {/* FIRST CONVERSION PUSH — catch motivated visitors early */}
         <Reveal><Countdown /></Reveal>
         <Reveal><Tickets /></Reveal>
-        <SectionBoundary><Suspense fallback={null}>
-          <Reveal><GroupTickets /></Reveal>
-          <Reveal><MyPass /></Reveal>
-          <Reveal><Standings /></Reveal>
-          <Reveal><MyDay /></Reveal>
-        </Suspense></SectionBoundary>
+        <Defer sections={4}>
+          <SectionBoundary><Suspense fallback={null}>
+            <Reveal><GroupTickets /></Reveal>
+            <Reveal><MyPass /></Reveal>
+            <Reveal><Standings /></Reveal>
+            <Reveal><MyDay /></Reveal>
+          </Suspense></SectionBoundary>
+        </Defer>
 
         {/* ACT 2: COMMUNITY — social proof and belonging */}
-        <SectionBoundary><Suspense fallback={null}>
-          <Reveal><Testimonials /></Reveal>
-          <Reveal><Community /></Reveal>
-          <Reveal><Crews /></Reveal>
-          <Reveal><FridayProtocol /></Reveal>
-          <Reveal><CommunityWall /></Reveal>
-          <Reveal><CommunityIntelligence /></Reveal>
-          <Reveal><MemoryMatch /></Reveal>
-        </Suspense></SectionBoundary>
+        <Defer sections={7}>
+          <SectionBoundary><Suspense fallback={null}>
+            <Reveal><Testimonials /></Reveal>
+            <Reveal><Community /></Reveal>
+            <Reveal><Crews /></Reveal>
+            <Reveal><FridayProtocol /></Reveal>
+            <Reveal><CommunityWall /></Reveal>
+            <Reveal><CommunityIntelligence /></Reveal>
+            <Reveal><MemoryMatch /></Reveal>
+          </Suspense></SectionBoundary>
+        </Defer>
 
         {/* ACT 3: IDENTITY — who are you as a sneakerhead? */}
-        <SectionBoundary><Suspense fallback={null}>
-          <Reveal><SneakerDNA /></Reveal>
-          <Reveal><ShoeColorizer /></Reveal>
-          <Reveal><OutfitMatcher /></Reveal>
-          <Reveal><StyleArchetype /></Reveal>
-          <Reveal><CollectorCard /></Reveal>
-          <Reveal><SoleOfLagos /></Reveal>
-        </Suspense></SectionBoundary>
+        <Defer sections={6}>
+          <SectionBoundary><Suspense fallback={null}>
+            <Reveal><SneakerDNA /></Reveal>
+            <Reveal><ShoeColorizer /></Reveal>
+            <Reveal><OutfitMatcher /></Reveal>
+            <Reveal><StyleArchetype /></Reveal>
+            <Reveal><CollectorCard /></Reveal>
+            <Reveal><SoleOfLagos /></Reveal>
+          </Suspense></SectionBoundary>
+        </Defer>
 
         {/* ACT 4: CULTURE — for those who want to go deeper */}
-        <SectionBoundary><Suspense fallback={null}>
-          <Reveal><CultureHistory /></Reveal>
-          <Reveal><Soledle /></Reveal>
-          <Reveal><CultureMuseum /></Reveal>
-          <Reveal><SneakerBible /></Reveal>
-        </Suspense></SectionBoundary>
+        <Defer sections={4}>
+          <SectionBoundary><Suspense fallback={null}>
+            <Reveal><CultureHistory /></Reveal>
+            <Reveal><Soledle /></Reveal>
+            <Reveal><CultureMuseum /></Reveal>
+            <Reveal><SneakerBible /></Reveal>
+          </Suspense></SectionBoundary>
+        </Defer>
 
         {/* ACT 5: DROPS & TRADE — commerce and the marketplace */}
-        <SectionBoundary><Suspense fallback={null}>
-          <Reveal><DropsTimeline /></Reveal>
-          <Reveal><VendorDirectory /></Reveal>
-          <Reveal><VendorMatcher /></Reveal>
-          <Reveal><ColdDMGenerator /></Reveal>
-          <Reveal><GrailAdvisor /></Reveal>
-          <Reveal><MysteryDrop /></Reveal>
-          <Reveal><DropAnalyzer /></Reveal>
-          <Reveal><TradeBoard /></Reveal>
-          <Reveal><TradeNegotiator /></Reveal>
-          <Reveal><AuctionWall /></Reveal>
-          <Reveal><FakeDetector /></Reveal>
-          <Reveal><PriceNegotiator /></Reveal>
-          <Reveal><HeatPredictor /></Reveal>
-          <Reveal><SneakerBingo /></Reveal>
-          <Reveal><SneakerWorth /></Reveal>
-          <Reveal><Merch /></Reveal>
-        </Suspense></SectionBoundary>
+        <Defer sections={16}>
+          <SectionBoundary><Suspense fallback={null}>
+            <Reveal><DropsTimeline /></Reveal>
+            <Reveal><VendorDirectory /></Reveal>
+            <Reveal><VendorMatcher /></Reveal>
+            <Reveal><ColdDMGenerator /></Reveal>
+            <Reveal><GrailAdvisor /></Reveal>
+            <Reveal><MysteryDrop /></Reveal>
+            <Reveal><DropAnalyzer /></Reveal>
+            <Reveal><TradeBoard /></Reveal>
+            <Reveal><TradeNegotiator /></Reveal>
+            <Reveal><AuctionWall /></Reveal>
+            <Reveal><FakeDetector /></Reveal>
+            <Reveal><PriceNegotiator /></Reveal>
+            <Reveal><HeatPredictor /></Reveal>
+            <Reveal><SneakerBingo /></Reveal>
+            <Reveal><SneakerWorth /></Reveal>
+            <Reveal><Merch /></Reveal>
+          </Suspense></SectionBoundary>
+        </Defer>
 
         {/* ACT 6: CREATE & COMPETE — make content, go head-to-head */}
-        <SectionBoundary><Suspense fallback={null}>
-          <Reveal><Gallery /></Reveal>
-          <Reveal><CaptionGenerator /></Reveal>
-          <Reveal><StoryGenerator /></Reveal>
-          <Reveal><SneakerRoast /></Reveal>
-          <Reveal><SneakerEulogy /></Reveal>
-          <Reveal><PhotoTools /></Reveal>
-          <Reveal><CrewVoteOff /></Reveal>
-          <Reveal><BadgeMaker /></Reveal>
-        </Suspense></SectionBoundary>
+        <Defer sections={8}>
+          <SectionBoundary><Suspense fallback={null}>
+            <Reveal><Gallery /></Reveal>
+            <Reveal><CaptionGenerator /></Reveal>
+            <Reveal><StoryGenerator /></Reveal>
+            <Reveal><SneakerRoast /></Reveal>
+            <Reveal><SneakerEulogy /></Reveal>
+            <Reveal><PhotoTools /></Reveal>
+            <Reveal><CrewVoteOff /></Reveal>
+            <Reveal><BadgeMaker /></Reveal>
+          </Suspense></SectionBoundary>
+        </Defer>
 
         {/* ACT 7: ACHIEVEMENT — progression, rankings, prizes */}
-        <SectionBoundary><Suspense fallback={null}>
-          <Reveal><Passport /></Reveal>
-          <Reveal><EggHuntTracker /></Reveal>
-          <Reveal><Leaderboard /></Reveal>
-          <Reveal><SoleRegistry /></Reveal>
-          <Reveal><CultureIndex /></Reveal>
-          <Reveal><Confessional /></Reveal>
-          <Reveal><Raffle /></Reveal>
+        <Defer sections={22}>
+          <SectionBoundary><Suspense fallback={null}>
+            <Reveal><Passport /></Reveal>
+            <Reveal><EggHuntTracker /></Reveal>
+            <Reveal><Leaderboard /></Reveal>
+            <Reveal><SoleRegistry /></Reveal>
+            <Reveal><CultureIndex /></Reveal>
+            <Reveal><Confessional /></Reveal>
+            <Reveal><Raffle /></Reveal>
 
-          {/* EVENT INFO — for those ready to plan the day */}
-          <Reveal><Schedule /></Reveal>
-          <Reveal><Venue /></Reveal>
+            {/* EVENT INFO — for those ready to plan the day */}
+            <Reveal><Schedule /></Reveal>
+            <Reveal><Venue /></Reveal>
 
-          {/* PARTICIPATION — vendor and access tiers */}
-          <Reveal><EarlyAccess /></Reveal>
-          <Reveal><VendorReg /></Reveal>
-          <Reveal><VendorDashboard /></Reveal>
-          <Reveal><AppPromo /></Reveal>
-          <Reveal><ArchitectVault /></Reveal>
+            {/* PARTICIPATION — vendor and access tiers */}
+            <Reveal><EarlyAccess /></Reveal>
+            <Reveal><VendorReg /></Reveal>
+            <Reveal><VendorDashboard /></Reveal>
+            <Reveal><AppPromo /></Reveal>
+            <Reveal><ArchitectVault /></Reveal>
 
-          {/* BRAND & HISTORY — for those who want the full story */}
-          <Reveal><About /></Reveal>
-          <Reveal><OriginStory /></Reveal>
-          <Reveal><FridayNightProtocol /></Reveal>
-          <Reveal><Press /></Reveal>
-          <Reveal><Sponsors /></Reveal>
-          <Reveal><SponsorTiers /></Reveal>
+            {/* BRAND & HISTORY — for those who want the full story */}
+            <Reveal><About /></Reveal>
+            <Reveal><OriginStory /></Reveal>
+            <Reveal><FridayNightProtocol /></Reveal>
+            <Reveal><Press /></Reveal>
+            <Reveal><Sponsors /></Reveal>
+            <Reveal><SponsorTiers /></Reveal>
 
-          {/* ECOSYSTEM */}
-          <Reveal><Comics /></Reveal>
-          <Reveal><Newsletter /></Reveal>
-        </Suspense></SectionBoundary>
+            {/* ECOSYSTEM */}
+            <Reveal><Comics /></Reveal>
+            <Reveal><Newsletter /></Reveal>
+          </Suspense></SectionBoundary>
+        </Defer>
 
         {/* KNOWLEDGE */}
-        <SectionBoundary><Suspense fallback={null}>
-          <Reveal><SneakerKnowledgeVault /></Reveal>
-        </Suspense></SectionBoundary>
+        <Defer sections={1}>
+          <SectionBoundary><Suspense fallback={null}>
+            <Reveal><SneakerKnowledgeVault /></Reveal>
+          </Suspense></SectionBoundary>
+        </Defer>
 
         {/* CLOSE */}
-        <SectionBoundary><Suspense fallback={null}>
-          <Reveal><FAQ /></Reveal>
-          <Reveal><Contact /></Reveal>
-        </Suspense></SectionBoundary>
+        <Defer sections={2}>
+          <SectionBoundary><Suspense fallback={null}>
+            <Reveal><FAQ /></Reveal>
+            <Reveal><Contact /></Reveal>
+          </Suspense></SectionBoundary>
+        </Defer>
         <Reveal><Footer /></Reveal>
       </div>
     </AuthProvider>
