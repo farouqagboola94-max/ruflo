@@ -416,10 +416,24 @@ export default function App() {
         {/* FIRST CONVERSION PUSH — catch motivated visitors early */}
         <Reveal><Countdown /></Reveal>
         <Reveal><Tickets /></Reveal>
-        <Defer sections={4}>
+        {/*
+          MyPass stands alone on purpose. A Suspense boundary fails as a unit:
+          if any one section in a group cannot fetch its chunk, every section
+          in that group is replaced by the error panel. MyPass is precached by
+          the service worker so it works with no network at all - but grouped
+          with GroupTickets, which is not precached, it went down with its
+          neighbours and showed SECTION UNAVAILABLE at the gate. Isolating it
+          is what makes the precaching actually reach the person holding the
+          phone.
+        */}
+        <Defer sections={1}>
+          <SectionBoundary><Suspense fallback={null}>
+            <Reveal><MyPass /></Reveal>
+          </Suspense></SectionBoundary>
+        </Defer>
+        <Defer sections={3}>
           <SectionBoundary><Suspense fallback={null}>
             <Reveal><GroupTickets /></Reveal>
-            <Reveal><MyPass /></Reveal>
             <Reveal><Standings /></Reveal>
             <Reveal><MyDay /></Reveal>
           </Suspense></SectionBoundary>
