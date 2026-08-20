@@ -118,8 +118,28 @@
     <script type="module" src="/src/main.jsx"></script>
     <script>
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/sw.js').catch(function(){})
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/sw.js').then(function (reg) {
+            // Ask the worker to cache the rest of the site once the page has
+            // gone quiet. Doing this at install time instead would pull all
+            // 67 files down on first paint and undo the whole reason sections
+            // are deferred; doing it here costs the reader nothing and means a
+            // later visit with no signal has the entire site rather than the
+            // boot set plus ten "could not load" panels.
+            var warm = function () {
+              var sw = reg.active || navigator.serviceWorker.controller
+              if (sw) sw.postMessage({ type: 'warm' })
+            }
+
+            // Two reasons not to. Data Saver is someone telling us in advance
+            // that background downloads are unwelcome, and on 2g the warm
+            // would be competing with the page the reader is actually using.
+            var c = navigator.connection
+            if (c && (c.saveData || /^(slow-)?2g$/.test(c.effectiveType || ''))) return
+
+            if ('requestIdleCallback' in window) requestIdleCallback(warm, { timeout: 10000 })
+            else setTimeout(warm, 4000)
+          }).catch(function () {})
         })
       }
     </script>

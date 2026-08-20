@@ -24,7 +24,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
  *   - MyPass, because a ticket you cannot display is a ticket you do not have,
  *     and at the gate there are thousands of people on one cell tower
  *
- * Everything else stays on demand and is cached as it is visited.
+ * Every remaining chunk goes into a second list the page asks for once it is
+ * idle. First paint stays at five files; the other seventy arrive quietly
+ * behind the reader, so a later visit with no signal has the whole site
+ * rather than ten "could not load" panels.
  */
 function swPrecache() {
   // Sections worth having without a network, beyond what booting needs.
@@ -66,9 +69,16 @@ function swPrecache() {
         ...[...keep].sort().map(f => '/' + f),
       ]
 
+      // Everything the boot set does not already cover: the deferred section
+      // chunks and their CSS. Warmed in the background, never on first paint.
+      const warm = chunks
+        .filter(c => (c.type === 'chunk' || /\.(css|woff2?)$/.test(c.fileName)) && !keep.has(c.fileName))
+        .map(c => '/' + c.fileName)
+        .sort()
+
       // Name the cache after its contents so a deploy invalidates the old one
       // and never serves a half-old, half-new mix of chunks.
-      const version = createHash('sha256').update(list.join('\n')).digest('hex').slice(0, 12)
+      const version = createHash('sha256').update([...list, ...warm].join('\n')).digest('hex').slice(0, 12)
 
       const swPath = r(__dirname, 'dist/sw.js')
       if (!existsSync(swPath)) {
@@ -80,13 +90,15 @@ function swPrecache() {
       sw = sw.replace(/const CACHE_NAME = '[^']*'/, `const CACHE_NAME = 'sf26-${version}'`)
       sw = sw.replace(/const PRECACHE = \[[\s\S]*?\n\]/,
         'const PRECACHE = [\n' + list.map(u => `  '${u}',`).join('\n') + '\n]')
+      sw = sw.replace(/const WARM = \[[\s\S]*?\]/,
+        'const WARM = [\n' + warm.map(u => `  '${u}',`).join('\n') + '\n]')
 
       if (sw === before) {
         // Failing loudly beats shipping a worker that silently caches nothing.
         this.error('sw-precache could not find CACHE_NAME/PRECACHE in dist/sw.js')
       }
       writeFileSync(swPath, sw)
-      console.log(`\n  sw-precache: ${list.length} files precached as sf26-${version}`)
+      console.log(`\n  sw-precache: ${list.length} precached, ${warm.length} warmed in background (sf26-${version})`)
     },
   }
 }

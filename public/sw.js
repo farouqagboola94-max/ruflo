@@ -9,11 +9,19 @@
 // install list, and a visitor who came once gets a blank page offline. That
 // was the measured behaviour: three entries cached, zero sections rendered.
 const CACHE_NAME = 'sf26-dev'
+
+// Tier 1: cached during install, because without it there is no app at all.
 const PRECACHE = [
   '/',
   '/manifest.json',
   '/favicon.svg',
 ]
+
+// Tier 2: every remaining section chunk. NOT fetched during install - that
+// would pull the whole site down on first paint and undo the reason sections
+// are deferred. The page asks for this once it is idle, so the visitor reads
+// the hero at 5 files and the rest arrives quietly behind them.
+const WARM = []
 const CORE_ASSETS = PRECACHE
 
 self.addEventListener('install', event => {
@@ -37,6 +45,55 @@ self.addEventListener('activate', event => {
     )
   )
   self.clients.claim()
+})
+
+/**
+ * Fill the cache with the deferred section chunks, gently.
+ *
+ * Concurrency is capped because the point is to be invisible. Six parallel
+ * fetches on a Lagos 3G connection would compete with whatever the reader is
+ * actually doing; two will not.
+ *
+ * Anything already cached is skipped, so a second visit costs nothing, and a
+ * failure is silent - warming is a bonus, never a requirement.
+ */
+let warming = false
+async function warmCache() {
+  if (warming || !WARM.length) return
+  warming = true
+  const cache = await caches.open(CACHE_NAME)
+  const queue = WARM.slice()
+  let done = 0
+
+  const worker = async () => {
+    while (queue.length) {
+      const url = queue.shift()
+      try {
+        if (await cache.match(url)) { done++; continue }
+        const res = await fetch(url, { credentials: 'same-origin' })
+        // Only store a real answer. Caching a 404 or an opaque error would
+        // make the section permanently broken offline instead of merely
+        // missing.
+        if (res && res.ok) { await cache.put(url, res.clone()); done++ }
+      } catch { /* no network, or it went away mid-warm; try again next visit */ }
+    }
+  }
+
+  await Promise.all([worker(), worker()])
+  warming = false
+
+  // includeUncontrolled covers the window between activate and clients.claim()
+  // taking effect, when a page can have asked for this warm without yet being
+  // controlled. Belt and braces rather than a fix for anything observed: a
+  // bare matchAll() was measured delivering this message correctly.
+  const clients = await self.clients.matchAll({ includeUncontrolled: true, type: 'window' })
+  for (const client of clients) {
+    client.postMessage({ type: 'warm-complete', cached: done, total: WARM.length })
+  }
+}
+
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'warm') event.waitUntil(warmCache())
 })
 
 self.addEventListener('fetch', event => {

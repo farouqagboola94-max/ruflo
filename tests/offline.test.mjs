@@ -28,10 +28,12 @@ const DIST_SW = root('dist/sw.js')
 const built = existsSync(DIST_SW)
 const sw = built ? readFileSync(DIST_SW, 'utf8') : ''
 
-const precache = () => {
-  const m = sw.match(/const PRECACHE = \[([\s\S]*?)\n\]/)
+const listNamed = name => {
+  const m = sw.match(new RegExp(`const ${name} = \\[([\\s\\S]*?)\\n\\]`))
   return m ? [...m[1].matchAll(/'([^']+)'/g)].map(x => x[1]) : []
 }
+const precache = () => listNamed('PRECACHE')
+const warmList = () => listNamed('WARM')
 
 test('the build rewrites the service worker with a real precache list', { skip: !built && 'run npm run build first' }, () => {
   const list = precache()
@@ -66,6 +68,35 @@ test('precaching does not quietly re-download the whole site', { skip: !built &&
   // chunks to read the hero. Precaching all of them would undo that.
   const list = precache()
   assert.ok(list.length < 20, `precache has grown to ${list.length} files; it should stay near the boot set`)
+})
+
+test('every remaining chunk is warmed in the background', { skip: !built && 'run npm run build first' }, () => {
+  // Ten section groups used to show "could not load" offline, because only the
+  // boot set was cached. Everything else is now fetched once the page is idle,
+  // so a later visit with no signal has the whole site.
+  const warm = warmList()
+  const boot = new Set(precache())
+  assert.ok(warm.length > 40, `expected the deferred chunks to be warmed, found ${warm.length}`)
+  const overlap = warm.filter(u => boot.has(u))
+  assert.deepEqual(overlap, [], `these are in both lists and would be fetched twice: ${overlap.join(', ')}`)
+})
+
+test('warming is asked for after load, never during install', { skip: !built && 'run npm run build first' }, () => {
+  // Warming inside the install handler would pull all 67 files down on first
+  // paint, which is exactly what deferring sections exists to prevent.
+  const install = sw.slice(sw.indexOf("addEventListener('install'"), sw.indexOf("addEventListener('activate'"))
+  assert.doesNotMatch(install, /WARM|warmCache/, 'install must not touch the warm list')
+  assert.match(sw, /addEventListener\('message'/, 'the page has to be able to ask for the warm')
+
+  const html = read('index.html')
+  assert.match(html, /requestIdleCallback/, 'the warm should be requested on idle, not immediately')
+  assert.match(html, /saveData/, 'Data Saver users should not get a background download')
+})
+
+test('a failed warm fetch is never cached', { skip: !built && 'run npm run build first' }, () => {
+  // Storing a 404 would make that section permanently broken offline rather
+  // than merely missing, and the next warm would skip it as already cached.
+  assert.match(sw, /res && res\.ok/, 'only a successful response may be put in the cache')
 })
 
 test('MyPass is not grouped with sections that are not precached', () => {
