@@ -98,6 +98,7 @@ const Crews           = lazy(() => import('./sections/Crews'))
 const FridayProtocol  = lazy(() => import('./sections/FridayProtocol'))
 const GroupTickets    = lazy(() => import('./sections/GroupTickets'))
 const MyPass          = lazy(() => import('./sections/MyPass'))
+const LiveNow         = lazy(() => import('./sections/LiveNow'))
 const Standings       = lazy(() => import('./sections/Standings'))
 const MyDay           = lazy(() => import('./sections/MyDay'))
 const VendorDirectory = lazy(() => import('./sections/VendorDirectory'))
@@ -429,6 +430,14 @@ export default function App() {
         <Defer sections={1}>
           <SectionBoundary><Suspense fallback={null}>
             <Reveal><MyPass /></Reveal>
+          </Suspense></SectionBoundary>
+        </Defer>
+        {/* Alone for the same reason as MyPass: it is precached so it works in
+            the park with no signal, and a boundary shared with a section that
+            is not precached would take it down with it. */}
+        <Defer sections={1}>
+          <SectionBoundary><Suspense fallback={null}>
+            <Reveal><LiveNow /></Reveal>
           </Suspense></SectionBoundary>
         </Defer>
         <Defer sections={3}>

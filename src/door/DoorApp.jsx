@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { B } from '../tokens'
 import {
   normaliseTicket, isValidTicket, readQueue, readLog,
-  enqueue, dequeue, logScan, resolveLogged, tallies,
+  enqueue, dequeue, logScan, resolveLogged, tallies, ticketFromHash,
 } from './doorQueue'
 
 const CHECKIN = '/.netlify/functions/ticket-checkin'
@@ -94,6 +94,27 @@ function Gate({ secret, onLoseAuth }) {
       }
     }
   }, [send])
+
+  // A pass carries a QR pointing at /door.html#t=TICKETID, so a staff member
+  // can use the camera app their phone already has - point, tap, land here
+  // with the ticket filled in. That removes the typing that makes the queue.
+  //
+  // Prefilled, never auto-submitted: an accidental scan of a pass in someone's
+  // hand must not silently burn their ticket. Staff still press the button.
+  useEffect(() => {
+    const fromHash = () => {
+      const id = ticketFromHash(window.location.hash)
+      if (!id) return
+      setTicket(id)
+      inputRef.current?.focus()
+      // Clear it so a reload does not re-arm the same ticket, and so the ID is
+      // not left sitting in the address bar of a shared staff phone.
+      history.replaceState(null, '', window.location.pathname)
+    }
+    fromHash()
+    window.addEventListener('hashchange', fromHash)
+    return () => window.removeEventListener('hashchange', fromHash)
+  }, [])
 
   useEffect(() => {
     const up = () => { setOnline(true); flush() }

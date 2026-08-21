@@ -19,6 +19,28 @@ export function isValidTicket(raw) {
   return TICKET_RE.test(normaliseTicket(raw))
 }
 
+/**
+ * Pull a ticket ID out of a door URL fragment.
+ *
+ * A pass carries a QR pointing at /door.html#t=TICKETID, so a staff member can
+ * use the camera app their phone already has instead of typing sixteen
+ * characters per person - which is the queue this exists to remove.
+ *
+ * Returns null for anything that is not a well-formed ticket. That matters:
+ * the fragment is attacker-controlled, anyone can hand a staff member a QR
+ * pointing anywhere, and a value that reached the input unchecked would be
+ * sent to the check-in endpoint and shown back on the screen.
+ */
+export function ticketFromHash(hash) {
+  const m = /[#&]t=([^&]*)/.exec(String(hash || ''))
+  if (!m) return null
+  let raw
+  // A malformed percent-escape throws rather than returning anything useful.
+  try { raw = decodeURIComponent(m[1]) } catch { return null }
+  const id = normaliseTicket(raw)
+  return isValidTicket(id) ? id : null
+}
+
 const read = (key, fallback) => {
   try { return JSON.parse(localStorage.getItem(key)) ?? fallback } catch { return fallback }
 }

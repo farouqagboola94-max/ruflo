@@ -99,5 +99,53 @@ globalThis.localStorage = {
 check('a blocked localStorage does not throw on read', Array.isArray(Q.readQueue()))
 check('a blocked localStorage does not throw on write', Array.isArray(Q.enqueue('SF26-GEN-AAAAAA', 't')))
 
+// --- QR deep link into the door app -----------------------------------------
+//
+// A pass carries a QR pointing at /door.html#t=TICKETID so staff can use the
+// camera app their phone already has, instead of typing sixteen characters per
+// person. The fragment is attacker-controlled - anyone can print a QR and hand
+// it to a staff member - so what comes out is only ever a validated ticket ID
+// or null.
+
+check('a QR link yields the ticket',
+  Q.ticketFromHash('#t=SF26-GEN-A1B2C3') === 'SF26-GEN-A1B2C3' &&
+  Q.ticketFromHash('#t=SF26-VIP-FFFFFF') === 'SF26-VIP-FFFFFF')
+
+// Some scanners lowercase a URL, and a hand-typed one picks up spaces.
+check('lowercase and stray whitespace still resolve',
+  Q.ticketFromHash('#t=sf26-gen-a1b2c3') === 'SF26-GEN-A1B2C3' &&
+  Q.ticketFromHash('#t=SF26-GEN-A1B2C3%20') === 'SF26-GEN-A1B2C3')
+
+check('the parameter is found among others',
+  Q.ticketFromHash('#src=qr&t=SF26-GEN-A1B2C3') === 'SF26-GEN-A1B2C3' &&
+  Q.ticketFromHash('#t=SF26-GEN-A1B2C3&src=qr') === 'SF26-GEN-A1B2C3')
+
+check('anything that is not a ticket yields null', [
+  '', null, undefined, '#', '#t=', '#t=hello', '#other=SF26-GEN-A1B2C3',
+  '#t=SF26-GEN-ZZZZZZ',       // G-Z are not hex
+  '#t=SF26-GEN-A1B2C',        // too short
+  '#t=SF26-GEN-A1B2C34',      // too long
+  '#t=SF26-GENERAL-A1B2C3',   // wrong tier field
+  '#t=XX26-GEN-A1B2C3',       // not our prefix
+].every(h => Q.ticketFromHash(h) === null))
+
+// Nothing arbitrary may reach the check-in call or the screen.
+check('a hostile fragment cannot smuggle anything through', [
+  '#t=<script>alert(1)</script>',
+  '#t=" onload="alert(1)',
+  '#t=%3Cimg%20src%3Dx%20onerror%3Dalert(1)%3E',
+  '#t=../../etc/passwd',
+  '#t=' + 'A'.repeat(5000),
+  '#t=%E0%A4%A',              // malformed escape - decodeURIComponent throws
+  '#t=javascript:alert(1)',
+].every(h => Q.ticketFromHash(h) === null))
+
+// The single guarantee the caller relies on.
+check('whatever it returns is always a valid ticket',
+  ['#t=SF26-GEN-A1B2C3', '#t=nonsense', '#t=', '#t=sf26-vip-000000', '#x=1']
+    .map(h => Q.ticketFromHash(h))
+    .every(out => out === null || Q.isValidTicket(out)))
+
 console.log(`\ndoor: ${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)
+

@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
+import { qrSVG } from '../lib/qr'
 
 const API = '/.netlify/functions/ticket-lookup'
 const STORE_KEY = 'sf26_pass'
@@ -19,6 +20,22 @@ const normalise = raw => String(raw || '').toUpperCase().replace(/\s/g, '')
 function Pass({ pass, onForget }) {
   const used = pass.checkedIn
   const accent = used ? B.smoke : B.amber
+
+  // The QR carries a link into the staff door app with the ticket already in
+  // it, not the bare ID. That means a staff member can use the camera app
+  // their phone already has - point, tap the notification, the door app opens
+  // filled in. Encoding just the ID would leave them reading it off a screen
+  // and typing it, which is the queue this is meant to remove.
+  //
+  // Built here rather than fetched: the encoder is in the bundle, so this
+  // renders with no network, which is the state of every phone at a gate with
+  // a few thousand people on one tower.
+  const qr = useMemo(() => {
+    if (!pass.ticketId) return null
+    const origin = typeof window === 'undefined' ? '' : window.location.origin
+    try { return qrSVG(`${origin}/door.html#t=${pass.ticketId}`, { ec: 'M', margin: 2 }) }
+    catch { return null }
+  }, [pass.ticketId])
 
   return (
     <div className="card-3d" style={{
@@ -47,7 +64,28 @@ function Pass({ pass, onForget }) {
           </div>
         </div>
 
-        {/* The code the gate types. Kept as large and legible as it will go. */}
+        {/* Dark modules on white, always. A QR rendered light-on-dark is
+            inverted, and while some scanners cope, plenty do not - and this
+            one has to work first time with a queue behind it. */}
+        {qr && (
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: 24 }}>
+            <div style={{
+              background: '#fff', padding: 10, borderRadius: 8, lineHeight: 0,
+              width: 'min(216px, 58vw)', opacity: used ? 0.45 : 1,
+            }}>
+              <div
+                role="img"
+                aria-label={`QR code for ticket ${pass.ticketId}. Staff can scan it, or read the code printed below it.`}
+                style={{ width: '100%' }}
+                dangerouslySetInnerHTML={{ __html: qr }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* The code the gate types. Kept as large and legible as it will go,
+            because the QR is a shortcut and not a single point of failure -
+            a cracked screen or a dead camera still has to get someone in. */}
         <div style={{
           margin: '24px 0 6px', padding: '20px 12px', borderRadius: 8, textAlign: 'center',
           background: B.black, border: `1px dashed ${accent}55`,
@@ -58,7 +96,9 @@ function Pass({ pass, onForget }) {
             color: accent, textShadow: used ? 'none' : `0 0 22px ${B.amber}40`,
             wordBreak: 'break-all',
           }}>{pass.ticketId}</div>
-          <div style={{ ...label, marginTop: 10, fontSize: 6.5 }}>SHOW THIS AT THE GATE</div>
+          <div style={{ ...label, marginTop: 10, fontSize: 9 }}>
+            {qr ? 'SHOW THE CODE ABOVE - OR READ THIS OUT' : 'SHOW THIS AT THE GATE'}
+          </div>
         </div>
 
         {used && (

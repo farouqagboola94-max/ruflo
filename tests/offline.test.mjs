@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { readFileSync, existsSync } from 'node:fs'
+import { readFileSync, existsSync, readdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
 // What has to survive a dead network, and why each piece is here.
@@ -97,6 +97,25 @@ test('a failed warm fetch is never cached', { skip: !built && 'run npm run build
   // Storing a 404 would make that section permanently broken offline rather
   // than merely missing, and the next warm would skip it as already cached.
   assert.match(sw, /res && res\.ok/, 'only a successful response may be put in the cache')
+})
+
+test('the core chunk does not depend on the data chunk', { skip: !built && 'run npm run build first' }, () => {
+  // src/data imports tokens out of core, so anything in core that reaches back
+  // into src/data makes the two chunks mutually dependent. Rollup emits that
+  // happily and the browser then crashes on load with "Cannot access 'e'
+  // before initialization" - measured: zero sections rendered, whole page
+  // dead. It also drags the 79 kB dataset onto first paint.
+  //
+  // Putting liveSchedule.js in src/lib did exactly this, because it imports
+  // the running order. The rule is: a module under src/lib that reads from
+  // src/data must be excluded from core in vite.config.js.
+  const files = readdirSync(root('dist/assets'))
+  const core = files.find(f => /^core-.*\.js$/.test(f))
+  const data = files.find(f => /^data-.*\.js$/.test(f))
+  assert.ok(core, 'no core chunk in dist/assets')
+  if (!data) return                                  // nothing to collide with
+  const src = readFileSync(root('dist/assets/' + core), 'utf8')
+  assert.ok(!src.includes(data), `core imports ${data}; that cycle crashes the page on load`)
 })
 
 test('MyPass is not grouped with sections that are not precached', () => {

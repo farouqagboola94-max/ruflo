@@ -23,6 +23,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
  *   - the CSS
  *   - MyPass, because a ticket you cannot display is a ticket you do not have,
  *     and at the gate there are thousands of people on one cell tower
+ *   - LiveNow, for the same reason: what is on right now is a day-of question
+ *     asked from inside the park
  *
  * Every remaining chunk goes into a second list the page asks for once it is
  * idle. First paint stays at five files; the other seventy arrive quietly
@@ -31,7 +33,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
  */
 function swPrecache() {
   // Sections worth having without a network, beyond what booting needs.
-  const OFFLINE_CRITICAL = ['sections/MyPass']
+  // Both are day-of features used standing in the park: the ticket you show
+  // at the gate, and what is on right now. Neither is any use over a network
+  // that is not there.
+  const OFFLINE_CRITICAL = ['sections/MyPass', 'sections/LiveNow']
   let bundle = null
 
   return {
@@ -128,6 +133,21 @@ export default defineConfig({
           // sections-culture, which dragged the 200-sneaker dataset onto the
           // critical path: 247 kB downloaded before a single section could
           // paint, on a page most visitors scroll two screens of.
+          // Not everything under src/lib belongs to every visitor. These are
+          // used by exactly one section each, so they ride with that section
+          // instead of joining the chunk loaded at first paint.
+          //
+          // liveSchedule is not merely a size question. It imports the running
+          // order from src/data, so putting it in core made core depend on the
+          // data chunk while data still depended on core for tokens - a cycle
+          // between chunks that crashed the whole page with "Cannot access 'e'
+          // before initialization" and rendered zero sections. Same shape as
+          // the bug that dragged the 200-sneaker dataset onto the critical
+          // path, so it is worth stating plainly: a module in src/lib that
+          // reaches into src/data must not be in core.
+          const SECTION_LOCAL = ['/src/lib/qr.js', '/src/lib/liveSchedule.js']
+          if (SECTION_LOCAL.some(m => id.includes(m))) return undefined
+
           if (
             id.includes('/src/tokens.js') ||
             id.includes('/src/components/') ||
