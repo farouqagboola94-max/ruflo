@@ -30,17 +30,24 @@ const dir = await mkdtemp(join(tmpdir(), 'sf26-tickets-'))
 await mkdir(join(dir, 'lib'), { recursive: true })
 await mkdir(join(dir, 'node_modules', '@netlify', 'blobs'), { recursive: true })
 
+// The real client against an in-memory edge, rather than a hand-written
+// stand-in for the store.
+//
+// The stand-in that used to live here had no getWithMetadata and ignored write
+// conditions, so once check-in began using a conditional write every scan
+// "lost" and eleven assertions failed against perfectly correct code. A stub
+// that does not implement what the code under test relies on does not test it.
+const REAL_BLOBS = pathToFileURL(join(root, 'node_modules', '@netlify', 'blobs', 'dist', 'main.js')).href
+const EDGE_HELPER = pathToFileURL(join(root, 'tests', 'helpers', 'blob-edge.mjs')).href
 await writeFile(join(dir, 'node_modules', '@netlify', 'blobs', 'index.js'), `
-export const _data = new Map()
-export function getStore() {
-  return {
-    async get(k) { return _data.has(k) ? _data.get(k) : null },
-    async set(k, v) { _data.set(k, v) },
-    async setJSON(k, v) { _data.set(k, JSON.stringify(v)) },
-    async delete(k) { _data.delete(k) },
-    async list() { return { blobs: [..._data.keys()].map(k => ({ key: k })) } },
-  }
+import { getStore as realGetStore } from ${JSON.stringify(REAL_BLOBS)}
+import { createBlobEdge } from ${JSON.stringify(EDGE_HELPER)}
+export const edge = createBlobEdge()
+export function getStore(opts) {
+  const o = typeof opts === 'string' ? { name: opts } : opts
+  return realGetStore({ ...o, ...edge.options(o.name) })
 }
+export * from ${JSON.stringify(REAL_BLOBS)}
 `)
 await writeFile(join(dir, 'node_modules', '@netlify', 'blobs', 'package.json'),
   JSON.stringify({ name: '@netlify/blobs', version: '0.0.0', type: 'module', main: 'index.js' }))
@@ -56,7 +63,15 @@ await copyFile(join(FN, 'ticket-checkin.js'), join(dir, 'ticket-checkin.js'))
 const { handler: purchase } = await import(pathToFileURL(join(dir, 'ticket-purchase.js')).href)
 const { handler: checkin }  = await import(pathToFileURL(join(dir, 'ticket-checkin.js')).href)
 const { generateTicketId, TIERS } = await import(pathToFileURL(join(dir, 'lib', 'ticket.js')).href)
-const blobs = await import(pathToFileURL(join(dir, 'node_modules', '@netlify', 'blobs', 'index.js')).href)
+const { edge } = await import(pathToFileURL(join(dir, 'node_modules', '@netlify', 'blobs', 'index.js')).href)
+const storage = await import(pathToFileURL(join(dir, 'lib', 'storage.js')).href)
+
+// The suite used to poke the store's backing map directly and synchronously.
+// It now goes through the same storage layer the functions use - which is both
+// closer to reality and the only way to reach a store behind a real client.
+const resetStore = () => edge.reset()
+const putRecord = (key, value) => storage.set(storage.Tickets, key, value)
+const readRecord = (key) => storage.get(storage.Tickets, key)
 
 const json = r => JSON.parse(r.body)
 
@@ -172,7 +187,7 @@ check('a refused order never reaches the payment provider', upstream.length === 
 
 console.log('\nthe pending record verify-payment reconciles against:')
 
-blobs._data.clear()
+resetStore()
 upstream = []
 upstreamReply = () => ({
   ok: true,
@@ -180,7 +195,7 @@ upstreamReply = () => ({
 })
 await buy(order({ name: 'Bem Tor', email: 'bem@example.com', tier: 'vvip', quantity: 2 }))
 
-const pending = JSON.parse(blobs._data.get('pending:ps_ref_pending'))
+const pending = await readRecord('pending:ps_ref_pending')
 check('a pending record is written under the reference', Boolean(pending))
 check('it records the buyer', pending.name === 'Bem Tor' && pending.email === 'bem@example.com')
 check('it records the tier and quantity', pending.tier === 'vvip' && pending.qty === 2)
@@ -213,9 +228,9 @@ const scan = (ticketId, secret = ADMIN) => checkin({
   headers: { authorization: `Bearer ${secret}` },
 })
 
-blobs._data.clear()
+resetStore()
 const ticketId = generateTicketId('vip', 'ps_ref_001')
-blobs._data.set(`ticket:${ticketId}`, JSON.stringify({
+await putRecord(`ticket:${ticketId}`, ({
   ticketId, name: 'Ada Okoye', email: 'ada@example.com', tier: 'vip', qty: 2,
   confirmedAt: '2026-12-01T10:00:00.000Z',
 }))
@@ -241,7 +256,7 @@ check('the original entry time is preserved, not overwritten',
 check('the gate still sees the name, to talk to the person holding it',
   json(second).name === 'Ada Okoye')
 
-const stored = JSON.parse(blobs._data.get(`ticket:${ticketId}`))
+const stored = await readRecord(`ticket:${ticketId}`)
 check('the stored ticket kept its first check-in time', stored.checkedInAt === firstTime)
 
 console.log('\nbad scans:')
@@ -263,17 +278,17 @@ check('a missing header is refused',
 // With DOOR_SECRET set, gate staff get a code that admits people but cannot
 // read the ticket, vendor or contact lists through admin.js.
 process.env.DOOR_SECRET = DOOR
-blobs._data.set(`ticket:${ticketId}`, JSON.stringify({ ticketId, name: 'Ada', tier: 'vip', qty: 1 }))
+await putRecord(`ticket:${ticketId}`, ({ ticketId, name: 'Ada', tier: 'vip', qty: 1 }))
 check('the door code works once it is set', json(await scan(ticketId, DOOR)).success === true)
 
-blobs._data.set(`ticket:${ticketId}`, JSON.stringify({ ticketId, name: 'Ada', tier: 'vip', qty: 1 }))
+await putRecord(`ticket:${ticketId}`, ({ ticketId, name: 'Ada', tier: 'vip', qty: 1 }))
 check('the admin code still works at the gate too',
   json(await scan(ticketId, ADMIN)).success === true)
 check('an old or guessed code does not', (await scan(ticketId, 'stale')).statusCode === 401)
 
 console.log('\nthe gate sees no more than it needs:')
 
-blobs._data.set(`ticket:${ticketId}`, JSON.stringify({
+await putRecord(`ticket:${ticketId}`, ({
   ticketId, name: 'Ada', tier: 'vip', qty: 1,
   email: 'private@example.com', paystackRef: 'ps_secret_ref', amountNGN: 10000,
 }))

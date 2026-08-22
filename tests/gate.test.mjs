@@ -2,72 +2,51 @@
 //
 // Run: node tests/gate.test.mjs
 //
-// These two functions are the whole entry path and neither had a test. The
-// pass now carries a QR, which makes scanning fast, which makes two scans of
-// the same ticket landing at the same moment far more likely than when a
-// staff member had to type sixteen characters.
+// These two functions are the whole entry path. Unlike the other function
+// tests, this one does NOT stub @netlify/blobs. It runs the real client
+// against an in-memory stand-in for the Netlify Blobs edge that speaks the
+// actual wire protocol, including HTTP preconditions.
 //
-// Same pattern as the other function tests: a throwaway module tree with a
-// stubbed storage layer beside copies of the handlers, so this runs on plain
-// node with no test runner and no dependencies.
+// That matters because check-in now depends on a conditional write to admit a
+// ticket exactly once. A stubbed store would happily pretend the condition
+// held and the test would prove nothing about the thing it exists to prove.
 
 import { mkdtemp, mkdir, writeFile, copyFile } from 'fs/promises'
 import { tmpdir } from 'os'
 import { join, dirname } from 'path'
 import { fileURLToPath, pathToFileURL } from 'url'
+import { createBlobEdge } from './helpers/blob-edge.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const FN = join(root, 'netlify', 'functions')
-
-// Every await yields, so two handlers running under Promise.all interleave at
-// exactly the points a real pair of concurrent requests would.
-const STORAGE_STUB = `
-export const store = new Map()
-export const calls = { get: 0, set: 0 }
-export const Tickets = () => 'tickets'
-export async function get(_s, key) {
-  calls.get++
-  await Promise.resolve()
-  return store.has(key) ? JSON.parse(store.get(key)) : null
-}
-export async function set(_s, key, data) {
-  calls.set++
-  await Promise.resolve()
-  store.set(key, JSON.stringify(data))
-}
-export async function del(_s, key) { store.delete(key) }
-`
+const REAL_BLOBS = pathToFileURL(join(root, 'node_modules', '@netlify', 'blobs', 'dist', 'main.js')).href
+const HELPER = pathToFileURL(join(root, 'tests', 'helpers', 'blob-edge.mjs')).href
 
 const dir = await mkdtemp(join(tmpdir(), 'sf26-gate-'))
 await mkdir(join(dir, 'lib'))
 await mkdir(join(dir, 'node_modules', '@netlify', 'blobs'), { recursive: true })
 
-// ratelimit.js talks to blobs directly, and it is part of what is under test
-// here, so it gets a real store rather than being stubbed out.
+// The functions call getStore({ name, consistency }) with no credentials,
+// because on Netlify those come from the runtime. This shim keeps the real
+// client and only supplies the missing connection details plus our fetch.
 await writeFile(join(dir, 'node_modules', '@netlify', 'blobs', 'index.js'), `
-export const _data = new Map()
-export function getStore() {
-  return {
-    async get(k, opts) {
-      if (!_data.has(k)) return null
-      const raw = _data.get(k)
-      return opts && opts.type === 'json' ? JSON.parse(raw) : raw
-    },
-    async set(k, v) { _data.set(k, v) },
-    async setJSON(k, v) { _data.set(k, JSON.stringify(v)) },
-    async delete(k) { _data.delete(k) },
-    async list() { return { blobs: [..._data.keys()].map(k => ({ key: k })) } },
-  }
+import { getStore as realGetStore } from ${JSON.stringify(REAL_BLOBS)}
+import { createBlobEdge } from ${JSON.stringify(HELPER)}
+export const edge = createBlobEdge()
+export function getStore(opts) {
+  const o = typeof opts === 'string' ? { name: opts } : opts
+  return realGetStore({ ...o, ...edge.options(o.name) })
 }
+export * from ${JSON.stringify(REAL_BLOBS)}
 `)
 await writeFile(join(dir, 'node_modules', '@netlify', 'blobs', 'package.json'),
   JSON.stringify({ name: '@netlify/blobs', version: '0.0.0', type: 'module', main: 'index.js' }))
 await writeFile(join(dir, 'package.json'), JSON.stringify({ type: 'module' }))
 
-for (const f of ['cors.js', 'auth.js', 'ratelimit.js']) {
+// Real lib files throughout - nothing in the path under test is a stub.
+for (const f of ['cors.js', 'auth.js', 'ratelimit.js', 'storage.js']) {
   await copyFile(join(FN, 'lib', f), join(dir, 'lib', f))
 }
-await writeFile(join(dir, 'lib', 'storage.js'), STORAGE_STUB)
 await copyFile(join(FN, 'ticket-lookup.js'), join(dir, 'ticket-lookup.js'))
 await copyFile(join(FN, 'ticket-checkin.js'), join(dir, 'ticket-checkin.js'))
 
@@ -76,8 +55,8 @@ process.env.ADMIN_SECRET = 'admin_test_secret'
 
 const lookup  = (await import(pathToFileURL(join(dir, 'ticket-lookup.js')).href)).handler
 const checkin = (await import(pathToFileURL(join(dir, 'ticket-checkin.js')).href)).handler
-const { store } = await import(pathToFileURL(join(dir, 'lib', 'storage.js')).href)
-const blobs = await import(pathToFileURL(join(dir, 'node_modules', '@netlify', 'blobs', 'index.js')).href)
+const storage = await import(pathToFileURL(join(dir, 'lib', 'storage.js')).href)
+const { edge } = await import(pathToFileURL(join(dir, 'node_modules', '@netlify', 'blobs', 'index.js')).href)
 
 let pass = 0, fail = 0
 const check = (name, cond) => {
@@ -86,13 +65,14 @@ const check = (name, cond) => {
 }
 
 const TICKET = 'SF26-VIP-A1B2C3'
-const seed = (over = {}) => {
-  store.clear()
-  store.set(`ticket:${TICKET}`, JSON.stringify({
+const readTicket = () => storage.get(storage.Tickets, `ticket:${TICKET}`)
+const seed = async (over = {}) => {
+  edge.reset()
+  await storage.set(storage.Tickets, `ticket:${TICKET}`, {
     ticketId: TICKET, name: 'Ade Balogun', email: 'ade@example.com',
     tier: 'vip', tierLabel: 'VIP', qty: 1, status: 'confirmed',
     checkedIn: false, confirmedAt: '2026-11-01T10:00:00.000Z', ...over,
-  }))
+  })
 }
 // Each test gets a fresh IP so the shared limiter does not leak between them.
 let ipSeq = 0
@@ -108,7 +88,7 @@ const json = r => JSON.parse(r.body)
 
 // --- lookup ---------------------------------------------------------------
 
-seed()
+await seed()
 {
   const r = await lookup(getEv({ id: TICKET }))
   const b = json(r)
@@ -147,8 +127,8 @@ seed()
 }
 
 {
-  seed()
-  store.set('ref:PSK_REF_9', JSON.stringify({ ticketId: TICKET }))
+  await seed()
+  await storage.set(storage.Tickets, 'ref:PSK_REF_9', { ticketId: TICKET })
   const r = await lookup(getEv({ ref: 'PSK_REF_9' }))
   check('lookup resolves a payment reference to the ticket', r.statusCode === 200 && json(r).ticketId === TICKET)
 }
@@ -157,7 +137,6 @@ seed()
   // A hit returns the holder's name, so an unthrottled endpoint is an oracle
   // for who is coming. Every other public endpoint here is limited; this one
   // was not.
-  blobs._data.clear()
   const ip = '203.0.113.9'
   let limited = 0
   for (let i = 0; i < 40; i++) {
@@ -175,13 +154,13 @@ seed()
 
 // --- check-in -------------------------------------------------------------
 
-seed()
+await seed()
 {
   const r = await checkin(postEv({ ticketId: TICKET }))
   const b = json(r)
   check('check-in admits an unused ticket', r.statusCode === 200 && b.success === true && b.alreadyUsed === false)
   check('check-in records who it was', b.name === 'Ade Balogun' && b.tier === 'vip')
-  check('check-in marks the ticket used', JSON.parse(store.get(`ticket:${TICKET}`)).checkedIn === true)
+  check('check-in marks the ticket used', (await readTicket()).checkedIn === true)
 }
 
 {
@@ -192,32 +171,32 @@ seed()
 }
 
 {
-  seed()
+  await seed()
   const r = await checkin(postEv({ ticketId: TICKET }, 'Bearer wrong'))
   check('check-in refuses a wrong door code', r.statusCode === 401)
-  check('a refused scan does not mark the ticket', JSON.parse(store.get(`ticket:${TICKET}`)).checkedIn === false)
+  check('a refused scan does not mark the ticket', (await readTicket()).checkedIn === false)
 }
 
 {
-  seed()
+  await seed()
   const r = await checkin(postEv({ ticketId: TICKET }, `Bearer ${process.env.ADMIN_SECRET}`))
   check('the organiser secret also opens the door', r.statusCode === 200)
 }
 
 {
-  seed()
+  await seed()
   const r = await checkin(postEv({ ticketId: 'SF26-VIP-ZZZZZZ' }))
   check('check-in rejects a malformed ticket id', r.statusCode === 400)
 }
 
 {
-  seed()
+  await seed()
   const r = await checkin(postEv({ ticketId: 'SF26-GEN-FFFFFF' }))
   check('check-in 404s an id that does not exist', r.statusCode === 404)
 }
 
 {
-  seed()
+  await seed()
   const r = await checkin({ httpMethod: 'POST', body: '{not json',
     headers: { authorization: `Bearer ${process.env.DOOR_SECRET}` } })
   check('check-in rejects malformed JSON', r.statusCode === 400)
@@ -246,26 +225,55 @@ seed()
 }
 
 {
-  seed()
+  // Force the requests to genuinely overlap. Without this the edge answers
+  // synchronously enough that the calls can serialise by accident, and the
+  // test would pass without ever exercising the conditional write.
+  edge.setDelay(() => new Promise(r => setTimeout(r, 5)))
+
+  await seed()
   const [a, b] = await Promise.all([
     checkin(postEv({ ticketId: TICKET })),
     checkin(postEv({ ticketId: TICKET })),
   ])
-  const admitted = [json(a), json(b)].filter(x => x.success === true)
-  check('two simultaneous scans admit exactly once', admitted.length === 1)
+  const bodies = [json(a), json(b)]
+  check('two simultaneous scans admit exactly once',
+    bodies.filter(x => x.success === true).length === 1)
   check('the loser is reported as a duplicate',
-    [json(a), json(b)].filter(x => x.alreadyUsed === true).length === 1)
-  check('the ticket ends up used', JSON.parse(store.get(`ticket:${TICKET}`)).checkedIn === true)
+    bodies.filter(x => x.alreadyUsed === true).length === 1)
+  check('the ticket ends up used', (await readTicket()).checkedIn === true)
+  check('the store actually refused a write',
+    edge.stats.preconditionFailed > 0)
 }
 
 {
-  seed()
+  // Twenty at once. With a conditional write this is exactly one, not at most
+  // one: the losers re-read, see the ticket is now used, and report a
+  // duplicate rather than failing.
+  await seed()
   const results = await Promise.all(
-    Array.from({ length: 6 }, () => checkin(postEv({ ticketId: TICKET }))),
+    Array.from({ length: 20 }, () => checkin(postEv({ ticketId: TICKET }))),
   )
-  const admitted = results.map(json).filter(x => x.success === true)
-  check('six simultaneous scans still admit at most once', admitted.length <= 1)
-  check('six simultaneous scans admit at least once', admitted.length >= 1)
+  const bodies = results.map(json)
+  const admitted = bodies.filter(x => x.success === true)
+  const duplicates = bodies.filter(x => x.alreadyUsed === true)
+  check('twenty simultaneous scans admit exactly once', admitted.length === 1)
+  check('the other nineteen are all told it is a duplicate', duplicates.length === 19)
+  check('none of the twenty is left without an answer',
+    results.every(r => r.statusCode === 200))
+}
+
+{
+  // A ticket already used stays used no matter how hard it is scanned.
+  await seed({ checkedIn: true, checkedInAt: '2026-12-12T13:00:00.000Z' })
+  const results = await Promise.all(
+    Array.from({ length: 10 }, () => checkin(postEv({ ticketId: TICKET }))),
+  )
+  check('an already-used ticket never admits anyone',
+    results.map(json).every(x => x.success === false && x.alreadyUsed === true))
+  check('and its original check-in time is not overwritten',
+    (await readTicket()).checkedInAt === '2026-12-12T13:00:00.000Z')
+
+  edge.setDelay(() => Promise.resolve())
 }
 
 console.log(`\ngate: ${pass} passed, ${fail} failed`)
