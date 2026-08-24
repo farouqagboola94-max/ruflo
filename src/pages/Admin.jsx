@@ -15,8 +15,84 @@ const fmtDate = s => {
   catch { return s || '—' }
 }
 
+const clockHM = t => {
+  // Lagos wall time, read the same way wherever the organiser's laptop thinks
+  // it is - the gate runs on WAT and so must the graph above it.
+  const d = new Date(t + 60 * 60_000)
+  return `${String(d.getUTCHours()).padStart(2, '0')}:${String(d.getUTCMinutes()).padStart(2, '0')}`
+}
+
+/**
+ * The live gate.
+ *
+ * Fifteen-minute columns, most recent on the right. The point is not precision
+ * - it is seeing at a glance whether a queue is building, which is the moment
+ * to open another lane.
+ */
+function GatePanel({ data }) {
+  const g = data?.gate
+  if (!g) return null
+  const peak = Math.max(1, ...g.timeline.map(b => b.count))
+  const trendColour = { rising: B.amber, falling: B.neonCyan, steady: B.smoke }[g.trend]
+  const trendWord = { rising: 'ARRIVALS RISING', falling: 'ARRIVALS SLOWING', steady: 'STEADY' }[g.trend]
+
+  return (
+    <div style={{ ...PANEL, padding: '22px 24px' }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 4 }}>
+        <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: 3, color: B.smoke }}>
+          ARRIVALS, LAST 3 HOURS
+        </span>
+        <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: 2, color: trendColour }}>
+          {trendWord} · {g.perHour}/HR
+        </span>
+      </div>
+
+      <div style={{ display: 'flex', alignItems: 'flex-end', gap: 4, height: 120, marginTop: 16 }}>
+        {g.timeline.map(b => (
+          <div key={b.from} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}>
+            <span style={{ fontFamily: MONO, fontSize: 8, color: b.count ? B.mist : 'transparent' }}>{b.count}</span>
+            <div
+              title={`${clockHM(b.from)} - ${b.count} in`}
+              style={{
+                width: '100%',
+                // A zero bar still gets a sliver, so the axis reads as a
+                // timeline rather than a gap.
+                height: `${Math.max(2, Math.round((b.count / peak) * 92))}px`,
+                background: b.count ? B.amber : 'rgba(255,255,255,0.07)',
+                borderRadius: 2,
+              }}
+            />
+            <span style={{ fontFamily: MONO, fontSize: 7, color: B.dim }}>{clockHM(b.from)}</span>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap', marginTop: 18, fontFamily: MONO, fontSize: 9, color: B.smoke }}>
+        {Object.entries(g.byTier).sort((a, b) => b[1] - a[1]).map(([tier, n]) => (
+          <span key={tier}>{tier.toUpperCase()} <span style={{ color: B.white }}>{n}</span></span>
+        ))}
+        {g.busiest && <span>BUSIEST <span style={{ color: B.white }}>{clockHM(g.busiest.from)}</span> ({g.busiest.count})</span>}
+        {g.lastArrival && <span>LAST IN <span style={{ color: B.white }}>{clockHM(g.lastArrival)}</span></span>}
+      </div>
+
+      {!data.capacityConfigured && (
+        <p style={{ fontFamily: MONO, fontSize: 9, color: B.dim, lineHeight: 1.8, marginTop: 16, marginBottom: 0 }}>
+          SET VENUE_CAPACITY TO SEE HOW FULL THE PARK IS. WITHOUT IT THIS COUNTS
+          PEOPLE BUT CANNOT TELL YOU WHEN TO STOP.
+        </p>
+      )}
+      {g.unreadable > 0 && (
+        <p style={{ fontFamily: MONO, fontSize: 9, color: B.amber, marginTop: 12, marginBottom: 0 }}>
+          {g.unreadable} ARRIVAL RECORDS COULD NOT BE READ AND ARE NOT COUNTED.
+        </p>
+      )}
+    </div>
+  )
+}
+
 // resource -> how to read it. `rows` pulls the list, `cols` picks the columns,
-// `stats` is the strip above the table.
+// `stats` is the strip above the table, `panel` is anything that is not a
+// table at all.
 const TABS = [
   {
     id: 'OVERVIEW', resource: 'summary',
@@ -33,6 +109,22 @@ const TABS = [
         ['TO MODERATE',    (s.confessionsPending || 0) + (s.solePending || 0) + (s.boardsPending || 0),
                            'confessions, registry, boards'],
         ['SUBSCRIBERS',    s.subscribers,                 `${s.contactMessages || 0} messages`],
+      ]
+    },
+  },
+  {
+    id: 'GATE', resource: 'gate', live: true,
+    panel: d => <GatePanel data={d} />,
+    stats: d => {
+      const g = d.gate || {}
+      return [
+        ['INSIDE NOW',  g.inside ?? 0,
+          g.capacity ? `${g.percentFull}% of ${g.capacity.toLocaleString()}` : 'capacity not set'],
+        ['ARRIVING',    `${g.perHour ?? 0}/hr`,  `${g.recent ?? 0} in the last ${g.windowMin ?? 15} min`],
+        ['HEADROOM',    g.remaining == null ? '—' : g.remaining.toLocaleString(),
+          g.remaining == null ? 'set VENUE_CAPACITY' : 'places left'],
+        ['DOORS OPENED', g.firstArrival ? clockHM(g.firstArrival) : '—',
+          g.firstArrival ? 'first scan' : 'nobody in yet'],
       ]
     },
   },
@@ -334,6 +426,18 @@ export default function Admin() {
 
   function logout() { clearSecret(); setAuthed(false); setData(null) }
 
+  // A live view that has to be reloaded by hand is not live. Only the gate
+  // polls, and only while it is the tab being looked at - every other resource
+  // here reads every record it lists, and polling those would be expensive for
+  // numbers that do not move minute to minute.
+  useEffect(() => {
+    if (!authed || !tab.live) return
+    const t = setInterval(() => { load() }, 30_000)
+    const onVisible = () => { if (!document.hidden) load() }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => { clearInterval(t); document.removeEventListener('visibilitychange', onVisible) }
+  }, [authed, tab.live, load])
+
   if (!authed) return <Gate onAuth={() => setAuthed(true)} />
 
   const rows  = data && tab.rows ? (tab.rows(data) || []) : null
@@ -394,6 +498,10 @@ export default function Admin() {
             ))}
           </div>
         )}
+
+        {/* Numbers first, then the shape of them. The four figures are what
+            somebody glances at; the chart is why they are what they are. */}
+        {tab.panel && data && tab.panel(data)}
 
         {canModerate && rows?.length > 0 && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>

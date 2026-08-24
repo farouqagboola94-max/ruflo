@@ -1,12 +1,14 @@
 // GET /.netlify/functions/admin?resource=summary|tickets|pending|waitlist|vendors
 //                                       |newsletter|contacts|crews|groups|fnp
 //                                       |confessions|raffle|hype|sole|wall|trades
+//                                       |gate
 // Header: Authorization: Bearer <ADMIN_SECRET>
 // Protected admin endpoint — returns live data from Netlify Blobs.
 
 import { ok, err, preflight } from './lib/cors.js'
 import { requireAdmin } from './lib/auth.js'
-import { listAll, Tickets, Waitlist, Vendors, Newsletter, Contacts } from './lib/storage.js'
+import { listAll, listKeys, Tickets, Waitlist, Vendors, Newsletter, Contacts } from './lib/storage.js'
+import { gatePicture, GATE_PREFIX } from './lib/gate-domain.js'
 import { getStore } from '@netlify/blobs'
 import { publicGroup } from './lib/group-domain.js'
 
@@ -33,6 +35,19 @@ export const handler = async (event) => {
   if (denied) return denied
 
   const resource = event.queryStringParameters?.resource || 'summary'
+
+  // The live gate. Answered from a key listing alone - no ticket is fetched -
+  // because this is the one view somebody refreshes every thirty seconds while
+  // standing in a field, and reading two thousand records to draw it would
+  // make it useless exactly when it is needed.
+  if (resource === 'gate') {
+    const capacity = Number(process.env.VENUE_CAPACITY || 0) || 0
+    const keys = await listKeys(Tickets, GATE_PREFIX)
+    return ok({
+      gate: gatePicture(keys, { now: Date.now(), capacity }),
+      capacityConfigured: capacity > 0,
+    })
+  }
 
   if (resource === 'tickets') {
     const all = await listAll(Tickets, 'ticket:')

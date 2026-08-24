@@ -5,7 +5,8 @@
 
 import { ok, err, preflight, limitBody } from './lib/cors.js'
 import { requireDoor } from './lib/auth.js'
-import { getVersioned, setIfUnchanged, Tickets } from './lib/storage.js'
+import { getVersioned, setIfUnchanged, set, Tickets } from './lib/storage.js'
+import { arrivalKey } from './lib/gate-domain.js'
 
 const TICKET_ID_RE = /^SF26-[A-Z]{3}-[A-F0-9]{6}$/
 
@@ -31,6 +32,22 @@ const TICKET_ID_RE = /^SF26-[A-Z]{3}-[A-F0-9]{6}$/
  */
 const MAX_ATTEMPTS = 3
 
+/**
+ * Note the arrival for the live gate view.
+ *
+ * Best-effort on purpose. This exists so the organiser can see how many people
+ * are inside and how fast they are coming; a person standing at the gate must
+ * never be turned away because a dashboard's bookkeeping failed. The
+ * authoritative record is the ticket itself, which has already been written by
+ * the time this runs.
+ *
+ * The key is unique per arrival, so these never contend with each other.
+ */
+async function recordArrival(ticketId, at) {
+  try { await set(Tickets, arrivalKey(ticketId, at), { at }) }
+  catch { /* the gate matters more than the graph */ }
+}
+
 async function claim(ticketId) {
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
     const { value: ticket, version } = await getVersioned(Tickets, `ticket:${ticketId}`)
@@ -44,7 +61,10 @@ async function claim(ticketId) {
       { ...ticket, checkedIn: true, checkedInAt: at },
       version,
     )
-    if (won) return { outcome: 'admitted', ticket, checkedInAt: at }
+    if (won) {
+      await recordArrival(ticketId, at)
+      return { outcome: 'admitted', ticket, checkedInAt: at }
+    }
     // Lost, or the record moved under us. Look again and decide from what is
     // actually there now.
   }

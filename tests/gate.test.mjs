@@ -11,7 +11,7 @@
 // ticket exactly once. A stubbed store would happily pretend the condition
 // held and the test would prove nothing about the thing it exists to prove.
 
-import { mkdtemp, mkdir, writeFile, copyFile } from 'fs/promises'
+import { mkdtemp, mkdir, writeFile, copyFile, readdir } from 'fs/promises'
 import { tmpdir } from 'os'
 import { join, dirname } from 'path'
 import { fileURLToPath, pathToFileURL } from 'url'
@@ -43,18 +43,22 @@ await writeFile(join(dir, 'node_modules', '@netlify', 'blobs', 'package.json'),
   JSON.stringify({ name: '@netlify/blobs', version: '0.0.0', type: 'module', main: 'index.js' }))
 await writeFile(join(dir, 'package.json'), JSON.stringify({ type: 'module' }))
 
-// Real lib files throughout - nothing in the path under test is a stub.
-for (const f of ['cors.js', 'auth.js', 'ratelimit.js', 'storage.js']) {
-  await copyFile(join(FN, 'lib', f), join(dir, 'lib', f))
+// The whole lib directory, rather than a hand-picked list. Naming files one by
+// one meant every new import inside them broke this setup with a module-not-
+// found that had nothing to do with what was being tested.
+for (const f of await readdir(join(FN, 'lib'))) {
+  if (f.endsWith('.js')) await copyFile(join(FN, 'lib', f), join(dir, 'lib', f))
 }
 await copyFile(join(FN, 'ticket-lookup.js'), join(dir, 'ticket-lookup.js'))
 await copyFile(join(FN, 'ticket-checkin.js'), join(dir, 'ticket-checkin.js'))
+await copyFile(join(FN, 'admin.js'), join(dir, 'admin.js'))
 
 process.env.DOOR_SECRET = 'door_test_secret'
 process.env.ADMIN_SECRET = 'admin_test_secret'
 
 const lookup  = (await import(pathToFileURL(join(dir, 'ticket-lookup.js')).href)).handler
 const checkin = (await import(pathToFileURL(join(dir, 'ticket-checkin.js')).href)).handler
+const admin   = (await import(pathToFileURL(join(dir, 'admin.js')).href)).handler
 const storage = await import(pathToFileURL(join(dir, 'lib', 'storage.js')).href)
 const { edge } = await import(pathToFileURL(join(dir, 'node_modules', '@netlify', 'blobs', 'index.js')).href)
 
@@ -274,6 +278,68 @@ await seed()
     (await readTicket()).checkedInAt === '2026-12-12T13:00:00.000Z')
 
   edge.setDelay(() => Promise.resolve())
+}
+
+// --- the live gate view ----------------------------------------------------
+//
+// Checking someone in is only half of it: on the day the organiser needs to
+// know how many are inside and how fast they are coming. That is answered from
+// a listing of arrival keys, so this checks the two halves actually meet.
+
+{
+  await seed()
+  const before = await checkin(postEv({ ticketId: TICKET }))
+  check('the scan that fed the gate view was admitted', json(before).success === true)
+
+  const keys = await storage.listKeys(storage.Tickets, 'gate:')
+  check('a successful check-in records an arrival', keys.length === 1)
+  check('the arrival key carries the ticket', keys[0].endsWith(TICKET))
+}
+
+{
+  // A duplicate scan is not a second person, and must not be counted as one.
+  const dup = await checkin(postEv({ ticketId: TICKET }))
+  check('the duplicate was refused', json(dup).alreadyUsed === true)
+  const keys = await storage.listKeys(storage.Tickets, 'gate:')
+  check('a duplicate scan does not record a second arrival', keys.length === 1)
+}
+
+{
+  const r = await admin({
+    httpMethod: 'GET', queryStringParameters: { resource: 'gate' },
+    headers: { authorization: `Bearer ${process.env.ADMIN_SECRET}` },
+  })
+  const g = json(r).gate
+  check('the gate view is served to the organiser', r.statusCode === 200)
+  check('it counts the person who came in', g.inside === 1)
+  check('it knows which tier they hold', g.byTier.vip === 1)
+  check('it reports no capacity when none is configured', g.percentFull === null)
+}
+
+{
+  const r = await admin({
+    httpMethod: 'GET', queryStringParameters: { resource: 'gate' }, headers: {},
+  })
+  check('the gate view is not public', r.statusCode === 401)
+}
+
+{
+  // Twenty different tickets, all scanned at once. Everyone through the gate
+  // should be on the graph exactly once.
+  edge.reset()
+  const ids = Array.from({ length: 20 }, (_, i) =>
+    `SF26-GEN-${i.toString(16).toUpperCase().padStart(6, '0')}`)
+  for (const id of ids) {
+    await storage.set(storage.Tickets, `ticket:${id}`, {
+      ticketId: id, name: 'Guest', tier: 'general', tierLabel: 'General',
+      qty: 1, status: 'confirmed', checkedIn: false,
+    })
+  }
+  const results = await Promise.all(ids.map(id => checkin(postEv({ ticketId: id }))))
+  const admitted = results.map(json).filter(x => x.success === true).length
+  const keys = await storage.listKeys(storage.Tickets, 'gate:')
+  check('twenty different tickets all get in', admitted === 20)
+  check('and each is counted exactly once', keys.length === 20)
 }
 
 console.log(`\ngate: ${pass} passed, ${fail} failed`)

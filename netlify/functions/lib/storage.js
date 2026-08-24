@@ -61,6 +61,24 @@ export async function del(storeFactory, key) {
   try { await storeFactory().delete(key) } catch { /* noop */ }
 }
 
+/**
+ * The keys under a prefix, without fetching a single blob.
+ *
+ * listAll reads every record it finds, which is one network round trip per
+ * record - fine for a queue of twenty vendor applications, ruinous for two
+ * thousand arrivals on a dashboard someone refreshes every thirty seconds.
+ * When the key itself carries the information, this answers in one request.
+ */
+export async function listKeys(storeFactory, prefix) {
+  try {
+    const result = await storeFactory().list(prefix ? { prefix } : {})
+    return result.blobs.map(b => b.key)
+  } catch (e) {
+    console.error('[storage] listKeys error:', e.message)
+    return []
+  }
+}
+
 export async function listAll(storeFactory, prefix) {
   try {
     const s = storeFactory()

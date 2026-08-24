@@ -7,7 +7,7 @@
 // landed in Blobs; the organiser opened /admin and saw "None yet". These pin
 // the endpoint it now reads, and the auth boundary in front of it.
 
-import { mkdtemp, mkdir, writeFile, copyFile, rm } from 'fs/promises'
+import { mkdtemp, mkdir, writeFile, copyFile, rm , readdir } from 'fs/promises'
 import { tmpdir } from 'os'
 import { join, dirname } from 'path'
 import { fileURLToPath, pathToFileURL } from 'url'
@@ -51,8 +51,11 @@ await writeFile(join(dir, 'node_modules', '@netlify', 'blobs', 'package.json'),
   JSON.stringify({ name: '@netlify/blobs', version: '0.0.0', type: 'module', main: 'index.js' }))
 await writeFile(join(dir, 'package.json'), JSON.stringify({ type: 'module' }))
 
-for (const f of ['cors.js', 'auth.js', 'storage.js', 'group-domain.js', 'ticket.js', 'text.js', 'crew-domain.js']) {
-  await copyFile(join(FN, 'lib', f), join(dir, 'lib', f))
+// The whole lib directory, rather than a hand-picked list. Naming files one
+// by one meant a new import inside admin.js broke this setup with a
+// module-not-found that had nothing to do with what is being tested.
+for (const f of await readdir(join(FN, 'lib'))) {
+  if (f.endsWith('.js')) await copyFile(join(FN, 'lib', f), join(dir, 'lib', f))
 }
 await writeFile(join(dir, 'lib', 'ratelimit.js'), 'export async function rateLimit() { return null }\n')
 await copyFile(join(FN, 'admin.js'), join(dir, 'admin.js'))
