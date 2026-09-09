@@ -3,7 +3,7 @@ export const SOCIAL_LINKS = {
   tiktok:            'https://tiktok.com/@sneakersfest',
   youtube:           'https://youtube.com/@catalyst00555',
   twitter:           'https://twitter.com/Catalyst188',
-  instagram:         'https://instagram.com/sneakersfest5555',
+  instagram:         'https://instagram.com/s_fest26',
   instagramPersonal: 'https://instagram.com/catalystggg',
   snapchat:          'https://www.snapchat.com/add/sneakersfest?share_id=UpEUQSUErXw&locale=en-GB',
   // WhatsApp broadcast channel (SocialDock + Footer)
