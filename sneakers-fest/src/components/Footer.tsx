@@ -2,9 +2,9 @@ import Link from 'next/link'
 
 const SOCIAL_LINKS = [
   { label: 'Twitter / X', href: 'https://x.com/Catalyst188' },
-  { label: 'Instagram', href: 'https://instagram.com/sneakersfest' },
+  { label: 'Instagram', href: 'https://www.instagram.com/s_fest26/' },
   { label: 'YouTube', href: 'https://youtube.com/@catalyst00555' },
-  { label: 'TikTok', href: 'https://tiktok.com/@sneakersfest' },
+  { label: 'TikTok', href: 'https://www.tiktok.com/@s_fest26' },
 ]
 
 export default function Footer() {
