@@ -1,14 +1,14 @@
 export interface Sponsor {
   name: string
-  tier: 'title' | 'gold' | 'silver' | 'media'
+  tier: 'title' | 'gold' | 'silver' | 'bronze'
 }
 
-// No sponsors confirmed yet — partnerships are open.
+// No sponsors are confirmed yet. Partnership conversations are open.
 export const SPONSORS: Sponsor[] = []
 
-export const TIER_LABELS: Record<string, string> = {
-  title: 'Presenting Sponsor',
+export const TIER_LABELS: Record<Sponsor['tier'], string> = {
+  title: 'Title Sponsor',
   gold: 'Gold Partners',
   silver: 'Silver Partners',
-  media: 'Media Partners',
+  bronze: 'Bronze Partners',
 }

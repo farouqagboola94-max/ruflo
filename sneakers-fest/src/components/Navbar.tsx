@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
+import { EVENT_FACTS } from '@/data/eventFacts'
 
 const NAV_LINKS = [
   { href: '/', label: 'Home' },
@@ -29,9 +30,9 @@ export default function Navbar() {
         style={{ background: 'linear-gradient(90deg, #FF6B2C, #FFA500)' }}
       >
         <p className="text-black text-[9px] sm:text-[10px] font-semibold tracking-[0.3em] uppercase text-center leading-none">
-          🔥 Early Bird Tickets Now Live &middot; December 12, 2026 &middot;{' '}
+          ONLINE-FIRST CULTURE MOVEMENT &middot; {EVENT_FACTS.date} &middot; TICKETS VIA TIX AFRICA SOON &middot;{' '}
           <Link href="/tickets" className="underline underline-offset-2 hover:opacity-70 transition-opacity">
-            Get Yours &rarr;
+            Get Updates &rarr;
           </Link>
         </p>
       </div>
@@ -81,7 +82,7 @@ export default function Navbar() {
               href="/tickets"
               className="hidden xl:inline-flex items-center px-5 py-2 rounded-full bg-gradient-to-r from-brand-orange to-brand-yellow text-black text-sm font-bold hover:opacity-90 transition-opacity"
             >
-              Get Tickets
+              Ticket Updates
             </Link>
 
             <button
@@ -131,7 +132,7 @@ export default function Navbar() {
               onClick={() => setOpen(false)}
               className="block mt-2 px-4 py-3 rounded-full bg-gradient-to-r from-brand-orange to-brand-yellow text-black text-sm font-bold text-center"
             >
-              Get Tickets
+              Ticket Updates
             </Link>
           </div>
         )}

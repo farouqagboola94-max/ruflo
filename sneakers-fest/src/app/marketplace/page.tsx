@@ -84,7 +84,7 @@ export default function MarketplacePage() {
               <div className="text-center py-8">
                 <div className="text-5xl mb-4">✅</div>
                 <h4 className="text-white font-bold text-xl mb-2">Listing Submitted!</h4>
-                <p className="text-gray-400">We'll confirm your vendor slot via email before the event.</p>
+                <p className="text-gray-400">We&apos;ll review this listing request when marketplace intake opens.</p>
                 <button onClick={() => setShowListForm(false)} className="mt-6 px-6 py-3 rounded-full bg-brand-orange text-black font-bold">Close</button>
               </div>
             ) : (

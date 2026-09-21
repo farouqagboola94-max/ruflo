@@ -5,19 +5,13 @@ import VenueMap from '@/components/VenueMap'
 import SponsorsSection from '@/components/SponsorsSection'
 import { SNEAKERS } from '@/data/sneakers'
 import { SCHEDULE } from '@/data/schedule'
+import { EVENT_FACTS, EVENT_TARGETS } from '@/data/eventFacts'
 
-const STATS = [
-  { value: '1K–2.5K', label: 'Year 1 Target' },
-  { value: '30–50',   label: 'Vendors' },
-  { value: '1',           label: 'Day' },
-  { value: '5K+',         label: 'Community Goal' },
-]
-
-const FNP_WEEKS = [
-  { week: 'Week 1', title: 'Drop Discussion', desc: 'Cop or pass. Community verdict every Friday.' },
-  { week: 'Week 2', title: 'The Challenge',   desc: 'Best cop. Worst decision. Most creative pair.' },
-  { week: 'Week 3', title: 'The Conversation',desc: 'Lagos sneaker culture. No script, no filter.' },
-  { week: 'Week 4', title: 'The Game',        desc: 'Trivia. Paid entry. Real prizes.' },
+const FNP_FORMATS = [
+  { title: 'Drop conversations', desc: 'Talk through the pairs, releases, and stories shaping sneaker culture.' },
+  { title: 'Community challenges', desc: 'Put the community’s collections, style, and creativity in the spotlight.' },
+  { title: 'Creator stories', desc: 'Showcase people building Lagos sneaker and streetwear culture.' },
+  { title: 'Live conversations', desc: 'Make room for collectors, vendors, artists, and young founders.' },
 ]
 
 export default function HomePage() {
@@ -33,21 +27,21 @@ export default function HomePage() {
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-orange/10 border border-brand-orange/30 text-brand-orange text-sm font-medium mb-8">
             <span className="w-2 h-2 rounded-full bg-brand-orange animate-pulse-slow" />
-            December 12, 2026 &middot; Lagos, Nigeria
+            {EVENT_FACTS.date} &middot; Lagos, venue to be announced
           </div>
           <h1 className="font-display text-6xl sm:text-8xl lg:text-9xl tracking-tight mb-6 leading-none">
             <span className="text-white">SNEAKERS</span><br />
             <span className="text-gradient">FEST</span>
           </h1>
           <p className="text-gray-300 text-xl sm:text-2xl max-w-2xl mx-auto mb-10 leading-relaxed">
-            Lagos&apos; first dedicated sneaker festival. The culture already exists. This is where it gets a stage.
+            Online-first sneaker and youth culture, built in Lagos. The community moves all year. The physical gathering is December 12.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/tickets" className="px-8 py-4 rounded-full bg-gradient-to-r from-brand-orange to-brand-amber text-black font-bold text-lg hover:opacity-90 shadow-lg shadow-orange-500/30">
-              Get Your Tickets
+            <Link href="/fnp" className="px-8 py-4 rounded-full bg-gradient-to-r from-brand-orange to-brand-amber text-black font-bold text-lg hover:opacity-90 shadow-lg shadow-orange-500/30">
+              Explore Friday Night Protocol
             </Link>
-            <Link href="/catalog" className="px-8 py-4 rounded-full border border-white/20 text-white font-semibold text-lg hover:bg-white/5 transition-colors">
-              Browse Catalog
+            <Link href="/tickets" className="px-8 py-4 rounded-full border border-white/20 text-white font-semibold text-lg hover:bg-white/5 transition-colors">
+              Ticket updates
             </Link>
           </div>
           <CountdownTimer />
@@ -62,8 +56,9 @@ export default function HomePage() {
       {/* Stats */}
       <section className="py-16 border-y border-white/5 bg-brand-gray">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-center text-gray-500 text-xs uppercase tracking-wider mb-8">2026 planning targets</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {STATS.map(({ value, label }) => (
+            {EVENT_TARGETS.map(({ value, label }) => (
               <div key={label} className="text-center">
                 <div className="font-display text-4xl sm:text-5xl text-gradient mb-2">{value}</div>
                 <div className="text-gray-400 text-sm uppercase tracking-wider">{label}</div>
@@ -124,18 +119,18 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <p className="text-brand-neon text-sm font-semibold uppercase tracking-wider mb-2">Every Friday Night</p>
+              <p className="text-brand-neon text-sm font-semibold uppercase tracking-wider mb-2">Online first</p>
               <h2 className="text-white font-display text-4xl sm:text-5xl mb-6">FRIDAY NIGHT<br />PROTOCOL</h2>
               <p className="text-gray-300 text-lg leading-relaxed mb-6">
-                The festival doesn&apos;t go dark between events. Every Friday, the Sneakers Fest community activates &mdash; drop discussions, challenges, live games, culture conversations.
+                Sneakers Fest is an online-first sneaker and youth-culture platform. Friday Night Protocol gives the community a digital home for conversations, challenges, creator stories, and culture.
               </p>
               <p className="text-gray-400 text-base leading-relaxed mb-8">
-                By the time December arrives, you won&apos;t be meeting strangers. You&apos;ll be in a room with people you&apos;ve been building with for months.
+                The physical gathering on December 12 is one milestone in a community built online throughout the year.
               </p>
               <div className="grid grid-cols-2 gap-4">
-                {FNP_WEEKS.map(({ week, title, desc }) => (
-                  <div key={week} className="bg-brand-dark rounded-xl p-4 border border-white/5">
-                    <p className="text-brand-orange text-xs font-mono mb-1">{week}</p>
+                {FNP_FORMATS.map(({ title, desc }) => (
+                  <div key={title} className="bg-brand-dark rounded-xl p-4 border border-white/5">
+                    <p className="text-brand-orange text-xs font-mono mb-1">FNP format</p>
                     <p className="text-white font-semibold text-sm">{title}</p>
                     <p className="text-gray-500 text-xs mt-1">{desc}</p>
                   </div>
@@ -146,14 +141,14 @@ export default function HomePage() {
               <div className="bg-brand-dark rounded-3xl p-8 border border-white/10">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-3 h-3 rounded-full bg-brand-neon animate-pulse" />
-                  <span className="text-brand-neon text-sm font-mono uppercase tracking-wider">Live Every Friday</span>
+                  <span className="text-brand-neon text-sm font-mono uppercase tracking-wider">Digital community</span>
                 </div>
                 <div className="space-y-4">
                   {[
-                    { label: 'Community target by Q3 2026', value: '5,000+' },
-                    { label: 'Weekly game entry',           value: '₦1,000–2,000' },
-                    { label: 'FNP session types',           value: '4 rotating' },
-                    { label: 'Platforms',                   value: 'IG · X · TikTok · WA' },
+                    { label: 'Online-first strategy', value: '90% online' },
+                    { label: 'Online impressions target',         value: '100M+' },
+                    { label: 'Physical gathering',                value: 'Dec 12, 2026' },
+                    { label: 'Official Instagram',                value: '@s_fest26' },
                   ].map(({ label, value }) => (
                     <div key={label} className="flex items-center justify-between border-b border-white/5 pb-3">
                       <span className="text-gray-400 text-sm">{label}</span>
@@ -162,8 +157,8 @@ export default function HomePage() {
                   ))}
                 </div>
                 <div className="mt-6 p-4 rounded-xl bg-brand-neon/10 border border-brand-neon/20">
-                  <p className="text-brand-neon text-sm font-medium">The ritual is the brand.</p>
-                  <p className="text-gray-400 text-xs mt-1">FNP doesn&apos;t pause. It doesn&apos;t skip weeks.</p>
+                  <p className="text-brand-neon text-sm font-medium">The culture lives online first.</p>
+                  <p className="text-gray-400 text-xs mt-1">Follow the official channels for programming and event updates.</p>
                 </div>
               </div>
             </div>

@@ -1,9 +1,7 @@
 import Link from 'next/link'
 
 const SOCIAL_LINKS = [
-  { label: 'Twitter / X', href: 'https://x.com/Catalyst188' },
   { label: 'Instagram', href: 'https://www.instagram.com/s_fest26/' },
-  { label: 'YouTube', href: 'https://youtube.com/@catalyst00555' },
   { label: 'TikTok', href: 'https://www.tiktok.com/@s_fest26' },
 ]
 
@@ -18,9 +16,9 @@ export default function Footer() {
               <span className="font-display text-xl tracking-wider text-gradient">SNEAKERS<span className="text-white">FEST</span></span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
-              Lagos’ first dedicated sneaker festival. Physical exhibition, year-round online platform, community engine.
+              Online-first sneaker and youth culture platform, building toward a physical gathering in Lagos.
             </p>
-            <p className="text-gray-500 text-sm mt-3">December 12, 2026 &middot; Lagos, Nigeria</p>
+            <p className="text-gray-500 text-sm mt-3">December 12, 2026 &middot; Lagos, venue to be announced</p>
             <div className="mt-4 text-xs text-gray-600 leading-relaxed">
               Founded by{' '}
               <a

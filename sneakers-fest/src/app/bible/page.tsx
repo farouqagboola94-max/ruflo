@@ -203,7 +203,7 @@ export default function BiblePage() {
               {
                 title: 'Before You Arrive',
                 items: [
-                  'Register your ticket QR code before you get to the gate.',
+                  'When ticket sales open, use the official Tix Africa ticket and check-in instructions.',
                   'Know the pairs you want to buy, sell, or trade. The Vault 200 is your cheat sheet.',
                   'Bring cash (naira) and a mobile transfer backup. Not all vendors run POS.',
                   'Wear comfortable footwear. You will be on your feet. Ironic, we know.',
@@ -215,7 +215,7 @@ export default function BiblePage() {
                   'Prices are negotiable on pre-event arrivals. Come early, come prepared.',
                   'Verify grail authenticity before any transaction. Use rarity ratings as reference.',
                   'Deadstock means unworn, original laces, box, and paper. Confirm all four.',
-                  'The raffle is weighted — VIP and VVIP tickets carry extra entries. Worth the upgrade.',
+                  'Raffle entry, prizes, and eligibility will be published with the official ticket details if a raffle is confirmed.',
                 ]
               },
               {

@@ -17,26 +17,26 @@ const PHASES = [
   {
     num: 2,
     label: 'Football Finals',
-    dates: 'Dec 11, 2026',
-    venue: 'Mobolaji Johnson Arena, Onikan',
+    dates: 'Date to be confirmed',
+    venue: 'Venue to be announced',
     activeClass: 'text-blue-400 border-blue-400/30 bg-blue-400/10',
     dotClass: 'bg-blue-400 border-blue-400',
-    desc: 'The 10-week street football campaign culminates. Finals at Mobolaji Johnson Arena. Lagos decides its champion.',
+    desc: 'The community tournament is in planning. Final date, venue, and match details will be announced when confirmed.',
   },
   {
     num: 3,
     label: 'Midnight Logistics',
-    dates: 'Dec 11–12 overnight',
-    venue: 'Onikan → Muri Okunola Park',
+    dates: 'Pre-event setup · details TBA',
+    venue: 'Venue to be announced',
     activeClass: 'text-purple-400 border-purple-400/30 bg-purple-400/10',
     dotClass: 'bg-purple-400 border-purple-400',
-    desc: 'Za.allyErrands coordinates overnight setup and logistics. From Onikan to Victoria Island — the ground crew makes it happen by sunrise.',
+    desc: 'Load-in and production details will be shared after the event venue and vendor plan are confirmed.',
   },
   {
     num: 4,
     label: 'Main Event',
     dates: 'Dec 12, 2026',
-    venue: 'Muri Okunola Park, VI',
+    venue: 'Lagos · venue to be announced',
     activeClass: 'text-brand-orange border-brand-orange/30 bg-brand-orange/10',
     dotClass: 'bg-brand-orange border-brand-orange',
     desc: 'The festival. Vendors, vault showcase, panels, customization, raffle, and the closing set. Lagos sneaker culture — all in one place.',
@@ -61,7 +61,8 @@ export default function SchedulePage() {
       <div className="text-center mb-12">
         <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">Oct 9 – Dec 12, 2026</p>
         <h1 className="font-display text-5xl sm:text-6xl text-white mb-4">THE TIMELINE</h1>
-        <p className="text-gray-400 text-lg max-w-xl mx-auto">4 phases. 10 weeks. One night that makes it all real.</p>
+        <p className="text-gray-400 text-lg max-w-xl mx-auto">Online community building toward the December 12 gathering in Lagos.</p>
+        <p className="text-gray-600 text-xs mt-3">Draft programme. Times, activities, and venues are subject to confirmation.</p>
       </div>
 
       {/* Phase selector cards */}
@@ -136,9 +137,9 @@ export default function SchedulePage() {
           </div>
           <div className="space-y-4 mb-6">
             {[
-              { time: '12:00 PM', title: 'Venue Opens',      desc: 'Mobolaji Johnson Arena gates open. Community pours in.' },
+              { time: '12:00 PM', title: 'Venue opens · proposed',      desc: 'Final time and venue to be confirmed.' },
               { time: '1:00 PM',  title: '3rd Place Match',  desc: 'The final two eliminated teams battle for bronze. Last chance for glory.' },
-              { time: '3:00 PM',  title: 'Grand Final',      desc: 'Lagos street football champion decided. 10 weeks. One match.' },
+              { time: '3:00 PM',  title: 'Grand Final · proposed',      desc: 'Match timing and format to be confirmed.' },
               { time: '5:00 PM',  title: 'Trophy Ceremony', desc: 'Champions crowned. Community celebrates. The energy carries into the night.' },
               { time: '6:00 PM',  title: 'Pre-Event Mixer', desc: 'Early birds link up before Dec 12. Buy, trade, hype builds.' },
             ].map(({ time, title, desc }) => (
@@ -153,8 +154,8 @@ export default function SchedulePage() {
           </div>
           <div className="p-4 rounded-xl bg-blue-400/5 border border-blue-400/15">
             <p className="text-blue-400 text-xs font-semibold uppercase tracking-wider mb-1">Venue</p>
-            <p className="text-white text-sm font-bold">Mobolaji Johnson Arena</p>
-            <p className="text-gray-400 text-xs">Onikan, Lagos Island</p>
+            <p className="text-white text-sm font-bold">To be announced</p>
+            <p className="text-gray-400 text-xs">Lagos, Nigeria</p>
           </div>
         </div>
       )}
@@ -167,15 +168,14 @@ export default function SchedulePage() {
             <span className="text-purple-400 text-sm font-mono uppercase tracking-wider">Dec 11 Midnight → Dec 12 Dawn</span>
           </div>
           <p className="text-gray-300 text-sm leading-relaxed mb-6">
-            While Lagos sleeps, the crew moves. Za.allyErrands handles overnight logistics — routing vendors, deliveries, and setup equipment from Onikan to Muri Okunola Park. By sunrise, the venue is ready.
+            Setup timing, logistics partners, and load-in routes are still being planned. Final details will follow venue confirmation.
           </p>
           <div className="space-y-4 mb-6">
             {[
-              { time: '11:00 PM', title: 'Logistics Brief',    desc: 'Za.allyErrands team assembles. Routes confirmed. Vendor contacts on standby.' },
-              { time: '12:00 AM', title: 'Convoy Departs',     desc: 'Onikan → Victoria Island. First load of equipment and vendor stock moves.' },
-              { time: '2:00 AM',  title: 'Park Setup Begins', desc: 'Muri Okunola Park receives first installations. Stage rigging, vendor tables, lighting.' },
-              { time: '5:00 AM',  title: 'Vendor Check-in',   desc: 'Early vendor arrivals. Booth assignments confirmed. Stock inspection.' },
-              { time: '7:00 AM',  title: 'Final Walkthrough', desc: 'Event team sweeps the venue. Everything locked before doors open at 9 AM.' },
+              { time: 'TBA', title: 'Vendor load-in',    desc: 'Load-in schedule and access instructions will be shared after venue confirmation.' },
+              { time: 'TBA', title: 'Production setup',  desc: 'Stage, vendor, and safety layouts depend on the confirmed site.' },
+              { time: 'TBA', title: 'Vendor check-in',   desc: 'Check-in time and booth assignments will be confirmed with approved vendors.' },
+              { time: 'TBA', title: 'Final walkthrough', desc: 'The event team will publish the final operating schedule before event day.' },
             ].map(({ time, title, desc }) => (
               <div key={time} className="flex gap-4 items-start">
                 <span className="font-mono text-xs text-purple-400 w-20 shrink-0 pt-0.5">{time}</span>
@@ -189,7 +189,7 @@ export default function SchedulePage() {
           <div className="p-4 rounded-xl bg-purple-400/5 border border-purple-400/15">
             <p className="text-purple-400 text-xs font-semibold uppercase tracking-wider mb-1">Logistics Partner</p>
             <p className="text-white text-sm font-bold">Za.allyErrands</p>
-            <p className="text-gray-400 text-xs">Overnight coordination, Onikan to Victoria Island</p>
+            <p className="text-gray-400 text-xs">Partner and route details to be confirmed</p>
           </div>
         </div>
       )}
@@ -199,7 +199,7 @@ export default function SchedulePage() {
         <div className="bg-brand-dark rounded-2xl border border-brand-orange/20 p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-2 h-2 rounded-full bg-brand-orange animate-pulse" />
-            <span className="text-brand-orange text-sm font-mono uppercase tracking-wider">December 12, 2026 · Muri Okunola Park</span>
+            <span className="text-brand-orange text-sm font-mono uppercase tracking-wider">December 12, 2026 · Lagos · venue to be announced</span>
           </div>
           <div className="relative">
             <div className="absolute left-[7px] top-2 bottom-2 w-px bg-white/10" />
@@ -239,7 +239,7 @@ export default function SchedulePage() {
           <div className="mt-6 text-center">
             <Link href="/tickets"
               className="inline-flex px-8 py-3 rounded-full bg-gradient-to-r from-brand-orange to-brand-amber text-black font-bold hover:opacity-90 transition-opacity">
-              Get Your Ticket &rarr;
+              Ticket Updates &rarr;
             </Link>
           </div>
         </div>

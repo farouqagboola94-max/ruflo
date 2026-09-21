@@ -8,47 +8,42 @@ export const FAQ: FaqItem[] = [
   {
     category: 'General',
     q: 'What is Sneakers Fest?',
-    a: "Sneakers Fest is West Africa's first dedicated sneaker culture event — a full day of buying, selling, trading, and celebrating kicks. The 2026 edition takes place on December 12 in Lagos, Nigeria.",
+    a: 'Sneakers Fest Lagos is an online-first sneaker and youth-culture platform building toward a physical gathering on December 12, 2026.',
   },
   {
     category: 'General',
     q: 'Who can attend?',
-    a: 'Open to everyone — from hardcore collectors to casual fans. Under-16s get free entry when accompanied by a ticketed adult.',
-  },
-  {
-    category: 'General',
-    q: 'Can I get my sneakers authenticated?',
-    a: 'Yes. An authentication station will be available on the day with legit checks for attendees. Authentication certificates are available for purchase.',
+    a: 'The event is being built for sneaker, streetwear, and youth-culture communities. Attendance and age details will be published with the official ticket listing.',
   },
   {
     category: 'Tickets',
-    q: 'Can I get a refund?',
-    a: 'Tickets are non-refundable but transferable. Contact us at least 48 hours before the event.',
+    q: 'When do ticket sales open?',
+    a: 'Ticket sales are not open yet. Tix Africa is the selected ticketing platform. Follow @s_fest26 for the official ticket link and launch details.',
   },
   {
     category: 'Tickets',
-    q: "What's the difference between ticket tiers?",
-    a: 'General gives full access to vendor floors and main stage programming for the day. VIP adds early entry, lounge access, and premium swag. Collector Edition (50 passes only) includes a private showcase tour, vendor credit, and a guaranteed raffle entry.',
+    q: 'What are the planned ticket prices?',
+    a: 'Current planning bands are Early Bird ₦5,000–₦7,000, Standard ₦10,000–₦12,000, Late up to ₦15,000, VIP ₦25,000–₦40,000, and Group / Pack ₦100,000+. Final prices and benefits will appear on the official Tix Africa listing.',
   },
   {
     category: 'Vendors',
     q: 'How do I apply for a vendor spot?',
-    a: 'Submit an application via the Vendor page. Each spot includes floor space, a table, chairs, and vendor passes for the day. Applications close December 5.',
+    a: 'Vendor pricing is being planned at Standard ₦50,000, Premium ₦100,000, and Corner ₦150,000. Application details will be announced after the venue and setup plan are confirmed.',
   },
   {
     category: 'Vendors',
     q: 'What can I sell?',
-    a: 'Sneakers (all brands, new and used), accessories, apparel, and care products. Counterfeit items are strictly banned — authentication checks will be conducted at the gate.',
+    a: 'Vendor categories and event policies will be shared with the application details.',
   },
   {
     category: 'Venue',
     q: 'Where is the event held?',
-    a: 'Sneakers Fest 2026 will be held in Lagos, Nigeria. The exact venue will be announced closer to the date. Follow our social channels for the update.',
+    a: 'The event is planned for Lagos, Nigeria. The venue has not been confirmed. Follow @s_fest26 for the announcement.',
   },
   {
     category: 'Venue',
-    q: 'Is there food at the event?',
-    a: 'Yes — multiple food vendors on site. VIP pass holders get complimentary drinks in the lounge.',
+    q: 'Will food and other experiences be available?',
+    a: 'Food, programming, and attendee services will be confirmed closer to the event. Check the official channels for updates.',
   },
 ]
 

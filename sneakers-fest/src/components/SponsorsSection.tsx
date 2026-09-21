@@ -1,13 +1,13 @@
 import Link from 'next/link'
 import { SPONSORS, TIER_LABELS } from '@/data/sponsors'
 
-const TIER_ORDER = ['title', 'gold', 'silver', 'media'] as const
+const TIER_ORDER = ['title', 'gold', 'silver', 'bronze'] as const
 
 const TIER_STYLES: Record<string, string> = {
   title: 'text-brand-orange border-brand-orange/40 bg-brand-orange/5 text-2xl font-display',
   gold: 'text-yellow-400 border-yellow-400/30 bg-yellow-400/5 text-xl font-display',
   silver: 'text-gray-300 border-gray-300/20 bg-gray-300/5 text-lg font-semibold',
-  media: 'text-gray-400 border-gray-400/20 bg-gray-400/5 text-base font-medium',
+  bronze: 'text-amber-600 border-amber-600/20 bg-amber-600/5 text-base font-medium',
 }
 
 const hasSponsors = SPONSORS.length > 0
@@ -23,7 +23,7 @@ export default function SponsorsSection() {
           <h2 className="font-display text-4xl sm:text-5xl text-white">SPONSORS &amp; PARTNERS</h2>
           {!hasSponsors && (
             <p className="text-gray-500 text-base mt-4 max-w-xl mx-auto">
-              Sneakers Fest 2026 is open for brand partnerships. Be part of West Africa&apos;s first dedicated sneaker festival.
+              Sneakers Fest 2026 is open for brand partnerships across an online-first sneaker and youth-culture platform.
             </p>
           )}
         </div>
@@ -44,7 +44,7 @@ export default function SponsorsSection() {
           )
         })}
         <div className="mt-12 text-center">
-          <p className="text-gray-500 text-sm mb-4">Want your brand at Lagos&apos; first sneaker festival?</p>
+          <p className="text-gray-500 text-sm mb-4">Want your brand in the Sneakers Fest Lagos community?</p>
           <Link
             href="/sponsors"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-brand-orange/30 text-brand-orange text-sm font-semibold hover:bg-brand-orange/10 transition-colors"

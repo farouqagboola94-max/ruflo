@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react'
 
-// WAT = UTC+1; event runs Dec 12 09:00 – 23:59:59
-const EVENT_START = new Date('2026-12-12T09:00:00+01:00')
+// WAT = UTC+1. The event date is confirmed; start time is not.
+const EVENT_START = new Date('2026-12-12T00:00:00+01:00')
 const EVENT_END   = new Date('2026-12-12T23:59:59+01:00')
 
 type TimeLeft = { days: number; hours: number; minutes: number; seconds: number }
@@ -41,7 +41,7 @@ export default function CountdownTimer() {
 
   const share = async () => {
     const url  = typeof window !== 'undefined' ? window.location.origin : ''
-    const text = `Lagos' first sneaker festival is happening Dec 12, 2026! Get your tickets:`
+    const text = `Sneakers Fest Lagos 2026 is building online toward December 12. Follow @s_fest26 for updates:`
     try {
       if (navigator.share) {
         await navigator.share({ title: 'Sneakers Fest 2026 — Lagos', text, url })

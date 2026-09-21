@@ -1,191 +1,41 @@
-'use client'
-
-import { useState } from 'react'
 import Link from 'next/link'
-import { TICKET_TIERS } from '@/data/tickets'
-
-interface SavedTicket {
-  id: string
-  name: string
-  email: string
-  phone: string
-  tierId: string
-  tierName: string
-  quantity: number
-  amount: number
-  ref: string
-  purchasedAt: string
-}
-
-function genTicketId() {
-  return 'TK-' + Math.random().toString(36).slice(2, 8).toUpperCase()
-}
+import { EVENT_FACTS, TICKET_PRICE_BANDS } from '@/data/eventFacts'
 
 export default function TicketsPage() {
-  const [selected, setSelected] = useState<string | null>(null)
-  const [form, setForm] = useState({ name: '', email: '', phone: '', quantity: '1' })
-  const [submitted, setSubmitted] = useState(false)
-  const [ticketId, setTicketId] = useState('')
-
-  const selectedTier = TICKET_TIERS.find(t => t.id === selected)
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!selectedTier) return
-    const ticket: SavedTicket = {
-      id: genTicketId(),
-      name: form.name,
-      email: form.email,
-      phone: form.phone,
-      tierId: selectedTier.id,
-      tierName: selectedTier.name,
-      quantity: parseInt(form.quantity),
-      amount: selectedTier.price * parseInt(form.quantity),
-      ref: `SF_${Date.now()}`,
-      purchasedAt: new Date().toISOString(),
-    }
-    const existing: SavedTicket[] = JSON.parse(localStorage.getItem('sf_tickets') ?? '[]')
-    localStorage.setItem('sf_tickets', JSON.stringify([...existing, ticket]))
-    setTicketId(ticket.id)
-    setSubmitted(true)
-  }
-
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <div className="text-center mb-14">
-        <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">December 12, 2026</p>
-        <h1 className="font-display text-5xl sm:text-6xl text-white mb-4">GET YOUR TICKETS</h1>
-        <p className="text-gray-400 text-lg max-w-xl mx-auto">Choose your pass. Limited quantities available.</p>
-        <Link href="/my-tickets" className="text-brand-orange text-sm hover:underline mt-3 inline-block">
-          Already purchased? View my tickets &rarr;
-        </Link>
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="text-center mb-12">
+        <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">{EVENT_FACTS.date} · Lagos</p>
+        <h1 className="font-display text-5xl sm:text-6xl text-white mb-4">{EVENT_FACTS.ticketingStatus.toUpperCase()}</h1>
+        <p className="text-gray-300 text-lg max-w-2xl mx-auto">
+          {EVENT_FACTS.ticketingPlatform} is the selected ticketing platform. Sales are not open yet. We’ll share the official ticket link when it’s live.
+        </p>
       </div>
 
-      {/* Tier Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
-        {TICKET_TIERS.map(tier => (
-          <div
-            key={tier.id}
-            onClick={() => setSelected(tier.id)}
-            className={`relative rounded-3xl p-px cursor-pointer transition-all ${
-              selected === tier.id
-                ? `bg-gradient-to-br ${tier.color} shadow-xl shadow-orange-500/20`
-                : 'bg-white/5 hover:bg-white/10'
-            }`}
-          >
-            {tier.badge && (
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-                <span className="px-4 py-1 rounded-full bg-gradient-to-r from-brand-orange to-brand-yellow text-black text-xs font-bold">{tier.badge}</span>
-              </div>
-            )}
-            <div className="rounded-3xl bg-brand-gray p-6 h-full flex flex-col">
-              <h3 className="text-white font-display text-2xl mb-1">{tier.name.toUpperCase()}</h3>
-              <div className="flex items-baseline gap-1 mb-3">
-                <span className="text-4xl font-bold text-gradient">${tier.price}</span>
-                <span className="text-gray-400 text-sm">/ person</span>
-              </div>
-              <p className="text-gray-400 text-sm mb-6 leading-relaxed">{tier.description}</p>
-              <ul className="space-y-2.5 flex-1">
-                {tier.perks.map(perk => (
-                  <li key={perk} className="flex items-start gap-2 text-sm">
-                    <span className="text-brand-orange mt-0.5 flex-shrink-0">✓</span>
-                    <span className="text-gray-300">{perk}</span>
-                  </li>
-                ))}
-              </ul>
-              <button
-                className={`mt-6 w-full py-3 rounded-xl font-bold text-sm transition-all ${
-                  selected === tier.id
-                    ? `bg-gradient-to-r ${tier.color} text-black`
-                    : 'border border-white/20 text-white hover:border-brand-orange hover:text-brand-orange'
-                }`}
-              >
-                {selected === tier.id ? 'Selected ✓' : 'Select This Pass'}
-              </button>
+      <section className="bg-brand-gray rounded-3xl p-7 sm:p-10 border border-white/5">
+        <p className="text-brand-orange text-xs font-semibold uppercase tracking-wider mb-5">Current planning price bands</p>
+        <div className="divide-y divide-white/10">
+          {TICKET_PRICE_BANDS.map(tier => (
+            <div key={tier.id} className="flex items-center justify-between gap-4 py-4">
+              <h2 className="text-white font-semibold">{tier.name}</h2>
+              <p className="text-brand-amber font-bold text-right">{tier.price}</p>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+        <p className="text-gray-500 text-sm mt-5">
+          These are planning bands, not active offers. Final prices, pass benefits, and purchase terms will appear on the official {EVENT_FACTS.ticketingPlatform} listing.
+        </p>
+      </section>
 
-      {/* RSVP Form */}
-      <div className="max-w-xl mx-auto">
-        {!submitted ? (
-          <div className="bg-brand-gray rounded-3xl p-8 border border-white/5">
-            <h2 className="font-display text-2xl text-white mb-2">COMPLETE YOUR RSVP</h2>
-            {selectedTier ? (
-              <p className="text-brand-orange text-sm mb-6">{selectedTier.name} &middot; ${selectedTier.price} per person</p>
-            ) : (
-              <p className="text-gray-500 text-sm mb-6">Select a ticket tier above, then fill in your details.</p>
-            )}
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm text-gray-400 mb-1.5">Full Name</label>
-                <input required value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} placeholder="Your full name" className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand-orange text-sm" />
-              </div>
-              <div>
-                <label className="block text-sm text-gray-400 mb-1.5">Email Address</label>
-                <input required type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} placeholder="you@example.com" className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand-orange text-sm" />
-              </div>
-              <div>
-                <label className="block text-sm text-gray-400 mb-1.5">Phone Number</label>
-                <input required value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} placeholder="+234 000 0000" className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand-orange text-sm" />
-              </div>
-              <div>
-                <label className="block text-sm text-gray-400 mb-1.5">Number of Tickets</label>
-                <select value={form.quantity} onChange={e => setForm(f => ({ ...f, quantity: e.target.value }))} className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white focus:outline-none focus:border-brand-orange text-sm">
-                  {[1,2,3,4,5].map(n => <option key={n} value={n}>{n}</option>)}
-                </select>
-              </div>
-              {selectedTier && (
-                <div className="bg-brand-dark rounded-xl p-4 border border-white/10">
-                  <div className="flex justify-between text-sm text-gray-400 mb-1">
-                    <span>{selectedTier.name} &times; {form.quantity}</span>
-                    <span>${(selectedTier.price * parseInt(form.quantity)).toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between font-bold text-white">
-                    <span>Total</span>
-                    <span className="text-gradient text-lg">${(selectedTier.price * parseInt(form.quantity)).toLocaleString()}</span>
-                  </div>
-                </div>
-              )}
-              <button
-                type="submit"
-                disabled={!selectedTier}
-                className="w-full py-4 rounded-xl bg-gradient-to-r from-brand-orange to-brand-yellow text-black font-bold text-lg hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                {selectedTier ? `Reserve ${form.quantity} Ticket${parseInt(form.quantity) > 1 ? 's' : ''}` : 'Select a Ticket First'}
-              </button>
-            </form>
-          </div>
-        ) : (
-          <div className="bg-brand-gray rounded-3xl p-12 border border-brand-orange/20 text-center">
-            <div className="text-6xl mb-6">👟</div>
-            <h3 className="font-display text-3xl text-white mb-3">YOU&apos;RE IN!</h3>
-            <p className="text-gray-400 mb-1">Confirmation sent to <span className="text-white">{form.email}</span></p>
-            <p className="font-mono text-gray-500 text-sm mb-2">{ticketId}</p>
-            <p className="text-gray-500 text-sm mb-8">
-              {form.quantity} &times; {selectedTier?.name} &middot; ${((selectedTier?.price ?? 0) * parseInt(form.quantity)).toLocaleString()} total
-            </p>
-            <div className="bg-brand-dark rounded-2xl p-4 mb-6 border border-white/10">
-              <p className="text-gray-400 text-sm">Lagos Convention Centre</p>
-              <p className="text-white font-semibold">December 12, 2026 &middot; Lagos, Nigeria</p>
-            </div>
-            <div className="flex flex-col items-center gap-3">
-              <Link
-                href="/my-tickets"
-                className="px-8 py-3 rounded-xl bg-gradient-to-r from-brand-orange to-brand-yellow text-black font-bold text-sm hover:opacity-90 transition-opacity"
-              >
-                View My Tickets
-              </Link>
-              <button
-                onClick={() => { setSubmitted(false); setSelected(null); setForm({ name: '', email: '', phone: '', quantity: '1' }); setTicketId('') }}
-                className="text-brand-orange text-sm hover:underline"
-              >
-                Register another ticket
-              </button>
-            </div>
-          </div>
-        )}
+      <div className="text-center mt-10">
+        <p className="text-gray-400 mb-5">Follow the official account for the launch announcement.</p>
+        <a href={EVENT_FACTS.instagramUrl} target="_blank" rel="noopener noreferrer"
+          className="inline-flex px-7 py-3 rounded-full bg-gradient-to-r from-brand-orange to-brand-yellow text-black font-bold">
+          Follow {EVENT_FACTS.instagramHandle}
+        </a>
+        <div className="mt-5">
+          <Link href="/fnp" className="text-brand-orange text-sm hover:underline">Explore Friday Night Protocol →</Link>
+        </div>
       </div>
     </div>
   )
