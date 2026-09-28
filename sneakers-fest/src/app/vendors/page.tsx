@@ -1,4 +1,5 @@
 import { EVENT_FACTS, VENDOR_PRICE_BANDS } from '@/data/eventFacts'
+import { VendorInterestForm } from '@/components/LeadCaptureForms'
 
 export default function VendorsPage() {
   return (
@@ -26,13 +27,16 @@ export default function VendorsPage() {
         </p>
       </section>
 
-      <div className="text-center mt-10">
-        <p className="text-gray-400 mb-5">Follow the official account for vendor application updates.</p>
-        <a href={EVENT_FACTS.instagramUrl} target="_blank" rel="noopener noreferrer"
-          className="inline-flex px-7 py-3 rounded-full bg-gradient-to-r from-brand-orange to-brand-yellow text-black font-bold">
-          Follow {EVENT_FACTS.instagramHandle}
-        </a>
-      </div>
+      <section className="mt-12">
+        <div className="mb-6 text-center">
+          <p className="text-brand-orange text-xs font-semibold uppercase tracking-wider mb-2">Vendor pipeline</p>
+          <h2 className="font-display text-3xl sm:text-4xl text-white mb-3">REGISTER YOUR INTEREST</h2>
+          <p className="text-gray-400 max-w-2xl mx-auto">
+            This is an expression of interest, not a confirmed booking or payment request. The team will contact shortlisted vendors when the venue and application terms are ready.
+          </p>
+        </div>
+        <VendorInterestForm />
+      </section>
     </div>
   )
 }
