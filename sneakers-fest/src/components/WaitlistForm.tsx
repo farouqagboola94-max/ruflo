@@ -10,13 +10,19 @@ const interestOptions = [
   'Community Cup',
 ]
 
-export default function WaitlistForm({ source = 'waitlist-page' }: { source?: string }) {
+export default function WaitlistForm({
+  source = 'waitlist-page',
+  initialInterest = 'Tickets',
+}: {
+  source?: string
+  initialInterest?: string
+}) {
   const [status, setStatus] = useState<NetlifyFormState>('idle')
   const [message, setMessage] = useState('')
   const [form, setForm] = useState({
     name: '',
     email: '',
-    interest: 'Tickets',
+    interest: initialInterest,
     refCode: '',
   })
 
@@ -32,7 +38,7 @@ export default function WaitlistForm({ source = 'waitlist-page' }: { source?: st
       })
       setStatus('success')
       setMessage('You are on the Sneakers Fest waitlist. Ticket and community updates will go here first.')
-      setForm({ name: '', email: '', interest: 'Tickets', refCode: '' })
+      setForm({ name: '', email: '', interest: initialInterest, refCode: '' })
     } catch {
       setStatus('error')
       setMessage('The form did not send. Try again in a moment or use the official Instagram link below.')
