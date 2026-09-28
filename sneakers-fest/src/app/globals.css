@@ -22,6 +22,13 @@ body {
   font-family: 'Inter', system-ui, sans-serif;
 }
 
+button,
+a,
+input,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
 @layer utilities {
   .text-gradient {
     background: linear-gradient(135deg, #FF6B2C, #FFA500);
@@ -49,5 +56,106 @@ body {
 
   .glow-neon {
     box-shadow: 0 0 20px rgba(57, 255, 20, 0.25);
+  }
+}
+
+.motion-backdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.motion-grid {
+  position: absolute;
+  inset: -20% -10% 0;
+  background-image:
+    linear-gradient(rgba(255, 107, 44, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 107, 44, 0.12) 1px, transparent 1px);
+  background-size: 64px 64px;
+  transform: perspective(560px) rotateX(62deg) translateY(6%);
+  transform-origin: center bottom;
+  animation: sf-grid-drift 7s linear infinite;
+  opacity: 0.35;
+}
+
+.motion-orbit {
+  position: absolute;
+  border: 1px solid rgba(255, 165, 0, 0.22);
+  border-radius: 999px;
+  filter: blur(0.2px);
+}
+
+.motion-orbit-one {
+  right: 9%;
+  top: 18%;
+  width: 260px;
+  height: 260px;
+  animation: sf-orbit 12s linear infinite;
+}
+
+.motion-orbit-two {
+  left: 8%;
+  bottom: 18%;
+  width: 180px;
+  height: 180px;
+  border-color: rgba(57, 255, 20, 0.16);
+  animation: sf-orbit 9s linear infinite reverse;
+}
+
+.motion-particle {
+  position: absolute;
+  bottom: -24px;
+  display: block;
+  border-radius: 999px;
+  background: rgba(255, 107, 44, 0.85);
+  box-shadow: 0 0 18px rgba(255, 107, 44, 0.55);
+  animation: sf-particle-rise 5.5s ease-in infinite;
+}
+
+.game-road {
+  background:
+    radial-gradient(circle at 50% 100%, rgba(255, 107, 44, 0.26), transparent 34%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.10) 0 2px, transparent 2px 28px),
+    linear-gradient(180deg, #171717, #050505);
+  animation: sf-road 0.8s linear infinite;
+}
+
+@keyframes sf-grid-drift {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 0 64px, 64px 0; }
+}
+
+@keyframes sf-orbit {
+  from { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.08); }
+  to { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes sf-particle-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0) scale(0.7);
+  }
+  18% { opacity: 0.9; }
+  to {
+    opacity: 0;
+    transform: translateY(-88vh) scale(1.2);
+  }
+}
+
+@keyframes sf-road {
+  from { background-position: center, 0 0, center; }
+  to { background-position: center, 0 28px, center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
   }
 }
