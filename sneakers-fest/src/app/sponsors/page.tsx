@@ -1,4 +1,5 @@
 import { EVENT_FACTS, SPONSOR_PRICE_BANDS } from '@/data/eventFacts'
+import { SponsorInterestForm } from '@/components/LeadCaptureForms'
 
 export default function SponsorsPage() {
   return (
@@ -25,13 +26,13 @@ export default function SponsorsPage() {
         These are current planning bands. Activation scope, audience deliverables, rights, and final commercial terms will be agreed in a written proposal. Venue-dependent benefits aren’t being offered before venue confirmation.
       </p>
 
-      <section className="mt-12 bg-brand-dark rounded-3xl p-8 text-center border border-white/10">
-        <p className="text-white font-semibold text-lg mb-2">Want to discuss a partnership?</p>
-        <p className="text-gray-400 text-sm mb-6">{EVENT_FACTS.date} · Lagos, venue to be announced</p>
-        <a href={EVENT_FACTS.instagramUrl} target="_blank" rel="noopener noreferrer"
-          className="inline-flex px-7 py-3 rounded-full bg-gradient-to-r from-brand-orange to-brand-yellow text-black font-bold">
-          Message {EVENT_FACTS.instagramHandle}
-        </a>
+      <section className="mt-12">
+        <div className="mb-6 text-center">
+          <p className="text-brand-orange text-xs font-semibold uppercase tracking-wider mb-2">Partnership desk</p>
+          <h2 className="font-display text-3xl sm:text-4xl text-white mb-3">START THE CONVERSATION</h2>
+          <p className="text-gray-400 max-w-2xl mx-auto">Share the commercial goal, budget range, and activation direction. The team can then respond with a relevant proposal instead of a generic deck.</p>
+        </div>
+        <SponsorInterestForm />
       </section>
     </div>
   )
