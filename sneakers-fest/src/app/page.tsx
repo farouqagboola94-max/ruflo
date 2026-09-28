@@ -3,6 +3,8 @@ import SneakerCard from '@/components/SneakerCard'
 import CountdownTimer from '@/components/CountdownTimer'
 import VenueMap from '@/components/VenueMap'
 import SponsorsSection from '@/components/SponsorsSection'
+import MotionBackdrop from '@/components/MotionBackdrop'
+import WaitlistForm from '@/components/WaitlistForm'
 import { SNEAKERS } from '@/data/sneakers'
 import { SCHEDULE } from '@/data/schedule'
 import { EVENT_FACTS, EVENT_TARGETS } from '@/data/eventFacts'
@@ -23,6 +25,7 @@ export default function HomePage() {
       {/* Hero */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-brand-dark via-brand-gray to-black" />
+        <MotionBackdrop />
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 25% 25%, #FF6B2C 0%, transparent 50%), radial-gradient(circle at 75% 75%, #FFA500 0%, transparent 50%)' }} />
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-orange/10 border border-brand-orange/30 text-brand-orange text-sm font-medium mb-8">
@@ -37,6 +40,9 @@ export default function HomePage() {
             Online-first sneaker and youth culture, built in Lagos. The community moves all year. The physical gathering is December 12.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/waitlist" className="px-8 py-4 rounded-full bg-white text-black font-bold text-lg hover:bg-brand-steel transition-colors">
+              Join Waitlist
+            </Link>
             <Link href="/fnp" className="px-8 py-4 rounded-full bg-gradient-to-r from-brand-orange to-brand-amber text-black font-bold text-lg hover:opacity-90 shadow-lg shadow-orange-500/30">
               Explore Friday Night Protocol
             </Link>
@@ -178,6 +184,18 @@ export default function HomePage() {
               </Link>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Waitlist */}
+      <section className="py-20 bg-brand-gray">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">Ticket and drop updates</p>
+          <h2 className="font-display text-4xl sm:text-5xl text-white mb-4">JOIN THE WAITLIST</h2>
+          <p className="text-gray-300 max-w-2xl mx-auto mb-8">
+            Get the official ticket launch, vendor updates, Community Cup news, and sponsor announcements without depending on social algorithms.
+          </p>
+          <WaitlistForm source="home-page" />
         </div>
       </section>
 
