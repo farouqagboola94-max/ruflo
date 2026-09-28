@@ -1,4 +1,5 @@
 import FaqAccordion from '@/components/FaqAccordion'
+import { ContactForm } from '@/components/LeadCaptureForms'
 import { EVENT_FACTS } from '@/data/eventFacts'
 
 export default function ContactPage() {
@@ -32,6 +33,15 @@ export default function ContactPage() {
           </a>
           <p className="text-gray-500 text-sm mt-1">Culture and creator content</p>
         </div>
+      </section>
+
+      <section className="mb-16">
+        <div className="mb-8">
+          <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">Direct enquiry</p>
+          <h2 className="font-display text-4xl text-white mb-3">SEND A MESSAGE</h2>
+          <p className="text-gray-400">Use this form for press, accessibility, ticket, and community questions.</p>
+        </div>
+        <ContactForm />
       </section>
 
       <section>
