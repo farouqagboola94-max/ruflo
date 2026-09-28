@@ -3,6 +3,7 @@ import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import ClientProviders from '@/components/ClientProviders'
+import NetlifyForms from '@/components/NetlifyForms'
 import { EVENT_FACTS } from '@/data/eventFacts'
 
 export const metadata: Metadata = {
@@ -17,6 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ClientProviders>
           <Navbar />
           <main className="pt-[100px] min-h-screen">{children}</main>
+          <NetlifyForms />
           <Footer />
         </ClientProviders>
       </body>
