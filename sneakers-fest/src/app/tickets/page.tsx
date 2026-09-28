@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { EVENT_FACTS, TICKET_PRICE_BANDS } from '@/data/eventFacts'
+import WaitlistForm from '@/components/WaitlistForm'
 
 export default function TicketsPage() {
   return (
@@ -27,16 +28,15 @@ export default function TicketsPage() {
         </p>
       </section>
 
-      <div className="text-center mt-10">
-        <p className="text-gray-400 mb-5">Follow the official account for the launch announcement.</p>
-        <a href={EVENT_FACTS.instagramUrl} target="_blank" rel="noopener noreferrer"
-          className="inline-flex px-7 py-3 rounded-full bg-gradient-to-r from-brand-orange to-brand-yellow text-black font-bold">
-          Follow {EVENT_FACTS.instagramHandle}
-        </a>
+      <section className="mt-10 text-center">
+        <p className="text-brand-orange text-xs font-semibold uppercase tracking-wider mb-2">Launch alert</p>
+        <h2 className="font-display text-3xl text-white mb-3">GET THE OFFICIAL TICKET LINK</h2>
+        <p className="text-gray-400 mb-6">Join the waitlist and we’ll send the verified {EVENT_FACTS.ticketingPlatform} link when sales open.</p>
+        <WaitlistForm source="tickets-page" initialInterest="Tickets" />
         <div className="mt-5">
           <Link href="/fnp" className="text-brand-orange text-sm hover:underline">Explore Friday Night Protocol →</Link>
         </div>
-      </div>
+      </section>
     </div>
   )
 }
