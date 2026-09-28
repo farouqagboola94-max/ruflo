@@ -27,6 +27,43 @@ export default function NetlifyForms() {
         <input name="team" />
         <input name="role" />
       </form>
+
+      <form name="vendor-interest" data-netlify="true" data-netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="vendor-interest" />
+        <input name="bot-field" />
+        <input name="businessName" />
+        <input name="contactName" />
+        <input name="email" />
+        <input name="phone" />
+        <input name="category" />
+        <input name="boothTier" />
+        <input name="socialUrl" />
+        <textarea name="notes" />
+        <input name="source" />
+      </form>
+
+      <form name="sponsor-interest" data-netlify="true" data-netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="sponsor-interest" />
+        <input name="bot-field" />
+        <input name="company" />
+        <input name="contactName" />
+        <input name="email" />
+        <input name="phone" />
+        <input name="budget" />
+        <input name="partnershipType" />
+        <textarea name="goals" />
+        <input name="source" />
+      </form>
+
+      <form name="contact" data-netlify="true" data-netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="contact" />
+        <input name="bot-field" />
+        <input name="name" />
+        <input name="email" />
+        <input name="topic" />
+        <textarea name="message" />
+        <input name="source" />
+      </form>
     </div>
   )
 }
