@@ -1,3 +1,4 @@
+import WaitlistForm from '@/components/WaitlistForm'
 import Link from 'next/link'
 import { EVENT_FACTS } from '@/data/eventFacts'
 
@@ -9,6 +10,7 @@ export default function RafflePage() {
       <p className="text-gray-300 text-lg max-w-xl mx-auto mb-8">
         Raffle entry, prizes, and eligibility haven’t been confirmed. We’ll publish the rules with the official ticket information.
       </p>
+      <div className="mb-8"><WaitlistForm source="raffle-page" initialInterest="Raffle updates" /></div>
       <a href={EVENT_FACTS.instagramUrl} target="_blank" rel="noopener noreferrer"
         className="inline-flex px-7 py-3 rounded-full bg-gradient-to-r from-brand-orange to-brand-yellow text-black font-bold">
         Follow {EVENT_FACTS.instagramHandle}

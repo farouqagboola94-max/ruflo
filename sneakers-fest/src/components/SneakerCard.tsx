@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+import Link from 'next/link'
 import Image from 'next/image'
 import { Sneaker } from '@/data/sneakers'
 import { useAuth } from '@/context/AuthContext'
@@ -14,12 +16,15 @@ const CONDITION_STYLES: Record<string, string> = {
 
 export default function SneakerCard({ sneaker, showSeller }: Props) {
   const { user, toggleFavorite, openAuth } = useAuth()
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
   const isFav = user?.favorites.includes(sneaker.id) ?? false
 
-  const handleFav = (e: React.MouseEvent) => {
+  const handleFav = async (e: React.MouseEvent) => {
     e.preventDefault()
     if (!user) { openAuth(); return }
-    toggleFavorite(sneaker.id)
+    setBusy(true); setError('')
+    try { await toggleFavorite(sneaker.id) } catch { setError('Could not save. Please try again.') } finally { setBusy(false) }
   }
 
   return (
@@ -29,7 +34,7 @@ export default function SneakerCard({ sneaker, showSeller }: Props) {
         <span className={`absolute top-3 right-3 text-xs font-semibold px-2 py-1 rounded-full ${CONDITION_STYLES[sneaker.condition]}`}>
           {sneaker.condition}
         </span>
-        <button onClick={handleFav}
+        <button onClick={handleFav} disabled={busy} aria-label={(isFav ? 'Unsave ' : 'Save ') + sneaker.name} aria-pressed={isFav}
           className={`absolute top-3 left-3 w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-sm transition-all ${
             isFav ? 'bg-red-500 text-white scale-110' : 'bg-black/40 text-white/60 hover:bg-red-500/70 hover:text-white'
           }`}>
@@ -48,15 +53,17 @@ export default function SneakerCard({ sneaker, showSeller }: Props) {
           <span className="text-xs text-gray-500">{sneaker.category}</span>
         </div>
         {showSeller && sneaker.seller && (
-          <p className="text-xs text-gray-500 mt-2 pt-2 border-t border-white/5">Seller: <span className="text-gray-300">{sneaker.seller}</span></p>
+          <p className="text-xs text-gray-500 mt-2 pt-2 border-t border-white/5">Sample seller: <span className="text-gray-300">{sneaker.seller}</span></p>
         )}
         <div className="flex flex-wrap gap-1 mt-3">
           {sneaker.size.slice(0, 4).map(s => <span key={s} className="text-xs px-2 py-0.5 bg-brand-muted rounded text-gray-400">{s}</span>)}
           {sneaker.size.length > 4 && <span className="text-xs px-2 py-0.5 bg-brand-muted rounded text-gray-500">+{sneaker.size.length - 4}</span>}
         </div>
-        <button className="mt-4 w-full py-2 rounded-lg bg-gradient-to-r from-brand-orange to-brand-yellow text-black text-sm font-bold hover:opacity-90 transition-opacity">
-          View Deal
-        </button>
+        <Link href={"/catalog/" + sneaker.id} className="mt-4 block text-center w-full py-2 rounded-lg bg-gradient-to-r from-brand-orange to-brand-yellow text-black text-sm font-bold hover:opacity-90 transition-opacity">
+          View sneaker
+        </Link>
+        <p className="mt-2 text-xs text-gray-500">Catalog reference · Not an active offer</p>
+        {error && <p role="alert" className="mt-2 text-xs text-red-400">{error}</p>}
       </div>
     </div>
   )

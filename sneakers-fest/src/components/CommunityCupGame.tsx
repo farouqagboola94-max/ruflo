@@ -1,89 +1,51 @@
 'use client'
 
-import { FormEvent, useEffect, useMemo, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { NetlifyFormState, submitNetlifyForm } from '@/lib/netlifyForms'
 
+import { advanceGame, initialGame } from '@/lib/laneGame'
 const lanes = [0, 1, 2]
-
-function nextObstacle(round: number) {
-  return {
-    lane: (round * 2 + 1) % lanes.length,
-    distance: 100,
-  }
-}
-
 export default function CommunityCupGame() {
-  const [lane, setLane] = useState(1)
-  const [running, setRunning] = useState(false)
-  const [score, setScore] = useState(0)
+  const [game, setGame] = useState(initialGame)
   const [best, setBest] = useState(0)
-  const [round, setRound] = useState(0)
-  const [obstacle, setObstacle] = useState(nextObstacle(0))
-  const [status, setStatus] = useState<'ready' | 'playing' | 'hit'>('ready')
+  const [paused, setPaused] = useState(false)
   const [formState, setFormState] = useState<NetlifyFormState>('idle')
   const [form, setForm] = useState({ name: '', email: '', team: '', role: 'Player' })
-
-  const speed = useMemo(() => Math.min(14 + Math.floor(score / 4), 26), [score])
-
+  const { lane, running, score } = game
+  const obstacle = { lane: game.obstacle, distance: game.distance }
+  const status = game.hit ? 'hit' : 'ready'
+  useEffect(() => { try { setBest(Number(localStorage.getItem('sf_game_best')) || 0) } catch {} }, [])
   useEffect(() => {
     if (!running) return
-
-    const timer = window.setInterval(() => {
-      setObstacle(current => {
-        const distance = current.distance - speed
-
-        if (distance <= 10 && distance >= 0 && current.lane === lane) {
-          setRunning(false)
-          setStatus('hit')
-          setBest(currentBest => Math.max(currentBest, score))
-          return current
-        }
-
-        if (distance <= 0) {
-          setScore(currentScore => currentScore + 1)
-          const nextRound = round + 1
-          setRound(nextRound)
-          return nextObstacle(nextRound)
-        }
-
-        return { ...current, distance }
-      })
-    }, 180)
-
+    const timer = window.setInterval(() => setGame(advanceGame), 60)
     return () => window.clearInterval(timer)
-  }, [lane, round, running, score, speed])
-
+  }, [running])
   useEffect(() => {
-    function handleKeydown(event: KeyboardEvent) {
-      if (event.key === 'ArrowLeft') move(-1)
-      if (event.key === 'ArrowRight') move(1)
-      if ((event.key === 'Enter' || event.key === ' ') && !running) startGame()
+    if (score > best) {
+      setBest(score)
+      try { localStorage.setItem('sf_game_best', String(score)) } catch {}
     }
-
-    window.addEventListener('keydown', handleKeydown)
-    return () => window.removeEventListener('keydown', handleKeydown)
-  })
-
+  }, [score, best])
+  useEffect(() => {
+    function hide() {
+      if (document.hidden && running) { setPaused(true); setGame(current => ({ ...current, running: false })) }
+    }
+    document.addEventListener('visibilitychange', hide)
+    return () => document.removeEventListener('visibilitychange', hide)
+  }, [running])
   function startGame() {
-    setLane(1)
-    setScore(0)
-    setRound(0)
-    setObstacle(nextObstacle(0))
-    setStatus('playing')
-    setRunning(true)
+    setGame(paused ? current => ({ ...current, running: true }) : { ...initialGame, running: true })
+    setPaused(false)
   }
-
   function move(direction: -1 | 1) {
-    if (!running) return
-    setLane(current => Math.max(0, Math.min(2, current + direction)))
+    setGame(current => current.running ? { ...current, lane: Math.max(0, Math.min(2, current.lane + direction)) } : current)
   }
-
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setFormState('submitting')
 
     try {
-      await submitNetlifyForm('community-cup-interest', form)
+      await submitNetlifyForm('community-cup-interest', form, event.currentTarget)
       setFormState('success')
       setForm({ name: '', email: '', team: '', role: 'Player' })
     } catch {
@@ -93,15 +55,15 @@ export default function CommunityCupGame() {
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-      <section className="rounded-2xl border border-white/10 bg-brand-gray p-5 sm:p-6">
+      <section tabIndex={0} aria-label="Lagos Lane Run game" onKeyDown={event => { if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { event.preventDefault(); move(event.key === 'ArrowLeft' ? -1 : 1) } }} className="rounded-2xl border border-white/10 bg-brand-gray p-5 sm:p-6">
         <div className="mb-5 flex items-center justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-brand-neon">Playable community test</p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-brand-neon">Free practice game</p>
             <h2 className="mt-1 font-display text-3xl text-white">Lagos Lane Run</h2>
           </div>
           <div className="text-right text-sm text-gray-400">
             <p>Score <span className="font-bold text-white">{score}</span></p>
-            <p>Best <span className="font-bold text-brand-amber">{best}</span></p>
+            <p>Device best <span className="font-bold text-brand-amber">{best}</span></p>
           </div>
         </div>
 
@@ -139,20 +101,21 @@ export default function CommunityCupGame() {
                   {status === 'hit' ? 'Tackle landed' : 'Ready'}
                 </p>
                 <p className="mt-2 max-w-sm text-sm text-gray-300">
-                  Dodge defenders, build score, and stress-test the tournament idea as an interactive fan mechanic.
+                  Dodge defenders with the arrows or buttons below. This practice game does not qualify you for the tournament.
                 </p>
                 <button
                   type="button"
                   onClick={startGame}
                   className="mt-5 rounded-full bg-gradient-to-r from-brand-orange to-brand-yellow px-6 py-3 text-sm font-bold text-black"
                 >
-                  {status === 'hit' ? 'Play again' : 'Start game'}
+                  {paused ? 'Resume game' : status === 'hit' ? 'Play again' : 'Start game'}
                 </button>
               </div>
             </div>
           )}
         </div>
 
+        {running && <button onClick={() => { setPaused(true); setGame(current => ({ ...current, running: false })) }} className="mt-4 text-brand-orange underline">Pause game</button>}
         <div className="mt-5 grid grid-cols-2 gap-3">
           <button
             type="button"
@@ -180,6 +143,7 @@ export default function CommunityCupGame() {
           This collects player, team, and volunteer interest while the full tournament format is still being confirmed.
         </p>
 
+        <p className="mt-4 text-xs text-gray-400">We use your details to follow up on your interest. <a href="/privacy" className="underline">Privacy</a></p>
         <form
           name="community-cup-interest"
           method="POST"

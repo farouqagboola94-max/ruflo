@@ -1,82 +1,63 @@
 'use client'
-
-import { useState } from 'react'
+import { useEffect, useRef, useState, FormEvent } from 'react'
+import Link from 'next/link'
 import { useAuth } from '@/context/AuthContext'
-
+import { supabase } from '@/lib/supabase'
 export default function AuthModal() {
   const { isAuthOpen, closeAuth, login, register } = useAuth()
-  const [tab, setTab] = useState<'login' | 'register'>('login')
+  const dialog = useRef<HTMLDialogElement>(null)
+  const [tab, setTab] = useState<'login' | 'register' | 'reset'>('login')
   const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '' })
   const [error, setError] = useState('')
+  const [notice, setNotice] = useState('')
   const [loading, setLoading] = useState(false)
-
-  if (!isAuthOpen) return null
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault(); setError(''); setLoading(true)
-    const ok = await login(form.email, form.password)
-    setLoading(false)
-    if (!ok) setError('Invalid email or password.')
+  useEffect(() => {
+    if (isAuthOpen) { dialog.current?.showModal(); setError(''); setNotice('') }
+    else { dialog.current?.close(); setForm(current => ({ ...current, password: '', confirm: '' })) }
+  }, [isAuthOpen])
+  async function submit(event: FormEvent) {
+    event.preventDefault(); setError(''); setNotice(''); setLoading(true)
+    try {
+      if (tab === 'login') await login(form.email, form.password)
+      if (tab === 'register') {
+        if (form.password !== form.confirm) throw new Error('Passwords do not match.')
+        const signedIn = await register(form.name, form.email, form.password)
+        if (!signedIn) setNotice('Check your email to confirm your account, then sign in here.')
+      }
+      if (tab === 'reset') {
+        const { error } = await supabase.auth.resetPasswordForEmail(form.email.trim(), { redirectTo: window.location.origin + '/reset-password/' })
+        if (error) throw error
+        setNotice('If this email has an account, a password reset link will arrive shortly.')
+      }
+    } catch (err) { setError(err instanceof Error ? err.message : 'Could not connect. Please try again.') }
+    finally { setLoading(false) }
   }
-
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault(); setError('')
-    if (form.password !== form.confirm) { setError('Passwords do not match.'); return }
-    if (form.password.length < 6) { setError('Password must be at least 6 characters.'); return }
-    setLoading(true)
-    await register(form.name, form.email, form.password)
-    setLoading(false)
-  }
-
-  const Field = ({ label, type, field, placeholder }: { label: string; type: string; field: keyof typeof form; placeholder: string }) => (
-    <div>
-      <label className="block text-sm text-gray-400 mb-1.5">{label}</label>
-      <input type={type} placeholder={placeholder} required value={form[field]}
-        onChange={e => setForm(f => ({ ...f, [field]: e.target.value }))}
-        className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand-orange text-sm" />
-    </div>
-  )
-
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="bg-brand-gray rounded-3xl p-8 w-full max-w-md border border-white/10">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-white font-display text-2xl">{tab === 'login' ? 'SIGN IN' : 'CREATE ACCOUNT'}</h3>
-          <button onClick={() => { closeAuth(); setError('') }} className="text-gray-400 hover:text-white">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-          </button>
-        </div>
-        <div className="flex gap-1 bg-brand-dark rounded-xl p-1 mb-6">
-          {(['login', 'register'] as const).map(t => (
-            <button key={t} onClick={() => { setTab(t); setError('') }}
-              className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${tab === t ? 'bg-brand-gray text-white' : 'text-gray-500 hover:text-gray-300'}`}>
-              {t === 'login' ? 'Sign In' : 'Register'}
-            </button>
-          ))}
-        </div>
-        {tab === 'login' ? (
-          <form onSubmit={handleLogin} className="space-y-4">
-            <Field label="Email" type="email" field="email" placeholder="you@example.com" />
-            <Field label="Password" type="password" field="password" placeholder="••••••••" />
-            {error && <p className="text-red-400 text-sm">{error}</p>}
-            <button type="submit" disabled={loading} className="w-full py-3 rounded-xl bg-gradient-to-r from-brand-orange to-brand-yellow text-black font-bold hover:opacity-90 disabled:opacity-50">
-              {loading ? 'Signing in…' : 'Sign In'}
-            </button>
-          </form>
-        ) : (
-          <form onSubmit={handleRegister} className="space-y-4">
-            <Field label="Full Name" type="text" field="name" placeholder="Your name" />
-            <Field label="Email" type="email" field="email" placeholder="you@example.com" />
-            <Field label="Password" type="password" field="password" placeholder="••••••••" />
-            <Field label="Confirm Password" type="password" field="confirm" placeholder="••••••••" />
-            {error && <p className="text-red-400 text-sm">{error}</p>}
-            <button type="submit" disabled={loading} className="w-full py-3 rounded-xl bg-gradient-to-r from-brand-orange to-brand-yellow text-black font-bold hover:opacity-90 disabled:opacity-50">
-              {loading ? 'Creating account…' : 'Create Account'}
-            </button>
-          </form>
-        )}
-        <p className="text-center text-gray-600 text-xs mt-4">By continuing, you agree to our Terms & Privacy Policy.</p>
+    <dialog ref={dialog} onCancel={closeAuth} onClose={closeAuth} aria-labelledby="auth-title" className="w-[calc(100%_-_2rem)] max-w-md rounded-3xl border border-white/10 bg-brand-gray p-6 text-white backdrop:bg-black/80">
+      <div className="mb-6 flex justify-between gap-3">
+        <h2 id="auth-title" className="font-display text-2xl">{tab === 'login' ? 'SIGN IN' : tab === 'register' ? 'CREATE ACCOUNT' : 'RESET PASSWORD'}</h2>
+        <button aria-label="Close sign in" onClick={closeAuth} className="px-2 text-xl">×</button>
       </div>
-    </div>
+      <div className="mb-5 flex gap-3">
+        {(['login', 'register'] as const).map(value => <button key={value} onClick={() => { setTab(value); setError(''); setNotice('') }} className={tab === value ? 'rounded-lg bg-brand-orange px-4 py-2 text-black' : 'rounded-lg bg-brand-dark px-4 py-2'}>{value === 'login' ? 'Sign in' : 'Register'}</button>)}
+      </div>
+      <form onSubmit={submit} className="space-y-4">
+        {(tab === 'register' ? ['name', 'email', 'password', 'confirm'] : tab === 'reset' ? ['email'] : ['email', 'password']).map(key => (
+          <label key={key} className="block text-sm text-gray-300">
+            {{ name: 'Full name', email: 'Email', password: 'Password', confirm: 'Confirm password' }[key]}
+            <input name={key} required maxLength={key === 'name' ? 100 : 254} minLength={tab === 'register' && ['password', 'confirm'].includes(key) ? 8 : undefined}
+              type={['password', 'confirm'].includes(key) ? 'password' : key === 'email' ? 'email' : 'text'}
+              autoComplete={key === 'email' ? 'email' : key === 'name' ? 'name' : tab === 'login' ? 'current-password' : 'new-password'}
+              value={form[key as keyof typeof form]} onChange={e => setForm(current => ({ ...current, [key]: e.target.value }))}
+              className="mt-2 w-full rounded-xl border border-white/20 bg-brand-dark px-4 py-3 text-white" />
+          </label>
+        ))}
+        {error && <p role="alert" className="text-sm text-red-400">{error}</p>}
+        {notice && <p role="status" className="text-sm text-brand-neon">{notice}</p>}
+        <button disabled={loading} className="w-full rounded-xl bg-brand-orange py-3 font-bold text-black disabled:opacity-50">{loading ? 'Please wait…' : tab === 'login' ? 'Sign in' : tab === 'register' ? 'Create account' : 'Send reset link'}</button>
+        {tab === 'login' && <button type="button" onClick={() => { setTab('reset'); setError(''); setNotice('') }} className="text-sm text-brand-orange">Forgot password?</button>}
+      </form>
+      <p className="mt-5 text-xs text-gray-400">Your account saves your favourites across devices. <Link href="/privacy" onClick={closeAuth} className="underline">Privacy</Link> · <Link href="/terms" onClick={closeAuth} className="underline">Terms</Link></p>
+    </dialog>
   )
 }

@@ -159,3 +159,8 @@ select {
     transition-duration: 0.001ms !important;
   }
 }
+
+:focus-visible { outline: 2px solid #FFA500; outline-offset: 4px; }
+html { scroll-padding-top: 110px; }
+input, select, textarea { min-width: 0; }
+dialog::backdrop { background: rgba(0,0,0,.82); }

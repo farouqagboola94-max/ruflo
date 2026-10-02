@@ -47,7 +47,7 @@ export default function CatalogPage() {
       <div className="mb-10">
         <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">Browse</p>
         <h1 className="font-display text-5xl sm:text-6xl text-white mb-4">SNEAKER CATALOG</h1>
-        <p className="text-gray-400">Explore all sneakers available at the fest. Filter by brand, category, or condition.</p>
+        <p className="text-gray-400">Explore our reference collection and save favourites. Photos, prices and sizes are illustrative, not confirmed inventory.</p>
       </div>
 
       <div className="bg-brand-gray rounded-2xl p-6 mb-8 border border-white/5 space-y-5">
@@ -57,7 +57,7 @@ export default function CatalogPage() {
           </svg>
           <input
             type="text"
-            placeholder="Search sneakers..."
+            aria-label="Search sneakers" placeholder="Search sneakers..."
             value={search}
             onChange={e => setSearch(e.target.value)}
             className="w-full pl-11 pr-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-brand-orange text-sm"
@@ -68,7 +68,7 @@ export default function CatalogPage() {
         <FilterChips label="Condition" options={CONDITIONS} value={condition} onChange={setCondition} />
         <div className="flex items-center gap-3">
           <p className="text-xs text-gray-500 uppercase tracking-wider">Sort</p>
-          <select
+          <select aria-label="Sort sneakers"
             value={sort}
             onChange={e => setSort(e.target.value)}
             className="bg-brand-muted text-white text-sm px-3 py-1.5 rounded-lg border border-white/10 focus:outline-none focus:border-brand-orange"

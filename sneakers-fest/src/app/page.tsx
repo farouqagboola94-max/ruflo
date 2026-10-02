@@ -23,7 +23,7 @@ export default function HomePage() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[calc(100svh-100px)] py-20 flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-brand-dark via-brand-gray to-black" />
         <MotionBackdrop />
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 25% 25%, #FF6B2C 0%, transparent 50%), radial-gradient(circle at 75% 75%, #FFA500 0%, transparent 50%)' }} />
@@ -52,15 +52,15 @@ export default function HomePage() {
           </div>
           <CountdownTimer />
         </div>
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+        <a href="#explore" aria-label="Explore Sneakers Fest" className="absolute bottom-4 left-1/2 -translate-x-1/2 animate-bounce">
           <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
-        </div>
+        </a>
       </section>
 
       {/* Stats */}
-      <section className="py-16 border-y border-white/5 bg-brand-gray">
+      <section id="explore" className="py-16 border-y border-white/5 bg-brand-gray">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-center text-gray-500 text-xs uppercase tracking-wider mb-8">2026 planning targets</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -81,6 +81,7 @@ export default function HomePage() {
             <div>
               <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">Catalog Highlights</p>
               <h2 className="text-white font-display text-4xl sm:text-5xl">FEATURED KICKS</h2>
+              <p className="mt-3 text-sm text-gray-400">Reference collection. Save favourites and explore the stories behind the pairs.</p>
             </div>
             <Link href="/catalog" className="text-brand-orange hover:text-brand-amber text-sm font-semibold">View All &rarr;</Link>
           </div>

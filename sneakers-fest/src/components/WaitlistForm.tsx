@@ -8,6 +8,8 @@ const interestOptions = [
   'Vendor updates',
   'Sponsor updates',
   'Community Cup',
+  'Raffle updates',
+  'Venue updates',
 ]
 
 export default function WaitlistForm({
@@ -35,7 +37,7 @@ export default function WaitlistForm({
       await submitNetlifyForm('waitlist', {
         ...form,
         source,
-      })
+      }, event.currentTarget)
       setStatus('success')
       setMessage('You are on the Sneakers Fest waitlist. Ticket and community updates will go here first.')
       setForm({ name: '', email: '', interest: initialInterest, refCode: '' })
@@ -115,6 +117,7 @@ export default function WaitlistForm({
         </label>
       </div>
 
+      <p className="mt-4 text-xs text-gray-400">By joining, you request updates about your selected interest. <a href="/privacy" className="underline">Privacy and unsubscribe details</a></p>
       <button
         type="submit"
         disabled={status === 'submitting'}

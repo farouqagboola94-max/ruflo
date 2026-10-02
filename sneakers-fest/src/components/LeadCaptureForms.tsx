@@ -62,6 +62,7 @@ function TextField({
       <span className={labelClass}>{label}</span>
       <input
         name={name}
+        maxLength={254}
         type={type}
         required={required}
         value={value}
@@ -124,6 +125,8 @@ function TextAreaField({
         value={value}
         onChange={event => onChange(event.target.value)}
         placeholder={placeholder}
+        required
+        maxLength={5000}
         rows={5}
         className={inputClass}
       />
@@ -144,7 +147,7 @@ function useLeadForm(initialState: FieldState, formName: string) {
     setStatus('submitting')
 
     try {
-      await submitNetlifyForm(formName, fields)
+      await submitNetlifyForm(formName, fields, event.currentTarget)
       setStatus('success')
       setFields(initialState)
     } catch {
@@ -190,6 +193,7 @@ export function VendorInterestForm() {
       <button type="submit" disabled={status === 'submitting'} className="w-full rounded-xl bg-gradient-to-r from-brand-orange to-brand-yellow px-5 py-4 text-sm font-bold text-black transition-opacity hover:opacity-90 disabled:opacity-60">
         {status === 'submitting' ? 'Sending interest...' : 'Send vendor interest'}
       </button>
+      <p className="text-xs text-gray-400">We use these details to respond to your request. <a href="/privacy" className="underline">Privacy</a></p>
       <StatusMessage state={status} />
     </form>
   )
@@ -228,6 +232,7 @@ export function SponsorInterestForm() {
       <button type="submit" disabled={status === 'submitting'} className="w-full rounded-xl bg-gradient-to-r from-brand-orange to-brand-yellow px-5 py-4 text-sm font-bold text-black transition-opacity hover:opacity-90 disabled:opacity-60">
         {status === 'submitting' ? 'Sending enquiry...' : 'Send sponsor enquiry'}
       </button>
+      <p className="text-xs text-gray-400">We use these details to respond to your request. <a href="/privacy" className="underline">Privacy</a></p>
       <StatusMessage state={status} />
     </form>
   )
@@ -253,11 +258,12 @@ export function ContactForm() {
         <TextField name="name" label="Name" value={fields.name} onChange={value => setField('name', value)} required placeholder="Your name" />
         <TextField name="email" label="Email" type="email" value={fields.email} onChange={value => setField('email', value)} required placeholder="you@example.com" />
       </div>
-      <SelectField name="topic" label="Topic" value={fields.topic} onChange={value => setField('topic', value)} options={['General question', 'Press', 'Tickets', 'Accessibility', 'Vendor', 'Sponsor', 'Community Cup']} />
+      <SelectField name="topic" label="Topic" value={fields.topic} onChange={value => setField('topic', value)} options={['General question', 'Press', 'Tickets', 'Accessibility', 'Vendor', 'Sponsor', 'Community Cup', 'Privacy / unsubscribe']} />
       <TextAreaField name="message" label="Message" value={fields.message} onChange={value => setField('message', value)} placeholder="What do you need help with?" />
       <button type="submit" disabled={status === 'submitting'} className="w-full rounded-xl bg-gradient-to-r from-brand-orange to-brand-yellow px-5 py-4 text-sm font-bold text-black transition-opacity hover:opacity-90 disabled:opacity-60">
         {status === 'submitting' ? 'Sending message...' : 'Send message'}
       </button>
+      <p className="text-xs text-gray-400">We use these details to respond to your request. <a href="/privacy" className="underline">Privacy</a></p>
       <StatusMessage state={status} />
     </form>
   )

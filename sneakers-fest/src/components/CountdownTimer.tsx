@@ -60,10 +60,10 @@ export default function CountdownTimer() {
     <div className="mt-10 text-center">
       <div className="inline-flex items-center gap-3 px-6 py-3.5 rounded-2xl bg-brand-orange/10 border border-brand-orange/40 shadow-lg shadow-orange-500/20">
         <span className="w-2.5 h-2.5 rounded-full bg-brand-orange animate-pulse" />
-        <span className="font-display text-xl sm:text-2xl text-gradient tracking-wide">EVENT IS LIVE</span>
+        <span className="font-display text-xl sm:text-2xl text-gradient tracking-wide">EVENT DAY</span>
         <span className="w-2.5 h-2.5 rounded-full bg-brand-orange animate-pulse" />
       </div>
-      <p className="text-gray-400 text-sm mt-3">Dec 12 · Lagos, Nigeria · It&apos;s happening right now!</p>
+      <p className="text-gray-400 text-sm mt-3">Dec 12 · Lagos, Nigeria · Check official updates for the confirmed programme.</p>
       <button onClick={share}
         className="mt-5 inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/15 text-gray-400 text-sm hover:text-white hover:border-white/30 transition-all">
         {copied ? (
@@ -107,7 +107,7 @@ export default function CountdownTimer() {
       `}</style>
 
       <div className="mt-10">
-        <p className="text-gray-500 text-xs uppercase tracking-widest mb-5 text-center">Event starts in</p>
+        <p className="text-gray-500 text-xs uppercase tracking-widest mb-5 text-center">Countdown to December 12</p>
 
         <div className="flex justify-center items-end gap-1.5 sm:gap-3">
           {units.map(({ value, label }, i) => (

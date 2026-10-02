@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { EVENT_FACTS } from '@/data/eventFacts'
 
 export default function VenueMap() {
@@ -10,6 +11,7 @@ export default function VenueMap() {
         <p className="text-gray-500 text-sm mt-3 max-w-xl mx-auto">
           The venue is still being confirmed. We&apos;ll publish the address and travel details after the booking is final.
         </p>
+        <Link href="/waitlist" className="mt-6 inline-block rounded-full border border-brand-orange px-6 py-3 text-brand-orange">Get venue updates</Link>
       </div>
     </section>
   )

@@ -64,6 +64,10 @@ export default function NetlifyForms() {
         <textarea name="message" />
         <input name="source" />
       </form>
+      <form name="marketplace-interest" data-netlify="true" data-netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="marketplace-interest" />
+        {['bot-field', 'name', 'brand', 'size', 'price', 'condition', 'type', 'contact', 'source'].map(name => <input key={name} name={name} />)}
+      </form>
     </div>
   )
 }

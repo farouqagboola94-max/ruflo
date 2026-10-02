@@ -16,7 +16,7 @@ export default function Newsletter() {
         email,
         interests: 'Drops, vendors, event updates',
         source: 'newsletter-component',
-      })
+      }, event.currentTarget)
       setEmail('')
       setStatus('success')
     } catch {
@@ -37,7 +37,7 @@ export default function Newsletter() {
           data-netlify="true"
           data-netlify-honeypot="bot-field"
           onSubmit={handleSubmit}
-          className="flex gap-3 max-w-sm mx-auto"
+          className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
         >
           <input type="hidden" name="form-name" value="newsletter" />
           <p className="hidden">
@@ -45,15 +45,16 @@ export default function Newsletter() {
               Do not fill this out: <input name="bot-field" />
             </label>
           </p>
-          <input type="email" required placeholder="your@email.com" value={email}
+          <input aria-label="Newsletter email" maxLength={254} type="email" required placeholder="your@email.com" value={email}
             onChange={e => setEmail(e.target.value)}
             name="email"
-            className="flex-1 px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand-orange text-sm" />
+            className="min-w-0 flex-1 px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand-orange text-sm" />
           <button type="submit" disabled={status === 'submitting'} className="px-5 py-3 rounded-xl bg-gradient-to-r from-brand-orange to-brand-yellow text-black font-bold text-sm hover:opacity-90 transition-opacity whitespace-nowrap disabled:opacity-60">
             {status === 'submitting' ? 'Sending...' : 'Subscribe'}
           </button>
         </form>
       )}
+      <p className="mt-4 text-xs text-gray-400">Subscribe to receive Sneakers Fest updates. You can ask to unsubscribe through our <a href="/contact" className="underline">contact form</a>. <a href="/privacy" className="underline">Privacy</a></p>
       {status === 'error' && <p role="status" className="mt-4 text-sm font-semibold text-brand-orange">Could not subscribe. Try again shortly.</p>}
     </div>
   )

@@ -2,21 +2,26 @@
 
 import { useState } from 'react'
 import SneakerCard from '@/components/SneakerCard'
+import { submitNetlifyForm } from '@/lib/netlifyForms'
 import { SNEAKERS } from '@/data/sneakers'
 
-const LISTING_TYPES = ['All', 'Buy', 'Sell', 'Trade']
+
 
 export default function MarketplacePage() {
-  const [activeType, setActiveType] = useState('All')
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
   const [showListForm, setShowListForm] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [form, setForm] = useState({ name: '', brand: '', size: '', price: '', condition: 'New', type: 'Sell', contact: '' })
 
   const marketplaceItems = SNEAKERS.filter(s => s.marketplace)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setSubmitted(true)
+    setBusy(true); setError('')
+    try { await submitNetlifyForm('marketplace-interest', { ...form, source: 'marketplace-page' }, e.currentTarget); setSubmitted(true) }
+    catch { setError('Your request was not saved. Please retry.') }
+    finally { setBusy(false) }
   }
 
   return (
@@ -25,29 +30,17 @@ export default function MarketplacePage() {
         <div>
           <p className="text-brand-orange text-sm font-semibold uppercase tracking-wider mb-2">Buy · Sell · Trade</p>
           <h1 className="font-display text-5xl sm:text-6xl text-white mb-4">MARKETPLACE</h1>
-          <p className="text-gray-400">Connect with sellers at the fest. Find your next grail or list your collection.</p>
+          <p className="text-gray-400">Explore sample pairs and register your listing interest. The team reviews enquiries before any listing goes live.</p>
         </div>
         <button
           onClick={() => { setShowListForm(true); setSubmitted(false) }}
           className="flex-shrink-0 px-6 py-3 rounded-full bg-gradient-to-r from-brand-orange to-brand-amber text-black font-bold hover:opacity-90 transition-opacity"
         >
-          + List Your Sneakers
+          + Register listing interest
         </button>
       </div>
 
-      <div className="flex gap-2 mb-8">
-        {LISTING_TYPES.map(type => (
-          <button
-            key={type}
-            onClick={() => setActiveType(type)}
-            className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${
-              activeType === type ? 'bg-brand-orange text-black' : 'bg-brand-gray text-gray-300 hover:bg-brand-muted'
-            }`}
-          >
-            {type}
-          </button>
-        ))}
-      </div>
+      <p className="mb-8 text-gray-400">Preview collection. Prices and sellers shown are examples, not verified stock or purchasable offers.</p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
         {marketplaceItems.map(s => <SneakerCard key={s.id} sneaker={s} showSeller />)}
@@ -57,9 +50,9 @@ export default function MarketplacePage() {
         <h2 className="font-display text-3xl text-white mb-8 text-center">HOW IT WORKS</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { step: '01', title: 'List Your Pair', desc: 'Fill out the quick listing form with your sneaker details, size, and asking price.' },
-            { step: '02', title: 'Show at the Fest', desc: 'Bring your sneakers to the event. Your vendor slot will be confirmed via email.' },
-            { step: '03', title: 'Make the Deal', desc: 'Meet buyers, negotiate, and complete transactions at the event. Cash or transfer.' },
+            { step: '01', title: 'Send your interest', desc: 'Fill out the quick listing form with your sneaker details, size, and asking price.' },
+            { step: '02', title: 'Team review', desc: 'The team will contact you about eligibility, terms and next steps. Submitting does not reserve a booth.' },
+            { step: '03', title: 'Stay informed', desc: 'Only follow confirmed event instructions. This preview does not collect payments or guarantee seller authenticity.' },
           ].map(({ step, title, desc }) => (
             <div key={step} className="text-center p-6">
               <div className="font-display text-5xl text-gradient mb-4">{step}</div>
@@ -74,8 +67,8 @@ export default function MarketplacePage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
           <div className="bg-brand-gray rounded-3xl p-8 w-full max-w-lg border border-white/10 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-white font-display text-2xl">LIST YOUR PAIR</h3>
-              <button onClick={() => setShowListForm(false)} className="text-gray-400 hover:text-white">
+              <h3 className="text-white font-display text-2xl">LISTING INTEREST</h3>
+              <button aria-label="Close listing form" onClick={() => setShowListForm(false)} className="text-gray-400 hover:text-white">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
@@ -83,12 +76,14 @@ export default function MarketplacePage() {
             {submitted ? (
               <div className="text-center py-8">
                 <div className="text-5xl mb-4">✅</div>
-                <h4 className="text-white font-bold text-xl mb-2">Listing Submitted!</h4>
-                <p className="text-gray-400">We&apos;ll review this listing request when marketplace intake opens.</p>
+                <h4 className="text-white font-bold text-xl mb-2">Interest received!</h4>
+                <p className="text-gray-400">Your interest has been saved for team review. This is not a live listing or confirmed booking.</p>
                 <button onClick={() => setShowListForm(false)} className="mt-6 px-6 py-3 rounded-full bg-brand-orange text-black font-bold">Close</button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form name="marketplace-interest" onSubmit={handleSubmit} className="space-y-4">
+                <input type="hidden" name="form-name" value="marketplace-interest" />
+                <label className="hidden">Leave blank<input name="bot-field" /></label>
                 {[
                   { label: 'Sneaker Name', key: 'name', placeholder: 'e.g. Air Jordan 1 Chicago' },
                   { label: 'Brand', key: 'brand', placeholder: 'e.g. Nike, Jordan, Adidas' },
@@ -99,7 +94,7 @@ export default function MarketplacePage() {
                   <div key={key}>
                     <label className="block text-sm text-gray-400 mb-1.5">{label}</label>
                     <input
-                      type="text"
+                      name={key} aria-label={label} maxLength={254} type="text"
                       placeholder={placeholder}
                       required
                       value={form[key as keyof typeof form]}
@@ -111,19 +106,21 @@ export default function MarketplacePage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm text-gray-400 mb-1.5">Condition</label>
-                    <select value={form.condition} onChange={e => setForm(f => ({ ...f, condition: e.target.value }))} className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white focus:outline-none focus:border-brand-orange text-sm">
+                    <select aria-label="Condition" name="condition" value={form.condition} onChange={e => setForm(f => ({ ...f, condition: e.target.value }))} className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white focus:outline-none focus:border-brand-orange text-sm">
                       <option>New</option><option>Deadstock</option><option>Used</option>
                     </select>
                   </div>
                   <div>
                     <label className="block text-sm text-gray-400 mb-1.5">Listing Type</label>
-                    <select value={form.type} onChange={e => setForm(f => ({ ...f, type: e.target.value }))} className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white focus:outline-none focus:border-brand-orange text-sm">
+                    <select aria-label="Listing type" name="type" value={form.type} onChange={e => setForm(f => ({ ...f, type: e.target.value }))} className="w-full px-4 py-3 bg-brand-dark border border-white/10 rounded-xl text-white focus:outline-none focus:border-brand-orange text-sm">
                       <option>Sell</option><option>Trade</option><option>Buy</option>
                     </select>
                   </div>
                 </div>
-                <button type="submit" className="w-full py-4 rounded-xl bg-gradient-to-r from-brand-orange to-brand-amber text-black font-bold text-lg hover:opacity-90 transition-opacity mt-2">
-                  Submit Listing
+                <p className="text-xs text-gray-400">By sending, you ask our team to contact you about this request. <a href="/privacy" className="underline">Privacy</a></p>
+                {error && <p role="alert" className="text-red-400">{error}</p>}
+                <button type="submit" disabled={busy} className="w-full py-4 rounded-xl bg-gradient-to-r from-brand-orange to-brand-amber text-black font-bold text-lg hover:opacity-90 transition-opacity mt-2">
+                  {busy ? 'Saving…' : 'Send listing interest'}
                 </button>
               </form>
             )}

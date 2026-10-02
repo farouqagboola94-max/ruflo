@@ -16,8 +16,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <ClientProviders>
+          <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-white focus:p-3 focus:text-black">Skip to content</a>
           <Navbar />
-          <main className="pt-[100px] min-h-screen">{children}</main>
+          <main id="main-content" className="pt-[100px] min-h-screen">{children}</main>
           <NetlifyForms />
           <Footer />
         </ClientProviders>

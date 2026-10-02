@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
+import { useAuth } from '@/context/AuthContext'
+import { FaInstagram, FaTiktok, FaUser } from 'react-icons/fa6'
 import { EVENT_FACTS } from '@/data/eventFacts'
 
 const NAV_LINKS = [
@@ -20,6 +22,7 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   const pathname = usePathname()
+  const { user } = useAuth()
   const [open, setOpen] = useState(false)
 
   return (
@@ -48,12 +51,12 @@ export default function Navbar() {
               </span>
             </Link>
 
-            <nav className="hidden xl:flex items-center gap-1">
+            <nav className="hidden xl:flex items-center gap-0">
               {NAV_LINKS.map(({ href, label, neon }) => (
                 <Link
                   key={href}
                   href={href}
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`px-2 py-2 rounded-lg text-xs font-medium transition-colors ${
                     pathname === href
                       ? neon
                         ? 'text-brand-neon bg-brand-neon/10'
@@ -68,7 +71,7 @@ export default function Navbar() {
               ))}
               <Link
                 href="/sponsors"
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors border ${
+                className={`px-2 py-2 rounded-lg text-xs font-medium transition-colors border ${
                   pathname === '/sponsors'
                     ? 'text-brand-amber bg-brand-amber/10 border-brand-amber/40'
                     : 'text-brand-amber/70 hover:text-brand-amber hover:bg-brand-amber/5 border-brand-amber/20'
@@ -78,9 +81,14 @@ export default function Navbar() {
               </Link>
             </nav>
 
+            <div className="flex items-center gap-2 ml-auto xl:ml-2">
+              <a href={EVENT_FACTS.instagramUrl} target="_blank" rel="noopener noreferrer" aria-label="Official Instagram" className="p-2 text-brand-orange"><FaInstagram /></a>
+              <a href={EVENT_FACTS.tiktokUrl} target="_blank" rel="noopener noreferrer" aria-label="Official TikTok" className="p-2 text-brand-orange"><FaTiktok /></a>
+              <Link href="/profile" aria-label={user ? "My account" : "Sign in"} className="p-2 text-white"><FaUser /></Link>
+            </div>
             <Link
               href="/tickets"
-              className="hidden xl:inline-flex items-center px-5 py-2 rounded-full bg-gradient-to-r from-brand-orange to-brand-yellow text-black text-sm font-bold hover:opacity-90 transition-opacity"
+              className="hidden 2xl:inline-flex items-center px-5 py-2 rounded-full bg-gradient-to-r from-brand-orange to-brand-yellow text-black text-sm font-bold hover:opacity-90 transition-opacity"
             >
               Ticket Updates
             </Link>
@@ -88,7 +96,7 @@ export default function Navbar() {
             <button
               onClick={() => setOpen(!open)}
               className="xl:hidden p-2 rounded-lg text-gray-300 hover:text-white"
-              aria-label="Toggle menu"
+              aria-label="Toggle menu" aria-expanded={open} aria-controls="mobile-navigation"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {open
@@ -101,7 +109,7 @@ export default function Navbar() {
         </div>
 
         {open && (
-          <div className="xl:hidden border-t border-white/10 bg-brand-dark/95 px-4 py-3 space-y-1">
+          <div id="mobile-navigation" className="xl:hidden max-h-[calc(100dvh-100px)] overflow-y-auto border-t border-white/10 bg-brand-dark/95 px-4 py-3 space-y-1">
             {NAV_LINKS.map(({ href, label, neon }) => (
               <Link
                 key={href}
@@ -116,6 +124,7 @@ export default function Navbar() {
                 {label}
               </Link>
             ))}
+            <Link href="/profile" onClick={() => setOpen(false)} className="block px-4 py-3 text-brand-orange">My account</Link>
             <Link
               href="/sponsors"
               onClick={() => setOpen(false)}
