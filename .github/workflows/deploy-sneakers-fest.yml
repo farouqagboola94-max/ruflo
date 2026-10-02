@@ -1,0 +1,32 @@
+name: Deploy Sneakers Fest
+
+on:
+  push:
+    branches: [claude/sneakers-fest-app-hiZxs]
+    paths:
+      - 'sneakers-fest/**'
+      - '.github/workflows/deploy-sneakers-fest.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: sneakers-fest
+
+      - name: Build
+        run: npm run build
+        working-directory: sneakers-fest
+
+      - name: Deploy to Netlify
+        run: npx netlify-cli@latest deploy --prod --dir out --site ${{ secrets.NETLIFY_SF_SITE_ID }}
+        working-directory: sneakers-fest
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
