@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Catalyst | CEO — Catalyst Concepts</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black:     #080808;
+    --surface:   #0F0F0F;
+    --orange:    #D4751A;
+    --orange-lo: rgba(212, 117, 26, 0.07);
+    --white:     #F2EDE4;
+    --muted:     #5A5A5A;
+    --line:      #1E1E1E;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .slide {
+    width: 1280px;
+    height: 720px;
+    background: var(--black);
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1px 480px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--white);
+    flex-shrink: 0;
+  }
+
+  /* ── Grain overlay ── */
+  .slide::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.032;
+    pointer-events: none;
+    z-index: 50;
+  }
+
+  /* ── Background ghost text ── */
+  .ghost {
+    position: absolute;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 380px;
+    letter-spacing: -16px;
+    color: var(--orange-lo);
+    top: -60px;
+    right: -30px;
+    z-index: 0;
+    user-select: none;
+    pointer-events: none;
+    line-height: 1;
+  }
+
+  /* ── Orange bottom strip ── */
+  .strip {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--orange) 0%, transparent 70%);
+    z-index: 10;
+  }
+
+  /* ── Top brand bar ── */
+  .brand-bar {
+    position: absolute;
+    top: 48px; left: 60px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 10;
+  }
+  .brand-pip {
+    width: 8px; height: 8px;
+    background: var(--orange);
+    border-radius: 50%;
+  }
+  .brand-name {
+    font-size: 10px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  /* ── Reg number ── */
+  .reg {
+    position: absolute;
+    bottom: 24px; right: 60px;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.12);
+    z-index: 10;
+  }
+
+  /* ════════════ LEFT PANEL ════════════ */
+  .left {
+    padding: 110px 60px 56px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    z-index: 5;
+  }
+
+  .eyebrow {
+    font-size: 9px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--orange);
+    font-weight: 500;
+    margin-bottom: 18px;
+  }
+
+  .name-display {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 108px;
+    line-height: 0.88;
+    letter-spacing: 2px;
+    color: var(--white);
+  }
+  .name-display .accent { color: var(--orange); }
+
+  .title-line {
+    margin-top: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .title-role {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--white);
+    font-weight: 500;
+  }
+  .title-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+
+  .bio {
+    margin-top: auto;
+    padding-top: 40px;
+    border-left: 2px solid var(--orange);
+    padding-left: 20px;
+    font-size: 12px;
+    line-height: 1.9;
+    color: var(--muted);
+    max-width: 360px;
+  }
+
+  /* ── Center vertical line ── */
+  .vline {
+    background: linear-gradient(to bottom, transparent 8%, var(--line) 25%, var(--line) 75%, transparent 92%);
+    z-index: 5;
+  }
+
+  /* ════════════ RIGHT PANEL ════════════ */
+  .right {
+    padding: 110px 60px 56px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 5;
+  }
+
+  .section-label {
+    font-size: 9px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 36px;
+  }
+
+  .contact-list { display: flex; flex-direction: column; }
+
+  .contact-item {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: 20px;
+    align-items: start;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .contact-item:first-child { border-top: 1px solid var(--line); }
+
+  .c-type {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-top: 3px;
+    font-weight: 400;
+  }
+
+  .c-value {
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--white);
+    letter-spacing: 0.3px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .c-value.handle { color: var(--orange); }
+
+  /* ── Availability badge ── */
+  .badge {
+    margin-top: 36px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border: 1px solid var(--line);
+    border-left: 2px solid var(--orange);
+    width: fit-content;
+  }
+  .badge-dot {
+    width: 6px; height: 6px;
+    background: var(--orange);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  .badge-text {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+
+  <!-- Decorative ghost text -->
+  <div class="ghost">CC</div>
+
+  <!-- Bottom strip -->
+  <div class="strip"></div>
+
+  <!-- Brand bar -->
+  <div class="brand-bar">
+    <div class="brand-pip"></div>
+    <span class="brand-name">Catalyst Concepts</span>
+  </div>
+
+  <!-- Registry -->
+  <div class="reg">BN: 9405192 &nbsp;·&nbsp; Lagos, Nigeria</div>
+
+  <!-- LEFT PANEL -->
+  <div class="left">
+    <div>
+      <div class="eyebrow">Chief Executive Officer</div>
+      <div class="name-display">
+        THE<br><span class="accent">CATALYST</span>
+      </div>
+      <div class="title-line">
+        <span class="title-role">CEO &nbsp;·&nbsp; Catalyst Concepts</span>
+        <span class="title-sub">Lagos, Nigeria · Est. 2021</span>
+      </div>
+    </div>
+    <div class="bio">
+      We don't manage events. We engineer self-sustaining cultural ecosystems. Every partnership is backed by four years of proven Lagos execution — zero institutional safety net, maximum strategic precision.
+    </div>
+  </div>
+
+  <!-- Vertical divider -->
+  <div class="vline"></div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right">
+    <div class="section-label">Direct Contact</div>
+
+    <div class="contact-list">
+      <div class="contact-item">
+        <span class="c-type">Phone</span>
+        <span class="c-value">07084 111 516</span>
+      </div>
+      <div class="contact-item">
+        <span class="c-type">Email</span>
+        <span class="c-value" style="font-size:13px;">Farouqagboola94@gmail.com</span>
+      </div>
+      <div class="contact-item">
+        <span class="c-type">Twitter</span>
+        <span class="c-value handle">@Catalyst188</span>
+      </div>
+      <div class="contact-item">
+        <span class="c-type">Instagram</span>
+        <span class="c-value handle">@Catalystggg</span>
+      </div>
+    </div>
+
+    <div class="badge">
+      <div class="badge-dot"></div>
+      <span class="badge-text">Open to Partnership Discussions</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

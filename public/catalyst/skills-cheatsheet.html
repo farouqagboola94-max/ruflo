@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CatalystOS — Skills Cheatsheet</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:wght@400;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    color: #c0c0c0;
+    font-family: 'DM Sans', sans-serif;
+    padding: 32px;
+    min-height: 100vh;
+  }
+
+  .page {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* HEADER */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 2px solid #FF6B2C;
+    padding-bottom: 16px;
+    margin-bottom: 28px;
+  }
+
+  .logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #FF6B2C;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #f0f0f0;
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+
+  h1 span { color: #FF6B2C; }
+
+  .header-right {
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #555;
+    line-height: 1.8;
+  }
+
+  /* GRID */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .col { display: flex; flex-direction: column; gap: 12px; }
+
+  /* CATEGORY BLOCK */
+  .cat {
+    border: 1px solid #1a1a1a;
+    background: #111;
+    padding: 14px;
+  }
+
+  .cat-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #222;
+  }
+
+  .cat-icon {
+    color: #FF6B2C;
+    font-size: 12px;
+    width: 16px;
+    text-align: center;
+  }
+
+  .cat-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    color: #f0f0f0;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .cat-count {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: #FF6B2C;
+    background: rgba(255,107,44,0.1);
+    border: 1px solid rgba(255,107,44,0.3);
+    padding: 1px 6px;
+  }
+
+  .skill-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .skill-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 0;
+  }
+
+  .skill-dot {
+    width: 4px;
+    height: 4px;
+    background: #333;
+    flex-shrink: 0;
+  }
+
+  .skill-n {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #c0c0c0;
+    flex: 1;
+  }
+
+  .skill-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* STACKS SECTION */
+  .stacks {
+    border: 1px solid #1a1a1a;
+    background: #0d0d0d;
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+
+  .stacks-header {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #FF6B2C;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #1a1a1a;
+  }
+
+  .stacks-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+  }
+
+  .stack-item {
+    border: 1px solid #1a1a1a;
+    padding: 10px;
+  }
+
+  .stack-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    color: #FF6B2C;
+    margin-bottom: 6px;
+  }
+
+  .stack-skills {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: #555;
+    line-height: 1.8;
+  }
+
+  .stack-skills span {
+    display: block;
+    color: #888;
+  }
+
+  /* CLI SECTION */
+  .cli {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .cli-block {
+    border: 1px solid #1a1a1a;
+    background: #0d0d0d;
+    padding: 14px;
+  }
+
+  .cli-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: #FF6B2C;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #1a1a1a;
+  }
+
+  .cli-command {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #888;
+    line-height: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .cli-command .prompt { color: #FF6B2C; }
+  .cli-command .cmd { color: #c0c0c0; }
+  .cli-command .comment { color: #333; }
+
+  /* FOOTER */
+  .footer {
+    border-top: 1px solid #1a1a1a;
+    padding-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-left {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: #333;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    line-height: 1.8;
+  }
+
+  .footer-left span { color: #FF6B2C; }
+
+  .total-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 48px;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1;
+  }
+
+  .total-badge span {
+    font-size: 14px;
+    color: #333;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  @media print {
+    body { background: white; color: #111; padding: 16px; }
+    .cat { border-color: #ddd; background: #fafafa; }
+    .stacks { background: #fafafa; border-color: #ddd; }
+    .cli-block { background: #fafafa; border-color: #ddd; }
+    h1, h1 span, .logo, .cat-name, .stacks-header, .cli-title, .stack-name { color: #111 !important; }
+    .skill-n { color: #333 !important; }
+    .total-badge { color: #eee !important; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div>
+      <div class="logo">⬡ CatalystOS</div>
+      <h1>Skills <span>Cheatsheet</span></h1>
+    </div>
+    <div class="header-right">
+      v2.0 · May 2026<br>
+      Roman Knox Integration<br>
+      Lagos, Nigeria<br>
+      catalyst-concepts.com
+    </div>
+  </div>
+
+  <div class="grid">
+    <!-- COL 1 -->
+    <div class="col">
+
+      <div class="cat">
+        <div class="cat-header">
+          <div class="cat-icon">◈</div>
+          <div class="cat-name">Design</div>
+          <div class="cat-count">9</div>
+        </div>
+        <div class="skill-list">
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">frontend-design</div><div class="skill-badge">UI/UX</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">claudedesign</div><div class="skill-badge">3D Motion</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">design-auditor</div><div class="skill-badge">QA</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">nothing-design</div><div class="skill-badge">Minimal</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">canvas-design</div><div class="skill-badge">Graphics</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">drawn-diagrams</div><div class="skill-badge">Visuals</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">algorithmic-art</div><div class="skill-badge">Generative</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">color-expert</div><div class="skill-badge">Color Science</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">gpt-image-2</div><div class="skill-badge">AI Image</div></div>
+        </div>
+      </div>
+
+      <div class="cat">
+        <div class="cat-header">
+          <div class="cat-icon">◎</div>
+          <div class="cat-name">Social</div>
+          <div class="cat-count">3</div>
+        </div>
+        <div class="skill-list">
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">tweetclaw</div><div class="skill-badge">X/Twitter</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">twitter-optimizer</div><div class="skill-badge">Algorithm</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">sm-research</div><div class="skill-badge">Intel</div></div>
+        </div>
+      </div>
+
+      <div class="cat">
+        <div class="cat-header">
+          <div class="cat-icon">▶</div>
+          <div class="cat-name">Video</div>
+          <div class="cat-count">3</div>
+        </div>
+        <div class="skill-list">
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">remotion</div><div class="skill-badge">React Video</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">ai-video-production</div><div class="skill-badge">Full Pipeline</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">generative-media</div><div class="skill-badge">Multi-Modal</div></div>
+        </div>
+      </div>
+
+      <div class="cat">
+        <div class="cat-header">
+          <div class="cat-icon">◯</div>
+          <div class="cat-name">SEO</div>
+          <div class="cat-count">1</div>
+        </div>
+        <div class="skill-list">
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">geo-seo</div><div class="skill-badge">AI SEO</div></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- COL 2 -->
+    <div class="col">
+
+      <div class="cat">
+        <div class="cat-header">
+          <div class="cat-icon">▤</div>
+          <div class="cat-name">Content</div>
+          <div class="cat-count">10</div>
+        </div>
+        <div class="skill-list">
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">social-media-os</div><div class="skill-badge">Strategy</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">voice-builder</div><div class="skill-badge">Branding</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">reels-scripting</div><div class="skill-badge">Short-Form</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">post-scorer</div><div class="skill-badge">QA</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">youtube-thumbnail</div><div class="skill-badge">CTR</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">hook-generator</div><div class="skill-badge">Copywriting</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">humanizer</div><div class="skill-badge">Polish</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">notebook-llm</div><div class="skill-badge">Repurpose</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">beautiful-prose</div><div class="skill-badge">Long-form</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">x-article-publisher</div><div class="skill-badge">Publishing</div></div>
+        </div>
+      </div>
+
+      <div class="cat">
+        <div class="cat-header">
+          <div class="cat-icon">◉</div>
+          <div class="cat-name">Research</div>
+          <div class="cat-count">3</div>
+        </div>
+        <div class="skill-list">
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">autoresearch</div><div class="skill-badge">Automation</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">evidence-dialogue</div><div class="skill-badge">Anti-Syco</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">jtbd-interview</div><div class="skill-badge">Discovery</div></div>
+        </div>
+      </div>
+
+      <div class="cat">
+        <div class="cat-header">
+          <div class="cat-icon">◆</div>
+          <div class="cat-name">Product</div>
+          <div class="cat-count">2</div>
+        </div>
+        <div class="skill-list">
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">pm-skills</div><div class="skill-badge">PM Toolkit</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">daydream</div><div class="skill-badge">Brainstorm</div></div>
+        </div>
+      </div>
+
+      <div class="cat">
+        <div class="cat-header">
+          <div class="cat-icon">✦</div>
+          <div class="cat-name">AI</div>
+          <div class="cat-count">2</div>
+        </div>
+        <div class="skill-list">
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">ai-transformation</div><div class="skill-badge">Consulting</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">ai-music-album</div><div class="skill-badge">Music</div></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- COL 3 -->
+    <div class="col">
+
+      <div class="cat">
+        <div class="cat-header">
+          <div class="cat-icon">◬</div>
+          <div class="cat-name">Marketing</div>
+          <div class="cat-count">8</div>
+        </div>
+        <div class="skill-list">
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">wondelai</div><div class="skill-badge">Growth</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">marketing-skills</div><div class="skill-badge">Full-Stack</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">email-marketing</div><div class="skill-badge">Email</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">competitive-ads</div><div class="skill-badge">Ad Intel</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">deep-research</div><div class="skill-badge">Research</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">academic-research</div><div class="skill-badge">Academic</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">kim-barrett</div><div class="skill-badge">Direct Resp</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">marketing-module</div><div class="skill-badge">System</div></div>
+        </div>
+      </div>
+
+      <div class="cat">
+        <div class="cat-header">
+          <div class="cat-icon">⚙</div>
+          <div class="cat-name">Engineering</div>
+          <div class="cat-count">7</div>
+        </div>
+        <div class="skill-list">
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">superpowers</div><div class="skill-badge">Senior Eng</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">repomix</div><div class="skill-badge">Codebase</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">antfu</div><div class="skill-badge">Tooling</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">dev-browser</div><div class="skill-badge">Playwright</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">vexor-search</div><div class="skill-badge">Vector DB</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">skill-seekers</div><div class="skill-badge">Skill Gen</div></div>
+          <div class="skill-row"><div class="skill-dot"></div><div class="skill-n">web-scraper</div><div class="skill-badge">Automation</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SMART STACKS -->
+  <div class="stacks">
+    <div class="stacks-header">⬡ Smart Stacks — Pre-built Skill Combinations</div>
+    <div class="stacks-grid">
+      <div class="stack-item">
+        <div class="stack-name">write-reel</div>
+        <div class="stack-skills">
+          <span>reels-scripting</span>
+          <span>hook-generator</span>
+          <span>voice-builder</span>
+        </div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-name">write-post</div>
+        <div class="stack-skills">
+          <span>hook-generator</span>
+          <span>voice-builder</span>
+          <span>post-scorer</span>
+          <span>humanizer</span>
+        </div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-name">build-ui</div>
+        <div class="stack-skills">
+          <span>frontend-design</span>
+          <span>design-auditor</span>
+        </div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-name">build-campaign</div>
+        <div class="stack-skills">
+          <span>marketing-skills</span>
+          <span>hook-generator</span>
+          <span>kim-barrett</span>
+          <span>competitive-ads</span>
+        </div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-name">sneakers-fest</div>
+        <div class="stack-skills">
+          <span>canvas-design</span>
+          <span>gpt-image-2</span>
+          <span>ai-video-production</span>
+          <span>social-media-os</span>
+        </div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-name">substack-essay</div>
+        <div class="stack-skills">
+          <span>beautiful-prose</span>
+          <span>voice-builder</span>
+          <span>deep-research</span>
+          <span>humanizer</span>
+        </div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-name">ai-consulting</div>
+        <div class="stack-skills">
+          <span>ai-transformation</span>
+          <span>deep-research</span>
+          <span>pm-skills</span>
+        </div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-name">ugc-video</div>
+        <div class="stack-skills">
+          <span>ai-video-production</span>
+          <span>dev-browser</span>
+          <span>reels-scripting</span>
+        </div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-name">client-social</div>
+        <div class="stack-skills">
+          <span>social-media-os</span>
+          <span>post-scorer</span>
+          <span>tweetclaw</span>
+          <span>hook-generator</span>
+        </div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-name">build-dashboard</div>
+        <div class="stack-skills">
+          <span>frontend-design</span>
+          <span>superpowers</span>
+          <span>design-auditor</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLI COMMANDS -->
+  <div class="cli">
+    <div class="cli-block">
+      <div class="cli-title">⬡ CLI — skills.sh Commands</div>
+      <div class="cli-command">
+        <div><span class="prompt">$ </span><span class="cmd">./skills/skills.sh --list</span></div>
+        <div><span class="prompt">$ </span><span class="cmd">./skills/skills.sh hook-generator</span></div>
+        <div><span class="prompt">$ </span><span class="cmd">./skills/skills.sh --stack write-reel</span></div>
+        <div><span class="prompt">$ </span><span class="cmd">./skills/skills.sh --category design</span></div>
+        <div><span class="prompt">$ </span><span class="cmd">./skills/skills.sh --copy humanizer</span></div>
+      </div>
+    </div>
+    <div class="cli-block">
+      <div class="cli-title">⬡ API — Skills Endpoints (port 8000)</div>
+      <div class="cli-command">
+        <div><span class="prompt">GET  </span><span class="cmd">/skills/</span></div>
+        <div><span class="prompt">GET  </span><span class="cmd">/skills/{skill-id}</span></div>
+        <div><span class="prompt">GET  </span><span class="cmd">/skills/category/{cat}</span></div>
+        <div><span class="prompt">GET  </span><span class="cmd">/skills/search?q=keyword</span></div>
+        <div><span class="prompt">POST </span><span class="cmd">/skills/stack</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">
+      CatalystOS Skills Hub v2.0<br>
+      Roman Knox Integration · May 2026<br>
+      Operator: <span>Oluwatobiloba The Catalyst</span> · Lagos, Nigeria<br>
+      Metal Dragon | INFJ | <span>2026 Launch</span>
+    </div>
+    <div>
+      <div class="total-badge">48<span>Total Skills</span></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

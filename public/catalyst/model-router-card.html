@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CatalystOS · Model Router</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#0A0A0A; --void2:#121212; --forge:#FF6A00; --forge-dim:#c95300;
+    --off:#F0EDE6; --muted:#8a857c; --line:#26241f; --ok:#3fb950;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--void); color:var(--off);
+    font-family:'Manrope',system-ui,sans-serif;
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    padding:32px; line-height:1.5;
+  }
+  .card{
+    width:100%; max-width:560px; background:var(--void2);
+    border:1px solid var(--line); border-radius:18px; overflow:hidden;
+    box-shadow:0 24px 80px rgba(0,0,0,.6);
+  }
+  .top{
+    padding:26px 28px 22px; border-bottom:1px solid var(--line);
+    background:radial-gradient(120% 140% at 100% 0%, rgba(255,106,0,.10), transparent 55%);
+    position:relative;
+  }
+  .kicker{
+    font-size:11px; letter-spacing:.28em; text-transform:uppercase;
+    color:var(--forge); font-weight:700; margin-bottom:10px;
+  }
+  h1{
+    font-family:'Bebas Neue',sans-serif; font-weight:400;
+    font-size:44px; line-height:.92; letter-spacing:.02em; color:var(--off);
+  }
+  h1 span{color:var(--forge)}
+  .sub{color:var(--muted); font-size:13px; margin-top:10px; max-width:42ch}
+  .status{
+    position:absolute; top:26px; right:28px; display:flex; align-items:center;
+    gap:7px; font-size:11px; color:var(--muted); font-weight:600; letter-spacing:.04em;
+  }
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 10px var(--ok)}
+  .body{padding:22px 28px 8px}
+  .section-label{
+    font-size:10px; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--muted); font-weight:700; margin:6px 0 12px;
+  }
+  .routes{display:grid; gap:1px; background:var(--line);
+    border:1px solid var(--line); border-radius:12px; overflow:hidden; margin-bottom:22px}
+  .route{display:grid; grid-template-columns:96px 1fr; gap:12px;
+    padding:12px 14px; background:var(--void2); align-items:center}
+  .route .job{font-family:'Bebas Neue',sans-serif; font-size:17px; letter-spacing:.04em; color:var(--forge)}
+  .route .model{font-size:13px; color:var(--off); font-weight:500}
+  .route .model small{display:block; color:var(--muted); font-size:11px; font-weight:400; margin-top:2px}
+  .modes{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px}
+  .mode{
+    background:var(--void); border:1px solid var(--line); color:var(--off);
+    border-radius:10px; padding:12px 8px; cursor:pointer; text-align:center;
+    font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:.05em; transition:.15s; user-select:none;
+  }
+  .mode:hover{border-color:var(--forge-dim); color:var(--forge)}
+  .mode.active{background:var(--forge); border-color:var(--forge); color:var(--void); font-weight:400}
+  .mode.secure.active{background:var(--ok); border-color:var(--ok); color:var(--void)}
+  .mode small{display:block; font-family:'Manrope'; font-size:9px; letter-spacing:.04em;
+    text-transform:uppercase; margin-top:3px; opacity:.7; font-weight:600}
+  .cmd{
+    background:var(--void); border:1px solid var(--line); border-radius:10px;
+    padding:14px 16px; font-family:ui-monospace,'SF Mono',Menlo,monospace;
+    font-size:13px; color:var(--off); display:flex; justify-content:space-between;
+    align-items:center; gap:12px; margin-bottom:8px;
+  }
+  .cmd .prompt{color:var(--forge); margin-right:8px}
+  .copy{
+    background:transparent; border:1px solid var(--line); color:var(--muted);
+    border-radius:7px; padding:5px 11px; font-size:11px; cursor:pointer;
+    font-family:'Manrope'; font-weight:600; transition:.15s; white-space:nowrap;
+  }
+  .copy:hover{border-color:var(--forge); color:var(--forge)}
+  .note{
+    font-size:12px; color:var(--muted); line-height:1.6; padding:14px 0 4px;
+    border-top:1px solid var(--line); margin-top:4px;
+  }
+  .note b{color:var(--off)}
+  .note .lock{color:var(--ok); font-weight:700}
+  .foot{
+    padding:16px 28px; border-top:1px solid var(--line);
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:11px; color:var(--muted); letter-spacing:.03em;
+  }
+  .foot b{color:var(--forge); font-family:'Bebas Neue'; font-size:14px; letter-spacing:.06em; font-weight:400}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="top">
+      <div class="status"><span class="dot"></span> GATEWAY LIVE</div>
+      <div class="kicker">CatalystOS · Switchboard</div>
+      <h1>MODEL <span>ROUTER</span></h1>
+      <p class="sub">One cockpit. Every engine. Cheap work runs cheap, hard work runs strong, client work stays locked.</p>
+    </div>
+
+    <div class="body">
+      <div class="section-label">Active Routing</div>
+      <div class="routes">
+        <div class="route"><div class="job">Background</div><div class="model">Gemini 2.5 Flash<small>summarize · compact · throwaway</small></div></div>
+        <div class="route"><div class="job">Default</div><div class="model">DeepSeek Chat<small>everyday coding · very low cost</small></div></div>
+        <div class="route"><div class="job">Think</div><div class="model">DeepSeek Reasoner<small>reasoning without frontier pricing</small></div></div>
+        <div class="route"><div class="job">Long Ctx</div><div class="model">Gemini 2.5 Pro<small>big files · wide context window</small></div></div>
+      </div>
+
+      <div class="section-label">Mode</div>
+      <div class="modes" id="modes">
+        <div class="mode active" data-cmd="cs cheap">CHEAP<small>min spend</small></div>
+        <div class="mode" data-cmd="cs balanced">BAL<small>mixed</small></div>
+        <div class="mode" data-cmd="cs strong">STRONG<small>frontier</small></div>
+        <div class="mode secure" data-cmd="cs secure">SECURE<small>client</small></div>
+      </div>
+
+      <div class="cmd"><span><span class="prompt">$</span><span id="cmdtext">cs cheap</span></span>
+        <button class="copy" id="copybtn">copy</button></div>
+
+      <div class="note" id="note">
+        Everything on the cheapest stack. Good for personal builds and drafts.
+      </div>
+    </div>
+
+    <div class="foot">
+      <span>claude-code-router · your keys · MIT</span>
+      <span><b>THE CATALYST</b></span>
+    </div>
+  </div>
+
+<script>
+  const notes = {
+    "cs cheap":"Everything on the cheapest stack. Good for personal builds and drafts.",
+    "cs balanced":"The default mix. Cheap background, strong reasoning where it matters.",
+    "cs strong":"Default jumps to Claude Sonnet for the hard edits and refactors.",
+    "cs secure":"<span class='lock'>LOCKED to Anthropic direct.</span> Use for Chambers, contracts, anything under NDPR. Nothing passes through a third party."
+  };
+  const modes = document.getElementById('modes');
+  const cmdtext = document.getElementById('cmdtext');
+  const note = document.getElementById('note');
+  const copybtn = document.getElementById('copybtn');
+
+  modes.addEventListener('click', e=>{
+    const m = e.target.closest('.mode'); if(!m) return;
+    [...modes.children].forEach(c=>c.classList.remove('active'));
+    m.classList.add('active');
+    const cmd = m.dataset.cmd;
+    cmdtext.textContent = cmd;
+    note.innerHTML = notes[cmd];
+  });
+
+  copybtn.addEventListener('click', ()=>{
+    const text = cmdtext.textContent + " && ccr restart";
+    navigator.clipboard.writeText(text).then(()=>{
+      copybtn.textContent = "copied ✓";
+      setTimeout(()=>copybtn.textContent="copy", 1400);
+    }).catch(()=>{ copybtn.textContent="select+copy"; });
+  });
+</script>
+</body>
+</html>

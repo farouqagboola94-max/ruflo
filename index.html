@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary Meta -->
+    <title>Sneakers Fest '26 — The Sole Exhibition | Lagos, Nigeria</title>
+    <meta name="description" content="West Africa's premier sneaker culture event. 200+ rare kicks, 30+ curated vendors, live DJs, custom art, street food. Muri Okunola Park, Victoria Island · Lagos, Nigeria · December 12, 2026." />
+    <meta name="theme-color" content="#F5A623" />
+
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://sneakers-fest-26.netlify.app/" />
+    <meta property="og:title" content="Sneakers Fest '26 — The Sole Exhibition" />
+    <meta property="og:description" content="West Africa's premier sneaker culture event. 200+ rare kicks, 30+ curated vendors, live DJs. Muri Okunola Park, Victoria Island · Lagos · December 12, 2026." />
+    <meta property="og:image" content="https://sneakers-fest-26.netlify.app/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Sneakers Fest '26 — The Sole Exhibition. December 12, 2026. Muri Okunola Park, Victoria Island, Lagos." />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Sneakers Fest '26 — The Sole Exhibition" />
+    <meta name="twitter:description" content="West Africa's premier sneaker culture event. Muri Okunola Park, V/I · Lagos, Nigeria · December 12, 2026." />
+    <meta name="twitter:image" content="https://sneakers-fest-26.netlify.app/og-image.png" />
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://sneakers-fest-26.netlify.app/" />
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <!-- JSON-LD Event Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "name": "Sneakers Fest '26 — The Sole Exhibition",
+      "startDate": "2026-12-12T12:00:00+01:00",
+      "endDate": "2026-12-12T22:00:00+01:00",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "location": {
+        "@type": "Place",
+        "name": "Muri Okunola Park, Victoria Island",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Muri Okunola Park",
+          "addressLocality": "Victoria Island, Lagos",
+          "addressRegion": "Lagos State",
+          "addressCountry": "NG"
+        }
+      },
+      "image": "https://sneakers-fest-26.netlify.app/og-image.png",
+      "description": "West Africa's premier sneaker culture event. 200+ rare kicks, 30+ curated vendors, live DJs, custom art, and street food. Muri Okunola Park, Victoria Island, Lagos.",
+      "organizer": {
+        "@type": "Organization",
+        "name": "Sneakers Fest",
+        "url": "https://sneakers-fest-26.netlify.app"
+      },
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "General Admission",
+          "url": "https://sneakers-fest-26.netlify.app/#tickets",
+          "availability": "https://schema.org/InStock",
+          "priceCurrency": "NGN",
+          "price": "5000",
+          "validFrom": "2026-01-01T00:00:00+01:00"
+        },
+        {
+          "@type": "Offer",
+          "name": "VIP Access",
+          "url": "https://sneakers-fest-26.netlify.app/#tickets",
+          "availability": "https://schema.org/InStock",
+          "priceCurrency": "NGN",
+          "price": "10000",
+          "validFrom": "2026-01-01T00:00:00+01:00"
+        },
+        {
+          "@type": "Offer",
+          "name": "VVIP Access",
+          "url": "https://sneakers-fest-26.netlify.app/#tickets",
+          "availability": "https://schema.org/InStock",
+          "priceCurrency": "NGN",
+          "price": "25000",
+          "validFrom": "2026-01-01T00:00:00+01:00"
+        },
+        {
+          "@type": "Offer",
+          "name": "Phalanx Package",
+          "url": "https://sneakers-fest-26.netlify.app/#tickets",
+          "availability": "https://schema.org/InStock",
+          "priceCurrency": "NGN",
+          "price": "50000",
+          "validFrom": "2026-01-01T00:00:00+01:00"
+        }
+      ]
+    }
+    </script>
+
+    <!-- The Netlify Identity widget and the two payment SDKs used to load
+         here on every visit - identity render-blocking, all three for
+         features most visitors never touch. They are fetched on demand now:
+         see src/lib/loadScript.js. Preconnect keeps the handshake cost off
+         the critical path for the people who do reach checkout. -->
+    <link rel="preconnect" href="https://js.paystack.co" crossorigin>
+    <link rel="dns-prefetch" href="https://checkout.flutterwave.com">
+  </head>
+  <body style="margin:0;background:#0A0A0A;">
+    <div id="root"></div>
+    <script defer src="/three.min.js"></script>
+    <script defer src="/confetti.min.js"></script>
+    <script type="module" src="/src/main.jsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/sw.js').then(function (reg) {
+            // Ask the worker to cache the rest of the site once the page has
+            // gone quiet. Doing this at install time instead would pull all
+            // 67 files down on first paint and undo the whole reason sections
+            // are deferred; doing it here costs the reader nothing and means a
+            // later visit with no signal has the entire site rather than the
+            // boot set plus ten "could not load" panels.
+            var warm = function () {
+              var sw = reg.active || navigator.serviceWorker.controller
+              if (sw) sw.postMessage({ type: 'warm' })
+            }
+
+            // Two reasons not to. Data Saver is someone telling us in advance
+            // that background downloads are unwelcome, and on 2g the warm
+            // would be competing with the page the reader is actually using.
+            var c = navigator.connection
+            if (c && (c.saveData || /^(slow-)?2g$/.test(c.effectiveType || ''))) return
+
+            if ('requestIdleCallback' in window) requestIdleCallback(warm, { timeout: 10000 })
+            else setTimeout(warm, 4000)
+          }).catch(function () {})
+        })
+      }
+    </script>
+
+    <!--
+      Netlify Forms: static dummy forms for build-time detection.
+      These are hidden from the UI — React submits them via fetch with
+      Content-Type: application/x-www-form-urlencoded and a form-name field.
+      Each form must match the name used in the fetch calls.
+    -->
+    <form name="waitlist" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="text" name="bot-field" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="refCode" />
+    </form>
+    <form name="newsletter" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="text" name="bot-field" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="interests" />
+    </form>
+    <form name="contact" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="text" name="bot-field" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <textarea name="message"></textarea>
+    </form>
+    <form name="vendor-registration" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="text" name="bot-field" />
+      <input type="text" name="business" />
+      <input type="text" name="contact" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <input type="text" name="category" />
+      <input type="text" name="booth" />
+      <input type="text" name="instagram" />
+      <input type="text" name="twitter" />
+      <input type="text" name="website" />
+      <textarea name="bio"></textarea>
+      <input type="text" name="applicationId" />
+    </form>
+    <form name="sponsor-enquiry" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="text" name="bot-field" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="company" />
+      <input type="text" name="budget" />
+      <textarea name="message"></textarea>
+    </form>
+  </body>
+</html>

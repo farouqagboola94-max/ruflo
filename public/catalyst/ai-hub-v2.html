@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CATALYST OS — AI Integration Hub v2.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#060608; --surface:#0e0e14; --card:#12121a; --border:#1c1c28;
+  --border-hot:#ff6b2b; --orange:#ff6b2b; --amber:#ffaa40; --gold:#e8c84a;
+  --text:#f2f2f8; --muted:#6a6a88; --dim:#3a3a55;
+  --green:#40e0a0; --blue:#4090ff; --purple:#9060ff; --red:#ff4455;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--orange),var(--amber),var(--orange),transparent);z-index:9999;}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:180px;opacity:0.025;}
+
+/* HEADER */
+.header{padding:44px 32px 28px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+.header::after{content:'CATALYST OS';position:absolute;right:-20px;top:-20px;font-family:'Bebas Neue';font-size:200px;color:#ffffff03;line-height:1;pointer-events:none;white-space:nowrap;user-select:none;}
+.header-meta{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+.logo-tag{background:var(--orange);color:#000;font-family:'Bebas Neue';font-size:11px;padding:3px 10px;letter-spacing:2px;}
+.version-tag{border:1px solid var(--dim);color:var(--muted);font-family:'JetBrains Mono';font-size:10px;padding:3px 8px;letter-spacing:1px;}
+.live-tag{border:1px solid #40e0a044;color:var(--green);font-family:'JetBrains Mono';font-size:10px;padding:3px 8px;letter-spacing:1px;display:flex;align-items:center;gap:5px;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulseLive 2s infinite;}
+@keyframes pulseLive{0%,100%{opacity:1;}50%{opacity:0.4;}}
+h1{font-family:'Bebas Neue';font-size:clamp(48px,9vw,80px);line-height:0.88;letter-spacing:2px;margin-bottom:14px;background:linear-gradient(135deg,#fff 0%,var(--amber) 55%,var(--orange) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.header-sub{font-size:13px;color:var(--muted);max-width:640px;font-family:'JetBrains Mono';line-height:1.7;}
+.header-sub em{color:var(--orange);font-style:normal;}
+.stats-row{display:flex;gap:32px;margin-top:24px;flex-wrap:wrap;}
+.stat{display:flex;flex-direction:column;}
+.stat-num{font-family:'Bebas Neue';font-size:32px;color:var(--orange);line-height:1;}
+.stat-label{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;}
+
+/* TAB NAV */
+.tab-nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;background:rgba(6,6,8,0.97);backdrop-filter:blur(16px);overflow-x:auto;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-btn{padding:16px 24px;background:none;border:none;cursor:pointer;font-family:'JetBrains Mono';font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);position:relative;transition:color 0.2s;white-space:nowrap;flex-shrink:0;}
+.tab-btn::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--orange);transform:scaleX(0);transition:transform 0.25s;}
+.tab-btn.active{color:var(--text);}
+.tab-btn.active::after{transform:scaleX(1);}
+.tab-btn:hover:not(.active){color:#a0a0c0;}
+.tab-badge{display:inline-block;margin-left:6px;background:var(--border);color:var(--muted);font-size:9px;padding:1px 5px;border-radius:2px;}
+.tab-btn.active .tab-badge{background:var(--orange);color:#000;}
+
+/* TAB PANELS */
+.tab-panel{display:none;animation:fadeUp 0.25s ease;}
+.tab-panel.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+/* SECTION LABEL */
+.section-label{font-family:'Bebas Neue';font-size:12px;letter-spacing:3px;color:var(--orange);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* ═══ OVERVIEW ═══ */
+.moves-section{padding:28px 32px;border-bottom:1px solid var(--border);}
+.moves-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;}
+.move-card{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--orange);padding:18px;position:relative;overflow:hidden;}
+.move-ghost{font-family:'Bebas Neue';font-size:72px;color:#ff6b2b08;position:absolute;right:8px;top:0;line-height:1;pointer-events:none;}
+.move-num{font-size:9px;color:var(--orange);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono';margin-bottom:6px;}
+.move-title{font-family:'Syne';font-size:15px;font-weight:800;margin-bottom:6px;}
+.move-desc{font-size:12px;color:var(--muted);line-height:1.6;}
+.move-action{margin-top:10px;font-size:10px;color:var(--orange);font-family:'JetBrains Mono';letter-spacing:1px;}
+
+/* ROADMAP */
+.roadmap-section{padding:28px 32px;border-bottom:1px solid var(--border);}
+.roadmap-scroll{overflow-x:auto;padding-bottom:8px;cursor:grab;-webkit-overflow-scrolling:touch;}
+.roadmap-scroll:active{cursor:grabbing;}
+.roadmap-scroll::-webkit-scrollbar{height:2px;}
+.roadmap-scroll::-webkit-scrollbar-track{background:var(--border);}
+.roadmap-scroll::-webkit-scrollbar-thumb{background:var(--dim);}
+.roadmap-track{display:flex;gap:0;padding:4px 4px 4px 0;min-width:max-content;align-items:stretch;}
+.roadmap-phase{width:220px;flex-shrink:0;border:1px solid var(--border);border-right:none;background:var(--card);padding:16px;position:relative;transition:background 0.2s;}
+.roadmap-phase:last-child{border-right:1px solid var(--border);}
+.roadmap-phase:hover{background:#12121e;}
+.phase-arrow{position:absolute;right:-13px;top:50%;transform:translateY(-50%);z-index:1;font-size:18px;color:var(--dim);}
+.phase-id{font-family:'JetBrains Mono';font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:4px;}
+.phase-time{font-family:'Bebas Neue';font-size:20px;line-height:1;margin-bottom:2px;}
+.phase-title{font-size:9px;color:var(--orange);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono';margin-bottom:12px;}
+.phase-bar-wrap{height:2px;background:var(--border);margin-bottom:12px;}
+.phase-bar-fill{height:100%;background:var(--orange);transition:width 1s ease;}
+.phase-tools-list{display:flex;flex-direction:column;gap:4px;}
+.phase-tool-item{font-size:10px;padding:3px 8px;background:var(--surface);border-left:2px solid var(--dim);color:var(--muted);font-family:'JetBrains Mono';}
+.phase-tool-item.is-core{border-left-color:var(--orange);color:var(--text);}
+
+/* STACKS */
+.stacks-section{padding:28px 32px;border-bottom:1px solid var(--border);}
+.stack-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;}
+.stack-card{background:var(--surface);border:1px solid var(--border);padding:14px 16px;}
+.stack-role{font-size:9px;color:var(--orange);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;font-family:'JetBrains Mono';}
+.stack-tools-txt{font-size:12px;color:var(--muted);line-height:1.7;}
+.stack-tools-txt strong{color:var(--text);}
+
+/* ═══ TOOLS ═══ */
+.controls{padding:16px 32px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:12px;position:sticky;top:49px;z-index:50;background:rgba(6,6,8,0.96);backdrop-filter:blur(12px);}
+.search-box{position:relative;}
+.search-box input{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'JetBrains Mono';font-size:13px;padding:11px 16px 11px 40px;outline:none;transition:border-color 0.2s;border-radius:0;}
+.search-box input:focus{border-color:var(--orange);}
+.search-box::before{content:'⌕';position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:18px;z-index:1;}
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+.filter-btn{padding:5px 12px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Syne';font-size:11px;font-weight:600;cursor:pointer;transition:all 0.15s;text-transform:uppercase;letter-spacing:0.5px;}
+.filter-btn:hover{border-color:var(--dim);color:var(--text);}
+.filter-btn.active{background:var(--orange);border-color:var(--orange);color:#000;}
+.priority-row{display:flex;gap:6px;flex-wrap:wrap;}
+.p-btn{padding:4px 11px;border:1px solid transparent;font-family:'JetBrains Mono';font-size:9px;cursor:pointer;transition:all 0.15s;letter-spacing:1px;text-transform:uppercase;background:transparent;}
+.p-btn.all{border-color:var(--dim);color:var(--muted);}
+.p-btn.all.active{border-color:var(--text);color:var(--text);}
+.p-btn.core{border-color:#ff6b2b40;color:var(--orange);}
+.p-btn.core.active{background:var(--orange);color:#000;}
+.p-btn.high{border-color:#ffaa4040;color:var(--amber);}
+.p-btn.high.active{background:var(--amber);color:#000;}
+.p-btn.future{border-color:#4090ff40;color:var(--blue);}
+.p-btn.future.active{background:var(--blue);color:#000;}
+.results-count{font-family:'JetBrains Mono';font-size:10px;color:var(--muted);margin-left:auto;align-self:center;}
+
+.grid-section{padding:24px 32px;}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;}
+.tool-card{background:var(--card);border:1px solid var(--border);padding:16px;position:relative;cursor:pointer;transition:all 0.2s;overflow:hidden;animation:cardIn 0.35s ease both;}
+@keyframes cardIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+.tool-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.tool-card.priority-core::before{background:var(--orange);}
+.tool-card.priority-high::before{background:var(--amber);}
+.tool-card.priority-future::before{background:var(--blue);opacity:0.5;}
+.tool-card:hover{border-color:var(--dim);transform:translateY(-2px);box-shadow:0 8px 32px #00000050;}
+.tool-card.hidden{display:none;}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.card-num{font-family:'Bebas Neue';font-size:22px;color:var(--dim);line-height:1;}
+.card-badges{display:flex;gap:5px;align-items:center;flex-wrap:wrap;justify-content:flex-end;}
+.cat-badge{font-family:'JetBrains Mono';font-size:8px;padding:2px 6px;letter-spacing:1px;text-transform:uppercase;border:1px solid;}
+.cat-coding{border-color:#9060ff44;color:var(--purple);}
+.cat-agents{border-color:#ff6b2b44;color:var(--orange);}
+.cat-mcp{border-color:#40e0a044;color:var(--green);}
+.cat-skills{border-color:#e8c84a44;color:var(--gold);}
+.cat-local{border-color:#6a6a8844;color:var(--muted);}
+.cat-automation{border-color:#4090ff44;color:var(--blue);}
+.cat-data{border-color:#ffaa4044;color:var(--amber);}
+.cat-infra{border-color:#40e0a044;color:#40b0c0;}
+.cat-learning{border-color:#e8c84a44;color:var(--gold);}
+.priority-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.priority-dot.core{background:var(--orange);box-shadow:0 0 6px var(--orange);}
+.priority-dot.high{background:var(--amber);}
+.priority-dot.future{background:var(--blue);}
+.tool-name{font-family:'Syne';font-size:15px;font-weight:800;color:var(--text);margin-bottom:3px;}
+.tool-tagline{font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.4;}
+.divider{height:1px;background:var(--border);margin-bottom:10px;}
+.catalyst-label{font-size:8px;font-family:'JetBrains Mono';color:var(--orange);letter-spacing:2px;text-transform:uppercase;margin-bottom:5px;}
+.catalyst-use{font-size:12px;color:#c0c0d8;line-height:1.6;}
+.card-footer{margin-top:12px;display:flex;justify-content:space-between;align-items:center;}
+.priority-label{font-family:'JetBrains Mono';font-size:8px;letter-spacing:1px;text-transform:uppercase;}
+.priority-label.core{color:var(--orange);}
+.priority-label.high{color:var(--amber);}
+.priority-label.future{color:var(--blue);}
+.action-hint{font-size:9px;color:var(--dim);font-family:'JetBrains Mono';}
+.no-results{text-align:center;padding:60px;color:var(--dim);font-family:'JetBrains Mono';font-size:13px;display:none;}
+.no-results.visible{display:block;}
+
+/* ═══ AI ADVISOR ═══ */
+.advisor-section{padding:32px;max-width:900px;}
+.advisor-title{font-family:'Bebas Neue';font-size:42px;margin-bottom:6px;}
+.advisor-subtitle{font-size:13px;color:var(--muted);font-family:'JetBrains Mono';line-height:1.7;max-width:620px;margin-bottom:28px;}
+.advisor-input-area{background:var(--surface);border:1px solid var(--border);padding:20px;margin-bottom:16px;transition:border-color 0.2s;}
+.advisor-input-area:focus-within{border-color:var(--orange);}
+.advisor-prompt-label{font-size:9px;color:var(--orange);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono';margin-bottom:10px;}
+.advisor-textarea{width:100%;background:none;border:none;outline:none;color:var(--text);font-family:'JetBrains Mono';font-size:13px;line-height:1.7;resize:none;min-height:90px;}
+.advisor-textarea::placeholder{color:var(--dim);}
+.advisor-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px;}
+.key-input{background:var(--card);border:1px solid var(--border);color:var(--muted);font-family:'JetBrains Mono';font-size:10px;padding:8px 12px;outline:none;flex:1;min-width:200px;max-width:320px;transition:border-color 0.2s;}
+.key-input:focus{border-color:var(--dim);}
+.advisor-btn{padding:10px 28px;background:var(--orange);border:none;color:#000;font-family:'Bebas Neue';font-size:17px;letter-spacing:2px;cursor:pointer;transition:all 0.15s;flex-shrink:0;}
+.advisor-btn:hover{background:var(--amber);}
+.advisor-btn:disabled{background:var(--dim);cursor:not-allowed;}
+.advisor-hint{font-size:10px;color:var(--dim);font-family:'JetBrains Mono';width:100%;}
+.examples-row{margin-bottom:24px;}
+.ex-label{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono';margin-bottom:10px;}
+.ex-chips{display:flex;gap:8px;flex-wrap:wrap;}
+.ex-chip{padding:5px 12px;border:1px solid var(--border);font-size:11px;color:var(--muted);cursor:pointer;font-family:'JetBrains Mono';transition:all 0.15s;}
+.ex-chip:hover{border-color:var(--orange);color:var(--text);}
+.advisor-loading{display:none;padding:40px;text-align:center;}
+.advisor-loading.visible{display:block;}
+.loading-text{font-family:'JetBrains Mono';font-size:13px;color:var(--orange);letter-spacing:2px;}
+.dot{display:inline-block;animation:blink 1.4s infinite;}
+.dot:nth-child(2){animation-delay:0.2s;}
+.dot:nth-child(3){animation-delay:0.4s;}
+@keyframes blink{0%,80%,100%{opacity:0;}40%{opacity:1;}}
+.advisor-result{display:none;}
+.advisor-result.visible{display:block;animation:fadeUp 0.3s ease;}
+.result-problem-bar{display:flex;align-items:center;gap:10px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.result-tag{background:var(--orange);color:#000;font-family:'Bebas Neue';font-size:11px;padding:3px 10px;letter-spacing:2px;flex-shrink:0;}
+.result-problem-txt{font-size:11px;color:var(--muted);font-family:'JetBrains Mono';line-height:1.5;}
+.recommended-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-bottom:16px;}
+.rec-card{background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--orange);padding:14px;}
+.rec-name{font-family:'Syne';font-size:14px;font-weight:800;margin-bottom:5px;}
+.rec-reason{font-size:11px;color:var(--muted);line-height:1.6;font-family:'JetBrains Mono';}
+.result-workflow{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--orange);padding:16px;margin-bottom:12px;}
+.result-wf-label{font-size:9px;color:var(--orange);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono';margin-bottom:8px;}
+.result-wf-text{font-size:13px;color:#c8c8e0;line-height:1.7;}
+.result-first{background:#ff6b2b0e;border:1px solid #ff6b2b28;padding:16px;}
+.result-first-label{font-size:9px;color:var(--orange);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono';margin-bottom:6px;}
+.result-first-text{font-size:13px;color:var(--text);font-family:'JetBrains Mono';line-height:1.5;}
+.advisor-error{background:#ff44550e;border:1px solid #ff445530;padding:16px;font-family:'JetBrains Mono';font-size:12px;color:#ff8899;line-height:1.6;display:none;}
+.advisor-error.visible{display:block;}
+
+/* ═══ SETUP ═══ */
+.setup-section{padding:32px;max-width:820px;}
+.setup-title{font-family:'Bebas Neue';font-size:42px;margin-bottom:6px;}
+.setup-subtitle{font-size:13px;color:var(--muted);font-family:'JetBrains Mono';line-height:1.7;max-width:600px;margin-bottom:24px;}
+.setup-progress-card{background:var(--surface);border:1px solid var(--border);padding:16px;margin-bottom:24px;}
+.progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.progress-label{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono';}
+.progress-count{font-family:'Bebas Neue';font-size:22px;color:var(--orange);}
+.progress-bar{height:3px;background:var(--border);}
+.progress-fill{height:100%;background:var(--orange);transition:width 0.4s ease;}
+.days-list{display:flex;flex-direction:column;gap:10px;}
+.day-block{background:var(--card);border:1px solid var(--border);overflow:hidden;}
+.day-header{padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background 0.15s;user-select:none;}
+.day-header:hover{background:var(--surface);}
+.day-num{font-family:'Bebas Neue';font-size:30px;color:var(--dim);line-height:1;min-width:34px;}
+.day-info{flex:1;}
+.day-title{font-family:'Syne';font-size:14px;font-weight:700;}
+.day-subtitle{font-size:10px;color:var(--muted);font-family:'JetBrains Mono';margin-top:2px;}
+.day-mini-progress{font-size:10px;color:var(--orange);font-family:'JetBrains Mono';margin-top:1px;}
+.day-chevron{color:var(--dim);font-size:14px;transition:transform 0.2s;flex-shrink:0;}
+.day-block.open .day-chevron{transform:rotate(180deg);}
+.day-items{display:none;padding:4px 16px 14px;}
+.day-block.open .day-items{display:flex;flex-direction:column;gap:2px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;cursor:pointer;padding:8px;transition:background 0.15s;border-radius:2px;}
+.check-item:hover{background:var(--surface);}
+.check-box{width:16px;height:16px;border:1px solid var(--dim);flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all 0.15s;}
+.check-item.done .check-box{background:var(--orange);border-color:var(--orange);}
+.check-item.done .check-box::after{content:'✓';font-size:10px;color:#000;font-weight:bold;}
+.check-item.done .check-text{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--dim);}
+.check-text{font-size:12px;color:#c8c8e0;line-height:1.5;}
+.check-sub{font-size:10px;color:var(--dim);font-family:'JetBrains Mono';margin-top:1px;}
+.reset-btn{margin-top:20px;padding:8px 20px;background:none;border:1px solid var(--border);color:var(--muted);font-family:'JetBrains Mono';font-size:10px;cursor:pointer;transition:all 0.15s;letter-spacing:1px;}
+.reset-btn:hover{border-color:var(--red);color:var(--red);}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--card);border:1px solid var(--border-hot);max-width:560px;width:100%;max-height:88vh;overflow-y:auto;animation:modalIn 0.2s ease;}
+@keyframes modalIn{from{opacity:0;transform:scale(0.95);}to{opacity:1;transform:none;}}
+.modal-header{padding:20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--card);z-index:1;display:flex;justify-content:space-between;align-items:flex-start;}
+.modal-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px;line-height:1;padding:0;transition:color 0.15s;}
+.modal-close:hover{color:var(--text);}
+.modal-body{padding:20px;}
+.modal-sec{margin-bottom:20px;}
+.modal-sec-title{font-size:9px;color:var(--orange);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono';margin-bottom:8px;}
+.modal-text{font-size:13px;color:#c8c8e0;line-height:1.7;}
+.wf-step{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.wf-step:last-child{border-bottom:none;}
+.wf-step-num{color:var(--orange);font-family:'JetBrains Mono';font-weight:700;flex-shrink:0;}
+.wf-step-txt{color:#c8c8e0;line-height:1.5;font-family:'JetBrains Mono';}
+
+footer{padding:40px 32px;border-top:1px solid var(--border);text-align:center;font-family:'JetBrains Mono';font-size:11px;color:var(--dim);}
+footer span{color:var(--orange);}
+::-webkit-scrollbar{width:3px;height:3px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--dim);}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .header{padding:32px 20px 20px;}
+  h1{font-size:clamp(40px,10vw,60px);}
+  .stats-row{gap:20px;}
+  .moves-section,.roadmap-section,.stacks-section,.grid-section,.advisor-section,.setup-section{padding:20px;}
+  .controls{padding:14px 20px;top:48px;}
+  .tools-grid{grid-template-columns:1fr;}
+  .advisor-section,.setup-section{max-width:100%;}
+}
+@media(max-width:480px){
+  .header{padding:24px 16px 16px;}
+  .moves-section,.roadmap-section,.stacks-section,.grid-section,.advisor-section,.setup-section{padding:16px;}
+  .controls{padding:12px 16px;}
+  .tab-btn{padding:14px 16px;font-size:9px;}
+  .key-input{min-width:100%;max-width:100%;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-meta">
+    <span class="logo-tag">⚡ CATALYST OS</span>
+    <span class="version-tag">v2026.Q2 // METAL DRAGON BUILD</span>
+    <span class="live-tag"><span class="live-dot"></span>AI-POWERED</span>
+  </div>
+  <h1>AI INTEGRATION<br>HUB</h1>
+  <p class="header-sub">
+    70 tools. All mapped to <em>your</em> operations. Substack. Sneakers Fest. AI Consulting. SMM. Legal Docs. Comic IP. Personal Brand OS.<br>
+    No fluff. No demos. <em>Build for real work.</em>
+  </p>
+  <div class="stats-row">
+    <div class="stat"><span class="stat-num" data-counter="70">70</span><span class="stat-label">Total Tools</span></div>
+    <div class="stat"><span class="stat-num" data-counter="24" style="color:var(--orange)">24</span><span class="stat-label">Core Stack</span></div>
+    <div class="stat"><span class="stat-num" data-counter="30" style="color:var(--amber)">30</span><span class="stat-label">High Value</span></div>
+    <div class="stat"><span class="stat-num" data-counter="16" style="color:var(--blue)">16</span><span class="stat-label">Future Build</span></div>
+    <div class="stat"><span class="stat-num" data-counter="9" style="color:var(--green)">9</span><span class="stat-label">Categories</span></div>
+  </div>
+</header>
+
+<!-- TAB NAV -->
+<nav class="tab-nav">
+  <button class="tab-btn active" data-tab="overview" onclick="switchTab('overview',this)">OVERVIEW</button>
+  <button class="tab-btn" data-tab="tools" onclick="switchTab('tools',this)">TOOLS <span class="tab-badge">70</span></button>
+  <button class="tab-btn" data-tab="advisor" onclick="switchTab('advisor',this)">AI ADVISOR <span class="tab-badge">CLAUDE</span></button>
+  <button class="tab-btn" data-tab="setup" onclick="switchTab('setup',this)">SETUP <span class="tab-badge" id="checkBadge">0/28</span></button>
+</nav>
+
+<!-- ═══ TAB: OVERVIEW ═══ -->
+<div class="tab-panel active" id="tab-overview">
+
+  <!-- This Week's Moves -->
+  <section class="moves-section">
+    <div class="section-label">THIS WEEK'S 3 MOVES</div>
+    <div class="moves-grid">
+      <div class="move-card">
+        <div class="move-ghost">01</div>
+        <div class="move-num">MOVE 01 — INSTALL NOW</div>
+        <div class="move-title">The Foundation Trio</div>
+        <div class="move-desc">Claude Code + Cursor + Superpowers. Install all three before anything else. This is the dev environment everything runs on. One afternoon, maximum.</div>
+        <div class="move-action">→ npm install -g @anthropic-ai/claude-code</div>
+      </div>
+      <div class="move-card">
+        <div class="move-ghost">02</div>
+        <div class="move-num">MOVE 02 — THIS WEEK</div>
+        <div class="move-title">The Automation Backbone</div>
+        <div class="move-desc">Self-host n8n on Railway + connect Supabase. This is the plumbing every other tool runs through. Sneakers Fest payments, content pipeline, client automation — all of it lives here.</div>
+        <div class="move-action">→ railway.app → deploy n8n Docker image</div>
+      </div>
+      <div class="move-card">
+        <div class="move-ghost">03</div>
+        <div class="move-num">MOVE 03 — FIRST PROOF</div>
+        <div class="move-title">Voice to Substack Draft</div>
+        <div class="move-desc">Install Whisper. Record a voice note. Run it through the pipeline. Get a formatted Substack draft out the other end. This is how you know the machine works. First proof of concept.</div>
+        <div class="move-action">→ pip install openai-whisper crewaI instructor</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Build Order Roadmap -->
+  <section class="roadmap-section">
+    <div class="section-label">BUILD ORDER ROADMAP</div>
+    <p style="font-size:12px;color:var(--muted);font-family:'JetBrains Mono';margin-bottom:16px;">Scroll right → Sequential phases. Build in this order. Don't jump ahead.</p>
+    <div class="roadmap-scroll" id="roadmapScroll">
+      <div class="roadmap-track" id="roadmapTrack"></div>
+    </div>
+  </section>
+
+  <!-- Quick Start Stacks -->
+  <section class="stacks-section">
+    <div class="section-label">CATALYST QUICK START STACKS</div>
+    <div class="stack-grid">
+      <div class="stack-card">
+        <div class="stack-role">Content Pipeline</div>
+        <div class="stack-tools-txt"><strong>Whisper</strong> + <strong>CrewAI</strong> + <strong>Instructor</strong> + <strong>n8n</strong><br>Voice note → transcript → draft → Substack publish</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-role">Sneakers Fest 2026</div>
+        <div class="stack-tools-txt"><strong>Stripe</strong> + <strong>Supabase MCP</strong> + <strong>n8n</strong> + <strong>Resend</strong><br>Registration, payments, automation, email — all live</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-role">AI Consulting</div>
+        <div class="stack-tools-txt"><strong>Dify</strong> + <strong>Portkey Gateway</strong> + <strong>CrewAI</strong> + <strong>lmnr</strong><br>Build client AI tools, demo and deliver results fast</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-role">SMM Clients</div>
+        <div class="stack-tools-txt"><strong>Marketing Skills</strong> + <strong>Claude SEO</strong> + <strong>Zapier</strong> + <strong>Firecrawl</strong><br>Content, scheduling, SEO audits, competitor intel</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-role">Legal Docs (Chambers)</div>
+        <div class="stack-tools-txt"><strong>PDF Processing</strong> + <strong>ExtractThinker</strong> + <strong>Instructor</strong> + <strong>Claude Code</strong><br>Affidavits, particulars, formatted legal output</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-role">Comic IP Pipeline</div>
+        <div class="stack-tools-txt"><strong>ComfyUI</strong> + <strong>Replicate</strong> + <strong>AI4Animation</strong> + <strong>Claude Code</strong><br>Character art, motion, panel layout, production</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-role">Personal Brand OS</div>
+        <div class="stack-tools-txt"><strong>OpenClaw</strong> + <strong>Chroma</strong> + <strong>Deep Research</strong> + <strong>ElevenLabs</strong><br>Archive, search, research, audio — full brand system</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-role">Local Private AI</div>
+        <div class="stack-tools-txt"><strong>Ollama</strong> + <strong>Open WebUI</strong> + <strong>Unsloth</strong> + <strong>vLLM</strong><br>Confidential client data, zero API costs, fine-tuned voice</div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /tab-overview -->
+
+<!-- ═══ TAB: TOOLS ═══ -->
+<div class="tab-panel" id="tab-tools">
+  <div class="controls">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search tools, workflows, use cases..." oninput="filterTools()">
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+      <div class="filter-row" id="catFilters">
+        <button class="filter-btn active" onclick="setCat('all',this)">ALL</button>
+        <button class="filter-btn" onclick="setCat('coding',this)">CODING</button>
+        <button class="filter-btn" onclick="setCat('agents',this)">AGENTS</button>
+        <button class="filter-btn" onclick="setCat('mcp',this)">MCP</button>
+        <button class="filter-btn" onclick="setCat('skills',this)">SKILLS</button>
+        <button class="filter-btn" onclick="setCat('local',this)">LOCAL AI</button>
+        <button class="filter-btn" onclick="setCat('automation',this)">AUTOMATION</button>
+        <button class="filter-btn" onclick="setCat('data',this)">DATA/RAG</button>
+        <button class="filter-btn" onclick="setCat('infra',this)">INFRA</button>
+        <button class="filter-btn" onclick="setCat('learning',this)">LEARNING</button>
+      </div>
+      <span class="results-count" id="resultsCount">70 tools</span>
+    </div>
+    <div class="priority-row">
+      <button class="p-btn all active" onclick="setPri('all',this)">ALL PRIORITY</button>
+      <button class="p-btn core" onclick="setPri('core',this)">● CORE — USE NOW</button>
+      <button class="p-btn high" onclick="setPri('high',this)">● HIGH — 30 DAYS</button>
+      <button class="p-btn future" onclick="setPri('future',this)">● FUTURE — Q3/Q4</button>
+    </div>
+  </div>
+  <div class="grid-section">
+    <div class="section-label" style="margin-bottom:20px;">ALL 70 TOOLS — CATALYST MAPPED</div>
+    <div class="tools-grid" id="toolsGrid"></div>
+    <div class="no-results" id="noResults">No tools match. Try a different search.</div>
+  </div>
+</div><!-- /tab-tools -->
+
+<!-- ═══ TAB: AI ADVISOR ═══ -->
+<div class="tab-panel" id="tab-advisor">
+  <div class="advisor-section">
+    <div class="advisor-title">AI STACK ADVISOR</div>
+    <p class="advisor-subtitle">Describe a problem or workflow. Claude picks the exact tools from your 70-tool arsenal and maps a specific implementation plan. No generic recommendations. Everything tied to Catalyst OS operations.</p>
+    
+    <div class="examples-row">
+      <div class="ex-label">EXAMPLE QUERIES — CLICK TO USE</div>
+      <div class="ex-chips">
+        <span class="ex-chip" onclick="useExample(this)">Automate my voice note to Substack pipeline</span>
+        <span class="ex-chip" onclick="useExample(this)">Build Sneakers Fest ticket registration + payments</span>
+        <span class="ex-chip" onclick="useExample(this)">Automate legal doc formatting for chambers</span>
+        <span class="ex-chip" onclick="useExample(this)">Research workflow for The Great Sabotage articles</span>
+        <span class="ex-chip" onclick="useExample(this)">Set up SMM automation for my retainer clients</span>
+        <span class="ex-chip" onclick="useExample(this)">Generate visual assets for the Catalyst OS comic</span>
+      </div>
+    </div>
+
+    <div class="advisor-input-area">
+      <div class="advisor-prompt-label">DESCRIBE YOUR PROBLEM OR GOAL</div>
+      <textarea class="advisor-textarea" id="advisorInput" placeholder="e.g. I want to turn voice notes into finished Substack articles automatically without touching a keyboard..."></textarea>
+      <div class="advisor-controls">
+        <input type="password" class="key-input" id="apiKeyInput" placeholder="Anthropic API key (sk-ant-...) — leave blank in Claude.ai">
+        <button class="advisor-btn" id="advisorBtn" onclick="getAdvice()">GET STACK →</button>
+        <span class="advisor-hint">Works natively in Claude.ai. For local use, add your API key above.</span>
+      </div>
+    </div>
+
+    <div class="advisor-loading" id="advisorLoading">
+      <div class="loading-text">ANALYZING YOUR OPERATION<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></div>
+    </div>
+    <div class="advisor-error" id="advisorError"></div>
+    <div class="advisor-result" id="advisorResult"></div>
+  </div>
+</div><!-- /tab-advisor -->
+
+<!-- ═══ TAB: SETUP ═══ -->
+<div class="tab-panel" id="tab-setup">
+  <div class="setup-section">
+    <div class="setup-title">7-DAY SETUP PROTOCOL</div>
+    <p class="setup-subtitle">Day-by-day build sequence. Complete in order. Each day is ~2-3 hours of actual work. By day 7, Catalyst OS is live and generating output.</p>
+    <div class="setup-progress-card">
+      <div class="progress-top">
+        <span class="progress-label">SETUP PROGRESS</span>
+        <span class="progress-count" id="progressCount">0 / 28</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+    <div class="days-list" id="daysList"></div>
+    <button class="reset-btn" onclick="resetChecklist()">RESET CHECKLIST</button>
+  </div>
+</div><!-- /tab-setup -->
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div>
+        <div id="modalMeta" style="font-family:'JetBrains Mono';font-size:10px;color:var(--muted);margin-bottom:4px;letter-spacing:1px;"></div>
+        <div id="modalName" style="font-family:'Syne';font-size:22px;font-weight:800;"></div>
+        <div id="modalTagline" style="font-size:12px;color:var(--muted);margin-top:2px;"></div>
+      </div>
+      <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<footer>
+  Built for <span>Oluwatobiloba The Catalyst</span> // Lagos, Nigeria // Metal Dragon // INFJ<br>
+  2026 is the launch. The fire made the metal stronger. <span>Now build.</span>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════
+   TOOLS DATABASE — 70 TOOLS
+═══════════════════════════════════════ */
+const TOOLS = [
+  // CODING AGENTS & IDEs
+  {id:1,name:"Claude Code",cat:"coding",tagline:"Terminal agent. 80.8% SWE-bench. The gold standard.",catalystUse:"Your primary code builder. Write the voice-to-content automation pipeline, generate Sneakers Fest ticketing scripts, build Python doc formatters for chambers, and develop Catalyst OS tools directly from the terminal. The foundation everything else builds on.",priority:"core",workflow:["npm install -g @anthropic-ai/claude-code","Use in any project folder — it reads your entire codebase","Task: 'Build an n8n webhook that receives audio and returns formatted Substack draft'","Iterate in the terminal without copy-pasting to chat boxes"]},
+  {id:2,name:"Cursor",cat:"coding",tagline:"AI-first IDE. 8 parallel agents. Replaces VS Code.",catalystUse:"Write and iterate on all Catalyst OS automation scripts. Edit multiple files at once for SMM client dashboards. Use parallel agents to build Sneakers Fest landing page components simultaneously. This is where you spend most of your build time.",priority:"core",workflow:["Download Cursor IDE from cursor.com","Open any Catalyst OS project folder","Cmd+K to edit inline, Cmd+L to chat about the whole codebase","Run 8 agents in parallel for complex multi-file builds"]},
+  {id:3,name:"Codex CLI",cat:"coding",tagline:"OpenAI terminal agent. Multi-step task execution.",catalystUse:"Backup terminal agent when Claude Code hits rate limits. Use for batch document processing — 'take this folder of voice transcripts, format each as a Substack article, output as .docx files'. Good fallback for long multi-step sequences.",priority:"high",workflow:["npm install -g @openai/codex","Use for file batch processing tasks","Good for long multi-step sequences that need persistence"]},
+  {id:4,name:"Windsurf",cat:"coding",tagline:"Cascade agent. Flow-state coding. Zero interruption.",catalystUse:"Deep-build sessions on Catalyst OS infrastructure. When you need to stay in flow building complex systems without interruption — Cascade plans the full build before executing. Use for client AI app builds that span multiple files and services.",priority:"high",workflow:["Download Windsurf IDE","Activate Cascade for autonomous multi-step builds","Best for long sessions building client AI apps","Plans architecture first, then executes systematically"]},
+  {id:5,name:"Devin",cat:"coding",tagline:"Most autonomous AI engineer. Full end-to-end builds.",catalystUse:"Complex autonomous builds — the Sneakers Fest full-stack web app including registration, payments, countdown, and vendor portal. Write a detailed PRD and let it build while you focus on strategy. Best for large greenfield projects.",priority:"future",workflow:["devin.ai — web-based platform","Write a detailed PRD for the target system","Assign: 'Build Sneakers Fest 2026 event website with Supabase backend'","Review, iterate, and ship"]},
+  {id:6,name:"Aider",cat:"coding",tagline:"AI pair programming. Any LLM. 30K+ GitHub stars.",catalystUse:"Quick code fixes and iterations on existing Catalyst OS scripts. Open source — works with Claude, GPT, Gemini. Good for rapid single-file edits when you don't want to open a full IDE. Fast iteration tool.",priority:"high",workflow:["pip install aider-chat","aider --claude-sonnet or --gpt-4o","Pair code with any model on any file","Fast for quick single-file improvements"]},
+  {id:7,name:"Superpowers",cat:"coding",tagline:"94K+ stars. AI interface supercharger. Install first.",catalystUse:"Browser extension that upgrades every AI interface you use. Adds prompt history, templates, and custom system prompts. Install on day one — it upgrades Claude.ai, ChatGPT, Gemini across all tabs simultaneously.",priority:"core",workflow:["Install from Chrome Web Store","Set Catalyst OS system prompt as default across all tools","Build prompt library: content drafts, legal formatting, SMM briefs","Use across all AI tools without re-entering context"]},
+  // AGENT FRAMEWORKS
+  {id:8,name:"OpenClaw",cat:"agents",tagline:"210K+ stars. Multi-channel personal agent backbone.",catalystUse:"Your Catalyst OS command center agent. Monitors Substack metrics, tracks Sneakers Fest registrations, manages your content calendar, and sends you daily briefings. Connect to n8n for action execution. This is the intelligence layer on top of all your data.",priority:"core",workflow:["Clone from GitHub: open-claw","Configure channels: email, Substack, social monitoring","Set up daily digest: Catalyst metrics, registrations, trending topics","Connect to n8n for automated action execution"]},
+  {id:9,name:"LangGraph",cat:"agents",tagline:"Multi-agent graphs. 26K+ stars. Stateful pipelines.",catalystUse:"Build the content pipeline as a graph: Node 1 receives transcript, Node 2 generates Substack draft, Node 3 generates YouTube script, Node 4 generates Shorts script, Node 5 formats Word doc. Visual, stateful, recoverable — if it fails at step 4, it resumes there.",priority:"high",workflow:["pip install langgraph","Map your content pipeline as a graph — each node is one transformation","Add conditional logic: if transcript is under 500 words, skip YouTube long-form","Recoverable: failed runs resume from last checkpoint, not from scratch"]},
+  {id:10,name:"CrewAI",cat:"agents",tagline:"Role-based agent teams. Your virtual AI workforce.",catalystUse:"Build your virtual content team: Content Director plans the piece, Researcher pulls context, Substack Writer drafts the article, SEO Editor optimizes, Social Manager writes platform posts. All running autonomously on every voice note. This is how you scale content without scaling effort.",priority:"core",workflow:["pip install crewai","Define agents: Content Director, Researcher, Writer, SEO Editor","Define tasks and assign to agents with specific goals","Set process: sequential or hierarchical","Run on voice note → get full content package output"]},
+  {id:11,name:"AutoGPT",cat:"agents",tagline:"The original autonomous agent. Matured and stable.",catalystUse:"Automated background research — run AutoGPT to monitor Lagos sneaker market, track competitor Substack growth, compile weekly industry reports. Set it running and check results daily. Good for ongoing monitoring tasks that don't need human input.",priority:"high",workflow:["Clone AutoGPT from GitHub","Set goals: 'Monitor Lagos sneaker industry news daily and compile a brief'","Run on schedule via cron job","Review compiled output every morning"]},
+  {id:12,name:"Dify",cat:"agents",tagline:"No-code LLM app builder. RAG + agents. Deploy instantly.",catalystUse:"Build and deliver AI tools to consulting clients without code on their end. Create 'Legal Doc Formatter' for chambers, 'Social Media Calendar Generator' for SMM clients, 'Event Brief Builder' for corporate clients. Deliver as a shareable web URL — they use it immediately.",priority:"core",workflow:["dify.ai — sign up free","New app → choose Agent type → connect Claude as model","Add knowledge base (client docs, brand guide)","Share the URL with the client — zero setup on their side"]},
+  {id:13,name:"OWL",cat:"agents",tagline:"Tops GAIA benchmark. Multi-agent coordination at scale.",catalystUse:"Complex multi-agent coordination — when you need multiple agents working in parallel across different workflows. Content pipeline + event management + client reporting simultaneously. GAIA benchmark means it handles real-world messy tasks, not clean demos.",priority:"future",workflow:["Clone OWL from GitHub","Define coordinator agent + specialized worker agents","Assign parallel workstreams: content, event tracking, client reporting","Coordinator manages conflicts, prioritization, and dependencies"]},
+  {id:14,name:"CopilotKit",cat:"agents",tagline:"Embed AI copilots inside your React apps.",catalystUse:"Embed an AI co-pilot into the Catalyst OS dashboard — type natural language commands inside your own tools. 'Add 3 new vendors to Sneakers Fest list' or 'Draft this week's Substack intro' from within your custom dashboard. Makes your tools conversational.",priority:"future",workflow:["npm install @copilotkit/react-core","Wrap your React app in CopilotKit provider","Add sidebar or popup copilot component","Define actions your copilot can perform within the app"]},
+  {id:15,name:"pydantic-ai",cat:"agents",tagline:"Type-safe. Validated AI outputs. No broken deliverables.",catalystUse:"When building client deliverables via AI, pydantic-ai ensures structured, validated outputs — so Claude never returns a malformed document, broken JSON, or incomplete proposal. Critical for professional consulting work where output quality is your reputation.",priority:"high",workflow:["pip install pydantic-ai","Define output schema: SubstackArticle, ClientProposal, EventBrief","AI output is validated against schema before delivery","If invalid, auto-retries — your client never sees a broken output"]},
+  // MCP SERVERS
+  {id:16,name:"Tavily",cat:"mcp",tagline:"AI-native search. Clean LLM-ready data. No scraping noise.",catalystUse:"Research engine for Substack articles. When writing on Lagos entrepreneurship, sneaker culture, AI trends, or Islamic philosophy — returns clean, citation-ready data. Integrates directly with Claude Code so research happens in your terminal alongside your writing.",priority:"core",workflow:["Get API key at tavily.com","Add as MCP server in Claude Code or Cursor","Use in content research: 'Find 5 recent data points on Nigerian sneaker market growth'","Returns structured, LLM-ready results with source citations"]},
+  {id:17,name:"Context7",cat:"mcp",tagline:"Live library docs. Zero hallucinated APIs.",catalystUse:"When building Catalyst OS tools, Claude references current docs for n8n, Supabase, FastAPI, Stripe, etc. instead of outdated training data. Eliminates the #1 cause of broken code: hallucinated method names and deprecated API calls. Add 'use context7' to every coding prompt.",priority:"core",workflow:["Add Context7 MCP server to Claude Code","Claude automatically fetches live docs for any library","Add 'use context7' to your prompts","Zero hallucinated method names or outdated parameters — ever"]},
+  {id:18,name:"Task Master AI",cat:"mcp",tagline:"AI project manager. PRD to task breakdown. State persists.",catalystUse:"Write the Sneakers Fest 2026 PRD once — Task Master breaks it into 200+ granular dev tasks with dependencies and tracks completion across Claude Code sessions. Also manages Substack content calendar and consulting project timelines. State persists between sessions.",priority:"core",workflow:["Install Task Master AI MCP","Write your PRD: 'Sneakers Fest 2026 event platform with X Y Z requirements'","It generates a full task breakdown with dependencies","Track progress across Claude Code sessions — it remembers everything"]},
+  {id:19,name:"MCP Playwright",cat:"mcp",tagline:"Browser automation via natural language. No Selenium.",catalystUse:"Automate repetitive browser tasks: fill vendor registration forms, post content across multiple social platforms, scrape competitor pricing, auto-schedule Instagram posts. You describe what to do in plain English and it controls the browser while you watch.",priority:"high",workflow:["Add Playwright MCP to Claude Code","Tell it: 'Go to Instagram, log in, post this caption with this image'","It controls the browser autonomously","Script repetitive form-filling for Sneakers Fest event management"]},
+  {id:20,name:"Figma MCP",cat:"mcp",tagline:"Design files to production code. One step.",catalystUse:"Convert Catalyst OS brand designs directly to working React components — Sneakers Fest landing page, Substack cover graphics as HTML, social media post templates as web components. Design to pixel-perfect code without manual translation.",priority:"future",workflow:["Add Figma MCP in Cursor or Claude Code","Share Figma file link","'Convert this Figma component to a React component matching the design exactly'","Produces pixel-perfect code from your design files"]},
+  {id:21,name:"Supabase MCP",cat:"mcp",tagline:"Database ops through natural language. No SQL needed.",catalystUse:"Manage Sneakers Fest registrations, vendor data, ticket sales, and client CRM in plain English. 'Show me all vendors who registered in the last 48 hours' or 'Update ticket count for early bird tier' — directly from your terminal while building.",priority:"core",workflow:["Set up Supabase project for Catalyst OS","Add Supabase MCP to Claude Code","Connect with your project URL and service key","Query your entire database in plain English from the terminal"]},
+  {id:22,name:"GitHub MCP",cat:"mcp",tagline:"Issues, PRs, repos managed by AI agents.",catalystUse:"Manage all Catalyst OS code via AI — create issues from voice notes, review PRs, manage repos for Sneakers Fest website, Substack automation, and client tools. Your AI agents can open PRs, review code, and flag problems without you touching GitHub directly.",priority:"high",workflow:["Connect GitHub MCP to Claude Code","'Create a GitHub issue: Substack formatter breaks when voice note is under 2 minutes'","Agents can open PRs, review code, and merge approved changes","Full project management through natural language commands"]},
+  {id:23,name:"fastmcp",cat:"mcp",tagline:"Build custom MCP servers in Python. Your own tools.",catalystUse:"Build proprietary MCPs for Catalyst-specific workflows — a CatalystContent MCP with tools for your exact Substack format, a SneakersFest MCP that knows all vendor and event data, a Chambers MCP with Nigerian legal document templates. Your own toolset, permanent.",priority:"future",workflow:["pip install fastmcp","Build custom tool with @mcp.tool decorator in Python","Deploy as MCP server","Connect to Claude Code — Claude now has access to YOUR proprietary tools"]},
+  // CLAUDE SKILLS
+  {id:24,name:"PDF Processing",cat:"skills",tagline:"Extract, merge, split, fill. Full PDF pipeline.",catalystUse:"Core skill for chambers work — extract data from uploaded legal documents, merge affidavits, split multi-party case files, fill form templates. Also use for reading vendor agreements and sponsor contracts for Sneakers Fest. Already available in your Claude Pro environment.",priority:"core",workflow:["Already available in Claude.ai Pro","Upload any PDF and ask for extraction, merging, splitting","Use for: chambers affidavits, sponsor contracts, event permits","Combine with Instructor for structured output from legal docs"]},
+  {id:25,name:"Frontend Design",cat:"skills",tagline:"277K+ installs. Production-grade UI. No AI slop look.",catalystUse:"Build Catalyst OS branded interfaces — Sneakers Fest landing page, Substack custom elements, client-facing AI tool UIs. This skill forces Claude to produce visually distinctive, non-generic designs. The tool that built the interface you're reading right now.",priority:"core",workflow:["Already installed in your Claude environment","Ask for any UI component or page","Specify: 'Dark industrial aesthetic, orange accents, Lagos energy'","Produces production-grade designs — not AI template output"]},
+  {id:26,name:"Skill Creator",cat:"skills",tagline:"Describe workflow. Get a custom skill in 5 min.",catalystUse:"Build custom Claude skills for YOUR exact workflows — a CatalystContent skill that knows your voice and Substack format, a ChambersDocs skill that knows Nigerian legal document conventions, a SneakersFest skill that knows your event structure. Permanent workflow optimization.",priority:"high",workflow:["Access Skill Creator in Claude","Describe workflow: 'Format voice transcripts into Substack articles with my specific style'","It generates a SKILL.md file","Install it — Claude performs that workflow at expert level every time"]},
+  {id:27,name:"MCP Builder",cat:"skills",tagline:"Build MCP servers. Architecture + code in one shot.",catalystUse:"Use this skill to guide building of custom Catalyst OS MCP servers. The skill knows the patterns and best practices for reliable, production MCPs. Pairs with fastmcp for implementation. Use when you need Claude's help designing the architecture before writing any code.",priority:"future",workflow:["Active in Claude — use alongside fastmcp","'Build me an MCP server with tools for managing Sneakers Fest vendor list'","It designs the architecture and writes the Python code","Deploy and connect to your agents"]},
+  {id:28,name:"Claude API Skill",cat:"skills",tagline:"8 language API quickstart. Production-ready code.",catalystUse:"When building client AI consulting products — this skill gives you production-ready Claude API integration code in Python, Node.js, and more. Use to build bespoke AI tools for chambers, SMM clients, and corporate consulting. Your fastest path from idea to deployable client tool.",priority:"core",workflow:["Active in Claude","'Build a Python script that takes a legal brief and returns formatted particulars of claim'","Get production-ready integration code immediately","Deploy as a client deliverable or internal tool"]},
+  {id:29,name:"WebApp Testing",cat:"skills",tagline:"Playwright tests via plain English descriptions.",catalystUse:"Test Catalyst OS tools before handing to clients — 'Test that the vendor registration form submits correctly and stores data in Supabase'. Professional quality delivery every time. This is what separates you from consultants who just demo and hope.",priority:"high",workflow:["Active in Claude","Describe your app's expected behavior in plain English","Claude generates a full Playwright test suite","Run tests automatically before every client demo or launch"]},
+  {id:30,name:"Marketing Skills",cat:"skills",tagline:"CRO, copywriting, SEO, email. Full marketing stack.",catalystUse:"Primary skill for SMM client work — conversion copy, email sequences, social captions, landing page copy, ad creative. Apply to all retainer clients. Also powers Sneakers Fest marketing: ticket sales page copy, early bird urgency messaging, vendor outreach emails.",priority:"core",workflow:["Active in Claude","Brief with client brand voice, target audience, and conversion goal","Output: social captions, email campaigns, ad copy, landing pages","Apply CRO principles to Sneakers Fest ticket sales page"]},
+  {id:31,name:"Claude SEO",cat:"skills",tagline:"12 sub-skills. Full-site audit. Upsell opportunity.",catalystUse:"Upsell to SMM clients — a full SEO audit as an additional service on top of your base retainer. Audit their site, fix technical SEO, build content strategy. High-value deliverable with low additional effort. Turn a ₦100K retainer into a ₦150K one.",priority:"high",workflow:["Active in Claude","Provide client website URL","Run full audit: technical, on-page, content gaps, competitor analysis","Generate prioritized action plan","Deliver as professional SEO report (docx)"]},
+  {id:32,name:"Deep Research",cat:"skills",tagline:"8-phase deep research. Auto-continuation. Cited output.",catalystUse:"Use for every major Substack piece — 8-phase research means your articles cite real data, not surface-level takes. Critical for consulting pitches: 'Research the state of AI adoption in Nigerian professional practices' before walking into a chambers or corporate pitch.",priority:"core",workflow:["Active in Claude Pro (Research feature)","State your research topic with full context and what you need it for","It runs 8 phases autonomously, follows citations, synthesizes findings","Output is a comprehensive brief you convert to content or pitch deck"]},
+  // LOCAL AI
+  {id:33,name:"Ollama",cat:"local",tagline:"Run LLMs locally. One command. Zero API cost.",catalystUse:"Run AI on your machine for confidential client data — chambers legal documents, client financial info, personal brand data. Zero API costs for high-volume tasks. Run Llama 3, Mistral, Qwen locally. Essential for sensitive consulting work where data leaves Nigeria as a liability.",priority:"high",workflow:["brew install ollama (Mac) or curl install on Linux","ollama pull llama3.3","ollama run llama3.3 — local model running instantly","Connect Open WebUI as the interface (tool #34)"]},
+  {id:34,name:"Open WebUI",cat:"local",tagline:"Self-hosted ChatGPT-quality interface. Full privacy.",catalystUse:"Your private AI workspace — ChatGPT-quality interface running entirely on your machine. Use for sensitive client work where you can't share data with external APIs. Configure with multiple local models via Ollama. Also build client-facing local AI tools for confidential industries.",priority:"high",workflow:["docker run -d -p 3000:80 ghcr.io/open-webui/open-webui","Connect to Ollama backend at localhost:11434","Set up custom system prompts for Catalyst OS workflows","Access at localhost:3000 — fully private, zero external data"]},
+  {id:35,name:"LlamaFile",cat:"local",tagline:"LLM as single executable. Zero setup. Offline.",catalystUse:"Single-file AI for on-the-go consulting — download one file, run anywhere, no setup, no internet. Use on client site visits, events, or when internet is unreliable in Lagos. Instant AI without connectivity dependency. Best backup when everything else fails.",priority:"future",workflow:["Download .llamafile from Mozilla's GitHub releases","chmod +x llamafile && ./llamafile","Opens a local web UI in your browser instantly","Works offline, no installation, no dependencies, no API keys"]},
+  {id:36,name:"Unsloth",cat:"local",tagline:"Fine-tune 2x faster. 70% less VRAM. Train your voice.",catalystUse:"Fine-tune a model on your 72K-word Catalyst Manifesto, The Great Sabotage, Dark Matter — creating a model that writes in YOUR voice. Deploy it to generate first drafts that sound like Catalyst, not like generic AI output. Your most valuable proprietary asset.",priority:"future",workflow:["pip install unsloth","Collect training data: all Catalyst OS writing output","Fine-tune Llama 3 on your content — runs on consumer GPU or Google Colab free tier","Deploy with Ollama or vLLM as your personal writing model"]},
+  {id:37,name:"vLLM",cat:"local",tagline:"2-4x faster inference. Production deployment. OpenAI-compatible.",catalystUse:"Once you fine-tune a Catalyst voice model via Unsloth, deploy it with vLLM for production-speed inference. Build a private API endpoint that SMM clients or consulting clients access — your proprietary AI model as a service. Premium consulting offering.",priority:"future",workflow:["pip install vllm","vllm serve your-catalyst-model","Creates OpenAI-compatible API endpoint at localhost:8000","Connect Dify, n8n, or any tool to your own model server"]},
+  // WORKFLOW & AUTOMATION
+  {id:38,name:"n8n",cat:"automation",tagline:"400+ integrations. 4K+ templates. Self-host. Zero per-run cost.",catalystUse:"The backbone of Catalyst OS automation. Every pipeline runs through here. Voice note → Whisper transcription → Claude formatting → Substack draft → email notify. Sneakers Fest: registration form → Supabase store → welcome email → Slack alert. Self-host on Railway = zero per-run costs forever.",priority:"core",workflow:["Deploy via Railway (n8n Docker image) — ~5 minutes","Build your first workflow: Webhook → Claude API → Gmail","Template 1: Voice note to content package","Template 2: Stripe payment → Supabase + confirmation email","Template 3: Daily Substack metrics → Telegram digest"]},
+  {id:39,name:"Langflow",cat:"automation",tagline:"Visual drag-and-drop AI pipeline builder. 140K+ stars.",catalystUse:"Visual alternative for AI-specific pipelines. Drag and drop: Load Document → Split Text → Embed → Store in Chroma → Retrieve → Claude → Output. Build your content RAG pipeline visually without writing Python. Great for prototyping before productionizing.",priority:"high",workflow:["pip install langflow","langflow run — opens browser UI","Drag components: Claude, Chroma, File Loader, Text Splitter","Build content archive pipeline visually","Export as Python when ready to productionize in n8n"]},
+  {id:40,name:"Huginn",cat:"automation",tagline:"Self-hosted web agents. Privacy-first intelligence network.",catalystUse:"Monitor the web privately — track competitor Substack stats, get alerted when 'Sneakers Fest' is mentioned online, watch for Lagos tech event announcements, track sneaker brand news. Alerts you automatically. No data shared with third parties. Your private intelligence network.",priority:"future",workflow:["Clone Huginn from GitHub — Docker deploy","Create Agents: 'Monitor Google for Lagos sneaker events'","Set scenarios: if new result → send Telegram message","Runs 24/7 as your private web intelligence system"]},
+  {id:41,name:"DSPy",cat:"automation",tagline:"Program models, not just prompt them. Auto-optimization.",catalystUse:"Optimize your content pipeline prompts automatically. Instead of manually tweaking prompts for better output, DSPy finds the optimal prompt through systematic testing. Use to maximize quality of Substack drafts, proposal generation, and client reports over time.",priority:"future",workflow:["pip install dspy-ai","Define task: input = voice transcript, output = quality Substack draft","Define metric: what makes the output good (structure, length, voice match)","DSPy optimizes prompts automatically through examples — set it and it improves"]},
+  {id:42,name:"Temporal",cat:"automation",tagline:"Durable workflows. Survives server crashes. No lost data.",catalystUse:"Production-grade workflows for Sneakers Fest — ticket purchase → payment confirmation → ticket generation → email delivery → database update. Each step is durable: if the server crashes at step 3, it resumes at step 3. No lost registrations. No angry ticket buyers.",priority:"future",workflow:["temporal.io — cloud or self-host","Define workflow activities in Python","Workflow state persists through any failure or restart","Critical for any payment or registration flow at Sneakers Fest"]},
+  // DATA & RAG
+  {id:43,name:"GPT Researcher",cat:"data",tagline:"Autonomous research reports with verified sources.",catalystUse:"Generate full research reports for consulting pitches — 'State of AI adoption in Nigerian SMEs 2026'. Run before every major client meeting. Also generates Substack research briefs: comprehensive, cited, under 10 minutes. Ends the hours you spend gathering research manually.",priority:"high",workflow:["pip install gpt-researcher","from gpt_researcher import GPTResearcher","researcher.research('Sneakers resale market in Lagos 2025-2026')","Get full report with sources and citations — ready to use in your article or pitch"]},
+  {id:44,name:"Firecrawl",cat:"data",tagline:"Any website into LLM-ready data. Full site crawls.",catalystUse:"Scrape sneaker brand websites, competitor event pages, and industry blogs into clean data for your AI. Research competitor Substack pricing and strategy. Crawl vendor websites before Sneakers Fest outreach. Feed clean data to your Chroma RAG system.",priority:"high",workflow:["firecrawl.dev — get API key","firecrawl.scrape_url(url) — single page, firecrawl.crawl_url(url) — full site","Feed output to Chroma for semantic search across all scraped content","Use: competitor intel, sponsor research, content enrichment"]},
+  {id:45,name:"Vanna AI",cat:"data",tagline:"Natural language to SQL. Ask your database anything.",catalystUse:"Query your Sneakers Fest Supabase database in plain English — 'How many tickets sold this week vs last week', 'Top 5 vendor categories by registration count', 'Which ticket tier has highest cart abandonment'. No SQL. Real-time business intelligence.",priority:"future",workflow:["pip install vanna","Connect to Supabase PostgreSQL database","Train Vanna on your schema","Ask questions in plain English, get SQL + results automatically","Build a simple dashboard interface for event-day monitoring"]},
+  {id:46,name:"Instructor",cat:"data",tagline:"Structured JSON from any LLM. Validated every time.",catalystUse:"Make Claude output perfectly structured data every time — SubstackArticle with exact fields, EventBrief with required sections, LegalDoc with proper formatting, ClientProposal with correct structure. Eliminates all manual reformatting. Your AI outputs are now as reliable as a function call.",priority:"core",workflow:["pip install instructor","import instructor — define Pydantic model: class SubstackArticle(BaseModel)","client = instructor.from_anthropic(Anthropic())","article = client.messages.create(response_model=SubstackArticle, ...)","Always returns valid, structured output — auto-retries on validation failure"]},
+  {id:47,name:"Chroma",cat:"data",tagline:"Open-source vector database. Semantic search over your archive.",catalystUse:"Store all Catalyst OS content in a vector database — every Substack article, The Great Sabotage, Catalyst Manifesto, Dark Matter, voice transcripts. Then: 'Find everything I've written about betrayal and resilience' — semantic search across your entire creative archive.",priority:"high",workflow:["pip install chromadb","client = chromadb.Client()","collection = client.create_collection('catalyst_archive')","Add all your documents with embeddings — batch upload everything","Query: collection.query(query_texts=['betrayal and rebuilding']) — instant semantic results"]},
+  {id:48,name:"dlt",cat:"data",tagline:"Data pipelines from 5,000+ sources. Set and forget.",catalystUse:"Automated data pipelines — Substack analytics → Supabase, Sneakers Fest registrations → data warehouse, client social media metrics → dashboard. Set up once, data flows automatically. Use to build client reporting infrastructure without manual exports.",priority:"future",workflow:["pip install dlt","Define source (Substack API, Supabase) and destination","dlt pipeline runs on schedule via n8n or cron","Data always flows to the right place without manual intervention"]},
+  {id:49,name:"ExtractThinker",cat:"data",tagline:"Structured data from any document. Pydantic output.",catalystUse:"Extract structured data from uploaded client documents — pull all party names, dates, case numbers from legal briefs for chambers. Extract vendor details from registration PDFs for Sneakers Fest. Convert unstructured uploads into workable, queryable data automatically.",priority:"high",workflow:["pip install extract-thinker","Load document: extractor.load_file(path)","Define extraction schema as Pydantic model: class LegalBrief(BaseModel)","result = extractor.extract(document, LegalBrief)","Returns clean structured data from any messy document — legal, vendor, contract"]},
+  // INFRA
+  {id:50,name:"FastAPI",cat:"infra",tagline:"Python web framework for AI apps. Fast to build and deploy.",catalystUse:"Backend infrastructure for all Catalyst OS tools — Sneakers Fest API for ticket purchases and vendor registration, Claude API wrapper for client tools, content pipeline webhook receiver. Production-grade Python APIs. Build endpoints in minutes, deploy on Railway.",priority:"core",workflow:["pip install fastapi uvicorn","Build endpoints: POST /transcribe, POST /format-content, GET /event-stats","Deploy on Railway — push to GitHub, auto-deploys","Connect to Supabase, Claude API, n8n webhooks","Backbone of all Catalyst OS production tools"]},
+  {id:51,name:"Portkey Gateway",cat:"infra",tagline:"Route to 250+ LLMs. One API. Cost intelligence.",catalystUse:"Manage all AI provider costs intelligently — use Claude for creative content, GPT-4o for specific tasks, Gemini for free tier tasks. One API key routes everything. Add fallbacks: if Claude rate limits, auto-route to GPT. Track spend across all projects. Essential at scale.",priority:"high",workflow:["portkey.ai — sign up","Get Portkey API key — replaces direct Anthropic/OpenAI calls","Configure routing rules: task type → best model for cost and quality","Monitor costs and latency across all your AI usage in one dashboard"]},
+  {id:52,name:"lmnr",cat:"infra",tagline:"Trace and evaluate agent behavior. Debug production AI.",catalystUse:"Monitor your Catalyst OS AI agents — when the content pipeline runs, see every decision it made, where it slowed down, where it failed. Essential for debugging complex CrewAI or LangGraph pipelines in production. Find and fix the 20% of agent behavior causing 80% of output quality issues.",priority:"future",workflow:["pip install lmnr","Wrap agent runs with lmnr tracing: lmnr.start_as_current_span('content-pipeline')","View detailed traces in the lmnr dashboard","Identify bottlenecks and fix them — data-driven agent improvement"]},
+  {id:53,name:"Codebase Memory MCP",cat:"infra",tagline:"Claude remembers your entire project between sessions.",catalystUse:"Claude forgets your codebase between sessions — this MCP gives it permanent memory of all Catalyst OS code. Every time you open Claude Code on a project, it already knows the architecture, conventions, and past decisions. No re-explaining from scratch every session.",priority:"high",workflow:["Install Codebase Memory MCP","Index your Catalyst OS repo on first run","Claude reads the memory index on every new session","'Remember we decided to use Supabase over Firebase' — it actually does","Works across Claude Code sessions permanently"]},
+  // LEARNING
+  {id:54,name:"Awesome Claude Skills",cat:"learning",tagline:"22K+ stars. Best curated skills list. Updated regularly.",catalystUse:"Your discovery resource for new Claude skills. Check monthly to find skills relevant to evolving workflows. As Catalyst OS grows, new skill needs emerge. Find them here before building custom ones from scratch — someone probably already built what you need.",priority:"high",workflow:["github.com/awesome-claude-skills","Browse by category: writing, coding, research, business, legal","Install directly from listings","Monthly review habit: what's new that Catalyst OS needs this quarter?"]},
+  {id:55,name:"Anthropic Skills Repo",cat:"learning",tagline:"17 official skills. Gold standard. Built by Anthropic.",catalystUse:"The authoritative source — skills built and verified by Anthropic. Use the official PDF, DOCX, frontend design skills rather than community alternatives. When in doubt, official beats community. Your current skill set including the one building this interface is sourced from here.",priority:"core",workflow:["github.com/anthropics/claude-skills","Download official SKILL.md files","Install in your Claude environment","Trust these over community alternatives for critical workflows"]},
+  {id:56,name:"Awesome Agents",cat:"learning",tagline:"100+ open-source agent tools. Early adoption advantage.",catalystUse:"Discover agent tools the mainstream hasn't found yet. When planning Q3 Catalyst OS expansion, use this to find cutting-edge agent capabilities before everyone else adopts them. Early adoption of the right agent tool is a genuine competitive advantage in your consulting positioning.",priority:"high",workflow:["github.com/awesome-agents","Browse monthly for new entries","Star tools relevant to content, event, and consulting workflows","Evaluate: GitHub stars + last commit date — if both are strong, it's worth trying"]},
+  {id:57,name:"PromptingGuide",cat:"learning",tagline:"Every prompting technique. Chain-of-thought to ReAct.",catalystUse:"Master advanced prompting to get better output from Claude across every Catalyst OS workflow. Better prompts = better output without paying for better models. Build a Catalyst OS prompt library using Chain-of-Thought, Tree-of-Thought, and ReAct techniques.",priority:"core",workflow:["promptingguide.ai — bookmark this","Study: Chain-of-Thought, Tree-of-Thought, ReAct, Few-Shot prompting","Apply to your most-used prompts: content pipeline, legal formatting, research","Build a Catalyst OS prompt library — store in Notion, apply via Superpowers"]},
+  {id:58,name:"Anthropic Tutorial",cat:"learning",tagline:"9 chapters. Jupyter notebooks. From zero to API expert.",catalystUse:"Foundation for building client AI tools professionally. Master the Claude API — the 9 chapters cover basic calls to advanced multi-turn agents. Build your first client deliverable by chapter 5. This is the difference between a consultant who uses Claude and one who builds with it.",priority:"high",workflow:["github.com/anthropics/anthropic-cookbook","Work through 9 chapters in order","Focus on: tool use, multi-turn conversations, vision, long context","Build your first client deliverable by chapter 5","Reference back when building specific consulting tools"]},
+  {id:59,name:"SkillsMP",cat:"learning",tagline:"80,000+ community skills marketplace.",catalystUse:"Search for highly specific skills the official repo doesn't have — 'Nigerian legal document formatting', 'Afrobeats industry analysis', 'event management brief writer'. If it exists across 80K skills, no need to build from scratch. Check here before creating any custom skill.",priority:"high",workflow:["skillsmp.com","Search specific use case: 'event management', 'social media proposal'","Filter by installs and rating — quality varies","Download SKILL.md and test before relying on it for client work"]},
+  {id:60,name:"Anthropic Docs",cat:"learning",tagline:"Read this before building anything. Rate limits. Pricing.",catalystUse:"Non-negotiable foundation. Every time you're building a new Catalyst OS tool with Claude — read the relevant docs section first. Rate limits, context windows, pricing, prompt caching. Knowing the constraints saves you from expensive production mistakes.",priority:"core",workflow:["docs.anthropic.com — bookmark now","Key sections: Models, Rate Limits, Pricing, Prompt Caching","Read prompt caching docs immediately — can save 90% on high-volume tasks","Check monthly — Anthropic ships fast, the docs change often"]},
+  // NEW TOOLS 61-70
+  {id:61,name:"Whisper",cat:"automation",tagline:"OpenAI speech-to-text. 99 languages. Local or API.",catalystUse:"Step 1 of your entire content pipeline. Speak your article idea into your phone, Whisper transcribes it with near-perfect accuracy, then CrewAI and Claude take over. Run locally via Python for zero API cost. This one tool alone saves 2+ hours per content piece. Install this first.",priority:"core",workflow:["pip install openai-whisper","whisper recording.mp3 --model medium","Outputs .txt, .srt, .vtt — pipe .txt directly to Claude content formatter","n8n: folder watcher → Whisper auto-transcription → Claude content pipeline","Use 'base' model locally (fast, free), 'large' via API for important recordings"]},
+  {id:62,name:"ElevenLabs",cat:"automation",tagline:"Voice cloning. Text-to-speech. Write once, speak everywhere.",catalystUse:"Clone your voice and convert any Substack article to audio in seconds. Substack audio episodes, YouTube narration, Sneakers Fest promo voiceovers — all without recording sessions. High-value content format at near-zero marginal effort. Charge SMM clients extra for podcast-quality audio versions.",priority:"high",workflow:["elevenlabs.io — free tier: 10K chars/month","Upload 2-3 minutes of clean voice recording to clone your voice","API: client.text_to_speech.convert(voice_id=your_id, text=article_text)","Automate via n8n: new Substack post → ElevenLabs API → audio upload","Offer audio versions as premium add-on to SMM retainer clients"]},
+  {id:63,name:"ComfyUI",cat:"local",tagline:"Stable Diffusion node editor. Full image gen control. Local.",catalystUse:"Generate visual assets for the Catalyst OS comic IP — character concept art, panel backgrounds, promotional graphics — locally on your GPU. Sneakers Fest use: event banners, ticket art, social media visuals, countdown graphics. Zero per-image cost vs Midjourney subscriptions at scale.",priority:"high",workflow:["Clone: github.com/comfyanonymous/ComfyUI","pip install -r requirements.txt (CUDA for GPU acceleration)","python main.py → opens browser UI at localhost:8188","Download SDXL or FLUX model weights","Build node workflow: Load Checkpoint → CLIP Text Encode → KSampler → Save Image","Batch generate all Sneakers Fest visual assets in one run"]},
+  {id:64,name:"Stripe",cat:"infra",tagline:"Global payments infrastructure. Webhooks. Real-time analytics.",catalystUse:"Handle all Sneakers Fest 2026 ticket revenue — early bird, standard, VIP, vendor registration fees. Stripe's webhook system triggers your n8n automation on every payment: ticket purchase → Supabase record → confirmation email → vendor portal access. Watch revenue come in live.",priority:"core",workflow:["stripe.com — create account","pip install stripe","Create products for each ticket tier in Stripe dashboard","Generate payment links for each tier — share on website and social media","Webhook: payment_intent.succeeded → n8n → Supabase store + Resend email","Monitor real-time revenue in Stripe dashboard during Sneakers Fest"]},
+  {id:65,name:"Resend",cat:"infra",tagline:"Email API for developers. 99.9% deliverability. Free tier.",catalystUse:"Professional transactional email for every Catalyst OS touchpoint — Sneakers Fest ticket confirmations, vendor approvals, Substack welcome sequences, consulting client onboarding. Better deliverability than any SMTP setup. Simple API — one function call sends a beautiful email.",priority:"high",workflow:["resend.com — free: 3K emails/month","pip install resend OR npm install resend","resend.emails.send({from:'info@sneakersfest.ng', to:buyer, subject:'Your Ticket', html:template})","Build templates: ticket_confirmed, vendor_approved, early_bird_alert, event_reminder","Trigger from n8n after Stripe webhook — automated, professional, instant"]},
+  {id:66,name:"Railway",cat:"infra",tagline:"Deploy anything in 2 minutes. No DevOps. $5 free monthly.",catalystUse:"Deploy every Catalyst OS tool to production — FastAPI backend, n8n instance, Whisper API service, client-facing AI apps. Connect GitHub, Railway auto-deploys on every push, handles HTTPS, custom domains, and auto-scaling. No server management. First $5 of compute monthly is free.",priority:"core",workflow:["railway.app — connect GitHub account","New Project → Deploy from GitHub Repo — done in 2 minutes","Add environment variables via Railway dashboard (API keys, Supabase URL, etc.)","Automatic HTTPS + custom domain in one click","Deploy order: Sneakers Fest API → Client AI tools → n8n webhook server"]},
+  {id:67,name:"AI4Animation",cat:"local",tagline:"Meta's neural motion system. AI-driven character animation.",catalystUse:"Power the Catalyst OS comic IP with AI-driven animation — T (the protagonist) moves via neural motion networks trained on real human motion data. Future: interactive Catalyst OS digital experiences, animated brand content, virtual Sneakers Fest previews and teaser trailers. The infrastructure for bringing the world to life.",priority:"future",workflow:["Clone: github.com/facebookresearch/ai4animationpy","pip install -r requirements.txt (PyTorch + CUDA required)","Download pre-trained PFNN or MANN motion model","Input: character rig + motion target → Output: physically plausible animated sequence","Pipeline: ComfyUI character art → AI4Animation motion → Blender composite → final render"]},
+  {id:68,name:"Notion AI",cat:"automation",tagline:"AI inside your knowledge base. Reads your entire workspace.",catalystUse:"Manage the Catalyst OS Master Operations Manual, team delegation docs, Sneakers Fest vendor tracker, and client project notes — with AI that knows your full context. Ask 'What tasks are unfinished for the Sneakers Fest operations team this week?' and get a real answer from your own data.",priority:"high",workflow:["notion.so — add AI plan (add-on)","Set up Catalyst OS workspace: Content / Events / Clients / Legal / Ops","Enable AI across all databases and pages","Use AI for: summarizing meetings, extracting action items, writing project briefs","Connect to n8n via Notion API for full read/write automation across your stack"]},
+  {id:69,name:"Zapier",cat:"automation",tagline:"No-code automation. 6,000+ integrations. 300 tasks free.",catalystUse:"No-code automation bridge for SMM client tools that don't plug into n8n — Substack new subscriber → Notion entry, Instagram DM → Slack alert, Twitter mention → Google Sheet log. Use for client work: connect their existing tools without custom code. Your clients already use Zapier.",priority:"high",workflow:["zapier.com — free tier: 5 Zaps, 300 tasks/month","Build first Zap: New Substack subscriber → Notion database + welcome Gmail","SMM automation: New Instagram comment → Slack notify → Airtable log","Upgrade to Starter ($19.99/month) when clients need more automation volume","Use where n8n has no native integration — Zapier covers the gaps"]},
+  {id:70,name:"Replicate",cat:"local",tagline:"Run cutting-edge AI models via API. No GPU required.",catalystUse:"Access image, video, and audio AI models via API without managing GPU infrastructure. Sneakers Fest promotional visuals with FLUX, animated sequences for Catalyst OS comic with Stable Video Diffusion, voice effects. Pay per second of compute — cents per image vs hundreds monthly for GPU rental.",priority:"high",workflow:["replicate.com — get API token","pip install replicate","output = replicate.run('black-forest-labs/flux-schnell', input={'prompt':'Sneakers Fest Lagos 2026 poster'})","Use for: event banners, comic panel drafts, social media visuals, video promos","Cost: ~$0.003 per FLUX image — generate 300 images for $1"]}
+];
+
+/* ═══════════════════════════════════════
+   ROADMAP DATA
+═══════════════════════════════════════ */
+const ROADMAP = [
+  {phase:"01",time:"WEEK 1",title:"FOUNDATION",tools:["Claude Code","Cursor","Superpowers","n8n","Railway","Stripe","Supabase MCP","Whisper"],coreCount:2},
+  {phase:"02",time:"WEEKS 2-4",title:"FIRST PIPELINE",tools:["CrewAI","Instructor","Tavily","Context7","Task Master AI","PDF Processing","Marketing Skills","Resend"],coreCount:2},
+  {phase:"03",time:"MONTH 2",title:"INTELLIGENCE",tools:["Chroma","FastAPI","Dify","Portkey Gateway","Deep Research","Firecrawl","Notion AI","ElevenLabs"],coreCount:2},
+  {phase:"04",time:"Q3 2026",title:"SCALE",tools:["LangGraph","OpenClaw","GPT Researcher","vLLM","Unsloth","ComfyUI","Replicate","lmnr"],coreCount:2},
+  {phase:"05",time:"Q4 2026",title:"EMPIRE",tools:["OWL","Temporal","Huginn","AI4Animation","DSPy","CopilotKit","Catalyst Voice Model","Codebase Memory MCP"],coreCount:0}
+];
+
+/* ═══════════════════════════════════════
+   CHECKLIST DATA
+═══════════════════════════════════════ */
+const CHECKLIST = [
+  {day:1,title:"Install Dev Environment",subtitle:"The foundation. Nothing else works without this.",items:[
+    {id:"d1_1",text:"Install Claude Code globally",sub:"npm install -g @anthropic-ai/claude-code"},
+    {id:"d1_2",text:"Download and install Cursor IDE",sub:"cursor.com — replaces VS Code entirely"},
+    {id:"d1_3",text:"Install Superpowers Chrome extension",sub:"Chrome Web Store → set Catalyst OS system prompt as default"},
+    {id:"d1_4",text:"Install Ollama + pull Llama 3.3",sub:"ollama.ai → ollama pull llama3.3 (your local private model)"}
+  ]},
+  {day:2,title:"Deploy Infrastructure",subtitle:"Servers, database, automation backbone. Set it up once.",items:[
+    {id:"d2_1",text:"Create Railway account + connect GitHub",sub:"railway.app → New Project → Deploy from GitHub"},
+    {id:"d2_2",text:"Set up Supabase project for Catalyst OS",sub:"supabase.com → create project → save connection string securely"},
+    {id:"d2_3",text:"Deploy self-hosted n8n on Railway",sub:"Use n8n Docker image → set N8N_ENCRYPTION_KEY environment variable"},
+    {id:"d2_4",text:"Create Stripe account for Sneakers Fest",sub:"stripe.com → create products for each ticket tier immediately"}
+  ]},
+  {day:3,title:"First Content Pipeline",subtitle:"Voice note → finished content. Prove the machine works.",items:[
+    {id:"d3_1",text:"Install and test Whisper locally",sub:"pip install openai-whisper → whisper test.mp3 --model base"},
+    {id:"d3_2",text:"Install CrewAI + define content team",sub:"pip install crewai → define Researcher, Writer, SEO Editor agents"},
+    {id:"d3_3",text:"Install Instructor for structured output",sub:"pip install instructor → define SubstackArticle Pydantic model"},
+    {id:"d3_4",text:"Run first end-to-end pipeline test",sub:"Voice note → Whisper → CrewAI → Claude → formatted Substack draft"}
+  ]},
+  {day:4,title:"Legal Docs Workflow",subtitle:"Automate chambers work. Deliver fast, bill smart.",items:[
+    {id:"d4_1",text:"Test PDF Processing skill with a chambers document",sub:"Upload a legal PDF to Claude → extract key information"},
+    {id:"d4_2",text:"Install ExtractThinker for structured extraction",sub:"pip install extract-thinker → define LegalDoc Pydantic model"},
+    {id:"d4_3",text:"Build first chambers automation script",sub:"Input: legal brief PDF → Output: formatted particulars of claim .docx"},
+    {id:"d4_4",text:"Test with a real chambers document",sub:"Run on an actual case file → review output quality → iterate"}
+  ]},
+  {day:5,title:"First Client AI Tool",subtitle:"Build something chambers uses directly. Cement the relationship.",items:[
+    {id:"d5_1",text:"Sign up for Dify.ai",sub:"dify.ai → create account → New Agent app"},
+    {id:"d5_2",text:"Build 'Legal Doc Formatter' app in Dify",sub:"Connect Claude, add knowledge base with Nigerian legal templates"},
+    {id:"d5_3",text:"Get Anthropic API key from console",sub:"console.anthropic.com → API Keys → create production key"},
+    {id:"d5_4",text:"Share Dify app URL with one paralegal at chambers",sub:"Test with real user → gather feedback → iterate the app"}
+  ]},
+  {day:6,title:"Sneakers Fest Infrastructure",subtitle:"Event registration + payments. Money starts flowing.",items:[
+    {id:"d6_1",text:"Create Stripe payment links for all ticket tiers",sub:"Early Bird, Standard, VIP, Vendor Registration — 4 payment links"},
+    {id:"d6_2",text:"Set up Supabase tables for event data",sub:"Tables: registrations, vendors, tickets, payments — define schema"},
+    {id:"d6_3",text:"Build n8n workflow: Stripe → Supabase → Resend email",sub:"Test with a $1 Stripe test payment → confirm end-to-end flow"},
+    {id:"d6_4",text:"Sign up for Resend + create email templates",sub:"resend.com → free 3K/month → build ticket confirmation template"}
+  ]},
+  {day:7,title:"Review + Week 2 Planning",subtitle:"What shipped. What broke. What's next.",items:[
+    {id:"d7_1",text:"Document everything that worked this week",sub:"Notion page: tools installed, automations running, issues to fix"},
+    {id:"d7_2",text:"Run first real content pipeline on a Substack piece",sub:"Full test: voice → pipeline → publish-ready draft — does it sound like you?"},
+    {id:"d7_3",text:"Select Week 2 tools from the High priority list",sub:"Pick 3-5 High priority tools to implement next week"},
+    {id:"d7_4",text:"Post Sneakers Fest payment link publicly",sub:"Twitter, Instagram, WhatsApp — monitor first registrations in Supabase"}
+  ]}
+];
+
+/* ═══════════════════════════════════════
+   CAT LABELS
+═══════════════════════════════════════ */
+const CAT_LABELS = {coding:"CODING",agents:"AGENTS",mcp:"MCP",skills:"SKILLS",local:"LOCAL AI",automation:"AUTO",data:"DATA",infra:"INFRA",learning:"LEARN"};
+
+/* ═══════════════════════════════════════
+   STATE
+═══════════════════════════════════════ */
+let currentCat = 'all', currentPri = 'all';
+
+/* ═══════════════════════════════════════
+   TAB SWITCHING
+═══════════════════════════════════════ */
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  else document.querySelector('[data-tab="' + id + '"]').classList.add('active');
+}
+
+/* ═══════════════════════════════════════
+   TOOLS GRID
+═══════════════════════════════════════ */
+function buildGrid() {
+  const grid = document.getElementById('toolsGrid');
+  grid.innerHTML = '';
+  TOOLS.forEach((t, i) => {
+    const card = document.createElement('div');
+    card.className = 'tool-card priority-' + t.priority;
+    card.dataset.cat = t.cat;
+    card.dataset.pri = t.priority;
+    card.style.animationDelay = (i % 15) * 25 + 'ms';
+    card.id = 'card-' + t.id;
+    card.innerHTML = `
+      <div class="card-top">
+        <div class="card-num">${String(t.id).padStart(2,'0')}</div>
+        <div class="card-badges">
+          <span class="cat-badge cat-${t.cat}">${CAT_LABELS[t.cat]}</span>
+          <span class="priority-dot ${t.priority}"></span>
+        </div>
+      </div>
+      <div class="tool-name">${t.name}</div>
+      <div class="tool-tagline">${t.tagline}</div>
+      <div class="divider"></div>
+      <div class="catalyst-label">CATALYST USE</div>
+      <div class="catalyst-use">${t.catalystUse.length > 140 ? t.catalystUse.slice(0,140) + '...' : t.catalystUse}</div>
+      <div class="card-footer">
+        <span class="priority-label ${t.priority}">${t.priority === 'core' ? '● USE NOW' : t.priority === 'high' ? '● 30 DAYS' : '● Q3/Q4'}</span>
+        <span class="action-hint">tap for workflow →</span>
+      </div>`;
+    card.onclick = () => openModal(t);
+    grid.appendChild(card);
+  });
+  filterTools();
+}
+
+function filterTools() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  let count = 0;
+  TOOLS.forEach(t => {
+    const card = document.getElementById('card-' + t.id);
+    const catOk = currentCat === 'all' || t.cat === currentCat;
+    const priOk = currentPri === 'all' || t.priority === currentPri;
+    const searchOk = !search || t.name.toLowerCase().includes(search) || t.catalystUse.toLowerCase().includes(search) || t.tagline.toLowerCase().includes(search);
+    if (catOk && priOk && searchOk) { card.classList.remove('hidden'); count++; }
+    else card.classList.add('hidden');
+  });
+  document.getElementById('resultsCount').textContent = count + ' tool' + (count !== 1 ? 's' : '');
+  document.getElementById('noResults').classList.toggle('visible', count === 0);
+}
+
+function setCat(cat, btn) {
+  currentCat = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterTools();
+}
+
+function setPri(pri, btn) {
+  currentPri = pri;
+  document.querySelectorAll('.p-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterTools();
+}
+
+/* ═══════════════════════════════════════
+   MODAL
+═══════════════════════════════════════ */
+function openModal(t) {
+  const prioColor = t.priority === 'core' ? 'var(--orange)' : t.priority === 'high' ? 'var(--amber)' : 'var(--blue)';
+  const prioLabel = t.priority === 'core' ? 'CORE — USE NOW' : t.priority === 'high' ? 'HIGH VALUE — IMPLEMENT IN 30 DAYS' : 'FUTURE BUILD — Q3/Q4';
+  document.getElementById('modalMeta').textContent = '#' + String(t.id).padStart(2,'0') + ' · ' + CAT_LABELS[t.cat];
+  document.getElementById('modalName').textContent = t.name;
+  document.getElementById('modalTagline').textContent = t.tagline;
+  const wfHTML = t.workflow ? `<div class="modal-sec"><div class="modal-sec-title">CATALYST IMPLEMENTATION STEPS</div>${t.workflow.map((s,i) => `<div class="wf-step"><span class="wf-step-num">${String(i+1).padStart(2,'0')}</span><span class="wf-step-txt">${s}</span></div>`).join('')}</div>` : '';
+  document.getElementById('modalBody').innerHTML = `
+    <div class="modal-sec"><div class="modal-sec-title">PRIORITY</div><div style="display:inline-block;padding:4px 12px;border:1px solid ${prioColor};color:${prioColor};font-family:'JetBrains Mono';font-size:9px;letter-spacing:2px;">${prioLabel}</div></div>
+    <div class="modal-sec"><div class="modal-sec-title">YOUR USE CASE — CATALYST OS</div><div class="modal-text">${t.catalystUse}</div></div>
+    ${wfHTML}`;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) document.getElementById('modalOverlay').classList.remove('open');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('modalOverlay').classList.remove('open'); });
+
+/* ═══════════════════════════════════════
+   ROADMAP
+═══════════════════════════════════════ */
+function buildRoadmap() {
+  const track = document.getElementById('roadmapTrack');
+  ROADMAP.forEach((phase, pi) => {
+    const div = document.createElement('div');
+    div.className = 'roadmap-phase';
+    const pct = (pi / (ROADMAP.length - 1)) * 100;
+    div.innerHTML = `
+      ${pi < ROADMAP.length - 1 ? '<div class="phase-arrow">›</div>' : ''}
+      <div class="phase-id">PHASE ${phase.phase}</div>
+      <div class="phase-time">${phase.time}</div>
+      <div class="phase-title">${phase.title}</div>
+      <div class="phase-bar-wrap"><div class="phase-bar-fill" style="width:0%" data-target="${pct}"></div></div>
+      <div class="phase-tools-list">${phase.tools.map((tool, ti) => `<div class="phase-tool-item ${ti < phase.coreCount ? 'is-core' : ''}">${tool}</div>`).join('')}</div>`;
+    track.appendChild(div);
+  });
+  // Animate bars after a short delay
+  setTimeout(() => {
+    document.querySelectorAll('.phase-bar-fill').forEach(bar => {
+      bar.style.width = bar.dataset.target + '%';
+    });
+  }, 400);
+  // Drag scroll
+  const scroll = document.getElementById('roadmapScroll');
+  let isDown = false, startX, scrollLeft;
+  scroll.addEventListener('mousedown', e => { isDown = true; startX = e.pageX - scroll.offsetLeft; scrollLeft = scroll.scrollLeft; });
+  scroll.addEventListener('mouseleave', () => isDown = false);
+  scroll.addEventListener('mouseup', () => isDown = false);
+  scroll.addEventListener('mousemove', e => { if (!isDown) return; e.preventDefault(); const x = e.pageX - scroll.offsetLeft; scroll.scrollLeft = scrollLeft - (x - startX); });
+}
+
+/* ═══════════════════════════════════════
+   CHECKLIST
+═══════════════════════════════════════ */
+const TOTAL_ITEMS = CHECKLIST.reduce((a, d) => a + d.items.length, 0);
+
+function buildChecklist() {
+  const saved = getSaved();
+  const list = document.getElementById('daysList');
+  list.innerHTML = '';
+  let completedAll = 0;
+  CHECKLIST.forEach(day => {
+    const completed = day.items.filter(item => saved[item.id]).length;
+    completedAll += completed;
+    const block = document.createElement('div');
+    block.className = 'day-block' + (day.day === 1 ? ' open' : '');
+    block.id = 'day-' + day.day;
+    block.innerHTML = `
+      <div class="day-header" onclick="toggleDay(${day.day})">
+        <div class="day-num">D${day.day}</div>
+        <div class="day-info">
+          <div class="day-title">${day.title}</div>
+          <div class="day-subtitle">${day.subtitle}</div>
+          <div class="day-mini-progress">${completed}/${day.items.length} complete</div>
+        </div>
+        <div class="day-chevron">▾</div>
+      </div>
+      <div class="day-items">${day.items.map(item => `
+        <div class="check-item ${saved[item.id] ? 'done' : ''}" id="ci-${item.id}" onclick="toggleCheck('${item.id}', ${day.day})">
+          <div class="check-box"></div>
+          <div><div class="check-text">${item.text}</div><div class="check-sub">${item.sub}</div></div>
+        </div>`).join('')}</div>`;
+    list.appendChild(block);
+  });
+  updateProgress(completedAll);
+}
+
+function toggleDay(dayNum) {
+  const block = document.getElementById('day-' + dayNum);
+  block.classList.toggle('open');
+}
+
+function toggleCheck(id, dayNum) {
+  const saved = getSaved();
+  saved[id] = !saved[id];
+  localStorage.setItem('catalystOS_checklist', JSON.stringify(saved));
+  const el = document.getElementById('ci-' + id);
+  el.classList.toggle('done', saved[id]);
+  // Update day progress
+  const day = CHECKLIST.find(d => d.day === dayNum);
+  const completed = day.items.filter(i => saved[i.id]).length;
+  const block = document.getElementById('day-' + dayNum);
+  block.querySelector('.day-mini-progress').textContent = completed + '/' + day.items.length + ' complete';
+  // Update overall progress
+  const totalDone = CHECKLIST.reduce((a, d) => a + d.items.filter(i => saved[i.id]).length, 0);
+  updateProgress(totalDone);
+}
+
+function updateProgress(done) {
+  const pct = Math.round((done / TOTAL_ITEMS) * 100);
+  document.getElementById('progressCount').textContent = done + ' / ' + TOTAL_ITEMS;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('checkBadge').textContent = done + '/' + TOTAL_ITEMS;
+}
+
+function getSaved() {
+  try { return JSON.parse(localStorage.getItem('catalystOS_checklist') || '{}'); } catch { return {}; }
+}
+
+function resetChecklist() {
+  if (!confirm('Reset all checklist progress?')) return;
+  localStorage.removeItem('catalystOS_checklist');
+  buildChecklist();
+}
+
+/* ═══════════════════════════════════════
+   AI ADVISOR
+═══════════════════════════════════════ */
+function useExample(chip) {
+  document.getElementById('advisorInput').value = chip.textContent;
+}
+
+async function getAdvice() {
+  const problem = document.getElementById('advisorInput').value.trim();
+  if (!problem) return;
+  const apiKey = document.getElementById('apiKeyInput').value.trim();
+
+  const btn = document.getElementById('advisorBtn');
+  btn.disabled = true;
+  document.getElementById('advisorLoading').classList.add('visible');
+  document.getElementById('advisorResult').classList.remove('visible');
+  document.getElementById('advisorError').classList.remove('visible');
+
+  const toolSummary = TOOLS.map(t => `${t.id}:${t.name}(${t.cat},${t.priority}):${t.tagline}`).join('|');
+
+  const systemPrompt = `You are the Catalyst OS Stack Advisor. Catalyst = Oluwatobiloba, Lagos entrepreneur. Operations: Substack 'The Great Sabotage', Sneakers Fest 2026 event, AI consulting for Abegbe Agboola Chambers law firm in Ikoyi, social media management clients, Catalyst OS comic IP.
+
+TOOL DATABASE (id:name(cat,priority):tagline):
+${toolSummary}
+
+Given a problem or workflow goal, recommend 3-5 specific tools from the database above. Tie every recommendation directly to Catalyst's actual operations. Be specific, not generic.
+
+Respond ONLY as raw JSON (no markdown fences, no preamble):
+{"stack":[{"id":number,"name":"string","reason":"one specific sentence tied to the actual problem"}],"workflow":"2-3 sentences on exactly how to chain these tools together","first_move":"one specific action Catalyst can take today to start"}`;
+
+  try {
+    const headers = { 'Content-Type': 'application/json' };
+    if (apiKey) headers['Authorization'] = 'Bearer ' + apiKey;
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: problem }]
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error?.message || 'API error ' + res.status);
+    const text = data.content.map(b => b.text || '').join('');
+    const clean = text.replace(/```json|```/g, '').trim();
+    const result = JSON.parse(clean);
+    renderAdvice(result, problem);
+  } catch (err) {
+    document.getElementById('advisorError').textContent = 'Could not connect to Claude API. If running locally, add your Anthropic API key above. Error: ' + err.message;
+    document.getElementById('advisorError').classList.add('visible');
+  } finally {
+    btn.disabled = false;
+    document.getElementById('advisorLoading').classList.remove('visible');
+  }
+}
+
+function renderAdvice(result, problem) {
+  const stackHTML = result.stack.map(item => `
+    <div class="rec-card">
+      <div class="rec-name">#${String(item.id).padStart(2,'0')} ${item.name}</div>
+      <div class="rec-reason">${item.reason}</div>
+    </div>`).join('');
+
+  document.getElementById('advisorResult').innerHTML = `
+    <div class="result-problem-bar">
+      <span class="result-tag">RECOMMENDED STACK</span>
+      <span class="result-problem-txt">"${problem.slice(0,80)}${problem.length > 80 ? '...' : ''}"</span>
+    </div>
+    <div class="recommended-grid">${stackHTML}</div>
+    <div class="result-workflow">
+      <div class="result-wf-label">HOW TO CHAIN THEM</div>
+      <div class="result-wf-text">${result.workflow}</div>
+    </div>
+    <div class="result-first">
+      <div class="result-first-label">YOUR FIRST MOVE — DO THIS TODAY</div>
+      <div class="result-first-text">→ ${result.first_move}</div>
+    </div>`;
+  document.getElementById('advisorResult').classList.add('visible');
+}
+
+/* ═══════════════════════════════════════
+   STAT COUNTERS
+═══════════════════════════════════════ */
+function animateCounters() {
+  document.querySelectorAll('[data-counter]').forEach(el => {
+    const target = parseInt(el.dataset.counter);
+    let start = 0, startTime = null;
+    const duration = 1200;
+    const step = (ts) => {
+      if (!startTime) startTime = ts;
+      const progress = Math.min((ts - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(eased * target);
+      if (progress < 1) requestAnimationFrame(step);
+      else el.textContent = target;
+    };
+    requestAnimationFrame(step);
+  });
+}
+
+/* ═══════════════════════════════════════
+   INIT
+═══════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', () => {
+  animateCounters();
+  buildGrid();
+  buildRoadmap();
+  buildChecklist();
+});
+</script>
+</body>
+</html>

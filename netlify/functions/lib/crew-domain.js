@@ -1,0 +1,112 @@
+import { cleanName } from './text.js'
+
+// Crews — pure domain rules. No I/O, no HTTP, no storage.
+// Everything here is deterministic given its inputs so it can be tested
+// directly, and so the handler stays a thin boundary over these rules.
+
+// Ambiguous glyphs removed: 0/O, 1/I/L, 5/S, 8/B. Codes get read aloud and
+// typed from a phone screen, so the alphabet matters more than the entropy.
+const ALPHABET = '23467 9ACDEFGHJKMNPQRTUVWXYZ'.replace(/ /g, '')
+export const CODE_LENGTH = 5
+export const CODE_RE = new RegExp(`^[${ALPHABET}]{${CODE_LENGTH}}$`)
+
+export const MAX_MEMBERS = 30
+export const MAX_NAME = 28
+export const MAX_CREW_NAME = 32
+
+export const CITIES = ['Lagos', 'Abuja', 'Port Harcourt', 'Kano', 'Ibadan', 'Benin City',
+  'Enugu', 'Kaduna', 'Owerri', 'Warri', 'Uyo', 'Calabar', 'Jos', 'Abeokuta', 'Akure', 'Other']
+
+/**
+ * Generate a crew code. `rand` is injected so tests are deterministic and so
+ * the caller decides the randomness source.
+ */
+export function generateCode(rand = Math.random) {
+  let out = ''
+  for (let i = 0; i < CODE_LENGTH; i++) {
+    out += ALPHABET[Math.floor(rand() * ALPHABET.length)]
+  }
+  return out
+}
+
+/** Codes are matched case-insensitively and tolerate spaces/dashes when typed. */
+export function normaliseCode(raw) {
+  return String(raw || '').toUpperCase().replace(/[\s-]/g, '')
+}
+
+/** Validate a crew-creation request. Returns { ok, value } or { ok:false, error }. */
+export function validateCreate({ crewName, city, founderName }) {
+  const name = cleanName(crewName, MAX_CREW_NAME)
+  const founder = cleanName(founderName, MAX_NAME)
+
+  if (name.length < 2)   return { ok: false, error: 'Crew name must be at least 2 characters' }
+  if (founder.length < 2) return { ok: false, error: 'Your name must be at least 2 characters' }
+  if (!CITIES.includes(city)) return { ok: false, error: 'Invalid city' }
+
+  return { ok: true, value: { crewName: name, city, founderName: founder } }
+}
+
+/** Validate a join request. */
+export function validateJoin({ code, memberName }) {
+  const c = normaliseCode(code)
+  const name = cleanName(memberName, MAX_NAME)
+
+  if (!CODE_RE.test(c))  return { ok: false, error: 'Invalid crew code' }
+  if (name.length < 2)   return { ok: false, error: 'Your name must be at least 2 characters' }
+
+  return { ok: true, value: { code: c, memberName: name } }
+}
+
+/** Shape a brand-new crew record. */
+export function newCrew({ code, crewName, city, founderName, now }) {
+  return {
+    code,
+    crewName,
+    city,
+    founderName,
+    createdAt: now,
+    members: [{ name: founderName, joinedAt: now, founder: true }],
+  }
+}
+
+/**
+ * Apply a join to a crew.
+ *
+ * Rejoining under a name already in the crew is a no-op rather than an error —
+ * people re-open the page and tap join again, and duplicating them or showing
+ * a failure both read as broken.
+ */
+export function addMember(crew, memberName, now) {
+  const members = crew.members || []
+  const already = members.some(m => m.name.toLowerCase() === memberName.toLowerCase())
+  if (already) return { ok: true, crew, alreadyMember: true }
+  if (members.length >= MAX_MEMBERS) {
+    return { ok: false, error: `This crew is full (${MAX_MEMBERS} members)` }
+  }
+  return {
+    ok: true,
+    alreadyMember: false,
+    crew: { ...crew, members: [...members, { name: memberName, joinedAt: now, founder: false }] },
+  }
+}
+
+/** Public projection — never leak join timestamps or internal fields. */
+export function publicCrew(crew) {
+  return {
+    code: crew.code,
+    crewName: crew.crewName,
+    city: crew.city,
+    founderName: crew.founderName,
+    memberCount: (crew.members || []).length,
+    members: (crew.members || []).map(m => ({ name: m.name, founder: Boolean(m.founder) })),
+    createdAt: crew.createdAt,
+  }
+}
+
+/** Ranking used by the crew leaderboard. Size first, then who got there first. */
+export function rankCrews(crews) {
+  return [...crews].sort((a, b) => {
+    const d = (b.members?.length || 0) - (a.members?.length || 0)
+    return d !== 0 ? d : String(a.createdAt).localeCompare(String(b.createdAt))
+  })
+}

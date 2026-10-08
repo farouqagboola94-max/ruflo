@@ -1,0 +1,257 @@
+/* ═══════════════════════════════════════════════════════
+   SNEAKERS FEST '26 — 3D LAGOS NOIR SYSTEM
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Root perspective ─────────────────────────────────── */
+:root {
+  --perspective: 1400px;
+  --noise-opacity: 0.038;
+
+  /* Lagos noir palette vars */
+  --lagos-ocher:    #D4751A;
+  --danfo-yellow:   #FFE033;
+  --noir-blue:      #0D1B2A;
+  --wet-concrete:   #1C1A17;
+  --street-haze:    #2A1F0F;
+  --amber:          #F5A623;
+  --neon-cyan:      #00F0FF;
+  --neon-magenta:   #FF2D7B;
+  --neon-lime:      #B8FF00;
+}
+
+/* ── Global film grain overlay ────────────────────────── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  pointer-events: none;
+  opacity: var(--noise-opacity);
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  animation: grainShift 0.12s steps(1) infinite;
+}
+
+@keyframes grainShift {
+  0%  { background-position:   0px   0px; }
+  10% { background-position: -5px  -10px; }
+  20% { background-position: -15px   5px; }
+  30% { background-position:  7px  -25px; }
+  40% { background-position: -5px  25px; }
+  50% { background-position: -15px  10px; }
+  60% { background-position: 15px   0px; }
+  70% { background-position:  0px  15px; }
+  80% { background-position:  3px  35px; }
+  90% { background-position: -10px  10px; }
+}
+
+/* ── Section depth backgrounds ────────────────────────── */
+section {
+  position: relative;
+}
+
+section:nth-child(even)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 50% at 15% 50%, rgba(212,117,26,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 85% 50%, rgba(0,240,255,0.03) 0%, transparent 60%);
+  z-index: 0;
+}
+
+section:nth-child(odd)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 50% at 80% 50%, rgba(245,166,35,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 20% 70%, rgba(155,89,255,0.03) 0%, transparent 60%);
+  z-index: 0;
+}
+
+/* ── 3D card base ─────────────────────────────────────── */
+.card-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1),
+              box-shadow 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform;
+}
+
+.card-3d:hover {
+  transform: perspective(var(--perspective)) rotateX(-4deg) rotateY(6deg) translateZ(12px) scale(1.025);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.7),
+    0 0 0 1px rgba(245,166,35,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.12);
+}
+
+/* ── Floating 3D animation ────────────────────────────── */
+@keyframes float3d {
+  0%,100% { transform: perspective(var(--perspective)) translateZ(0) translateY(0)    rotateX(0deg)    rotateY(0deg); }
+  25%     { transform: perspective(var(--perspective)) translateZ(16px) translateY(-8px) rotateX(1.5deg)  rotateY(-2deg); }
+  50%     { transform: perspective(var(--perspective)) translateZ(8px)  translateY(-4px) rotateX(-1deg)   rotateY(2.5deg); }
+  75%     { transform: perspective(var(--perspective)) translateZ(20px) translateY(-12px) rotateX(2deg)   rotateY(-1.5deg); }
+}
+
+.float-3d {
+  animation: float3d 7s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
+/* ── Parallax depth layers ────────────────────────────── */
+.depth-far    { transform: translateZ(-60px) scale(1.04); }
+.depth-mid    { transform: translateZ(-20px) scale(1.014); }
+.depth-near   { transform: translateZ(20px); }
+.depth-close  { transform: translateZ(50px); }
+
+/* ── Glassmorph surface ───────────────────────────────── */
+.glass-noir {
+  background: rgba(12, 10, 8, 0.55);
+  backdrop-filter: blur(24px) saturate(160%) brightness(0.9);
+  -webkit-backdrop-filter: blur(24px) saturate(160%) brightness(0.9);
+  border: 1px solid rgba(255,255,255,0.07);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    inset 0 -1px 0 rgba(0,0,0,0.4),
+    0 8px 40px rgba(0,0,0,0.65);
+}
+
+.glass-amber {
+  background: rgba(245,166,35,0.06);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(245,166,35,0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(245,166,35,0.20),
+    0 4px 30px rgba(0,0,0,0.6),
+    0 0 60px rgba(245,166,35,0.06);
+}
+
+/* ── 3D reveal entrance ───────────────────────────────── */
+@keyframes reveal3d {
+  from {
+    opacity: 0;
+    transform: perspective(var(--perspective)) rotateX(12deg) translateY(40px) translateZ(-30px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(var(--perspective)) rotateX(0deg) translateY(0) translateZ(0);
+    filter: blur(0);
+  }
+}
+
+.reveal-3d {
+  animation: reveal3d 0.85s cubic-bezier(0.23, 1, 0.32, 1) both;
+  transform-style: preserve-3d;
+}
+.reveal-3d.delay-1 { animation-delay: 0.1s; }
+.reveal-3d.delay-2 { animation-delay: 0.22s; }
+.reveal-3d.delay-3 { animation-delay: 0.36s; }
+.reveal-3d.delay-4 { animation-delay: 0.5s; }
+.reveal-3d.delay-5 { animation-delay: 0.65s; }
+
+/* ── Text 3D extrude ──────────────────────────────────── */
+.text-3d {
+  text-shadow:
+    1px 1px 0 rgba(0,0,0,0.9),
+    2px 2px 0 rgba(0,0,0,0.8),
+    3px 3px 0 rgba(0,0,0,0.7),
+    4px 4px 0 rgba(0,0,0,0.5),
+    5px 5px 12px rgba(0,0,0,0.6),
+    0 0 80px rgba(245,166,35,0.18);
+}
+
+/* ── Neon border glow ─────────────────────────────────── */
+.neon-amber {
+  box-shadow:
+    0 0 7px rgba(245,166,35,0.6),
+    0 0 20px rgba(245,166,35,0.35),
+    0 0 50px rgba(245,166,35,0.15),
+    inset 0 0 12px rgba(245,166,35,0.06);
+  border-color: rgba(245,166,35,0.6) !important;
+}
+
+.neon-cyan {
+  box-shadow:
+    0 0 7px rgba(0,240,255,0.6),
+    0 0 20px rgba(0,240,255,0.35),
+    0 0 50px rgba(0,240,255,0.15),
+    inset 0 0 12px rgba(0,240,255,0.06);
+  border-color: rgba(0,240,255,0.5) !important;
+}
+
+/* ── Lagos horizon divider ────────────────────────────── */
+.lagos-divider {
+  position: relative;
+  height: 1px;
+  margin: 0;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(212,117,26,0.6) 20%,
+    rgba(245,166,35,0.9) 45%,
+    rgba(0,240,255,0.5) 65%,
+    rgba(212,117,26,0.4) 85%,
+    transparent 100%
+  );
+}
+
+.lagos-divider::before {
+  content: '◆';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  font-size: 8px;
+  color: var(--amber);
+  text-shadow: 0 0 12px var(--amber);
+  background: #0a0a0a;
+  padding: 0 12px;
+}
+
+/* ── Tilt wrapper (JS-driven via CSS vars) ────────────── */
+.tilt-scene {
+  transform-style: preserve-3d;
+  perspective: var(--perspective);
+}
+
+.tilt-card {
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transform-style: preserve-3d;
+  transition: transform 0.08s linear;
+  will-change: transform;
+}
+
+/* ── Shimmer sweep animation ──────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+/* ── Pulse ────────────────────────────────────────────── */
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%     { opacity: 0.6; transform: scale(0.95); }
+}
+
+/* ── FadeUp ───────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Scanlines ────────────────────────────────────────── */
+@keyframes scanMove {
+  from { transform: translateY(0); }
+  to   { transform: translateY(4px); }
+}
+
+/* ── Scrollbar ────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #0a0905; }
+::-webkit-scrollbar-thumb { background: #D4751A; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #F5A623; }

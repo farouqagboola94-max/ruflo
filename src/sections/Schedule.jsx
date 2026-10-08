@@ -1,0 +1,172 @@
+import { useState, useEffect, useRef } from 'react'
+import { B } from '../tokens'
+import { PHASES, DAY1, DAY2 } from '../data/schedule'
+import { GrainOverlay, SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
+
+
+function parseMins(time, period) {
+  const [h, m] = time.split(':').map(Number)
+  let hour = h
+  if (period === 'PM' && hour !== 12) hour += 12
+  if (period === 'AM' && hour === 12) hour = 0
+  return hour * 60 + (m || 0)
+}
+
+function getLiveStatus(items, dateStr) {
+  // Convert local time to Lagos (WAT = UTC+1)
+  const lagosMs = Date.now() + new Date().getTimezoneOffset() * 60000 + 60 * 60000
+  const lagos   = new Date(lagosMs)
+  const lagosDate = `${lagos.getFullYear()}-${String(lagos.getMonth()+1).padStart(2,'0')}-${String(lagos.getDate()).padStart(2,'0')}`
+  if (lagosDate !== dateStr) return {}
+  const cur    = lagos.getHours() * 60 + lagos.getMinutes()
+  const status = {}
+  let nextSet  = false
+  for (let i = 0; i < items.length; i++) {
+    const start = parseMins(items[i].time, items[i].period)
+    const nxt   = items[i + 1]
+    const end   = nxt ? parseMins(nxt.time, nxt.period) : start + 90
+    if (cur >= start && cur < end)    { status[i] = 'NOW' }
+    else if (cur < start && !nextSet) { status[i] = 'NEXT'; nextSet = true }
+  }
+  return status
+}
+
+function Timeline({ items, liveStatus = {} }) {
+  return (
+    <div style={{ position:'relative' }}>
+      <style>{`@keyframes liveNow { 0%,100%{opacity:1} 50%{opacity:0.45} }`}</style>
+      <div style={{ position:'absolute', left:86, top:0, bottom:0, width:1, background:`linear-gradient(${B.amber}00, ${B.gunmetal}80, ${B.amber}40, ${B.gunmetal}80, ${B.amber}00)` }} />
+      <div style={{ display:'flex', flexDirection:'column' }}>
+        {items.map((item, i) => {
+          const isNow  = liveStatus[i] === 'NOW'
+          const isNext = liveStatus[i] === 'NEXT'
+          return (
+            <div key={i} style={{ display:'flex', alignItems:'flex-start', marginBottom: i < items.length - 1 ? 8 : 0 }}>
+              <div style={{ width:86, flexShrink:0, paddingTop:18, paddingRight:18, textAlign:'right' }}>
+                <div style={{ fontFamily:"'Orbitron',monospace", fontSize:11, fontWeight:700, color: isNow ? item.color : item.featured ? item.color : item.tag==='CLOSE' ? B.dim : B.smoke, lineHeight:1.2, textShadow: isNow||item.featured ? `0 0 12px ${item.color}50` : 'none' }}>{item.time}</div>
+                <div style={{ fontFamily:"'Space Mono',monospace", fontSize: 9, color: B.dim, letterSpacing:'0.1em' }}>{item.period}</div>
+              </div>
+              <div style={{ flexShrink:0, paddingTop:22, display:'flex', alignItems:'center', justifyContent:'center', width:12 }}>
+                <div style={{ width:11, height:11, borderRadius:'50%', background: isNow ? item.color : item.featured ? item.color : item.tag==='CLOSE' ? B.gunmetal : B.charcoal, border:`2px solid ${isNow ? item.color : item.featured ? item.color : item.tag==='CLOSE' ? B.gunmetal : item.color+'60'}`, boxShadow: isNow||item.featured ? `0 0 18px ${item.color}80` : 'none', flexShrink:0 }} />
+              </div>
+              <div
+                className="card-3d"
+                style={{ flex:1, marginLeft:16, padding:'14px 18px', background: isNow ? `${item.color}10` : item.featured ? `${item.color}08` : 'rgba(255,255,255,0.025)', border:`1px solid ${isNow ? item.color+'60' : item.featured ? item.color+'45' : B.gunmetal}`, borderRadius:8, position:'relative', overflow:'hidden' }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = item.color+'70'; e.currentTarget.style.background = `${item.color}0e` }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = isNow ? item.color+'60' : item.featured ? item.color+'45' : B.gunmetal; e.currentTarget.style.background = isNow ? `${item.color}10` : item.featured ? `${item.color}08` : 'rgba(255,255,255,0.025)' }}
+              >
+                {(item.featured || isNow) && <div style={{ position:'absolute', left:0, top:0, bottom:0, width:3, background:item.color, boxShadow:`0 0 12px ${item.color}` }} />}
+                <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:5, flexWrap:'wrap' }}>
+                  <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:18, color:item.tag==='CLOSE' ? B.smoke : B.white, letterSpacing:'0.04em', lineHeight:1 }}>{item.title}</div>
+                  <span style={{ padding:'2px 7px', background:item.color+'18', border:`1px solid ${item.color}40`, borderRadius:2, fontFamily:"'Space Mono',monospace", fontSize: 9, color:item.color, letterSpacing:'0.12em', whiteSpace:'nowrap' }}>{item.tag}</span>
+                  {isNow && (
+                    <span style={{ padding:'2px 8px', background:`${B.neonLime}20`, border:`1px solid ${B.neonLime}60`, borderRadius:2, fontFamily:"'Space Mono',monospace", fontSize: 9, color:B.neonLime, letterSpacing:'0.1em', animation:'liveNow 2s ease infinite' }}>● LIVE NOW</span>
+                  )}
+                  {isNext && (
+                    <span style={{ padding:'2px 8px', background:`${B.amber}15`, border:`1px solid ${B.amber}50`, borderRadius:2, fontFamily:"'Space Mono',monospace", fontSize: 9, color:B.amber, letterSpacing:'0.1em' }}>▶ UP NEXT</span>
+                  )}
+                  {item.stage && (
+                    <span style={{ padding:'2px 7px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.12)', borderRadius:2, fontFamily:"'Space Mono',monospace", fontSize: 9, color: B.smoke, letterSpacing:'0.1em', whiteSpace:'nowrap' }}>↗ {item.stage}</span>
+                  )}
+                </div>
+                <div style={{ fontFamily:"'Syne',sans-serif", fontSize:12, color:B.smoke, lineHeight:1.6 }}>{item.desc}</div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+export default function Schedule() {
+  const [day, setDay]             = useState(2)
+  const [liveStatus, setLiveStatus] = useState({})
+  const liveRef = useRef(null)
+
+  useEffect(() => {
+    const items   = day === 1 ? DAY1 : DAY2
+    const dateStr = day === 1 ? '2026-12-11' : '2026-12-12'
+    setLiveStatus(getLiveStatus(items, dateStr))
+    liveRef.current = setInterval(() => setLiveStatus(getLiveStatus(items, dateStr)), 60000)
+    return () => clearInterval(liveRef.current)
+  }, [day])
+
+  return (
+    <section id="schedule" style={{ position:'relative', overflow:'hidden', background:B.void, padding:'100px 24px' }}>
+      <GrainOverlay />
+      <Egg id="egg-083" corner="top-right" />
+      <Egg id="egg-084" corner="bottom-left" />
+      <div style={{ position:'absolute', top:'20%', right:'-5%', width:360, height:360, background:`radial-gradient(circle, ${B.neonMagenta}07 0%, transparent 70%)`, filter:'blur(70px)', pointerEvents:'none' }} />
+      <div style={{ position:'absolute', bottom:'20%', left:'-5%', width:320, height:320, background:`radial-gradient(circle, ${B.amber}07 0%, transparent 70%)`, filter:'blur(70px)', pointerEvents:'none' }} />
+
+      <div style={{ position:'relative', zIndex:10, maxWidth:820, margin:'0 auto' }}>
+
+        {/* Campaign phases strip */}
+        <div style={{ marginBottom:56 }}>
+          <div style={{ textAlign:'center', marginBottom:32 }}>
+            <SectionTag>THE PHALANX FRAMEWORK</SectionTag>
+            <div className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:'clamp(36px,5vw,60px)', color:B.white, lineHeight:0.9 }}>
+              4 PHASES. 1 MOVEMENT.
+            </div>
+            <div style={{ fontFamily:"'Space Mono',sans-serif", fontSize:12, color:B.smoke, marginTop:10 }}>Oct 9, 2026 → Dec 12, 2026 · Za.allyErrands · The Phalanx · The Catalyst Codes</div>
+          </div>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(180px, 1fr))', gap:12 }}>
+            {PHASES.map((ph, i) => (
+              <div key={i} className="card-3d" style={{ background:'rgba(255,255,255,0.025)', border:`1px solid ${ph.color}30`, borderTop:`2px solid ${ph.color}`, borderRadius:8, padding:'18px 16px' }}>
+                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:8 }}>
+                  <div style={{ fontFamily:"'Space Mono',monospace", fontSize: 9, color:ph.color, letterSpacing:2 }}>{ph.label}</div>
+                  <div style={{ fontFamily:"'Orbitron',monospace", fontSize: 9, color: B.dim, letterSpacing:1 }}>{ph.dates}</div>
+                </div>
+                <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:14, color:B.white, letterSpacing:'0.05em', marginBottom:10 }}>{ph.title}</div>
+                {ph.lines.map((l, j) => (
+                  <div key={j} style={{ fontFamily:"'Space Mono',monospace", fontSize: 9, color: B.smoke, lineHeight:1.9, borderLeft:`1px solid ${ph.color}25`, paddingLeft:8 }}>{l}</div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Day selector */}
+        <div style={{ textAlign:'center', marginBottom:40 }}>
+          <SectionTag>{day === 1 ? 'DECEMBER 11, 2026' : 'DECEMBER 12, 2026'}</SectionTag>
+          <div className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:'clamp(40px,6vw,68px)', color:B.white, lineHeight:0.9 }}>
+            EVENT<br /><span style={{ color:B.amber }}>SCHEDULE</span>
+          </div>
+          <div style={{ display:'flex', gap:10, justifyContent:'center', marginTop:20 }}>
+            {[
+              { d:1, label:'DEC 11 · STADIUM FINALS', venue:'Mobolaji Johnson Arena, Onikan' },
+              { d:2, label:'DEC 12 · SNEAKER FEST', venue:'Muri Okunola Park, V/I' },
+            ].map(({ d, label, venue }) => (
+              <button key={d} onClick={() => setDay(d)} style={{ padding:'10px 20px', background:day===d ? `${B.amber}15` : 'transparent', border:`1px solid ${day===d ? B.amber : B.gunmetal}`, borderRadius:6, cursor:'pointer', textAlign:'left' }}>
+                <div style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color:day===d ? B.amber : B.smoke, letterSpacing:2, marginBottom:3 }}>{label}</div>
+                <div style={{ fontFamily:"'Syne',sans-serif", fontSize:11, color:day===d ? B.white : B.dim }}>{venue}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {day === 2 && (
+          <div style={{ display:'flex', gap:16, flexWrap:'wrap', marginBottom:20, paddingLeft:98 }}>
+            {[{label:'MAIN STAGE', color:B.amber},{label:'ART ZONE', color:B.neonMagenta},{label:'SPORT ZONE', color:B.neonLime},{label:'DROP ZONE', color:B.neonCyan}].map(s => (
+              <div key={s.label} style={{ display:'flex', alignItems:'center', gap:6 }}>
+                <div style={{ width:7, height:7, borderRadius:'50%', background:s.color, boxShadow:`0 0 6px ${s.color}80` }} />
+                <span style={{ fontFamily:"'Space Mono',monospace", fontSize: 9, color: B.smoke, letterSpacing:'0.1em' }}>{s.label}</span>
+              </div>
+            ))}
+          </div>
+        )}
+        <Timeline items={day === 1 ? DAY1 : DAY2} liveStatus={liveStatus} />
+
+        <div className="card-3d" style={{ marginTop:36, padding:'20px 24px', background:B.charcoal, border:`1px solid ${B.gunmetal}`, borderRadius:8, display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:12 }}>
+          <div style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color:B.smoke, letterSpacing:'0.15em', lineHeight:1.7 }}>
+            SCHEDULE SUBJECT TO CHANGE<br />
+            <span style={{ color: B.dim }}>FOLLOW @SNEAKERSFEST FOR LIVE UPDATES</span>
+          </div>
+          <a href="#tickets" style={{ padding:'10px 20px', background:B.amber, color:B.black, fontFamily:"'Space Mono',monospace", fontSize:8, fontWeight:700, letterSpacing:'0.15em', textDecoration:'none', borderRadius:2, whiteSpace:'nowrap' }}>SECURE YOUR SPOT →</a>
+        </div>
+      </div>
+    </section>
+  )
+}

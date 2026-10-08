@@ -1,0 +1,7 @@
+/* SPA fallback — backup for netlify.toml redirects */
+/*  from      to             status */
+/*  already handled by netlify.toml [[redirects]] */
+/* This file is a safety net in case netlify.toml is not read */
+/*  Netlify reads _redirects BEFORE netlify.toml redirects */
+/*  So we put the SPA rule here too */
+/* eslint-disable */

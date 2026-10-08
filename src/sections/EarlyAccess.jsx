@@ -1,0 +1,440 @@
+import { useState, useEffect, useRef } from 'react'
+import { B } from '../tokens'
+import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
+import Egg from '../components/Egg'
+import MemberCard from '../components/MemberCard'
+
+const GOAL    = 2500
+const KEY     = 'sf26_waitlist'
+const REF_KEY = 'sf26_refcode'
+
+const TIERS = [
+  {
+    max:100, label:'FOUNDING MEMBER', icon:'👑', color:B.amber,
+    perks:['First window for Phalanx + VVIP tickets','Name on the event wall','Exclusive founding merch bag','Direct WhatsApp access to The Catalyst'],
+  },
+  {
+    max:500, label:'INNER CIRCLE', icon:'💎', color:B.neonCyan,
+    perks:['48-hour early ticket window','₦2,000 discount on any tier','Priority vendor application slot','Insider drop intel before public'],
+  },
+  {
+    max:1000, label:'EARLY ACCESS', icon:'⚡', color:B.neonLime,
+    perks:['24-hour early ticket window','Priority newsletter drops','First shot at raffle entries','FNP community access'],
+  },
+  {
+    max:Infinity, label:'WAITLIST', icon:'🎯', color:'#888',
+    perks:['Access before public sale opens','Community newsletter updates','FNP community access'],
+  },
+]
+
+function getTier(pos) {
+  return TIERS.find(t => pos <= t.max) || TIERS[TIERS.length - 1]
+}
+
+function genRefCode(name) {
+  const prefix = (name || 'SF').replace(/[^a-zA-Z]/g, '').slice(0, 2).toUpperCase() || 'SF'
+  const rand = Math.random().toString(36).slice(2, 6).toUpperCase()
+  return `${prefix}${rand}`
+}
+
+function useCountUp(target, active) {
+  const [val, setVal] = useState(0)
+  const raf = useRef()
+  useEffect(() => {
+    if (!active || !target) return
+    const start = Date.now()
+    const dur   = 1400
+    const tick  = () => {
+      const p = Math.min(1, (Date.now() - start) / dur)
+      const ease = 1 - Math.pow(1 - p, 3)
+      setVal(Math.round(ease * target))
+      if (p < 1) raf.current = requestAnimationFrame(tick)
+    }
+    raf.current = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf.current)
+  }, [target, active])
+  return val
+}
+
+export default function EarlyAccess() {
+  const [email,       setEmail]       = useState('')
+  const [name,        setName]        = useState('')
+  const [phase,       setPhase]       = useState('form')
+  const [position,    setPosition]    = useState(null)
+  // null until the server answers - we never guess how many people have joined
+  const [total,       setTotal]       = useState(null)
+  const [error,       setError]       = useState('')
+  const [refCode,     setRefCode]     = useState('')
+  const [referredBy,  setReferredBy]  = useState('')
+  const [refCopied,   setRefCopied]   = useState(false)
+  const [shared,      setShared]      = useState(false)
+  const [refCount,    setRefCount]    = useState(null)
+  const [confetti,    setConfetti]    = useState([])
+
+  const animPos = useCountUp(position, phase === 'done')
+
+  useEffect(() => {
+    if (phase !== 'done') return
+    const COLORS = [B.amber, B.neonCyan, B.neonMagenta, B.neonLime, '#ffffff', B.electricPurple]
+    const pieces = Array.from({ length: 48 }, (_, i) => ({
+      id: i,
+      color: COLORS[i % COLORS.length],
+      left: Math.random() * 100,
+      delay: Math.random() * 0.6,
+      dur: 0.9 + Math.random() * 0.8,
+      size: 5 + Math.random() * 7,
+      spin: Math.random() > 0.5 ? 1 : -1,
+      shape: Math.random() > 0.4 ? 'rect' : 'circle',
+    }))
+    setConfetti(pieces)
+    const t = setTimeout(() => setConfetti([]), 2400)
+    return () => clearTimeout(t)
+  }, [phase])
+
+  useEffect(() => {
+    // Read ?ref= from URL to credit the referrer
+    try {
+      const urlRef = new URLSearchParams(window.location.search).get('ref')
+      if (urlRef) setReferredBy(urlRef.trim())
+    } catch {}
+
+    // Real waitlist size, straight from the store. Count only - no entrant data.
+    fetch('/.netlify/functions/waitlist-signup')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (typeof d?.total === 'number') setTotal(d.total) })
+      .catch(() => {})
+
+    // Restore returning user's waitlist state from localStorage
+    try {
+      const savedCode = localStorage.getItem(REF_KEY)
+      if (savedCode) {
+        const stored = Number(JSON.parse(localStorage.getItem(KEY) || 'null'))
+        setRefCode(savedCode)
+        if (Number.isFinite(stored) && stored > 0) setPosition(stored)
+        setPhase('done')
+        fetch(`/.netlify/functions/referral-stats?code=${encodeURIComponent(savedCode)}`)
+          .then(r => r.ok ? r.json() : null)
+          .then(d => { if (d?.referralCount != null) setRefCount(d.referralCount) })
+          .catch(() => {})
+      }
+    } catch {}
+  }, [])
+
+  async function submit(e) {
+    e.preventDefault()
+    if (!email.includes('@')) { setError('Enter a valid email address.'); return }
+    setError(''); setPhase('loading')
+
+    const code = genRefCode(name)
+
+    // Netlify Forms — organiser receives this in the Netlify dashboard
+    try {
+      const body = new URLSearchParams({
+        'form-name': 'waitlist',
+        'bot-field': '',
+        name: name.trim() || 'Unknown',
+        email: email.trim().toLowerCase(),
+        refCode: code,
+      })
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString(),
+      })
+    } catch {}
+
+    // Netlify Function - stores the entry and returns the real queue position.
+    // If it does not answer we leave the position unknown rather than invent one:
+    // the number drives which tier of perks the visitor is promised.
+    let pos = null
+    try {
+      const res = await fetch('/.netlify/functions/waitlist-signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name:       name.trim() || 'Unknown',
+          email:      email.trim().toLowerCase(),
+          refCode:    code,
+          referredBy: referredBy || undefined,
+        }),
+      })
+      if (res.ok) {
+        const data = await res.json()
+        if (typeof data.position === 'number' && data.position > 0) pos = data.position
+        if (typeof data.total    === 'number') setTotal(data.total)
+      }
+    } catch {}
+
+    try {
+      if (pos !== null) localStorage.setItem(KEY, JSON.stringify(pos))
+      localStorage.setItem(REF_KEY, code)
+    } catch {}
+    setPosition(pos); setRefCode(code); setPhase('done')
+
+    // Fetch live referral count for this code (fire-and-forget)
+    fetch(`/.netlify/functions/referral-stats?code=${encodeURIComponent(code)}`)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d?.referralCount != null) setRefCount(d.referralCount) })
+      .catch(() => {})
+  }
+
+  function copyRef() {
+    const url = `https://sneakersfest26.com?ref=${refCode}`
+    navigator.clipboard.writeText(url).then(() => { setRefCopied(true); setTimeout(() => setRefCopied(false), 2200) }).catch(() => {})
+  }
+
+  function sharePos() {
+    const text = position
+      ? `I'm #${position.toLocaleString()} on the Sneakers Fest '26 early access list. Lagos, Dec 12. Grab your spot → sneakersfest26.com?ref=${refCode}`
+      : `I'm on the Sneakers Fest '26 early access list. Lagos, Dec 12. Grab your spot → sneakersfest26.com?ref=${refCode}`
+    if (navigator.share) navigator.share({ text })
+    else { navigator.clipboard.writeText(text); setShared(true); setTimeout(() => setShared(false), 2000) }
+  }
+
+  const known  = total !== null
+  const pct    = known ? Math.min(100, Math.round((total / GOAL) * 100)) : 0
+  const tier   = position ? getTier(position) : null
+  const ahead  = position && known ? Math.max(0, total - position) : null
+
+  return (
+    <section id="waitlist" style={{ background:`linear-gradient(135deg, ${B.void} 0%, ${B.black} 50%, ${B.charcoal} 100%)`, padding:'80px 20px', position:'relative', overflow:'hidden' }}>
+      <GrainOverlay />
+      <Egg id="egg-065" corner="top-right" />
+      <Egg id="egg-066" corner="bottom-left" />
+      <ScanLines />
+      <div style={{ position:'absolute', bottom:-80, left:'50%', transform:'translateX(-50%)', width:500, height:300, borderRadius:'50%', background:`radial-gradient(ellipse, ${B.amber}15 0%, transparent 70%)`, filter:'blur(40px)', pointerEvents:'none' }} />
+
+      {/* confetti burst */}
+      {confetti.length > 0 && (
+        <div style={{ position:'absolute', inset:0, pointerEvents:'none', overflow:'hidden', zIndex:10 }}>
+          <style>{`
+            @keyframes confettiDrop {
+              0%   { transform: translateY(-30px) rotate(0deg); opacity: 1; }
+              100% { transform: translateY(110%) rotate(var(--spin, 360deg)); opacity: 0; }
+            }
+          `}</style>
+          {confetti.map(p => (
+            <div key={p.id} style={{
+              position: 'absolute',
+              left: `${p.left}%`,
+              top: 0,
+              width: p.size,
+              height: p.size,
+              borderRadius: p.shape === 'circle' ? '50%' : 2,
+              background: p.color,
+              '--spin': `${p.spin * 540}deg`,
+              animation: `confettiDrop ${p.dur}s ${p.delay}s ease-in forwards`,
+              boxShadow: `0 0 6px ${p.color}80`,
+            }} />
+          ))}
+        </div>
+      )}
+
+      <div style={{ maxWidth:600, margin:'0 auto', position:'relative', zIndex:2 }}>
+        <SectionTag color={B.amber}>EARLY ACCESS</SectionTag>
+        <h2 className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue'", fontSize:'clamp(2.5rem,7vw,5rem)', color:B.white, letterSpacing:'0.05em', marginBottom:8 }}>
+          JOIN THE INNER CIRCLE
+        </h2>
+        <p style={{ color:B.smoke, fontFamily:"'Space Mono'", fontSize:'0.8rem', marginBottom:20, lineHeight:1.7 }}>
+          First access to VIP ticket releases · exclusive drops · insider updates before anyone else
+        </p>
+
+        {/* progress bar */}
+        <div style={{ marginBottom:28 }}>
+          <div style={{ display:'flex', justifyContent:'space-between', marginBottom:6 }}>
+            <span style={{ fontFamily:"'Space Mono'", fontSize:'0.6rem', color:B.amber, letterSpacing:2 }}>
+              {known ? `${total.toLocaleString()} LOCKED IN` : 'COUNTING…'}
+            </span>
+            <span style={{ fontFamily:"'Space Mono'", fontSize:'0.6rem', color: B.dim, letterSpacing:2 }}>
+              GOAL: {GOAL.toLocaleString()}{known ? ` · ${pct}% FULL` : ''}
+            </span>
+          </div>
+          <div style={{ height:6, background:'rgba(255,255,255,0.05)', borderRadius:3, overflow:'hidden' }}>
+            <div style={{ height:'100%', width:`${pct}%`, background:`linear-gradient(90deg, ${B.amber}, ${B.neonCyan})`, borderRadius:3, transition:'width 1s ease', boxShadow:`0 0 10px ${B.amber}50` }} />
+          </div>
+          <div style={{ display:'flex', gap:16, marginTop:10, flexWrap:'wrap' }}>
+            {TIERS.slice(0,-1).map(t => (
+              <span key={t.label} style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color:t.color, letterSpacing:1 }}>
+                {t.icon} #{t.max}: {t.label}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* FORM */}
+        {phase === 'form' && (
+          <form onSubmit={submit}>
+            <div style={{ display:'flex', flexDirection:'column', gap:12, marginBottom:16 }}>
+              <input aria-label="Your name" value={name} onChange={e => setName(e.target.value)} placeholder="Your name"
+                style={{ background:B.charcoal, border:`1px solid ${B.gunmetal}`, borderRadius:6, padding:'12px 16px', color:B.white, fontFamily:"'Space Mono'", fontSize:'0.85rem', outline:'none', transition:'border-color 0.2s' }}
+                onFocus={e => e.target.style.borderColor = B.amber}
+                onBlur={e  => e.target.style.borderColor = B.gunmetal} />
+              <div style={{ display:'flex', gap:12 }}>
+                <input aria-label="Email address" type="email" value={email} onChange={e => { setEmail(e.target.value); setError('') }} placeholder="your@email.com" required
+                  style={{ flex:1, background:B.charcoal, border:`1px solid ${error ? B.neonMagenta : B.gunmetal}`, borderRadius:6, padding:'12px 16px', color:B.white, fontFamily:"'Space Mono'", fontSize:'0.85rem', outline:'none', transition:'border-color 0.2s' }}
+                  onFocus={e => { if (!error) e.target.style.borderColor = B.amber }}
+                  onBlur={e  => { if (!error) e.target.style.borderColor = B.gunmetal }} />
+                <button type="submit" style={{ background:B.amber, color:B.black, border:'none', padding:'12px 28px', fontFamily:"'Bebas Neue'", fontSize:'1.1rem', letterSpacing:'0.1em', cursor:'pointer', borderRadius:6, whiteSpace:'nowrap', boxShadow:`0 0 20px ${B.amber}50` }}>
+                  JOIN
+                </button>
+              </div>
+            </div>
+            {error && <p style={{ color:B.neonMagenta, fontFamily:"'Space Mono'", fontSize:'0.65rem', marginBottom:8 }}>{error}</p>}
+            <p style={{ color:B.smoke, fontFamily:"'Space Mono'", fontSize:'0.62rem' }}>No spam · unsubscribe anytime · your email stays private</p>
+          </form>
+        )}
+
+        {/* LOADING */}
+        {phase === 'loading' && (
+          <div style={{ textAlign:'center', padding:'40px 0' }}>
+            <div style={{ width:48, height:48, borderRadius:'50%', border:`3px solid ${B.gunmetal}`, borderTop:`3px solid ${B.amber}`, margin:'0 auto 16px', animation:'spin 0.8s linear infinite' }} />
+            <p style={{ color:B.smoke, fontFamily:"'Space Mono'", fontSize:'0.75rem' }}>Securing your spot...</p>
+          </div>
+        )}
+
+        {/* DONE, but the queue position never came back - say so plainly */}
+        {phase === 'done' && !tier && (
+          <div className="card-3d" style={{ background:'rgba(255,255,255,0.02)', border:`1px solid ${B.amber}30`, borderRadius:10, padding:'20px 22px', textAlign:'left' }}>
+            <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color:B.amber, letterSpacing:3, marginBottom:8 }}>YOU'RE ON THE LIST</div>
+            <p style={{ fontFamily:"'Syne'", fontSize:'0.85rem', color:B.smoke, lineHeight:1.6, margin:0 }}>
+              We couldn't confirm your queue number just now. Your place is saved — the
+              confirmation email carries your position and the tier that comes with it.
+            </p>
+            {refCode && (
+              <div style={{ marginTop:14, fontFamily:"'Space Mono'", fontSize:'0.6rem', color: B.smoke, letterSpacing:2 }}>
+                REFERRAL CODE · <span style={{ color:B.neonCyan }}>{refCode}</span>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* DONE */}
+        {phase === 'done' && tier && (
+          <div>
+            {/* premium member card */}
+            <MemberCard
+              name={name || undefined}
+              refCode={refCode}
+              position={position}
+              tier={tier.label}
+              tierIcon={tier.icon}
+              referralCount={refCount ?? 0}
+              ticket={null}
+              style={{ marginBottom: 24 }}
+            />
+
+            {/* tier badge */}
+            <div className="card-3d" style={{ display:'flex', alignItems:'center', gap:14, padding:'16px 20px', background:`${tier.color}12`, border:`1px solid ${tier.color}40`, borderRadius:10, marginBottom:24 }}>
+              <span style={{ fontSize:32 }}>{tier.icon}</span>
+              <div>
+                <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color:tier.color, letterSpacing:3, marginBottom:2 }}>YOUR STATUS</div>
+                <div style={{ fontFamily:"'Bebas Neue'", fontSize:'1.6rem', color:B.white, letterSpacing:'0.06em' }}>{tier.label}</div>
+              </div>
+              <div style={{ marginLeft:'auto', textAlign:'right' }}>
+                <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color: B.smoke, letterSpacing:2, marginBottom:2 }}>QUEUE #</div>
+                <div style={{ fontFamily:"'Orbitron'", fontSize:'1.5rem', fontWeight:900, color:tier.color, textShadow:`0 0 20px ${tier.color}60` }}>
+                  {animPos.toLocaleString()}
+                </div>
+              </div>
+            </div>
+
+            {/* context stats */}
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:12, marginBottom:24 }}>
+              {[
+                { label:'AHEAD OF YOU', val:Math.max(0, position - 1).toLocaleString(),   color:B.amber },
+                { label:'BEHIND YOU',   val:ahead === null ? '—' : ahead.toLocaleString(), color:B.neonCyan },
+                { label:'QUEUE FILL',   val:known ? `${pct}%` : '—',                       color:B.neonLime },
+              ].map(s => (
+                <div key={s.label} className="card-3d" style={{ background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:8, padding:'12px 14px', textAlign:'center' }}>
+                  <div style={{ fontFamily:"'Orbitron'", fontSize:'1.2rem', fontWeight:900, color:s.color, marginBottom:4 }}>{s.val}</div>
+                  <div style={{ fontFamily:"'Space Mono'", fontSize:'0.55rem', color: B.dim, letterSpacing:2 }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* perks */}
+            <div className="card-3d" style={{ background:'rgba(255,255,255,0.02)', border:`1px solid ${tier.color}25`, borderRadius:10, padding:'16px 20px', marginBottom:24 }}>
+              <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color:tier.color, letterSpacing:3, marginBottom:12 }}>YOUR PERKS</div>
+              <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+                {tier.perks.map((p, i) => (
+                  <div key={i} style={{ display:'flex', gap:10, alignItems:'flex-start' }}>
+                    <span style={{ color:tier.color, fontSize:12, marginTop:1, flexShrink:0 }}>✓</span>
+                    <span style={{ fontFamily:"'Syne'", fontSize:'0.82rem', color:B.smoke, lineHeight:1.5 }}>{p}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* referral link */}
+            <div className="card-3d" style={{ background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.07)', borderRadius:10, padding:'16px 20px', marginBottom:16 }}>
+              <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color: B.smoke, letterSpacing:3, marginBottom:4 }}>YOUR REFERRAL LINK</div>
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:10 }}>
+                <span style={{ fontFamily:"'Space Mono'", fontSize:'0.65rem', color:B.amber }}>Refer 5 friends → FREE ticket</span>
+                {refCount !== null && (
+                  <span style={{ fontFamily:"'Orbitron'", fontSize:'0.7rem', color:refCount >= 5 ? B.neonLime : B.smoke, fontWeight:700 }}>
+                    {refCount}/5 referrals
+                  </span>
+                )}
+              </div>
+              <div style={{ display:'flex', gap:8, alignItems:'center' }}>
+                <div style={{ flex:1, background:B.charcoal, border:'1px solid rgba(255,255,255,0.08)', borderRadius:6, padding:'10px 14px', fontFamily:"'Space Mono'", fontSize:'0.7rem', color:'#888', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
+                  sneakersfest26.com?ref=<span style={{ color:B.amber }}>{refCode}</span>
+                </div>
+                <button onClick={copyRef}
+                  style={{ padding:'10px 18px', background:refCopied ? `${B.amber}20` : 'rgba(255,255,255,0.05)', border:`1px solid ${refCopied ? B.amber+'50' : 'rgba(255,255,255,0.1)'}`, borderRadius:6, color:refCopied ? B.amber : B.smoke, fontFamily:"'Orbitron'", fontSize:9, cursor:'pointer', letterSpacing:1, whiteSpace:'nowrap', transition:'all 0.2s' }}>
+                  {refCopied ? '✓ COPIED' : 'COPY'}
+                </button>
+              </div>
+            </div>
+
+            {/* Referral milestone */}
+            {refCount !== null && (
+              refCount >= 5 ? (
+                <div className="card-3d" style={{ background:`${B.neonLime}10`, border:`2px solid ${B.neonLime}60`, borderRadius:10, padding:'20px', marginBottom:24, textAlign:'center' }}>
+                  <div style={{ fontSize:'2.2rem', marginBottom:8 }}>🎟</div>
+                  <div style={{ fontFamily:"'Bebas Neue'", fontSize:'1.8rem', color:B.neonLime, letterSpacing:'0.08em', marginBottom:6 }}>
+                    FREE TICKET UNLOCKED!
+                  </div>
+                  <p style={{ fontFamily:"'Space Mono'", fontSize:'0.68rem', color:B.smoke, marginBottom:12, lineHeight:1.7 }}>
+                    You referred <strong style={{ color:B.neonLime }}>{refCount} people</strong> — you've earned a free General Admission ticket.
+                  </p>
+                  <div style={{ background:B.charcoal, border:`1px solid ${B.neonLime}30`, borderRadius:8, padding:'10px 16px', fontFamily:"'Space Mono'", fontSize:'0.65rem', color:B.neonLime, marginBottom:8 }}>
+                    Email <strong>sneakersfest088@gmail.com</strong><br />
+                    Subject: FREE TICKET — REF CODE: <strong>{refCode}</strong>
+                  </div>
+                  <p style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color: B.smoke }}>Valid for one GA ticket · redeemable at the gate on Dec 12</p>
+                </div>
+              ) : (
+                <div className="card-3d" style={{ background:'rgba(255,255,255,0.02)', border:`1px solid ${B.amber}25`, borderRadius:10, padding:'14px 20px', marginBottom:24 }}>
+                  <div style={{ fontFamily:"'Space Mono'", fontSize:'0.58rem', color: B.smoke, letterSpacing:3, marginBottom:8 }}>REFERRAL PROGRESS</div>
+                  <div style={{ display:'flex', gap:8, marginBottom:8 }}>
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <div key={i} style={{
+                        flex:1, height:6, borderRadius:3,
+                        background: i < refCount ? B.neonLime : 'rgba(255,255,255,0.08)',
+                        boxShadow: i < refCount ? `0 0 6px ${B.neonLime}80` : 'none',
+                        transition:'background 0.3s',
+                      }} />
+                    ))}
+                  </div>
+                  <p style={{ fontFamily:"'Space Mono'", fontSize:'0.62rem', color:B.smoke, margin:0 }}>
+                    <strong style={{ color:B.amber }}>{5 - refCount} more</strong> referral{5 - refCount !== 1 ? 's' : ''} to unlock a free GA ticket
+                  </p>
+                </div>
+              )
+            )}
+
+            {/* share CTA */}
+            <button onClick={sharePos}
+              style={{ width:'100%', background:B.amber, color:B.black, border:'none', padding:'14px', fontFamily:"'Bebas Neue'", fontSize:'1.2rem', letterSpacing:'0.1em', cursor:'pointer', borderRadius:6, boxShadow:`0 0 24px ${B.amber}50` }}>
+              {shared ? '✓ LINK COPIED!' : 'SHARE & MOVE UP THE QUEUE'}
+            </button>
+            <p style={{ color: B.dim, fontFamily:"'Space Mono'", fontSize:'0.6rem', marginTop:10, textAlign:'center' }}>
+              {name ? `${name}, check` : 'Check'} your email for confirmation · early access tickets drop to you first
+            </p>
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}
