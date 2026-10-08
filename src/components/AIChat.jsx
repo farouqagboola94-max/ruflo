@@ -47,7 +47,7 @@ function keywordReply(text) {
 }
 
 const SUGGESTIONS = [
-  ['Ticket prices', 'Vendor spots', 'Catalyst OS Skills', 'Date & venue'],
+  ['Ticket prices', 'Vendor spots', 'Legit Check Booth', 'Date & venue'],
   ['VIP perks', 'LSX Sneaker Pit', 'Exclusive drops', 'Sponsorships'],
 ]
 

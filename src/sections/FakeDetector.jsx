@@ -96,15 +96,15 @@ export default function FakeDetector() {
           ))}
         </div>
 
-        <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
+        <div style={{ display: 'flex', gap: 10, marginBottom: 24, flexWrap: 'wrap' }}>
           <input aria-label="Sneaker to check"
             value={shoe}
             onChange={e => { setShoe(e.target.value); setResult(null) }}
-            placeholder="e.g. Yeezy Boost 350 V2 'Zebra' or Nike Dunk Low 'Panda'"
-            style={{ flex: 1, background: '#0d0d0d', border: '1px solid #1a1a1a', color: B.white, padding: '12px 14px', fontFamily: "'Space Mono'", fontSize: 11, outline: 'none' }}
+            placeholder="e.g. Travis Scott AJ1, Yeezy 350 Zebra, Nike Dunk Panda"
+            style={{ flex: '1 1 240px', background: '#0d0d0d', border: '1px solid #1a1a1a', color: B.white, padding: '13px 16px', fontFamily: "'Space Mono'", fontSize: 13, outline: 'none', borderRadius: 4 }}
           />
-          <button onClick={check} disabled={!shoe.trim() || loading} style={{ padding: '12px 24px', background: shoe.trim() && !loading ? B.amber : '#111', color: shoe.trim() && !loading ? B.black : B.dim, border: 'none', fontFamily: "'Space Mono'", fontSize: 10, letterSpacing: '0.15em', fontWeight: 700, cursor: shoe.trim() && !loading ? 'pointer' : 'default', whiteSpace: 'nowrap', transition: 'all 0.2s' }}>
-            {loading ? '⟳ CHECKING...' : 'LEGIT CHECK →'}
+          <button onClick={check} disabled={!shoe.trim() || loading} style={{ padding: '13px 24px', background: shoe.trim() && !loading ? B.amber : '#111', color: shoe.trim() && !loading ? B.black : B.dim, border: 'none', borderRadius: 4, fontFamily: "'Space Mono'", fontSize: 10, letterSpacing: '0.15em', fontWeight: 700, cursor: shoe.trim() && !loading ? 'pointer' : 'default', whiteSpace: 'nowrap', transition: 'all 0.2s', flex: '0 0 auto' }}>
+            {loading ? '⟳ CHECKING HEURISTICS...' : 'LEGIT CHECK →'}
           </button>
         </div>
 

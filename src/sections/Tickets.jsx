@@ -143,8 +143,31 @@ export default function Tickets() {
   const [orders,        setOrders]        = useState([])
   const [dlRef,         setDlRef]         = useState(null)
   const [qty,           setQty]           = useState({ GENERAL:1, VIP:1, VVIP:1, PHALANX:1 })
+  const [currency,      setCurrency]      = useState('NGN') // 'NGN' | 'USD'
+  const [couponInput,   setCouponInput]   = useState('')
+  const [appliedCoupon, setAppliedCoupon] = useState(null) // { code, pct, flat }
+  const [couponError,   setCouponError]   = useState('')
 
+  const NGN_PER_USD = 1500
   const daysLeft = Math.max(0, Math.ceil((new Date('2026-12-01') - new Date()) / 86400000))
+
+  function applyPromo(e) {
+    if (e) e.preventDefault()
+    const code = couponInput.trim().toUpperCase()
+    setCouponError('')
+    if (!code) return
+    if (code === 'CATALYST') {
+      setAppliedCoupon({ code, pct: 0.15, label: '15% Catalyst VIP Discount' })
+    } else if (code === 'EARLYBIRD') {
+      setAppliedCoupon({ code, pct: 0.10, label: '10% Early Bird Wave Discount' })
+    } else if (code === 'LAGOSSOLE') {
+      setAppliedCoupon({ code, flat: 1000, label: '₦1,000 Lagos Sole Bonus' })
+    } else if (code === 'SNEAKFEST26') {
+      setAppliedCoupon({ code, flat: 1500, label: '₦1,500 Festival Hype Pass' })
+    } else {
+      setCouponError('Invalid promo code. Try CATALYST or EARLYBIRD.')
+    }
+  }
 
   function loadOrders() {
     try { setOrders(JSON.parse(localStorage.getItem('sf26_orders') || '[]')) } catch { setOrders([]) }
@@ -162,7 +185,18 @@ export default function Tickets() {
   }
 
   const setTierQty = (name, val) => setQty(q => ({ ...q, [name]:val }))
-  const buyer = BUYER_NAMES[buyerIdx]
+
+  function getTierPricing(tier) {
+    const count = qty[tier.name] || 1
+    const baseTotal = tier.priceNum * count
+    let discount = 0
+    if (appliedCoupon?.pct) discount += Math.round(baseTotal * appliedCoupon.pct)
+    if (appliedCoupon?.flat) discount += appliedCoupon.flat
+    if (count >= 3) discount += Math.round(baseTotal * 0.10) // 10% Squad perk for 3+ passes
+    const netTotal = Math.max(1000, baseTotal - discount)
+    const unitPrice = Math.round(netTotal / count)
+    return { count, baseTotal, discount, netTotal, unitPrice }
+  }
 
   return (
     <section id="tickets" style={{ position:'relative', overflow:'hidden', background:B.black, padding:'100px 24px' }}>
@@ -196,11 +230,47 @@ export default function Tickets() {
         </div>
 
         {/* Verified Event Notice */}
-        <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:10, marginBottom:28, minHeight:22 }}>
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:10, marginBottom:20, minHeight:22 }}>
           <span style={{ width:6, height:6, borderRadius:'50%', background:B.neonLime, boxShadow:`0 0 8px ${B.neonLime}`, display:'inline-block', animation:'viewBlink 1.2s ease-in-out infinite', flexShrink:0 }} />
           <span style={{ fontFamily:"'Space Mono', monospace", fontSize:8.5, color: B.white, letterSpacing:2 }}>
             OFFICIAL NOTICE: VERIFIED TICKETS ARE ISSUED EXCLUSIVELY VIA PAYSTACK & FLUTTERWAVE
           </span>
+        </div>
+
+        {/* Currency & Promo Bar */}
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:12, marginBottom:32, padding:'14px 20px', background:'rgba(255,255,255,0.025)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:10 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:8, flexWrap:'wrap' }}>
+            <span style={{ fontFamily:"'Space Mono', monospace", fontSize:9, color:B.smoke, letterSpacing:'0.15em' }}>CURRENCY:</span>
+            <button type="button" onClick={() => setCurrency('NGN')} style={{ padding:'5px 12px', background:currency==='NGN'?`${B.amber}22`:'transparent', border:`1px solid ${currency==='NGN'?B.amber:'rgba(255,255,255,0.1)'}`, borderRadius:4, color:currency==='NGN'?B.amber:B.smoke, fontFamily:"'Space Mono', monospace", fontSize:10, cursor:'pointer' }}>
+              ₦ NGN
+            </button>
+            <button type="button" onClick={() => setCurrency('USD')} style={{ padding:'5px 12px', background:currency==='USD'?`${B.neonCyan}22`:'transparent', border:`1px solid ${currency==='USD'?B.neonCyan:'rgba(255,255,255,0.1)'}`, borderRadius:4, color:currency==='USD'?B.neonCyan:B.smoke, fontFamily:"'Space Mono', monospace", fontSize:10, cursor:'pointer' }}>
+              $ USD (FX: ₦1,500)
+            </button>
+          </div>
+
+          <form onSubmit={applyPromo} style={{ display:'flex', gap:6, alignItems:'center', flexWrap:'wrap' }}>
+            <input
+              aria-label="Discount or Promo Code"
+              value={couponInput}
+              onChange={e => setCouponInput(e.target.value)}
+              placeholder="PROMO CODE (e.g. CATALYST)"
+              style={{ padding:'6px 10px', background:'#000', border:'1px solid rgba(255,255,255,0.15)', borderRadius:4, color:B.white, fontFamily:"'Space Mono', monospace", fontSize:9, textTransform:'uppercase', outline:'none' }}
+            />
+            <button type="submit" style={{ padding:'6px 12px', background:B.amber, border:'none', borderRadius:4, color:B.black, fontFamily:"'Space Mono', monospace", fontSize:9, fontWeight:700, cursor:'pointer' }}>
+              APPLY
+            </button>
+            {appliedCoupon && (
+              <span style={{ padding:'4px 8px', background:`${B.neonLime}20`, border:`1px solid ${B.neonLime}50`, borderRadius:4, color:B.neonLime, fontFamily:"'Space Mono', monospace", fontSize:8 }}>
+                ✓ {appliedCoupon.label}
+              </span>
+            )}
+            {couponError && (
+              <span style={{ color:B.neonMagenta, fontFamily:"'Space Mono', monospace", fontSize:8 }}>
+                {couponError}
+              </span>
+            )}
+          </form>
         </div>
 
         {/* Early Bird Banner */}
@@ -245,9 +315,16 @@ export default function Tickets() {
         <div className="reveal-3d" style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(260px, 1fr))', gap:20, alignItems:'center' }}>
           {TIERS.map((tier, i) => {
             const pct      = tier.avail / tier.total
-            const sold     = tier.total - tier.avail
             const urgColor = pct < 0.15 ? B.neonMagenta : pct < 0.4 ? B.amber : tier.color
             const isUrgent = pct < 0.3 && !tier.featured
+            const pricing = getTierPricing(tier)
+            const displayUnitPrice = currency === 'USD'
+              ? `$${(pricing.unitPrice / NGN_PER_USD).toFixed(1)}`
+              : `₦${pricing.unitPrice.toLocaleString('en-NG')}`
+            const displayNetTotal = currency === 'USD'
+              ? `$${(pricing.netTotal / NGN_PER_USD).toFixed(1)}`
+              : `₦${pricing.netTotal.toLocaleString('en-NG')}`
+
             return (
               <div key={i}
                 style={{ background:tier.featured?`rgba(245,166,35,0.07)`:`rgba(255,255,255,0.05)`, backdropFilter:'blur(20px) saturate(180%)', WebkitBackdropFilter:'blur(20px) saturate(180%)', border:`1px solid ${tier.featured?tier.color+'55':'rgba(255,255,255,0.10)'}`, borderRadius:14, overflow:'hidden', position:'relative', transform:tier.featured?'scale(1.04)':'scale(1)', boxShadow:tier.featured?`0 8px 40px rgba(0,0,0,0.6),0 0 0 1px ${tier.color}15,inset 0 1px 0 rgba(255,255,255,0.12)`:`0 8px 32px rgba(0,0,0,0.45),inset 0 1px 0 rgba(255,255,255,0.07)`, transition:'all 0.3s ease' }}
@@ -270,8 +347,10 @@ export default function Tickets() {
                   <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:28, color:B.white, letterSpacing:'0.05em' }}>{tier.name}</div>
 
                   <div style={{ margin:'14px 0 16px', padding:'12px 16px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:8, display:'inline-block' }}>
-                    <div style={{ fontFamily:"'Orbitron', monospace", fontWeight:900, fontSize:32, color:tier.color, lineHeight:1, textShadow:`0 0 20px ${tier.color}50` }}>{tier.price}</div>
-                    <div style={{ fontFamily:"'Space Mono', monospace", fontSize: 9, color:B.smoke, letterSpacing:'0.2em', marginTop:4 }}>OFFICIAL FESTIVAL RATE</div>
+                    <div style={{ fontFamily:"'Orbitron', monospace", fontWeight:900, fontSize:32, color:tier.color, lineHeight:1, textShadow:`0 0 20px ${tier.color}50` }}>{displayUnitPrice}</div>
+                    <div style={{ fontFamily:"'Space Mono', monospace", fontSize: 9, color:B.smoke, letterSpacing:'0.2em', marginTop:4 }}>
+                      {pricing.discount > 0 ? `PROMO APPLIED (WAS ₦${tier.priceNum.toLocaleString()})` : 'OFFICIAL FESTIVAL RATE'}
+                    </div>
                   </div>
 
                   {/* Allocation Status */}
@@ -301,12 +380,19 @@ export default function Tickets() {
                   <QtySelector name={tier.name} value={qty[tier.name]} color={tier.color} onChange={val => setTierQty(tier.name, val)} />
 
                   <button
-                    onClick={() => setSelectedTier({ ...tier, quantity:qty[tier.name] })}
+                    onClick={() => setSelectedTier({
+                      ...tier,
+                      quantity: pricing.count,
+                      priceNum: pricing.unitPrice,
+                      price: displayUnitPrice,
+                      netTotal: pricing.netTotal,
+                      appliedCoupon: appliedCoupon?.code,
+                    })}
                     style={{ width:'100%', padding:'14px 0', background:tier.featured?tier.color:'rgba(255,255,255,0.07)', border:`1px solid ${tier.color}`, borderRadius:6, cursor:'pointer', fontFamily:"'Space Mono', monospace", fontSize:10, fontWeight:700, color:tier.featured?B.black:tier.color, letterSpacing:'0.2em', transition:'all 0.25s', boxShadow:tier.featured?`0 0 24px ${tier.color}35`:'none' }}
                     onMouseEnter={e => { e.currentTarget.style.background=tier.color; e.currentTarget.style.color=B.black; e.currentTarget.style.boxShadow=`0 0 36px ${tier.color}55` }}
                     onMouseLeave={e => { e.currentTarget.style.background=tier.featured?tier.color:'rgba(255,255,255,0.07)'; e.currentTarget.style.color=tier.featured?B.black:tier.color; e.currentTarget.style.boxShadow=tier.featured?`0 0 24px ${tier.color}35`:'none' }}
                   >
-                    {tier.cta}{qty[tier.name]>1?` × ${qty[tier.name]} = ₦${(tier.priceNum*qty[tier.name]).toLocaleString()}`:''}
+                    {tier.cta}{pricing.count > 1 ? ` × ${pricing.count} = ${displayNetTotal}` : pricing.discount > 0 ? ` (${displayNetTotal})` : ''}
                   </button>
                 </div>
               </div>
