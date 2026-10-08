@@ -19,6 +19,7 @@ export default function WhatsAppButton() {
   }, [])
 
   const contacts = [
+    { label: 'INNER CIRCLE CHANNEL', href: SOCIAL_LINKS.whatsapp, isChannel: true },
     { label: '0708 411 1516', href: SOCIAL_LINKS.whatsappContact1 },
     { label: '0905 268 5799', href: SOCIAL_LINKS.whatsappContact2 },
   ]
