@@ -143,9 +143,6 @@ export default function Tickets() {
   const [orders,        setOrders]        = useState([])
   const [dlRef,         setDlRef]         = useState(null)
   const [qty,           setQty]           = useState({ GENERAL:1, VIP:1, VVIP:1, PHALANX:1 })
-  const [buyerIdx,      setBuyerIdx]      = useState(0)
-  const [buyerVisible,  setBuyerVisible]  = useState(true)
-  const [tierViewers,   setTierViewers]   = useState({ GENERAL:21, VIP:27, VVIP:18, PHALANX:13 })
 
   const daysLeft = Math.max(0, Math.ceil((new Date('2026-12-01') - new Date()) / 86400000))
 
@@ -153,22 +150,6 @@ export default function Tickets() {
     try { setOrders(JSON.parse(localStorage.getItem('sf26_orders') || '[]')) } catch { setOrders([]) }
   }
   useEffect(() => { loadOrders() }, [])
-
-  useEffect(() => {
-    const vid = setInterval(() => {
-      setTierViewers(p => ({
-        GENERAL: Math.max(12, Math.min(38, p.GENERAL + Math.floor(Math.random()*5)-2)),
-        VIP:     Math.max(18, Math.min(50, p.VIP     + Math.floor(Math.random()*5)-2)),
-        VVIP:    Math.max(10, Math.min(30, p.VVIP    + Math.floor(Math.random()*5)-2)),
-        PHALANX: Math.max(6,  Math.min(22, p.PHALANX + Math.floor(Math.random()*3)-1)),
-      }))
-    }, 5300)
-    const bid = setInterval(() => {
-      setBuyerVisible(false)
-      setTimeout(() => { setBuyerIdx(i => (i+1) % BUYER_NAMES.length); setBuyerVisible(true) }, 350)
-    }, 5000)
-    return () => { clearInterval(vid); clearInterval(bid) }
-  }, [])
 
   function closePaymentModal() {
     const before = orders.length
@@ -214,12 +195,11 @@ export default function Tickets() {
           </div>
         </div>
 
-        {/* Live buyer ticker */}
+        {/* Verified Event Notice */}
         <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:10, marginBottom:28, minHeight:22 }}>
           <span style={{ width:6, height:6, borderRadius:'50%', background:B.neonLime, boxShadow:`0 0 8px ${B.neonLime}`, display:'inline-block', animation:'viewBlink 1.2s ease-in-out infinite', flexShrink:0 }} />
-          <span style={{ fontFamily:"'Space Mono', monospace", fontSize:8, color: B.dim, letterSpacing:2 }}>JUST PURCHASED:</span>
-          <span style={{ fontFamily:"'Space Mono', monospace", fontSize:8, letterSpacing:1, color:buyer.color, opacity:buyerVisible?1:0, transition:'opacity 0.3s', animation:buyerVisible?'buyerSlide 0.35s ease':undefined }}>
-            {buyer.name} ({buyer.city}) → {buyer.tier}
+          <span style={{ fontFamily:"'Space Mono', monospace", fontSize:8.5, color: B.white, letterSpacing:2 }}>
+            OFFICIAL NOTICE: VERIFIED TICKETS ARE ISSUED EXCLUSIVELY VIA PAYSTACK & FLUTTERWAVE
           </span>
         </div>
 
@@ -279,12 +259,11 @@ export default function Tickets() {
                 <div style={{ height:3, background:`linear-gradient(90deg,${tier.color},${tier.color}30)` }} />
 
                 <div style={{ padding:28 }}>
-                  {/* Tag row + viewer chip */}
+                  {/* Tag row */}
                   <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14 }}>
                     <span style={{ padding:'3px 10px', borderRadius:2, background:tier.color+'18', border:`1px solid ${tier.color}50`, fontFamily:"'Space Mono', monospace", fontSize: 9, color:tier.color, letterSpacing:'0.2em' }}>{tier.tag}</span>
-                    <span style={{ display:'flex', alignItems:'center', gap:5, fontFamily:"'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing:1 }}>
-                      <span style={{ width:5, height:5, borderRadius:'50%', background:B.neonCyan, boxShadow:`0 0 5px ${B.neonCyan}`, display:'inline-block', animation:'viewBlink 2s ease-in-out infinite' }} />
-                      {tierViewers[tier.name]} viewing
+                    <span style={{ fontFamily:"'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing:1 }}>
+                      BATCH 01 (EARLY ACCESS)
                     </span>
                   </div>
 
@@ -292,19 +271,19 @@ export default function Tickets() {
 
                   <div style={{ margin:'14px 0 16px', padding:'12px 16px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:8, display:'inline-block' }}>
                     <div style={{ fontFamily:"'Orbitron', monospace", fontWeight:900, fontSize:32, color:tier.color, lineHeight:1, textShadow:`0 0 20px ${tier.color}50` }}>{tier.price}</div>
-                    <div style={{ fontFamily:"'Space Mono', monospace", fontSize: 9, color:B.smoke, letterSpacing:'0.2em', marginTop:4 }}>EARLY BIRD PRICE</div>
+                    <div style={{ fontFamily:"'Space Mono', monospace", fontSize: 9, color:B.smoke, letterSpacing:'0.2em', marginTop:4 }}>OFFICIAL FESTIVAL RATE</div>
                   </div>
 
-                  {/* Scarcity bar */}
+                  {/* Allocation Status */}
                   <div style={{ marginBottom:16 }}>
                     <div style={{ display:'flex', justifyContent:'space-between', marginBottom:5 }}>
-                      <span style={{ fontFamily:"'Space Mono', monospace", fontSize: 9, color:urgColor, letterSpacing:1 }}>
-                        {pct < 0.15 ? '⚡ ALMOST GONE' : pct < 0.4 ? 'SELLING FAST' : 'AVAILABLE'}
+                      <span style={{ fontFamily:"'Space Mono', monospace", fontSize: 9, color:tier.color, letterSpacing:1 }}>
+                        STATUS: ACTIVE ENTRY
                       </span>
-                      <span style={{ fontFamily:"'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing:1 }}>{sold} / {tier.total} SOLD</span>
+                      <span style={{ fontFamily:"'Space Mono', monospace", fontSize: 9, color: B.smoke, letterSpacing:1 }}>CAPACITY: {tier.total} PASSES</span>
                     </div>
                     <div style={{ height:3, background:'rgba(255,255,255,0.06)', borderRadius:2, overflow:'hidden' }}>
-                      <div style={{ height:'100%', width:`${(sold/tier.total)*100}%`, background:urgColor, borderRadius:2 }} />
+                      <div style={{ height:'100%', width:'100%', background:tier.color, opacity:0.65, borderRadius:2 }} />
                     </div>
                   </div>
 
