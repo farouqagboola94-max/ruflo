@@ -112,7 +112,7 @@ export default function VendorMatcher() {
           Enter your SF26 wishlist · Claude maps the vendor strategy · Know where to go before you arrive
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 24, marginBottom: 28 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24, marginBottom: 28 }}>
           <div>
             <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 12 }}>YOUR WISHLIST (UP TO 5)</div>
             {wishlist.map((s, i) => (

@@ -255,3 +255,74 @@ section:nth-child(odd)::before {
 ::-webkit-scrollbar-track { background: #0a0905; }
 ::-webkit-scrollbar-thumb { background: #D4751A; border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: #F5A623; }
+
+/* ── Mobile Viewport & Touch Ergonomics ──────────────────── */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Touch devices: disable sticky 3D hover rotations and provide instantaneous tactile press feedback */
+@media (hover: none) and (pointer: coarse) {
+  .card-3d:hover {
+    transform: none !important;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6) !important;
+  }
+  .card-3d:active {
+    transform: scale(0.98) !important;
+    transition: transform 0.1s ease !important;
+  }
+  .float-3d {
+    animation: none !important;
+  }
+}
+
+/* Mobile viewport adjustments (< 768px) */
+@media (max-width: 768px) {
+  /* Prevent iOS Safari auto-zooming on focus when font-size < 16px */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+
+  /* Safe interactive touch targets (min 44px) */
+  button, .mobile-tap-target {
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+
+  /* Compact section padding for mobile screens */
+  section {
+    padding-left: clamp(14px, 4vw, 24px) !important;
+    padding-right: clamp(14px, 4vw, 24px) !important;
+  }
+
+  /* Ensure smooth horizontal scroll for chips, carousels and tabs */
+  .mobile-scroll-x {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .mobile-scroll-x::-webkit-scrollbar {
+    display: none;
+  }
+  .mobile-scroll-x > * {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+  }
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+

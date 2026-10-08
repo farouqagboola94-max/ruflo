@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
 import { SOCIAL_LINKS } from '../config'
@@ -8,20 +8,163 @@ import { claudeChat, useAiAvailable } from '../lib/catalystAI'
 
 const FORMSPREE = import.meta.env.VITE_FORMSPREE_ID || ''
 
-const CATEGORIES = ['Sneakers', 'Apparel', 'Accessories', 'Vintage', 'Custom Art', 'Food & Beverage', 'Tech / Photography', 'Other']
+const CATEGORIES = [
+  'Sneakers & Deadstock',
+  'Streetwear Apparel',
+  'Accessories & Jewelry',
+  'Vintage & Archive',
+  'Custom Sneaker Art',
+  'Restoration & Care',
+  'Food & Gourmet Street Bites',
+  'Tech & Creative Media',
+  'Other',
+]
 
 const BOOTHS = [
-  { id:'standard', label:'Standard',       size:'3 × 3 m', price:150000, capacity:20, features:['Table + 2 chairs','Power outlet','Booth ID signage'] },
-  { id:'double',   label:'Double',         size:'6 × 3 m', price:280000, capacity:10, features:['2 Tables + 4 chairs','2 Power outlets','Corner visibility option'] },
-  { id:'premium',  label:'Premium Corner', size:'4 × 4 m', price:400000, capacity:6,  features:['High-traffic corner','LED spotlight','Social media feature','Extra storage'] },
-  { id:'collab',   label:'Exclusive Collab', size:'Custom', price:null,  capacity:3,  features:['Exclusive drop opportunity','Co-branded marketing','Custom build-out','Direct negotiation'] },
+  {
+    id: 'standard',
+    label: 'Standard Booth',
+    tag: 'MOST POPULAR',
+    size: '3 × 3 m (9 sqm)',
+    basePrice: 150000,
+    capacity: 20,
+    recommendedFor: 'Emerging streetwear labels, single-table sellers & customizers',
+    features: [
+      '1 Heavy-duty display table + 2 chairs',
+      'Standard 220V power connection',
+      'Official SF26 engraved booth plaque',
+      '2 All-day vendor crew wristbands',
+      'Inclusion in the digital SF26 Vendor Guide',
+    ],
+  },
+  {
+    id: 'double',
+    label: 'Double Retail Wing',
+    tag: 'HIGH VOLUME',
+    size: '6 × 3 m (18 sqm)',
+    basePrice: 280000,
+    capacity: 10,
+    recommendedFor: 'Established footwear resellers, multibrand curators & apparel brands',
+    features: [
+      '2 Heavy display tables + 4 chairs',
+      '2 Dedicated 15A high-load power feeds',
+      'Double aisle frontage for high customer throughput',
+      '4 All-day vendor crew wristbands',
+      'Guaranteed high-traffic primary walkway placement',
+      'Social media feature across @s_fest26 channels',
+    ],
+  },
+  {
+    id: 'premium',
+    label: 'Premium Corner Pavilion',
+    tag: 'PRIME JUNCTION',
+    size: '4 × 4 m (16 sqm)',
+    basePrice: 420000,
+    capacity: 6,
+    recommendedFor: 'Flagship sneaker boutiques, grail vaults & premier designers',
+    features: [
+      'High-traffic crossway corner with 270° visibility',
+      'Dual customer walk-by display frontage',
+      'Dedicated 32A power feed + overhead LED spotlight',
+      'Lockable on-site overnight storage box',
+      '6 All-day vendor crew wristbands',
+      'Dedicated SF26 story & reel spotlight',
+      'Priority product drop announcement on schedule',
+    ],
+  },
+  {
+    id: 'collab',
+    label: 'Brand Experiential Activation',
+    tag: 'BESPOKE',
+    size: '8 × 8 m (64 sqm)',
+    basePrice: 750000,
+    capacity: 3,
+    recommendedFor: 'Major consumer brands, headline sponsors & experiential activations',
+    features: [
+      'Custom activation footprint with structural build rights',
+      'Main-stage MC live drop hype announcement',
+      'Video wall commercial rotation during peak hours',
+      'Exclusive festival drop collaboration rights',
+      '10 All-access VIP crew credentials + VIP lounge',
+      'Dedicated security detail & private concierge',
+    ],
+  },
+]
+
+const ADD_ONS = [
+  {
+    id: 'wifi',
+    name: 'Starlink Low-Latency POS WiFi Node',
+    price: 30000,
+    desc: 'Dedicated low-latency WiFi link for seamless POS swipes and instant mobile bank transfers without cellular network congestion.',
+  },
+  {
+    id: 'showcase',
+    name: 'Lockable Acrylic Grail Display Case',
+    price: 45000,
+    desc: 'Tamper-resistant clear acrylic showcase with integrated halo LED illumination for high-value collector pairs.',
+  },
+  {
+    id: 'extra_tables',
+    name: 'Extra Display Table & 2 Chairs + Garment Rack',
+    price: 20000,
+    desc: 'Additional heavy-duty setup to maximize retail square footage.',
+  },
+  {
+    id: 'mc_hype',
+    name: 'Main-Stage MC Hype Announcement',
+    price: 60000,
+    desc: 'Live microphone drop and digital stage screen shoutout during peak traffic afternoon hours.',
+  },
+  {
+    id: 'escrow_fast',
+    name: 'Physical Legit-Check Fast Lane',
+    price: 35000,
+    desc: 'Priority on-site physical authentication passes with SF26 verified holographic tags for all your customer sales.',
+  },
 ]
 
 const FAQ = [
-  { q:'Who attends?',                                    a:"Lagos sneakerheads, streetwear creatives, collectors, content creators, and brand enthusiasts. Year 1 target: 1,000 to 2,500 attendees." },
-  { q:'Can I do an exclusive drop at the event?',        a:"Yes. Limited collab and exclusive drop opportunities are available — separate from the standard vendor package. Select 'Exclusive Collab Tier' or contact directly." },
-  { q:'How are vendors selected?',                       a:"Year 1 is invitation-curated. We're building a first cohort of 30 confirmed vendors before announcing publicly. Applications are reviewed within 3 business days." },
-  { q:'What does the stall include?',                    a:"Booth space, table, power connection, and setup time. Full spec sheet sent on confirmation. Specific inclusions depend on tier selected." },
+  {
+    q: 'Who attends Sneakers Fest Lagos?',
+    a: 'West Africa’s top sneakerheads, streetwear creators, archivist collectors, lifestyle photographers, musicians, and young urban professionals. Target Year 1 cohort: 1,000 to 2,500 qualified attendees ready to spend.',
+  },
+  {
+    q: 'What is the selection and curation criteria?',
+    a: 'Year 1 is strictly invitation-curated to guarantee authenticity and prevent bootlegs or poor-quality replicas. Applications are reviewed by our curatorial committee within 3 business days of submission.',
+  },
+  {
+    q: 'Can I do an exclusive sneaker drop or collaborative release at SF26?',
+    a: 'Absolutely. We actively encourage vendors to bring limited-run colorways, exclusive capsule apparel, or 1-of-1 customs. Select "Yes — I want a drop" during registration so our stage directors can schedule your launch.',
+  },
+  {
+    q: 'What are the payment terms and installment options?',
+    a: 'You can choose between Full Upfront Settlement (which earns a 5% instant discount) or a Flexible 2-Stage Split (50% commitment deposit upon acceptance to lock your booth number, with the remaining 50% due by Nov 25, 2026).',
+  },
+  {
+    q: 'What utilities are provided at each stall?',
+    a: 'Each booth comes with dedicated table fixtures, chairs, official booth plaque, certified 220V power outlets, and load-in assistance starting from 8:00 AM on event day.',
+  },
+]
+
+const CONFIRMED_VENDORS = [
+  { name: 'Sole Lagos', cat: 'Sneakers & Deadstock', city: 'Lagos', ig: '@solelagos', color: B.amber, booth: 'Premium Corner Pavilion', bringing: 'Deadstock Air Jordan collection + exclusive Lagos colourways' },
+  { name: 'Kicksurge NG', cat: 'Sneakers & Deadstock', city: 'Abuja', ig: '@kicksurgeng', color: B.neonCyan, booth: 'Double Retail Wing', bringing: 'Rare Adidas and Nike imports and limited edition runners' },
+  { name: 'Stitch and Sole', cat: 'Custom Sneaker Art', city: 'Lagos', ig: '@stitchedsole', color: B.neonMagenta, booth: 'Standard Booth', bringing: 'Live customisation station — bring your blank canvas pair' },
+  { name: 'Lagos Drip Haus', cat: 'Streetwear Apparel', city: 'Lagos', ig: '@lagosdrip', color: B.neonLime, booth: 'Double Retail Wing', bringing: 'Lagos-made streetwear capsule and unreleased collab pieces' },
+  { name: 'The Sneaker Lab', cat: 'Restoration & Care', city: 'Lagos', ig: '@sneakerlab.ng', color: B.amber, booth: 'Double Retail Wing', bringing: 'Authentication service + curated grail collection for sale' },
+  { name: 'Afro Threads', cat: 'Streetwear Apparel', city: 'Port Harcourt', ig: '@afrothreads', color: B.neonCyan, booth: 'Standard Booth', bringing: 'Pan-African streetwear brand debut — first Lagos pop-up ever' },
+  { name: 'Lagos Kicks Clinic', cat: 'Accessories & Jewelry', city: 'Lagos', ig: '@kicksclinic', color: B.neonLime, booth: 'Standard Booth', bringing: 'Sneaker restoration, deep cleaning, and custom lace bar' },
+  { name: 'NoFilter Lagos', cat: 'Tech & Creative Media', city: 'Lagos', ig: '@nofilter.lag', color: B.amber, booth: 'Standard Booth', bringing: 'Event editorial photography + instant print gallery for buyers' },
+  { name: 'Street Eats Lagos', cat: 'Food & Gourmet Street Bites', city: 'Lagos', ig: '@streeteats.lag', color: B.neonLime, booth: 'Standard Booth', bringing: 'Artisan suya, gourmet jollof cones, and craft cocktails' },
+  { name: 'Chike Creatives', cat: 'Custom Sneaker Art', city: 'Lagos', ig: '@chikecreates', color: B.neonMagenta, booth: 'Standard Booth', bringing: 'Limited edition SF26 metallic prints and collector canvases' },
+]
+
+const MAP_ZONES = [
+  { id: 'collab', label: 'STAGE / COLLAB ZONE', hint: '64 sqm Activation Footprint' },
+  { id: 'premium', label: 'PREMIUM CORNERS', hint: '16 sqm 270° Crossways' },
+  { id: 'double', label: 'DOUBLE RETAIL WINGS', hint: '18 sqm High-Traffic Corridor' },
+  { id: 'standard', label: 'STANDARD FLOOR', hint: '9 sqm Curated Arcade' },
 ]
 
 function genAppId() {
@@ -31,154 +174,135 @@ function genAppId() {
   return id
 }
 
-function BoothCard({ booth, selected, onSelect, taken }) {
-  const pct         = taken / booth.capacity
-  const statusColor = pct >= 1 ? B.neonMagenta : pct >= 0.7 ? B.amber : B.neonLime
-  const statusText  = pct >= 1 ? 'FULL' : pct >= 0.7 ? 'FILLING FAST' : 'AVAILABLE'
-  const isFull      = pct >= 1
-  return (
-    <div onClick={() => !isFull && onSelect(booth.id)}
-      style={{ padding:16, borderRadius:8, cursor:isFull ? 'not-allowed' : 'pointer', border:`1px solid ${selected ? B.neonCyan : isFull ? B.dim : 'rgba(255,255,255,0.09)'}`, background:selected ? `${B.neonCyan}08` : isFull ? 'rgba(255,255,255,0.02)' : 'rgba(255,255,255,0.03)', transition:'all 0.2s', opacity:isFull ? 0.5 : 1 }}
-    >
-      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:8 }}>
-        <div>
-          <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:16, color:selected ? B.neonCyan : B.white, letterSpacing:1 }}>{booth.label}</div>
-          <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:B.smoke, marginTop:2 }}>{booth.size}</div>
-        </div>
-        <div style={{ textAlign:'right' }}>
-          <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:18, color:B.amber }}>{booth.price ? `₦${booth.price.toLocaleString('en-NG')}` : 'CONTACT'}</div>
-          <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:statusColor, letterSpacing:1, marginTop:2 }}>{statusText}</div>
-        </div>
-      </div>
-      <div style={{ height:3, background:'#1a1a1a', borderRadius:2, marginBottom:10, overflow:'hidden' }}>
-        <div style={{ height:'100%', width:`${Math.min(pct*100,100)}%`, background:statusColor, borderRadius:2, transition:'width 0.5s' }} />
-      </div>
-      <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:B.smoke, marginBottom:8 }}>
-        {booth.capacity - taken} of {booth.capacity} spots remaining
-      </div>
-      <ul style={{ listStyle:'none', padding:0, margin:0, display:'flex', flexDirection:'column', gap:4 }}>
-        {booth.features.map(f => (
-          <li key={f} style={{ fontFamily:'Syne,sans-serif', fontSize:11, color:selected ? B.white : B.smoke, display:'flex', gap:6, alignItems:'center' }}>
-            <span style={{ color:selected ? B.neonCyan : B.dim, flexShrink:0 }}>◆</span>{f}
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
-
-const CONFIRMED_VENDORS = [
-  { name:'Sole Lagos',         cat:'Sneakers',           city:'Lagos',         ig:'@solelagos',      color:B.amber,       booth:'Premium Corner', bringing:'Deadstock Air Jordan collection + exclusive Lagos colourways' },
-  { name:'Kicksurge NG',       cat:'Sneakers',           city:'Abuja',         ig:'@kicksurgeng',    color:B.neonCyan,    booth:'Double',         bringing:'Rare Adidas and Nike imports and limited edition runners' },
-  { name:'Stitch and Sole',    cat:'Custom Art',         city:'Lagos',         ig:'@stitchedsole',   color:B.neonMagenta, booth:'Standard',       bringing:'Live customisation station — bring your blank canvas pair' },
-  { name:'Lagos Drip Haus',    cat:'Apparel',            city:'Lagos',         ig:'@lagosdrip',      color:B.neonLime,    booth:'Double',         bringing:'Lagos-made streetwear capsule and unreleased collab pieces' },
-  { name:'The Sneaker Lab',    cat:'Sneakers',           city:'Lagos',         ig:'@sneakerlab.ng',  color:B.amber,       booth:'Double',         bringing:'Authentication service + curated grail collection for sale' },
-  { name:'Afro Threads',       cat:'Apparel',            city:'Port Harcourt', ig:'@afrothreads',    color:B.neonCyan,    booth:'Standard',       bringing:'Pan-African streetwear brand debut — first Lagos pop-up ever' },
-  { name:'Lagos Kicks Clinic', cat:'Accessories',        city:'Lagos',         ig:'@kicksclinic',    color:B.neonLime,    booth:'Standard',       bringing:'Sneaker restoration, cleaning, and lace customisation on site' },
-  { name:'NoFilter Lagos',     cat:'Tech / Photography', city:'Lagos',         ig:'@nofilter.lag',   color:B.amber,       booth:'Standard',       bringing:'Event photography + instant print booth for all attendees' },
-  { name:'Street Eats Lagos',  cat:'Food & Beverage',    city:'Lagos',         ig:'@streeteats.lag', color:B.neonLime,    booth:'Standard',       bringing:'Local street food meets gourmet — suya, jollof, and more' },
-  { name:'Chike Creatives',    cat:'Custom Art',         city:'Lagos',         ig:'@chikecreates',   color:B.neonMagenta, booth:'Standard',       bringing:'Limited edition SF26 prints and poster art — only on the day' },
-]
-
-const MAP_ZONES = [
-  { id:'collab', label:'STAGE / COLLAB', hint:'Custom build' },
-  { id:'premium', label:'PREMIUM CORNER', hint:'4x4m corners' },
-  { id:'double', label:'DOUBLE BOOTH', hint:'6x3m wing' },
-  { id:'standard', label:'STANDARD FLOOR', hint:'3x3m rows' },
-]
-function BoothMap({ taken, selected, onSelect }) {
-  return (
-    <div style={{ marginBottom:16 }}>
-      <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color: B.dim, letterSpacing:2, marginBottom:8 }}>VENUE FLOOR PLAN</div>
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gridTemplateRows:'70px 90px', gap:4 }}>
-        {MAP_ZONES.map(z => {
-          const booth = BOOTHS.find(b => b.id === z.id)
-          const pct = (taken[z.id] || 0) / (booth ? booth.capacity : 1)
-          const col = pct >= 1 ? B.neonMagenta : pct >= 0.7 ? B.amber : B.neonCyan
-          const isSel = selected === z.id
-          return (
-            <div key={z.id} onClick={() => pct < 1 && onSelect(z.id)} style={{ padding:'8px 10px', borderRadius:6, cursor:pct >= 1 ? 'not-allowed' : 'pointer', background:isSel ? `${col}15` : 'rgba(255,255,255,0.02)', border:`1px solid ${isSel ? col : col + '35'}`, opacity:pct >= 1 ? 0.4 : 1, transition:'all 0.2s', display:'flex', flexDirection:'column', justifyContent:'space-between' }}>
-              <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color:col, letterSpacing:1 }}>{z.label}</div>
-              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-end' }}>
-                <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color: B.dim }}>{z.hint}</div>
-                <div style={{ fontFamily:'Orbitron,monospace', fontSize:8, color:isSel ? col : B.smoke }}>{(booth ? booth.capacity : 0) - (taken[z.id] || 0)} LEFT</div>
-              </div>
-            </div>
-          )
-        })}
-      </div>
-    </div>
-  )
-}
-
-const STEPS = [
-  { label:'BOOTH',      subtitle:'Choose your space' },
-  { label:'BRAND INFO', subtitle:'Who are you?' },
-  { label:'SOCIAL',     subtitle:'Links & presence' },
-  { label:'REVIEW',     subtitle:'Confirm & submit' },
-]
-
-const STATUS_STEPS = [
-  { num:'01', title:'RECEIVED',     desc:'In queue',        color:B.neonCyan,    done:true  },
-  { num:'02', title:'UNDER REVIEW', desc:'3 biz days',      color:B.amber,       done:false },
-  { num:'03', title:'SHORTLISTED',  desc:'If selected',     color:B.neonLime,    done:false },
-  { num:'04', title:'CONFIRMED',    desc:'Dec 12, Lagos',   color:B.neonMagenta, done:false },
-]
-
 export default function VendorReg() {
   const aiReady = useAiAvailable()
-  const [step,         setStep]        = useState(0)
-  const [form,         setForm]        = useState({ booth:'', business:'', contact:'', email:'', phone:'', category:'', instagram:'', twitter:'', website:'', deckUrl:'', exclusiveDrop:'', bio:'' })
-  const [status,       setStatus]      = useState('idle')
-  const [openFaq,      setOpenFaq]     = useState(null)
-  const [appId,        setAppId]       = useState('')
-  const [taken,        setTaken]       = useState({ standard:8, double:5, premium:3, collab:1 })
-  const [existingApp,  setExistingApp] = useState(null)
+  const [step, setStep] = useState(0)
+  const [form, setForm] = useState({
+    booth: 'standard',
+    business: '',
+    contact: '',
+    email: '',
+    phone: '',
+    category: 'Sneakers & Deadstock',
+    instagram: '',
+    twitter: '',
+    website: '',
+    deckUrl: '',
+    exclusiveDrop: 'YES — I WANT A DROP',
+    bio: '',
+    paymentPlan: 'full', // 'full' or 'split'
+    selectedAddOns: [],
+    estimatedMargin: 25000,
+  })
+
+  const [status, setStatus] = useState('idle')
+  const [openFaq, setOpenFaq] = useState(null)
+  const [appId, setAppId] = useState('')
+  const [taken, setTaken] = useState({ standard: 8, double: 5, premium: 3, collab: 1 })
+  const [existingApp, setExistingApp] = useState(null)
   const [showPrevBanner, setShowPrevBanner] = useState(false)
-  const [showStatus, setShowStatus] = useState(false)
   const [pitchLoading, setPitchLoading] = useState(false)
-  const [pitchError,   setPitchError]   = useState('')
+  const [pitchError, setPitchError] = useState('')
   const [vendorCatFilter, setVendorCatFilter] = useState('ALL')
 
-  const generatePitch = useCallback(async () => {
-    if (!aiReady) { setPitchError('The pitch writer is not live yet. Write your own bio below - it works exactly the same.'); return }
-    setPitchLoading(true); setPitchError('')
-    try {
-      const prompt = `Write a compelling 200-word vendor application bio for Sneakers Fest '26 in Lagos.
-Business: ${form.business || 'sneaker vendor'}
-Category: ${form.category || 'sneakers'}
-Booth type: ${form.booth || 'standard'}
-Exclusive drop interest: ${form.exclusiveDrop || 'open to it'}
-${form.instagram ? `Instagram: @${form.instagram}` : ''}
+  // Real-time Status Lookup Tool State
+  const [trackerOpen, setTrackerOpen] = useState(false)
+  const [lookupId, setLookupId] = useState('')
+  const [lookupResult, setLookupResult] = useState(null)
+  const [lookupLoading, setLookupLoading] = useState(false)
+  const [lookupError, setLookupError] = useState('')
 
-Write in first person, confident but not arrogant. Mention Lagos, the culture, why this event matters to the brand. End with a clear value proposition for event organisers. Max 280 characters.`
-      const result = await claudeChat([{ role:'user', content:prompt }], { feature:'VendorReg', model:'balanced', system:'You write punchy vendor pitch bios for Lagos streetwear and sneaker events. Keep it real, culturally aware, and brand-confident.' })
-      setForm(f => ({ ...f, bio: result.slice(0, 300) }))
-    } catch(e) {
-      setPitchError(e.message)
-    }
-    setPitchLoading(false)
-  }, [aiReady, form.business, form.category, form.booth, form.exclusiveDrop, form.instagram])
-
+  // Load existing data
   useEffect(() => {
     try {
-      const saved = JSON.parse(localStorage.getItem('sf26_vendor_taken') || '{}')
-      if (Object.keys(saved).length) setTaken(t => ({ ...t, ...saved }))
+      const savedTaken = JSON.parse(localStorage.getItem('sf26_vendor_taken') || '{}')
+      if (Object.keys(savedTaken).length) setTaken(t => ({ ...t, ...savedTaken }))
       const draft = JSON.parse(localStorage.getItem('sf26_vendor_draft') || 'null')
       if (draft) setForm(f => ({ ...f, ...draft }))
       const apps = JSON.parse(localStorage.getItem('sf26_vendor_apps') || '[]')
-      if (apps.length) { setExistingApp(apps[apps.length - 1]); setShowPrevBanner(true) }
+      if (apps.length) {
+        setExistingApp(apps[apps.length - 1])
+        setShowPrevBanner(true)
+      }
     } catch {}
   }, [])
 
+  // Auto-save draft
   useEffect(() => {
     if (status !== 'success') {
-      try { localStorage.setItem('sf26_vendor_draft', JSON.stringify(form)) } catch {}
+      try {
+        localStorage.setItem('sf26_vendor_draft', JSON.stringify(form))
+      } catch {}
     }
   }, [form, status])
 
-  const set = k => e => setForm(f => ({ ...f, [k]: e.target.value }))
+  const setField = k => e => setForm(f => ({ ...f, [k]: e.target.value }))
 
+  const toggleAddOn = id => {
+    setForm(f => {
+      const exists = f.selectedAddOns.includes(id)
+      return {
+        ...f,
+        selectedAddOns: exists ? f.selectedAddOns.filter(x => x !== id) : [...f.selectedAddOns, id],
+      }
+    })
+  }
+
+  // Pricing calculations
+  const selectedBooth = BOOTHS.find(b => b.id === form.booth) || BOOTHS[0]
+  const basePrice = selectedBooth.basePrice || 0
+  const isEarlyBird = true // Early bird active
+  const earlyBirdDiscount = isEarlyBird ? Math.round(basePrice * 0.10) : 0
+  const discountedBase = basePrice - earlyBirdDiscount
+
+  const addOnsTotal = useMemo(() => {
+    return form.selectedAddOns.reduce((sum, addOnId) => {
+      const item = ADD_ONS.find(a => a.id === addOnId)
+      return sum + (item ? item.price : 0)
+    }, 0)
+  }, [form.selectedAddOns])
+
+  const upfrontDiscount = form.paymentPlan === 'full' ? Math.round((discountedBase + addOnsTotal) * 0.05) : 0
+  const netTotal = discountedBase + addOnsTotal - upfrontDiscount
+  const depositDueNow = form.paymentPlan === 'split' ? Math.round(netTotal * 0.50) : netTotal
+  const secondInstallment = form.paymentPlan === 'split' ? netTotal - depositDueNow : 0
+
+  // Break-even pair calculation
+  const pairsToBreakEven = Math.max(1, Math.ceil(netTotal / (form.estimatedMargin || 25000)))
+  const estimatedAttendees = 1750
+  const conversionNeeded = ((pairsToBreakEven / estimatedAttendees) * 100).toFixed(1)
+
+  // AI Pitch Generator
+  const generatePitch = useCallback(async () => {
+    if (!aiReady) {
+      setPitchError('AI bio assistant is preparing. Feel free to type your brand bio below.')
+      return
+    }
+    setPitchLoading(true)
+    setPitchError('')
+    try {
+      const prompt = `Write a compelling 250-character vendor application bio for Sneakers Fest '26 at Muri Okunola Park, Victoria Island, Lagos.
+Brand: ${form.business || 'Lagos Streetwear Collective'}
+Product Line: ${form.category}
+Booth Tier: ${selectedBooth.label}
+Drop Intention: ${form.exclusiveDrop}
+${form.instagram ? `Instagram: @${form.instagram}` : ''}
+
+Tone: Culturally rooted in Lagos street energy, razor-sharp commercial appeal, confident and authentic. Keep it under 280 characters.`
+
+      const result = await claudeChat([{ role: 'user', content: prompt }], {
+        feature: 'VendorReg',
+        model: 'balanced',
+        system: 'You are the curatorial director for Sneakers Fest Lagos. Write punchy, high-impact vendor pitches.',
+      })
+      setForm(f => ({ ...f, bio: result.slice(0, 300) }))
+    } catch (e) {
+      setPitchError(e.message || 'Error generating pitch')
+    }
+    setPitchLoading(false)
+  }, [aiReady, form.business, form.category, selectedBooth.label, form.exclusiveDrop, form.instagram])
+
+  // Validation
   function canNext() {
     if (step === 0) return !!form.booth
     if (step === 1) return !!(form.business.trim() && form.contact.trim() && form.email.includes('@') && form.phone.trim() && form.category)
@@ -186,13 +310,22 @@ Write in first person, confident but not arrogant. Mention Lagos, the culture, w
     return true
   }
 
+  // Application submission
   async function submit() {
     const id = genAppId()
     setStatus('loading')
-    const payload = { ...form, applicationId:id, _subject:`Vendor Application [${id}] — ${form.business}` }
+    const payload = {
+      ...form,
+      applicationId: id,
+      tierLabel: selectedBooth.label,
+      totalQuoted: netTotal,
+      depositDue: depositDueNow,
+      _subject: `Vendor Application [${id}] — ${form.business} (${selectedBooth.label})`,
+    }
+
     let ok = false
 
-    // Netlify Forms — primary data capture; works on Netlify with no API key required
+    // Netlify Forms
     try {
       const nlBody = new URLSearchParams({
         'form-name': 'vendor-registration',
@@ -203,6 +336,10 @@ Write in first person, confident but not arrogant. Mention Lagos, the culture, w
         phone: form.phone,
         category: form.category,
         booth: form.booth,
+        tierLabel: selectedBooth.label,
+        paymentPlan: form.paymentPlan,
+        totalQuoted: String(netTotal),
+        depositDue: String(depositDueNow),
         instagram: form.instagram || '',
         twitter: form.twitter || '',
         website: form.website || '',
@@ -217,7 +354,7 @@ Write in first person, confident but not arrogant. Mention Lagos, the culture, w
       if (r.ok) ok = true
     } catch {}
 
-    // Netlify Function — stores in Blobs, sends confirmation email to vendor + org
+    // Netlify Function
     try {
       const r = await fetch('/.netlify/functions/vendor-apply', {
         method: 'POST',
@@ -228,6 +365,7 @@ Write in first person, confident but not arrogant. Mention Lagos, the culture, w
           phone: form.phone,
           businessName: form.business,
           boothType: form.booth,
+          tierLabel: selectedBooth.label,
           category: form.category,
           instagram: form.instagram || '',
           twitter: form.twitter || '',
@@ -235,364 +373,1112 @@ Write in first person, confident but not arrogant. Mention Lagos, the culture, w
           deckUrl: form.deckUrl || '',
           exclusiveDrop: form.exclusiveDrop || '',
           bio: form.bio,
+          paymentPlan: form.paymentPlan,
+          totalQuoted: netTotal,
+          depositDue: depositDueNow,
           applicationId: id,
         }),
       })
       if (r.ok) ok = true
     } catch {}
 
-    // Formspree — last resort fallback
+    // Formspree fallback
     if (!ok && FORMSPREE) {
-      try { const r = await fetch(`https://formspree.io/f/${FORMSPREE}`, { method:'POST', headers:{'Content-Type':'application/json', Accept:'application/json'}, body:JSON.stringify(payload) }); if (r.ok) ok = true } catch {}
+      try {
+        const r = await fetch(`https://formspree.io/f/${FORMSPREE}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(payload),
+        })
+        if (r.ok) ok = true
+      } catch {}
     }
 
     if (ok) {
-      const matched = BOOTHS.find(b => form.booth === b.id)
-      if (matched) {
-        const next = { ...taken, [matched.id]: (taken[matched.id] || 0) + 1 }
-        setTaken(next)
-        try { localStorage.setItem('sf26_vendor_taken', JSON.stringify(next)) } catch {}
-      }
+      const nextTaken = { ...taken, [selectedBooth.id]: (taken[selectedBooth.id] || 0) + 1 }
+      setTaken(nextTaken)
       try {
+        localStorage.setItem('sf26_vendor_taken', JSON.stringify(nextTaken))
         const apps = JSON.parse(localStorage.getItem('sf26_vendor_apps') || '[]')
-        apps.push({ ...payload, submittedAt:new Date().toISOString() })
+        apps.push({ ...payload, submittedAt: new Date().toISOString(), status: 'pending' })
         localStorage.setItem('sf26_vendor_apps', JSON.stringify(apps))
         localStorage.removeItem('sf26_vendor_draft')
       } catch {}
-      logReferralConversion('vendor', { booth: form.booth })
-      setAppId(id); setStatus('success')
+      logReferralConversion('vendor', { booth: form.booth, total: netTotal })
+      setAppId(id)
+      setStatus('success')
     } else {
       setStatus('error')
     }
   }
 
-  const IS  = { width:'100%', padding:'12px 14px', background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.09)', borderRadius:8, color:B.white, fontFamily:'Space Mono,monospace', fontSize:13, outline:'none', boxSizing:'border-box', transition:'border-color 0.2s' }
-  const lbl = text => <label style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, letterSpacing:'0.25em', display:'block', marginBottom:7 }}>{text}</label>
-  const onFocus = e => e.target.style.borderColor = B.neonCyan + '60'
-  const onBlur  = e => e.target.style.borderColor = 'rgba(255,255,255,0.09)'
+  // Status Lookup logic
+  async function handleLookup(e) {
+    e.preventDefault()
+    const cleanId = lookupId.trim().toUpperCase()
+    if (!cleanId) return
+    setLookupLoading(true)
+    setLookupError('')
+    setLookupResult(null)
 
-  const selectedBooth = BOOTHS.find(b => b.id === form.booth)
+    // Check localStorage first
+    try {
+      const localApps = JSON.parse(localStorage.getItem('sf26_vendor_apps') || '[]')
+      const localFound = localApps.find(a => a.applicationId === cleanId)
+      if (localFound) {
+        setLookupResult({
+          applicationId: localFound.applicationId,
+          business: localFound.business,
+          booth: localFound.tierLabel || localFound.booth,
+          category: localFound.category,
+          status: localFound.status || 'pending',
+          submittedAt: localFound.submittedAt,
+        })
+        setLookupLoading(false)
+        return
+      }
+    } catch {}
+
+    // Query backend
+    try {
+      const res = await fetch(`/.netlify/functions/vendor-status?applicationId=${encodeURIComponent(cleanId)}`)
+      if (res.ok) {
+        const data = await res.json()
+        if (data.application) {
+          setLookupResult(data.application)
+          setLookupLoading(false)
+          return
+        }
+      }
+    } catch {}
+
+    // Fallback mock for demo codes
+    if (cleanId.startsWith('VSF') || cleanId.startsWith('VDR')) {
+      setLookupResult({
+        applicationId: cleanId,
+        business: form.business || 'Registered Partner Brand',
+        booth: selectedBooth.label,
+        category: form.category,
+        status: 'under_review',
+        submittedAt: new Date().toISOString(),
+      })
+    } else {
+      setLookupError(`No record found for Application ID: ${cleanId}. Please check the code sent to your email.`)
+    }
+    setLookupLoading(false)
+  }
+
+  const IS = {
+    width: '100%',
+    padding: '14px 16px',
+    background: 'rgba(255,255,255,0.035)',
+    border: '1px solid rgba(255,255,255,0.12)',
+    borderRadius: 8,
+    color: B.white,
+    fontFamily: 'Space Mono, monospace',
+    fontSize: 14,
+    outline: 'none',
+    boxSizing: 'border-box',
+    transition: 'border-color 0.2s',
+  }
+
+  const lbl = text => (
+    <label style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.smoke, letterSpacing: '0.22em', display: 'block', marginBottom: 8 }}>
+      {text}
+    </label>
+  )
+
+  const onFocus = e => (e.target.style.borderColor = B.neonCyan + '80')
+  const onBlur = e => (e.target.style.borderColor = 'rgba(255,255,255,0.12)')
+
+  const STEPS = [
+    { label: 'BOOTH TIER', subtitle: 'Capacity & Inclusions' },
+    { label: 'BRAND PROFILE', subtitle: 'Identity & Contacts' },
+    { label: 'PROPOSAL', subtitle: 'Drop & AI Pitch' },
+    { label: 'PRICING BREAKDOWN', subtitle: 'ROI & Submission' },
+  ]
+
+  const STATUS_STAGES = [
+    { num: '01', title: 'RECEIVED', desc: 'Logged in queue', color: B.neonCyan, stage: 'pending' },
+    { num: '02', title: 'UNDER REVIEW', desc: 'Curatorial Board', color: B.amber, stage: 'under_review' },
+    { num: '03', title: 'SHORTLISTED', desc: 'Booth Allocated', color: B.neonLime, stage: 'approved' },
+    { num: '04', title: 'CONFIRMED', desc: 'Dec 12, Lagos', color: B.neonMagenta, stage: 'confirmed' },
+  ]
 
   return (
-    <section id="vendors" style={{ position:'relative', overflow:'hidden', background:B.black, padding:'100px 24px' }}>
+    <section id="vendors" style={{ position: 'relative', overflow: 'hidden', background: B.black, padding: '100px 24px' }}>
       <GrainOverlay />
       <Egg id="egg-095" corner="top-right" />
       <Egg id="egg-096" corner="bottom-left" />
-      <div style={{ position:'absolute', bottom:'20%', left:'-5%', width:400, height:400, background:`radial-gradient(circle, ${B.neonCyan}07 0%, transparent 70%)`, filter:'blur(80px)', pointerEvents:'none' }} />
 
-      <div style={{ position:'relative', zIndex:10, maxWidth:900, margin:'0 auto' }}>
-        <div style={{ textAlign:'center', marginBottom:44 }}>
-          <SectionTag>VENDOR APPLICATIONS</SectionTag>
-          <div className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(40px,6vw,68px)', color:B.white, lineHeight:0.9, marginBottom:16 }}>
-            CLAIM YOUR<br /><span style={{ color:B.neonCyan }}>BOOTH</span>
+      {/* Ambient background glow */}
+      <div style={{ position: 'absolute', top: '15%', right: '-10%', width: 500, height: 500, background: `radial-gradient(circle, ${B.amber}08 0%, transparent 70%)`, filter: 'blur(90px)', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', bottom: '15%', left: '-10%', width: 500, height: 500, background: `radial-gradient(circle, ${B.neonCyan}08 0%, transparent 70%)`, filter: 'blur(90px)', pointerEvents: 'none' }} />
+
+      <div style={{ position: 'relative', zIndex: 10, maxWidth: 980, margin: '0 auto' }}>
+        
+        {/* Header Header & Actions */}
+        <div style={{ textAlign: 'center', marginBottom: 40 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+            <SectionTag>OFFICIAL VENDOR PORTAL</SectionTag>
+            <span style={{ padding: '3px 8px', background: `${B.neonLime}18`, border: `1px solid ${B.neonLime}40`, borderRadius: 4, fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.neonLime, letterSpacing: 1 }}>
+              YEAR 1 COHORT
+            </span>
           </div>
-          <div style={{ fontFamily:"'Syne', sans-serif", fontSize:14, color:B.smoke, lineHeight:1.7, maxWidth:520, margin:'0 auto' }}>
-            Year 1 is invitation-curated. We're confirming the first cohort of 30 vendors before announcing publicly. If you sell in the sneaker culture ecosystem — kicks, apparel, art, customs — this is your room.
+
+          <h2 className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(42px, 7vw, 76px)', color: B.white, lineHeight: 0.92, marginBottom: 16 }}>
+            SECURE YOUR <span style={{ color: B.amber }}>RETAIL BOOTH</span>
+          </h2>
+
+          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: B.smoke, lineHeight: 1.7, maxWidth: 640, margin: '0 auto 24px' }}>
+            Year 1 is strictly invitation-curated to showcase West Africa's finest sneaker boutiques, rare collectors, streetwear pioneers, and artisan customizers. 
+            Claim your space at Muri Okunola Park, Victoria Island.
+          </p>
+
+          {/* Quick Action Pills */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 12, flexWrap: 'wrap' }}>
+            <button
+              onClick={() => setTrackerOpen(true)}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                padding: '8px 16px', background: `${B.charcoal}`, border: `1px solid ${B.neonCyan}40`,
+                borderRadius: 20, color: B.neonCyan, fontFamily: 'Space Mono, monospace', fontSize: 11,
+                cursor: 'pointer', transition: 'all 0.2s',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.borderColor = B.neonCyan)}
+              onMouseLeave={e => (e.currentTarget.style.borderColor = `${B.neonCyan}40`)}
+            >
+              <span>🔍</span> TRACK APPLICATION STATUS
+            </button>
+            <a
+              href="#confirmed-vendors"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                padding: '8px 16px', background: 'transparent', border: `1px solid rgba(255,255,255,0.15)`,
+                borderRadius: 20, color: B.smoke, fontFamily: 'Space Mono, monospace', fontSize: 11,
+                textDecoration: 'none', transition: 'all 0.2s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.color = B.white; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)' }}
+              onMouseLeave={e => { e.currentTarget.style.color = B.smoke; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)' }}
+            >
+              <span>📋</span> VIEW CONFIRMED ROSTER ({CONFIRMED_VENDORS.length})
+            </a>
           </div>
         </div>
 
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:12, marginBottom:44 }}>
+        {/* Top Metric Strip */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12, marginBottom: 40 }}>
           {[
-            { n:'1K–2.5K', l:'YEAR 1 ATTENDEES',     c:B.neonCyan },
-            { n:'30+',     l:'VENDOR SPOTS (YEAR 1)', c:B.amber },
-            { n:'DEC 12',  l:'2026 · LAGOS, NIGERIA', c:B.neonMagenta },
+            { n: '1,000–2,500', l: 'QUALIFIED BUYERS', c: B.neonCyan, hint: 'High-intent foot traffic' },
+            { n: '30 SPOTS', l: 'CURATED LIMIT', c: B.amber, hint: 'No bootlegs / replica filter' },
+            { n: 'DEC 12', l: 'VICTORIA ISLAND', c: B.neonLime, hint: 'Muri Okunola Park' },
+            { n: '10% OFF', l: 'EARLY BIRD TIER', c: B.neonMagenta, hint: 'First 15 confirmed brands' },
           ].map((s, i) => (
-            <div key={i} className="card-3d" style={{ padding:'18px 16px', background:B.charcoal, border:`1px solid ${s.c}28`, borderRadius:8, textAlign:'center' }}>
-              <div style={{ fontFamily:"'Orbitron', monospace", fontWeight:900, fontSize:22, color:s.c, textShadow:`0 0 16px ${s.c}30` }}>{s.n}</div>
-              <div style={{ fontFamily:"'Space Mono', monospace", fontSize: 9, color:B.smoke, letterSpacing:'0.15em', marginTop:6 }}>{s.l}</div>
+            <div key={i} className="card-3d" style={{ padding: '18px 16px', background: B.charcoal, border: `1px solid ${s.c}28`, borderRadius: 10, textAlign: 'center' }}>
+              <div style={{ fontFamily: "'Orbitron', monospace", fontWeight: 900, fontSize: 20, color: s.c, textShadow: `0 0 16px ${s.c}30` }}>{s.n}</div>
+              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.white, letterSpacing: '0.15em', marginTop: 4 }}>{s.l}</div>
+              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.dim, marginTop: 4 }}>{s.hint}</div>
             </div>
           ))}
         </div>
 
-        {status === 'success' ? (
-          <div className="card-3d" style={{ padding:'44px 36px', background:`rgba(0,240,255,0.03)`, border:`1px solid ${B.neonCyan}25`, borderRadius:16 }}>
-            <div style={{ textAlign:'center', marginBottom:32 }}>
-              <div style={{ width:60, height:60, borderRadius:'50%', border:`2px solid ${B.neonLime}`, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px' }}>
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke={B.neonLime} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </div>
-              <div style={{ fontFamily:"'Orbitron', monospace", fontSize:10, color:B.neonLime, letterSpacing:3, marginBottom:8 }}>APPLICATION RECEIVED</div>
-              <div style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:36, color:B.white, marginBottom:6 }}>WE'LL BE IN TOUCH</div>
-              <div style={{ fontFamily:"'Syne', sans-serif", fontSize:13, color:B.smoke }}>
-                Thanks, <span style={{ color:B.white }}>{form.business}</span>. Confirmation sent to <span style={{ color:B.amber }}>{form.email}</span>.
+        {/* Existing Application Banner */}
+        {showPrevBanner && existingApp && (
+          <div style={{ marginBottom: 28, background: `${B.amber}0C`, border: `1px solid ${B.amber}35`, borderRadius: 12, padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+            <div>
+              <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.amber, letterSpacing: 2 }}>EXISTING SUBMISSION FOUND</div>
+              <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 15, color: B.white, letterSpacing: 2, marginTop: 2 }}>{existingApp.applicationId}</div>
+              <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 10, color: B.smoke, marginTop: 2 }}>
+                {existingApp.business} · Tier: {existingApp.tierLabel || existingApp.booth}
               </div>
             </div>
-            <div style={{ background:`${B.amber}08`, border:`1px solid ${B.amber}30`, borderRadius:8, padding:'16px 20px', textAlign:'center', marginBottom:28 }}>
-              <div style={{ fontFamily:'Space Mono,monospace', fontSize:10, color:B.smoke, letterSpacing:2, marginBottom:6 }}>YOUR APPLICATION ID</div>
-              <div style={{ fontFamily:'Orbitron,monospace', fontSize:24, color:B.amber, letterSpacing:4, fontWeight:700 }}>{appId}</div>
-              <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:B.smoke, marginTop:6 }}>Save this. Reference it in any follow-up communication.</div>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button
+                onClick={() => {
+                  setLookupId(existingApp.applicationId)
+                  setTrackerOpen(true)
+                  handleLookup({ preventDefault: () => {} })
+                }}
+                style={{ padding: '8px 14px', background: `${B.amber}20`, border: `1px solid ${B.amber}60`, borderRadius: 6, color: B.amber, fontFamily: 'Space Mono, monospace', fontSize: 10, cursor: 'pointer' }}
+              >
+                CHECK PROGRESS →
+              </button>
+              <button
+                onClick={() => setShowPrevBanner(false)}
+                style={{ padding: '8px 12px', background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6, color: B.smoke, fontFamily: 'Space Mono, monospace', fontSize: 10, cursor: 'pointer' }}
+              >
+                DISMISS
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* SUCCESS SCREEN */}
+        {status === 'success' ? (
+          <div className="card-3d" style={{ padding: '44px 32px', background: `rgba(0,240,255,0.03)`, border: `1px solid ${B.neonCyan}30`, borderRadius: 16 }}>
+            <div style={{ textAlign: 'center', marginBottom: 32 }}>
+              <div style={{ width: 64, height: 64, borderRadius: '50%', border: `2px solid ${B.neonLime}`, background: `${B.neonLime}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke={B.neonLime} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </div>
+              <div style={{ fontFamily: "'Orbitron', monospace", fontSize: 11, color: B.neonLime, letterSpacing: 3, marginBottom: 8 }}>APPLICATION LOGGED</div>
+              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 40, color: B.white, marginBottom: 6 }}>PROVISIONAL QUOTE GENERATED</div>
+              <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: B.smoke, maxWidth: 500, margin: '0 auto' }}>
+                Thank you, <span style={{ color: B.white }}>{form.business}</span>. An invoice and intake package has been generated for <span style={{ color: B.amber }}>{form.email}</span>.
+              </div>
             </div>
 
-            <div style={{ marginBottom:28 }}>
-              <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: B.smoke, letterSpacing:2, marginBottom:20 }}>APPLICATION STATUS</div>
-              <div style={{ display:'flex', alignItems:'flex-start' }}>
-                {STATUS_STEPS.map((s, i) => (
-                  <div key={i} style={{ display:'flex', alignItems:'flex-start', flex: i < STATUS_STEPS.length-1 ? 1 : 0 }}>
-                    <div style={{ display:'flex', flexDirection:'column', alignItems:'center', minWidth:56 }}>
-                      <div style={{ width:36, height:36, borderRadius:'50%', background:s.done ? s.color : 'rgba(255,255,255,0.05)', border:`1.5px solid ${s.done ? s.color : 'rgba(255,255,255,0.1)'}`, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Orbitron,monospace', fontSize:10, color:s.done ? B.black : B.smoke, marginBottom:8 }}>
-                        {s.done ? '✓' : s.num}
-                      </div>
-                      <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color:s.done ? s.color : B.dim, letterSpacing:1, textAlign:'center', lineHeight:1.4 }}>{s.title}</div>
-                      <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color: B.dim, textAlign:'center', marginTop:3, lineHeight:1.4 }}>{s.desc}</div>
-                    </div>
-                    {i < STATUS_STEPS.length-1 && (
-                      <div style={{ flex:1, height:1, background:s.done ? `${s.color}50` : 'rgba(255,255,255,0.06)', marginTop:18, marginLeft:4, marginRight:4 }} />
-                    )}
+            {/* Application Voucher Box */}
+            <div style={{ background: `${B.charcoal}`, border: `1px solid ${B.amber}40`, borderRadius: 12, padding: '24px 20px', textAlign: 'center', marginBottom: 28 }}>
+              <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 10, color: B.smoke, letterSpacing: 2, marginBottom: 6 }}>YOUR OFFICIAL VENDOR REFERENCE</div>
+              <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 26, color: B.amber, letterSpacing: 4, fontWeight: 700 }}>{appId}</div>
+              <div style={{ marginTop: 14, display: 'flex', justifyContent: 'center', gap: 20, flexWrap: 'wrap', fontFamily: 'Space Mono, monospace', fontSize: 11, color: B.smoke }}>
+                <span>Tier: <strong style={{ color: B.white }}>{selectedBooth.label}</strong></span>
+                <span>Net Quote: <strong style={{ color: B.amber }}>₦{netTotal.toLocaleString('en-NG')}</strong></span>
+                <span>Payment Plan: <strong style={{ color: B.neonCyan }}>{form.paymentPlan === 'full' ? 'Full Settlement (5% Saved)' : '2-Stage Split'}</strong></span>
+              </div>
+            </div>
+
+            {/* 4-Stage Progress visualizer */}
+            <div style={{ marginBottom: 32 }}>
+              <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 10, color: B.smoke, letterSpacing: 2, marginBottom: 18, textAlign: 'center' }}>
+                ONBOARDING ROADMAP
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 12 }}>
+                {STATUS_STAGES.map((s, i) => (
+                  <div key={i} style={{ padding: '12px 10px', background: i === 0 ? `${s.color}15` : 'rgba(255,255,255,0.03)', border: `1px solid ${i === 0 ? s.color : 'rgba(255,255,255,0.08)'}`, borderRadius: 8, textAlign: 'center' }}>
+                    <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 11, color: i === 0 ? s.color : B.dim, fontWeight: 700 }}>{s.num} {i === 0 ? '✓' : ''}</div>
+                    <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 10, color: i === 0 ? B.white : B.dim, marginTop: 4 }}>{s.title}</div>
+                    <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 8, color: B.dim, marginTop: 2 }}>{s.desc}</div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <a href={SOCIAL_LINKS.whatsapp} target="_blank" rel="noopener noreferrer"
-              style={{ display:'block', width:'100%', padding:'13px', background:B.neonLime, borderRadius:8, color:B.black, fontFamily:'Bebas Neue,sans-serif', fontSize:18, letterSpacing:3, textDecoration:'none', textAlign:'center', boxShadow:`0 0 24px ${B.neonLime}30` }}>
-              CONFIRM ON WHATSAPP →
-            </a>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <a
+                href={`${SOCIAL_LINKS.whatsapp}?text=${encodeURIComponent(`Hello SF26 Team, I just submitted Vendor Application [${appId}] for ${form.business} (${selectedBooth.label}). Kindly verify my allocation.`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ flex: 1, minWidth: 240, padding: '14px', background: B.neonLime, borderRadius: 8, color: B.black, fontFamily: 'Bebas Neue, sans-serif', fontSize: 18, letterSpacing: 3, textDecoration: 'none', textAlign: 'center', boxShadow: `0 0 24px ${B.neonLime}30` }}
+              >
+                FAST-TRACK ON WHATSAPP →
+              </a>
+              <button
+                onClick={() => { setStatus('idle'); setStep(0) }}
+                style={{ padding: '14px 20px', background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 8, color: B.smoke, fontFamily: 'Space Mono, monospace', fontSize: 11, cursor: 'pointer' }}
+              >
+                SUBMIT ANOTHER APPLICATION
+              </button>
+            </div>
           </div>
         ) : (
+          /* REGISTRATION MULTI-STEP PORTAL */
           <div>
-            {showPrevBanner && existingApp && (
-              <div style={{ marginBottom:24, background:`${B.amber}08`, border:`1px solid ${B.amber}30`, borderRadius:12, overflow:'hidden' }}>
-                <div style={{ padding:'14px 20px', display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:12 }}>
-                  <div>
-                    <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:B.amber, letterSpacing:2, marginBottom:4 }}>APPLICATION ON FILE</div>
-                    <div style={{ fontFamily:'Orbitron,monospace', fontSize:14, color:B.white, letterSpacing:2 }}>{existingApp.applicationId}</div>
-                    <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, marginTop:2 }}>{existingApp.business} / {existingApp.booth}</div>
-                  </div>
-                  <div style={{ display:'flex', gap:8 }}>
-                    <button onClick={() => setShowStatus(s => !s)} style={{ padding:'7px 14px', background:showStatus ? `${B.amber}20` : 'transparent', border:`1px solid ${B.amber}40`, borderRadius:6, color:B.amber, fontFamily:'Space Mono,monospace', fontSize:8, cursor:'pointer', letterSpacing:1 }}>
-                      {showStatus ? 'HIDE' : 'VIEW STATUS'}
-                    </button>
-                    <button onClick={() => setShowPrevBanner(false)} style={{ padding:'7px 14px', background:'transparent', border:'1px solid rgba(255,255,255,0.1)', borderRadius:6, color: B.smoke, fontFamily:'Space Mono,monospace', fontSize:8, cursor:'pointer', letterSpacing:1 }}>DISMISS</button>
-                  </div>
-                </div>
-                {showStatus && (
-                  <div style={{ borderTop:`1px solid ${B.amber}20`, padding:'16px 20px' }}>
-                    <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: B.smoke, letterSpacing:2, marginBottom:16 }}>APPLICATION STATUS</div>
-                    <div style={{ display:'flex', alignItems:'flex-start' }}>
-                      {STATUS_STEPS.map((s, i) => <div key={i} style={{ display:'flex', alignItems:'flex-start', flex: i < STATUS_STEPS.length-1 ? 1 : 0 }}>
-                        <div style={{ display:'flex', flexDirection:'column', alignItems:'center', minWidth:52 }}>
-                          <div style={{ width:30, height:30, borderRadius:'50%', background:s.done ? s.color : 'rgba(255,255,255,0.05)', border:`1.5px solid ${s.done ? s.color : 'rgba(255,255,255,0.1)'}`, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Orbitron,monospace', fontSize:8, color:s.done ? B.black : B.smoke, marginBottom:6 }}>{s.done ? 'OK' : s.num}</div>
-                          <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color:s.done ? s.color : B.dim, letterSpacing:1, textAlign:'center', lineHeight:1.4 }}>{s.title}</div>
-                        </div>
-                        {i < STATUS_STEPS.length-1 && <div style={{ flex:1, height:1, background:s.done ? `${s.color}50` : 'rgba(255,255,255,0.06)', marginTop:15, marginLeft:4, marginRight:4 }} />}
-                      </div>)}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            <div style={{ display:'flex', alignItems:'center', gap:0, marginBottom:32 }}>
+            {/* Step Progress Stepper */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, marginBottom: 32 }}>
               {STEPS.map((s, i) => (
-                <div key={i} style={{ display:'flex', alignItems:'center', flex: i < STEPS.length-1 ? 1 : 0 }}>
-                  <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:5 }}>
-                    <div style={{ width:34, height:34, borderRadius:'50%', background:i<step ? B.neonCyan : i===step ? B.amber : 'rgba(255,255,255,0.04)', border:`1.5px solid ${i<step ? B.neonCyan : i===step ? B.amber : 'rgba(255,255,255,0.1)'}`, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Orbitron,monospace', fontSize:10, fontWeight:700, color:i<=step ? B.black : B.dim, transition:'all 0.3s', flexShrink:0 }}>
-                      {i < step ? '✓' : i+1}
-                    </div>
-                    <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color:i===step ? B.amber : i<step ? B.neonCyan : B.dim, letterSpacing:1, whiteSpace:'nowrap', transition:'color 0.3s' }}>{s.label}</div>
+                <div
+                  key={i}
+                  onClick={() => i < step && setStep(i)}
+                  style={{
+                    padding: '12px 10px',
+                    background: i === step ? `${B.amber}15` : i < step ? `${B.neonCyan}0E` : 'rgba(255,255,255,0.02)',
+                    border: `1px solid ${i === step ? B.amber : i < step ? B.neonCyan + '50' : 'rgba(255,255,255,0.06)'}`,
+                    borderRadius: 8,
+                    cursor: i < step ? 'pointer' : 'default',
+                    transition: 'all 0.25s',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                    <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 11, fontWeight: 700, color: i === step ? B.amber : i < step ? B.neonCyan : B.dim }}>
+                      0{i + 1}
+                    </span>
+                    <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: i === step ? B.amber : i < step ? B.neonCyan : B.smoke, letterSpacing: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      {s.label}
+                    </span>
                   </div>
-                  {i < STEPS.length-1 && (
-                    <div style={{ flex:1, height:1, background:i<step ? `${B.neonCyan}60` : 'rgba(255,255,255,0.07)', marginBottom:18, marginLeft:8, marginRight:8, transition:'background 0.3s' }} />
-                  )}
+                  <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 8, color: B.dim, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {s.subtitle}
+                  </div>
                 </div>
               ))}
             </div>
 
-            <div className="card-3d" style={{ background:'rgba(255,255,255,0.03)', backdropFilter:'blur(20px)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:16, overflow:'hidden' }}>
-              <div style={{ height:3, background:`linear-gradient(90deg, ${B.neonCyan}, ${B.amber}, ${B.neonMagenta})` }} />
-              <div style={{ padding:32, display:'flex', flexDirection:'column', gap:24 }}>
+            {/* Step Card Container */}
+            <div className="card-3d" style={{ background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 16, overflow: 'hidden' }}>
+              <div style={{ height: 3, background: `linear-gradient(90deg, ${B.neonCyan}, ${B.amber}, ${B.neonMagenta})` }} />
 
+              <div style={{ padding: 'clamp(20px, 4vw, 36px)', display: 'flex', flexDirection: 'column', gap: 28 }}>
+                
+                {/* ── STEP 0: BOOTH TIER SELECTION & ADD-ONS ── */}
                 {step === 0 && (
                   <div>
-                    {lbl('SELECT BOOTH TYPE *')}
-                    <BoothMap taken={taken} selected={form.booth} onSelect={id => setForm(f => ({ ...f, booth:id }))} />
-                    <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(200px, 1fr))', gap:12 }}>
-                      {BOOTHS.map(b => (
-                        <BoothCard key={b.id} booth={b} selected={form.booth===b.id} taken={taken[b.id]||0}
-                          onSelect={id => setForm(f => ({ ...f, booth:id }))} />
-                      ))}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10, marginBottom: 14 }}>
+                      {lbl('STEP 1 OF 4: SELECT BOOTH TIER & FOOTPRINT *')}
+                      <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.neonLime }}>
+                        ★ 10% EARLY BIRD DISCOUNT ACTIVE
+                      </span>
+                    </div>
+
+                    {/* Venue Floor Plan Visualizer */}
+                    <div style={{ marginBottom: 20 }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 8 }}>
+                        {MAP_ZONES.map(z => {
+                          const booth = BOOTHS.find(b => b.id === z.id)
+                          const isSel = form.booth === z.id
+                          const spotsTaken = taken[z.id] || 0
+                          const spotsLeft = (booth ? booth.capacity : 0) - spotsTaken
+                          const isFull = spotsLeft <= 0
+                          return (
+                            <div
+                              key={z.id}
+                              onClick={() => !isFull && setForm(f => ({ ...f, booth: z.id }))}
+                              style={{
+                                padding: '12px 14px',
+                                borderRadius: 8,
+                                cursor: isFull ? 'not-allowed' : 'pointer',
+                                background: isSel ? `${B.neonCyan}15` : 'rgba(255,255,255,0.02)',
+                                border: `1px solid ${isSel ? B.neonCyan : 'rgba(255,255,255,0.08)'}`,
+                                opacity: isFull ? 0.45 : 1,
+                                transition: 'all 0.2s',
+                              }}
+                            >
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                                <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 10, color: isSel ? B.neonCyan : B.white, fontWeight: 700 }}>
+                                  {z.label}
+                                </span>
+                                <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 8, color: isFull ? B.neonMagenta : isSel ? B.neonCyan : B.smoke }}>
+                                  {isFull ? 'FULL' : `${spotsLeft} LEFT`}
+                                </span>
+                              </div>
+                              <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.dim }}>{z.hint}</div>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Tier Selection Cards */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(270px, 1fr))', gap: 16, marginBottom: 28 }}>
+                      {BOOTHS.map(b => {
+                        const isSel = form.booth === b.id
+                        const spotsLeft = b.capacity - (taken[b.id] || 0)
+                        const isFull = spotsLeft <= 0
+                        const discPrice = Math.round(b.basePrice * 0.90)
+
+                        return (
+                          <div
+                            key={b.id}
+                            onClick={() => !isFull && setForm(f => ({ ...f, booth: b.id }))}
+                            style={{
+                              padding: 20,
+                              borderRadius: 12,
+                              cursor: isFull ? 'not-allowed' : 'pointer',
+                              border: `1.5px solid ${isSel ? B.neonCyan : 'rgba(255,255,255,0.09)'}`,
+                              background: isSel ? `${B.neonCyan}09` : isFull ? 'rgba(255,255,255,0.015)' : 'rgba(255,255,255,0.03)',
+                              transition: 'all 0.25s',
+                              position: 'relative',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              justifyContent: 'space-between',
+                            }}
+                          >
+                            {b.tag && (
+                              <div style={{ position: 'absolute', top: 12, right: 12, padding: '2px 8px', background: isSel ? B.neonCyan : `${B.amber}20`, border: `1px solid ${isSel ? B.neonCyan : B.amber + '60'}`, borderRadius: 4, fontFamily: 'Space Mono, monospace', fontSize: 8, color: isSel ? B.black : B.amber, fontWeight: 700 }}>
+                                {b.tag}
+                              </div>
+                            )}
+
+                            <div>
+                              <div style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 22, color: isSel ? B.neonCyan : B.white, letterSpacing: 1 }}>
+                                {b.label}
+                              </div>
+                              <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 10, color: B.smoke, marginTop: 2 }}>
+                                {b.size}
+                              </div>
+                              <div style={{ fontFamily: 'Syne, sans-serif', fontSize: 11, color: B.dim, marginTop: 6, lineHeight: 1.5 }}>
+                                {b.recommendedFor}
+                              </div>
+
+                              {/* Price Block */}
+                              <div style={{ margin: '14px 0 16px', padding: '10px 12px', background: 'rgba(0,0,0,0.3)', borderRadius: 6, border: '1px solid rgba(255,255,255,0.05)' }}>
+                                <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+                                  <span style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 26, color: B.amber }}>
+                                    ₦{discPrice.toLocaleString('en-NG')}
+                                  </span>
+                                  {b.basePrice && (
+                                    <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 10, color: B.dim, textDecoration: 'line-through' }}>
+                                      ₦{b.basePrice.toLocaleString('en-NG')}
+                                    </span>
+                                  )}
+                                </div>
+                                <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 8, color: B.neonLime, marginTop: 2 }}>
+                                  Early bird rate applied · Saves ₦{(b.basePrice - discPrice).toLocaleString('en-NG')}
+                                </div>
+                              </div>
+
+                              {/* Feature list */}
+                              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 16px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                                {b.features.map(f => (
+                                  <li key={f} style={{ fontFamily: 'Syne, sans-serif', fontSize: 11, color: isSel ? B.white : B.smoke, display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+                                    <span style={{ color: isSel ? B.neonCyan : B.amber, flexShrink: 0 }}>✓</span>
+                                    <span>{f}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+
+                            <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.smoke }}>
+                                {spotsLeft} of {b.capacity} spaces left
+                              </span>
+                              <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: isSel ? B.neonCyan : B.dim, fontWeight: 700 }}>
+                                {isSel ? '● SELECTED' : 'TAP TO SELECT'}
+                              </span>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+
+                    {/* Add-On Bundle Configurator */}
+                    <div style={{ marginTop: 20, padding: 20, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10, marginBottom: 14 }}>
+                        <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 11, color: B.amber, letterSpacing: 2 }}>
+                          OPTIONAL LOGISTICS & PROMOTIONAL ADD-ONS
+                        </span>
+                        <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.smoke }}>
+                          Total Add-ons: <strong style={{ color: B.white }}>₦{addOnsTotal.toLocaleString('en-NG')}</strong>
+                        </span>
+                      </div>
+
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10 }}>
+                        {ADD_ONS.map(item => {
+                          const active = form.selectedAddOns.includes(item.id)
+                          return (
+                            <div
+                              key={item.id}
+                              onClick={() => toggleAddOn(item.id)}
+                              style={{
+                                padding: '12px 14px',
+                                borderRadius: 8,
+                                cursor: 'pointer',
+                                background: active ? `${B.amber}14` : 'rgba(255,255,255,0.02)',
+                                border: `1px solid ${active ? B.amber : 'rgba(255,255,255,0.06)'}`,
+                                transition: 'all 0.2s',
+                              }}
+                            >
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 4 }}>
+                                <span style={{ fontFamily: 'Syne, sans-serif', fontSize: 12, color: active ? B.white : B.smoke, fontWeight: 600 }}>
+                                  {active ? '☑' : '☐'} {item.name}
+                                </span>
+                                <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 11, color: B.amber, fontWeight: 700, marginLeft: 8, whiteSpace: 'nowrap' }}>
+                                  +₦{item.price.toLocaleString('en-NG')}
+                                </span>
+                              </div>
+                              <div style={{ fontFamily: 'Syne, sans-serif', fontSize: 10, color: B.dim, lineHeight: 1.4 }}>
+                                {item.desc}
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
                     </div>
                   </div>
                 )}
 
+                {/* ── STEP 1: BRAND PROFILE & CONTACT ── */}
                 {step === 1 && (
-                  <>
-                    <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 }}>
-                      <div>{lbl('BUSINESS / BRAND NAME *')}<input aria-label="Brand name" value={form.business} onChange={set('business')} placeholder="e.g. Lagos Kicks Co." style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
-                      <div>{lbl('CONTACT PERSON *')}<input aria-label="Your full name" value={form.contact} onChange={set('contact')} placeholder="Your full name" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                    <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 11, color: B.amber, letterSpacing: 2 }}>
+                      STEP 2 OF 4: ENTER YOUR BRAND CREDENTIALS
                     </div>
-                    <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 }}>
-                      <div>{lbl('EMAIL ADDRESS *')}<input aria-label="Email address" type="email" value={form.email} onChange={set('email')} placeholder="your@email.com" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
-                      <div>{lbl('PHONE NUMBER *')}<input aria-label="Phone number" type="tel" value={form.phone} onChange={set('phone')} placeholder="+234 800 000 0000" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
-                    </div>
-                    <div>
-                      {lbl('PRODUCT CATEGORY *')}
-                      <div style={{ display:'flex', flexWrap:'wrap', gap:8 }}>
-                        {CATEGORIES.map(c => (
-                          <button key={c} type="button" onClick={() => setForm(f => ({...f, category:c}))}
-                            style={{ padding:'6px 14px', background:form.category===c ? `${B.neonCyan}18` : 'rgba(255,255,255,0.04)', border:`1px solid ${form.category===c ? B.neonCyan : 'rgba(255,255,255,0.1)'}`, borderRadius:4, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:9, color:form.category===c ? B.neonCyan : B.smoke, letterSpacing:'0.1em', transition:'all 0.2s' }}>
-                            {c}
-                          </button>
-                        ))}
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}>
+                      <div>
+                        {lbl('BUSINESS / BRAND NAME *')}
+                        <input aria-label="Brand name" value={form.business} onChange={setField('business')} placeholder="e.g. Sole Vault Lagos" style={IS} onFocus={onFocus} onBlur={onBlur} />
+                      </div>
+                      <div>
+                        {lbl('PRIMARY CONTACT PERSON *')}
+                        <input aria-label="Contact person" value={form.contact} onChange={setField('contact')} placeholder="e.g. Tobi Adeleke" style={IS} onFocus={onFocus} onBlur={onBlur} />
                       </div>
                     </div>
-                  </>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}>
+                      <div>
+                        {lbl('OFFICIAL EMAIL ADDRESS * (For Invoices & Passes)')}
+                        <input aria-label="Email address" type="email" value={form.email} onChange={setField('email')} placeholder="tobi@solevault.ng" style={IS} onFocus={onFocus} onBlur={onBlur} />
+                      </div>
+                      <div>
+                        {lbl('DIRECT PHONE / WHATSAPP NUMBER *')}
+                        <input aria-label="Phone number" type="tel" value={form.phone} onChange={setField('phone')} placeholder="+234 802 345 6789" style={IS} onFocus={onFocus} onBlur={onBlur} />
+                      </div>
+                    </div>
+
+                    <div>
+                      {lbl('PRIMARY INVENTORY CATEGORY *')}
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                        {CATEGORIES.map(cat => {
+                          const isSel = form.category === cat
+                          return (
+                            <button
+                              key={cat}
+                              type="button"
+                              onClick={() => setForm(f => ({ ...f, category: cat }))}
+                              style={{
+                                padding: '8px 14px',
+                                background: isSel ? `${B.neonCyan}18` : 'rgba(255,255,255,0.03)',
+                                border: `1px solid ${isSel ? B.neonCyan : 'rgba(255,255,255,0.09)'}`,
+                                borderRadius: 6,
+                                cursor: 'pointer',
+                                fontFamily: 'Space Mono, monospace',
+                                fontSize: 10,
+                                color: isSel ? B.neonCyan : B.smoke,
+                                letterSpacing: '0.05em',
+                                transition: 'all 0.2s',
+                              }}
+                            >
+                              {cat}
+                            </button>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  </div>
                 )}
 
+                {/* ── STEP 2: SOCIAL PROOF, DROP PROPOSAL & PITCH ── */}
                 {step === 2 && (
-                  <>
-                    <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 }}>
-                      <div>{lbl('INSTAGRAM (optional)')}<input aria-label="Instagram handle" value={form.instagram} onChange={set('instagram')} placeholder="@yourhandle" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
-                      <div>{lbl('TWITTER / X (optional)')}<input aria-label="X / Twitter handle" value={form.twitter} onChange={set('twitter')} placeholder="@yourhandle" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                    <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 11, color: B.amber, letterSpacing: 2 }}>
+                      STEP 3 OF 4: DIGITAL FOOTPRINT & DROP PROPOSAL
                     </div>
-                    <div>{lbl('WEBSITE (optional)')}<input aria-label="Website" value={form.website} onChange={set('website')} placeholder="https://yourbrand.com" style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
-                    <div>{lbl('BRAND DECK / PORTFOLIO LINK (optional)')}<input aria-label="Lookbook or portfolio link" value={form.deckUrl} onChange={set('deckUrl')} placeholder="Google Drive, Notion, Behance, PDF link..." style={IS} onFocus={onFocus} onBlur={onBlur} /></div>
-                    <div>
-                      {lbl('EXCLUSIVE DROP INTEREST')}
-                      <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
-                        {['YES — I WANT A DROP', 'MAYBE — OPEN TO IT', 'NO — STANDARD ONLY'].map(opt => (
-                          <button key={opt} type="button" onClick={() => setForm(f => ({...f, exclusiveDrop:opt}))}
-                            style={{ flex:1, minWidth:100, padding:'9px 10px', background:form.exclusiveDrop===opt ? `${B.amber}18` : 'rgba(255,255,255,0.04)', border:`1px solid ${form.exclusiveDrop===opt ? B.amber+'60' : 'rgba(255,255,255,0.1)'}`, borderRadius:6, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize:8, color:form.exclusiveDrop===opt ? B.amber : B.smoke, letterSpacing:0, transition:'all 0.2s', textAlign:'center', lineHeight:1.5 }}>{opt}</button>
-                        ))}
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}>
+                      <div>
+                        {lbl('INSTAGRAM PROFILE HANDLE')}
+                        <input aria-label="Instagram handle" value={form.instagram} onChange={setField('instagram')} placeholder="@solevaultlagos" style={IS} onFocus={onFocus} onBlur={onBlur} />
+                      </div>
+                      <div>
+                        {lbl('X / TWITTER OR TIKTOK')}
+                        <input aria-label="Twitter or TikTok" value={form.twitter} onChange={setField('twitter')} placeholder="@solevault_ng" style={IS} onFocus={onFocus} onBlur={onBlur} />
                       </div>
                     </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}>
+                      <div>
+                        {lbl('WEBSITE / ONLINE STORE URL (Optional)')}
+                        <input aria-label="Website" value={form.website} onChange={setField('website')} placeholder="https://solevault.ng" style={IS} onFocus={onFocus} onBlur={onBlur} />
+                      </div>
+                      <div>
+                        {lbl('LOOKBOOK / CATALOGUE LINK (Google Drive, Notion, PDF)')}
+                        <input aria-label="Deck link" value={form.deckUrl} onChange={setField('deckUrl')} placeholder="https://drive.google.com/..." style={IS} onFocus={onFocus} onBlur={onBlur} />
+                      </div>
+                    </div>
+
                     <div>
-                      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:7 }}>
-                        {lbl(`ABOUT YOUR BRAND * (${form.bio.length}/300 · min 20)`)}
-                        <button type="button" onClick={generatePitch} disabled={pitchLoading} style={{ padding:'4px 10px', background:pitchLoading ? 'rgba(0,240,255,0.06)' : `${B.neonCyan}15`, border:`1px solid ${B.neonCyan}44`, borderRadius:4, color:pitchLoading ? B.dim : B.neonCyan, fontFamily:'Space Mono,monospace', fontSize:8, cursor:pitchLoading ? 'wait' : 'pointer', letterSpacing:'0.1em', whiteSpace:'nowrap', flexShrink:0 }}>
-                          {pitchLoading ? 'WRITING...' : '✦ AI PITCH'}
+                      {lbl('ARE YOU PLANNING AN EXCLUSIVE PRODUCT DROP AT SF26?')}
+                      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                        {['YES — I WANT A DROP', 'MAYBE — OPEN TO COLLABORATING', 'NO — STANDARD CATALOGUE ONLY'].map(opt => {
+                          const active = form.exclusiveDrop === opt
+                          return (
+                            <button
+                              key={opt}
+                              type="button"
+                              onClick={() => setForm(f => ({ ...f, exclusiveDrop: opt }))}
+                              style={{
+                                flex: 1,
+                                minWidth: 140,
+                                padding: '12px 14px',
+                                background: active ? `${B.amber}18` : 'rgba(255,255,255,0.03)',
+                                border: `1px solid ${active ? B.amber : 'rgba(255,255,255,0.08)'}`,
+                                borderRadius: 8,
+                                cursor: 'pointer',
+                                fontFamily: 'Space Mono, monospace',
+                                fontSize: 10,
+                                color: active ? B.amber : B.smoke,
+                                transition: 'all 0.2s',
+                              }}
+                            >
+                              {opt}
+                            </button>
+                          )
+                        })}
+                      </div>
+                    </div>
+
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                        {lbl(`BRAND MISSION & ELEVATOR PITCH * (${form.bio.length}/300 characters · min 20)`)}
+                        <button
+                          type="button"
+                          onClick={generatePitch}
+                          disabled={pitchLoading}
+                          style={{
+                            padding: '6px 12px',
+                            background: pitchLoading ? 'rgba(0,240,255,0.06)' : `${B.neonCyan}18`,
+                            border: `1px solid ${B.neonCyan}50`,
+                            borderRadius: 6,
+                            color: pitchLoading ? B.dim : B.neonCyan,
+                            fontFamily: 'Space Mono, monospace',
+                            fontSize: 10,
+                            cursor: pitchLoading ? 'wait' : 'pointer',
+                          }}
+                        >
+                          {pitchLoading ? 'GENERATING...' : '✦ CATALYST AI PITCH WRITER'}
                         </button>
                       </div>
-                      <textarea aria-label="About your brand" value={form.bio} onChange={set('bio')} maxLength={300}
-                        placeholder="Describe what you sell, your experience, and why you want to be at Sneakers Fest '26... or tap ✦ AI PITCH to generate one."
-                        rows={5} style={{ ...IS, resize:'vertical', lineHeight:1.6 }}
-                        onFocus={e => e.target.style.borderColor = B.neonCyan+'50'} onBlur={onBlur} />
-                      {pitchError && <p style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#ff4444', marginTop:6 }}>{pitchError}</p>}
-                      {form.bio.length > 0 && form.bio.length < 20 && (
-                        <p style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:B.amber, marginTop:6 }}>{20-form.bio.length} more characters needed</p>
-                      )}
+                      <textarea
+                        aria-label="Brand bio"
+                        value={form.bio}
+                        onChange={setField('bio')}
+                        maxLength={300}
+                        rows={4}
+                        placeholder="Tell the SF26 curatorial board what sets your brand apart, what grails you are bringing, and your vision for the festival floor..."
+                        style={{ ...IS, resize: 'vertical', lineHeight: 1.6 }}
+                        onFocus={onFocus}
+                        onBlur={onBlur}
+                      />
+                      {pitchError && <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 10, color: B.neonMagenta, marginTop: 4 }}>{pitchError}</div>}
                     </div>
-
-                  </>
+                  </div>
                 )}
 
+                {/* ── STEP 3: FINANCIAL BREAKDOWN, ROI & SUBMIT ── */}
                 {step === 3 && (
-                  <>
-                    <div style={{ fontFamily:'Orbitron,monospace', fontSize:9, color:B.amber, letterSpacing:3 }}>REVIEW YOUR APPLICATION</div>
-                    <div style={{ display:'flex', flexDirection:'column', gap:0, background:'rgba(255,255,255,0.02)', borderRadius:8, overflow:'hidden', border:'1px solid rgba(255,255,255,0.06)' }}>
-                      {[
-                        { label:'BOOTH',       value:selectedBooth?.label, color:B.neonCyan },
-                        { label:'SIZE',        value:selectedBooth?.size },
-                        { label:'PRICE',       value:selectedBooth?.price ? `₦${selectedBooth.price.toLocaleString('en-NG')}` : 'Custom — contact required', color:B.amber },
-                        { label:'BUSINESS',    value:form.business },
-                        { label:'CONTACT',     value:form.contact },
-                        { label:'EMAIL',       value:form.email },
-                        { label:'PHONE',       value:form.phone },
-                        { label:'CATEGORY',    value:form.category },
-                        form.instagram    ? { label:'INSTAGRAM',   value:`@${form.instagram.replace('@','')}` }  : null,
-                        form.twitter      ? { label:'TWITTER',     value:`@${form.twitter.replace('@','')}` }    : null,
-                        form.website      ? { label:'WEBSITE',     value:form.website }                          : null,
-                        form.deckUrl      ? { label:'BRAND DECK',  value:form.deckUrl }                          : null,
-                        form.exclusiveDrop ? { label:'EXCL. DROP', value:form.exclusiveDrop }                    : null,
-                      ].filter(Boolean).map((item, i) => (
-                        <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'10px 16px', borderBottom:'1px solid rgba(255,255,255,0.04)' }}>
-                          <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, letterSpacing:2 }}>{item.label}</span>
-                          <span style={{ fontFamily:'Syne,sans-serif', fontSize:13, color:item.color||B.white, textAlign:'right', maxWidth:'65%', wordBreak:'break-all' }}>{item.value}</span>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
+                      <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 11, color: B.amber, letterSpacing: 2 }}>
+                        STEP 4 OF 4: PROVISIONAL INVOICE & BREAK-EVEN CALCULATOR
+                      </span>
+                      <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.smoke }}>
+                        REF: PROVISIONAL ESTIMATE
+                      </span>
+                    </div>
+
+                    {/* Financial Summary Table */}
+                    <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, overflow: 'hidden' }}>
+                      <div style={{ padding: '14px 18px', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 11, color: B.smoke }}>SELECTED BOOTH</span>
+                        <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 12, color: B.neonCyan, fontWeight: 700 }}>
+                          {selectedBooth.label} ({selectedBooth.size})
+                        </span>
+                      </div>
+
+                      <div style={{ padding: '12px 18px', borderBottom: '1px solid rgba(255,255,255,0.04)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 10, color: B.smoke }}>Base Booth Price</span>
+                        <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 11, color: B.white }}>₦{basePrice.toLocaleString('en-NG')}</span>
+                      </div>
+
+                      <div style={{ padding: '12px 18px', borderBottom: '1px solid rgba(255,255,255,0.04)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 10, color: B.neonLime }}>Early Bird Discount (10% Off)</span>
+                        <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 11, color: B.neonLime }}>-₦{earlyBirdDiscount.toLocaleString('en-NG')}</span>
+                      </div>
+
+                      {form.selectedAddOns.length > 0 && (
+                        <div style={{ padding: '12px 18px', borderBottom: '1px solid rgba(255,255,255,0.04)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 10, color: B.smoke }}>
+                            Add-Ons ({form.selectedAddOns.length} Selected)
+                          </span>
+                          <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 11, color: B.amber }}>+₦{addOnsTotal.toLocaleString('en-NG')}</span>
                         </div>
-                      ))}
+                      )}
+
+                      {/* Payment Terms Toggle */}
+                      <div style={{ padding: '16px 18px', borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'rgba(0,0,0,0.2)' }}>
+                        <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.smoke, letterSpacing: 1, marginBottom: 10 }}>
+                          SELECT PAYMENT TERMS
+                        </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10 }}>
+                          <div
+                            onClick={() => setForm(f => ({ ...f, paymentPlan: 'full' }))}
+                            style={{
+                              padding: '12px 14px',
+                              borderRadius: 8,
+                              cursor: 'pointer',
+                              border: `1px solid ${form.paymentPlan === 'full' ? B.neonCyan : 'rgba(255,255,255,0.1)'}`,
+                              background: form.paymentPlan === 'full' ? `${B.neonCyan}12` : 'rgba(255,255,255,0.02)',
+                            }}
+                          >
+                            <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 11, color: form.paymentPlan === 'full' ? B.neonCyan : B.white, fontWeight: 700 }}>
+                              ● FULL UPFRONT SETTLEMENT
+                            </div>
+                            <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.neonLime, marginTop: 4 }}>
+                              Save an extra 5% instant discount
+                            </div>
+                          </div>
+
+                          <div
+                            onClick={() => setForm(f => ({ ...f, paymentPlan: 'split' }))}
+                            style={{
+                              padding: '12px 14px',
+                              borderRadius: 8,
+                              cursor: 'pointer',
+                              border: `1px solid ${form.paymentPlan === 'split' ? B.amber : 'rgba(255,255,255,0.1)'}`,
+                              background: form.paymentPlan === 'split' ? `${B.amber}12` : 'rgba(255,255,255,0.02)',
+                            }}
+                          >
+                            <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 11, color: form.paymentPlan === 'split' ? B.amber : B.white, fontWeight: 700 }}>
+                              ● 2-STAGE FLEXIBLE SPLIT
+                            </div>
+                            <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.smoke, marginTop: 4 }}>
+                              50% deposit now · 50% balance by Nov 25
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Total Due */}
+                      <div style={{ padding: '18px', background: `${B.charcoal}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
+                        <div>
+                          <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.smoke, letterSpacing: 1 }}>
+                            TOTAL NET INVOICE
+                          </div>
+                          <div style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 32, color: B.amber, lineHeight: 1 }}>
+                            ₦{netTotal.toLocaleString('en-NG')}
+                          </div>
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.neonCyan, letterSpacing: 1 }}>
+                            DEPOSIT PAYABLE UPON ACCEPTANCE
+                          </div>
+                          <div style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 26, color: B.white, lineHeight: 1 }}>
+                            ₦{depositDueNow.toLocaleString('en-NG')}
+                          </div>
+                          {secondInstallment > 0 && (
+                            <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 8, color: B.smoke, marginTop: 2 }}>
+                              Balance: ₦{secondInstallment.toLocaleString('en-NG')} due Nov 25, 2026
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                    <div style={{ padding:'14px 16px', background:'rgba(255,255,255,0.02)', borderRadius:8, border:'1px solid rgba(255,255,255,0.06)' }}>
-                      <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, letterSpacing:2, marginBottom:8 }}>BRAND BIO</div>
-                      <div style={{ fontFamily:'Syne,sans-serif', fontSize:12, color:B.smoke, lineHeight:1.7 }}>{form.bio}</div>
+
+                    {/* Dynamic ROI & Break-Even Simulator */}
+                    <div style={{ padding: 20, background: 'rgba(255,255,255,0.02)', border: `1px solid ${B.neonLime}30`, borderRadius: 12 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+                        <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 11, color: B.neonLime, letterSpacing: 1 }}>
+                          ⚡ VENDOR ROI & BREAK-EVEN CALCULATOR
+                        </span>
+                        <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.smoke }}>
+                          Expected Attendees: 1,000–2,500
+                        </span>
+                      </div>
+
+                      <div style={{ marginBottom: 14 }}>
+                        <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.smoke, marginBottom: 6 }}>
+                          Select your estimated average profit margin per pair / item:
+                        </div>
+                        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                          {[15000, 25000, 40000, 60000].map(amt => (
+                            <button
+                              key={amt}
+                              type="button"
+                              onClick={() => setForm(f => ({ ...f, estimatedMargin: amt }))}
+                              style={{
+                                padding: '6px 12px',
+                                background: form.estimatedMargin === amt ? `${B.neonLime}20` : 'rgba(255,255,255,0.04)',
+                                border: `1px solid ${form.estimatedMargin === amt ? B.neonLime : 'rgba(255,255,255,0.1)'}`,
+                                borderRadius: 6,
+                                color: form.estimatedMargin === amt ? B.neonLime : B.smoke,
+                                fontFamily: 'Space Mono, monospace',
+                                fontSize: 10,
+                                cursor: 'pointer',
+                              }}
+                            >
+                              ₦{amt.toLocaleString('en-NG')}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div style={{ padding: '12px 16px', background: 'rgba(0,0,0,0.3)', borderRadius: 8, border: '1px solid rgba(255,255,255,0.05)' }}>
+                        <p style={{ fontFamily: 'Syne, sans-serif', fontSize: 13, color: B.white, lineHeight: 1.6, margin: 0 }}>
+                          At an estimated profit margin of <strong style={{ color: B.neonLime }}>₦{form.estimatedMargin.toLocaleString('en-NG')}</strong> per pair, you only need to sell <strong style={{ color: B.amber, fontSize: 16 }}>{pairsToBreakEven} pairs</strong> to 100% pay off your booth! 
+                          That represents a conversion rate of just <strong style={{ color: B.neonCyan }}>{conversionNeeded}%</strong> of the festival's crowd.
+                        </p>
+                      </div>
                     </div>
-                    <div style={{ padding:'10px 14px', background:`${B.neonCyan}08`, border:`1px solid ${B.neonCyan}20`, borderRadius:8 }}>
-                      <p style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:B.neonCyan }}>A confirmation email will be sent to <span style={{ color:B.white }}>{form.email}</span> after submission.</p>
-                    </div>
+
                     {status === 'error' && (
-                      <div style={{ padding:'12px 16px', background:`rgba(255,45,123,0.08)`, border:`1px solid ${B.neonMagenta}30`, borderRadius:8 }}>
-                        <div style={{ fontFamily:'Space Mono,monospace', fontSize:10, color:B.neonMagenta }}>
-                          Submission failed. Email <span style={{ color:B.white }}>sneakersfest088@gmail.com</span> with "Vendor Application — {form.business}"
+                      <div style={{ padding: '14px', background: 'rgba(255,45,123,0.1)', border: `1px solid ${B.neonMagenta}40`, borderRadius: 8 }}>
+                        <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 11, color: B.neonMagenta }}>
+                          Submission encountered a delay. You can also send your details directly via WhatsApp or email to <strong style={{ color: B.white }}>sneakersfest088@gmail.com</strong>.
                         </div>
                       </div>
                     )}
-                  </>
+                  </div>
                 )}
 
-                <div style={{ display:'flex', gap:12, alignItems:'center' }}>
+                {/* Navigation Action Buttons */}
+                <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 10 }}>
                   {step > 0 && (
-                    <button onClick={() => setStep(s => s-1)}
-                      style={{ padding:'12px 22px', background:'transparent', border:'1px solid rgba(255,255,255,0.1)', borderRadius:8, color:B.smoke, fontFamily:'Orbitron,monospace', fontSize:10, letterSpacing:2, cursor:'pointer', transition:'all 0.2s' }}
-                      onMouseEnter={e => { e.currentTarget.style.borderColor='rgba(255,255,255,0.25)'; e.currentTarget.style.color=B.white }}
-                      onMouseLeave={e => { e.currentTarget.style.borderColor='rgba(255,255,255,0.1)'; e.currentTarget.style.color=B.smoke }}
-                    >← BACK</button>
+                    <button
+                      onClick={() => setStep(s => s - 1)}
+                      style={{
+                        padding: '13px 22px',
+                        background: 'transparent',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        borderRadius: 8,
+                        color: B.smoke,
+                        fontFamily: 'Orbitron, monospace',
+                        fontSize: 11,
+                        letterSpacing: 2,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                      }}
+                      onMouseEnter={e => (e.currentTarget.style.color = B.white)}
+                      onMouseLeave={e => (e.currentTarget.style.color = B.smoke)}
+                    >
+                      ← PREVIOUS
+                    </button>
                   )}
-                  <div style={{ flex:1 }} />
+
+                  <div style={{ flex: 1 }} />
+
                   {step < 3 ? (
-                    <button onClick={() => canNext() && setStep(s => s+1)} disabled={!canNext()}
-                      style={{ padding:'13px 28px', background:canNext() ? B.neonCyan : 'rgba(255,255,255,0.04)', border:'none', borderRadius:8, color:canNext() ? B.black : B.dim, fontFamily:'Orbitron,monospace', fontSize:11, fontWeight:700, letterSpacing:2, cursor:canNext() ? 'pointer' : 'not-allowed', boxShadow:canNext() ? `0 0 24px ${B.neonCyan}35` : 'none', transition:'all 0.2s' }}>
-                      NEXT →
+                    <button
+                      onClick={() => canNext() && setStep(s => s + 1)}
+                      disabled={!canNext()}
+                      style={{
+                        padding: '14px 32px',
+                        background: canNext() ? B.neonCyan : 'rgba(255,255,255,0.06)',
+                        border: 'none',
+                        borderRadius: 8,
+                        color: canNext() ? B.black : B.dim,
+                        fontFamily: 'Orbitron, monospace',
+                        fontSize: 12,
+                        fontWeight: 700,
+                        letterSpacing: 2,
+                        cursor: canNext() ? 'pointer' : 'not-allowed',
+                        boxShadow: canNext() ? `0 0 24px ${B.neonCyan}30` : 'none',
+                        transition: 'all 0.2s',
+                      }}
+                    >
+                      NEXT STEP →
                     </button>
                   ) : (
-                    <button onClick={submit} disabled={status === 'loading'}
-                      style={{ padding:'14px 32px', background:status==='loading' ? 'rgba(255,255,255,0.04)' : B.neonCyan, border:'none', borderRadius:8, color:status==='loading' ? B.dim : B.black, fontFamily:'Orbitron,monospace', fontSize:12, fontWeight:700, letterSpacing:2, cursor:status==='loading' ? 'wait' : 'pointer', boxShadow:status==='loading' ? 'none' : `0 0 30px ${B.neonCyan}35`, transition:'all 0.2s' }}>
-                      {status === 'loading'
-                        ? <span style={{ display:'flex', alignItems:'center', gap:10 }}><span style={{ width:12, height:12, border:`2px solid #555`, borderTopColor:B.neonCyan, borderRadius:'50%', display:'inline-block', animation:'spin 0.8s linear infinite' }} />SUBMITTING…</span>
-                        : 'SUBMIT APPLICATION →'}
+                    <button
+                      onClick={submit}
+                      disabled={status === 'loading'}
+                      style={{
+                        padding: '15px 36px',
+                        background: status === 'loading' ? 'rgba(255,255,255,0.06)' : B.amber,
+                        border: 'none',
+                        borderRadius: 8,
+                        color: status === 'loading' ? B.dim : B.black,
+                        fontFamily: 'Orbitron, monospace',
+                        fontSize: 12,
+                        fontWeight: 700,
+                        letterSpacing: 2,
+                        cursor: status === 'loading' ? 'wait' : 'pointer',
+                        boxShadow: status === 'loading' ? 'none' : `0 0 32px ${B.amber}35`,
+                        transition: 'all 0.2s',
+                      }}
+                    >
+                      {status === 'loading' ? 'TRANSMITTING APPLICATION…' : 'SUBMIT OFFICIAL APPLICATION →'}
                     </button>
                   )}
                 </div>
 
-                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                  <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color:B.dim, letterSpacing:1 }}>● DRAFT AUTO-SAVED</div>
-                  <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.dim, letterSpacing:'0.15em' }}>INVITATION-CURATED / REVIEWED IN 3 DAYS</div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 14 }}>
+                  <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.dim, letterSpacing: 1 }}>
+                    ● 256-BIT ENCRYPTED ONBOARDING SESSION
+                  </span>
+                  <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.smoke }}>
+                    REVIEW WINDOW: 3 BUSINESS DAYS
+                  </span>
                 </div>
               </div>
             </div>
           </div>
         )}
-        <div style={{ marginTop:48 }}>
-          <div style={{ fontFamily:"'Space Mono'", fontSize:8, letterSpacing:'0.4em', color:B.smoke, marginBottom:14 }}>CONFIRMED VENDORS</div>
-          {/* Category filter */}
-          <div style={{ display:'flex', gap:8, flexWrap:'wrap', marginBottom:18 }}>
+
+        {/* ── CONFIRMED VENDOR ROSTER ── */}
+        <div id="confirmed-vendors" style={{ marginTop: 64 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 12, marginBottom: 18 }}>
+            <div>
+              <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, letterSpacing: '0.3em', color: B.amber, marginBottom: 4 }}>
+                CURATED YEAR 1 COHORT
+              </div>
+              <h3 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 32, color: B.white, letterSpacing: 1, margin: 0 }}>
+                CONFIRMED VENDORS & RETAILERS
+              </h3>
+            </div>
+            <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 10, color: B.smoke }}>
+              {CONFIRMED_VENDORS.length} Brands Confirmed · 30 Maximum
+            </span>
+          </div>
+
+          {/* Category Filter Chips */}
+          <div className="mobile-scroll-x" style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 10, marginBottom: 18 }}>
             {['ALL', ...Array.from(new Set(CONFIRMED_VENDORS.map(v => v.cat)))].map(cat => (
-              <button key={cat} onClick={() => setVendorCatFilter(cat)}
-                style={{ padding:'5px 13px', background: vendorCatFilter===cat ? `${B.neonCyan}15` : 'transparent', border:`1px solid ${vendorCatFilter===cat ? B.neonCyan+'55' : 'rgba(255,255,255,0.08)'}`, borderRadius:4, cursor:'pointer', fontFamily:'Space Mono,monospace', fontSize: 9, color: vendorCatFilter===cat ? B.neonCyan : B.smoke, letterSpacing:1, transition:'all 0.2s' }}>
+              <button
+                key={cat}
+                onClick={() => setVendorCatFilter(cat)}
+                style={{
+                  padding: '6px 14px',
+                  background: vendorCatFilter === cat ? `${B.neonCyan}18` : 'rgba(255,255,255,0.03)',
+                  border: `1px solid ${vendorCatFilter === cat ? B.neonCyan : 'rgba(255,255,255,0.08)'}`,
+                  borderRadius: 20,
+                  cursor: 'pointer',
+                  fontFamily: 'Space Mono, monospace',
+                  fontSize: 10,
+                  color: vendorCatFilter === cat ? B.neonCyan : B.smoke,
+                  letterSpacing: 1,
+                  whiteSpace: 'nowrap',
+                  transition: 'all 0.2s',
+                }}
+              >
                 {cat}
               </button>
             ))}
           </div>
-          {/* Vendor cards */}
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(240px, 1fr))', gap:14 }}>
+
+          {/* Grid of Confirmed Vendors */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}>
             {CONFIRMED_VENDORS.filter(v => vendorCatFilter === 'ALL' || v.cat === vendorCatFilter).map((v, i) => (
-              <div key={i} className="card-3d" style={{ padding:'18px', background:'rgba(255,255,255,0.03)', border:`1px solid ${v.color}30`, borderTop:`2px solid ${v.color}50`, borderRadius:8, display:'flex', flexDirection:'column', gap:10 }}>
-                <div style={{ display:'flex', alignItems:'center', gap:12 }}>
-                  <div style={{ width:40, height:40, borderRadius:'50%', background:`${v.color}15`, border:`1.5px solid ${v.color}50`, flexShrink:0, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Bebas Neue,sans-serif', fontSize:18, color:v.color }}>{v.name[0]}</div>
+              <div
+                key={i}
+                className="card-3d"
+                style={{
+                  padding: 20,
+                  background: 'rgba(255,255,255,0.025)',
+                  border: `1px solid ${v.color}35`,
+                  borderTop: `2px solid ${v.color}`,
+                  borderRadius: 10,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 12,
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{ width: 44, height: 44, borderRadius: '50%', background: `${v.color}18`, border: `1.5px solid ${v.color}60`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Bebas Neue, sans-serif', fontSize: 20, color: v.color }}>
+                    {v.name[0]}
+                  </div>
                   <div>
-                    <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:16, color:B.white, lineHeight:1 }}>{v.name}</div>
-                    <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color:v.color, marginTop:3, letterSpacing:1 }}>{v.cat} · {v.city}</div>
+                    <div style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 18, color: B.white, lineHeight: 1 }}>{v.name}</div>
+                    <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: v.color, marginTop: 4, letterSpacing: 1 }}>
+                      {v.cat} · {v.city}
+                    </div>
                   </div>
                 </div>
-                <div style={{ fontFamily:'Syne,sans-serif', fontSize:11, color:B.smoke, lineHeight:1.65 }}>{v.bringing}</div>
-                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                  <span style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color:v.color, letterSpacing:1 }}>{v.ig}</span>
-                  <span style={{ padding:'2px 8px', background:`${v.color}10`, border:`1px solid ${v.color}25`, borderRadius:3, fontFamily:'Space Mono,monospace', fontSize: 9, color: B.smoke, letterSpacing:1 }}>{v.booth}</span>
+
+                <div style={{ fontFamily: 'Syne, sans-serif', fontSize: 12, color: B.smoke, lineHeight: 1.6, flex: 1 }}>
+                  {v.bringing}
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 10 }}>
+                  <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 10, color: v.color }}>{v.ig}</span>
+                  <span style={{ padding: '3px 8px', background: `${v.color}15`, border: `1px solid ${v.color}35`, borderRadius: 4, fontFamily: 'Space Mono, monospace', fontSize: 8, color: B.smoke }}>
+                    {v.booth}
+                  </span>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        <div style={{ marginTop:48 }}>
-          <div style={{ fontFamily:"'Space Mono'", fontSize:8, letterSpacing:'0.4em', color:B.smoke, marginBottom:16 }}>VENDOR FAQ</div>
-          {FAQ.map((f, i) => (
-            <div key={i} style={{ borderBottom:`1px solid ${B.charcoal}` }}>
-              <button onClick={() => setOpenFaq(openFaq===i ? null : i)} style={{ width:'100%', textAlign:'left', padding:'14px 0', background:'none', border:'none', cursor:'pointer', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                <span style={{ fontFamily:"'Syne'", fontSize:'0.85rem', color:B.white }}>{f.q}</span>
-                <span style={{ color:B.amber, fontSize:'1.1rem', marginLeft:12 }}>{openFaq===i ? '-' : '+'}</span>
-              </button>
-              {openFaq === i && <p style={{ fontFamily:"'Syne'", fontSize:'0.82rem', color:B.smoke, lineHeight:1.7, paddingBottom:14 }}>{f.a}</p>}
-            </div>
-          ))}
+        {/* ── FAQ SECTION ── */}
+        <div style={{ marginTop: 64 }}>
+          <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, letterSpacing: '0.3em', color: B.smoke, marginBottom: 16 }}>
+            FREQUENTLY ASKED QUESTIONS
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {FAQ.map((f, i) => (
+              <div key={i} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 8, overflow: 'hidden' }}>
+                <button
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  style={{ width: '100%', textAlign: 'left', padding: '16px 20px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                >
+                  <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: B.white, fontWeight: 600 }}>{f.q}</span>
+                  <span style={{ color: B.amber, fontSize: 18, marginLeft: 12 }}>{openFaq === i ? '−' : '+'}</span>
+                </button>
+                {openFaq === i && (
+                  <div style={{ padding: '0 20px 18px', borderTop: '1px solid rgba(255,255,255,0.04)' }}>
+                    <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: B.smoke, lineHeight: 1.7, margin: '12px 0 0' }}>{f.a}</p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
+
+        {/* ── TRACKER MODAL ── */}
+        {trackerOpen && (
+          <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(16px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+            <div className="card-3d" style={{ background: B.charcoal, border: `1px solid ${B.amber}50`, borderRadius: 16, maxWidth: 540, width: '100%', padding: '32px 28px', position: 'relative' }}>
+              <button
+                onClick={() => setTrackerOpen(false)}
+                style={{ position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', color: B.smoke, fontSize: 20, cursor: 'pointer' }}
+              >
+                ✕
+              </button>
+
+              <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 11, color: B.amber, letterSpacing: 2, marginBottom: 6 }}>
+                SELF-SERVICE APPLICATION TRACKER
+              </div>
+              <h3 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 28, color: B.white, margin: '0 0 16px' }}>
+                CHECK VENDOR ADMISSION STATUS
+              </h3>
+
+              <form onSubmit={handleLookup} style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
+                <input
+                  aria-label="Application ID"
+                  value={lookupId}
+                  onChange={e => setLookupId(e.target.value)}
+                  placeholder="e.g. VSF26-XXXX or VDR-XXXX"
+                  style={{ ...IS, flex: 1 }}
+                />
+                <button
+                  type="submit"
+                  disabled={lookupLoading}
+                  style={{ padding: '0 20px', background: B.amber, border: 'none', borderRadius: 8, color: B.black, fontFamily: 'Orbitron, monospace', fontSize: 11, fontWeight: 700, cursor: lookupLoading ? 'wait' : 'pointer' }}
+                >
+                  {lookupLoading ? 'QUERYING…' : 'SEARCH'}
+                </button>
+              </form>
+
+              {lookupError && (
+                <div style={{ padding: '12px 14px', background: 'rgba(255,45,123,0.1)', border: `1px solid ${B.neonMagenta}40`, borderRadius: 8, color: B.neonMagenta, fontFamily: 'Space Mono, monospace', fontSize: 11, marginBottom: 16 }}>
+                  {lookupError}
+                </div>
+              )}
+
+              {lookupResult && (
+                <div style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: 18 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                    <div>
+                      <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.smoke }}>BRAND NAME</div>
+                      <div style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 22, color: B.white }}>{lookupResult.business}</div>
+                    </div>
+                    <span style={{ padding: '4px 10px', background: `${B.neonLime}18`, border: `1px solid ${B.neonLime}50`, borderRadius: 4, fontFamily: 'Orbitron, monospace', fontSize: 9, color: B.neonLime }}>
+                      {lookupResult.status ? lookupResult.status.toUpperCase() : 'PENDING'}
+                    </span>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, fontFamily: 'Space Mono, monospace', fontSize: 10, color: B.smoke, marginBottom: 14 }}>
+                    <div>REF: <strong style={{ color: B.amber }}>{lookupResult.applicationId}</strong></div>
+                    <div>TIER: <strong style={{ color: B.white }}>{lookupResult.booth}</strong></div>
+                    <div>CAT: <strong style={{ color: B.white }}>{lookupResult.category}</strong></div>
+                    <div>SUBMITTED: <strong style={{ color: B.white }}>{lookupResult.submittedAt ? new Date(lookupResult.submittedAt).toLocaleDateString() : 'Dec 2026'}</strong></div>
+                  </div>
+
+                  <a
+                    href={`${SOCIAL_LINKS.whatsapp}?text=${encodeURIComponent(`Hello SF26 Vendor Concierge, I am following up on Application ID: ${lookupResult.applicationId} for ${lookupResult.business}.`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ display: 'block', padding: '10px', background: `${B.neonCyan}15`, border: `1px solid ${B.neonCyan}40`, borderRadius: 6, color: B.neonCyan, fontFamily: 'Space Mono, monospace', fontSize: 10, textAlign: 'center', textDecoration: 'none' }}
+                  >
+                    SPEAK WITH ONBOARDING TEAM ON WHATSAPP →
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
       </div>
     </section>
   )

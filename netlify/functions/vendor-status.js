@@ -12,6 +12,32 @@ const esc = (s) =>
 
 export const handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return preflight()
+
+  // Public GET lookup: allows vendors to check application status by ID
+  if (event.httpMethod === 'GET') {
+    const params = event.queryStringParameters || {}
+    const appId = (params.applicationId || params.id || '').trim().toUpperCase()
+    if (!appId) return err(400, 'applicationId query parameter is required')
+
+    const vendor = await get(Vendors, appId)
+    if (!vendor) return err(404, `No vendor application found for ID: ${appId}`)
+
+    // Return sanitized public status
+    return ok({
+      success: true,
+      application: {
+        applicationId: vendor.applicationId,
+        status: vendor.status || 'pending',
+        business: vendor.business,
+        category: vendor.category || 'N/A',
+        booth: vendor.booth || 'Standard',
+        submittedAt: vendor.submittedAt,
+        updatedAt: vendor.updatedAt || vendor.submittedAt,
+        notes: vendor.status === 'approved' ? vendor.notes : undefined,
+      }
+    })
+  }
+
   if (event.httpMethod !== 'POST') return err(405, 'Method not allowed')
 
   const adminSecret = process.env.ADMIN_SECRET

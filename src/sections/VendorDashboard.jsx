@@ -194,7 +194,7 @@ function BoothCard({ vendor }) {
           <p style={{ fontSize: 12, color: B.smoke }}>{vendor.zone}</p>
         </div>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))', gap: 12 }}>
         {[
           { label: 'SETUP CALL', val: vendor.setup },
           { label: 'TABLES', val: vendor.tables },
@@ -277,7 +277,7 @@ function ProfileTab({ vendor }) {
       <div>
         <p style={{ fontFamily: 'Orbitron, sans-serif', fontSize: 10, letterSpacing: 3, color: B.amber, marginBottom: 16 }}>STALL PROFILE</p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
             {[['@Instagram', 'instagram'], ['X / Twitter', 'twitter']].map(([label, key]) => (
               <div key={key}>
                 <p style={{ fontSize: 11, color: B.smoke, marginBottom: 6 }}>{label}</p>
@@ -406,7 +406,7 @@ function ProductsTab({ vendor }) {
           <p style={{ fontSize: 12, color: B.amber, marginBottom: 14, fontFamily: 'Space Mono, monospace', letterSpacing: 1 }}>NEW ITEM</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <input aria-label="Product name or model" style={iStyle} placeholder="Product name / model" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))', gap: 10 }}>
               <input aria-label="Size" style={iStyle} placeholder="Size" value={form.size} onChange={e => setForm(f => ({ ...f, size: e.target.value }))} />
               <input aria-label="Price in naira" style={iStyle} placeholder="Price (NGN)" type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} />
               <input aria-label="Quantity" style={iStyle} placeholder="Qty" type="number" min="1" value={form.qty} onChange={e => setForm(f => ({ ...f, qty: e.target.value }))} />
