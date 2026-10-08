@@ -13,11 +13,14 @@ const SOCIALS = [
   { platform: 'INSTAGRAM',     handle: '@s_fest26',         href: SOCIAL_LINKS.instagram,               color: '#E1306C',     icon: 'IG', tip: 'Official Festival Page' },
   { platform: 'SNAPCHAT',      handle: 'SNEAKERSFEST',      href: SOCIAL_LINKS.snapchat,                color: B.amber,       icon: 'SC', tip: 'Stories & BTS' },
   { platform: 'WHATSAPP',      handle: 'JOIN COMMUNITY',    href: SOCIAL_LINKS.whatsapp,                color: B.neonLime,    icon: 'WA', tip: 'Inner Circle' },
-  { platform: 'SUBSTACK',      handle: '@CATALYST00555',    href: 'https://substack.com/@catalyst00555', color: '#FF6719',     icon: 'SS', tip: 'Read the Culture' },
+  { platform: 'SUBSTACK',      handle: '@CATALYSTGGG',      href: 'https://substack.com/@catalystggg',   color: '#FF6719',     icon: 'SS', tip: 'Read the Culture' },
 ]
 
 const NAV = [
   ['About',                '#about'],
+  ['Catalyst OS Skills',   '#catalyst-skills'],
+  ['Lagos Sole Exchange',  '#sole-exchange'],
+  ['FitCheck Studio AI',   '#fitcheck-studio'],
   ['Friday Night Protocol','#fnp'],
   ['Community',            '#community'],
   ['Crew Codes',           '#crews'],

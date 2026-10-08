@@ -84,6 +84,7 @@ const ColdDMGenerator         = lazy(() => import('./sections/ColdDMGenerator'))
 const SneakerEulogy           = lazy(() => import('./sections/SneakerEulogy'))
 const CollectorCard           = lazy(() => import('./sections/CollectorCard'))
 const EarlyAccess     = lazy(() => import('./sections/EarlyAccess'))
+const CatalystOSSkillsHub = lazy(() => import('./sections/CatalystOSSkillsHub'))
 const Comics          = lazy(() => import('./sections/Comics'))
 const Gallery         = lazy(() => import('./sections/Gallery'))
 const TradeBoard      = lazy(() => import('./sections/TradeBoard'))
@@ -556,6 +557,7 @@ export default function App() {
             <Reveal><SponsorTiers /></Reveal>
 
             {/* ECOSYSTEM */}
+            <Reveal><CatalystOSSkillsHub /></Reveal>
             <Reveal><Comics /></Reveal>
             <Reveal><Newsletter /></Reveal>
           </Suspense></SectionBoundary>

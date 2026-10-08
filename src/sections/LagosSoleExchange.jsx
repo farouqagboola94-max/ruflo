@@ -436,6 +436,18 @@ export default function LagosSoleExchange() {
                 </h3>
 
                 <div style={{
+                  display: 'flex', alignItems: 'center', gap: '6px',
+                  padding: '4px 8px', borderRadius: '4px',
+                  background: 'rgba(192, 132, 252, 0.08)', border: '1px solid rgba(192, 132, 252, 0.25)',
+                  marginBottom: '10px'
+                }}>
+                  <span style={{ fontSize: '10px' }}>⚡</span>
+                  <span style={{ fontSize: '10px', color: '#C084FC', fontFamily: "'Space Mono', monospace", fontWeight: '700' }}>
+                    CATALYST ARBITRAGE: +{(12 + (item.hypeIndex % 15)).toFixed(1)}% RESALE VELOCITY
+                  </span>
+                </div>
+
+                <div style={{
                   background: 'rgba(255,255,255,0.03)',
                   border: '1px solid rgba(255,255,255,0.06)',
                   borderRadius: '10px',

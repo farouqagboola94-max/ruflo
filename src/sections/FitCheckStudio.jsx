@@ -33,6 +33,14 @@ const STREET_ARCHETYPES = [
     recommendedKicks: ["Air Jordan 4 Travis Scott Purple", "Nike SB Chunky Dunky", "Air Jordan 6 Infrared"],
     vibeColor: '#10B981',
     palette: ['#0B130E', '#064E3B', '#10B981', '#E6FFFA']
+  },
+  {
+    id: 'catalyst-alchemist',
+    name: 'The Balogun Alchemist',
+    tagline: 'Turns everyday Lagos street grit into uncompromising editorial gold (Catalyst OS Core)',
+    recommendedKicks: ["Air Jordan 1 'Chicago'", "Nike Air Max 95 OG", "Travis Scott AJ1 Low"],
+    vibeColor: '#C084FC',
+    palette: ['#050508', '#1A1028', '#C084FC', '#E8C84A']
   }
 ]
 

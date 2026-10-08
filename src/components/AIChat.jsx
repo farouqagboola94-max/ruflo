@@ -4,11 +4,12 @@ import { claudeChat, aiAvailable } from '../lib/catalystAI'
 
 const API = import.meta.env.VITE_BACKEND_URL || ''
 
-const SNEAKER_SYSTEM = `You are the official Sneakers Fest '26 AI — a Lagos sneaker culture expert and event concierge. You know everything about:
+const SNEAKER_SYSTEM = `You are the official Sneakers Fest '26 AI — a Lagos sneaker culture expert and event concierge powered by the Catalyst OS Neural Skills Engine. You know everything about:
 - Sneakers Fest '26: December 12, 2026, Lagos Nigeria. Tickets: General ₦5K, VIP ₦10K, VVIP ₦25K, Phalanx ₦50K.
 - Lineup: Headliner details classified. 30+ vendor spaces. Collector room. Exclusive drops for VIP+.
 - Grail culture, resale market, sneaker history, drop intel, outfit advice.
-- The Lagos streetwear scene, Friday Night Protocol (weekly community sessions), and The Catalyst (@catalyst00555).
+- The Lagos streetwear scene, Friday Night Protocol (weekly community sessions), and The Catalyst (@catalystggg).
+- Catalyst OS: The underlying intelligence operating system featuring 2,393 universal skills and 70 priority domain skills.
 - Contact: WhatsApp button on the site, Instagram @sneakersfest5555, Snapchat sneakersfest, email sneakersfest088@gmail.com.
 Be direct, culturally aware, and helpful. Reference Lagos culture naturally. Keep responses concise.`
 
@@ -26,14 +27,15 @@ const QA = [
   { keys: ['early access','waitlist','queue'], answer: 'Sign up in the Early Access section — queue position + first shot at tickets, vendor spots, and drop intel.' },
   { keys: ['raffle','win','giveaway'], answer: 'Enter raffles in the Raffle section. Live draws at the event. Enter early.' },
   { keys: ['gallery','photo','upload'], answer: 'Upload in the Gallery section. Community votes with heat — top photos rank on the leaderboard.' },
-  { keys: ['trade','swap'], answer: 'Browse and post on the Trade Board. WhatsApp deep-link makes reaching sellers easy.' },
+  { keys: ['trade','swap','lsx','exchange'], answer: 'Lagos Sole Exchange (LSX) offers authenticated P2P trades with physical escrow at SF26. Browse the Trade Board or LSX section.' },
   { keys: ['museum','art','bid','artwork'], answer: 'Eight artworks up for bid — Lagos at Dawn, Sole Supremacy, Grail Keeper, and more. Bid in the Museum section.' },
   { keys: ['whatsapp','community','join','group'], answer: 'Tap the WhatsApp button (bottom right). Also follow @sneakersfest5555 on Instagram and add sneakersfest on Snapchat. Inner circle gets early access, FNP alerts, and drop announcements.' },
   { keys: ['contact','reach','email','hello','hi'], answer: 'WhatsApp (bottom right) is fastest. Instagram @sneakersfest5555 · Snapchat: sneakersfest · sneakersfest088@gmail.com for media, partnerships & enquiries.' },
   { keys: ['instagram','snapchat','social','follow'], answer: 'Instagram: @sneakersfest5555 — Snapchat: sneakersfest — TikTok: @sneakersfest. All platforms are live. Follow for drops, culture, FNP highlights, and event updates.' },
   { keys: ['merch','shirt','hoodie','clothing'], answer: 'Merch in the Merch section. Lagos Noir aesthetic, limited runs.' },
-  { keys: ['catalyst','founder','who','about'], answer: "Built by Oluwatobiloba — The Catalyst, principal of Catalyst Concepts, Lagos. Full story in Origin Story." },
-  { keys: ['substack','newsletter','read'], answer: 'The Catalyst Substack (@catalyst00555) covers sneaker culture, Lagos drops, and event docs. Subscribe free.' },
+  { keys: ['catalyst','founder','ceo','who','about'], answer: "Founded and directed by Oluwatobiloba — The Catalyst (@catalystggg), principal of Catalyst Concepts & Abegbe Agboola Chambers AI Consulting. Full story in Origin Story and the Catalyst OS Hub." },
+  { keys: ['skill','catalyst os','engine','neural'], answer: 'The site is supercharged by the Catalyst OS Skills Registry (2,393 universal skills across Anthropics, Claude, Antigravity & VoltAgent) plus 70 priority skills powering all 17 AI tools, LSX, and FitCheck Studio.' },
+  { keys: ['substack','newsletter','read'], answer: 'The Catalyst official publications cover sneaker culture, Lagos drops, systems, and psychology (@catalystggg). Subscribe free.' },
 ]
 
 function keywordReply(text) {
@@ -45,8 +47,8 @@ function keywordReply(text) {
 }
 
 const SUGGESTIONS = [
-  ['Ticket prices', 'Vendor spots', 'What is FNP?', 'Date & venue'],
-  ['VIP perks', 'How do raffles work?', 'Exclusive drops', 'Sponsorships'],
+  ['Ticket prices', 'Vendor spots', 'Catalyst OS Skills', 'Date & venue'],
+  ['VIP perks', 'LSX Sneaker Pit', 'Exclusive drops', 'Sponsorships'],
 ]
 
 // ── component ─────────────────────────────────────────────────────────────────

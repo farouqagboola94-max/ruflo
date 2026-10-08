@@ -81,10 +81,13 @@ export const SECTIONS = [
   { id: 'sneaker-vault',   t: 'Sneaker Vault',     c: 'culture', d: 'The knowledge base',             k: 'knowledge learn encyclopedia reference vault' },
   { id: 'artists',         t: 'Artists',           c: 'culture', d: 'The creatives on the bill',      k: 'creators art performers spotlight' },
   { id: 'timeline',        t: 'Drops Timeline',    c: 'culture', d: 'The releases that mattered',     k: 'releases history drops dates timeline' },
-  { id: 'gallery',         t: 'Gallery',           c: 'culture', d: 'Shots from the culture',        k: 'photos images pictures gallery look' },
+  { id: 'fit-check-studio', t: 'FitCheck Studio AI', c: 'identity', d: 'Full streetwear styling & silhouette analysis', k: 'fitcheck studio ai styling streetwear outfit analysis photo look' },
+  { id: 'youth-experience', t: 'Lagos Youth Experience', c: 'culture', d: 'Interactive story generator, WebGL studio & soundboard', k: 'youth experience lagos stories 3d soundboard scratch beats' },
+  { id: 'catalyst-skills',  t: 'Catalyst OS Skills Hub', c: 'culture', d: '2,393 universal agent skills & 70 priority domain models', k: 'catalyst os skills registry agent prompt ai engine tools neural farouq' },
   { id: 'comics',          t: 'Catalyst Universe', c: 'culture', d: 'The comic side of the world',    k: 'comic story catalyst universe read' },
 
-  // ---- Marketplace ---------------------------------------------------
+  { id: 'lsx',              t: 'Lagos Sole Exchange (LSX)', c: 'market', d: 'P2P sneaker trading pit with physical escrow', k: 'lsx sole exchange trade swap pit escrow p2p authenticated market buy sell' },
+  { id: 'gallery',          t: 'Gallery',           c: 'culture', d: 'Shots from the culture',        k: 'photos images pictures gallery look' },
   { id: 'merch',            t: 'Merch',             c: 'market', d: 'Official Sneakers Fest gear',    k: 'shop buy clothing tshirt hoodie store gear merch wear apparel' },
   { id: 'vendor-directory', t: 'The Floor',         c: 'market', d: 'Every confirmed vendor',           k: 'vendors directory floor sellers shops stalls who list brands confirmed' },
   { id: 'vendors',          t: 'Become a Vendor',   c: 'market', d: 'Apply for a booth',              k: 'apply sell booth stall business vendor trade seller stand pitch' },

@@ -467,6 +467,7 @@ export default function LagosYouthExperience() {
                 className="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:border-amber-400 outline-none"
               >
                 <option value="👑 GRAIL COLLECTOR">👑 GRAIL COLLECTOR (Archival Heat)</option>
+                <option value="⚡ CATALYST ALCHEMIST">⚡ CATALYST ALCHEMIST (Value Alchemy & Lore)</option>
                 <option value="🛹 SKATE / STREET">🛹 SKATE / STREET (SBs Only)</option>
                 <option value="🛡️ TECHWEAR PHALANX">🛡️ TECHWEAR PHALANX (GORE-TEX)</option>
                 <option value="🏀 RETRO HOOPER">🏀 RETRO HOOPER (OG Jordans)</option>
