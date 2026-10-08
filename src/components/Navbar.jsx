@@ -11,15 +11,17 @@ const SearchIcon = ({ color, size = 14 }) => (
 )
 
 const DESKTOP_LINKS = [
-  { label: 'ABOUT',    href: '#about' },
-  { label: 'LINEUP',   href: '#lineup' },
-  { label: 'SCHEDULE', href: '#schedule' },
-  { label: 'VENUE',    href: '#venue' },
-  { label: 'MERCH',    href: '#merch' },
-  { label: 'VENDORS',  href: '#vendors' },
-  { label: 'FAQ',      href: '#faq' },
-  { label: 'CONTACT',  href: '#contact' },
-  { label: 'APP',      href: '#app-promo' },
+  { label: 'ABOUT',         href: '#about' },
+  { label: 'SOLE EXCHANGE', href: '#sole-exchange' },
+  { label: 'FITCHECK AI',   href: '#fitcheck-studio' },
+  { label: 'LINEUP',        href: '#lineup' },
+  { label: 'SCHEDULE',      href: '#schedule' },
+  { label: 'VENUE',         href: '#venue' },
+  { label: 'MERCH',         href: '#merch' },
+  { label: 'VENDORS',       href: '#vendors' },
+  { label: 'FAQ',           href: '#faq' },
+  { label: 'CONTACT',       href: '#contact' },
+  { label: 'APP',           href: '#app-promo' },
 ]
 
 const MOBILE_LINKS = [

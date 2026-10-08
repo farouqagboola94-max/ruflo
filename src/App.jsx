@@ -31,6 +31,8 @@ import Highlights from './sections/Highlights'
 // Everything below the fold is code-split; it loads as the reader travels.
 const About               = lazy(() => import('./sections/About'))
 const LagosYouthExperience= lazy(() => import('./sections/LagosYouthExperience'))
+const LagosSoleExchange   = lazy(() => import('./sections/LagosSoleExchange'))
+const FitCheckStudio      = lazy(() => import('./sections/FitCheckStudio'))
 const OriginStory         = lazy(() => import('./sections/OriginStory'))
 const FridayNightProtocol = lazy(() => import('./sections/FridayNightProtocol'))
 const Press               = lazy(() => import('./sections/Press'))
@@ -408,6 +410,8 @@ export default function App() {
           <SectionBoundary><Suspense fallback={null}>
             <Reveal><ArtistSpotlight /></Reveal>
             <Reveal><LagosYouthExperience /></Reveal>
+            <Reveal><LagosSoleExchange /></Reveal>
+            <Reveal><FitCheckStudio /></Reveal>
             <Reveal><SneakerTrivia /></Reveal>
             <Reveal><HypeCounter /></Reveal>
             <Reveal><AITrivia /></Reveal>
