@@ -6,7 +6,7 @@ import { goToSection } from './Defer'
 const RECENT_KEY = 'sf26_palette_recent'
 const MAX_RECENT = 5
 
-const QUICK_IDS = ['tickets', 'catalyst-skills', 'lsx', 'schedule', 'fit-check-studio', 'venue', 'merch', 'vendors']
+const QUICK_IDS = ['tickets', 'lsx', 'schedule', 'fit-check-studio', 'venue', 'merch', 'vendors']
 
 function readRecent() {
   try { return JSON.parse(localStorage.getItem(RECENT_KEY)) || [] } catch { return [] }

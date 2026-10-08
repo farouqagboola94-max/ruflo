@@ -14,7 +14,6 @@ const DESKTOP_LINKS = [
   { label: 'ABOUT',         href: '#about' },
   { label: 'SOLE EXCHANGE', href: '#sole-exchange' },
   { label: 'FITCHECK AI',   href: '#fitcheck-studio' },
-  { label: 'CATALYST SKILLS', href: '#catalyst-skills' },
   { label: 'LINEUP',        href: '#lineup' },
   { label: 'SCHEDULE',      href: '#schedule' },
   { label: 'VENUE',         href: '#venue' },
@@ -27,10 +26,9 @@ const DESKTOP_LINKS = [
 
 const MOBILE_LINKS = [
   { label: 'ABOUT',           href: '#about',     num: '01' },
-  { label: 'CATALYST SKILLS', href: '#catalyst-skills', num: '02' },
-  { label: 'ORIGIN STORY',    href: '#origin',    num: '03' },
-  { label: 'SOLE EXCHANGE',   href: '#sole-exchange', num: '04' },
-  { label: 'FITCHECK STUDIO', href: '#fitcheck-studio', num: '05' },
+  { label: 'ORIGIN STORY',    href: '#origin',    num: '02' },
+  { label: 'SOLE EXCHANGE',   href: '#sole-exchange', num: '03' },
+  { label: 'FITCHECK STUDIO', href: '#fitcheck-studio', num: '04' },
   { label: 'FRIDAY PROTOCOL', href: '#fnp',       num: '06' },
   { label: 'GALLERY',         href: '#gallery',   num: '07' },
   { label: 'LINEUP',          href: '#lineup',    num: '08' },

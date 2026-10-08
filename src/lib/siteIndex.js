@@ -83,7 +83,6 @@ export const SECTIONS = [
   { id: 'timeline',        t: 'Drops Timeline',    c: 'culture', d: 'The releases that mattered',     k: 'releases history drops dates timeline' },
   { id: 'fit-check-studio', t: 'FitCheck Studio AI', c: 'identity', d: 'Full streetwear styling & silhouette analysis', k: 'fitcheck studio ai styling streetwear outfit analysis photo look' },
   { id: 'youth-experience', t: 'Lagos Youth Experience', c: 'culture', d: 'Interactive story generator, WebGL studio & soundboard', k: 'youth experience lagos stories 3d soundboard scratch beats' },
-  { id: 'catalyst-skills',  t: 'Catalyst OS Skills Hub', c: 'culture', d: '2,393 universal agent skills & 70 priority domain models', k: 'catalyst os skills registry agent prompt ai engine tools neural farouq' },
   { id: 'comics',          t: 'Catalyst Universe', c: 'culture', d: 'The comic side of the world',    k: 'comic story catalyst universe read' },
 
   { id: 'lsx',              t: 'Lagos Sole Exchange (LSX)', c: 'market', d: 'P2P sneaker trading pit with physical escrow', k: 'lsx sole exchange trade swap pit escrow p2p authenticated market buy sell' },

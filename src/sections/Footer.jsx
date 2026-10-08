@@ -18,7 +18,6 @@ const SOCIALS = [
 
 const NAV = [
   ['About',                '#about'],
-  ['Catalyst OS Skills',   '#catalyst-skills'],
   ['Lagos Sole Exchange',  '#sole-exchange'],
   ['FitCheck Studio AI',   '#fitcheck-studio'],
   ['Friday Night Protocol','#fnp'],
