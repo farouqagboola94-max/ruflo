@@ -4,12 +4,12 @@ import { GrainOverlay, AmberGlow, SectionTag } from '../components/Shared'
 import Egg from '../components/Egg'
 
 const LINEUP = [
-  { name: "⧡ CLASSIFIED", role: "HEADLINER", time: "8PM — 10PM", genre: "AFROBEATS / STREET POP", featured: true },
-  { name: "SPECIAL GUEST — TBA", role: "SPECIAL GUEST", time: "6PM — 8PM", genre: "ALT-R&B / ELECTRONIC" },
-  { name: "⧡ CLASSIFIED", role: "PRODUCER SET", time: "4PM — 6PM", genre: "STREET / TRAP / AFRO" },
-  { name: "⧡ CLASSIFIED", role: "OPENING ACT", time: "2PM — 4PM", genre: "AFROBEATS / STREET POP" },
-  { name: "SPECIAL GUEST — TBA", role: "SPECIAL GUEST", time: "12PM — 2PM", genre: "AFROBEATS / STREET POP" },
-  { name: "+ MORE TBA", role: "SURPRISE GUESTS", time: "THROUGHOUT", genre: "CULTURE × SOUL × FUTURE" },
+  { name: "⚡ LAGOS HEADLINER [PHASE 1 DROPPING]", role: "HEADLINER", time: "8PM — 10PM", genre: "AFROBEATS / STREET POP", featured: true },
+  { name: "ALTÉ VANGUARD LIVE", role: "SPECIAL GUEST", time: "6PM — 8PM", genre: "ALT-R&B / ELECTRONIC" },
+  { name: "CATALYST SOUND LAB", role: "PRODUCER SET", time: "4PM — 6PM", genre: "STREET / TRAP / AFRO" },
+  { name: "MAINLAND NEW WAVE", role: "OPENING ACT", time: "2PM — 4PM", genre: "AFROBEATS / STREET POP" },
+  { name: "SURPRISE GRAIL GUEST", role: "SPECIAL GUEST", time: "12PM — 2PM", genre: "AFROBEATS / STREET POP" },
+  { name: "+ RESIDENT SOLE DJS", role: "ALL DAY SOUNDSCAPE", time: "THROUGHOUT", genre: "CULTURE × SOUL × FUTURE" },
 ]
 
 const BASE_VOTES    = [4821, 3192, 2356, 1688, 2103, 5740]
