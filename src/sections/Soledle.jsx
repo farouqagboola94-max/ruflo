@@ -271,16 +271,28 @@ export default function Soledle() {
               {game.guesses.map((g, i) => g === answer.name ? '🟩' : '🟥').join('')}&nbsp;
               {game.guesses.length}/{MAX_GUESSES}
             </div>
-            <button
-              onClick={shareResult}
-              style={{
-                background: B.neonMagenta, color: B.black, border: 'none',
-                padding: '10px 28px', fontFamily: "'Bebas Neue'", fontSize: '1.1rem', letterSpacing: '0.1em',
-                cursor: 'pointer', borderRadius: 4,
-              }}
-            >
-              {copied ? '✓ COPIED' : 'SHARE RESULT'}
-            </button>
+            <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
+              <button
+                onClick={shareResult}
+                style={{
+                  background: B.neonMagenta, color: B.black, border: 'none',
+                  padding: '10px 24px', fontFamily: "'Bebas Neue'", fontSize: '1.1rem', letterSpacing: '0.1em',
+                  cursor: 'pointer', borderRadius: 4,
+                }}
+              >
+                {copied ? '✓ COPIED' : 'SHARE RESULT'}
+              </button>
+              <a
+                href="#leaderboard"
+                style={{
+                  background: `${B.neonLime}20`, color: B.neonLime, border: `1px solid ${B.neonLime}60`,
+                  padding: '10px 20px', fontFamily: "'Orbitron'", fontSize: '0.75rem', letterSpacing: '0.08em',
+                  textDecoration: 'none', borderRadius: 4, display: 'inline-flex', alignItems: 'center',
+                }}
+              >
+                VIEW LEADERBOARD →
+              </a>
+            </div>
           </div>
         )}
 

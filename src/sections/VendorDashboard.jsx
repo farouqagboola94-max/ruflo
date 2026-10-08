@@ -60,16 +60,21 @@ function LoginScreen({ onLogin }) {
     setLoading(true)
     setError('')
     setTimeout(() => {
-      const vendor = DEMO_VENDORS[code.trim().toUpperCase()]
+      const c = code.trim().toUpperCase()
+      const isMaster = c === 'ADMIN' || c === 'ORGANIZER'
+      const vendor = isMaster
+        ? { code: 'ADMIN', name: 'Organizers Control Desk', isAdmin: true, booth: 'HQ-01', zone: 'Control Center', setup: '7:00 AM', category: 'Festival Organizer', tables: 4, sqm: 24 }
+        : DEMO_VENDORS[c]
+
       if (vendor) {
-        try { localStorage.setItem('sf26_vendor_session', JSON.stringify({ code: code.trim().toUpperCase(), ts: Date.now() })) } catch {}
-        onLogin({ code: code.trim().toUpperCase(), ...vendor })
+        try { localStorage.setItem('sf26_vendor_session', JSON.stringify({ code: c, ts: Date.now() })) } catch {}
+        onLogin({ code: c, ...vendor })
       } else {
-        setError('Access code not recognised. Check your confirmation email.')
+        setError('Access code not recognised. Try SF26-001 or ADMIN.')
         setLoading(false)
         inputRef.current?.select()
       }
-    }, 900)
+    }, 600)
   }
 
   return (
@@ -101,20 +106,20 @@ function LoginScreen({ onLogin }) {
         </div>
 
         <p style={{ fontFamily: 'Orbitron, sans-serif', fontSize: 11, letterSpacing: 4, color: B.amber, marginBottom: 8, textTransform: 'uppercase' }}>
-          VENDOR PORTAL
+          VENDOR & ORGANIZER PORTAL
         </p>
         <h2 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 36, letterSpacing: 2, color: B.white, marginBottom: 8 }}>
-          Access Your Dashboard
+          Access Dashboard
         </h2>
-        <p style={{ fontSize: 13, color: B.smoke, lineHeight: 1.6, marginBottom: 36 }}>
-          Enter the vendor access code from your confirmation email to view your booth details and event briefing.
+        <p style={{ fontSize: 13, color: B.smoke, lineHeight: 1.6, marginBottom: 30 }}>
+          Enter your vendor pass code to view booth setup, or login as organizer to review applications.
         </p>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <input aria-label="Vendor ID"
             ref={inputRef}
             type="text"
-            placeholder="e.g. SF26-001  or  DEMO"
+            placeholder="e.g. SF26-001 or ADMIN"
             value={code}
             onChange={e => setCode(e.target.value)}
             maxLength={12}
@@ -158,8 +163,31 @@ function LoginScreen({ onLogin }) {
           </button>
         </form>
 
+        {/* Quick test chips */}
+        <div style={{ display: 'flex', gap: 6, justifyContent: 'center', marginTop: 18, flexWrap: 'wrap', alignItems: 'center' }}>
+          <span style={{ fontSize: 9, color: B.dim, fontFamily: 'Space Mono, monospace' }}>QUICK PASS:</span>
+          {[
+            { id: 'SF26-001', label: 'Sole House' },
+            { id: 'SF26-002', label: 'Lagos Kicks' },
+            { id: 'ADMIN', label: '⚡ Organizer Desk' },
+          ].map(c => (
+            <button
+              key={c.id}
+              type="button"
+              onClick={() => setCode(c.id)}
+              style={{
+                background: 'rgba(255,255,255,0.06)', border: `1px solid ${c.id === 'ADMIN' ? B.neonLime + '60' : B.amber + '40'}`,
+                borderRadius: 4, padding: '4px 8px', color: c.id === 'ADMIN' ? B.neonLime : B.amber,
+                fontFamily: 'Space Mono, monospace', fontSize: 9, cursor: 'pointer',
+              }}
+            >
+              {c.label}
+            </button>
+          ))}
+        </div>
+
         <p style={{ marginTop: 24, fontSize: 11, color: `${B.smoke}80`, lineHeight: 1.6 }}>
-          No code? Email <span style={{ color: B.amber }}>sneakersfest088@gmail.com</span> with your business name and application reference.
+          Need assistance? Email <span style={{ color: B.amber }}>sneakersfest088@gmail.com</span> with your registered brand.
         </p>
       </div>
 
@@ -635,17 +663,225 @@ function RulesTab() {
   )
 }
 
+function AdminDeskTab() {
+  const [apps, setApps] = useState(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('sf26_vendor_applications') || 'null')
+      if (saved && Array.isArray(saved) && saved.length > 0) return saved
+    } catch {}
+    return [
+      { id: 'APP-901', business: 'Sole House Lagos', contact: 'Tunde B.', phone: '+2348012345678', category: 'Resell & Deadstock', tier: 'Standard (₦150,000)', status: 'assigned', boothNumber: 'A-01', submittedAt: '2026-10-06' },
+      { id: 'APP-902', business: 'Lagos Kicks Co.', contact: 'Chisom O.', phone: '+2348098765432', category: 'Customs & 1-of-1', tier: 'Double (₦280,000)', status: 'assigned', boothNumber: 'A-02', submittedAt: '2026-10-06' },
+      { id: 'APP-903', business: 'The Grail Vault', contact: 'Femi A.', phone: '+2348055551212', category: 'Vintage & Archive', tier: 'Premium Corner (₦420,000)', status: 'approved', boothNumber: '', submittedAt: '2026-10-07' },
+      { id: 'APP-904', business: 'Afro Kicks Studio', contact: 'Kemi S.', phone: '+2348033334444', category: 'Streetwear', tier: 'Standard (₦150,000)', status: 'invoiced', boothNumber: '', submittedAt: '2026-10-07' },
+      { id: 'APP-905', business: 'Island Heat Lab', contact: 'Emeka C.', phone: '+2348077778888', category: 'Resell & Deadstock', tier: 'Brand Activation (₦750,000+)', status: 'pending', boothNumber: '', submittedAt: '2026-10-08' },
+    ]
+  })
+
+  const [filter, setFilter] = useState('all')
+  const [search, setSearch] = useState('')
+  const [assigningId, setAssigningId] = useState(null)
+  const [boothInput, setBoothInput] = useState('')
+
+  function save(newApps) {
+    setApps(newApps)
+    try { localStorage.setItem('sf26_vendor_applications', JSON.stringify(newApps)) } catch {}
+  }
+
+  function handleStatus(id, newStatus, extra = {}) {
+    const updated = apps.map(a => a.id === id ? { ...a, status: newStatus, ...extra, updatedAt: new Date().toISOString() } : a)
+    save(updated)
+  }
+
+  function submitBoothAssignment(id) {
+    if (!boothInput.trim()) return
+    handleStatus(id, 'assigned', { boothNumber: boothInput.trim().toUpperCase() })
+    setAssigningId(null)
+    setBoothInput('')
+  }
+
+  const filtered = apps.filter(a => {
+    if (filter !== 'all' && a.status !== filter) return false
+    if (search.trim()) {
+      const q = search.toLowerCase()
+      return a.business.toLowerCase().includes(q) || a.contact.toLowerCase().includes(q) || a.id.toLowerCase().includes(q)
+    }
+    return true
+  })
+
+  const statusColor = {
+    pending: B.amber,
+    approved: B.neonCyan,
+    invoiced: '#A855F7',
+    assigned: B.neonLime,
+    rejected: '#EF4444',
+  }
+
+  return (
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
+        <div>
+          <p style={{ fontFamily: 'Orbitron, sans-serif', fontSize: 10, letterSpacing: 3, color: B.neonLime, marginBottom: 4 }}>ORGANIZER CONTROL DESK</p>
+          <p style={{ fontSize: 12, color: B.smoke }}>Vendor Applications, Status Lifecycles & Booth Allocation</p>
+        </div>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <input
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search business, contact, ID..."
+            style={{ background: 'rgba(0,0,0,0.5)', border: `1px solid ${B.gunmetal}`, borderRadius: 6, padding: '7px 12px', color: B.white, fontFamily: 'Space Mono, monospace', fontSize: 10, outline: 'none' }}
+          />
+        </div>
+      </div>
+
+      {/* Filter tabs */}
+      <div style={{ display: 'flex', gap: 6, marginBottom: 20, flexWrap: 'wrap' }}>
+        {['all', 'pending', 'approved', 'invoiced', 'assigned'].map(st => (
+          <button
+            key={st}
+            onClick={() => setFilter(st)}
+            style={{
+              padding: '6px 12px', borderRadius: 6,
+              background: filter === st ? 'rgba(255,255,255,0.1)' : 'transparent',
+              border: `1px solid ${filter === st ? B.white : B.gunmetal}`,
+              color: filter === st ? B.white : B.smoke,
+              fontFamily: 'Space Mono, monospace', fontSize: 9, cursor: 'pointer', textTransform: 'uppercase',
+            }}
+          >
+            {st} ({apps.filter(a => st === 'all' || a.status === st).length})
+          </button>
+        ))}
+      </div>
+
+      {/* Application Cards List */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        {filtered.map(app => {
+          const col = statusColor[app.status] || B.smoke
+          const waMessage = encodeURIComponent(`Hi ${app.contact}, this is the Sneakers Fest '26 Team! Regarding your vendor application (${app.id} - ${app.business}): your status is currently ${app.status.toUpperCase()}${app.boothNumber ? ` at Booth ${app.boothNumber}` : ''}. Let's finalize your onboarding!`)
+          return (
+            <div
+              key={app.id}
+              style={{
+                background: B.void, border: `1px solid ${col}35`, borderRadius: 12, padding: '16px 20px',
+                position: 'relative', overflow: 'hidden',
+              }}
+            >
+              <div style={{ position: 'absolute', top: 0, left: 16, right: 16, height: 1, background: `linear-gradient(90deg, transparent, ${col}60, transparent)` }} />
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 10, marginBottom: 10 }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 20, color: B.white, letterSpacing: 1 }}>{app.business}</span>
+                    <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 8, color: col, border: `1px solid ${col}50`, borderRadius: 4, padding: '2px 6px' }}>{app.status.toUpperCase()}</span>
+                    {app.boothNumber && (
+                      <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 8, color: B.neonLime, background: `${B.neonLime}15`, borderRadius: 4, padding: '2px 6px' }}>BOOTH {app.boothNumber}</span>
+                    )}
+                  </div>
+                  <p style={{ fontFamily: 'Space Mono, monospace', fontSize: 10, color: B.smoke, marginTop: 4 }}>
+                    Contact: {app.contact} · {app.phone} · Applied: {app.submittedAt}
+                  </p>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.amber }}>{app.tier}</span>
+                </div>
+              </div>
+
+              {/* Status Action Workflow Bar */}
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', marginTop: 12, paddingTop: 12, borderTop: `1px solid ${B.gunmetal}` }}>
+                {app.status === 'pending' && (
+                  <button
+                    onClick={() => handleStatus(app.id, 'approved')}
+                    style={{ background: `${B.neonCyan}20`, border: `1px solid ${B.neonCyan}`, color: B.neonCyan, borderRadius: 6, padding: '6px 14px', fontFamily: 'Space Mono, monospace', fontSize: 9, cursor: 'pointer', fontWeight: 700 }}
+                  >
+                    ✓ APPROVE APPLICATION
+                  </button>
+                )}
+
+                {(app.status === 'approved' || app.status === 'pending') && (
+                  <button
+                    onClick={() => handleStatus(app.id, 'invoiced', { invoiceUrl: `https://paystack.com/pay/sf26-${app.id.toLowerCase()}` })}
+                    style={{ background: '#A855F720', border: '1px solid #A855F7', color: '#A855F7', borderRadius: 6, padding: '6px 14px', fontFamily: 'Space Mono, monospace', fontSize: 9, cursor: 'pointer', fontWeight: 700 }}
+                  >
+                    📄 ISSUE INVOICE
+                  </button>
+                )}
+
+                {assigningId === app.id ? (
+                  <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                    <input
+                      value={boothInput}
+                      onChange={e => setBoothInput(e.target.value)}
+                      placeholder="e.g. A-03"
+                      style={{ width: 80, background: '#111', border: `1px solid ${B.neonLime}`, borderRadius: 4, padding: '5px 8px', color: B.white, fontFamily: 'Space Mono, monospace', fontSize: 10 }}
+                    />
+                    <button
+                      onClick={() => submitBoothAssignment(app.id)}
+                      style={{ background: B.neonLime, border: 'none', color: B.black, borderRadius: 4, padding: '6px 12px', fontFamily: 'Space Mono, monospace', fontSize: 9, cursor: 'pointer', fontWeight: 700 }}
+                    >
+                      SAVE
+                    </button>
+                    <button
+                      onClick={() => setAssigningId(null)}
+                      style={{ background: 'transparent', border: '1px solid #333', color: B.smoke, borderRadius: 4, padding: '6px 8px', fontSize: 9, cursor: 'pointer' }}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => { setAssigningId(app.id); setBoothInput(app.boothNumber || '') }}
+                    style={{ background: `${B.neonLime}20`, border: `1px solid ${B.neonLime}`, color: B.neonLime, borderRadius: 6, padding: '6px 14px', fontFamily: 'Space Mono, monospace', fontSize: 9, cursor: 'pointer', fontWeight: 700 }}
+                  >
+                    📍 {app.boothNumber ? 'REASSIGN BOOTH' : 'ASSIGN BOOTH'}
+                  </button>
+                )}
+
+                <a
+                  href={`https://wa.me/${app.phone.replace(/[^0-9]/g, '')}?text=${waMessage}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ background: 'rgba(37,211,102,0.12)', border: '1px solid #25D366', color: '#25D366', borderRadius: 6, padding: '6px 14px', fontFamily: 'Space Mono, monospace', fontSize: 9, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4 }}
+                >
+                  💬 WHATSAPP VENDOR →
+                </a>
+
+                {app.status !== 'rejected' && (
+                  <button
+                    onClick={() => handleStatus(app.id, 'rejected')}
+                    style={{ background: 'transparent', border: '1px solid #555', color: '#888', borderRadius: 6, padding: '6px 12px', fontFamily: 'Space Mono, monospace', fontSize: 9, cursor: 'pointer', marginLeft: 'auto' }}
+                  >
+                    REJECT
+                  </button>
+                )}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 export default function VendorDashboard() {
-  const TABS = ['Booth', 'Schedule', 'Products', 'Checklist', 'Rules', 'Profile']
   const [vendor, setVendor] = useState(null)
   const [tab, setTab] = useState('Booth')
+
+  const TABS = vendor?.isAdmin
+    ? ['Admin Desk', 'Booth', 'Schedule', 'Products', 'Checklist', 'Rules', 'Profile']
+    : ['Booth', 'Schedule', 'Products', 'Checklist', 'Rules', 'Profile', 'Admin Desk']
 
   useEffect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem('sf26_vendor_session') || 'null')
       if (saved && Date.now() - saved.ts < 24 * 60 * 60 * 1000) {
-        const profile = DEMO_VENDORS[saved.code]
-        if (profile) setVendor({ code: saved.code, ...profile })
+        const isMaster = saved.code === 'ADMIN' || saved.code === 'ORGANIZER'
+        const profile = isMaster
+          ? { code: 'ADMIN', name: 'Organizers Control Desk', isAdmin: true, booth: 'HQ-01', zone: 'Control Center', setup: '7:00 AM', category: 'Festival Organizer', tables: 4, sqm: 24 }
+          : DEMO_VENDORS[saved.code]
+        if (profile) {
+          setVendor({ code: saved.code, ...profile })
+          if (profile.isAdmin) setTab('Admin Desk')
+        }
       }
     } catch {}
   }, [])
@@ -689,7 +925,7 @@ export default function VendorDashboard() {
         </div>
 
         {!vendor ? (
-          <LoginScreen onLogin={setVendor} />
+          <LoginScreen onLogin={v => { setVendor(v); if (v.isAdmin) setTab('Admin Desk') }} />
         ) : (
           <div>
             {/* Header bar */}
@@ -751,12 +987,13 @@ export default function VendorDashboard() {
               background: B.charcoal, border: `1px solid ${B.gunmetal}`,
               borderRadius: 16, padding: 28,
             }}>
-              {tab === 'Booth'     && <BoothCard vendor={vendor} />}
-              {tab === 'Schedule'  && <ScheduleTab />}
-              {tab === 'Products'  && <ProductsTab vendor={vendor} />}
-              {tab === 'Checklist' && <ChecklistTab />}
-              {tab === 'Rules'     && <RulesTab />}
-              {tab === 'Profile'   && <ProfileTab vendor={vendor} />}
+              {tab === 'Admin Desk' && <AdminDeskTab />}
+              {tab === 'Booth'      && <BoothCard vendor={vendor} />}
+              {tab === 'Schedule'   && <ScheduleTab />}
+              {tab === 'Products'   && <ProductsTab vendor={vendor} />}
+              {tab === 'Checklist'  && <ChecklistTab />}
+              {tab === 'Rules'      && <RulesTab />}
+              {tab === 'Profile'    && <ProfileTab vendor={vendor} />}
             </div>
 
             <p style={{ textAlign: 'center', marginTop: 20, fontSize: 11, color: `${B.smoke}50` }}>

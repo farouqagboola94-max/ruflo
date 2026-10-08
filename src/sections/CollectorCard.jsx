@@ -33,13 +33,179 @@ const RANK_CONFIG = {
 
 const ACCENT = [B.amber, B.neonCyan, '#A855F7', B.neonLime, '#f97316']
 
+function generateHeuristicCard(shoes, handle) {
+  const kicks = shoes.join(' ').toLowerCase()
+  let title = 'The Mainland Sole Crusader'
+  let rank = 'ELITE'
+  let rep = 88
+  let specialty = 'Lagos Street Rotation'
+  let move = 'Calculated box-fresh heat with street presence'
+  let flex = shoes[0]
+  let weak = shoes[shoes.length - 1]
+  let atFest = 'Seen at the front of the Trade Board inspecting grails before the DJ drop'
+  let line = `Pulling up to Sneakers Fest '26 in my ${shoes[0]}. Check the rotation.`
+
+  if (kicks.includes('jordan') || kicks.includes('retro')) {
+    title = 'The Jumpman Disciple of VI'
+    rank = 'LEGENDARY'
+    rep = 95
+    specialty = 'Tinker Hatfield & Air Jordan Archives'
+    move = 'Doubling up on deadstock releases and never creasing the toe box'
+    atFest = 'Stalking Grail Alley for 1985 originals and Jordan 4 White Cements'
+    line = `Jordan rotation certified for Lagos streets. Sneakers Fest '26 ready.`
+  } else if (kicks.includes('yeezy') || kicks.includes('foam')) {
+    title = 'The Futuristic Heat Architect'
+    rank = 'ELITE'
+    rep = 89
+    specialty = 'Organic silhouettes & earth-tone aesthetics'
+    move = 'Pairing oversized cargo pants with sculptural foam silhouettes'
+    atFest = 'Chilling in the VIP Lounge discussing silhouette evolution'
+  } else if (kicks.includes('dunk') || kicks.includes('sb')) {
+    title = 'The Skate & Swoosh Specialist'
+    rank = 'CERTIFIED'
+    rep = 84
+    specialty = 'SB Dunks & high-energy color blocking'
+    move = 'Swapping neon laces and wearing every pair to death'
+    atFest = 'Bouncing between the main stage and photo alley'
+  } else if (kicks.includes('new balance') || kicks.includes('asics') || kicks.includes('salomon')) {
+    title = 'The Technical Archival Don'
+    rank = 'LEGENDARY'
+    rep = 96
+    specialty = 'Gorpcore engineering, mesh layering, and premium suede'
+    move = 'Walking 20,000 steps without a single complaint while looking impeccable'
+    atFest = 'Consulting at the Authenticity Lab and scoping rare collaborations'
+    line = `Comfort meets high culture. Catch me Dec 12 in full technical gear.`
+  } else if (kicks.includes('travis') || kicks.includes('off-white') || kicks.includes('corteiz')) {
+    title = 'The Island Grail Kingpin'
+    rank = 'LEGENDARY'
+    rep = 98
+    specialty = 'High-stakes grails and hype collabs'
+    move = 'Entering every raffle, winning the un-winnable, and letting everyone know'
+    atFest = 'Entering with the entourage under the headline drop spotlight'
+    line = `Nothing under six figures on foot. See you at Sneakers Fest '26.`
+  }
+
+  return {
+    collector_title: title,
+    rank,
+    rep_score: rep,
+    tagline: `Built on authentic Lagos street grit and certified sneaker heat.`,
+    specialty,
+    longest_flex: `${flex} — unmistakable presence on any Lagos tarmac.`,
+    weakest_link: `${weak} — needs a sole scrub before Dec 12.`,
+    signature_move: move,
+    sf26_predicted_behavior: atFest,
+    share_line: line,
+  }
+}
+
+async function exportCardToCanvas(result, handle, shoes, format = 'story') {
+  const W = format === 'story' ? 1080 : 1200
+  const H = format === 'story' ? 1920 : 675
+  const canvas = document.createElement('canvas')
+  canvas.width = W; canvas.height = H
+  const ctx = canvas.getContext('2d')
+  const rc = RANK_CONFIG[result.rank] || RANK_CONFIG.ELITE
+
+  // Deep dark background
+  ctx.fillStyle = '#06060A'
+  ctx.fillRect(0, 0, W, H)
+
+  // Glow gradients
+  const g1 = ctx.createRadialGradient(W / 2, 200, 50, W / 2, 200, 600)
+  g1.addColorStop(0, rc.color + '33')
+  g1.addColorStop(1, 'transparent')
+  ctx.fillStyle = g1
+  ctx.fillRect(0, 0, W, H)
+
+  // Border frame
+  ctx.strokeStyle = rc.color + '60'
+  ctx.lineWidth = 4
+  ctx.strokeRect(30, 30, W - 60, H - 60)
+
+  // Header
+  ctx.fillStyle = rc.color
+  ctx.font = '700 24px monospace'
+  ctx.textAlign = 'center'
+  ctx.fillText("SNEAKERS FEST '26 · OFFICIAL COLLECTOR REGISTRY", W / 2, format === 'story' ? 140 : 80)
+
+  // Handle
+  if (handle) {
+    ctx.fillStyle = '#FFFFFF'
+    ctx.font = '700 32px sans-serif'
+    ctx.fillText(handle.startsWith('@') ? handle : `@${handle}`, W / 2, format === 'story' ? 220 : 130)
+  }
+
+  // Title
+  ctx.fillStyle = rc.color
+  ctx.font = '900 68px sans-serif'
+  ctx.fillText(result.collector_title, W / 2, format === 'story' ? 360 : 220)
+
+  // Rep Score
+  ctx.fillStyle = '#FFFFFF'
+  ctx.font = '900 130px sans-serif'
+  ctx.fillText(String(result.rep_score), W / 2, format === 'story' ? 560 : 340)
+
+  ctx.fillStyle = rc.color
+  ctx.font = '700 32px monospace'
+  ctx.fillText(`${result.rank} TIER · LAGOS REP`, W / 2, format === 'story' ? 640 : 400)
+
+  if (format === 'story') {
+    // Rotation section
+    ctx.fillStyle = '#777788'
+    ctx.font = '700 24px monospace'
+    ctx.fillText('ROTATION CONFIRMED FOR DEC 12', W / 2, 800)
+
+    let y = 880
+    shoes.filter(Boolean).forEach((s, i) => {
+      ctx.fillStyle = '#FFFFFF'
+      ctx.font = '700 34px sans-serif'
+      ctx.fillText(`${i + 1}.  ${s}`, W / 2, y)
+      y += 65
+    })
+
+    // Share line quote box
+    ctx.fillStyle = 'rgba(255,255,255,0.04)'
+    ctx.strokeStyle = rc.color + '40'
+    ctx.lineWidth = 2
+    ctx.beginPath(); ctx.roundRect(100, y + 60, W - 200, 200, 16); ctx.fill(); ctx.stroke()
+
+    ctx.fillStyle = '#CCCCCC'
+    ctx.font = 'italic 600 28px sans-serif'
+    ctx.fillText(`"${result.share_line}"`, W / 2, y + 170)
+
+    // Footer
+    ctx.fillStyle = '#555566'
+    ctx.font = '700 22px monospace'
+    ctx.fillText("DECEMBER 12, 2026 · VICTORIA ISLAND, LAGOS", W / 2, H - 120)
+    ctx.fillStyle = rc.color
+    ctx.fillText("@s_fest26 · @catalystggg · SNEAKERSFEST.COM", W / 2, H - 70)
+  }
+
+  return new Promise(resolve => {
+    canvas.toBlob(blob => {
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `SF26-COLLECTOR-${result.rank}-${Date.now().toString(36).toUpperCase()}.png`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+      resolve()
+    }, 'image/png')
+  })
+}
+
 export default function CollectorCard() {
   const aiReady = useAiAvailable()
+  const [handle, setHandle] = useState('')
   const [shoes, setShoes] = useState(['', '', ''])
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState(null)
   const [error, setError] = useState('')
   const [copied, setCopied] = useState(false)
+  const [downloading, setDownloading] = useState(false)
 
   function updateShoe(i, val) {
     const next = [...shoes]
@@ -61,23 +227,29 @@ export default function CollectorCard() {
   async function generate() {
     const filled = shoes.filter(s => s.trim())
     if (filled.length < 3) return
-    if (!aiReady) {
-      setError('Collector Card is not live yet. It will be ready before December 12.')
-      return
-    }
     setLoading(true)
     setResult(null)
     setError('')
     setCopied(false)
+
     try {
-      const list = filled.map((s, i) => `${i + 1}. ${s}`).join('\n')
-      const prompt = `My rotation:\n${list}\n\nIssue my collector card.`
-      const raw = await claudeChat([{ role: 'user', content: prompt }], { feature: 'CollectorCard', model: 'smart', system: SYSTEM, maxTokens: 700 })
-      const match = raw.match(/\{[\s\S]*\}/)
-      if (match) setResult(JSON.parse(match[0]))
-      else setError('Could not parse card. Try again.')
-    } catch (e) {
-      setError(e.message || 'Something went wrong.')
+      if (aiReady) {
+        const list = filled.map((s, i) => `${i + 1}. ${s}`).join('\n')
+        const prompt = `My rotation:\n${list}\n\nIssue my collector card.`
+        const raw = await claudeChat([{ role: 'user', content: prompt }], { feature: 'CollectorCard', model: 'smart', system: SYSTEM, maxTokens: 700 })
+        const match = raw.match(/\{[\s\S]*\}/)
+        if (match) {
+          setResult(JSON.parse(match[0]))
+          setLoading(false)
+          return
+        }
+      }
+      // Instant authentic heuristic fallback
+      const fallback = generateHeuristicCard(filled, handle)
+      setResult(fallback)
+    } catch {
+      const fallback = generateHeuristicCard(filled, handle)
+      setResult(fallback)
     } finally {
       setLoading(false)
     }
@@ -85,10 +257,24 @@ export default function CollectorCard() {
 
   function copy() {
     if (!result?.share_line) return
-    navigator.clipboard.writeText(result.share_line).then(() => {
+    const text = `${result.share_line}\n\nCollector Rank: ${result.rank} (${result.rep_score}/100)\nPulling up to @s_fest26 on Dec 12 in Lagos! #SneakersFest26`
+    navigator.clipboard.writeText(text).then(() => {
       setCopied(true)
       setTimeout(() => setCopied(false), 2200)
     })
+  }
+
+  function shareToTwitter() {
+    const tag = handle ? (handle.startsWith('@') ? handle : `@${handle}`) : ''
+    const text = `${result.share_line}\n\n${tag ? tag + ' · ' : ''}Rank: ${result.rank} (${result.rep_score} REP)\nDec 12 · Muri Okunola Park, Lagos\n@s_fest26 @catalystggg #SneakersFest26`
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank')
+  }
+
+  async function handleDownload(format) {
+    if (!result) return
+    setDownloading(true)
+    await exportCardToCanvas(result, handle, shoes, format)
+    setDownloading(false)
   }
 
   const filled = shoes.filter(s => s.trim())
@@ -102,26 +288,35 @@ export default function CollectorCard() {
 
       <div style={{ maxWidth: 700, margin: '0 auto' }}>
         <SectionTag>COLLECTOR REGISTRY</SectionTag>
-        {!aiReady && <AIComingSoon feature="Collector Card" />}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
           <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2rem,5vw,3.5rem)', color: B.white, letterSpacing: '0.05em', margin: 0 }}>
             COLLECTOR CARD
           </h2>
           <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.15em' }}>LAGOS SNEAKER REGISTRY</div>
         </div>
-        <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.72rem', marginBottom: 36, letterSpacing: '0.04em' }}>
-          Enter 3–5 shoes from your rotation · Claude issues your official collector profile · Screenshot it
+        <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.72rem', marginBottom: 28, letterSpacing: '0.04em' }}>
+          Enter your kicks rotation · Issue your official Sneakers Fest '26 collector card · Download high-res PNG for Instagram Story & X
         </p>
 
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>YOUR SOCIAL HANDLE (FOR PASS EXPORT)</div>
+          <input
+            value={handle}
+            onChange={e => setHandle(e.target.value)}
+            placeholder="@yourhandle (e.g. @lagos_sole_king)"
+            style={{ width: '100%', boxSizing: 'border-box', background: '#0d0d0d', border: `1px solid ${handle.trim() ? B.amber + '60' : '#1e1e1e'}`, color: B.white, padding: '11px 14px', fontFamily: "'Space Mono'", fontSize: 10, outline: 'none' }}
+          />
+        </div>
+
         <div style={{ marginBottom: 20 }}>
-          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 12 }}>YOUR ROTATION (3–5)</div>
+          <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 12 }}>YOUR ROTATION (3–5 KICKS)</div>
           {shoes.map((s, i) => (
             <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 8, alignItems: 'center' }}>
               <div style={{ fontFamily: "'Orbitron'", fontSize: 11, color: ACCENT[i % ACCENT.length], fontWeight: 900, width: 20, flexShrink: 0 }}>0{i + 1}</div>
               <input aria-label={`Shoe ${i + 1}`}
                 value={s}
                 onChange={e => updateShoe(i, e.target.value)}
-                placeholder={`Shoe ${i + 1}`}
+                placeholder={`Shoe ${i + 1} (e.g. Jordan 4 Military Black, NB 1906R, Samba OG)`}
                 style={{ flex: 1, background: '#0d0d0d', border: `1px solid ${s.trim() ? ACCENT[i % ACCENT.length] + '44' : '#1a1a1a'}`, color: B.white, padding: '11px 14px', fontFamily: "'Space Mono'", fontSize: 10, outline: 'none', transition: 'border-color 0.15s' }}
               />
               {shoes.length > 3 && (
@@ -144,8 +339,10 @@ export default function CollectorCard() {
 
         {result && rc && (
           <div style={{ animation: 'ccSlide 0.4s ease' }}>
-            <div style={{ background: rc.bg, border: `2px solid ${rc.color}44`, padding: '28px 28px', marginBottom: 16, textAlign: 'center' }}>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.25em', marginBottom: 10 }}>OFFICIAL COLLECTOR CARD</div>
+            <div style={{ background: rc.bg, border: `2px solid ${rc.color}44`, padding: '28px 28px', marginBottom: 16, textAlign: 'center', borderRadius: 8 }}>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.25em', marginBottom: 10 }}>
+                {handle ? `COLLECTOR PASS · ${handle.toUpperCase()}` : 'OFFICIAL COLLECTOR CARD'}
+              </div>
               <div style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(1.4rem,3.5vw,2.4rem)', color: rc.color, letterSpacing: '0.05em', marginBottom: 8 }}>{result.collector_title}</div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, marginBottom: 14 }}>
                 <div style={{ fontFamily: "'Orbitron'", fontSize: 48, fontWeight: 900, color: rc.color, lineHeight: 1 }}>{result.rep_score}</div>
@@ -158,42 +355,56 @@ export default function CollectorCard() {
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
-              <div style={{ background: '#0a0a0a', border: `1px solid ${B.amber}20`, padding: '12px 14px' }}>
+              <div style={{ background: '#0a0a0a', border: `1px solid ${B.amber}20`, padding: '12px 14px', borderRadius: 6 }}>
                 <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.amber, letterSpacing: '0.15em', marginBottom: 5 }}>SPECIALTY</div>
                 <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.smoke, lineHeight: 1.6 }}>{result.specialty}</div>
               </div>
-              <div style={{ background: '#0a0a0a', border: `1px solid ${B.neonCyan}20`, padding: '12px 14px' }}>
+              <div style={{ background: '#0a0a0a', border: `1px solid ${B.neonCyan}20`, padding: '12px 14px', borderRadius: 6 }}>
                 <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.neonCyan, letterSpacing: '0.15em', marginBottom: 5 }}>SIGNATURE MOVE</div>
                 <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.smoke, lineHeight: 1.6 }}>{result.signature_move}</div>
               </div>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
-              <div style={{ background: '#0a0a0a', border: `1px solid ${B.neonLime}20`, padding: '12px 14px' }}>
+              <div style={{ background: '#0a0a0a', border: `1px solid ${B.neonLime}20`, padding: '12px 14px', borderRadius: 6 }}>
                 <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.neonLime, letterSpacing: '0.15em', marginBottom: 5 }}>LONGEST FLEX</div>
                 <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.smoke, lineHeight: 1.6 }}>{result.longest_flex}</div>
               </div>
-              <div style={{ background: '#1a0000', border: '1px solid #ef444418', padding: '12px 14px' }}>
+              <div style={{ background: '#1a0000', border: '1px solid #ef444418', padding: '12px 14px', borderRadius: 6 }}>
                 <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#ef4444', letterSpacing: '0.15em', marginBottom: 5 }}>WEAKEST LINK</div>
                 <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#ff8888', lineHeight: 1.6 }}>{result.weakest_link}</div>
               </div>
             </div>
 
-            <div style={{ background: '#0a0a0a', border: `1px solid ${'#A855F7'}20`, padding: '12px 16px', marginBottom: 12 }}>
+            <div style={{ background: '#0a0a0a', border: `1px solid ${'#A855F7'}20`, padding: '12px 16px', marginBottom: 14, borderRadius: 6 }}>
               <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: '#A855F7', letterSpacing: '0.15em', marginBottom: 5 }}>AT SF26</div>
               <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.smoke, lineHeight: 1.6 }}>{result.sf26_predicted_behavior}</div>
             </div>
 
-            <div style={{ background: '#0a0a0a', border: `2px solid ${rc.color}33`, padding: '16px 20px', marginBottom: 14 }}>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>YOUR IDENTITY</div>
-              <div style={{ fontFamily: "'Bebas Neue'", fontSize: 18, color: B.white, letterSpacing: '0.04em', marginBottom: 14, lineHeight: 1.4 }}>{result.share_line}</div>
-              <button onClick={copy} style={{ background: copied ? '#052e16' : rc.color, border: 'none', color: copied ? '#22c55e' : B.black, fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.15em', fontWeight: 700, padding: '9px 20px', cursor: 'pointer', transition: 'all 0.2s' }}>
-                {copied ? '✓ COPIED' : 'COPY → POST IT'}
+            {/* Social Sharing & PNG Generation Section */}
+            <div style={{ background: '#0a0a0a', border: `2px solid ${rc.color}33`, padding: '18px 20px', marginBottom: 14, borderRadius: 8 }}>
+              <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.2em', marginBottom: 8 }}>YOUR IDENTITY QUOTE</div>
+              <div style={{ fontFamily: "'Bebas Neue'", fontSize: 18, color: B.white, letterSpacing: '0.04em', marginBottom: 16, lineHeight: 1.4 }}>"{result.share_line}"</div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10, marginBottom: 12 }}>
+                <button onClick={() => handleDownload('story')} disabled={downloading} style={{ background: rc.color, border: 'none', color: B.black, fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.1em', fontWeight: 700, padding: '12px 14px', cursor: 'pointer', borderRadius: 6 }}>
+                  {downloading ? 'GENERATING...' : '📸 DOWNLOAD STORY (9:16 PNG)'}
+                </button>
+                <button onClick={() => handleDownload('post')} disabled={downloading} style={{ background: 'transparent', border: `1px solid ${rc.color}`, color: rc.color, fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.1em', fontWeight: 700, padding: '12px 14px', cursor: 'pointer', borderRadius: 6 }}>
+                  {downloading ? 'GENERATING...' : '🖼️ DOWNLOAD X CARD (16:9 PNG)'}
+                </button>
+                <button onClick={shareToTwitter} style={{ background: '#1D9BF0', border: 'none', color: '#fff', fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.1em', fontWeight: 700, padding: '12px 14px', cursor: 'pointer', borderRadius: 6 }}>
+                  🐦 SHARE TO X (@s_fest26)
+                </button>
+              </div>
+
+              <button onClick={copy} style={{ width: '100%', background: copied ? '#052e16' : 'rgba(255,255,255,0.05)', border: `1px solid ${copied ? '#22c55e' : 'rgba(255,255,255,0.1)'}`, color: copied ? '#22c55e' : B.smoke, fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.15em', fontWeight: 700, padding: '10px', cursor: 'pointer', borderRadius: 6, transition: 'all 0.2s' }}>
+                {copied ? '✓ COPIED QUOTE & TAGS TO CLIPBOARD' : 'COPY SHARE TEXT'}
               </button>
             </div>
 
-            <button onClick={() => { setResult(null); setShoes(['', '', '']) }} style={{ width: '100%', background: 'transparent', border: '1px solid #1a1a1a', color: B.dim, fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.15em', padding: '10px', cursor: 'pointer' }}>
-              RESET — TRY DIFFERENT SHOES
+            <button onClick={() => { setResult(null); setShoes(['', '', '']); setHandle('') }} style={{ width: '100%', background: 'transparent', border: '1px solid #1a1a1a', color: B.dim, fontFamily: "'Space Mono'", fontSize: 9, letterSpacing: '0.15em', padding: '10px', cursor: 'pointer', borderRadius: 6 }}>
+              RESET — TRY DIFFERENT ROTATION
             </button>
           </div>
         )}

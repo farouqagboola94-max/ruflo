@@ -48,18 +48,29 @@ export const handler = async (event) => {
   let body
   try { body = JSON.parse(event.body || '{}') } catch { return err(400, 'Invalid JSON') }
 
-  const { applicationId, action, notes } = body
+  const { applicationId, action, notes, boothNumber, invoiceUrl } = body
   if (!applicationId) return err(400, 'applicationId is required')
-  if (action !== 'approve' && action !== 'reject') return err(400, "action must be 'approve' or 'reject'")
+  const validActions = ['approve', 'reject', 'invoice', 'assign_booth']
+  if (!validActions.includes(action)) {
+    return err(400, `action must be one of: ${validActions.join(', ')}`)
+  }
 
   const vendor = await get(Vendors, applicationId)
   if (!vendor) return err(404, `No vendor application found for ID: ${applicationId}`)
 
+  let nextStatus = vendor.status || 'pending'
+  if (action === 'approve') nextStatus = 'approved'
+  else if (action === 'reject') nextStatus = 'rejected'
+  else if (action === 'invoice') nextStatus = 'invoiced'
+  else if (action === 'assign_booth') nextStatus = 'assigned'
+
   const updatedAt = new Date().toISOString()
   const updated = {
     ...vendor,
-    status:    action === 'approve' ? 'approved' : 'rejected',
-    notes:     (notes || '').trim(),
+    status:      nextStatus,
+    boothNumber: boothNumber || vendor.boothNumber || undefined,
+    invoiceUrl:  invoiceUrl || vendor.invoiceUrl || undefined,
+    notes:       notes !== undefined ? (notes || '').trim() : vendor.notes,
     updatedAt,
   }
 

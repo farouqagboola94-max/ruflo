@@ -209,9 +209,16 @@ export default function Leaderboard() {
   const [copied,         setCopied]         = useState(false)
   const [liveBoard,      setLiveBoard]      = useState([])
   const [liveBoardReady, setLiveBoardReady] = useState(false)
+  const [passport,       setPassport]       = useState(getPassport)
   const tickRef = useRef(null)
 
   useEffect(() => { setData(readAll()) }, [])
+
+  useEffect(() => {
+    const handleXP = () => setPassport(getPassport())
+    window.addEventListener('sf26:xp', handleXP)
+    return () => window.removeEventListener('sf26:xp', handleXP)
+  }, [])
 
   useEffect(() => {
     fetch('/.netlify/functions/leaderboard?limit=10')
@@ -248,6 +255,24 @@ export default function Leaderboard() {
 
   const tabColor = { collectors:'#C084FC', cities:B.amber, gallery:B.neonCyan, traders:B.neonMagenta, museum:B.neonLime }
 
+  const userXP = passport?.xp || 0
+  const userTier = getTier(userXP)
+  const userLvl = getLevel(userXP)
+
+  const combinedSeeds = [...COLLECTOR_SEEDS]
+  if (userXP > 0) {
+    combinedSeeds.push({
+      id: 'self',
+      name: 'YOU (Attendee Pass)',
+      city: 'Lagos',
+      pts: userXP,
+      delta: 1,
+      badges: `🌟 LEVEL ${userLvl.level} · ${userTier.name.toUpperCase()}`,
+      isSelf: true,
+    })
+    combinedSeeds.sort((a, b) => b.pts - a.pts)
+  }
+
   const collectorRows = liveBoardReady
     ? liveBoard.map((c, i) => ({
         rank:i+1, label:c.name, sub:`${c.tierIcon || ''} ${c.tier} · #${c.position}`,
@@ -255,10 +280,10 @@ export default function Leaderboard() {
         color:'#C084FC', metricRaw:c.referralCount, delta:null,
         grandPrize: i < GRAND_PRIZE_RANK,
       }))
-    : COLLECTOR_SEEDS.map((c, i) => ({
+    : combinedSeeds.map((c, i) => ({
         rank:i+1, label:c.name, sub:c.city + (c.badges ? ' · ' + c.badges : ''),
         metric:`${c.pts.toLocaleString()} PTS`, metricSub:'points',
-        color:'#C084FC', metricRaw:c.pts, delta:c.delta,
+        color: c.isSelf ? B.neonLime : '#C084FC', metricRaw:c.pts, delta:c.delta,
         grandPrize: i < GRAND_PRIZE_RANK,
       }))
 
@@ -303,7 +328,7 @@ export default function Leaderboard() {
 
   const collectorsSum = liveBoardReady
     ? liveBoard.reduce((s, c) => s + c.referralCount, 0).toLocaleString() + ' refs'
-    : COLLECTOR_SEEDS.reduce((s, c) => s + c.pts, 0).toLocaleString()
+    : combinedSeeds.reduce((s, c) => s + c.pts, 0).toLocaleString()
   const summaryVal = { collectors:collectorsSum, cities:totalRSVPs.toLocaleString(), gallery:totalHeat || '—', traders:totalWants || '—', museum:totalBids ? fmt(totalBids) : '—' }
   const summaryLbl = { collectors: liveBoardReady ? 'total referrals' : 'total pts banked', cities:'total RSVPs', gallery:'total heat', traders:'total wants', museum:'total bid value' }
   const emptyMsg   = { collectors:'Collectors rank here as community activity accumulates.', gallery:'Community photos will rank here once uploaded.', traders:'Trade listings will rank here once posted.', museum:'Museum bids will rank here once placed.', cities:'' }
@@ -329,6 +354,44 @@ export default function Leaderboard() {
           <div className="card-3d" style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'7px 18px', background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:24, marginTop:8 }}>
             <div style={{ width:5, height:5, borderRadius:'50%', background:B.neonLime, boxShadow:`0 0 6px ${B.neonLime}`, animation:'pulse 1.5s infinite' }} />
             <span key={ticker} style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#888', animation:'fadeUp 0.4s ease' }}>{TICKER_MSGS[ticker]}</span>
+          </div>
+        </div>
+
+        {/* Attendee Live Passport Rank Card */}
+        <div className="card-3d" style={{
+          background: 'rgba(255,255,255,0.03)', border: `1px solid ${userTier.color}40`,
+          borderRadius: 14, padding: '18px 24px', marginBottom: 20, position: 'relative', overflow: 'hidden',
+        }}>
+          <div style={{ position: 'absolute', top: 0, left: 20, right: 20, height: 1, background: `linear-gradient(90deg, transparent, ${userTier.color}80, transparent)` }} />
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 14 }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 9, color: userTier.color, letterSpacing: 2 }}>YOUR COLLECTOR PASSPORT:</span>
+                <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 10, color: B.white, fontWeight: 700 }}>LEVEL {userLvl.level} · {userTier.name.toUpperCase()}</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 6 }}>
+                <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 24, fontWeight: 900, color: userTier.color }}>{userXP.toLocaleString()} XP</span>
+                <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.smoke }}>({userLvl.xpToNext} XP to Level {userLvl.level + 1})</span>
+              </div>
+            </div>
+
+            {/* Quick Play Links */}
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              <a href="#soledle" style={{ background: `${B.neonMagenta}20`, border: `1px solid ${B.neonMagenta}60`, color: B.neonMagenta, borderRadius: 6, padding: '6px 12px', fontFamily: 'Orbitron, monospace', fontSize: 8, letterSpacing: 1, textDecoration: 'none' }}>
+                🎮 SOLEDLE (+120 XP)
+              </a>
+              <a href="#spinwheel" style={{ background: `${B.amber}20`, border: `1px solid ${B.amber}60`, color: B.amber, borderRadius: 6, padding: '6px 12px', fontFamily: 'Orbitron, monospace', fontSize: 8, letterSpacing: 1, textDecoration: 'none' }}>
+                🎡 SPIN (+150 XP)
+              </a>
+              <button onClick={() => setPassport(getPassport())} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', color: B.smoke, borderRadius: 6, padding: '6px 10px', fontFamily: 'Space Mono, monospace', fontSize: 8, cursor: 'pointer' }}>
+                ⚡ SYNC XP
+              </button>
+            </div>
+          </div>
+
+          {/* Progress bar */}
+          <div style={{ height: 4, background: 'rgba(255,255,255,0.08)', borderRadius: 2, marginTop: 14, overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${userLvl.pct}%`, background: `linear-gradient(90deg, ${userTier.color}, #FFFFFF)`, transition: 'width 0.4s ease' }} />
           </div>
         </div>
 
