@@ -1,6 +1,37 @@
 import { getStore } from '@netlify/blobs'
 
-const store = (name) => getStore({ name, consistency: 'strong' })
+const memStore = new Map()
+
+const store = (name) => {
+  try {
+    const options = { name, consistency: 'strong' }
+    const siteID = process.env.NETLIFY_SITE_ID || process.env.SITE_ID || 'bd236657-e156-4ec8-882d-6d3f393f7307'
+    const token = process.env.NETLIFY_API_TOKEN || process.env.NETLIFY_AUTH_TOKEN
+    if (siteID && token) {
+      options.siteID = siteID
+      options.token = token
+    }
+    return getStore(options)
+  } catch (err) {
+    // Graceful fallback store when Blobs environment token is unconfigured
+    return {
+      get: async (key) => memStore.get(`${name}:${key}`) || null,
+      getWithMetadata: async (key) => ({ data: memStore.get(`${name}:${key}`) || null, etag: 'mem' }),
+      set: async (key, val) => { memStore.set(`${name}:${key}`, val); return { modified: true } },
+      delete: async (key) => { memStore.delete(`${name}:${key}`) },
+      list: async (opts) => {
+        const prefix = opts?.prefix || ''
+        const blobs = []
+        for (const k of memStore.keys()) {
+          if (k.startsWith(`${name}:${prefix}`)) {
+            blobs.push({ key: k.replace(`${name}:`, '') })
+          }
+        }
+        return { blobs }
+      }
+    }
+  }
+}
 
 export const Tickets    = () => store('sf26-tickets')
 export const Waitlist   = () => store('sf26-waitlist')

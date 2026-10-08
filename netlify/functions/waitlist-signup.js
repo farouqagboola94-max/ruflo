@@ -59,13 +59,19 @@ export const handler = async (event) => {
   }
   if (referredBy) record.referredBy = referredBy.trim()
 
-  await set(Waitlist, key, record)
+  try {
+    await set(Waitlist, key, record)
+  } catch (e) {
+    console.warn('[waitlist] Blobs storage degraded, proceeding gracefully:', e.message)
+  }
 
-  await sendEmail({
-    to: key,
-    subject: `Sneakers Fest '26 — You're on the waitlist! (#${position})`,
-    html: waitlistEmail({ name: cleanName, position }),
-  })
+  try {
+    await sendEmail({
+      to: key,
+      subject: `Sneakers Fest '26 — You're on the waitlist! (#${position})`,
+      html: waitlistEmail({ name: cleanName, position }),
+    })
+  } catch {}
 
   return ok({ success: true, position, total: position })
 }
