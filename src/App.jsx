@@ -60,6 +60,7 @@ const SpinWheel      = lazy(() => import('./sections/SpinWheel'))
 const CrewVoteOff    = lazy(() => import('./sections/CrewVoteOff'))
 const BadgeMaker     = lazy(() => import('./sections/BadgeMaker'))
 const MysteryDrop    = lazy(() => import('./sections/MysteryDrop'))
+const LagosGrailHeist = lazy(() => import('./sections/LagosGrailHeist'))
 const SneakerWorth   = lazy(() => import('./sections/SneakerWorth'))
 const SneakerBingo   = lazy(() => import('./sections/SneakerBingo'))
 // Culture & tools — lazy-loaded
@@ -532,6 +533,7 @@ export default function App() {
           <SectionBoundary><Suspense fallback={null}>
             <Reveal><Passport /></Reveal>
             <Reveal><EggHuntTracker /></Reveal>
+            <Reveal><LagosGrailHeist /></Reveal>
             <Reveal><Leaderboard /></Reveal>
             <Reveal><SoleRegistry /></Reveal>
             <Reveal><CultureIndex /></Reveal>
