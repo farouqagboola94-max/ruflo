@@ -200,6 +200,32 @@ function LoginScreen({ onLogin }) {
 }
 
 function BoothCard({ vendor }) {
+  const STATUS_KEY = `sf26_vendor_setup_status_${vendor.code}`
+  const [setupStatus, setSetupStatus] = useState(() => {
+    try { return localStorage.getItem(STATUS_KEY) || 'EN_ROUTE' } catch { return 'EN_ROUTE' }
+  })
+
+  const STATUSES = [
+    { id: 'EN_ROUTE', label: '🚚 En Route', color: B.amber },
+    { id: 'UNLOADING', label: '📦 Unloading', color: B.neonCyan },
+    { id: 'INSPECTION', label: '🔍 Inspection Ready', color: '#A855F7' },
+    { id: 'BOOTH_LIVE', label: '🟢 Live & Open', color: B.neonLime },
+  ]
+
+  const handleStatusChange = (newStatus) => {
+    setSetupStatus(newStatus)
+    try { localStorage.setItem(STATUS_KEY, newStatus) } catch {}
+    dispatchFestivalAction(FESTIVAL_ACTIONS.VENDOR_STATUS_TRANSITION, {
+      code: vendor.code,
+      name: vendor.name,
+      status: newStatus,
+      action: `Vendor ${vendor.name} transitioned to ${newStatus}`,
+    })
+    playFestivalSound(newStatus === 'BOOTH_LIVE' ? 'badge_unlock' : 'zone_click')
+  }
+
+  const currentStatusObj = STATUSES.find(s => s.id === setupStatus) || STATUSES[0]
+
   return (
     <div style={{
       border: `1px solid ${B.amber}35`,
@@ -246,6 +272,48 @@ function BoothCard({ vendor }) {
         <div>
           <p style={{ fontSize: 11, color: B.amberGlow, fontWeight: 600, marginBottom: 2 }}>Category: {vendor.category}</p>
           <p style={{ fontSize: 11, color: B.smoke }}>Doors open 12 PM — Vendor entry from {vendor.setup}</p>
+        </div>
+      </div>
+
+      {/* Booth Setup Lifecycle Tracker */}
+      <div style={{
+        marginTop: 20, padding: '16px 20px', borderRadius: 12,
+        background: 'rgba(0,0,0,0.3)', border: `1px solid ${currentStatusObj.color}40`,
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
+          <p style={{ fontFamily: 'Orbitron, sans-serif', fontSize: 10, letterSpacing: 2, color: currentStatusObj.color }}>
+            LIVE BOOTH READINESS
+          </p>
+          <span style={{
+            fontFamily: 'Space Mono, monospace', fontSize: 9,
+            color: currentStatusObj.color, background: `${currentStatusObj.color}15`,
+            border: `1px solid ${currentStatusObj.color}50`, borderRadius: 4, padding: '3px 8px',
+            fontWeight: 700,
+          }}>
+            {currentStatusObj.label.toUpperCase()}
+          </span>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))', gap: 8 }}>
+          {STATUSES.map(st => {
+            const isCurrent = setupStatus === st.id
+            return (
+              <button
+                key={st.id}
+                onClick={() => handleStatusChange(st.id)}
+                style={{
+                  background: isCurrent ? `${st.color}25` : 'rgba(255,255,255,0.03)',
+                  border: `1px solid ${isCurrent ? st.color : 'rgba(255,255,255,0.08)'}`,
+                  borderRadius: 6, padding: '8px 10px',
+                  color: isCurrent ? B.white : B.smoke,
+                  fontFamily: 'Space Mono, monospace', fontSize: 9,
+                  cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center',
+                }}
+              >
+                {st.label}
+              </button>
+            )
+          })}
         </div>
       </div>
     </div>
@@ -375,11 +443,19 @@ function ProfileTab({ vendor }) {
   )
 }
 
+const LSI_BENCHMARKS = [
+  { name: 'Travis Scott x AJ1 Low Mocha', price: 1850000, size: 'US 10.5' },
+  { name: 'Nike Dunk Low Retro Panda', price: 280000, size: 'US 10' },
+  { name: 'Air Jordan 4 Retro Bred Reimagined', price: 720000, size: 'US 11' },
+  { name: 'Wales Bonner x adidas Samba Silver', price: 490000, size: 'US 9.5' },
+  { name: 'Nike Air Force 1 07 Triple White', price: 165000, size: 'US 10' },
+]
+
 function ProductsTab({ vendor }) {
   const STORAGE_KEY = `sf26_vendor_products_${vendor.code}`
   const load = () => { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]') } catch { return [] } }
   const [products, setProducts] = useState(load)
-  const [form, setForm] = useState({ name: '', size: '', price: '', condition: 'DS', qty: 1 })
+  const [form, setForm] = useState({ name: '', size: '', price: '', condition: 'DS', qty: 1, isLsiPegged: false })
   const [adding, setAdding] = useState(false)
 
   function addProduct() {
@@ -387,8 +463,9 @@ function ProductsTab({ vendor }) {
     const updated = [...products, { ...form, id: Date.now(), price: Number(form.price), qty: Number(form.qty) }]
     setProducts(updated)
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(updated)) } catch {}
-    setForm({ name: '', size: '', price: '', condition: 'DS', qty: 1 })
+    setForm({ name: '', size: '', price: '', condition: 'DS', qty: 1, isLsiPegged: false })
     setAdding(false)
+    playFestivalSound('button_click')
   }
 
   function remove(id) {
@@ -408,23 +485,36 @@ function ProductsTab({ vendor }) {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 10 }}>
         <div>
           <p style={{ fontFamily: 'Orbitron, sans-serif', fontSize: 10, letterSpacing: 3, color: B.amber, marginBottom: 4 }}>PRODUCT LISTING</p>
           <p style={{ fontSize: 12, color: B.smoke }}>{products.length} item{products.length !== 1 ? 's' : ''} listed</p>
         </div>
-        {!adding && (
-          <button
-            onClick={() => setAdding(true)}
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <a
+            href="#lagos-sole-index"
             style={{
-              background: `${B.amber}15`, border: `1px solid ${B.amber}40`,
-              borderRadius: 8, padding: '8px 16px',
-              color: B.amber, fontSize: 13, fontWeight: 600, cursor: 'pointer',
+              display: 'inline-flex', alignItems: 'center', gap: 4,
+              color: B.neonLime, fontFamily: 'Space Mono, monospace', fontSize: 9,
+              textDecoration: 'none', background: `${B.neonLime}12`, border: `1px solid ${B.neonLime}40`,
+              borderRadius: 6, padding: '6px 10px',
             }}
           >
-            + Add Item
-          </button>
-        )}
+            📈 LSI Index Quotes →
+          </a>
+          {!adding && (
+            <button
+              onClick={() => setAdding(true)}
+              style={{
+                background: `${B.amber}15`, border: `1px solid ${B.amber}40`,
+                borderRadius: 8, padding: '8px 16px',
+                color: B.amber, fontSize: 13, fontWeight: 600, cursor: 'pointer',
+              }}
+            >
+              + Add Item
+            </button>
+          )}
+        </div>
       </div>
 
       {adding && (
@@ -432,9 +522,45 @@ function ProductsTab({ vendor }) {
           border: `1px solid ${B.amber}30`, borderRadius: 12, padding: 20,
           background: `${B.charcoal}`, marginBottom: 20,
         }}>
-          <p style={{ fontSize: 12, color: B.amber, marginBottom: 14, fontFamily: 'Space Mono, monospace', letterSpacing: 1 }}>NEW ITEM</p>
+          <p style={{ fontSize: 12, color: B.amber, marginBottom: 12, fontFamily: 'Space Mono, monospace', letterSpacing: 1 }}>NEW ITEM</p>
+
+          {/* Quick LSI Pegging Strip */}
+          <div style={{ marginBottom: 14, padding: '10px 12px', background: 'rgba(0,0,0,0.3)', borderRadius: 8, border: `1px solid ${B.neonLime}30` }}>
+            <span style={{ fontSize: 9, color: B.neonLime, fontFamily: 'Space Mono, monospace', letterSpacing: 1 }}>
+              ⚡ PEG TO LAGOS SOLE INDEX (LSI BENCHMARK):
+            </span>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 8 }}>
+              {LSI_BENCHMARKS.map(bench => (
+                <button
+                  key={bench.name}
+                  type="button"
+                  onClick={() => {
+                    setForm({
+                      name: bench.name,
+                      size: bench.size,
+                      price: bench.price,
+                      condition: 'DS',
+                      qty: 1,
+                      isLsiPegged: true,
+                    })
+                    playFestivalSound('zone_click')
+                  }}
+                  style={{
+                    background: 'rgba(255,255,255,0.04)',
+                    border: `1px solid ${B.neonLime}50`,
+                    borderRadius: 4, padding: '4px 8px',
+                    color: B.neonLime,
+                    fontFamily: 'Space Mono, monospace', fontSize: 8, cursor: 'pointer',
+                  }}
+                >
+                  📈 {bench.name.split(' ')[0]} {bench.name.split(' ')[1]} (₦{(bench.price/1000).toFixed(0)}K)
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <input aria-label="Product name or model" style={iStyle} placeholder="Product name / model" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
+            <input aria-label="Product name or model" style={iStyle} placeholder="Product name / model" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value, isLsiPegged: false }))} />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))', gap: 10 }}>
               <input aria-label="Size" style={iStyle} placeholder="Size" value={form.size} onChange={e => setForm(f => ({ ...f, size: e.target.value }))} />
               <input aria-label="Price in naira" style={iStyle} placeholder="Price (NGN)" type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} />
@@ -487,8 +613,19 @@ function ProductsTab({ vendor }) {
                 {p.condition}
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <p style={{ fontSize: 13, fontWeight: 600, color: B.white, marginBottom: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.name}</p>
-                <p style={{ fontSize: 11, color: B.smoke }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <p style={{ fontSize: 13, fontWeight: 600, color: B.white, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.name}</p>
+                  {p.isLsiPegged && (
+                    <span style={{
+                      fontFamily: 'Orbitron, monospace', fontSize: 7, color: B.neonLime,
+                      background: `${B.neonLime}15`, border: `1px solid ${B.neonLime}50`,
+                      borderRadius: 3, padding: '1px 5px', flexShrink: 0,
+                    }}>
+                      LSI PEGGED
+                    </span>
+                  )}
+                </div>
+                <p style={{ fontSize: 11, color: B.smoke, marginTop: 2 }}>
                   {p.size && `Size ${p.size}  ·  `}Qty {p.qty}
                 </p>
               </div>
@@ -938,13 +1075,33 @@ export default function VendorDashboard() {
             <div style={{
               display: 'flex', justifyContent: 'space-between', alignItems: 'center',
               background: B.charcoal, border: `1px solid ${B.amber}30`,
-              borderRadius: 12, padding: '12px 20px', marginBottom: 24,
+              borderRadius: 12, padding: '12px 20px', marginBottom: 24, flexWrap: 'wrap', gap: 12,
             }}>
               <div>
                 <p style={{ fontSize: 11, color: B.smoke, marginBottom: 2 }}>Logged in as</p>
                 <p style={{ fontSize: 14, fontWeight: 600, color: B.white }}>{vendor.name}</p>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                <a
+                  href="#lagos-sole-index"
+                  style={{
+                    color: B.neonLime, fontFamily: 'Space Mono, monospace', fontSize: 10,
+                    textDecoration: 'none', background: `${B.neonLime}15`, border: `1px solid ${B.neonLime}40`,
+                    borderRadius: 6, padding: '4px 10px', display: 'inline-flex', alignItems: 'center', gap: 4,
+                  }}
+                >
+                  📈 LSI Market
+                </a>
+                <a
+                  href="#lsx"
+                  style={{
+                    color: B.amber, fontFamily: 'Space Mono, monospace', fontSize: 10,
+                    textDecoration: 'none', background: `${B.amber}15`, border: `1px solid ${B.amber}40`,
+                    borderRadius: 6, padding: '4px 10px', display: 'inline-flex', alignItems: 'center', gap: 4,
+                  }}
+                >
+                  🤝 LSX Escrow
+                </a>
                 <span style={{
                   background: `${B.amber}15`, border: `1px solid ${B.amber}30`,
                   borderRadius: 6, padding: '4px 10px',

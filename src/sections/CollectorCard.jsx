@@ -353,11 +353,47 @@ export default function CollectorCard() {
 
         {result && rc && (
           <div style={{ animation: 'ccSlide 0.4s ease' }}>
-            <div style={{ background: rc.bg, border: `2px solid ${rc.color}44`, padding: '28px 28px', marginBottom: 16, textAlign: 'center', borderRadius: 8 }}>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.25em', marginBottom: 10 }}>
-                {handle ? `COLLECTOR PASS · ${handle.toUpperCase()}` : 'OFFICIAL COLLECTOR CARD'}
+            <div style={{
+              background: rc.bg,
+              border: `2px solid ${rc.color}66`,
+              padding: '28px 24px',
+              marginBottom: 16,
+              textAlign: 'center',
+              borderRadius: 12,
+              position: 'relative',
+              boxShadow: `0 16px 40px ${rc.color}22`,
+              overflow: 'hidden'
+            }}>
+              {/* Holographic foil line */}
+              <div style={{
+                position: 'absolute',
+                top: 0, left: 0, right: 0,
+                height: 3,
+                background: `linear-gradient(90deg, ${B.amber}, ${B.neonCyan}, ${B.neonMagenta}, ${B.neonLime})`
+              }} />
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, flexWrap: 'wrap', gap: 6 }}>
+                <span style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.25em' }}>
+                  {handle ? `COLLECTOR PASS · ${handle.toUpperCase()}` : 'OFFICIAL COLLECTOR CARD'}
+                </span>
+                <span style={{
+                  fontFamily: "'Orbitron'",
+                  fontSize: 8,
+                  fontWeight: 900,
+                  color: B.white,
+                  background: 'rgba(255,255,255,0.08)',
+                  border: `1px solid ${rc.color}40`,
+                  borderRadius: 999,
+                  padding: '2px 8px'
+                }}>
+                  LVL {gamification?.level || 1} · {gamification?.xp || 0} XP
+                </span>
               </div>
-              <div style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(1.4rem,3.5vw,2.4rem)', color: rc.color, letterSpacing: '0.05em', marginBottom: 8 }}>{result.collector_title}</div>
+
+              <div style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(1.5rem,3.8vw,2.6rem)', color: rc.color, letterSpacing: '0.05em', marginBottom: 8 }}>
+                {result.collector_title}
+              </div>
+
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, marginBottom: 14 }}>
                 <div style={{ fontFamily: "'Orbitron'", fontSize: 48, fontWeight: 900, color: rc.color, lineHeight: 1 }}>{result.rep_score}</div>
                 <div>
@@ -365,7 +401,38 @@ export default function CollectorCard() {
                   <div style={{ fontFamily: "'Orbitron'", fontSize: 14, fontWeight: 900, color: rc.color }}>{result.rank}</div>
                 </div>
               </div>
-              <div style={{ fontFamily: "'Space Mono'", fontSize: 10, color: B.smoke, lineHeight: 1.6 }}>{result.tagline}</div>
+
+              <div style={{ fontFamily: "'Space Mono'", fontSize: 10, color: B.smoke, lineHeight: 1.6, marginBottom: 14 }}>
+                {result.tagline}
+              </div>
+
+              {/* Unlocked Badges Ribbon */}
+              {gamification?.badges?.length > 0 && (
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: 6,
+                  flexWrap: 'wrap',
+                  paddingTop: 10,
+                  borderTop: '1px solid rgba(255,255,255,0.08)'
+                }}>
+                  {gamification.badges.slice(-4).map((bg, idx) => (
+                    <span key={idx} style={{
+                      fontFamily: "'Space Mono'",
+                      fontSize: 8,
+                      fontWeight: 700,
+                      color: B.amberGlow,
+                      background: 'rgba(245,166,35,0.12)',
+                      border: `1px solid ${B.amber}30`,
+                      borderRadius: 4,
+                      padding: '2px 6px'
+                    }}>
+                      🏅 {bg.replace(/_/g, ' ')}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>

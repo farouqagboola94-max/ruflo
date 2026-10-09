@@ -1,7 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { B, FONTS } from '../tokens'
+import {
+  useFestivalGamification,
+  useFestivalTelemetry,
+  dispatchFestivalAction,
+  FESTIVAL_ACTIONS,
+  playFestivalSound
+} from '../framework/festivalFramework'
 
 export default function LagosYouthExperience() {
+  const { awardXP, unlockBadge } = useFestivalGamification()
+  const { telemetry, dispatch } = useFestivalTelemetry()
+
   // IG Story Pass State
   const [handle, setHandle] = useState('@lagos_grailking')
   const [archetype, setArchetype] = useState('👑 GRAIL COLLECTOR')
@@ -93,6 +103,13 @@ export default function LagosYouthExperience() {
           osc.stop(now + 0.35)
         })
       }
+
+      // Framework Integration: Pump Live Acoustic Decibel Telemetry and Award XP
+      awardXP(25, `Triggered ${type.toUpperCase()} Street Beat`)
+      unlockBadge('MAINLAND_ORIGIN')
+      dispatch(FESTIVAL_ACTIONS.TELEMETRY_SOUND_UPDATE, {
+        decibels: Math.min(108, (telemetry?.decibels || 94) + 3)
+      })
     } catch (e) {
       console.warn('Audio not allowed yet:', e)
     }
@@ -204,6 +221,13 @@ export default function LagosYouthExperience() {
     link.download = `SneakersFest26-Story-Pass.png`
     link.href = canvas.toDataURL('image/png')
     link.click()
+
+    playFestivalSound('badge_unlock')
+    awardXP(75, 'Exported Official Story Pass')
+    unlockBadge('LAGOS_PASSPORT')
+    if (handle.trim()) {
+      dispatch(FESTIVAL_ACTIONS.GAMIFICATION_SET_HANDLE, { handle: handle.trim() })
+    }
   }
 
   // 3. Three.js Initialization

@@ -21,6 +21,7 @@ const ZONES = [
     schedule:['12:00 — Doors open','14:00 — Panel: Future of Lagos Streetwear','18:00 — Main DJ set','21:00 — Headline drop reveal'],
     tags:['MUSIC','PANELS','DROPS'],
     category:'stage', sound:'98 dB · Live DJ', density:'92% Capacity',
+    warpHash: '#schedule',
   },
   {
     id: 'vip', short: 'VIP', label: 'VIP Lounge',
@@ -30,6 +31,7 @@ const ZONES = [
     schedule:['All-day access','Private drop at 20:00'],
     tags:['VIP','EXCLUSIVE','BAR'],
     category:'vip', sound:'68 dB · Velvet Vibe', density:'45% Capacity', fastTrack: true,
+    warpHash: '#tickets',
   },
   {
     id: 'gallery', short: 'ART GALLERY', label: 'Art Gallery',
@@ -39,24 +41,37 @@ const ZONES = [
     schedule:['Open all day','Artist walk-through at 15:00'],
     tags:['ART','CULTURE','PRINTS'],
     category:'art', sound:'62 dB · Curated', density:'55% Capacity',
+    warpHash: '#auction',
   },
   {
-    id: 'floor', short: 'MAIN FLOOR', label: 'Main Floor',
-    color:'#FFFFFF', x:180, y:140, w:440, h:180,
-    icon:'👟', tagline:'The epicentre.',
-    desc:'30+ curated vendor booths across footwear, streetwear, accessories, and collectibles. The beating heart of Sneakers Fest.',
-    schedule:['Open 12:00 — 22:00','Peak crowd: 16:00 — 20:00'],
-    tags:['VENDORS','TRADE','BROWSE'],
+    id: 'floor', short: 'MAIN FLOOR', label: 'Main Floor & LSX Pit',
+    color:'#FFFFFF', x:180, y:140, w:260, h:180,
+    icon:'👟', tagline:'The epicentre & authenticated trade floor.',
+    desc:'30+ curated vendor booths across footwear, streetwear, and collectibles alongside the Lagos Sole Exchange physical escrow desk.',
+    schedule:['Open 12:00 — 22:00','Peak crowd: 16:00 — 20:00','Escrow trading desk active'],
+    tags:['VENDORS','TRADE','LSX'],
     category:'vendors', sound:'84 dB · Buzzing', density:'88% Capacity',
+    warpHash: '#lsx',
   },
   {
-    id: 'museum', short: 'MUSEUM', label: 'Culture Museum',
+    id: 'lsi_terminal', short: 'LSI TICKER', label: 'Lagos Sole Index Terminal',
+    color: B.neonLime, x:440, y:140, w:180, h:180,
+    icon:'📈', tagline:'Real-time sneaker market analytics.',
+    desc:'Live financial ticker tracking secondary market sneaker prices across Lagos. View real-time valuation, volatility index, and escrow settlements.',
+    schedule:['Live price feeds all day','Market index rebalancing: 18:00','Whale trade alert: 20:00'],
+    tags:['FINANCE','INDEX','PRICING'],
+    category:'vendors', sound:'82 dB · Financial Pit', density:'72% Capacity',
+    warpHash: '#lagos-sole-index',
+  },
+  {
+    id: 'museum', short: 'MUSEUM', label: 'Culture Museum & Vault',
     color: B.neonMagenta, x:620, y:140, w:180, h:180,
     icon:'🏛️', tagline:'Bid for the culture.',
-    desc:'8 exclusive digital artworks from Lagos creatives on live auction. Highest bids placed via the website go home with the piece. Closes at event end.',
-    schedule:['Viewing all day','Auction closes 21:30'],
-    tags:['AUCTION','ART','DIGITAL'],
+    desc:'8 exclusive digital artworks from Lagos creatives on live auction, plus the secret GPS beacon checkpoint for the Grail Heist.',
+    schedule:['Viewing all day','Heist Beacon active: 14:00','Auction closes 21:30'],
+    tags:['AUCTION','HEIST','VAULT'],
     category:'vip', sound:'70 dB · Auction Room', density:'60% Capacity',
+    warpHash: '#grail-heist',
   },
   {
     id: 'vendor_w', short: 'VENDORS W', label: 'Vendor Hall West',
@@ -66,15 +81,27 @@ const ZONES = [
     schedule:['Open 12:00 — 21:30'],
     tags:['DEADSTOCK','CUSTOMS','STREETWEAR'],
     category:'vendors', sound:'78 dB · Marketplace', density:'75% Capacity',
+    warpHash: '#vendors',
   },
   {
-    id: 'photo', short: 'PHOTO BOOTH', label: 'Photo Booth Alley',
-    color: B.neonCyan, x:180, y:320, w:440, h:120,
+    id: 'photo', short: 'PHOTO ALLEY', label: 'Photo Booth Alley',
+    color: B.neonCyan, x:180, y:320, w:220, h:120,
     icon:'📸', tagline:'Make your moment.',
     desc:'Four themed photo installations inspired by Lagos streetwear decades. Print on-site in 90 seconds. SF\'26 hype card moments guaranteed.',
     schedule:['Open all day','Queue expected 16:00 — 19:00'],
     tags:['PHOTO','PRINT','CONTENT'],
     category:'art', sound:'74 dB · Hype Photos', density:'80% Capacity',
+    warpHash: '#experience',
+  },
+  {
+    id: 'arena', short: 'FIT ARENA', label: 'Live Fit-Check Arena',
+    color: B.amber, x:400, y:320, w:220, h:120,
+    icon:'⚔️', tagline:'Head-to-head 1v1 drip battles.',
+    desc:'Center-stage street style runway. Attendees enter live 1v1 fit battles, crowd votes real-time, and top drips climb the leaderboard to win grails.',
+    schedule:['Battles run every 30 mins','Mainland vs Island Derby: 17:00','Championship finals: 20:30'],
+    tags:['BATTLES','VOTE','STREETWEAR'],
+    category:'stage', sound:'96 dB · Crowd Roar', density:'95% Capacity',
+    warpHash: '#fitcheck-arena',
   },
   {
     id: 'care', short: 'SNEAKER CARE', label: 'Sneaker Care Station',
@@ -84,6 +111,7 @@ const ZONES = [
     schedule:['Open 12:00 — 21:00','Walk-ins only'],
     tags:['CLEANING','CARE','RESTORE'],
     category:'care', sound:'66 dB · Restoration Lab', density:'50% Capacity',
+    warpHash: '#experience',
   },
   {
     id: 'food', short: 'FOOD COURT', label: 'Food Court',
@@ -93,6 +121,7 @@ const ZONES = [
     schedule:['Open 12:00 — 22:00'],
     tags:['FOOD','DRINKS','VIBES'],
     category:'food', sound:'80 dB · Terrace Vibes', density:'70% Capacity',
+    warpHash: '#experience',
   },
   {
     id: 'entrance', short: 'ENTRANCE', label: 'Entrance & Registration',
@@ -102,15 +131,17 @@ const ZONES = [
     schedule:['Early bird entry 11:30 AM','General entry 12:00 PM','Last entry 20:00'],
     tags:['TICKETS','ENTRY','WRISTBAND'],
     category:'entry', sound:'76 dB · Gate Chime', density:'Fast Moving', entry: true,
+    warpHash: '#tickets',
   },
   {
-    id: 'workshop', short: 'WORKSHOP', label: 'Workshop Zone',
+    id: 'danfo_lab', short: 'DANFO LAB', label: 'Danfo Custom Sneaker Lab',
     color: B.neonCyan, x:620, y:440, w:180, h:120,
-    icon:'🎨', tagline:'Learn the craft.',
-    desc:'Sneaker customisation masterclasses, lacing tutorials, and brand activation sessions. Limited seats — claim at the info desk.',
-    schedule:['Sessions at 13:00, 15:00, 17:00','Walk-in only'],
-    tags:['WORKSHOP','CUSTOM','LEARN'],
-    category:'care', sound:'64 dB · Studio Calm', density:'Limited Seats',
+    icon:'🎨', tagline:'1-of-1 Workshop & Minting Engine.',
+    desc:'Danfo transit stencils, custom color blocking, sole dyeing masterclasses, and digital certificate minting. Limited maker benches.',
+    schedule:['Workshop drops at 13:00, 15:00, 17:00','1-of-1 minting open all day'],
+    tags:['CUSTOM','WORKSHOP','MINT'],
+    category:'care', sound:'72 dB · Maker Studio', density:'Limited Seats',
+    warpHash: '#colorizer',
   },
 ]
 
@@ -141,8 +172,8 @@ const TRANSPORT = [
 function BoothGrid() {
   const dots = []
   for (let row = 0; row < 4; row++) {
-    for (let col = 0; col < 9; col++) {
-      dots.push({ x: 213 + col * 46, y: 162 + row * 40 })
+    for (let col = 0; col < 5; col++) {
+      dots.push({ x: 200 + col * 46, y: 162 + row * 40 })
     }
   }
   return (
@@ -256,23 +287,50 @@ function InfoPanel({ zone, onClose, onSelectRoute }) {
           </div>
         </div>
       </div>
+
+      {/* Direct Warp Action Button */}
+      {zone.warpHash && (
+        <div style={{ marginTop:16, paddingTop:14, borderTop:'1px solid rgba(255,255,255,0.06)', display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:10 }}>
+          <span style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:B.smoke }}>
+            Target Destination: <strong style={{ color:zone.color }}>{zone.label}</strong>
+          </span>
+          <a
+            href={zone.warpHash}
+            onClick={() => {
+              playFestivalSound('button_click')
+            }}
+            style={{
+              display:'inline-flex', alignItems:'center', gap:6,
+              background:`linear-gradient(135deg, ${zone.color}25, ${zone.color}10)`,
+              border:`1px solid ${zone.color}`,
+              color:B.white,
+              fontFamily:'Orbitron, monospace', fontSize:9, fontWeight:700,
+              letterSpacing:1, padding:'7px 16px', borderRadius:6, textDecoration:'none',
+              boxShadow:`0 0 15px ${zone.color}30`, transition:'all 0.2s',
+            }}
+          >
+            ⚡ WARP TO SECTION ({zone.warpHash}) →
+          </a>
+        </div>
+      )}
     </div>
   )
 }
 
 // ── legend ─────────────────────────────────────────────────────────────────────
 const LEGEND = [
-  { color: B.amber,       label: 'Stage / Entry' },
-  { color: B.neonCyan,    label: 'Art / Photo / Workshop' },
-  { color: B.neonMagenta, label: 'VIP / Museum' },
-  { color: B.neonLime,    label: 'Vendors / Food' },
+  { color: B.amber,       label: 'Stage / Arena / Entry' },
+  { color: B.neonCyan,    label: 'Art / Photo / Danfo Lab' },
+  { color: B.neonMagenta, label: 'VIP / Museum / Heist Vault' },
+  { color: B.neonLime,    label: 'Vendors / LSI / Food' },
 ]
 
 const ROUTES = [
   { id: 'none', label: 'OFF', name: 'No Route', color: '#555', path: null },
-  { id: 'grail', label: '🔥 GRAIL DROP RUSH', name: 'Entrance ➔ West Vendors ➔ Main Floor ➔ Stage', color: B.amber, path: 'M 400 480 L 90 380 L 400 230 L 400 70' },
+  { id: 'grail', label: '🔥 GRAIL DROP RUSH', name: 'Entrance ➔ West Vendors ➔ Main Floor ➔ Stage', color: B.amber, path: 'M 400 480 L 90 380 L 310 230 L 400 70' },
   { id: 'vip', label: '👑 VIP FAST-TRACK', name: 'Entrance ➔ VIP Lounge ➔ Museum ➔ Stage', color: B.neonMagenta, path: 'M 400 480 L 710 70 L 710 230 L 400 70' },
-  { id: 'care', label: '✨ CARE & CULTURE', name: 'Entrance ➔ Sneaker Care ➔ Gallery ➔ Workshop', color: B.neonCyan, path: 'M 400 480 L 710 380 L 90 230 L 710 500' },
+  { id: 'arena', label: '⚔️ ARENA & HEIST RUN', name: 'Entrance ➔ Fit Arena ➔ LSI Ticker ➔ Vault', color: B.neonLime, path: 'M 400 480 L 510 380 L 530 230 L 710 230' },
+  { id: 'care', label: '✨ CARE & CUSTOM LAB', name: 'Entrance ➔ Sneaker Care ➔ Danfo Lab ➔ Gallery', color: B.neonCyan, path: 'M 400 480 L 710 380 L 710 500 L 90 230' },
 ]
 
 // ── main section ───────────────────────────────────────────────────────────────
@@ -494,6 +552,8 @@ export default function Venue() {
               <line x1="0" y1="140" x2="800" y2="140" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
               <line x1="0" y1="320" x2="800" y2="320" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
               <line x1="0" y1="440" x2="800" y2="440" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+              <line x1="440" y1="140" x2="440" y2="320" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+              <line x1="400" y1="320" x2="400" y2="440" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
               <rect x="1" y="1" width="178" height="138" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.06)" strokeWidth="0.8" rx="2" />
               <text x="90" y="70" textAnchor="middle" dominantBaseline="middle" fontFamily="Space Mono,monospace" fontSize={8} fill="rgba(255,255,255,0.2)" letterSpacing={1.5}>PRODUCTION</text>
               <text x="90" y="84" textAnchor="middle" dominantBaseline="middle" fontFamily="Space Mono,monospace" fontSize={7} fill="rgba(255,255,255,0.1)">CREW ONLY</text>
@@ -538,6 +598,33 @@ export default function Venue() {
               </text>
             </svg>
           </div>
+        </div>
+
+        {/* Quick Hotspot Warp Bar */}
+        <div style={{ display:'flex', gap:8, flexWrap:'wrap', justifyContent:'center', marginBottom:16 }}>
+          {[
+            { label:'⚔️ 1v1 FIT ARENA', hash:'#fitcheck-arena', color:B.amber },
+            { label:'📈 LAGOS SOLE INDEX', hash:'#lagos-sole-index', color:B.neonLime },
+            { label:'🏆 GRAIL HEIST CRYPT', hash:'#grail-heist', color:B.neonMagenta },
+            { label:'🎨 DANFO SNEAKER LAB', hash:'#colorizer', color:B.neonCyan },
+            { label:'🤝 LSX ESCROW PIT', hash:'#lsx', color:B.white },
+          ].map(h => (
+            <a
+              key={h.hash}
+              href={h.hash}
+              onClick={() => playFestivalSound('button_click')}
+              style={{
+                display:'inline-flex', alignItems:'center', gap:4,
+                padding:'5px 12px', borderRadius:20,
+                background:`${h.color}12`, border:`1px solid ${h.color}40`,
+                color:h.color, fontFamily:'Space Mono,monospace', fontSize:9,
+                letterSpacing:1, textDecoration:'none', fontWeight:600,
+                transition:'all 0.2s',
+              }}
+            >
+              {h.label} →
+            </a>
+          ))}
         </div>
 
         {/* Legend */}
