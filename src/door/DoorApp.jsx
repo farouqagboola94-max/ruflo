@@ -4,6 +4,7 @@ import {
   normaliseTicket, isValidTicket, readQueue, readLog,
   enqueue, dequeue, logScan, resolveLogged, tallies, ticketFromHash,
 } from './doorQueue'
+import { playFestivalSound } from '../framework/festivalFramework'
 
 const CHECKIN = '/.netlify/functions/ticket-checkin'
 const ADMIN = '/.netlify/functions/admin'
@@ -11,6 +12,27 @@ const MODERATE = '/.netlify/functions/moderate'
 const SECRET_KEY = 'sf26_door_secret'
 
 const mono = { fontFamily: "'Space Mono', monospace" }
+
+function playBuzzer(isDupe = false) {
+  if (typeof window === 'undefined') return
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext
+    if (!AudioCtx) return
+    const ctx = new AudioCtx()
+    const now = ctx.currentTime
+    const osc = ctx.createOscillator()
+    const gain = ctx.createGain()
+    osc.connect(gain)
+    gain.connect(ctx.destination)
+    osc.type = 'sawtooth'
+    osc.frequency.setValueAtTime(isDupe ? 320 : 180, now)
+    osc.frequency.setValueAtTime(isDupe ? 240 : 130, now + 0.1)
+    gain.gain.setValueAtTime(0.2, now)
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3)
+    osc.start(now)
+    osc.stop(now + 0.3)
+  } catch {}
+}
 
 const OUTCOME = {
   admitted:  { label: 'ADMITTED',   colour: B.neonLime },
@@ -65,9 +87,80 @@ function Gate({ secret, onLoseAuth }) {
   const [queue, setQueue] = useState(readQueue)
   const [log, setLog] = useState(readLog)
   const [online, setOnline] = useState(() => navigator.onLine)
+  const [cameraActive, setCameraActive] = useState(false)
+  const [cameraError, setCameraError] = useState('')
   const inputRef = useRef(null)
+  const videoRef = useRef(null)
+  const streamRef = useRef(null)
 
   const t = tallies(log)
+
+  const stopCamera = useCallback(() => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop())
+      streamRef.current = null
+    }
+    setCameraActive(false)
+  }, [])
+
+  const startCamera = async () => {
+    setCameraError('')
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
+      })
+      streamRef.current = stream
+      setCameraActive(true)
+    } catch {
+      setCameraError('Camera access denied or unavailable')
+    }
+  }
+
+  useEffect(() => {
+    if (cameraActive && videoRef.current && streamRef.current) {
+      videoRef.current.srcObject = streamRef.current
+    }
+  }, [cameraActive])
+
+  // Barcode / QR detection loop when camera is active
+  useEffect(() => {
+    if (!cameraActive) return
+
+    let intervalId = null
+    if ('BarcodeDetector' in window) {
+      const detector = new window.BarcodeDetector({ formats: ['qr_code'] })
+      intervalId = setInterval(async () => {
+        if (videoRef.current && videoRef.current.readyState === 4) {
+          try {
+            const barcodes = await detector.detect(videoRef.current)
+            if (barcodes.length > 0) {
+              const raw = barcodes[0].rawValue || ''
+              const extracted = raw.includes('#t=') ? raw.split('#t=')[1] : raw
+              const norm = normaliseTicket(extracted)
+              if (norm && isValidTicket(norm)) {
+                setTicket(norm)
+                stopCamera()
+                playFestivalSound('xp_gain')
+              }
+            }
+          } catch {}
+        }
+      }, 350)
+    }
+
+    return () => {
+      if (intervalId) clearInterval(intervalId)
+    }
+  }, [cameraActive, stopCamera])
+
+  // Clean up camera stream on unmount
+  useEffect(() => {
+    return () => {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop())
+      }
+    }
+  }, [])
 
   const send = useCallback(async (ticketId) => {
     const res = await fetch(CHECKIN, {
@@ -95,20 +188,13 @@ function Gate({ secret, onLoseAuth }) {
     }
   }, [send])
 
-  // A pass carries a QR pointing at /door.html#t=TICKETID, so a staff member
-  // can use the camera app their phone already has - point, tap, land here
-  // with the ticket filled in. That removes the typing that makes the queue.
-  //
-  // Prefilled, never auto-submitted: an accidental scan of a pass in someone's
-  // hand must not silently burn their ticket. Staff still press the button.
+  // Prefilled from hash: /door.html#t=TICKETID
   useEffect(() => {
     const fromHash = () => {
       const id = ticketFromHash(window.location.hash)
       if (!id) return
       setTicket(id)
       inputRef.current?.focus()
-      // Clear it so a reload does not re-arm the same ticket, and so the ID is
-      // not left sitting in the address bar of a shared staff phone.
       history.replaceState(null, '', window.location.pathname)
     }
     fromHash()
@@ -130,6 +216,7 @@ function Gate({ secret, onLoseAuth }) {
     const id = normaliseTicket(ticket)
 
     if (!isValidTicket(id)) {
+      playBuzzer(false)
       setResult({ outcome: 'rejected', ticketId: id || '(empty)', error: 'Not a Sneakers Fest ticket format' })
       setLog(logScan({ ticketId: id, outcome: 'rejected', at: new Date().toISOString() }))
       setTicket(''); inputRef.current?.focus()
@@ -140,6 +227,15 @@ function Gate({ secret, onLoseAuth }) {
     try {
       const { status, data } = await send(id)
       const outcome = status === 404 ? 'rejected' : data.alreadyUsed ? 'duplicate' : 'admitted'
+      
+      if (outcome === 'admitted') {
+        playFestivalSound('nfc_success')
+      } else if (outcome === 'duplicate') {
+        playBuzzer(true)
+      } else {
+        playBuzzer(false)
+      }
+
       const entry = {
         ticketId: id, outcome, at: new Date().toISOString(),
         name: data.name, tier: data.tier, qty: data.qty, checkedInAt: data.checkedInAt,
@@ -149,7 +245,7 @@ function Gate({ secret, onLoseAuth }) {
       setLog(logScan(entry))
     } catch (err) {
       if (err.message === 'AUTH') return
-      // Held rather than guessed. Pending is never shown as admitted.
+      playBuzzer(false)
       const entry = { ticketId: id, outcome: 'pending', at: new Date().toISOString() }
       setQueue(enqueue(id, entry.at))
       setResult(entry)
@@ -179,6 +275,70 @@ function Gate({ secret, onLoseAuth }) {
         </div>
       )}
 
+      {/* CAMERA VIEWFINDER MODAL / OVERLAY */}
+      {cameraActive && (
+        <div style={{
+          position: 'relative',
+          marginBottom: 16,
+          background: B.black,
+          borderRadius: 8,
+          overflow: 'hidden',
+          border: `2px solid ${B.neonLime}`,
+          boxShadow: `0 0 20px ${B.neonLime}33`
+        }}>
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            muted
+            style={{ width: '100%', height: 220, objectFit: 'cover' }}
+          />
+          <div style={{
+            position: 'absolute',
+            top: 0, left: 0, right: 0, bottom: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: 12,
+            pointerEvents: 'none'
+          }}>
+            <div style={{ ...mono, fontSize: 8, color: B.neonLime, background: 'rgba(0,0,0,0.7)', padding: '4px 8px', borderRadius: 4 }}>
+              ALIGN TICKET QR INSIDE FRAME
+            </div>
+            <div style={{
+              width: 140, height: 140,
+              border: `2px dashed ${B.neonLime}`,
+              borderRadius: 8,
+              boxShadow: '0 0 0 9999px rgba(0,0,0,0.4)'
+            }} />
+            <div style={{ pointerEvents: 'auto' }}>
+              <button
+                type="button"
+                onClick={stopCamera}
+                style={{
+                  padding: '6px 14px',
+                  background: 'rgba(0,0,0,0.8)',
+                  border: `1px solid ${B.gunmetal}`,
+                  borderRadius: 4,
+                  color: B.white,
+                  ...mono, fontSize: 8,
+                  cursor: 'pointer'
+                }}
+              >
+                ✕ CLOSE CAMERA
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {cameraError && (
+        <div style={{ ...mono, fontSize: 9, color: B.neonMagenta, marginBottom: 12 }}>
+          {cameraError}
+        </div>
+      )}
+
       <Result result={result} />
 
       <form onSubmit={scan} style={{ marginBottom: 20 }}>
@@ -197,11 +357,30 @@ function Gate({ secret, onLoseAuth }) {
             color: B.white, outline: 'none',
             fontFamily: "'Orbitron', monospace", fontSize: 20, letterSpacing: '0.12em', textAlign: 'center',
           }} />
-        <button type="submit" disabled={busy} style={{
-          width: '100%', marginTop: 10, padding: '16px', border: 'none', borderRadius: 8,
-          background: B.amber, color: B.black, cursor: busy ? 'default' : 'pointer', opacity: busy ? 0.6 : 1,
-          ...mono, fontSize: 12, fontWeight: 700, letterSpacing: '0.22em',
-        }}>{busy ? 'CHECKING...' : 'CHECK IN'}</button>
+
+        <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
+          <button type="submit" disabled={busy} style={{
+            flex: 2, padding: '16px', border: 'none', borderRadius: 8,
+            background: B.amber, color: B.black, cursor: busy ? 'default' : 'pointer', opacity: busy ? 0.6 : 1,
+            ...mono, fontSize: 12, fontWeight: 700, letterSpacing: '0.22em',
+          }}>{busy ? 'CHECKING...' : 'CHECK IN'}</button>
+
+          <button
+            type="button"
+            onClick={cameraActive ? stopCamera : startCamera}
+            style={{
+              flex: 1, padding: '16px 8px',
+              border: `1px solid ${cameraActive ? B.neonLime : B.gunmetal}`,
+              borderRadius: 8,
+              background: cameraActive ? `${B.neonLime}22` : B.charcoal,
+              color: cameraActive ? B.neonLime : B.white,
+              cursor: 'pointer',
+              ...mono, fontSize: 10, fontWeight: 700, letterSpacing: '0.14em',
+            }}
+          >
+            {cameraActive ? '✕ STOP' : '📸 CAMERA'}
+          </button>
+        </div>
       </form>
 
       <div style={{ ...mono, fontSize: 9, color: B.smoke, letterSpacing: '0.24em', marginBottom: 10 }}>RECENT</div>
