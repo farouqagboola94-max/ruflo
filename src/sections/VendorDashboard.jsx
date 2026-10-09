@@ -453,10 +453,16 @@ const LSI_BENCHMARKS = [
 
 function ProductsTab({ vendor }) {
   const STORAGE_KEY = `sf26_vendor_products_${vendor.code}`
+  const SALES_KEY = `sf26_vendor_sales_${vendor.code}`
   const load = () => { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]') } catch { return [] } }
+  const loadSales = () => { try { return Number(localStorage.getItem(SALES_KEY) || 0) } catch { return 0 } }
+  
   const [products, setProducts] = useState(load)
+  const [totalSales, setTotalSales] = useState(loadSales)
   const [form, setForm] = useState({ name: '', size: '', price: '', condition: 'DS', qty: 1, isLsiPegged: false })
   const [adding, setAdding] = useState(false)
+  const [checkoutProduct, setCheckoutProduct] = useState(null)
+  const [posSuccess, setPosSuccess] = useState(false)
 
   function addProduct() {
     if (!form.name.trim() || !form.price) return
@@ -474,7 +480,39 @@ function ProductsTab({ vendor }) {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(updated)) } catch {}
   }
 
+  function handleSell(product) {
+    if (product.qty <= 0) return
+    const updated = products.map(p => {
+      if (p.id === product.id) {
+        return { ...p, qty: p.qty - 1 }
+      }
+      return p
+    })
+    setProducts(updated)
+    const newSales = totalSales + Number(product.price)
+    setTotalSales(newSales)
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+      localStorage.setItem(SALES_KEY, String(newSales))
+    } catch {}
+    dispatchFestivalAction('VENDOR_ITEM_SOLD', {
+      vendor: vendor.name,
+      item: product.name,
+      amount: product.price,
+    })
+    playFestivalSound('badge_unlock')
+    setPosSuccess(true)
+    setTimeout(() => {
+      setPosSuccess(false)
+      setCheckoutProduct(null)
+    }, 1800)
+  }
+
   const CONDITIONS = ['DS', 'VNDS', '9/10', '8/10', 'WORN']
+
+  const totalValue = products.reduce((acc, p) => acc + (p.price * (p.qty || 1)), 0)
+  const totalUnits = products.reduce((acc, p) => acc + (p.qty || 0), 0)
+  const lsiPeggedCount = products.filter(p => p.isLsiPegged).length
 
   const iStyle = {
     background: B.gunmetal, border: `1px solid ${B.amber}20`,
@@ -485,6 +523,21 @@ function ProductsTab({ vendor }) {
 
   return (
     <div>
+      {/* Sales & Inventory Metrics Strip */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10, marginBottom: 20 }}>
+        {[
+          { label: 'BOOTH SALES REVENUE', val: `₦${totalSales.toLocaleString('en-NG')}`, color: B.neonLime },
+          { label: 'INVENTORY VALUATION', val: `₦${totalValue.toLocaleString('en-NG')}`, color: B.amber },
+          { label: 'TOTAL UNITS IN STOCK', val: totalUnits, color: B.white },
+          { label: 'LSI PEGGED ASSETS', val: `${lsiPeggedCount} Items`, color: B.neonCyan },
+        ].map(m => (
+          <div key={m.label} style={{ background: B.void, border: `1px solid rgba(255,255,255,0.08)`, borderRadius: 10, padding: '12px 14px' }}>
+            <p style={{ fontFamily: 'Space Mono, monospace', fontSize: 8, color: B.dim, letterSpacing: 1.5, marginBottom: 4 }}>{m.label}</p>
+            <p style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 20, color: m.color, letterSpacing: 1, margin: 0 }}>{m.val}</p>
+          </div>
+        ))}
+      </div>
+
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 10 }}>
         <div>
           <p style={{ fontFamily: 'Orbitron, sans-serif', fontSize: 10, letterSpacing: 3, color: B.amber, marginBottom: 4 }}>PRODUCT LISTING</p>
@@ -601,8 +654,8 @@ function ProductsTab({ vendor }) {
           {products.map(p => (
             <div key={p.id} style={{
               display: 'flex', alignItems: 'center', gap: 12,
-              background: B.charcoal, border: `1px solid ${B.gunmetal}`,
-              borderRadius: 10, padding: '12px 16px',
+              background: B.charcoal, border: `1px solid ${p.qty <= 0 ? 'rgba(239,68,68,0.3)' : B.gunmetal}`,
+              borderRadius: 10, padding: '12px 16px', opacity: p.qty <= 0 ? 0.6 : 1, flexWrap: 'wrap',
             }}>
               <div style={{
                 width: 36, height: 36, borderRadius: 8, background: `${B.amber}15`,
@@ -612,9 +665,9 @@ function ProductsTab({ vendor }) {
               }}>
                 {p.condition}
               </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ flex: '1 1 200px', minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <p style={{ fontSize: 13, fontWeight: 600, color: B.white, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.name}</p>
+                  <p style={{ fontSize: 13, fontWeight: 600, color: B.white, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', margin: 0 }}>{p.name}</p>
                   {p.isLsiPegged && (
                     <span style={{
                       fontFamily: 'Orbitron, monospace', fontSize: 7, color: B.neonLime,
@@ -624,28 +677,159 @@ function ProductsTab({ vendor }) {
                       LSI PEGGED
                     </span>
                   )}
+                  {p.qty <= 0 && (
+                    <span style={{
+                      fontFamily: 'Orbitron, monospace', fontSize: 7, color: '#EF4444',
+                      background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.4)',
+                      borderRadius: 3, padding: '1px 5px', flexShrink: 0,
+                    }}>
+                      SOLD OUT
+                    </span>
+                  )}
                 </div>
-                <p style={{ fontSize: 11, color: B.smoke, marginTop: 2 }}>
-                  {p.size && `Size ${p.size}  ·  `}Qty {p.qty}
+                <p style={{ fontSize: 11, color: B.smoke, marginTop: 4, margin: 0 }}>
+                  {p.size && `Size ${p.size}  ·  `}Stock: <strong>{p.qty}</strong> left
                 </p>
               </div>
-              <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                <p style={{ fontSize: 14, fontFamily: 'Space Mono, monospace', color: B.amberGlow }}>
-                  {Number(p.price).toLocaleString('en-NG')}
+
+              <div style={{ textAlign: 'right', flexShrink: 0, marginRight: 8 }}>
+                <p style={{ fontSize: 14, fontFamily: 'Space Mono, monospace', color: B.amberGlow, margin: 0 }}>
+                  ₦{Number(p.price).toLocaleString('en-NG')}
                 </p>
-                <p style={{ fontSize: 10, color: B.smoke }}>NGN</p>
+                <p style={{ fontSize: 9, color: B.smoke, margin: 0 }}>CASH / TRANSFER</p>
               </div>
-              <button
-                onClick={() => remove(p.id)}
-                style={{
-                  background: 'none', border: 'none', color: `${B.neonMagenta}60`,
-                  cursor: 'pointer', padding: '4px 8px', fontSize: 13, flexShrink: 0,
-                }}
-              >
-                x
-              </button>
+
+              {/* Action Buttons: Instant POS Checkout & Quick Sell */}
+              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                <button
+                  disabled={p.qty <= 0}
+                  onClick={() => {
+                    setCheckoutProduct(p)
+                    playFestivalSound('button_click')
+                  }}
+                  style={{
+                    background: p.qty > 0 ? `${B.neonLime}15` : 'rgba(255,255,255,0.03)',
+                    border: `1px solid ${p.qty > 0 ? B.neonLime + '60' : 'rgba(255,255,255,0.1)'}`,
+                    borderRadius: 6, padding: '6px 10px',
+                    color: p.qty > 0 ? B.neonLime : B.dim,
+                    fontFamily: 'Space Mono, monospace', fontSize: 9, cursor: p.qty > 0 ? 'pointer' : 'default',
+                    fontWeight: 700,
+                  }}
+                >
+                  💳 QR CHECKOUT
+                </button>
+
+                <button
+                  disabled={p.qty <= 0}
+                  onClick={() => handleSell(p)}
+                  style={{
+                    background: p.qty > 0 ? `${B.amber}15` : 'transparent',
+                    border: `1px solid ${p.qty > 0 ? B.amber + '50' : 'rgba(255,255,255,0.1)'}`,
+                    borderRadius: 6, padding: '6px 10px',
+                    color: p.qty > 0 ? B.amber : B.dim,
+                    fontFamily: 'Space Mono, monospace', fontSize: 9, cursor: p.qty > 0 ? 'pointer' : 'default',
+                  }}
+                >
+                  [-] 1 SOLD
+                </button>
+
+                <button
+                  onClick={() => remove(p.id)}
+                  style={{
+                    background: 'none', border: 'none', color: `${B.neonMagenta}60`,
+                    cursor: 'pointer', padding: '4px 6px', fontSize: 13, flexShrink: 0,
+                  }}
+                >
+                  x
+                </button>
+              </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* POS / Cashless QR Payment Modal */}
+      {checkoutProduct && (
+        <div style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          zIndex: 9999, padding: 20, backdropFilter: 'blur(8px)',
+        }}>
+          <div style={{
+            background: B.charcoal, border: `2px solid ${B.neonLime}`,
+            borderRadius: 16, maxWidth: 440, width: '100%', padding: '28px 24px',
+            textAlign: 'center', position: 'relative', boxShadow: `0 20px 60px ${B.neonLime}25`,
+          }}>
+            <button
+              onClick={() => setCheckoutProduct(null)}
+              style={{ position: 'absolute', top: 14, right: 16, background: 'none', border: 'none', color: B.smoke, fontSize: 18, cursor: 'pointer' }}
+            >
+              ✕
+            </button>
+
+            <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 9, letterSpacing: 2, color: B.neonLime }}>
+              SNEAKERS FEST '26 · LIVE POS TERMINAL
+            </span>
+            <h3 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 28, color: B.white, letterSpacing: 1, margin: '8px 0 2px' }}>
+              {checkoutProduct.name}
+            </h3>
+            <p style={{ fontFamily: 'Space Mono, monospace', fontSize: 10, color: B.smoke, marginBottom: 16 }}>
+              Size: {checkoutProduct.size || 'Standard'} · Stall: {vendor.booth} ({vendor.name})
+            </p>
+
+            <div style={{
+              background: '#08080C', border: `1px solid ${B.neonLime}40`,
+              borderRadius: 12, padding: '16px', marginBottom: 16,
+            }}>
+              <p style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.dim, marginBottom: 4 }}>TOTAL DUE</p>
+              <p style={{ fontFamily: 'Orbitron, monospace', fontSize: 26, fontWeight: 900, color: B.neonLime, margin: 0 }}>
+                ₦{Number(checkoutProduct.price).toLocaleString('en-NG')}
+              </p>
+            </div>
+
+            {/* Generated QR Pattern */}
+            <div style={{
+              background: '#FFF', borderRadius: 12, padding: 16, display: 'inline-block',
+              margin: '0 auto 16px', border: `4px solid ${B.neonLime}`,
+            }}>
+              <svg width="140" height="140" viewBox="0 0 100 100">
+                <rect width="100" height="100" fill="#FFF" />
+                <rect x="10" y="10" width="25" height="25" fill="#000" />
+                <rect x="15" y="15" width="15" height="15" fill="#FFF" />
+                <rect x="19" y="19" width="7" height="7" fill="#000" />
+                <rect x="65" y="10" width="25" height="25" fill="#000" />
+                <rect x="70" y="15" width="15" height="15" fill="#FFF" />
+                <rect x="74" y="19" width="7" height="7" fill="#000" />
+                <rect x="10" y="65" width="25" height="25" fill="#000" />
+                <rect x="15" y="70" width="15" height="15" fill="#FFF" />
+                <rect x="19" y="74" width="7" height="7" fill="#000" />
+                <rect x="45" y="15" width="10" height="20" fill="#000" />
+                <rect x="40" y="45" width="20" height="10" fill="#000" />
+                <rect x="65" y="45" width="10" height="20" fill="#000" />
+                <rect x="45" y="65" width="20" height="20" fill="#000" />
+                <rect x="75" y="75" width="15" height="15" fill="#000" />
+              </svg>
+            </div>
+
+            <p style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.smoke, marginBottom: 16, lineHeight: 1.5 }}>
+              Scan with Bank App or transfer to:<br />
+              <strong style={{ color: B.white }}>Zenith Bank · 101-SF26-ESCROW</strong><br />
+              Ref: <span style={{ color: B.amber }}>{vendor.booth}-{checkoutProduct.id}</span>
+            </p>
+
+            <button
+              onClick={() => handleSell(checkoutProduct)}
+              disabled={posSuccess}
+              style={{
+                width: '100%', padding: '14px', borderRadius: 8,
+                background: posSuccess ? B.neonLime : `linear-gradient(135deg, ${B.neonLime}, #16a34a)`,
+                border: 'none', color: B.black, fontFamily: 'Bebas Neue, sans-serif',
+                fontSize: 18, letterSpacing: 1.5, cursor: 'pointer', transition: 'all 0.2s',
+              }}
+            >
+              {posSuccess ? '✓ PAYMENT CONFIRMED! INVENTORY UPDATED' : '✓ CONFIRM RECEIVED PAYMENT & RECORD SALE'}
+            </button>
+          </div>
         </div>
       )}
     </div>

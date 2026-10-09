@@ -37,6 +37,41 @@ const RANK_CONFIG = {
   CASUAL:    { color: B.smoke, bg: '#0a0a0a' },
 }
 
+const FOIL_THEMES = {
+  GOLD: {
+    id: 'GOLD',
+    label: '✨ GOLD VAULT',
+    border: '#F5A623',
+    glow: 'rgba(245, 166, 35, 0.45)',
+    accent: '#FFD700',
+    shimmer: 'linear-gradient(90deg, #F5A623, #FFD700, #FFE57F, #F5A623)',
+  },
+  CYBER: {
+    id: 'CYBER',
+    label: '⚡ CYBER MAINLAND',
+    border: '#00F5FF',
+    glow: 'rgba(0, 245, 255, 0.45)',
+    accent: '#00F5FF',
+    shimmer: 'linear-gradient(90deg, #00F5FF, #A855F7, #EC4899, #00F5FF)',
+  },
+  DANFO: {
+    id: 'DANFO',
+    label: '🚌 DANFO TRANSIT',
+    border: '#FFB800',
+    glow: 'rgba(255, 184, 0, 0.45)',
+    accent: '#FF5500',
+    shimmer: 'linear-gradient(90deg, #FFB800, #FF5500, #111111, #FFB800)',
+  },
+  DIAMOND: {
+    id: 'DIAMOND',
+    label: '💎 DIAMOND GRAIL',
+    border: '#E0F2FE',
+    glow: 'rgba(224, 242, 254, 0.55)',
+    accent: '#BAE6FD',
+    shimmer: 'linear-gradient(90deg, #FFFFFF, #BAE6FD, #7DD3FC, #FFFFFF)',
+  },
+}
+
 const ACCENT = [B.amber, B.neonCyan, '#A855F7', B.neonLime, '#f97316']
 
 function generateHeuristicCard(shoes, handle) {
@@ -213,6 +248,41 @@ export default function CollectorCard() {
   const [error, setError] = useState('')
   const [copied, setCopied] = useState(false)
   const [downloading, setDownloading] = useState(false)
+  const [foilTheme, setFoilTheme] = useState(() => {
+    try {
+      return localStorage.getItem('sf26_card_foil_theme') || 'GOLD'
+    } catch {
+      return 'GOLD'
+    }
+  })
+  const [nfcTapped, setNfcTapped] = useState(false)
+  const [nfcScanning, setNfcScanning] = useState(false)
+
+  function changeFoilTheme(themeKey) {
+    setFoilTheme(themeKey)
+    try {
+      localStorage.setItem('sf26_card_foil_theme', themeKey)
+    } catch {}
+    playFestivalSound('click')
+  }
+
+  function simulateNfcTap() {
+    if (nfcScanning) return
+    setNfcScanning(true)
+    playFestivalSound('telemetry_ping')
+    setTimeout(() => {
+      setNfcScanning(false)
+      setNfcTapped(true)
+      awardXP(50, 'NFC Gate Pass Verified')
+      unlockBadge('VIP_FAST_PASS')
+      dispatchFestivalAction(FESTIVAL_ACTIONS.WALLET_PASS_GENERATED, {
+        tier: result?.rank || 'ELITE',
+        handle: handle || 'ANONYMOUS_COLLECTOR',
+        timestamp: Date.now(),
+      })
+      playFestivalSound('badge_unlock')
+    }, 1200)
+  }
 
   function updateShoe(i, val) {
     const next = [...shoes]
@@ -293,6 +363,7 @@ export default function CollectorCard() {
 
   const filled = shoes.filter(s => s.trim())
   const rc = result ? RANK_CONFIG[result.rank] : null
+  const curFoil = FOIL_THEMES[foilTheme] || FOIL_THEMES.GOLD
 
   return (
     <section id="collector-card" style={{ background: '#040404', padding: '80px 20px', position: 'relative', overflow: 'hidden' }}>
@@ -353,23 +424,66 @@ export default function CollectorCard() {
 
         {result && rc && (
           <div style={{ animation: 'ccSlide 0.4s ease' }}>
+            {/* Holographic Foil Coating Selector */}
             <div style={{
-              background: rc.bg,
-              border: `2px solid ${rc.color}66`,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: 8,
+              background: '#0a0a0a',
+              border: '1px solid #1e1e1e',
+              padding: '10px 14px',
+              borderRadius: 8,
+              marginBottom: 16,
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ fontSize: 13 }}>✨</span>
+                <span style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.15em' }}>
+                  FOIL COATING:
+                </span>
+              </div>
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                {Object.values(FOIL_THEMES).map(t => (
+                  <button
+                    key={t.id}
+                    onClick={() => changeFoilTheme(t.id)}
+                    style={{
+                      background: foilTheme === t.id ? t.glow : 'rgba(255,255,255,0.04)',
+                      border: `1px solid ${foilTheme === t.id ? t.border : 'rgba(255,255,255,0.1)'}`,
+                      color: foilTheme === t.id ? B.white : B.dim,
+                      fontFamily: "'Space Mono'",
+                      fontSize: 8,
+                      fontWeight: 700,
+                      padding: '5px 10px',
+                      borderRadius: 4,
+                      cursor: 'pointer',
+                      transition: 'all 0.15s ease'
+                    }}
+                  >
+                    {t.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div style={{
+              background: `radial-gradient(ellipse at 50% 0%, ${curFoil.glow} 0%, ${rc.bg} 80%)`,
+              border: `2px solid ${curFoil.border}`,
               padding: '28px 24px',
               marginBottom: 16,
               textAlign: 'center',
               borderRadius: 12,
               position: 'relative',
-              boxShadow: `0 16px 40px ${rc.color}22`,
+              boxShadow: `0 18px 48px ${curFoil.glow}`,
               overflow: 'hidden'
             }}>
               {/* Holographic foil line */}
               <div style={{
                 position: 'absolute',
                 top: 0, left: 0, right: 0,
-                height: 3,
-                background: `linear-gradient(90deg, ${B.amber}, ${B.neonCyan}, ${B.neonMagenta}, ${B.neonLime})`
+                height: 4,
+                background: curFoil.shimmer
               }} />
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, flexWrap: 'wrap', gap: 6 }}>
@@ -382,7 +496,7 @@ export default function CollectorCard() {
                   fontWeight: 900,
                   color: B.white,
                   background: 'rgba(255,255,255,0.08)',
-                  border: `1px solid ${rc.color}40`,
+                  border: `1px solid ${curFoil.border}40`,
                   borderRadius: 999,
                   padding: '2px 8px'
                 }}>
@@ -390,20 +504,99 @@ export default function CollectorCard() {
                 </span>
               </div>
 
-              <div style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(1.5rem,3.8vw,2.6rem)', color: rc.color, letterSpacing: '0.05em', marginBottom: 8 }}>
+              <div style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(1.5rem,3.8vw,2.6rem)', color: curFoil.accent, letterSpacing: '0.05em', marginBottom: 8 }}>
                 {result.collector_title}
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, marginBottom: 14 }}>
-                <div style={{ fontFamily: "'Orbitron'", fontSize: 48, fontWeight: 900, color: rc.color, lineHeight: 1 }}>{result.rep_score}</div>
+                <div style={{ fontFamily: "'Orbitron'", fontSize: 48, fontWeight: 900, color: curFoil.accent, lineHeight: 1 }}>{result.rep_score}</div>
                 <div>
                   <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.15em' }}>REP SCORE</div>
-                  <div style={{ fontFamily: "'Orbitron'", fontSize: 14, fontWeight: 900, color: rc.color }}>{result.rank}</div>
+                  <div style={{ fontFamily: "'Orbitron'", fontSize: 14, fontWeight: 900, color: curFoil.accent }}>{result.rank}</div>
                 </div>
               </div>
 
               <div style={{ fontFamily: "'Space Mono'", fontSize: 10, color: B.smoke, lineHeight: 1.6, marginBottom: 14 }}>
                 {result.tagline}
+              </div>
+
+              {/* RPG Collector Stat Bars */}
+              <div style={{
+                marginTop: 14,
+                marginBottom: 14,
+                padding: '12px 14px',
+                background: 'rgba(0,0,0,0.55)',
+                borderRadius: 8,
+                border: '1px solid rgba(255,255,255,0.08)',
+                textAlign: 'left'
+              }}>
+                <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, letterSpacing: '0.2em', marginBottom: 10, textAlign: 'center' }}>
+                  ⚡ RPG COLLECTOR ATTRIBUTES & RADAR
+                </div>
+                {[
+                  { label: 'HYPE POWER', val: Math.min(100, Math.max(70, result.rep_score + 4)), color: B.amber, display: `${Math.min(100, Math.max(70, result.rep_score + 4))}/100` },
+                  { label: 'AUTHENTICITY', val: 99, color: B.neonCyan, display: '99% VERIFIED' },
+                  { label: 'RARITY INDEX', val: result.rank === 'LEGENDARY' ? 98 : result.rank === 'ELITE' ? 88 : 78, color: '#A855F7', display: result.rank === 'LEGENDARY' ? 'S-TIER GRAIL' : result.rank === 'ELITE' ? 'A-TIER HEAT' : 'B-TIER DRIP' },
+                  { label: 'LAGOS STREET REP', val: result.rep_score, color: B.neonLime, display: `${result.rep_score}/100` },
+                ].map((stat, sIdx) => (
+                  <div key={sIdx} style={{ marginBottom: 6 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: "'Space Mono'", fontSize: 8, marginBottom: 3 }}>
+                      <span style={{ color: B.smoke }}>{stat.label}</span>
+                      <span style={{ color: stat.color, fontWeight: 700 }}>{stat.display}</span>
+                    </div>
+                    <div style={{ width: '100%', height: 4, background: 'rgba(255,255,255,0.08)', borderRadius: 2, overflow: 'hidden' }}>
+                      <div style={{ width: `${stat.val}%`, height: '100%', background: stat.color, boxShadow: `0 0 8px ${stat.color}`, transition: 'width 0.8s ease' }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* NFC Gate Scanner Accreditation Simulation */}
+              <div style={{ marginTop: 12, marginBottom: 10 }}>
+                {nfcTapped ? (
+                  <div style={{
+                    background: 'rgba(34,197,94,0.14)',
+                    border: '1px solid #22c55e',
+                    borderRadius: 8,
+                    padding: '10px 14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 8,
+                    fontFamily: "'Space Mono'",
+                    fontSize: 9,
+                    color: '#4ade80',
+                    letterSpacing: '0.08em'
+                  }}>
+                    <span>✅</span>
+                    <span><strong>NFC GATE ACCREDITED:</strong> DEC 12 MURI OKUNOLA VIP FAST-LANE ACTIVE (+50 XP)</span>
+                  </div>
+                ) : (
+                  <button
+                    onClick={simulateNfcTap}
+                    disabled={nfcScanning}
+                    style={{
+                      width: '100%',
+                      background: nfcScanning ? '#121224' : 'linear-gradient(90deg, rgba(0,245,255,0.12), rgba(168,85,247,0.12))',
+                      border: `1px dashed ${B.neonCyan}`,
+                      color: B.white,
+                      fontFamily: "'Space Mono'",
+                      fontSize: 9,
+                      fontWeight: 700,
+                      letterSpacing: '0.14em',
+                      padding: '11px 14px',
+                      borderRadius: 8,
+                      cursor: nfcScanning ? 'wait' : 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 8,
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <span>{nfcScanning ? '📡 CONNECTING TO VENUE NFC GATE SENSOR...' : '📲 SIMULATE NFC TAP (GATE SCANNER ACCREDITATION)'}</span>
+                  </button>
+                )}
               </div>
 
               {/* Unlocked Badges Ribbon */}

@@ -186,23 +186,109 @@ function BoothGrid() {
   )
 }
 
+// ── Spatial Zone Audio Synthesizer ──────────────────────────────────────────
+function playSpatialZoneSound(zoneId) {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)()
+    const now = ctx.currentTime
+    if (zoneId === 'stage' || zoneId === 'arena') {
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.type = 'sawtooth'
+      osc.frequency.setValueAtTime(160, now)
+      osc.frequency.exponentialRampToValueAtTime(45, now + 0.45)
+      gain.gain.setValueAtTime(0.5, now)
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.45)
+      osc.connect(gain); gain.connect(ctx.destination)
+      osc.start(now); osc.stop(now + 0.45)
+    } else if (zoneId === 'lsi_terminal') {
+      [0, 0.08, 0.16].forEach((delay, idx) => {
+        const osc = ctx.createOscillator()
+        const gain = ctx.createGain()
+        osc.type = 'sine'
+        osc.frequency.setValueAtTime(800 + idx * 240, now + delay)
+        gain.gain.setValueAtTime(0.2, now + delay)
+        gain.gain.exponentialRampToValueAtTime(0.01, now + delay + 0.06)
+        osc.connect(gain); gain.connect(ctx.destination)
+        osc.start(now + delay); osc.stop(now + delay + 0.06)
+      })
+    } else if (zoneId === 'danfo_lab') {
+      const bufferSize = Math.floor(ctx.sampleRate * 0.25)
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate)
+      const data = buffer.getChannelData(0)
+      for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1
+      const noise = ctx.createBufferSource()
+      noise.buffer = buffer
+      const filter = ctx.createBiquadFilter()
+      filter.type = 'bandpass'
+      filter.frequency.setValueAtTime(3200, now)
+      const gain = ctx.createGain()
+      gain.gain.setValueAtTime(0.25, now)
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25)
+      noise.connect(filter); filter.connect(gain); gain.connect(ctx.destination)
+      noise.start(now)
+    } else {
+      [220, 330, 440].forEach((freq) => {
+        const osc = ctx.createOscillator()
+        const gain = ctx.createGain()
+        osc.type = 'sine'
+        osc.frequency.setValueAtTime(freq, now)
+        gain.gain.setValueAtTime(0.12, now)
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35)
+        osc.connect(gain); gain.connect(ctx.destination)
+        osc.start(now); osc.stop(now + 0.35)
+      })
+    }
+  } catch (e) {
+    console.warn('Audio not available', e)
+  }
+}
+
 // ── single clickable zone rect ──────────────────────────────────────────────────
-function ZoneRect({ zone, active, hovered, dimmed, onEnter, onLeave, onClick }) {
+function ZoneRect({ zone, active, hovered, dimmed, onEnter, onLeave, onClick, viewMode, isPinned }) {
   const on  = active?.id === zone.id || hovered === zone.id
   const isWhite = zone.color === '#FFFFFF'
+  const isHeatmap = viewMode === 'heatmap'
   const opacity = dimmed ? 0.25 : 1
-  const fill   = isWhite ? `rgba(255,255,255,${on ? '0.12' : '0.04'})` : `${zone.color}${on ? '25' : '0F'}`
-  const stroke = `${zone.color}${on ? 'FF' : '44'}`
+  
+  // Heatmap density coloring
+  const densityVal = parseInt(zone.density) || 70
+  const heatColor = densityVal >= 90 ? '#EF4444' : densityVal >= 80 ? '#F5A623' : '#22C55E'
+  
+  const fill = isHeatmap
+    ? `${heatColor}${on ? '40' : '22'}`
+    : isWhite ? `rgba(255,255,255,${on ? '0.12' : '0.04'})` : `${zone.color}${on ? '25' : '0F'}`
+  const stroke = isHeatmap ? `${heatColor}${on ? 'FF' : '66'}` : `${zone.color}${on ? 'FF' : '44'}`
   const px = zone.x + 1, py = zone.y + 1, pw = zone.w - 2, ph = zone.h - 2
 
   return (
     <g onClick={() => onClick(zone)} onMouseEnter={() => onEnter(zone.id)} onMouseLeave={onLeave} style={{ cursor:'pointer', opacity, transition:'opacity 0.25s' }}>
       <rect x={px} y={py} width={pw} height={ph} fill={fill} stroke={stroke} strokeWidth={on ? 2 : 0.8} rx={4} />
-      {on && <line x1={px+16} y1={py} x2={px+pw-16} y2={py} stroke={zone.color} strokeWidth={2} opacity={0.9} />}
+      {on && <line x1={px+16} y1={py} x2={px+pw-16} y2={py} stroke={isHeatmap ? heatColor : zone.color} strokeWidth={2} opacity={0.9} />}
+      
+      {/* Heatmap density radar ring */}
+      {isHeatmap && (
+        <circle cx={zone.x + zone.w/2} cy={zone.y + zone.h/2} r={Math.min(zone.w, zone.h)/3.5}
+          fill="none" stroke={heatColor} strokeWidth={1} opacity={0.6}>
+          <animate attributeName="r" values={`${Math.min(zone.w, zone.h)/4};${Math.min(zone.w, zone.h)/3};${Math.min(zone.w, zone.h)/4}`} dur="2s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.7;0.2;0.7" dur="2s" repeatCount="indefinite" />
+        </circle>
+      )}
+
+      {/* Pinned Meetup Beacon */}
+      {isPinned && (
+        <g>
+          <circle cx={zone.x + zone.w/2} cy={zone.y + 14} r={6} fill="#22C55E" opacity={0.9}>
+            <animate attributeName="r" values="5;9;5" dur="1.2s" repeatCount="indefinite" />
+          </circle>
+          <text x={zone.x + zone.w/2} y={zone.y + 15} textAnchor="middle" dominantBaseline="middle" fontFamily="Space Mono,monospace" fontSize={6} fill="#000" fontWeight="bold">📍</text>
+        </g>
+      )}
+
       <text x={zone.x + zone.w/2} y={zone.y + zone.h/2 - (zone.entry ? 10 : 4)}
         textAnchor="middle" dominantBaseline="middle"
         fontFamily="Orbitron,monospace" fontSize={zone.w < 200 ? 8 : 10}
-        fill={on ? zone.color : `${zone.color}99`} letterSpacing={1.5} fontWeight="bold"
+        fill={isHeatmap ? (on ? '#FFFFFF' : heatColor) : (on ? zone.color : `${zone.color}99`)} letterSpacing={1.5} fontWeight="bold"
         style={{ pointerEvents:'none', userSelect:'none' }}
       >{zone.short}</text>
       {zone.sound && (
@@ -211,7 +297,7 @@ function ZoneRect({ zone, active, hovered, dimmed, onEnter, onLeave, onClick }) 
           fontFamily="Space Mono,monospace" fontSize={7}
           fill={on ? '#FFFFFF' : 'rgba(255,255,255,0.4)'} letterSpacing={0.5}
           style={{ pointerEvents:'none', userSelect:'none' }}
-        >{zone.sound.split('·')[0].trim()}</text>
+        >{isHeatmap ? zone.density : zone.sound.split('·')[0].trim()}</text>
       )}
       {zone.entry && (
         <>
@@ -230,7 +316,7 @@ function ZoneRect({ zone, active, hovered, dimmed, onEnter, onLeave, onClick }) 
 }
 
 // ── info panel ─────────────────────────────────────────────────────────────────
-function InfoPanel({ zone, onClose, onSelectRoute }) {
+function InfoPanel({ zone, onClose, onSelectRoute, onPinZone, isPinned }) {
   if (!zone) return (
     <div style={{ textAlign:'center', padding:'36px 0', fontFamily:'Space Mono,monospace', fontSize:11, color: B.dim }}>
       ← tap any zone or select a route above to explore the festival floor plan
@@ -288,31 +374,74 @@ function InfoPanel({ zone, onClose, onSelectRoute }) {
         </div>
       </div>
 
-      {/* Direct Warp Action Button */}
-      {zone.warpHash && (
-        <div style={{ marginTop:16, paddingTop:14, borderTop:'1px solid rgba(255,255,255,0.06)', display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:10 }}>
-          <span style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:B.smoke }}>
-            Target Destination: <strong style={{ color:zone.color }}>{zone.label}</strong>
-          </span>
-          <a
-            href={zone.warpHash}
+      {/* Interactive Action Bar: Spatial Sound, Pin Spot, Warp */}
+      <div style={{ marginTop:16, paddingTop:14, borderTop:'1px solid rgba(255,255,255,0.06)', display:'flex', flexDirection:'column', gap:10 }}>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:8 }}>
+          <button
             onClick={() => {
-              playFestivalSound('button_click')
+              playSpatialZoneSound(zone.id)
             }}
             style={{
               display:'inline-flex', alignItems:'center', gap:6,
-              background:`linear-gradient(135deg, ${zone.color}25, ${zone.color}10)`,
-              border:`1px solid ${zone.color}`,
-              color:B.white,
-              fontFamily:'Orbitron, monospace', fontSize:9, fontWeight:700,
-              letterSpacing:1, padding:'7px 16px', borderRadius:6, textDecoration:'none',
-              boxShadow:`0 0 15px ${zone.color}30`, transition:'all 0.2s',
+              background:'rgba(255,255,255,0.06)', border:`1px solid ${zone.color}50`,
+              color:B.white, fontFamily:'Orbitron,monospace', fontSize:9, fontWeight:700,
+              padding:'7px 12px', borderRadius:6, cursor:'pointer',
             }}
           >
-            ⚡ WARP TO SECTION ({zone.warpHash}) →
-          </a>
+            🎧 LISTEN IN (SPATIAL SIMULATOR)
+          </button>
+
+          <button
+            onClick={() => onPinZone(zone)}
+            style={{
+              display:'inline-flex', alignItems:'center', gap:6,
+              background: isPinned ? `${B.neonLime}20` : 'rgba(255,255,255,0.06)',
+              border:`1px solid ${isPinned ? B.neonLime : 'rgba(255,255,255,0.15)'}`,
+              color: isPinned ? B.neonLime : B.smoke, fontFamily:'Orbitron,monospace', fontSize:9,
+              fontWeight:700, padding:'7px 12px', borderRadius:6, cursor:'pointer',
+            }}
+          >
+            {isPinned ? '✓ PINNED AS MY SPOT' : '📍 DROP MY MEETUP PIN (+50 XP)'}
+          </button>
+
+          {zone.warpHash && (
+            <a
+              href={zone.warpHash}
+              onClick={() => playFestivalSound('button_click')}
+              style={{
+                display:'inline-flex', alignItems:'center', gap:6,
+                background:`linear-gradient(135deg, ${zone.color}25, ${zone.color}10)`,
+                border:`1px solid ${zone.color}`,
+                color:B.white,
+                fontFamily:'Orbitron, monospace', fontSize:9, fontWeight:700,
+                letterSpacing:1, padding:'7px 14px', borderRadius:6, textDecoration:'none',
+                boxShadow:`0 0 15px ${zone.color}30`,
+              }}
+            >
+              ⚡ WARP TO SECTION →
+            </a>
+          )}
         </div>
-      )}
+
+        {isPinned && (
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'8px 12px', background:'rgba(37,211,102,0.1)', border:'1px solid rgba(37,211,102,0.3)', borderRadius:6, flexWrap:'wrap', gap:6 }}>
+            <span style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#25D366' }}>
+              📍 Meetup set at {zone.label}! Share coordinates with your squad:
+            </span>
+            <a
+              href={`https://wa.me/?text=${encodeURIComponent(`Yo! Meet me at ${zone.label} (${zone.short}) at Sneakers Fest '26, Muri Okunola Park! Check the venue map here: https://sneakers-fest-55.netlify.app#venue`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color:'#25D366', fontFamily:'Space Mono,monospace', fontSize:9, fontWeight:700,
+                textDecoration:'none', display:'inline-flex', alignItems:'center', gap:4,
+              }}
+            >
+              💬 WHATSAPP SQUAD →
+            </a>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
@@ -339,11 +468,14 @@ export default function Venue() {
   const { gamification, awardXP, unlockBadge } = useFestivalGamification()
   const [active,       setActive]       = useState(null)
   const [hovered,      setHovered]      = useState(null)
-  const [viewMode,     setViewMode]     = useState('3d') // '3d' | '2d'
+  const [viewMode,     setViewMode]     = useState('3d') // '3d' | '2d' | 'heatmap'
   const [activeRoute,  setActiveRoute]  = useState('none')
   const [activeFilter, setActiveFilter] = useState('all')
   const [searchQuery,  setSearchQuery]  = useState('')
   const [visitedZones, setVisitedZones] = useState(() => new Set())
+  const [pinnedZone,   setPinnedZone]   = useState(() => {
+    try { return localStorage.getItem('sf26_pinned_zone') || null } catch { return null }
+  })
 
   // Sync external zone changes (from Schedule or HUD)
   useEffect(() => {
@@ -354,6 +486,23 @@ export default function Venue() {
       }
     }
   }, [telemetry?.activeZone])
+
+  const handlePinZone = (z) => {
+    const next = pinnedZone === z.id ? null : z.id
+    setPinnedZone(next)
+    try {
+      if (next) localStorage.setItem('sf26_pinned_zone', next)
+      else localStorage.removeItem('sf26_pinned_zone')
+    } catch {}
+    if (next) {
+      awardXP(50, `Pinned Meetup: ${z.short}`)
+      unlockBadge('VENUE_NAVIGATOR')
+      dispatchFestivalAction(FESTIVAL_ACTIONS.ZONE_CHECKIN, { zoneId: z.id, zoneLabel: z.label })
+      playFestivalSound('badge_unlock')
+    } else {
+      playFestivalSound('button_click')
+    }
+  }
 
   const handleZoneSelect = (z) => {
     playFestivalSound('zone_click')
@@ -435,14 +584,27 @@ export default function Venue() {
         <div style={{ display:'flex', flexDirection:'column', gap:14, marginBottom:20, background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:12, padding:'16px 20px' }}>
           {/* Row 1: Mode + Search */}
           <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:12 }}>
-            <div style={{ display:'flex', gap:8, alignItems:'center' }}>
+            <div style={{ display:'flex', gap:8, alignItems:'center', flexWrap:'wrap' }}>
               <span style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:B.dim, letterSpacing:2 }}>VIEW:</span>
-              <button
-                onClick={() => setViewMode(viewMode === '3d' ? '2d' : '3d')}
-                style={{ padding:'6px 14px', borderRadius:20, background: viewMode === '3d' ? `${B.amber}20` : 'transparent', border: `1px solid ${viewMode === '3d' ? B.amber : 'rgba(255,255,255,0.1)'}`, color: viewMode === '3d' ? B.amber : B.smoke, fontFamily:'Orbitron,monospace', fontSize:9, letterSpacing:1, cursor:'pointer' }}
-              >
-                {viewMode === '3d' ? '🕹️ 3D ISOMETRIC' : '📐 2D BLUEPRINT'}
-              </button>
+              {[
+                { id: '3d', label: '🕹️ 3D ISOMETRIC' },
+                { id: '2d', label: '📐 2D BLUEPRINT' },
+                { id: 'heatmap', label: '🌡️ CROWD HEATMAP' },
+              ].map(m => (
+                <button
+                  key={m.id}
+                  onClick={() => setViewMode(m.id)}
+                  style={{
+                    padding:'6px 12px', borderRadius:20,
+                    background: viewMode === m.id ? (m.id === 'heatmap' ? 'rgba(239,68,68,0.2)' : `${B.amber}20`) : 'transparent',
+                    border: `1px solid ${viewMode === m.id ? (m.id === 'heatmap' ? '#EF4444' : B.amber) : 'rgba(255,255,255,0.1)'}`,
+                    color: viewMode === m.id ? (m.id === 'heatmap' ? '#EF4444' : B.amber) : B.smoke,
+                    fontFamily:'Orbitron,monospace', fontSize:9, letterSpacing:1, cursor:'pointer',
+                  }}
+                >
+                  {m.label}
+                </button>
+              ))}
             </div>
 
             <div style={{ display:'flex', alignItems:'center', gap:8, flex: '1 1 240px', maxWidth:360 }}>
@@ -570,6 +732,8 @@ export default function Venue() {
                   onEnter={setHovered}
                   onLeave={() => setHovered(null)}
                   onClick={handleZoneSelect}
+                  viewMode={viewMode}
+                  isPinned={pinnedZone === zone.id}
                 />
               ))}
 
@@ -638,7 +802,12 @@ export default function Venue() {
         </div>
 
         {/* Info panel */}
-        <InfoPanel zone={active} onClose={() => setActive(null)} />
+        <InfoPanel
+          zone={active}
+          onClose={() => setActive(null)}
+          onPinZone={handlePinZone}
+          isPinned={pinnedZone === active?.id}
+        />
 
         {/* CTAs */}
         <div style={{ marginTop:48, textAlign:'center' }}>

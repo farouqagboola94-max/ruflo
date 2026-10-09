@@ -47,6 +47,10 @@ export default function LagosYouthExperience() {
   }
 
   // 1. Synthesized Audio FX
+  const [combo, setCombo] = useState(0)
+  const comboTimerRef = useRef(null)
+
+  // 1. Synthesized Audio FX (8-Pad Street Synthesizer)
   const playSound = (type) => {
     try {
       const ctx = getAudioContext()
@@ -60,10 +64,8 @@ export default function LagosYouthExperience() {
         osc.frequency.exponentialRampToValueAtTime(80, now + 0.35)
         gain.gain.setValueAtTime(0.4, now)
         gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35)
-        osc.connect(gain)
-        gain.connect(ctx.destination)
-        osc.start(now)
-        osc.stop(now + 0.35)
+        osc.connect(gain); gain.connect(ctx.destination)
+        osc.start(now); osc.stop(now + 0.35)
       } else if (type === 'opor') {
         const osc = ctx.createOscillator()
         const gain = ctx.createGain()
@@ -72,10 +74,8 @@ export default function LagosYouthExperience() {
         osc.frequency.exponentialRampToValueAtTime(45, now + 0.5)
         gain.gain.setValueAtTime(0.7, now)
         gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5)
-        osc.connect(gain)
-        gain.connect(ctx.destination)
-        osc.start(now)
-        osc.stop(now + 0.5)
+        osc.connect(gain); gain.connect(ctx.destination)
+        osc.start(now); osc.stop(now + 0.5)
       } else if (type === 'zuzu') {
         [0, 0.1, 0.2].forEach((delay) => {
           const osc = ctx.createOscillator()
@@ -84,10 +84,8 @@ export default function LagosYouthExperience() {
           osc.frequency.setValueAtTime(880, now + delay)
           gain.gain.setValueAtTime(0.15, now + delay)
           gain.gain.exponentialRampToValueAtTime(0.01, now + delay + 0.08)
-          osc.connect(gain)
-          gain.connect(ctx.destination)
-          osc.start(now + delay)
-          osc.stop(now + delay + 0.08)
+          osc.connect(gain); gain.connect(ctx.destination)
+          osc.start(now + delay); osc.stop(now + delay + 0.08)
         })
       } else if (type === 'danfo') {
         [320, 390].forEach((freq) => {
@@ -97,14 +95,70 @@ export default function LagosYouthExperience() {
           osc.frequency.setValueAtTime(freq, now)
           gain.gain.setValueAtTime(0.2, now)
           gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35)
-          osc.connect(gain)
-          gain.connect(ctx.destination)
-          osc.start(now)
-          osc.stop(now + 0.35)
+          osc.connect(gain); gain.connect(ctx.destination)
+          osc.start(now); osc.stop(now + 0.35)
         })
+      } else if (type === 'koporke') {
+        // Dual syncopated handclaps
+        [0, 0.08].forEach((delay) => {
+          const osc = ctx.createOscillator()
+          const gain = ctx.createGain()
+          osc.type = 'triangle'
+          osc.frequency.setValueAtTime(1200, now + delay)
+          osc.frequency.exponentialRampToValueAtTime(200, now + delay + 0.12)
+          gain.gain.setValueAtTime(0.4, now + delay)
+          gain.gain.exponentialRampToValueAtTime(0.01, now + delay + 0.12)
+          osc.connect(gain); gain.connect(ctx.destination)
+          osc.start(now + delay); osc.stop(now + delay + 0.12)
+        })
+      } else if (type === 'echoke') {
+        // Sub-bass 50Hz rumble drop
+        const osc = ctx.createOscillator()
+        const gain = ctx.createGain()
+        osc.type = 'sine'
+        osc.frequency.setValueAtTime(65, now)
+        osc.frequency.exponentialRampToValueAtTime(32, now + 0.7)
+        gain.gain.setValueAtTime(0.8, now)
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.7)
+        osc.connect(gain); gain.connect(ctx.destination)
+        osc.start(now); osc.stop(now + 0.7)
+      } else if (type === 'wahala') {
+        // Alarm horn
+        const osc = ctx.createOscillator()
+        const gain = ctx.createGain()
+        osc.type = 'sawtooth'
+        osc.frequency.setValueAtTime(450, now)
+        osc.frequency.linearRampToValueAtTime(900, now + 0.25)
+        gain.gain.setValueAtTime(0.3, now)
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3)
+        osc.connect(gain); gain.connect(ctx.destination)
+        osc.start(now); osc.stop(now + 0.3)
+      } else if (type === 'otilo') {
+        // Speed warp slide
+        const osc = ctx.createOscillator()
+        const gain = ctx.createGain()
+        osc.type = 'sine'
+        osc.frequency.setValueAtTime(150, now)
+        osc.frequency.exponentialRampToValueAtTime(1200, now + 0.4)
+        gain.gain.setValueAtTime(0.35, now)
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4)
+        osc.connect(gain); gain.connect(ctx.destination)
+        osc.start(now); osc.stop(now + 0.4)
       }
 
-      // Framework Integration: Pump Live Acoustic Decibel Telemetry and Award XP
+      // Combo counter streak
+      setCombo(prev => {
+        const next = prev + 1
+        if (next >= 5) {
+          awardXP(100, 'Street Freestyle Master Combo (5x!)')
+          unlockBadge('STREET_MAESTRO')
+        }
+        return next
+      })
+
+      if (comboTimerRef.current) clearTimeout(comboTimerRef.current)
+      comboTimerRef.current = setTimeout(() => setCombo(0), 2200)
+
       awardXP(25, `Triggered ${type.toUpperCase()} Street Beat`)
       unlockBadge('MAINLAND_ORIGIN')
       dispatch(FESTIVAL_ACTIONS.TELEMETRY_SOUND_UPDATE, {
@@ -559,39 +613,90 @@ export default function LagosYouthExperience() {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono text-xs uppercase tracking-widest mb-2">
             🔊 BROWSER SYNTHESIZER
           </div>
-          <h3 className="font-display text-2xl sm:text-3xl text-white">
+          <h3 className="font-display text-2xl sm:text-3xl text-white mb-2">
             Lagos Street Soundboard
           </h3>
+          <div className="flex items-center justify-center gap-4">
+            <span className="text-gray-400 text-xs">8-Pad procedural Web Audio synth engine · Tap rhythmically to build streaks</span>
+            {combo > 1 && (
+              <span className="px-3 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-black font-mono font-bold text-xs animate-bounce">
+                🔥 {combo}X COMBO STREAK!
+              </span>
+            )}
+          </div>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <button
-            onClick={() => playSound('nodull')}
-            className="p-5 rounded-2xl bg-black/60 border border-white/10 hover:border-amber-400 text-left transition-all hover:-translate-y-1"
-          >
-            <div className="text-white font-bold text-sm mb-1">🔥 No Dull Yourself!</div>
-            <div className="text-gray-400 text-xs">440Hz punch synth</div>
-          </button>
-          <button
-            onClick={() => playSound('opor')}
-            className="p-5 rounded-2xl bg-black/60 border border-white/10 hover:border-amber-400 text-left transition-all hover:-translate-y-1"
-          >
-            <div className="text-white font-bold text-sm mb-1">⚡ Opor Gan!</div>
-            <div className="text-gray-400 text-xs">Sub-bass 808 drop</div>
-          </button>
-          <button
-            onClick={() => playSound('zuzu')}
-            className="p-5 rounded-2xl bg-black/60 border border-white/10 hover:border-amber-400 text-left transition-all hover:-translate-y-1"
-          >
-            <div className="text-white font-bold text-sm mb-1">👀 Who Dey Zuzu?</div>
-            <div className="text-gray-400 text-xs">Chirp filter sweep</div>
-          </button>
-          <button
-            onClick={() => playSound('danfo')}
-            className="p-5 rounded-2xl bg-black/60 border border-white/10 hover:border-amber-400 text-left transition-all hover:-translate-y-1"
-          >
-            <div className="text-white font-bold text-sm mb-1">🚐 Oshodi Express!</div>
-            <div className="text-gray-400 text-xs">Dual horn acoustic</div>
-          </button>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
+          {[
+            { id: 'nodull',  title: '🔥 No Dull Yourself!', sub: '320Hz punch sweep', color: 'border-amber-400/30' },
+            { id: 'opor',    title: '⚡ Opor Gan!',          sub: 'Sub-bass 808 drop',  color: 'border-orange-400/30' },
+            { id: 'zuzu',    title: '👀 Who Dey Zuzu?',      sub: 'Chirp filter sweep', color: 'border-cyan-400/30' },
+            { id: 'danfo',   title: '🚐 Oshodi Express!',    sub: 'Dual horn acoustic', color: 'border-yellow-400/30' },
+            { id: 'koporke', title: '👏 Ko Por Ke!',         sub: 'Syncopated clap',    color: 'border-green-400/30' },
+            { id: 'echoke',  title: '🚀 E Choke!',           sub: '50Hz rumble sub',    color: 'border-purple-400/30' },
+            { id: 'wahala',  title: '🚨 Wahala Dey!',        sub: 'High alarm sweep',   color: 'border-red-400/30' },
+            { id: 'otilo',   title: '💨 Otilo No Trace!',    sub: 'Speed warp slide',   color: 'border-pink-400/30' },
+          ].map(pad => (
+            <button
+              key={pad.id}
+              onClick={() => playSound(pad.id)}
+              className={`p-5 rounded-2xl bg-black/60 border ${pad.color} hover:border-amber-400 text-left transition-all hover:-translate-y-1 active:scale-95`}
+            >
+              <div className="text-white font-bold text-sm mb-1">{pad.title}</div>
+              <div className="text-gray-400 text-xs font-mono">{pad.sub}</div>
+            </button>
+          ))}
+        </div>
+
+        {/* Interactive Street Lingo Translator */}
+        <div className="glass-noir rounded-3xl border border-amber-500/20 p-6 sm:p-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono text-xs uppercase tracking-widest mb-1">
+                🗣️ STREETWEAR LINGO
+              </div>
+              <h4 className="font-display text-xl sm:text-2xl text-white">
+                Lagos Sneaker Slang Translator
+              </h4>
+            </div>
+            <span className="text-xs font-mono text-gray-400">Authentic Mainland & Island dialect</span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[
+              { en: "These kicks are 100% authentic deadstock", street: "Omo this grail clean die, box-fresh original no fugazi!" },
+              { en: "How much is your final best price?", street: "Bros cut soap, how much last for this heavy drip?" },
+              { en: "I am hunting for rare holy grails", street: "I dey find the sacred archival heat wey pass normal!" },
+              { en: "Let's do a direct sneaker trade", street: "Oya swap am for the table make we balance the flex!" },
+            ].map((lingo, idx) => (
+              <div
+                key={idx}
+                className="p-4 rounded-xl bg-black/40 border border-white/10 hover:border-amber-400/50 transition-colors flex flex-col justify-between"
+              >
+                <div>
+                  <p className="text-gray-400 text-xs font-mono mb-2">ENG: "{lingo.en}"</p>
+                  <p className="text-amber-400 font-bold text-sm mb-3">LAGOS: "{lingo.street}"</p>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      navigator.clipboard?.writeText(lingo.street)
+                      playSound('zuzu')
+                    }}
+                    className="px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-white font-mono text-[10px] border border-white/10"
+                  >
+                    📋 Copy Slang
+                  </button>
+                  <button
+                    onClick={() => playSound('opor')}
+                    className="px-3 py-1 rounded-lg bg-amber-500/20 text-amber-400 font-mono text-[10px] border border-amber-500/30"
+                  >
+                    🔊 Play Voice Tone
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
