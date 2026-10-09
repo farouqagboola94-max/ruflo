@@ -11,25 +11,25 @@ const TIERS = [
   {
     name: 'GENERAL', price: '₦5,000', priceNum: 5000,
     tag: 'ENTRY', color: B.neonCyan,
-    perks: ['Full event floor access','Vendor floor entry','Live DJ sets all day','Street food zone'],
+    perks: ['Full event floor access','Vendor floor entry','Live DJ sets all day','Fit-Check Arena crowd voting pass','Street food zone'],
     cta: 'BUY NOW', featured: false, avail: 820, total: 1500,
   },
   {
     name: 'VIP', price: '₦10,000', priceNum: 10000,
     tag: 'MOST POPULAR', color: B.amber,
-    perks: ['Everything in General','VIP lounge access','Exclusive drop previews','Meet & greet access',"SF '26 merch bag"],
+    perks: ['Everything in General','VIP lounge access','LSI Market Terminal pass','Exclusive drop previews','Meet & greet access',"SF '26 merch bag"],
     cta: 'GET VIP', featured: true, avail: 143, total: 400,
   },
   {
     name: 'VVIP', price: '₦25,000', priceNum: 25000,
     tag: 'EXCLUSIVE', color: B.neonMagenta,
-    perks: ['Everything in VIP','Private collector room','Artist studio access','Signed memorabilia','Exclusive VVIP badge','Priority entry & exit'],
+    perks: ['Everything in VIP','Private collector room','Danfo Custom Lab fast-track','Grail Heist Golden Pass eligibility','Signed memorabilia','Priority entry & exit'],
     cta: 'GO VVIP', featured: false, avail: 38, total: 150,
   },
   {
     name: 'PHALANX', price: '₦50,000', priceNum: 50000,
     tag: 'TOP TIER', color: B.neonLime,
-    perks: ['Everything in VVIP','Private Phalanx lounge','Dedicated concierge host','Early entry from 11:00 AM','Exclusive badge + collectible box','Founder-level floor access'],
+    perks: ['Everything in VVIP','Private Phalanx lounge','LSX Escrow priority desk','Early entry from 11:00 AM','Dedicated concierge host','Founder collectible box'],
     cta: 'JOIN PHALANX', featured: false, avail: 12, total: 50,
   },
 ]

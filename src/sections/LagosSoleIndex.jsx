@@ -4,7 +4,9 @@ import { GrainOverlay, SectionTag } from '../components/Shared'
 import {
   useFestivalGamification,
   useFestivalTelemetry,
-  playFestivalSound
+  playFestivalSound,
+  dispatchFestivalAction,
+  FESTIVAL_ACTIONS
 } from '../framework/festivalFramework'
 
 // Top 8 Tracked Sneaker Assets on the Lagos Sole Index (LSI)
@@ -243,6 +245,7 @@ export default function LagosSoleIndex() {
       playFestivalSound('badge_unlock')
       awardXP(75, `Tracked ${symbol} on Lagos Sole Index`)
       unlockBadge('WALL_STREET_OF_SOLES')
+      dispatchFestivalAction(FESTIVAL_ACTIONS.LSI_ASSET_TRACKED, { symbol })
     }
     setWatchlist(nextList)
     try {

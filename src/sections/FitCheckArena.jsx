@@ -235,6 +235,7 @@ export default function FitCheckArena() {
 
     // Gamification rewards
     awardXP(50, `Voted in Fit Battle (${battle.round})`)
+    dispatchFestivalAction(FESTIVAL_ACTIONS.FITCHECK_VOTE_CAST, { battleId: battle.id, contender: contenderKey })
 
     const totalVoted = Object.keys(updatedUserVotes).length
     if (totalVoted >= 3) {

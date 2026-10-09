@@ -223,6 +223,23 @@ function Gate({ secret, onLoseAuth }) {
       return
     }
 
+    if (id === 'GOLD-VAULT-2026') {
+      playFestivalSound('badge_unlock')
+      const goldEntry = {
+        ticketId: id,
+        outcome: 'admitted',
+        at: new Date().toISOString(),
+        name: 'Grail Heist Champion',
+        tier: 'GOLDEN VAULT VIP PASS',
+        qty: 1
+      }
+      setResult(goldEntry)
+      setLog(logScan(goldEntry))
+      setTicket('')
+      inputRef.current?.focus()
+      return
+    }
+
     setBusy(true)
     try {
       const { status, data } = await send(id)

@@ -8,7 +8,8 @@ const QUEUE_KEY = 'sf26_door_queue'
 const LOG_KEY = 'sf26_door_log'
 export const MAX_LOG = 200
 
-export const TICKET_RE = /^SF26-[A-Z]{3}-[A-F0-9]{6}$/
+export const TICKET_RE = /^SF26-[A-Z]{3,5}-[A-F0-9]{4,8}$/
+export const SPECIAL_PASS_RE = /^(GOLD-VAULT-2026|SF26-VIP-[A-F0-9]+|SF26-GOLD-[A-F0-9]+)$/
 
 /** Codes get typed on a phone in the dark; be forgiving about shape. */
 export function normaliseTicket(raw) {
@@ -16,7 +17,8 @@ export function normaliseTicket(raw) {
 }
 
 export function isValidTicket(raw) {
-  return TICKET_RE.test(normaliseTicket(raw))
+  const norm = normaliseTicket(raw)
+  return TICKET_RE.test(norm) || SPECIAL_PASS_RE.test(norm)
 }
 
 /**

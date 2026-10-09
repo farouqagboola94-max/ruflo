@@ -42,6 +42,12 @@ export const FESTIVAL_ACTIONS = {
   HUD_SET_TAB: 'FESTIVAL:HUD_SET_TAB',
   AI_CONCIERGE_OPEN: 'FESTIVAL:AI_CONCIERGE_OPEN',
   AI_CONCIERGE_ACTION: 'FESTIVAL:AI_CONCIERGE_ACTION',
+
+  // Level 5 Integrations: LSI, FitCheck, Customizer & Heist
+  LSI_ASSET_TRACKED: 'FESTIVAL:LSI_ASSET_TRACKED',
+  FITCHECK_VOTE_CAST: 'FESTIVAL:FITCHECK_VOTE_CAST',
+  CUSTOM_SHOE_MINTED: 'FESTIVAL:CUSTOM_SHOE_MINTED',
+  GRAIL_HEIST_CHECKPOINT: 'FESTIVAL:GRAIL_HEIST_CHECKPOINT',
 }
 
 // Storage Keys
@@ -214,6 +220,16 @@ export function dispatchFestivalAction(type, payload = {}) {
         level: newLevel,
         recentReward: `+${gained} XP (${payload.reason || 'Festival Action'})`,
       }
+      // Dual-sync with classic passport storage for instant cross-widget reactivity
+      if (typeof window !== 'undefined') {
+        try {
+          const pass = JSON.parse(localStorage.getItem('sf26_passport') || '{"xp":0,"badges":[],"log":[]}')
+          pass.xp = (pass.xp || 0) + gained
+          pass.log = [...(pass.log || []), { amount: gained, source: payload.reason || 'Festival Action', at: Date.now() }].slice(-50)
+          localStorage.setItem('sf26_passport', JSON.stringify(pass))
+          window.dispatchEvent(new CustomEvent('sf26:xp', { detail: { ...pass, leveledUp: newLevel > (nextState.gamification.level || 1) } }))
+        } catch {}
+      }
       break
     }
 
@@ -225,9 +241,47 @@ export function dispatchFestivalAction(type, payload = {}) {
           badges: [...currentBadges, payload.badge],
           recentReward: `UNLOCKED: ${payload.badge}`,
         }
+        if (typeof window !== 'undefined') {
+          try {
+            const pass = JSON.parse(localStorage.getItem('sf26_passport') || '{"xp":0,"badges":[],"log":[]}')
+            if (!pass.badges.includes(payload.badge)) {
+              pass.badges = [...pass.badges, payload.badge]
+              localStorage.setItem('sf26_passport', JSON.stringify(pass))
+              window.dispatchEvent(new CustomEvent('sf26:xp', { detail: pass }))
+            }
+          } catch {}
+        }
       }
       break
     }
+
+    case FESTIVAL_ACTIONS.LSI_ASSET_TRACKED:
+      nextState.gamification = {
+        ...nextState.gamification,
+        recentReward: `Tracked ${payload.symbol || 'Grail'} on LSI`,
+      }
+      break
+
+    case FESTIVAL_ACTIONS.FITCHECK_VOTE_CAST:
+      nextState.gamification = {
+        ...nextState.gamification,
+        recentReward: `Voted in 1v1 Street Clash`,
+      }
+      break
+
+    case FESTIVAL_ACTIONS.CUSTOM_SHOE_MINTED:
+      nextState.gamification = {
+        ...nextState.gamification,
+        recentReward: `Minted 1-of-1 ${payload.model || 'Danfo Custom'}`,
+      }
+      break
+
+    case FESTIVAL_ACTIONS.GRAIL_HEIST_CHECKPOINT:
+      nextState.gamification = {
+        ...nextState.gamification,
+        recentReward: `Checkpoint Reached: ${payload.checkpoint || 'Beacon'}`,
+      }
+      break
 
     case FESTIVAL_ACTIONS.GAMIFICATION_SET_HANDLE:
       nextState.gamification = {

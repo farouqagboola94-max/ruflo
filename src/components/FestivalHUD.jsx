@@ -49,11 +49,13 @@ export default function FestivalHUD() {
     return `${m}:${s < 10 ? '0' : ''}${s}`
   }
 
-  const teleportToZone = (zoneId) => {
+  const teleportToZone = (target) => {
     playFestivalSound('zone_click')
+    const zoneId = typeof target === 'object' ? target.id : target
+    const sectionId = typeof target === 'object' ? target.section : target
     dispatch(FESTIVAL_ACTIONS.TELEMETRY_ZONE_FOCUS, { zone: zoneId })
     setShowTeleport(false)
-    const el = document.getElementById('venue')
+    const el = document.getElementById(sectionId) || document.getElementById('venue')
     if (el) el.scrollIntoView({ behavior: 'smooth' })
   }
 
@@ -110,22 +112,24 @@ export default function FestivalHUD() {
               display: 'grid',
               gridTemplateColumns: 'repeat(2, 1fr)',
               gap: 8,
-              width: 320,
+              width: 340,
               boxShadow: '0 12px 30px rgba(0,0,0,0.9)',
               animation: 'fadeUp 0.2s ease',
             }}
           >
             {[
-              { id: 'stage', label: '🎤 Main Stage', color: B.amber },
-              { id: 'floor', label: '👟 Main Floor', color: '#FFF' },
-              { id: 'vip', label: '💎 VIP Lounge', color: B.neonMagenta },
-              { id: 'gallery', label: '🖼️ Art Gallery', color: B.neonCyan },
-              { id: 'vendor_w', label: '🛍️ Vendor West', color: B.neonLime },
-              { id: 'entrance', label: '🎟️ Gate 1 Turnstile', color: B.amber },
+              { id: 'stage', section: 'venue', label: '🎤 Main Stage', color: B.amber },
+              { id: 'arena', section: 'fitcheck-arena', label: '⚔️ Fit Battle Arena', color: B.neonMagenta },
+              { id: 'lsi', section: 'lagos-sole-index', label: '📈 Lagos Sole Index', color: B.neonLime },
+              { id: 'heist', section: 'grail-heist', label: '🏆 Grail Heist Quest', color: B.amberGlow },
+              { id: 'custom', section: 'colorizer', label: '🎨 Danfo Custom Lab', color: B.danfoYellow },
+              { id: 'lsx', section: 'lsx', label: '🤝 LSX Trade Pit', color: B.neonCyan },
+              { id: 'vip', section: 'venue', label: '💎 VIP Lounge', color: B.neonMagenta },
+              { id: 'entrance', section: 'my-pass', label: '🎟️ Gate Turnstile', color: B.amber },
             ].map(z => (
               <button
                 key={z.id}
-                onClick={() => teleportToZone(z.id)}
+                onClick={() => teleportToZone(z)}
                 style={{
                   padding: '8px 10px',
                   borderRadius: 6,
@@ -179,6 +183,29 @@ export default function FestivalHUD() {
                     {formatTimer(dropTimer)}
                   </span>
                 </div>
+
+                <a
+                  href="#lagos-sole-index"
+                  onClick={() => playFestivalSound('zone_click')}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 5,
+                    background: 'rgba(0,240,255,0.08)',
+                    padding: '3px 8px',
+                    borderRadius: 4,
+                    border: `1px solid ${B.neonCyan}40`,
+                    textDecoration: 'none',
+                    fontFamily: 'Space Mono,monospace',
+                    fontSize: 9,
+                    color: B.neonCyan,
+                    fontWeight: 700
+                  }}
+                  title="View Lagos Sole Index Live Ticker"
+                >
+                  <span>📈 LSI ₦4.8M</span>
+                  <span style={{ color: B.neonLime, fontSize: 8 }}>▲ +5.8%</span>
+                </a>
               </>
             )}
           </div>
@@ -224,6 +251,29 @@ export default function FestivalHUD() {
             >
               🗺️ MAP
             </button>
+
+            <a
+              href="#fitcheck-arena"
+              onClick={() => playFestivalSound('zone_click')}
+              style={{
+                padding: '6px 10px',
+                borderRadius: 6,
+                background: 'rgba(255,45,123,0.15)',
+                border: `1px solid ${B.neonMagenta}`,
+                color: B.neonMagenta,
+                fontFamily: 'Orbitron,monospace',
+                fontSize: 9,
+                fontWeight: 700,
+                cursor: 'pointer',
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 4
+              }}
+              title="Jump into Live 1v1 Street Clash"
+            >
+              ⚔️ 1v1 FIT
+            </a>
 
             <button
               onClick={() => {

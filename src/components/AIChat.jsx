@@ -11,37 +11,30 @@ import {
 const API = import.meta.env.VITE_BACKEND_URL || ''
 
 const SNEAKER_SYSTEM = `You are the official Sneakers Fest '26 AI — a Lagos sneaker culture expert and event concierge powered by the Catalyst OS Neural Skills Engine. You know everything about:
-- Sneakers Fest '26: December 12, 2026, Lagos Nigeria. Tickets: General ₦5K, VIP ₦10K, VVIP ₦25K, Phalanx ₦50K.
-- Lineup: Headliner details classified. 30+ vendor spaces. Collector room. Exclusive drops for VIP+.
-- Grail culture, resale market, sneaker history, drop intel, outfit advice.
-- The Lagos streetwear scene, Friday Night Protocol (weekly community sessions), and The Catalyst (@catalystggg).
-- Catalyst OS: The underlying intelligence operating system featuring 2,393 universal skills and 70 priority domain skills.
-- Contact: WhatsApp button on the site, Instagram @sneakersfest5555, Snapchat sneakersfest, email sneakersfest088@gmail.com.
+- Sneakers Fest '26: December 12, 2026, Muri Okunola Park, Victoria Island, Lagos Nigeria. Tickets: General ₦5K, VIP ₦10K, VVIP ₦25K, Phalanx ₦50K.
+- Live Fit-Check Arena (#fitcheck-arena): 1v1 head-to-head on-foot street drip battles between Mainland and Island contenders. Crowd voting awards +50 XP; submitting your fit awards +150 XP & BEST_DRESSED_STREET badge.
+- Lagos Sole Index (LSI) (#lagos-sole-index): West Africa's real-time sneaker aftermarket terminal & streaming ticker. Tracks NGN prices for TS1-Mocha, OW-AJ4-Sail, Chicago '85, Panda Dunks, and Virgil LV AF1.
+- Lagos Grail Heist (#grail-heist): Interactive satellite radar quest across 4 encrypted beacons at Muri Okunola Park. Unlocks +250 XP and the Golden Vault Pass for the deadstock giveaway.
+- Danfo Custom Sneaker Lab (#colorizer): 1-of-1 design lab featuring Danfo Hazard stripes, Adire Batik patterns, and official mint certificate serials.
+- Lagos Sole Exchange (LSX) (#lsx): Authenticated P2P sneaker trading pit with physical escrow desks.
+- Turnstile Door Scanner (/door.html): On-site gate scanner with camera QR detection and instant audio buzzers.
+- Leadership & Identity: Directed by Oluwatobiloba — The Catalyst (@catalystggg) and official brand @s_fest26.
 Be direct, culturally aware, and helpful. Reference Lagos culture naturally. Keep responses concise.`
 
 // ── keyword fallback ──────────────────────────────────────────────────────────
 const QA = [
+  { keys: ['lsi','index','price','stock','ticker','market','worth'], answer: "The Lagos Sole Index (LSI) tracks real-time aftermarket prices in Naira (NGN). Currently, TS1 'Reverse Mocha' sits at ₦1,850,000 (+14.2%) and Virgil's Off-White AJ4 'Sail' at ₦2,450,000. Check the #lagos-sole-index terminal to view live charts and bid depth." },
+  { keys: ['fit check','arena','battle','1v1','vote','drip','outfit'], answer: "The Live Fit-Check Arena (#fitcheck-arena) is where Lagos street legends clash 1v1 on foot! Vote on active battles to earn +50 XP or hit 'ENTER YOUR FIT' (+150 XP & BEST_DRESSED_STREET badge) to challenge the reigning champions." },
+  { keys: ['heist','radar','quest','beacon','golden pass'], answer: "The Lagos Grail Heist (#grail-heist) has 4 encrypted beacons across Muri Okunola Park (Alpha at Main Stage, Beta at LSX Desk, Gamma at Danfo Wall, Delta at VIP Crypt). Solve all 4 to earn +250 XP and unlock the Golden Vault Pass!" },
+  { keys: ['custom','colorizer','danfo lab','mint','shoe builder'], answer: "The Danfo Custom Sneaker Lab (#colorizer) lets you craft 1-of-1 kicks with Danfo Hazard transit stripes, Adire Batik geometry, and industrial quote branding. Mint your pair to earn +150 XP and enter the on-site custom battle." },
+  { keys: ['door','scanner','turnstile','gate','checkin'], answer: "Door crews and security scan attendee QR and NFC passes at /door.html with real-time camera detection and dual acoustic buzzers. You can also test your pass in the HUD My Pass simulator." },
   { keys: ['ticket','price','cost','how much','buy','purchase'], answer: 'Tickets: General ₦5,000 · VIP ₦10,000 · VVIP ₦25,000 · Phalanx ₦50,000. Head to the Tickets section to grab yours.' },
-  { keys: ['date','when','time','december'], answer: 'December 12, 2026. Doors open 12 PM; Phalanx holders from 11 AM. Mark your calendar.' },
-  { keys: ['venue','location','where','address'], answer: 'Muri Okunola Park, Victoria Island, Lagos. December 12, 2026 — doors at 12 PM, Phalanx holders from 11 AM.' },
-  { keys: ['lineup','dj','artist','music','perform'], answer: 'Lineup details drop soon — follow @sneakersfest5555 on Instagram and join the WhatsApp inner circle to be first to know.' },
-  { keys: ['vip','vvip','phalanx'], answer: 'VIP (₦10K): Priority entry + lounge + merch bag. VVIP (₦25K): + collector room + exclusive access. Phalanx (₦50K): private lounge, concierge, badge + collectible box, 11 AM entry.' },
-  { keys: ['vendor','sell','stall','booth','apply'], answer: '30+ vendor spaces, invitation-curated first cohort. Apply in the Vendors section — reviewed in 3 business days.' },
-  { keys: ['sponsor','partner','sponsorship'], answer: 'Packages from ₦250K to ₦5M+. FNP from ₦100K. Email sneakersfest088@gmail.com.' },
-  { keys: ['fnp','friday','protocol','weekly'], answer: 'Friday Night Protocol is a weekly community session — drop discussions, challenges, games. Join WhatsApp for alerts.' },
-  { keys: ['drop','exclusive','release','grail','kicks','sneaker'], answer: 'Exclusive drop intel hits the community first. Follow @sneakersfest5555 on Instagram, add sneakersfest on Snapchat, and join the WhatsApp inner circle for early alerts.' },
-  { keys: ['early access','waitlist','queue'], answer: 'Sign up in the Early Access section — queue position + first shot at tickets, vendor spots, and drop intel.' },
-  { keys: ['raffle','win','giveaway'], answer: 'Enter raffles in the Raffle section. Live draws at the event. Enter early.' },
-  { keys: ['gallery','photo','upload'], answer: 'Upload in the Gallery section. Community votes with heat — top photos rank on the leaderboard.' },
-  { keys: ['trade','swap','lsx','exchange'], answer: 'Lagos Sole Exchange (LSX) offers authenticated P2P trades with physical escrow at SF26. Browse the Trade Board or LSX section.' },
-  { keys: ['museum','art','bid','artwork'], answer: 'Eight artworks up for bid — Lagos at Dawn, Sole Supremacy, Grail Keeper, and more. Bid in the Museum section.' },
-  { keys: ['whatsapp','community','join','group'], answer: 'Tap the WhatsApp button (bottom right). Also follow @sneakersfest5555 on Instagram and add sneakersfest on Snapchat. Inner circle gets early access, FNP alerts, and drop announcements.' },
-  { keys: ['contact','reach','email','hello','hi'], answer: 'WhatsApp (bottom right) is fastest. Instagram @sneakersfest5555 · Snapchat: sneakersfest · sneakersfest088@gmail.com for media, partnerships & enquiries.' },
-  { keys: ['instagram','snapchat','social','follow'], answer: 'Instagram: @sneakersfest5555 — Snapchat: sneakersfest — TikTok: @sneakersfest. All platforms are live. Follow for drops, culture, FNP highlights, and event updates.' },
-  { keys: ['merch','shirt','hoodie','clothing'], answer: 'Merch in the Merch section. Lagos Noir aesthetic, limited runs.' },
-  { keys: ['catalyst','founder','ceo','who','about'], answer: "Founded and directed by Oluwatobiloba — The Catalyst (@catalystggg), principal of Catalyst Concepts & Abegbe Agboola Chambers AI Consulting. Full story in Origin Story and the Catalyst OS Hub." },
-  { keys: ['skill','catalyst os','engine','neural'], answer: 'The site is supercharged by the Catalyst OS Skills Registry (2,393 universal skills across Anthropics, Claude, Antigravity & VoltAgent) plus 70 priority skills powering all 17 AI tools, LSX, and FitCheck Studio.' },
-  { keys: ['substack','newsletter','read'], answer: 'The Catalyst official publications cover sneaker culture, Lagos drops, systems, and psychology (@catalystggg). Subscribe free.' },
+  { keys: ['date','when','time','december'], answer: 'December 12, 2026. Doors open 12 PM; Phalanx holders from 11 AM at Muri Okunola Park, Victoria Island, Lagos.' },
+  { keys: ['venue','location','where','address'], answer: 'Muri Okunola Park, Victoria Island, Lagos (6.4312° N, 3.4241° E). Full access details sent 14 days before the event.' },
+  { keys: ['vip','vvip','phalanx'], answer: 'VIP (₦10K): Lounge access + merch bag + LSI live terminal pass. VVIP (₦25K): Collector room + Danfo custom lab fast-track + Golden Pass eligibility. Phalanx (₦50K): Dedicated concierge + collectible box + 11 AM entry.' },
+  { keys: ['vendor','sell','stall','booth','apply'], answer: '30+ vendor spaces across The Floor. Apply in the Vendors section — applications are reviewed within 3 business days.' },
+  { keys: ['trade','swap','lsx','exchange'], answer: 'Lagos Sole Exchange (LSX) offers authenticated P2P trades with physical escrow desks at SF26. Browse the Trade Board or LSX section to match swaps.' },
+  { keys: ['catalyst','founder','ceo','who','about'], answer: "Founded and convened by Oluwatobiloba — The Catalyst (@catalystggg), principal of Catalyst Concepts & Abegbe Agboola Chambers AI Consulting. Official brand: @s_fest26." },
 ]
 
 function keywordReply(text) {
@@ -53,8 +46,8 @@ function keywordReply(text) {
 }
 
 const SUGGESTIONS = [
-  ['Ticket prices', 'Vendor spots', 'Legit Check Booth', 'Date & venue'],
-  ['VIP perks', 'LSX Sneaker Pit', 'Exclusive drops', 'Sponsorships'],
+  ['LSI Market Ticker', 'Fit Battle Ring', 'Grail Heist Clues', 'Ticket prices'],
+  ['Danfo Sneaker Lab', 'LSX Trade Pit', 'Digital Pass / NFC', 'VIP perks'],
 ]
 
 // ── component ─────────────────────────────────────────────────────────────────
