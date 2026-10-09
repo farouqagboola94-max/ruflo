@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import { B } from '../tokens'
 import { loadSDK } from '../lib/loadScript'
 import { dispatchFestivalAction, FESTIVAL_ACTIONS, playFestivalSound } from '../framework/festivalFramework'
+import { downloadAppleWalletPass, downloadGoogleWalletPass } from '../lib/walletPassGenerator'
 
 const PAYSTACK_KEY = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || ''
 const FLW_KEY      = import.meta.env.VITE_FLUTTERWAVE_PUBLIC_KEY || ''
@@ -470,6 +471,22 @@ export default function PaymentModal({ tier, onClose }) {
               style={{ width:'100%', padding:'13px', borderRadius:10, border:`1px solid ${tier.color}`, background:`${tier.color}15`, color:tier.color, fontFamily:'Orbitron,sans-serif', fontSize:11, fontWeight:700, letterSpacing:2, cursor:downloading ? 'wait' : 'pointer', transition:'all 0.2s' }}>
               {downloading ? 'SAVING…' : 'DOWNLOAD TICKET PNG →'}
             </button>
+
+            {/* Native Mobile Wallet Passes */}
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
+              <button
+                onClick={() => downloadAppleWalletPass({ name, email, tier: tier.name, tierColor: tier.color, ref: success.ref, price: tier.price })}
+                style={{ padding:'11px', borderRadius:8, border:'1px solid rgba(255,255,255,0.2)', background:'rgba(255,255,255,0.06)', color:B.white, fontFamily:'Space Mono,monospace', fontSize:9, fontWeight:700, letterSpacing:1, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:6 }}
+              >
+                🍏 APPLE WALLET
+              </button>
+              <button
+                onClick={() => downloadGoogleWalletPass({ name, email, tier: tier.name, tierColor: tier.color, ref: success.ref, price: tier.price })}
+                style={{ padding:'11px', borderRadius:8, border:'1px solid rgba(255,255,255,0.2)', background:'rgba(255,255,255,0.06)', color:B.white, fontFamily:'Space Mono,monospace', fontSize:9, fontWeight:700, letterSpacing:1, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:6 }}
+              >
+                💳 GOOGLE WALLET
+              </button>
+            </div>
 
             <button
               onClick={() => {

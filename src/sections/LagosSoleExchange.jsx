@@ -1,6 +1,26 @@
 import { useState, useMemo } from 'react'
 import { SNEAKERS } from '../data/sneakers'
 import { B, FONTS } from '../tokens'
+import {
+  useFestivalGamification,
+  useFestivalTelemetry,
+  playFestivalSound,
+  dispatchFestivalAction,
+  FESTIVAL_ACTIONS,
+} from '../framework/festivalFramework'
+
+export const TRADE_PAIRS_CATALOG = [
+  { id: 'TP-1', name: "Air Jordan 1 High OG 'Chicago' 2022", value: 2850000, hype: 98, tier: 'GRAIL' },
+  { id: 'TP-2', name: "Travis Scott x AJ1 Low 'Cactus Jack'", value: 1450000, hype: 94, tier: 'HEAT' },
+  { id: 'TP-3', name: "Nike Air Force 1 Low x Tiffany & Co.", value: 1800000, hype: 96, tier: 'GRAIL' },
+  { id: 'TP-4', name: "Nike Dunk Low 'Panda' OG", value: 265000, hype: 88, tier: 'STAPLE' },
+  { id: 'TP-5', name: "Air Jordan 4 Retro 'Bred' Reimagined", value: 920000, hype: 92, tier: 'HEAT' },
+  { id: 'TP-6', name: "Air Jordan 1 x Off-White 'The Ten' Chicago", value: 8500000, hype: 100, tier: 'HOLY GRAIL' },
+  { id: 'TP-7', name: "Nike SB Dunk Low x Ben & Jerry's Chunky Dunky", value: 3200000, hype: 97, tier: 'GRAIL' },
+  { id: 'TP-8', name: "New Balance 9060 'Rain Cloud'", value: 290000, hype: 89, tier: 'STAPLE' },
+  { id: 'TP-9', name: "Travis Scott x AJ1 Low 'Reverse Mocha'", value: 1950000, hype: 97, tier: 'GRAIL' },
+  { id: 'TP-10', name: "Custom AF1 'Eyo Festival Edition' 1-of-1", value: 250000, hype: 91, tier: 'CUSTOM' },
+]
 
 // Curated live listings simulating Lagos verified peer drops & boutique dealers
 const INITIAL_LISTINGS = [
@@ -187,6 +207,7 @@ const INITIAL_LISTINGS = [
 ]
 
 export default function LagosSoleExchange() {
+  const [exchangeMode, setExchangeMode] = useState('browse') // 'browse' | 'matcher'
   const [filter, setFilter] = useState('ALL')
   const [search, setSearch] = useState('')
   const [selectedListing, setSelectedListing] = useState(null)
@@ -194,6 +215,63 @@ export default function LagosSoleExchange() {
   const [escrowStep, setEscrowStep] = useState(1)
   const [orderConfirmed, setOrderConfirmed] = useState(false)
   const [userOffer, setUserOffer] = useState('')
+
+  // Level 1-3 Framework Hooks
+  const { awardXP, unlockBadge } = useFestivalGamification()
+  const { setZone } = useFestivalTelemetry()
+
+  // Matcher state
+  const [haveShoeId, setHaveShoeId] = useState('TP-5')
+  const [haveSize, setHaveSize] = useState('US 10.5')
+  const [haveCondition, setHaveCondition] = useState('Deadstock (DS)')
+  const [wantShoeId, setWantShoeId] = useState('TP-3')
+  const [wantSize, setWantSize] = useState('US 10.0')
+  const [rendezvousPass, setRendezvousPass] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('sf26_lsx_rendezvous') || 'null')
+    } catch {
+      return null
+    }
+  })
+
+  const haveShoe = useMemo(() => TRADE_PAIRS_CATALOG.find(p => p.id === haveShoeId) || TRADE_PAIRS_CATALOG[0], [haveShoeId])
+  const wantShoe = useMemo(() => TRADE_PAIRS_CATALOG.find(p => p.id === wantShoeId) || TRADE_PAIRS_CATALOG[1], [wantShoeId])
+  const valueDelta = Math.abs(wantShoe.value - haveShoe.value)
+  const isStraightTrade = valueDelta <= 150000
+  const fairnessScore = Math.max(72, Math.min(99, Math.round(100 - (valueDelta / Math.max(haveShoe.value, wantShoe.value)) * 28)))
+
+  const handleLockRendezvous = () => {
+    const desks = ['DESK-ALPHA', 'DESK-BETA', 'DESK-03', 'DESK-04']
+    const assignedDesk = desks[Math.floor(Math.random() * desks.length)]
+    const code = `LSX-ZONE-B-${Math.floor(1000 + Math.random() * 9000)}`
+    const pass = {
+      code,
+      desk: `Zone B (Floor Pit Authenticator ${assignedDesk})`,
+      slot: 'Festival Day 1 — 15:00 WAT',
+      have: `${haveShoe.name} (${haveSize}, ${haveCondition})`,
+      want: `${wantShoe.name} (${wantSize})`,
+      fairness: `${fairnessScore}% Fair Trade Index`,
+      cashBalance: isStraightTrade
+        ? 'Straight 1:1 Trade'
+        : wantShoe.value > haveShoe.value
+          ? `Top-Up From You: +₦${valueDelta.toLocaleString()}`
+          : `Cash Payout To You: +₦${valueDelta.toLocaleString()}`,
+      timeGenerated: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    }
+    setRendezvousPass(pass)
+    try {
+      localStorage.setItem('sf26_lsx_rendezvous', JSON.stringify(pass))
+    } catch {}
+
+    awardXP(75, 'LSX Trade Rendezvous Scheduled')
+    unlockBadge('LSX_TRADER_VERIFIED')
+    setZone('floor')
+    playFestivalSound('badge_unlock')
+    dispatchFestivalAction(FESTIVAL_ACTIONS.ADD_NOTIFICATION, {
+      title: 'LSX Trade Rendezvous Confirmed!',
+      message: `Reserved ${assignedDesk} at Muri Okunola Park. Pass: ${code}`
+    })
+  }
 
   const filteredListings = useMemo(() => {
     return INITIAL_LISTINGS.filter(item => {
@@ -285,6 +363,449 @@ export default function LagosSoleExchange() {
             The premier decentralized trading pit for West Africa’s sneaker capital. Instant peer-to-peer deals, locked funds protection via Sneakers Fest Physical Escrow, and direct door-to-door dispatched legit checking.
           </p>
         </div>
+
+        {/* Mode Selector */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '12px',
+          marginBottom: '32px',
+          flexWrap: 'wrap'
+        }}>
+          <button
+            onClick={() => {
+              setExchangeMode('matcher')
+              playFestivalSound('zone_click')
+            }}
+            style={{
+              padding: '12px 22px',
+              borderRadius: '10px',
+              border: exchangeMode === 'matcher' ? `1px solid ${B.amber}` : `1px solid ${B.gunmetal}`,
+              background: exchangeMode === 'matcher' ? 'rgba(255, 184, 0, 0.16)' : 'rgba(255, 255, 255, 0.03)',
+              color: exchangeMode === 'matcher' ? B.amber : '#9CA3AF',
+              fontFamily: "'Space Mono', monospace",
+              fontSize: '11px',
+              fontWeight: 700,
+              letterSpacing: '0.12em',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              boxShadow: exchangeMode === 'matcher' ? '0 0 20px rgba(255, 184, 0, 0.25)' : 'none',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <span>⚡ P2P TRADE MATCHER & RENDEZVOUS</span>
+            {rendezvousPass && <span style={{ padding: '2px 6px', background: B.neonLime, color: B.black, borderRadius: 3, fontSize: 8 }}>PASS BOOKED</span>}
+          </button>
+
+          <button
+            onClick={() => {
+              setExchangeMode('browse')
+              playFestivalSound('zone_click')
+            }}
+            style={{
+              padding: '12px 22px',
+              borderRadius: '10px',
+              border: exchangeMode === 'browse' ? `1px solid ${B.neonCyan}` : `1px solid ${B.gunmetal}`,
+              background: exchangeMode === 'browse' ? 'rgba(0, 229, 255, 0.16)' : 'rgba(255, 255, 255, 0.03)',
+              color: exchangeMode === 'browse' ? B.neonCyan : '#9CA3AF',
+              fontFamily: "'Space Mono', monospace",
+              fontSize: '11px',
+              fontWeight: 700,
+              letterSpacing: '0.12em',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              boxShadow: exchangeMode === 'browse' ? '0 0 20px rgba(0, 229, 255, 0.25)' : 'none',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <span>🛒 LIVE ESCROW DROPS ({filteredListings.length})</span>
+          </button>
+        </div>
+
+        {/* P2P TRADE MATCHER & RENDEZVOUS ENGINE */}
+        {exchangeMode === 'matcher' && (
+          <div style={{
+            background: 'rgba(15, 18, 24, 0.9)',
+            border: `1px solid ${B.amber}44`,
+            borderRadius: '20px',
+            padding: 'clamp(20px, 4vw, 36px)',
+            marginBottom: '40px',
+            boxShadow: '0 12px 40px rgba(0,0,0,0.6)',
+            position: 'relative'
+          }}>
+            {/* Header badge */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10, marginBottom: 24 }}>
+              <div>
+                <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: B.amber, letterSpacing: '0.18em', textTransform: 'uppercase' }}>
+                  AUTOMATED SNEAKER FAIRNESS ALGORITHM
+                </div>
+                <h3 style={{ fontFamily: "'Orbitron', monospace", fontSize: 'clamp(20px, 3vw, 28px)', color: B.white, margin: '6px 0 0 0' }}>
+                  PEER-TO-PEER <span style={{ color: B.amber }}>TRADE CALCULATOR</span>
+                </h3>
+              </div>
+              <div style={{
+                padding: '6px 12px',
+                borderRadius: '6px',
+                background: 'rgba(255, 184, 0, 0.1)',
+                border: `1px solid ${B.amber}55`,
+                fontFamily: "'Space Mono', monospace",
+                fontSize: 10,
+                color: B.amber
+              }}>
+                ZONE B AUTHENTICATION ESCROW READY
+              </div>
+            </div>
+
+            {/* Split Trade Cards */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px', marginBottom: '28px' }}>
+              {/* HAVE CARD */}
+              <div style={{
+                background: '#0D0F14',
+                border: `1px solid ${B.gunmetal}`,
+                borderRadius: '14px',
+                padding: '20px',
+                position: 'relative'
+              }}>
+                <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: B.neonCyan, letterSpacing: '0.15em', marginBottom: 12 }}>
+                  YOUR GRAIL TO TRADE (HAVE)
+                </div>
+                
+                <label style={{ display: 'block', fontSize: 11, color: '#9CA3AF', marginBottom: 6, fontFamily: "'Space Mono', monospace" }}>
+                  SELECT SNEAKER
+                </label>
+                <select
+                  value={haveShoeId}
+                  onChange={(e) => setHaveShoeId(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '11px',
+                    borderRadius: '8px',
+                    background: '#151922',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    color: '#fff',
+                    fontSize: '13px',
+                    marginBottom: '16px',
+                    outline: 'none'
+                  }}
+                >
+                  {TRADE_PAIRS_CATALOG.map(p => (
+                    <option key={p.id} value={p.id}>{p.name} — ₦{p.value.toLocaleString()}</option>
+                  ))}
+                </select>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: 11, color: '#9CA3AF', marginBottom: 6, fontFamily: "'Space Mono', monospace" }}>
+                      SIZE
+                    </label>
+                    <select
+                      value={haveSize}
+                      onChange={(e) => setHaveSize(e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '10px',
+                        borderRadius: '8px',
+                        background: '#151922',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        color: '#fff',
+                        fontSize: '13px',
+                        outline: 'none'
+                      }}
+                    >
+                      {['US 7.5', 'US 8.0', 'US 8.5', 'US 9.0', 'US 9.5', 'US 10.0', 'US 10.5', 'US 11.0', 'US 11.5', 'US 12.0', 'US 13.0'].map(s => (
+                        <option key={s} value={s}>{s}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: 11, color: '#9CA3AF', marginBottom: 6, fontFamily: "'Space Mono', monospace" }}>
+                      CONDITION
+                    </label>
+                    <select
+                      value={haveCondition}
+                      onChange={(e) => setHaveCondition(e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '10px',
+                        borderRadius: '8px',
+                        background: '#151922',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        color: '#fff',
+                        fontSize: '13px',
+                        outline: 'none'
+                      }}
+                    >
+                      <option value="Deadstock (DS)">Deadstock (DS)</option>
+                      <option value="VNDS (Worn 1x)">VNDS (Worn 1x)</option>
+                      <option value="9/10 OG All">9/10 OG All</option>
+                      <option value="8.5/10 Clean">8.5/10 Clean</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div style={{
+                  padding: '12px',
+                  background: 'rgba(0, 229, 255, 0.05)',
+                  border: '1px solid rgba(0, 229, 255, 0.2)',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}>
+                  <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: '#9CA3AF' }}>EST. MARKET VALUE</span>
+                  <span style={{ fontFamily: "'Orbitron', monospace", fontSize: 15, fontWeight: 700, color: B.neonCyan }}>
+                    ₦{haveShoe.value.toLocaleString()}
+                  </span>
+                </div>
+              </div>
+
+              {/* WANT CARD */}
+              <div style={{
+                background: '#0D0F14',
+                border: `1px solid ${B.gunmetal}`,
+                borderRadius: '14px',
+                padding: '20px',
+                position: 'relative'
+              }}>
+                <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: B.amber, letterSpacing: '0.15em', marginBottom: 12 }}>
+                  TARGET GRAIL HUNT (WANT)
+                </div>
+
+                <label style={{ display: 'block', fontSize: 11, color: '#9CA3AF', marginBottom: 6, fontFamily: "'Space Mono', monospace" }}>
+                  DESIRED SNEAKER
+                </label>
+                <select
+                  value={wantShoeId}
+                  onChange={(e) => setWantShoeId(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '11px',
+                    borderRadius: '8px',
+                    background: '#151922',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    color: '#fff',
+                    fontSize: '13px',
+                    marginBottom: '16px',
+                    outline: 'none'
+                  }}
+                >
+                  {TRADE_PAIRS_CATALOG.map(p => (
+                    <option key={p.id} value={p.id}>{p.name} — ₦{p.value.toLocaleString()}</option>
+                  ))}
+                </select>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 12, marginBottom: 16 }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: 11, color: '#9CA3AF', marginBottom: 6, fontFamily: "'Space Mono', monospace" }}>
+                      DESIRED SIZE
+                    </label>
+                    <select
+                      value={wantSize}
+                      onChange={(e) => setWantSize(e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '10px',
+                        borderRadius: '8px',
+                        background: '#151922',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        color: '#fff',
+                        fontSize: '13px',
+                        outline: 'none'
+                      }}
+                    >
+                      {['US 7.5', 'US 8.0', 'US 8.5', 'US 9.0', 'US 9.5', 'US 10.0', 'US 10.5', 'US 11.0', 'US 11.5', 'US 12.0', 'US 13.0'].map(s => (
+                        <option key={s} value={s}>{s}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div style={{
+                  padding: '12px',
+                  background: 'rgba(255, 184, 0, 0.05)',
+                  border: '1px solid rgba(255, 184, 0, 0.2)',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}>
+                  <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: '#9CA3AF' }}>EST. MARKET VALUE</span>
+                  <span style={{ fontFamily: "'Orbitron', monospace", fontSize: 15, fontWeight: 700, color: B.amber }}>
+                    ₦{wantShoe.value.toLocaleString()}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Fair Trade Index Gauge */}
+            <div style={{
+              background: '#0D0F14',
+              borderRadius: '14px',
+              padding: '20px',
+              border: `1px solid ${B.gunmetal}`,
+              marginBottom: '24px'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, flexWrap: 'wrap', gap: 8 }}>
+                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, color: B.white, fontWeight: 700 }}>
+                  ⚖️ FAIR TRADE EQUIVALENCE SCORE
+                </span>
+                <span style={{ fontFamily: "'Orbitron', monospace", fontSize: 14, fontWeight: 900, color: fairnessScore >= 85 ? B.neonLime : B.amber }}>
+                  {fairnessScore}% MATCH QUALITY
+                </span>
+              </div>
+
+              {/* Progress bar */}
+              <div style={{ height: 8, background: '#1c212d', borderRadius: 4, overflow: 'hidden', marginBottom: 14 }}>
+                <div style={{
+                  height: '100%',
+                  width: `${fairnessScore}%`,
+                  background: fairnessScore >= 85 ? `linear-gradient(90deg, ${B.amber}, ${B.neonLime})` : B.amber,
+                  borderRadius: 4,
+                  transition: 'width 0.4s ease'
+                }} />
+              </div>
+
+              {/* Valuation Recommendation */}
+              <div style={{
+                padding: '12px 14px',
+                borderRadius: '8px',
+                background: isStraightTrade ? 'rgba(0, 255, 128, 0.08)' : 'rgba(255, 184, 0, 0.08)',
+                border: `1px solid ${isStraightTrade ? B.neonLime + '44' : B.amber + '44'}`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: 10
+              }}>
+                <div>
+                  <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, fontWeight: 700, color: isStraightTrade ? B.neonLime : B.amber }}>
+                    {isStraightTrade ? '🤝 RECOMMENDED: STRAIGHT 1:1 TRADE' : '⚖️ RECOMMENDED VALUE BALANCE ADJUSTMENT'}
+                  </div>
+                  <div style={{ fontSize: 13, color: '#D1D5DB', marginTop: 4, fontFamily: "'Syne', sans-serif" }}>
+                    {isStraightTrade
+                      ? 'Values are within fair parity margins. No additional cash needed between parties.'
+                      : wantShoe.value > haveShoe.value
+                        ? `Target grail carries higher market value. Recommend +₦${valueDelta.toLocaleString()} cash top-up from you.`
+                        : `Your grail carries higher market value. Recommend +₦${valueDelta.toLocaleString()} cash payout to you.`
+                    }
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ marginTop: 12, fontSize: 12, color: '#9CA3AF', fontFamily: "'Syne', sans-serif", lineHeight: 1.5 }}>
+                🛡️ <strong style={{ color: B.white }}>Sneakers Fest Authentication Pit Guarantee:</strong> Both sneakers undergo mandatory dual-authenticator inspection at Muri Okunola Park Zone B with ultraviolet spectroscopy, stitch-density check, and anti-swap tamper tags before handover.
+              </div>
+            </div>
+
+            {/* Rendezvous Pass Display or Book Button */}
+            {rendezvousPass ? (
+              <div style={{
+                background: 'linear-gradient(135deg, #131720 0%, #0a0d13 100%)',
+                border: `2px solid ${B.neonLime}`,
+                borderRadius: '16px',
+                padding: '24px',
+                boxShadow: `0 0 30px ${B.neonLime}22`
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10, marginBottom: 16 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ fontSize: 18 }}>🎟️</span>
+                    <span style={{ fontFamily: "'Orbitron', monospace", fontWeight: 900, fontSize: 16, color: B.neonLime }}>
+                      LSX RENDEZVOUS PASS CONFIRMED
+                    </span>
+                  </div>
+                  <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, color: B.neonCyan }}>
+                    PASS #{rendezvousPass.code}
+                  </span>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14, marginBottom: 20 }}>
+                  <div style={{ background: '#080a0f', padding: '12px', borderRadius: 8, border: `1px solid ${B.gunmetal}` }}>
+                    <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: '#9CA3AF' }}>RENDEZVOUS LOCATION</div>
+                    <div style={{ color: B.white, fontWeight: 700, fontSize: 13, marginTop: 4 }}>{rendezvousPass.desk}</div>
+                    <div style={{ color: B.smoke, fontSize: 11, marginTop: 2 }}>Muri Okunola Park, VI</div>
+                  </div>
+                  <div style={{ background: '#080a0f', padding: '12px', borderRadius: 8, border: `1px solid ${B.gunmetal}` }}>
+                    <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: '#9CA3AF' }}>AUTHENTICATION TIME SLOT</div>
+                    <div style={{ color: B.amber, fontWeight: 700, fontSize: 13, marginTop: 4 }}>{rendezvousPass.slot}</div>
+                    <div style={{ color: B.smoke, fontSize: 11, marginTop: 2 }}>Physical queue priority</div>
+                  </div>
+                  <div style={{ background: '#080a0f', padding: '12px', borderRadius: 8, border: `1px solid ${B.gunmetal}` }}>
+                    <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: '#9CA3AF' }}>OFFICIAL TRADE TERMS</div>
+                    <div style={{ color: B.neonLime, fontWeight: 700, fontSize: 13, marginTop: 4 }}>{rendezvousPass.cashBalance}</div>
+                    <div style={{ color: B.smoke, fontSize: 11, marginTop: 2 }}>{rendezvousPass.fairness}</div>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                  <button
+                    onClick={() => {
+                      alert(`LSX Pass ${rendezvousPass.code} confirmed! Present at Zone B Authentication Desk on festival day.`)
+                      playFestivalSound('xp_gain')
+                    }}
+                    style={{
+                      flex: '1 1 200px',
+                      padding: '12px 18px',
+                      background: B.neonLime,
+                      color: B.black,
+                      border: 'none',
+                      borderRadius: 8,
+                      fontFamily: "'Space Mono', monospace",
+                      fontSize: 11,
+                      fontWeight: 800,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    💾 SAVE DIGITAL RENDEZVOUS PASS
+                  </button>
+                  <button
+                    onClick={() => {
+                      setRendezvousPass(null)
+                      try { localStorage.removeItem('sf26_lsx_rendezvous') } catch {}
+                      playFestivalSound('zone_click')
+                    }}
+                    style={{
+                      padding: '12px 18px',
+                      background: 'transparent',
+                      color: '#9CA3AF',
+                      border: `1px solid ${B.gunmetal}`,
+                      borderRadius: 8,
+                      fontFamily: "'Space Mono', monospace",
+                      fontSize: 11,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    CHANGE PAIR / RESCHEDULE
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <button
+                onClick={handleLockRendezvous}
+                style={{
+                  width: '100%',
+                  padding: '16px 24px',
+                  background: `linear-gradient(90deg, ${B.amber}, #FFA000)`,
+                  border: 'none',
+                  borderRadius: '12px',
+                  color: B.black,
+                  fontFamily: "'Space Mono', monospace",
+                  fontSize: '13px',
+                  fontWeight: 900,
+                  letterSpacing: '0.12em',
+                  cursor: 'pointer',
+                  boxShadow: '0 8px 30px rgba(255, 184, 0, 0.4)',
+                  transition: 'transform 0.2s, box-shadow 0.2s'
+                }}
+              >
+                🔒 LOCK FESTIVAL RENDEZVOUS & AUTHENTICATION DESK (+75 XP)
+              </button>
+            )}
+          </div>
+        )}
 
         {/* Live Marketplace Telemetry & Filters */}
         <div style={{

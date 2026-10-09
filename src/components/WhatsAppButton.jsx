@@ -1,11 +1,34 @@
 import { useState, useEffect } from 'react'
 import { SOCIAL_LINKS } from '../config'
+import {
+  useFestivalGamification,
+  playFestivalSound,
+  dispatchFestivalAction,
+  FESTIVAL_ACTIONS,
+} from '../framework/festivalFramework'
 
 export default function WhatsAppButton() {
   const [visible, setVisible] = useState(false)
   const [hovered, setHovered] = useState(false)
   const [expanded, setExpanded] = useState(false)
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768)
+
+  const { awardXP, unlockBadge } = useFestivalGamification()
+
+  const handleSquadInvite = () => {
+    const inviteMsg = encodeURIComponent(
+      "Yo! I'm pulling up to Sneakers Fest '26 at Muri Okunola Park, Lagos! 👟🔥\n\nLock in your passes, trade grails at LSX, and catch the live drops:\nhttps://sneakers-fest-55.netlify.app/?ref=squad\n\nOfficial: @s_fest26 | Convener: @catalystggg #SneakersFest26"
+    )
+    window.open(`https://wa.me/?text=${inviteMsg}`, '_blank')
+    awardXP(100, 'Squad WhatsApp Invite Dispatched')
+    unlockBadge('SQUAD_LEADER')
+    playFestivalSound('badge_unlock')
+    dispatchFestivalAction(FESTIVAL_ACTIONS.ADD_NOTIFICATION, {
+      title: 'Squad Invite Dispatched! (+100 XP)',
+      message: 'You unlocked the SQUAD LEADER badge. See you on the floor!'
+    })
+    setExpanded(false)
+  }
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 400)
@@ -41,7 +64,7 @@ export default function WhatsAppButton() {
         pointerEvents: visible ? 'auto' : 'none',
       }}
     >
-      {/* Number picker — shown when expanded */}
+      {/* Number picker & Squad Viral Engine — shown when expanded */}
       {expanded && (
         <div
           style={{
@@ -51,6 +74,28 @@ export default function WhatsAppButton() {
             alignItems: 'flex-end',
           }}
         >
+          {/* Squad Invite Action */}
+          <button
+            onClick={handleSquadInvite}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
+              background: 'linear-gradient(90deg, #1DB954 0%, #25D366 100%)',
+              border: '1px solid #00FF88',
+              borderRadius: 10,
+              padding: '11px 18px',
+              cursor: 'pointer',
+              boxShadow: '0 4px 20px rgba(37, 211, 102, 0.4)',
+              animation: 'chatSlideIn 0.2s ease',
+            }}
+          >
+            <span style={{ fontSize: 16 }}>🚀</span>
+            <span style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 16, color: '#000', letterSpacing: 1.5, fontWeight: 900 }}>
+              INVITE SQUAD TO FEST (+100 XP)
+            </span>
+          </button>
+
           {contacts.map(({ label, href }) => (
             <a
               key={label}

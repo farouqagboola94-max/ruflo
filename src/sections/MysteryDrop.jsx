@@ -3,6 +3,13 @@ import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import { addXP, XP_VALUES } from '../lib/passport'
 import Egg from '../components/Egg'
+import {
+  useFestivalWallet,
+  useFestivalGamification,
+  playFestivalSound,
+  dispatchFestivalAction,
+  FESTIVAL_ACTIONS,
+} from '../framework/festivalFramework'
 
 const EVENT = new Date('2026-12-12T12:00:00')
 
@@ -61,6 +68,18 @@ function getFounderCount() {
 }
 
 export default function MysteryDrop() {
+  const { wallet } = useFestivalWallet()
+  const { gamification, awardXP, unlockBadge } = useFestivalGamification()
+  const [reservedDrops, setReservedDrops] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('sf26_reserved_drops') || '[]') } catch { return [] }
+  })
+  const [reservingId,   setReservingId]   = useState(null)
+  const [reserveSuccess,setReserveSuccess]= useState(null)
+  const [botAnswer,     setBotAnswer]     = useState('')
+  const [botError,      setBotError]      = useState('')
+
+  const isVipTier = wallet.activePass && ['VIP', 'VVIP', 'PHALANX'].includes(wallet.activePass.tier?.toUpperCase())
+
   const [hovered,       setHovered]       = useState(false)
   const [watchers,      setWatchers]      = useState(WATCHER_BASE)
   const [unlockedClues, setUnlockedClues] = useState([0])
@@ -75,6 +94,32 @@ export default function MysteryDrop() {
   const watcherRef   = useRef(null)
   const clueRef      = useRef(null)
   const elapsedRef   = useRef(null)
+
+  function handleReserve(drop) {
+    if (botAnswer.trim() !== '1985') {
+      setBotError('Anti-bot verification failed. Hint: Air Jordan 1 debuted in 1985.')
+      return
+    }
+    setBotError('')
+    const voucher = {
+      id: drop.id,
+      name: drop.name,
+      voucherCode: `GRAIL-${drop.id}-${Date.now().toString(36).toUpperCase()}`,
+      zone: drop.zone,
+      retail: drop.retail,
+      reservedAt: new Date().toLocaleTimeString(),
+      priority: isVipTier ? 'VIP Priority Access' : 'General Queue',
+    }
+    const updated = [voucher, ...reservedDrops]
+    setReservedDrops(updated)
+    try { localStorage.setItem('sf26_reserved_drops', JSON.stringify(updated)) } catch {}
+    awardXP(150, `Reserved ${drop.name}`)
+    unlockBadge('GRAIL_RADAR_RESERVED')
+    playFestivalSound('badge_unlock')
+    setReserveSuccess(voucher)
+    setReservingId(null)
+    setBotAnswer('')
+  }
 
   const pad = n => String(n).padStart(2, '0')
 
@@ -370,6 +415,128 @@ export default function MysteryDrop() {
               }}
             >SECURE YOUR STATUS →</button>
           </div>
+        </div>
+
+        {/* LIVE GRAIL DROPLIST RADAR & INSTANT RESERVE (Phase 2 Feature) */}
+        <div style={{ margin: '40px 0', textAlign: 'left' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
+            <div>
+              <div style={{ fontFamily: "'Orbitron'", fontSize: '0.65rem', color: B.neonLime, letterSpacing: 2, fontWeight: 700 }}>
+                ● REAL-TIME RADAR: 3 CONFIRMED FESTIVAL EXCLUSIVES
+              </div>
+              <div style={{ fontFamily: "'Bebas Neue'", fontSize: '1.6rem', color: B.white, letterSpacing: 2 }}>
+                FESTIVAL GRAIL DROPLIST & INSTANT QUEUE
+              </div>
+            </div>
+            {isVipTier && (
+              <span style={{ fontFamily: "'Orbitron'", fontSize: '0.65rem', color: B.neonMagenta, background: 'rgba(255,45,123,0.1)', border: `1px solid ${B.neonMagenta}60`, padding: '4px 10px', borderRadius: 4 }}>
+                👑 VIP FAST-TRACK QUEUE ACTIVE
+              </span>
+            )}
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14 }}>
+            {[
+              { id: 'TS-MOCHA', name: "Travis Scott Jumpman Jack 'Dark Mocha'", pairsTotal: 50, pairsLeft: 35, zone: 'Zone A · Stage', retail: '₦280,000', time: '15:30 WAT', color: B.amber },
+              { id: 'CORTEIZ-95', name: "Corteiz x Nike Air Max 95 'Island Sunset'", pairsTotal: 40, pairsLeft: 24, zone: 'Zone B · Main Floor', retail: '₦220,000', time: '17:00 WAT', color: B.neonCyan },
+              { id: 'OW-DANFO', name: "Off-White AF1 'Lagos Danfo Custom' (1-of-12)", pairsTotal: 12, pairsLeft: 8, zone: 'VIP Grail Vault', retail: '₦350,000', time: '19:30 WAT', color: B.neonLime },
+            ].map(drop => {
+              const isReserved = reservedDrops.some(r => r.id === drop.id)
+              return (
+                <div key={drop.id} className="card-3d" style={{ background: 'rgba(255,255,255,0.025)', border: `1px solid ${drop.color}35`, borderRadius: 12, padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <span style={{ fontFamily: "'Space Mono'", fontSize: '0.6rem', color: drop.color, letterSpacing: 1.5 }}>
+                      DROP: {drop.time}
+                    </span>
+                    <span style={{ fontFamily: "'Orbitron'", fontSize: '0.6rem', color: drop.pairsLeft <= 10 ? '#EF4444' : B.neonLime, background: 'rgba(255,255,255,0.05)', padding: '2px 7px', borderRadius: 3 }}>
+                      {drop.pairsLeft}/{drop.pairsTotal} PAIRS LEFT
+                    </span>
+                  </div>
+
+                  <div style={{ fontFamily: "'Syne'", fontSize: '0.95rem', fontWeight: 700, color: B.white }}>
+                    {drop.name}
+                  </div>
+
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontFamily: "'Space Mono'", fontSize: '0.7rem', color: B.smoke, borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 8 }}>
+                    <span>📍 {drop.zone}</span>
+                    <span style={{ color: B.white, fontWeight: 700 }}>RETAIL: {drop.retail}</span>
+                  </div>
+
+                  {isReserved ? (
+                    <div style={{ padding: '8px', background: `${B.neonLime}15`, border: `1px solid ${B.neonLime}40`, borderRadius: 6, textAlign: 'center', fontFamily: "'Orbitron'", fontSize: '0.65rem', color: B.neonLime }}>
+                      ✓ VOUCHER RESERVED
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => { setReservingId(drop.id); setBotAnswer(''); setBotError('') }}
+                      style={{ padding: '9px', borderRadius: 6, border: 'none', background: drop.color, color: B.black, fontFamily: "'Orbitron'", fontSize: '0.7rem', fontWeight: 700, letterSpacing: 1, cursor: 'pointer' }}
+                    >
+                      RESERVE PAIR QUEUE →
+                    </button>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Modal / Dialog when reservingId is open */}
+          {reservingId && (
+            <div style={{ marginTop: 16, padding: '16px 20px', background: 'rgba(10,10,15,0.95)', border: `1px solid ${B.amber}`, borderRadius: 10 }}>
+              <div style={{ fontFamily: "'Orbitron'", fontSize: '0.75rem', color: B.amber, marginBottom: 8, letterSpacing: 1 }}>
+                ⚡ ANTI-BOT HUMAN VERIFICATION
+              </div>
+              <p style={{ fontFamily: "'Space Mono'", fontSize: '0.7rem', color: B.smoke, marginBottom: 10 }}>
+                What four-digit year did the Air Jordan 1 officially debut? (Hint: 1985)
+              </p>
+              <div style={{ display: 'flex', gap: 10 }}>
+                <input
+                  value={botAnswer}
+                  onChange={e => setBotAnswer(e.target.value)}
+                  placeholder="Enter 4-digit year"
+                  style={{ padding: '8px 12px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 6, color: B.white, fontFamily: "'Space Mono'", fontSize: '0.8rem', outline: 'none' }}
+                />
+                <button
+                  onClick={() => {
+                    const drop = [
+                      { id: 'TS-MOCHA', name: "Travis Scott Jumpman Jack 'Dark Mocha'", zone: 'Zone A · Stage', retail: '₦280,000' },
+                      { id: 'CORTEIZ-95', name: "Corteiz x Nike Air Max 95 'Island Sunset'", zone: 'Zone B · Main Floor', retail: '₦220,000' },
+                      { id: 'OW-DANFO', name: "Off-White AF1 'Lagos Danfo Custom'", zone: 'VIP Grail Vault', retail: '₦350,000' },
+                    ].find(d => d.id === reservingId)
+                    if (drop) handleReserve(drop)
+                  }}
+                  style={{ padding: '8px 18px', background: B.neonLime, border: 'none', borderRadius: 6, color: B.black, fontFamily: "'Orbitron'", fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}
+                >
+                  CONFIRM & LOCK VOUCHER
+                </button>
+                <button
+                  onClick={() => setReservingId(null)}
+                  style={{ padding: '8px 14px', background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 6, color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.7rem', cursor: 'pointer' }}
+                >
+                  CANCEL
+                </button>
+              </div>
+              {botError && <p style={{ color: '#EF4444', fontFamily: "'Space Mono'", fontSize: '0.65rem', marginTop: 8 }}>{botError}</p>}
+            </div>
+          )}
+
+          {reserveSuccess && (
+            <div style={{ marginTop: 14, padding: '12px 18px', background: 'rgba(184,255,0,0.08)', border: `1px solid ${B.neonLime}`, borderRadius: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>
+                <span style={{ fontFamily: "'Orbitron'", fontSize: '0.65rem', color: B.neonLime, letterSpacing: 1.5, fontWeight: 700 }}>
+                  ✓ VOUCHER SECURED: {reserveSuccess.voucherCode}
+                </span>
+                <p style={{ fontFamily: "'Space Mono'", fontSize: '0.65rem', color: B.smoke, margin: '2px 0 0' }}>
+                  {reserveSuccess.name} · {reserveSuccess.priority} · Claim at {reserveSuccess.zone}
+                </p>
+              </div>
+              <button
+                onClick={() => setReserveSuccess(null)}
+                style={{ background: 'transparent', border: 'none', color: B.smoke, cursor: 'pointer' }}
+              >
+                ✕
+              </button>
+            </div>
+          )}
         </div>
 
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.65rem', letterSpacing: '0.1em' }}>

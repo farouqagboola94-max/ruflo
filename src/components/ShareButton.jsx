@@ -1,10 +1,18 @@
 import { useState, useEffect } from 'react'
 import { B } from '../tokens'
+import {
+  useFestivalGamification,
+  playFestivalSound,
+  dispatchFestivalAction,
+  FESTIVAL_ACTIONS,
+} from '../framework/festivalFramework'
 
 export default function ShareButton() {
   const [visible, setVisible] = useState(false)
   const [hovered, setHovered] = useState(false)
   const [copied, setCopied] = useState(false)
+
+  const { awardXP } = useFestivalGamification()
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 600)
@@ -15,9 +23,17 @@ export default function ShareButton() {
   const handleShare = async () => {
     const data = {
       title: "Sneakers Fest '26 — The Sole Exhibition",
-      text: "West Africa's premier sneaker culture event. December 12, 2026 · Lagos, Nigeria.",
+      text: "West Africa's premier sneaker culture event. December 12, 2026 · Lagos, Nigeria. Official: @s_fest26 | Convener: @catalystggg",
       url: window.location.href,
     }
+
+    awardXP(50, 'Festival Link Shared')
+    playFestivalSound('xp_gain')
+    dispatchFestivalAction(FESTIVAL_ACTIONS.ADD_NOTIFICATION, {
+      title: 'Spread The Sole Movement (+50 XP)',
+      message: 'Thanks for repping Sneakers Fest Lagos.'
+    })
+
     if (navigator.share && navigator.canShare && navigator.canShare(data)) {
       try { await navigator.share(data) } catch {}
     } else {

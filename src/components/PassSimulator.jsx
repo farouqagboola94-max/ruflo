@@ -17,6 +17,7 @@ import {
   dispatchFestivalAction,
   FESTIVAL_ACTIONS,
 } from '../framework/festivalFramework'
+import { downloadAppleWalletPass, downloadGoogleWalletPass } from '../lib/walletPassGenerator'
 
 export default function PassSimulator({ onClose }) {
   const { wallet, checkIn } = useFestivalWallet()
@@ -205,6 +206,52 @@ export default function PassSimulator({ onClose }) {
                 {cleared ? 'CHECKED IN' : 'READY FOR GATE'}
               </span>
             </div>
+          </div>
+
+          {/* Export to Native Phone Wallets */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 16 }}>
+            <button
+              onClick={() => downloadAppleWalletPass(activePass)}
+              style={{
+                padding: '9px',
+                borderRadius: 8,
+                border: '1px solid rgba(255,255,255,0.15)',
+                background: 'rgba(255,255,255,0.04)',
+                color: B.white,
+                fontFamily: 'Space Mono,monospace',
+                fontSize: 8.5,
+                fontWeight: 700,
+                letterSpacing: 1,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 5,
+              }}
+            >
+              🍏 ADD APPLE WALLET
+            </button>
+            <button
+              onClick={() => downloadGoogleWalletPass(activePass)}
+              style={{
+                padding: '9px',
+                borderRadius: 8,
+                border: '1px solid rgba(255,255,255,0.15)',
+                background: 'rgba(255,255,255,0.04)',
+                color: B.white,
+                fontFamily: 'Space Mono,monospace',
+                fontSize: 8.5,
+                fontWeight: 700,
+                letterSpacing: 1,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 5,
+              }}
+            >
+              💳 ADD GOOGLE WALLET
+            </button>
           </div>
 
           {/* Actions */}

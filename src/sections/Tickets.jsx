@@ -5,6 +5,7 @@ import PaymentModal, { TicketCard, downloadTicketPNG } from '../components/Payme
 import { logReferralConversion } from '../lib/referral'
 import Egg from '../components/Egg'
 import { useFestivalWallet, playFestivalSound, dispatchFestivalAction, FESTIVAL_ACTIONS } from '../framework/festivalFramework'
+import { downloadAppleWalletPass, downloadGoogleWalletPass } from '../lib/walletPassGenerator'
 
 const TIERS = [
   {
@@ -494,6 +495,20 @@ export default function Tickets() {
                       disabled={dlRef===order.ref}
                       style={{ width:'100%', padding:'12px', borderRadius:10, border:`1px solid ${order.tierColor}`, background:`${order.tierColor}15`, color:order.tierColor, fontFamily:"'Orbitron', monospace", fontSize:10, fontWeight:700, letterSpacing:2, cursor:dlRef===order.ref?'wait':'pointer', transition:'all 0.2s' }}
                     >{dlRef===order.ref?'SAVING…':'DOWNLOAD TICKET PNG →'}</button>
+                    <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
+                      <button
+                        onClick={() => downloadAppleWalletPass(order)}
+                        style={{ padding:'9px', borderRadius:8, border:'1px solid rgba(255,255,255,0.15)', background:'rgba(255,255,255,0.05)', color:B.white, fontFamily:"'Space Mono', monospace", fontSize:8.5, fontWeight:700, letterSpacing:1, cursor:'pointer' }}
+                      >
+                        🍏 APPLE WALLET
+                      </button>
+                      <button
+                        onClick={() => downloadGoogleWalletPass(order)}
+                        style={{ padding:'9px', borderRadius:8, border:'1px solid rgba(255,255,255,0.15)', background:'rgba(255,255,255,0.05)', color:B.white, fontFamily:"'Space Mono', monospace", fontSize:8.5, fontWeight:700, letterSpacing:1, cursor:'pointer' }}
+                      >
+                        💳 GOOGLE WALLET
+                      </button>
+                    </div>
                     <button
                       onClick={() => {
                         dispatchFestivalAction(FESTIVAL_ACTIONS.WALLET_SET_ACTIVE_PASS, { pass: order })
