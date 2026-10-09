@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { B } from '../tokens'
 import { loadSDK } from '../lib/loadScript'
+import { dispatchFestivalAction, FESTIVAL_ACTIONS, playFestivalSound } from '../framework/festivalFramework'
 
 const PAYSTACK_KEY = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || ''
 const FLW_KEY      = import.meta.env.VITE_FLUTTERWAVE_PUBLIC_KEY || ''
@@ -341,7 +342,10 @@ export default function PaymentModal({ tier, onClose }) {
       name: name.trim(), email: email.trim().toLowerCase(),
       amount, tier: tier.name, isSandbox,
       onSuccess: (gateway, ref) => {
-        saveOrder({ name: name.trim(), email: email.trim().toLowerCase(), tier: tier.name, tierColor: tier.color, ref, price: tier.price, quantity, gateway, purchasedAt: Date.now() })
+        const orderData = { name: name.trim(), email: email.trim().toLowerCase(), tier: tier.name, tierColor: tier.color, ref, price: tier.price, quantity, gateway, purchasedAt: Date.now() }
+        saveOrder(orderData)
+        dispatchFestivalAction(FESTIVAL_ACTIONS.WALLET_TICKET_PURCHASED, { pass: orderData })
+        playFestivalSound('badge_unlock')
         setLoading(false); setSuccess({ gateway, ref })
       },
       onError: (msg) => { setLoading(false); setError(msg) },
@@ -465,6 +469,16 @@ export default function PaymentModal({ tier, onClose }) {
             <button onClick={handleDownload} disabled={downloading}
               style={{ width:'100%', padding:'13px', borderRadius:10, border:`1px solid ${tier.color}`, background:`${tier.color}15`, color:tier.color, fontFamily:'Orbitron,sans-serif', fontSize:11, fontWeight:700, letterSpacing:2, cursor:downloading ? 'wait' : 'pointer', transition:'all 0.2s' }}>
               {downloading ? 'SAVING…' : 'DOWNLOAD TICKET PNG →'}
+            </button>
+
+            <button
+              onClick={() => {
+                dispatchFestivalAction(FESTIVAL_ACTIONS.HUD_SET_TAB, { tab: 'pass' })
+                onClose()
+              }}
+              style={{ width:'100%', padding:'12px', borderRadius:10, border:`1px solid ${B.neonLime}80`, background:`${B.neonLime}15`, color:B.neonLime, fontFamily:'Orbitron,sans-serif', fontSize:10, fontWeight:700, letterSpacing:1.5, cursor:'pointer' }}
+            >
+              📱 SIMULATE NFC TURNSTILE CLEARANCE →
             </button>
 
             <button onClick={onClose}

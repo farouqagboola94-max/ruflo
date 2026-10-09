@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag, Divider } from '../components/Shared'
+import { dispatchFestivalAction, FESTIVAL_ACTIONS, playFestivalSound } from '../framework/festivalFramework'
 
 // Vendor access codes — keyed by code, value is booth profile
 const DEMO_VENDORS = {
@@ -691,11 +692,16 @@ function AdminDeskTab() {
   function handleStatus(id, newStatus, extra = {}) {
     const updated = apps.map(a => a.id === id ? { ...a, status: newStatus, ...extra, updatedAt: new Date().toISOString() } : a)
     save(updated)
+    dispatchFestivalAction(FESTIVAL_ACTIONS.VENDOR_STATUS_TRANSITION, { status: newStatus, action: `Transitioned ${id} to ${newStatus}` })
+    playFestivalSound('zone_click')
   }
 
   function submitBoothAssignment(id) {
     if (!boothInput.trim()) return
-    handleStatus(id, 'assigned', { boothNumber: boothInput.trim().toUpperCase() })
+    const booth = boothInput.trim().toUpperCase()
+    handleStatus(id, 'assigned', { boothNumber: booth })
+    dispatchFestivalAction(FESTIVAL_ACTIONS.VENDOR_BOOTH_ASSIGNED, { booth })
+    playFestivalSound('badge_unlock')
     setAssigningId(null)
     setBoothInput('')
   }

@@ -20,6 +20,7 @@ import KonamiCode from './components/KonamiCode'
 import ReactivationBanner from './components/ReactivationBanner'
 import LiveActivity from './components/LiveActivity'
 import CommandPalette from './components/CommandPalette'
+import FestivalHUD from './components/FestivalHUD'
 import SectionBoundary from './components/SectionBoundary'
 import Defer, { mountAll, goToSection } from './components/Defer'
 import { SECTIONS } from './lib/siteIndex'
@@ -389,6 +390,7 @@ export default function App() {
         <Navbar />
         <SocialDock />
         <AIChat />
+        <FestivalHUD />
         <BackToTop />
         <WhatsAppButton />
         <ShareButton />

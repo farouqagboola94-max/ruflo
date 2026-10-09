@@ -3,6 +3,7 @@ import { B } from '../tokens'
 import { PHASES, DAY1, DAY2 } from '../data/schedule'
 import { GrainOverlay, SectionTag } from '../components/Shared'
 import Egg from '../components/Egg'
+import { dispatchFestivalAction, FESTIVAL_ACTIONS, playFestivalSound } from '../framework/festivalFramework'
 
 
 function parseMins(time, period) {
@@ -67,7 +68,27 @@ function Timeline({ items, liveStatus = {} }) {
                     <span style={{ padding:'2px 8px', background:`${B.amber}15`, border:`1px solid ${B.amber}50`, borderRadius:2, fontFamily:"'Space Mono',monospace", fontSize: 9, color:B.amber, letterSpacing:'0.1em' }}>▶ UP NEXT</span>
                   )}
                   {item.stage && (
-                    <span style={{ padding:'2px 7px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.12)', borderRadius:2, fontFamily:"'Space Mono',monospace", fontSize: 9, color: B.smoke, letterSpacing:'0.1em', whiteSpace:'nowrap' }}>↗ {item.stage}</span>
+                    <button
+                      onClick={() => {
+                        playFestivalSound('zone_click')
+                        const zoneMap = {
+                          'Main Stage': 'stage',
+                          'VIP Lounge': 'vip',
+                          'Art Gallery': 'gallery',
+                          'Main Floor': 'floor',
+                          'Culture Museum': 'museum',
+                          'Vendor Hall': 'vendor_w',
+                        }
+                        const zoneId = zoneMap[item.stage] || 'stage'
+                        dispatchFestivalAction(FESTIVAL_ACTIONS.TELEMETRY_ZONE_FOCUS, { zone: zoneId })
+                        const el = document.getElementById('venue')
+                        if (el) el.scrollIntoView({ behavior: 'smooth' })
+                      }}
+                      style={{ padding:'2px 8px', background:'rgba(245,166,35,0.12)', border:`1px solid ${B.amber}50`, borderRadius:4, fontFamily:"'Space Mono',monospace", fontSize: 9, color: B.amber, letterSpacing:'0.1em', cursor:'pointer', display:'inline-flex', alignItems:'center', gap:4 }}
+                      title="Focus on 3D Venue Map"
+                    >
+                      📍 3D MAP · {item.stage}
+                    </button>
                   )}
                 </div>
                 <div style={{ fontFamily:"'Syne',sans-serif", fontSize:12, color:B.smoke, lineHeight:1.6 }}>{item.desc}</div>

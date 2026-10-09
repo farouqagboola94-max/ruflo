@@ -4,6 +4,7 @@ import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import PaymentModal, { TicketCard, downloadTicketPNG } from '../components/PaymentModal'
 import { logReferralConversion } from '../lib/referral'
 import Egg from '../components/Egg'
+import { useFestivalWallet, playFestivalSound, dispatchFestivalAction, FESTIVAL_ACTIONS } from '../framework/festivalFramework'
 
 const TIERS = [
   {
@@ -493,6 +494,17 @@ export default function Tickets() {
                       disabled={dlRef===order.ref}
                       style={{ width:'100%', padding:'12px', borderRadius:10, border:`1px solid ${order.tierColor}`, background:`${order.tierColor}15`, color:order.tierColor, fontFamily:"'Orbitron', monospace", fontSize:10, fontWeight:700, letterSpacing:2, cursor:dlRef===order.ref?'wait':'pointer', transition:'all 0.2s' }}
                     >{dlRef===order.ref?'SAVING…':'DOWNLOAD TICKET PNG →'}</button>
+                    <button
+                      onClick={() => {
+                        dispatchFestivalAction(FESTIVAL_ACTIONS.WALLET_SET_ACTIVE_PASS, { pass: order })
+                        dispatchFestivalAction(FESTIVAL_ACTIONS.HUD_SET_TAB, { tab: 'pass' })
+                        setShowMyTickets(false)
+                        playFestivalSound('nfc_success')
+                      }}
+                      style={{ width:'100%', padding:'10px', borderRadius:8, border:`1px solid ${B.neonLime}60`, background:`${B.neonLime}12`, color:B.neonLime, fontFamily:"'Orbitron', monospace", fontSize:9, fontWeight:700, letterSpacing:1.5, cursor:'pointer' }}
+                    >
+                      📱 SIMULATE TURNSTILE CLEARANCE →
+                    </button>
                     <p style={{ fontFamily:"'Space Mono', monospace", fontSize:9, color: B.dim, textAlign:'center' }}>
                       Purchased {new Date(order.purchasedAt).toLocaleDateString('en-NG')} via {order.gateway}
                     </p>

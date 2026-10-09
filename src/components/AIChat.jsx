@@ -1,6 +1,12 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { B } from '../tokens'
 import { claudeChat, aiAvailable } from '../lib/catalystAI'
+import {
+  useFestivalState,
+  dispatchFestivalAction,
+  FESTIVAL_ACTIONS,
+  playFestivalSound,
+} from '../framework/festivalFramework'
 
 const API = import.meta.env.VITE_BACKEND_URL || ''
 
@@ -53,9 +59,10 @@ const SUGGESTIONS = [
 
 // ── component ─────────────────────────────────────────────────────────────────
 export default function AIChat() {
+  const [state, dispatch] = useFestivalState()
   const [open,       setOpen]      = useState(false)
   const [messages,   setMessages]  = useState([
-    { role: 'assistant', content: "What's good. I'm the Sneakers Fest AI — ask me anything about tickets, lineup, vendors, the Friday Protocol, drops, or the event." }
+    { role: 'assistant', content: "What's good! I'm the Sneakers Fest Street AI Concierge. I have live telemetry on Muri Okunola Park, your ticket status, and today's schedule. Ask me anything!" }
   ])
   const [input,      setInput]     = useState('')
   const [loading,    setLoading]   = useState(false)
@@ -73,6 +80,18 @@ export default function AIChat() {
     const fn = () => setMobile(window.innerWidth < 768)
     window.addEventListener('resize', fn)
     return () => window.removeEventListener('resize', fn)
+  }, [])
+
+  // Listen to remote HUD open requests
+  useEffect(() => {
+    const handleRemoteOpen = (e) => {
+      setOpen(true)
+      if (e?.detail?.prompt) {
+        setTimeout(() => sendText(e.detail.prompt), 100)
+      }
+    }
+    window.addEventListener('sf26:open_ai_chat', handleRemoteOpen)
+    return () => window.removeEventListener('sf26:open_ai_chat', handleRemoteOpen)
   }, [])
 
   const sendText = useCallback(async (text) => {
@@ -243,6 +262,40 @@ export default function AIChat() {
               ))}
             </div>
           )}
+
+          {/* Quick Festival Action Chips (Level 3 Integration) */}
+          <div style={{ padding: '0 12px 8px', display: 'flex', gap: 6, overflowX: 'auto' }}>
+            <button
+              onClick={() => {
+                dispatch(FESTIVAL_ACTIONS.TELEMETRY_ZONE_FOCUS, { zone: 'stage' })
+                setOpen(false)
+                const el = document.getElementById('venue')
+                if (el) el.scrollIntoView({ behavior: 'smooth' })
+              }}
+              style={{ padding: '4px 8px', borderRadius: 6, background: 'rgba(245,166,35,0.1)', border: `1px solid ${B.amber}40`, color: B.amber, fontSize: 8, fontFamily: 'Space Mono,monospace', cursor: 'pointer', whiteSpace: 'nowrap' }}
+            >
+              📍 3D STAGE FOCUS
+            </button>
+            <button
+              onClick={() => {
+                dispatch(FESTIVAL_ACTIONS.HUD_SET_TAB, { tab: 'pass' })
+                setOpen(false)
+              }}
+              style={{ padding: '4px 8px', borderRadius: 6, background: 'rgba(184,255,0,0.1)', border: `1px solid ${B.neonLime}40`, color: B.neonLime, fontSize: 8, fontFamily: 'Space Mono,monospace', cursor: 'pointer', whiteSpace: 'nowrap' }}
+            >
+              📱 TURNSTILE NFC PASS
+            </button>
+            <button
+              onClick={() => {
+                setOpen(false)
+                const el = document.getElementById('soledle')
+                if (el) el.scrollIntoView({ behavior: 'smooth' })
+              }}
+              style={{ padding: '4px 8px', borderRadius: 6, background: 'rgba(0,240,255,0.1)', border: `1px solid ${B.neonCyan}40`, color: B.neonCyan, fontSize: 8, fontFamily: 'Space Mono,monospace', cursor: 'pointer', whiteSpace: 'nowrap' }}
+            >
+              👟 SOLEDLE QUEST (+120 XP)
+            </button>
+          </div>
 
           {/* input */}
           <div style={{ padding: '10px 12px 14px', borderTop: '1px solid rgba(255,255,255,0.07)', display: 'flex', gap: 8 }}>

@@ -4,6 +4,7 @@ import { useCounter } from '../lib/counter'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import { addXP, XP_VALUES } from '../lib/passport'
 import Egg from '../components/Egg'
+import { dispatchFestivalAction, FESTIVAL_ACTIONS, playFestivalSound } from '../framework/festivalFramework'
 
 const KEY = 'sf26_soledle'
 const MAX_GUESSES = 5
@@ -97,6 +98,9 @@ export default function Soledle() {
       const badge = isOracle ? 'soledle-oracle' : guesses.length <= 2 ? 'soledle-ace' : undefined
       const xp = Math.round(XP_VALUES.soledleWin * (MAX_GUESSES - guesses.length + 1) / MAX_GUESSES)
       addXP(xp, 'Soledle', badge)
+      dispatchFestivalAction(FESTIVAL_ACTIONS.GAMIFICATION_XP_EARNED, { xp, reason: 'Soledle Daily Solve' })
+      if (badge) dispatchFestivalAction(FESTIVAL_ACTIONS.GAMIFICATION_BADGE_UNLOCKED, { badge: badge.toUpperCase() })
+      playFestivalSound('xp_gain')
       setGame({ ...game, guesses, status: 'won', xpWon: xp, oracle: isOracle })
       bumpSolvers()
       setConfetti(true)

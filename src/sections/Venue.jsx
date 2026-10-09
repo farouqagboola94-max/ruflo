@@ -1,8 +1,15 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
 import { SOCIAL_LINKS } from '../config'
 import Egg from '../components/Egg'
+import {
+  useFestivalTelemetry,
+  useFestivalGamification,
+  playFestivalSound,
+  dispatchFestivalAction,
+  FESTIVAL_ACTIONS,
+} from '../framework/festivalFramework'
 
 // ── zone data ──────────────────────────────────────────────────────────────────
 const ZONES = [
@@ -270,12 +277,44 @@ const ROUTES = [
 
 // ── main section ───────────────────────────────────────────────────────────────
 export default function Venue() {
+  const { telemetry, setZone } = useFestivalTelemetry()
+  const { gamification, awardXP, unlockBadge } = useFestivalGamification()
   const [active,       setActive]       = useState(null)
   const [hovered,      setHovered]      = useState(null)
   const [viewMode,     setViewMode]     = useState('3d') // '3d' | '2d'
   const [activeRoute,  setActiveRoute]  = useState('none')
   const [activeFilter, setActiveFilter] = useState('all')
   const [searchQuery,  setSearchQuery]  = useState('')
+  const [visitedZones, setVisitedZones] = useState(() => new Set())
+
+  // Sync external zone changes (from Schedule or HUD)
+  useEffect(() => {
+    if (telemetry?.activeZone) {
+      const match = ZONES.find(z => z.id === telemetry.activeZone)
+      if (match && match.id !== active?.id) {
+        setActive(match)
+      }
+    }
+  }, [telemetry?.activeZone])
+
+  const handleZoneSelect = (z) => {
+    playFestivalSound('zone_click')
+    const nextActive = active?.id === z.id ? null : z
+    setActive(nextActive)
+    if (nextActive) {
+      const dbMatch = parseInt(z.sound) || 75
+      setZone(z.id, activeRoute, dbMatch)
+      awardXP(25, `Explored ${z.short}`)
+      setVisitedZones(prev => {
+        const updated = new Set(prev).add(z.id)
+        if (updated.size >= 3 && !gamification.badges.includes('VENUE_NAVIGATOR')) {
+          unlockBadge('VENUE_NAVIGATOR')
+          playFestivalSound('badge_unlock')
+        }
+        return updated
+      })
+    }
+  }
 
   const routeObj = ROUTES.find(r => r.id === activeRoute)
 
@@ -393,6 +432,31 @@ export default function Venue() {
               </button>
             ))}
           </div>
+
+          {/* Row 4: Live Telemetry & XP Quest Recon (Level 1/2 Integration) */}
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:10, paddingTop:8, borderTop:'1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+              <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+                <span style={{ width:7, height:7, borderRadius:'50%', background:B.neonLime, boxShadow:`0 0 8px ${B.neonLime}`, animation:'liveNow 2s infinite' }} />
+                <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:B.white, letterSpacing:1 }}>
+                  ACOUSTIC SENSORS: <strong>{telemetry?.decibels || 88} dB</strong>
+                </span>
+              </div>
+              <span style={{ color:'rgba(255,255,255,0.2)' }}>|</span>
+              <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:B.smoke }}>
+                CROWD: <span style={{ color:B.amber }}>{telemetry?.crowdDensity || 'OPTIMAL'}</span>
+              </div>
+            </div>
+
+            <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+              <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:B.amber, letterSpacing:1 }}>
+                🎯 EXPLORATION QUEST:
+              </span>
+              <span style={{ fontFamily:'Orbitron,monospace', fontSize:8, color: visitedZones.size >= 3 ? B.neonLime : B.white }}>
+                {visitedZones.size}/3 ZONES ({visitedZones.size >= 3 ? '✓ VENUE_NAVIGATOR UNLOCKED' : '+25 XP EACH'})
+              </span>
+            </div>
+          </div>
         </div>
 
         {/* SVG floor map with dynamic 3D Perspective container */}
@@ -445,7 +509,7 @@ export default function Venue() {
                   dimmed={isDimmed(zone)}
                   onEnter={setHovered}
                   onLeave={() => setHovered(null)}
-                  onClick={z => setActive(prev => prev?.id === z.id ? null : z)}
+                  onClick={handleZoneSelect}
                 />
               ))}
 

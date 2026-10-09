@@ -3,6 +3,12 @@ import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import { claudeChat, useAiAvailable } from '../lib/catalystAI'
 import AIComingSoon from '../components/AIComingSoon'
+import {
+  useFestivalGamification,
+  playFestivalSound,
+  dispatchFestivalAction,
+  FESTIVAL_ACTIONS,
+} from '../framework/festivalFramework'
 
 const SYSTEM = `You are the official Lagos Sneaker Culture registry. Based on someone's rotation, issue their collector profile.
 
@@ -199,7 +205,8 @@ async function exportCardToCanvas(result, handle, shoes, format = 'story') {
 
 export default function CollectorCard() {
   const aiReady = useAiAvailable()
-  const [handle, setHandle] = useState('')
+  const { gamification, awardXP, unlockBadge, setHandle: syncHandle } = useFestivalGamification()
+  const [handle, setHandle] = useState(() => gamification?.handle || '')
   const [shoes, setShoes] = useState(['', '', ''])
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState(null)
@@ -233,23 +240,30 @@ export default function CollectorCard() {
     setCopied(false)
 
     try {
+      let finalCard = null
       if (aiReady) {
         const list = filled.map((s, i) => `${i + 1}. ${s}`).join('\n')
         const prompt = `My rotation:\n${list}\n\nIssue my collector card.`
         const raw = await claudeChat([{ role: 'user', content: prompt }], { feature: 'CollectorCard', model: 'smart', system: SYSTEM, maxTokens: 700 })
         const match = raw.match(/\{[\s\S]*\}/)
         if (match) {
-          setResult(JSON.parse(match[0]))
-          setLoading(false)
-          return
+          finalCard = JSON.parse(match[0])
         }
       }
-      // Instant authentic heuristic fallback
-      const fallback = generateHeuristicCard(filled, handle)
-      setResult(fallback)
+      if (!finalCard) {
+        finalCard = generateHeuristicCard(filled, handle)
+      }
+      setResult(finalCard)
+      if (handle.trim()) syncHandle(handle.trim())
+      awardXP(100, 'Collector Card Issued')
+      unlockBadge('COLLECTOR_CARD_MINTED')
+      playFestivalSound('xp_gain')
     } catch {
       const fallback = generateHeuristicCard(filled, handle)
       setResult(fallback)
+      awardXP(100, 'Collector Card Issued')
+      unlockBadge('COLLECTOR_CARD_MINTED')
+      playFestivalSound('xp_gain')
     } finally {
       setLoading(false)
     }
