@@ -55,6 +55,7 @@ export const SECTIONS = [
   { id: 'mystery',      t: 'Mystery Drop',       c: 'play', d: 'Something is behind the door',       k: 'surprise secret box drop reveal' },
   { id: 'hype',         t: 'Hype Counter',       c: 'play', d: 'Crank the hype up',                  k: 'clicker counter game tap' },
   { id: 'egg-hunt',     t: 'The Great Sole Hunt',c: 'play', d: 'Hidden eggs across the site',        k: 'easter egg hunt find secret hidden collect' },
+  { id: 'fitcheck-arena', t: 'Fit-Check Arena',   c: 'play', d: '1v1 On-Foot Street Showdown & Crowd Voting', k: 'fit check arena battle 1v1 vote outfit drip kicks on court kicks street style' },
   { id: 'worth',        t: 'Collection Worth',   c: 'play', d: 'What is your rotation worth?',       k: 'value price estimate calculator collection' },
 
   // ---- Identity ------------------------------------------------------
@@ -85,6 +86,7 @@ export const SECTIONS = [
   { id: 'youth-experience', t: 'Lagos Youth Experience', c: 'culture', d: 'Interactive story generator, WebGL studio & soundboard', k: 'youth experience lagos stories 3d soundboard scratch beats' },
   { id: 'comics',          t: 'Catalyst Universe', c: 'culture', d: 'The comic side of the world',    k: 'comic story catalyst universe read' },
 
+  { id: 'lagos-sole-index', t: 'Lagos Sole Index (LSI)', c: 'market', d: 'Live sneaker aftermarket ticker & sentiment terminal', k: 'lsi lagos sole index ticker market price naira quotes volatility aftermarket capital' },
   { id: 'lsx',              t: 'Lagos Sole Exchange (LSX)', c: 'market', d: 'P2P sneaker trading pit with physical escrow', k: 'lsx sole exchange trade swap pit escrow p2p authenticated market buy sell' },
   { id: 'gallery',          t: 'Gallery',           c: 'culture', d: 'Shots from the culture',        k: 'photos images pictures gallery look' },
   { id: 'merch',            t: 'Merch',             c: 'market', d: 'Official Sneakers Fest gear',    k: 'shop buy clothing tshirt hoodie store gear merch wear apparel' },

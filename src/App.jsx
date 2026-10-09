@@ -33,7 +33,9 @@ import Highlights from './sections/Highlights'
 const About               = lazy(() => import('./sections/About'))
 const LagosYouthExperience= lazy(() => import('./sections/LagosYouthExperience'))
 const LagosSoleExchange   = lazy(() => import('./sections/LagosSoleExchange'))
+const LagosSoleIndex      = lazy(() => import('./sections/LagosSoleIndex'))
 const FitCheckStudio      = lazy(() => import('./sections/FitCheckStudio'))
+const FitCheckArena       = lazy(() => import('./sections/FitCheckArena'))
 const OriginStory         = lazy(() => import('./sections/OriginStory'))
 const FridayNightProtocol = lazy(() => import('./sections/FridayNightProtocol'))
 const Press               = lazy(() => import('./sections/Press'))
@@ -415,6 +417,7 @@ export default function App() {
             <Reveal><LagosYouthExperience /></Reveal>
             <Reveal><LagosSoleExchange /></Reveal>
             <Reveal><FitCheckStudio /></Reveal>
+            <Reveal><FitCheckArena /></Reveal>
             <Reveal><SneakerTrivia /></Reveal>
             <Reveal><HypeCounter /></Reveal>
             <Reveal><AITrivia /></Reveal>
@@ -495,6 +498,7 @@ export default function App() {
         {/* ACT 5: DROPS & TRADE — commerce and the marketplace */}
         <Defer sections={16}>
           <SectionBoundary><Suspense fallback={null}>
+            <Reveal><LagosSoleIndex /></Reveal>
             <Reveal><DropsTimeline /></Reveal>
             <Reveal><VendorDirectory /></Reveal>
             <Reveal><VendorMatcher /></Reveal>
