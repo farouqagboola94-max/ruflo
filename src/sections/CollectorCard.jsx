@@ -263,13 +263,13 @@ export default function CollectorCard() {
     try {
       localStorage.setItem('sf26_card_foil_theme', themeKey)
     } catch {}
-    playFestivalSound('click')
+    playFestivalSound('zone_click')
   }
 
   function simulateNfcTap() {
     if (nfcScanning) return
     setNfcScanning(true)
-    playFestivalSound('telemetry_ping')
+    playFestivalSound('nfc_success')
     setTimeout(() => {
       setNfcScanning(false)
       setNfcTapped(true)
