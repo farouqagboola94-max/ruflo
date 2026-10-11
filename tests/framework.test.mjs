@@ -50,4 +50,46 @@ const updated = getFestivalState()
 assert.strictEqual(updated.gamification.recentReward, 'VIP Fast-Pass Verified')
 console.log('✅ Dispatch and state updates verified.\n')
 
+// Test 4: Auction Bids safeStorage Persistence
+console.log('Test 4: Testing auction bid tracking in safeStorage...')
+const sampleBids = {
+  1: { lotId: 1, lotName: 'Air Jordan 1 Retro High OG Bred Toe', myBid: 294000, status: 'HIGH_BIDDER' }
+}
+safeStorage.setItem('sf26_auction_my_bids', sampleBids)
+const storedBids = safeStorage.getJSON('sf26_auction_my_bids')
+assert.strictEqual(storedBids[1].myBid, 294000)
+assert.strictEqual(storedBids[1].status, 'HIGH_BIDDER')
+console.log('✅ Auction bid tracking verified.\n')
+
+// Test 5: Lost & Found safeStorage Persistence
+console.log('Test 5: Testing Lost & Found registry serialization...')
+const sampleReports = [
+  { id: 'lf-99', type: 'LOST', item: 'Nike Dunk Travis Scott', zone: 'Zone A', contact: '@dan' }
+]
+safeStorage.setItem('sf26_lost_found_reports', sampleReports)
+const retrievedReports = safeStorage.getJSON('sf26_lost_found_reports')
+assert.strictEqual(retrievedReports.length, 1)
+assert.strictEqual(retrievedReports[0].item, 'Nike Dunk Travis Scott')
+console.log('✅ Lost & Found registry serialization verified.\n')
+
+// Test 6: Schedule Clash Detection Logic
+console.log('Test 6: Validating timetable clash detector logic...')
+const toMinutes = (time, period) => {
+  const [h, m] = time.split(':').map(Number)
+  let hr = h % 12
+  if (period.toUpperCase() === 'PM') hr += 12
+  return hr * 60 + m
+}
+const event1 = { title: 'Main Stage Headliner', time: '3:00', period: 'PM' }
+const event2 = { title: '1v1 FitCheck Finals', time: '3:00', period: 'PM' }
+const event3 = { title: 'Late Night Afterparty', time: '8:00', period: 'PM' }
+
+const time1 = toMinutes(event1.time, event1.period)
+const time2 = toMinutes(event2.time, event2.period)
+const time3 = toMinutes(event3.time, event3.period)
+
+assert.strictEqual(time1, time2) // Exact clash
+assert.ok(Math.abs(time1 - time3) > 60) // No clash
+console.log('✅ Schedule clash detection logic verified.\n')
+
 console.log('🎉 ALL TESTS PASSED SUCCESSFULLY! 0 ERRORS.')

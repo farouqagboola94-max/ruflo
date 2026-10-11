@@ -23,6 +23,7 @@ export const SECTIONS = [
   { id: 'my-pass',       t: 'My Pass',            c: 'essentials', d: 'Find your ticket and show it at the gate', k: 'ticket pass lost email lookup my find entry qr code scan gate' },
   { id: 'schedule',   t: 'Schedule',           c: 'essentials', d: 'Full run of show, 12PM to 10PM',          k: 'time timetable agenda lineup order programme when start begin doors open close hours' },
   { id: 'venue',      t: 'Venue & Directions', c: 'essentials', d: 'Muri Okunola Park, Victoria Island',      k: 'where map location address parking directions vi lagos park muri okunola getting there' },
+  { id: 'safety-sos', t: 'Safety & SOS Beacon', c: 'essentials', d: 'Emergency SOS, lost property registry & first aid directory', k: 'safety sos emergency medic doctor first aid lost found help security beacon police ambulance call' },
   { id: 'lineup',     t: 'The Lineup',         c: 'essentials', d: 'Who is on the bill',                      k: 'performers acts stage bill' },
   { id: 'countdown',  t: 'Countdown',          c: 'essentials', d: 'Time left until December 12',             k: 'days clock timer when how long' },
   { id: 'waitlist',   t: 'Early Access',       c: 'essentials', d: 'Get in before general release',           k: 'signup join waitlist presale first list email' },

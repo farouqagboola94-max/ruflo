@@ -36,7 +36,7 @@ function swPrecache() {
   // Both are day-of features used standing in the park: the ticket you show
   // at the gate, and what is on right now. Neither is any use over a network
   // that is not there.
-  const OFFLINE_CRITICAL = ['sections/MyPass', 'sections/LiveNow']
+  const OFFLINE_CRITICAL = ['sections/MyPass', 'sections/LiveNow', 'sections/SafetySOS']
   let bundle = null
 
   return {

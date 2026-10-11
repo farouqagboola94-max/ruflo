@@ -96,6 +96,7 @@ const PhotoTools      = lazy(() => import('./sections/PhotoTools'))
 const Newsletter      = lazy(() => import('./sections/Newsletter'))
 const Schedule        = lazy(() => import('./sections/Schedule'))
 const Venue           = lazy(() => import('./sections/Venue'))
+const SafetySOS       = lazy(() => import('./sections/SafetySOS'))
 const Merch           = lazy(() => import('./sections/Merch'))
 const Raffle          = lazy(() => import('./sections/Raffle'))
 const SoleRegistry    = lazy(() => import('./sections/SoleRegistry'))
@@ -547,6 +548,7 @@ export default function App() {
             {/* EVENT INFO — for those ready to plan the day */}
             <Reveal><Schedule /></Reveal>
             <Reveal><Venue /></Reveal>
+            <Reveal><SafetySOS /></Reveal>
 
             {/* PARTICIPATION — vendor and access tiers */}
             <Reveal><EarlyAccess /></Reveal>

@@ -41,16 +41,52 @@ const OUTCOME = {
   pending:   { label: 'QUEUED',     colour: B.neonCyan },
 }
 
+function exportDoorLogCSV(log) {
+  if (!log || !log.length) return
+  const headers = ['Timestamp', 'Ticket ID', 'Name', 'Tier', 'Outcome', 'Quantity', 'Error']
+  const rows = log.map(e => [
+    `"${e.at || ''}"`,
+    `"${e.ticketId || ''}"`,
+    `"${(e.name || '').replace(/"/g, '""')}"`,
+    `"${e.tier || ''}"`,
+    `"${e.outcome || ''}"`,
+    `"${e.qty || 1}"`,
+    `"${(e.error || '').replace(/"/g, '""')}"`
+  ])
+  const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n')
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.setAttribute('href', url)
+  link.setAttribute('download', `sf26-gate-log-${new Date().toISOString().slice(0, 10)}.csv`)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}
+
 function Result({ result }) {
   if (!result) return null
   const o = OUTCOME[result.outcome]
+  const isFastPass = result.tier && /(vip|vvip|phalanx)/i.test(result.tier)
+
   return (
     <div style={{
       padding: '22px 20px', borderRadius: 10, marginBottom: 18,
       background: `${o.colour}18`, border: `2px solid ${o.colour}`,
     }}>
-      <div style={{ ...mono, fontSize: 11, letterSpacing: '0.24em', color: o.colour, fontWeight: 700 }}>
-        {o.label}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ ...mono, fontSize: 11, letterSpacing: '0.24em', color: o.colour, fontWeight: 700 }}>
+          {o.label}
+        </div>
+        {isFastPass && (
+          <span style={{
+            ...mono, fontSize: 8, padding: '3px 8px', borderRadius: 4,
+            background: 'rgba(255,215,0,0.2)', border: '1px solid #ffd700',
+            color: '#ffd700', fontWeight: 700, letterSpacing: '0.1em'
+          }}>
+            ⚡ FAST-PASS VIP
+          </span>
+        )}
       </div>
       {result.name && (
         <div style={{ fontFamily: "'Orbitron', monospace", fontWeight: 900, fontSize: 22, color: B.white, marginTop: 8 }}>
@@ -89,11 +125,36 @@ function Gate({ secret, onLoseAuth }) {
   const [online, setOnline] = useState(() => navigator.onLine)
   const [cameraActive, setCameraActive] = useState(false)
   const [cameraError, setCameraError] = useState('')
+  const [showOverride, setShowOverride] = useState(false)
+  const [overrideName, setOverrideName] = useState('')
+  const [overrideTier, setOverrideTier] = useState('GENERAL')
+  const [overrideReason, setOverrideReason] = useState('PHOTO ID MATCH')
   const inputRef = useRef(null)
   const videoRef = useRef(null)
   const streamRef = useRef(null)
 
   const t = tallies(log)
+  const PARK_CAPACITY = 5000
+  const capPercent = Math.min(Math.round((t.admitted / PARK_CAPACITY) * 100), 100)
+  const capColor = capPercent > 90 ? B.neonMagenta : capPercent > 70 ? B.amber : B.neonLime
+
+  const handleManualOverride = (e) => {
+    e.preventDefault()
+    if (!overrideName.trim()) return
+    playFestivalSound('badge_unlock')
+    const entry = {
+      ticketId: `MANUAL-${Math.random().toString(36).slice(2, 8).toUpperCase()}`,
+      outcome: 'admitted',
+      at: new Date().toISOString(),
+      name: overrideName.trim(),
+      tier: `${overrideTier} (${overrideReason})`,
+      qty: 1
+    }
+    setResult(entry)
+    setLog(logScan(entry))
+    setShowOverride(false)
+    setOverrideName('')
+  }
 
   const stopCamera = useCallback(() => {
     if (streamRef.current) {
@@ -276,6 +337,21 @@ function Gate({ secret, onLoseAuth }) {
 
   return (
     <>
+      {/* VENUE CAPACITY TELEMETRY GAUGE */}
+      <div style={{ marginBottom: 14, background: B.charcoal, border: `1px solid ${B.gunmetal}`, borderRadius: 8, padding: '12px 14px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
+          <span style={{ ...mono, fontSize: 8, color: B.mist, letterSpacing: '0.15em' }}>
+            VENUE CAPACITY TELEMETRY · MURI OKUNOLA PARK
+          </span>
+          <span style={{ ...mono, fontSize: 9, color: capColor, fontWeight: 700 }}>
+            {t.admitted.toLocaleString()} / {PARK_CAPACITY.toLocaleString()} ({capPercent}%)
+          </span>
+        </div>
+        <div style={{ height: 6, background: '#111', borderRadius: 3, overflow: 'hidden' }}>
+          <div style={{ width: `${capPercent}%`, height: '100%', background: capColor, transition: 'width 0.4s ease' }} />
+        </div>
+      </div>
+
       <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
         {[['IN', t.admitted, B.neonLime], ['DUPES', t.duplicate, B.amber],
           ['NO', t.rejected, B.neonMagenta], ['QUEUED', queue.length, B.neonCyan]].map(([l, v, c]) => (
@@ -399,6 +475,139 @@ function Gate({ secret, onLoseAuth }) {
           </button>
         </div>
       </form>
+
+      {/* SUPERVISOR ACTIONS: OVERRIDE & CSV EXPORT */}
+      <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
+        <button
+          type="button"
+          onClick={() => setShowOverride(true)}
+          style={{
+            flex: 1, padding: '10px 8px', background: 'transparent',
+            border: `1px dashed ${B.amber}`, borderRadius: 6,
+            color: B.amber, ...mono, fontSize: 8, letterSpacing: '0.1em', cursor: 'pointer',
+            fontWeight: 700
+          }}
+        >
+          ⚠️ MANUAL OVERRIDE (SUPERVISOR)
+        </button>
+
+        <button
+          type="button"
+          onClick={() => exportDoorLogCSV(log)}
+          disabled={!log.length}
+          style={{
+            flex: 1, padding: '10px 8px', background: 'transparent',
+            border: `1px solid ${B.gunmetal}`, borderRadius: 6,
+            color: log.length ? B.mist : B.dim, ...mono, fontSize: 8, letterSpacing: '0.1em', cursor: log.length ? 'pointer' : 'default',
+            fontWeight: 700
+          }}
+        >
+          📥 EXPORT GATE LOG ({log.length})
+        </button>
+      </div>
+
+      {/* SUPERVISOR MANUAL OVERRIDE MODAL */}
+      {showOverride && (
+        <div style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)',
+          backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: 20, zIndex: 9999
+        }}>
+          <div style={{
+            background: B.charcoal, border: `2px solid ${B.amber}`, borderRadius: 10,
+            maxWidth: 420, width: '100%', padding: 20, boxShadow: `0 0 30px ${B.amber}33`
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <div style={{ ...mono, fontSize: 10, color: B.amber, fontWeight: 700, letterSpacing: '0.15em' }}>
+                ⚠️ SUPERVISOR MANUAL CHECK-IN OVERRIDE
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowOverride(false)}
+                style={{ background: 'transparent', border: 'none', color: B.smoke, fontSize: 16, cursor: 'pointer' }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <p style={{ ...mono, fontSize: 8, color: B.mist, lineHeight: 1.6, marginBottom: 14 }}>
+              Use only for attendees with unreadable screens, physical wristband swaps, or confirmed photo ID list verification.
+            </p>
+
+            <form onSubmit={handleManualOverride}>
+              <div style={{ marginBottom: 10 }}>
+                <label style={{ display: 'block', ...mono, fontSize: 8, color: B.smoke, marginBottom: 4 }}>
+                  ATTENDEE FULL NAME:
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={overrideName}
+                  onChange={e => setOverrideName(e.target.value)}
+                  placeholder="e.g. Babatunde Adeleke"
+                  style={{
+                    width: '100%', padding: '10px 12px', boxSizing: 'border-box',
+                    background: B.black, border: `1px solid ${B.gunmetal}`, borderRadius: 6,
+                    color: B.white, ...mono, fontSize: 11
+                  }}
+                />
+              </div>
+
+              <div style={{ marginBottom: 10 }}>
+                <label style={{ display: 'block', ...mono, fontSize: 8, color: B.smoke, marginBottom: 4 }}>
+                  PASS TIER:
+                </label>
+                <select
+                  value={overrideTier}
+                  onChange={e => setOverrideTier(e.target.value)}
+                  style={{
+                    width: '100%', padding: '10px 12px', boxSizing: 'border-box',
+                    background: B.black, border: `1px solid ${B.gunmetal}`, borderRadius: 6,
+                    color: B.white, ...mono, fontSize: 10
+                  }}
+                >
+                  <option value="GENERAL">GENERAL ADMISSION</option>
+                  <option value="VIP FAST-PASS">VIP FAST-PASS</option>
+                  <option value="VVIP ALL-ACCESS">VVIP ALL-ACCESS</option>
+                  <option value="PHALANX CREW">PHALANX CREW</option>
+                  <option value="MEDIA / CREATOR">MEDIA / CREATOR</option>
+                </select>
+              </div>
+
+              <div style={{ marginBottom: 16 }}>
+                <label style={{ display: 'block', ...mono, fontSize: 8, color: B.smoke, marginBottom: 4 }}>
+                  AUTHORIZATION REASON:
+                </label>
+                <select
+                  value={overrideReason}
+                  onChange={e => setOverrideReason(e.target.value)}
+                  style={{
+                    width: '100%', padding: '10px 12px', boxSizing: 'border-box',
+                    background: B.black, border: `1px solid ${B.gunmetal}`, borderRadius: 6,
+                    color: B.white, ...mono, fontSize: 10
+                  }}
+                >
+                  <option value="PHOTO ID MATCH">Govt Photo ID Match (Name on Registry)</option>
+                  <option value="DAMAGED WRISTBAND">Damaged Wristband Replacement</option>
+                  <option value="DEAD BATTERY GUEST">Phone Battery Exhausted (Email Confirmed)</option>
+                  <option value="ORGANISER DIRECTIVE">Organiser Verbal Clearance</option>
+                </select>
+              </div>
+
+              <button
+                type="submit"
+                style={{
+                  width: '100%', padding: '12px', background: B.amber, color: B.black,
+                  border: 'none', borderRadius: 6, ...mono, fontSize: 10, fontWeight: 700,
+                  letterSpacing: '0.15em', cursor: 'pointer'
+                }}
+              >
+                AUTHORIZE & ADMIT ATTENDEE →
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
 
       <div style={{ ...mono, fontSize: 9, color: B.smoke, letterSpacing: '0.24em', marginBottom: 10 }}>RECENT</div>
       {log.slice(0, 25).map((e, i) => (
