@@ -53,6 +53,7 @@ export const FESTIVAL_ACTIONS = {
   ZONE_CHECKIN: 'FESTIVAL:ZONE_CHECKIN',
   VENDOR_ITEM_SOLD: 'FESTIVAL:VENDOR_ITEM_SOLD',
   WALLET_PASS_GENERATED: 'FESTIVAL:WALLET_PASS_GENERATED',
+  ADD_NOTIFICATION: 'FESTIVAL:ADD_NOTIFICATION',
 }
 
 // Storage Keys
@@ -140,6 +141,10 @@ function saveState(state) {
   } catch {
     // Storage full or sandboxed
   }
+}
+
+export function getFestivalState() {
+  return loadPersistedState()
 }
 
 // Setup Broadcast Channel with Window CustomEvent fallback
@@ -326,6 +331,13 @@ export function dispatchFestivalAction(type, payload = {}) {
       }
       break
 
+    case FESTIVAL_ACTIONS.ADD_NOTIFICATION:
+      nextState.gamification = {
+        ...nextState.gamification,
+        recentReward: payload.title || payload.message || 'Festival Alert',
+      }
+      break
+
     default:
       break
   }
@@ -491,11 +503,15 @@ export function useFestivalVendor() {
  * turnstile clearance, NFC haptics, level-up chimes, and grail alerts.
  */
 export function playFestivalSound(type = 'chime') {
-  if (typeof window === 'undefined' || !window.AudioContext && !window.webkitAudioContext) return
+  if (typeof window === 'undefined') return
+  const AudioCtx = window.AudioContext || window.webkitAudioContext
+  if (!AudioCtx) return
 
   try {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext
     const ctx = new AudioCtx()
+    if (ctx.state === 'suspended') {
+      ctx.resume().catch(() => {})
+    }
 
     const now = ctx.currentTime
     const osc = ctx.createOscillator()
@@ -540,13 +556,25 @@ export function playFestivalSound(type = 'chime') {
         break
 
       case 'zone_click':
+      case 'click':
+      case 'button_click':
         // Low subtle futuristic tick
         osc.type = 'sine'
-        osc.frequency.setValueAtTime(220, now)
-        gain.gain.setValueAtTime(0.1, now)
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05)
+        osc.frequency.setValueAtTime(260, now)
+        gain.gain.setValueAtTime(0.12, now)
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06)
         osc.start(now)
-        osc.stop(now + 0.05)
+        osc.stop(now + 0.06)
+        break
+
+      case 'telemetry_ping':
+        // High sonar radar ping
+        osc.type = 'sine'
+        osc.frequency.setValueAtTime(980, now)
+        gain.gain.setValueAtTime(0.14, now)
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12)
+        osc.start(now)
+        osc.stop(now + 0.12)
         break
 
       default:

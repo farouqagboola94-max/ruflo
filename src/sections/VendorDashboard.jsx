@@ -495,7 +495,7 @@ function ProductsTab({ vendor }) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
       localStorage.setItem(SALES_KEY, String(newSales))
     } catch {}
-    dispatchFestivalAction('VENDOR_ITEM_SOLD', {
+    dispatchFestivalAction(FESTIVAL_ACTIONS.VENDOR_ITEM_SOLD, {
       vendor: vendor.name,
       item: product.name,
       amount: product.price,

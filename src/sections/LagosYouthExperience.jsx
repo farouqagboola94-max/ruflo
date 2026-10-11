@@ -7,6 +7,7 @@ import {
   FESTIVAL_ACTIONS,
   playFestivalSound
 } from '../framework/festivalFramework'
+import { copyToClipboard } from '../lib/clipboard'
 
 export default function LagosYouthExperience() {
   const { awardXP, unlockBadge } = useFestivalGamification()
@@ -41,7 +42,7 @@ export default function LagosYouthExperience() {
       audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)()
     }
     if (audioCtxRef.current.state === 'suspended') {
-      audioCtxRef.current.resume()
+      audioCtxRef.current.resume().catch(() => {})
     }
     return audioCtxRef.current
   }
@@ -49,6 +50,7 @@ export default function LagosYouthExperience() {
   // 1. Synthesized Audio FX
   const [combo, setCombo] = useState(0)
   const comboTimerRef = useRef(null)
+  const [copiedSlang, setCopiedSlang] = useState(null)
 
   // 1. Synthesized Audio FX (8-Pad Street Synthesizer)
   const playSound = (type) => {
@@ -679,13 +681,21 @@ export default function LagosYouthExperience() {
                 </div>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => {
-                      navigator.clipboard?.writeText(lingo.street)
-                      playSound('zuzu')
+                    onClick={async () => {
+                      const ok = await copyToClipboard(lingo.street)
+                      if (ok) {
+                        setCopiedSlang(lingo.street)
+                        playSound('zuzu')
+                        setTimeout(() => setCopiedSlang(null), 2000)
+                      }
                     }}
-                    className="px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-white font-mono text-[10px] border border-white/10"
+                    className={`px-3 py-1 rounded-lg font-mono text-[10px] border transition-colors ${
+                      copiedSlang === lingo.street
+                        ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40'
+                        : 'bg-white/5 hover:bg-white/10 text-white border-white/10'
+                    }`}
                   >
-                    📋 Copy Slang
+                    {copiedSlang === lingo.street ? '✓ Copied!' : '📋 Copy Slang'}
                   </button>
                   <button
                     onClick={() => playSound('opor')}

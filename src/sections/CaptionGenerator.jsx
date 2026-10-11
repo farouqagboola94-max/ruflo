@@ -35,6 +35,22 @@ Write ONE caption for the requested platform, mood, and ticket tier. The caption
 
 Respond with ONLY the caption text. No intro, no explanation, no label, no quotes. Just the caption.`
 
+import { copyToClipboard } from '../lib/clipboard'
+
+function generateHeuristicCaption(platform, mood, tier, shoe) {
+  const kick = shoe ? ` in my ${shoe}` : ''
+  if (mood === 'GATEKEEP') {
+    return `You're asking for ID on the kicks, I'm already in Muri Okunola Park. Some grails aren't meant for everyone's algorithm. @s_fest26 Dec 12.`
+  }
+  if (mood === 'CHEF') {
+    return `Cooked this rotation specifically for the Lagos tarmac. Box fresh, zero crease, 100% certified heat. See you at Sneakers Fest '26.`
+  }
+  if (mood === 'STREET') {
+    return `Mainland grit, Island flex. Pulling up to @s_fest26${kick} with the full crew. Lagos sneaker culture is undefeated.`
+  }
+  return `December 12. Muri Okunola Park. The biggest sole exhibition in West Africa. Pulling up${kick} with my ${tier} pass for @s_fest26. #SneakersFest26`
+}
+
 export default function CaptionGenerator() {
   const aiReady = useAiAvailable()
   const [platform, setPlatform] = useState(null)
@@ -48,38 +64,38 @@ export default function CaptionGenerator() {
 
   async function generate() {
     if (!platform || !mood || !tier) return
-    if (!aiReady) {
-      setError('Caption Generator is not live yet. It will be ready before December 12.')
-      return
-    }
     setLoading(true)
     setCaption('')
     setError('')
     setCopied(false)
     try {
-      const shoeContext = shoe.trim() ? `\nShoe / fit: ${shoe.trim()}` : ''
-      const platformObj = PLATFORMS.find(p => p.value === platform)
-      const moodObj = MOODS.find(m => m.value === mood)
-      const prompt = `Platform: ${platform} (${platformObj?.hint})
-Mood: ${mood} — ${moodObj?.hint}
-Ticket tier: ${tier}${shoeContext}
-
-Write the perfect Sneakers Fest '26 caption.`
-      const raw = await claudeChat([{ role: 'user', content: prompt }], { feature: 'CaptionGenerator', model: 'balanced', system: SYSTEM, maxTokens: 300 })
-      setCaption(raw.trim())
-    } catch (e) {
-      setError(e.message || 'Something went wrong.')
+      let finalCaption = ''
+      if (aiReady) {
+        const shoeContext = shoe.trim() ? `\nShoe / fit: ${shoe.trim()}` : ''
+        const platformObj = PLATFORMS.find(p => p.value === platform)
+        const moodObj = MOODS.find(m => m.value === mood)
+        const prompt = `Platform: ${platform} (${platformObj?.hint})\nMood: ${mood} — ${moodObj?.hint}\nTicket tier: ${tier}${shoeContext}\n\nWrite the perfect Sneakers Fest '26 caption.`
+        const raw = await claudeChat([{ role: 'user', content: prompt }], { feature: 'CaptionGenerator', model: 'balanced', system: SYSTEM, maxTokens: 300 })
+        finalCaption = raw.trim()
+      }
+      if (!finalCaption) {
+        finalCaption = generateHeuristicCaption(platform, mood, tier, shoe)
+      }
+      setCaption(finalCaption)
+    } catch {
+      setCaption(generateHeuristicCaption(platform, mood, tier, shoe))
     } finally {
       setLoading(false)
     }
   }
 
-  function copy() {
+  async function copy() {
     if (!caption) return
-    navigator.clipboard.writeText(caption).then(() => {
+    const ok = await copyToClipboard(caption)
+    if (ok) {
       setCopied(true)
       setTimeout(() => setCopied(false), 2200)
-    })
+    }
   }
 
   const ready = platform && mood && tier

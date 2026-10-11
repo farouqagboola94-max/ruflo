@@ -36,6 +36,19 @@ Rules:
 - Lagos street charm + professionalism
 - Short. Every sentence earns its place.`
 
+import { copyToClipboard } from '../lib/clipboard'
+
+function generateHeuristicDM(target, shoe, offer, context) {
+  return {
+    subject_line: `SF26 // ${shoe || 'Grail Inquiry'}`,
+    opening: `Respect chief, hope festival prep is moving solid.`,
+    body: `Saw your rotation and wanted to reach out regarding the ${shoe || 'grails'}. I am pulling up to Sneakers Fest '26 on Dec 12 with ${offer || 'liquid payment ready'}.`,
+    ask: `Are you available for a quick 5-min link-up around the Trade Board or VIP Lounge?`,
+    closing: `Blessings, let's link up at Muri Okunola.`,
+    why_it_works: `Direct, acknowledges their positioning, and sets a clear, zero-friction festival meetup.`
+  }
+}
+
 export default function ColdDMGenerator() {
   const aiReady = useAiAvailable()
   const [shoe, setShoe] = useState('')
@@ -50,24 +63,26 @@ export default function ColdDMGenerator() {
 
   async function generate() {
     if (!shoe.trim() || !target || !offer.trim()) return
-    if (!aiReady) {
-      setError('Cold DM Generator is not live yet. It will be ready before December 12.')
-      return
-    }
     setLoading(true)
     setResult(null)
     setError('')
     setCopied(false)
     try {
-      const tierContext = tier ? ` I have a ${tier} ticket.` : ''
-      const extraContext = context.trim() ? `\nExtra context: ${context}` : ''
-      const prompt = `I want: ${shoe}\nI'm DMing: ${target}\nI'm offering: ${offer}${tierContext}${extraContext}\n\nWrite my cold DM.`
-      const raw = await claudeChat([{ role: 'user', content: prompt }], { feature: 'ColdDMGenerator', model: 'balanced', system: SYSTEM, maxTokens: 600 })
-      const match = raw.match(/\{[\s\S]*\}/)
-      if (match) setResult(JSON.parse(match[0]))
-      else setError('Could not parse DM. Try again.')
-    } catch (e) {
-      setError(e.message || 'Something went wrong.')
+      let finalResult = null
+      if (aiReady) {
+        const tierContext = tier ? ` I have a ${tier} ticket.` : ''
+        const extraContext = context.trim() ? `\nExtra context: ${context}` : ''
+        const prompt = `I want: ${shoe}\nI'm DMing: ${target}\nI'm offering: ${offer}${tierContext}${extraContext}\n\nWrite my cold DM.`
+        const raw = await claudeChat([{ role: 'user', content: prompt }], { feature: 'ColdDMGenerator', model: 'balanced', system: SYSTEM, maxTokens: 600 })
+        const match = raw.match(/\{[\s\S]*\}/)
+        if (match) finalResult = JSON.parse(match[0])
+      }
+      if (!finalResult) {
+        finalResult = generateHeuristicDM(target, shoe, offer, context)
+      }
+      setResult(finalResult)
+    } catch {
+      setResult(generateHeuristicDM(target, shoe, offer, context))
     } finally {
       setLoading(false)
     }
@@ -78,13 +93,14 @@ export default function ColdDMGenerator() {
     return `${result.subject_line}\n\n${result.opening} ${result.body} ${result.ask}\n\n${result.closing}`
   }
 
-  function copy() {
+  async function copy() {
     const dm = fullDM()
     if (!dm) return
-    navigator.clipboard.writeText(dm).then(() => {
+    const ok = await copyToClipboard(dm)
+    if (ok) {
       setCopied(true)
       setTimeout(() => setCopied(false), 2200)
-    })
+    }
   }
 
   const ready = shoe.trim() && offer.trim() && target

@@ -9,6 +9,7 @@ import {
   dispatchFestivalAction,
   FESTIVAL_ACTIONS,
 } from '../framework/festivalFramework'
+import { copyToClipboard } from '../lib/clipboard'
 
 const SYSTEM = `You are the official Lagos Sneaker Culture registry. Based on someone's rotation, issue their collector profile.
 
@@ -339,13 +340,15 @@ export default function CollectorCard() {
     }
   }
 
-  function copy() {
+  async function copy() {
     if (!result?.share_line) return
     const text = `${result.share_line}\n\nCollector Rank: ${result.rank} (${result.rep_score}/100)\nPulling up to @s_fest26 on Dec 12 in Lagos! #SneakersFest26`
-    navigator.clipboard.writeText(text).then(() => {
+    const ok = await copyToClipboard(text)
+    if (ok) {
       setCopied(true)
+      playFestivalSound('zone_click')
       setTimeout(() => setCopied(false), 2200)
-    })
+    }
   }
 
   function shareToTwitter() {

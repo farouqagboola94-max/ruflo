@@ -6,6 +6,7 @@ import {
   dispatchFestivalAction,
   FESTIVAL_ACTIONS,
 } from '../framework/festivalFramework'
+import { copyToClipboard } from '../lib/clipboard'
 
 export default function ShareButton() {
   const [visible, setVisible] = useState(false)
@@ -37,11 +38,11 @@ export default function ShareButton() {
     if (navigator.share && navigator.canShare && navigator.canShare(data)) {
       try { await navigator.share(data) } catch {}
     } else {
-      try {
-        await navigator.clipboard.writeText(window.location.href)
+      const ok = await copyToClipboard(window.location.href)
+      if (ok) {
         setCopied(true)
         setTimeout(() => setCopied(false), 2500)
-      } catch {}
+      }
     }
   }
 
