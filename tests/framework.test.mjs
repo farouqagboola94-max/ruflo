@@ -92,4 +92,14 @@ assert.strictEqual(time1, time2) // Exact clash
 assert.ok(Math.abs(time1 - time3) > 60) // No clash
 console.log('✅ Schedule clash detection logic verified.\n')
 
-console.log('🎉 ALL TESTS PASSED SUCCESSFULLY! 0 ERRORS.')
+// Test 7: Verified Brand Truth & Real Schedule Alignment
+console.log('Test 7: Validating official December 12 Muri Okunola Park schedule & handles...')
+const { PHASES, DAY2 } = await import('../src/data/schedule.js')
+assert.ok(DAY2.length >= 10, 'Should have full December 12 run-of-show')
+assert.strictEqual(PHASES.length, 4, 'Should have 4 official festival phases')
+assert.ok(DAY2.every(item => !item.desc.includes('Mobolaji Johnson')), 'No unconfirmed Mobolaji Johnson Arena lore')
+console.log('✅ Brand truth & December 12 schedule alignment verified.\n')
+
+console.log('🎉 ALL 7 TESTS PASSED SUCCESSFULLY! 0 ERRORS.')
+
+

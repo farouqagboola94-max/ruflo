@@ -107,8 +107,8 @@ const ZONES = [
     id: 'care', short: 'SNEAKER CARE', label: 'Sneaker Care Station',
     color: B.amber, x:620, y:320, w:180, h:120,
     icon:'✨', tagline:'Keep your grails fresh.',
-    desc:'On-site cleaning, restoration, re-lacing, and sole protection. RESHOEVN8R and Jason Markk professionals on deck all day.',
-    schedule:['Open 12:00 — 21:00','Walk-ins only'],
+    desc:'On-site deep cleaning, suede restoration, custom re-lacing, and sole protection by specialist sneaker care technicians all day.',
+    schedule:['Open 12:00 — 21:00','Walk-ins welcome'],
     tags:['CLEANING','CARE','RESTORE'],
     category:'care', sound:'66 dB · Restoration Lab', density:'50% Capacity',
     warpHash: '#experience',
@@ -568,10 +568,10 @@ export default function Venue() {
         {/* Event details strip */}
         <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(160px, 1fr))', gap:1, marginBottom:28, border:`1px solid rgba(255,255,255,0.07)`, borderRadius:12, overflow:'hidden' }}>
           {[
-            { label:'DATE',    value:'Saturday, December 12',         color:B.amber },
-            { label:'DOORS',   value:'12:00 PM — 10:00 PM',           color:B.neonCyan },
-            { label:'VENUE',   value:'Muri Okunola Park, V/I',         color:B.neonLime },
-            { label:'DAY 1',   value:'Mobolaji Johnson Arena · Dec 11', color:B.neonMagenta },
+            { label:'DATE',    value:'Saturday, Dec 12, 2026',        color:B.amber },
+            { label:'DOORS',   value:'11:00 AM — Late',               color:B.neonCyan },
+            { label:'VENUE',   value:'Muri Okunola Park, V/I',        color:B.neonLime },
+            { label:'OFFICIAL', value:'@s_fest26 · @catalystggg',     color:B.neonMagenta },
           ].map(({ label, value, color }) => (
             <div key={label} style={{ padding:'18px 20px', background:'rgba(255,255,255,0.025)' }}>
               <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color: B.dim, letterSpacing:3, marginBottom:6 }}>{label}</div>

@@ -186,8 +186,10 @@ export default function OriginStory() {
               Event builder, brand strategist, and principal of Catalyst Concepts. Former startup operator. Currently channeling five years of pattern recognition, cultural obsession, and a very deliberate Void into building Lagos's first dedicated sneaker festival.
             </div>
             <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
-              <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer"
-                style={{ padding:'7px 14px', background:'rgba(225,48,108,0.1)', border:'1px solid rgba(225,48,108,0.35)', borderRadius:4, fontFamily:"'Space Mono', monospace", fontSize:8, color:'#E1306C', textDecoration:'none', letterSpacing:1 }}>IG @SNEAKERSFEST5555</a>
+              <a href={SOCIAL_LINKS.twitter} target="_blank" rel="noopener noreferrer"
+                style={{ padding:'7px 14px', background:'rgba(225,48,108,0.1)', border:'1px solid rgba(225,48,108,0.35)', borderRadius:4, fontFamily:"'Space Mono', monospace", fontSize:8, color:'#E1306C', textDecoration:'none', letterSpacing:1 }}>X / IG @S_FEST26</a>
+              <a href="https://x.com/catalystggg" target="_blank" rel="noopener noreferrer"
+                style={{ padding:'7px 14px', background:`${B.neonCyan}12`, border:`1px solid ${B.neonCyan}40`, borderRadius:4, fontFamily:"'Space Mono', monospace", fontSize:8, color:B.neonCyan, textDecoration:'none', letterSpacing:1 }}>CONVENER @CATALYSTGGG</a>
               <a href="https://substack.com/@catalyst00555" target="_blank" rel="noopener noreferrer"
                 style={{ padding:'7px 14px', background:'rgba(255,103,25,0.1)', border:'1px solid rgba(255,103,25,0.35)', borderRadius:4, fontFamily:"'Space Mono', monospace", fontSize:8, color:'#FF6719', textDecoration:'none', letterSpacing:1 }}>SUBSTACK @CATALYST00555</a>
               <a href={SOCIAL_LINKS.whatsapp} target="_blank" rel="noopener noreferrer"

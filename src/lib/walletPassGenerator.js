@@ -84,7 +84,7 @@ export function buildAppleWalletPassData({ name, tier, tierColor, ref, price }) 
         {
           key: 'social',
           label: 'OFFICIAL CHANNELS',
-          value: 'X: @s_fest26 · Instagram: @sneakersfest5555 · WhatsApp Inner Circle',
+          value: 'X & IG: @s_fest26 · Convener: @catalystggg · WhatsApp Inner Circle',
         },
         {
           key: 'support',

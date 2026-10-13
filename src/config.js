@@ -2,7 +2,8 @@
 export const SOCIAL_LINKS = {
   tiktok:            'https://tiktok.com/@sneakersfest',
   youtube:           'https://youtube.com/@catalyst00555',
-  twitter:           'https://twitter.com/Catalyst188',
+  twitter:           'https://x.com/s_fest26',
+  twitterConvener:   'https://x.com/catalystggg',
   instagram:         'https://instagram.com/s_fest26',
   instagramPersonal: 'https://instagram.com/catalystggg',
   snapchat:          'https://www.snapchat.com/add/sneakersfest?share_id=UpEUQSUErXw&locale=en-GB',
@@ -20,7 +21,7 @@ export const EVENT = {
   name:    "Sneakers Fest '26",
   date:    'December 12, 2026',
   dateISO: '2026-12-12T12:00:00',
-  venue:   'Lagos, Nigeria',
+  venue:   'Muri Okunola Park, Victoria Island, Lagos',
   doors:   '12:00 PM',
   email:   'info@sneakersfest.com',
 }

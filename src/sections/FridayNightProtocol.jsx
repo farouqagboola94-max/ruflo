@@ -225,7 +225,7 @@ export default function FridayNightProtocol() {
             <div style={{ textAlign:'center', padding:'30px 0' }}>
               <div style={{ fontSize:32, marginBottom:12 }}>🔥</div>
               <div style={{ fontFamily:"'Bebas Neue'", fontSize:'1.8rem', color:B.amber, letterSpacing:'0.06em', marginBottom:8 }}>YOU'RE IN THE MIX</div>
-              <div style={{ fontFamily:"'Space Mono'", fontSize:'0.7rem', color:B.smoke, marginBottom:20 }}>Your submission is noted. Winners get announced on Sunday — follow @sneakersfest5555 to catch it.</div>
+              <div style={{ fontFamily:"'Space Mono'", fontSize:'0.7rem', color:B.smoke, marginBottom:20 }}>Your submission is noted. Winners get announced on Sunday — follow @s_fest26 to catch it.</div>
               <button onClick={resetForm} style={{ background:'transparent', border:`1px solid ${B.amber}40`, borderRadius:20, padding:'8px 24px', fontFamily:"'Space Mono'", fontSize:'0.65rem', color:B.amber, cursor:'pointer', letterSpacing:1 }}>
                 SUBMIT ANOTHER →
               </button>
@@ -296,9 +296,9 @@ export default function FridayNightProtocol() {
             style={{ display:'inline-block', background:'#25D366', color:B.black, padding:'12px 32px', fontFamily:"'Bebas Neue'", fontSize:'1.1rem', letterSpacing:'0.1em', textDecoration:'none', borderRadius:4, boxShadow:'0 0 20px rgba(37,211,102,0.4)' }}>
             JOIN ON WHATSAPP
           </a>
-          <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer"
+          <a href={SOCIAL_LINKS.twitter} target="_blank" rel="noopener noreferrer"
             style={{ display:'inline-block', background:'transparent', color:'#E1306C', border:'1px solid #E1306C60', padding:'12px 28px', fontFamily:"'Bebas Neue'", fontSize:'1.1rem', letterSpacing:'0.1em', textDecoration:'none', borderRadius:4 }}>
-            FOLLOW @SNEAKERSFEST5555
+            FOLLOW @S_FEST26
           </a>
           <a href={SOCIAL_LINKS.snapchat} target="_blank" rel="noopener noreferrer"
             style={{ display:'inline-block', background:'transparent', color:B.amber, border:`1px solid ${B.amber}60`, padding:'12px 28px', fontFamily:"'Bebas Neue'", fontSize:'1.1rem', letterSpacing:'0.1em', textDecoration:'none', borderRadius:4 }}>

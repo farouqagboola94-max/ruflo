@@ -28,8 +28,7 @@ const dayEnd = items => {
 }
 
 export const DAYS = [
-  { date: '2026-12-11', label: 'FINALS NIGHT', venue: 'Mobolaji Johnson Arena, Onikan', items: DAY1, endsAt: dayEnd(DAY1) },
-  { date: '2026-12-12', label: 'THE SOLE EXHIBITION', venue: 'Muri Okunola Park, Victoria Island', items: DAY2, endsAt: dayEnd(DAY2) },
+  { date: '2026-12-12', label: "SNEAKERS FEST '26 MAIN EVENT", venue: 'Muri Okunola Park, Victoria Island, Lagos', items: DAY2, endsAt: dayEnd(DAY2) },
 ]
 
 /**

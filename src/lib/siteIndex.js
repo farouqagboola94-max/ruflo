@@ -126,7 +126,7 @@ export const SECTIONS = [
 export const ACTIONS = [
   { id: 'act-whatsapp',  t: 'Join the WhatsApp Channel', d: 'Updates straight to your phone', href: SOCIAL_LINKS.whatsapp,         ext: true, k: 'whatsapp chat community group join talk channel' },
   { id: 'act-dm',        t: 'Message the Team',          d: 'Direct WhatsApp to an organiser', href: SOCIAL_LINKS.whatsappContact1, ext: true, k: 'whatsapp dm message contact ask question help talk' },
-  { id: 'act-instagram', t: 'Follow on Instagram',       d: '@sneakersfest5555',               href: SOCIAL_LINKS.instagram,        ext: true, k: 'instagram social follow ig' },
+  { id: 'act-instagram', t: 'Follow on Instagram / X',   d: '@s_fest26 · @catalystggg',        href: SOCIAL_LINKS.twitter,          ext: true, k: 'instagram twitter x social follow ig' },
   { id: 'act-tiktok',    t: 'Follow on TikTok',          d: '@sneakersfest',                   href: SOCIAL_LINKS.tiktok,           ext: true, k: 'tiktok social follow video' },
   { id: 'act-top',       t: 'Back to Top',               d: 'Return to the hero',              href: '#', k: 'top scroll up home start beginning hero' },
 ]

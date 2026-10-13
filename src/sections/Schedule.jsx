@@ -127,11 +127,11 @@ export default function Schedule() {
         {/* Campaign phases strip */}
         <div style={{ marginBottom:56 }}>
           <div style={{ textAlign:'center', marginBottom:32 }}>
-            <SectionTag>THE PHALANX FRAMEWORK</SectionTag>
+            <SectionTag>FESTIVAL ROADMAP</SectionTag>
             <div className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:'clamp(36px,5vw,60px)', color:B.white, lineHeight:0.9 }}>
               4 PHASES. 1 MOVEMENT.
             </div>
-            <div style={{ fontFamily:"'Space Mono',sans-serif", fontSize:12, color:B.smoke, marginTop:10 }}>Oct 9, 2026 → Dec 12, 2026 · Za.allyErrands · The Phalanx · The Catalyst Codes</div>
+            <div style={{ fontFamily:"'Space Mono',sans-serif", fontSize:12, color:B.smoke, marginTop:10 }}>Leading to Saturday, December 12, 2026 · Muri Okunola Park, Victoria Island, Lagos</div>
           </div>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(180px, 1fr))', gap:12 }}>
             {PHASES.map((ph, i) => (
@@ -149,41 +149,35 @@ export default function Schedule() {
           </div>
         </div>
 
-        {/* Day selector */}
+        {/* Official Run of Show Header */}
         <div style={{ textAlign:'center', marginBottom:40 }}>
-          <SectionTag>{day === 1 ? 'DECEMBER 11, 2026' : 'DECEMBER 12, 2026'}</SectionTag>
+          <SectionTag>SATURDAY, DECEMBER 12, 2026</SectionTag>
           <div className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:'clamp(40px,6vw,68px)', color:B.white, lineHeight:0.9 }}>
-            EVENT<br /><span style={{ color:B.amber }}>SCHEDULE</span>
+            OFFICIAL<br /><span style={{ color:B.amber }}>RUN OF SHOW</span>
           </div>
-          <div style={{ display:'flex', gap:10, justifyContent:'center', marginTop:20 }}>
-            {[
-              { d:1, label:'DEC 11 · STADIUM FINALS', venue:'Mobolaji Johnson Arena, Onikan' },
-              { d:2, label:'DEC 12 · SNEAKER FEST', venue:'Muri Okunola Park, V/I' },
-            ].map(({ d, label, venue }) => (
-              <button key={d} onClick={() => setDay(d)} style={{ padding:'10px 20px', background:day===d ? `${B.amber}15` : 'transparent', border:`1px solid ${day===d ? B.amber : B.gunmetal}`, borderRadius:6, cursor:'pointer', textAlign:'left' }}>
-                <div style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color:day===d ? B.amber : B.smoke, letterSpacing:2, marginBottom:3 }}>{label}</div>
-                <div style={{ fontFamily:"'Syne',sans-serif", fontSize:11, color:day===d ? B.white : B.dim }}>{venue}</div>
-              </button>
-            ))}
+          <div style={{ display:'inline-flex', alignItems:'center', gap:10, marginTop:20, padding:'10px 24px', background:`${B.amber}15`, border:`1px solid ${B.amber}`, borderRadius:6 }}>
+            <div style={{ textAlign:'center' }}>
+              <div style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color:B.amber, letterSpacing:2, marginBottom:3 }}>DEC 12 · 12:00 PM — 10:00 PM WAT</div>
+              <div style={{ fontFamily:"'Syne',sans-serif", fontSize:12, color:B.white, fontWeight:700 }}>Muri Okunola Park, Victoria Island, Lagos</div>
+            </div>
           </div>
         </div>
 
-        {day === 2 && (
-          <div style={{ display:'flex', gap:16, flexWrap:'wrap', marginBottom:20, paddingLeft:98 }}>
-            {[{label:'MAIN STAGE', color:B.amber},{label:'ART ZONE', color:B.neonMagenta},{label:'SPORT ZONE', color:B.neonLime},{label:'DROP ZONE', color:B.neonCyan}].map(s => (
-              <div key={s.label} style={{ display:'flex', alignItems:'center', gap:6 }}>
-                <div style={{ width:7, height:7, borderRadius:'50%', background:s.color, boxShadow:`0 0 6px ${s.color}80` }} />
-                <span style={{ fontFamily:"'Space Mono',monospace", fontSize: 9, color: B.smoke, letterSpacing:'0.1em' }}>{s.label}</span>
-              </div>
-            ))}
-          </div>
-        )}
-        <Timeline items={day === 1 ? DAY1 : DAY2} liveStatus={liveStatus} />
+        <div style={{ display:'flex', gap:16, flexWrap:'wrap', marginBottom:20, paddingLeft:98 }}>
+          {[{label:'MAIN STAGE', color:B.amber},{label:'1V1 ARENA', color:B.neonMagenta},{label:'GRAIL ALLEY', color:B.neonLime},{label:'YOUTH LOUNGE', color:B.neonCyan}].map(s => (
+            <div key={s.label} style={{ display:'flex', alignItems:'center', gap:6 }}>
+              <div style={{ width:7, height:7, borderRadius:'50%', background:s.color, boxShadow:`0 0 6px ${s.color}80` }} />
+              <span style={{ fontFamily:"'Space Mono',monospace", fontSize: 9, color: B.smoke, letterSpacing:'0.1em' }}>{s.label}</span>
+            </div>
+          ))}
+        </div>
+
+        <Timeline items={DAY2} liveStatus={liveStatus} />
 
         <div className="card-3d" style={{ marginTop:36, padding:'20px 24px', background:B.charcoal, border:`1px solid ${B.gunmetal}`, borderRadius:8, display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:12 }}>
           <div style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color:B.smoke, letterSpacing:'0.15em', lineHeight:1.7 }}>
-            SCHEDULE SUBJECT TO CHANGE<br />
-            <span style={{ color: B.dim }}>FOLLOW @SNEAKERSFEST FOR LIVE UPDATES</span>
+            OFFICIAL RUN OF SHOW · SUBJECT TO CURATION UPDATES<br />
+            <span style={{ color: B.dim }}>FOLLOW @S_FEST26 & @CATALYSTGGG FOR LIVE ANNOUNCEMENTS</span>
           </div>
           <a href="#tickets" style={{ padding:'10px 20px', background:B.amber, color:B.black, fontFamily:"'Space Mono',monospace", fontSize:8, fontWeight:700, letterSpacing:'0.15em', textDecoration:'none', borderRadius:2, whiteSpace:'nowrap' }}>SECURE YOUR SPOT →</a>
         </div>

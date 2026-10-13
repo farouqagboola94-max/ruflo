@@ -115,7 +115,7 @@ export default function PhotoTools() {
       const sz2 = Math.round(barH * 0.27)
       ctx.font      = `${sz2}px 'Space Mono', monospace`
       ctx.fillStyle = 'rgba(255,255,255,0.55)'
-      ctx.fillText('@sneakersfest5555  ·  @sneakersfest', 14, sh - 10)
+      ctx.fillText('@s_fest26  ·  @catalystggg', 14, sh - 10)
     }
   }, [img, cssFilter, texts, showStamp])
 

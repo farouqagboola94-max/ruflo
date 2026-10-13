@@ -68,7 +68,7 @@ const PARTNER_LEVELS = [
       'Cross-promotion across your platform',
       'Event coverage rights (media partners)',
       'Branded presence on community pages',
-      'Joint content opportunities with @sneakersfest5555',
+      'Joint content opportunities with @s_fest26 & @catalystggg',
       'Negotiated by activation value — open to proposals',
     ],
   },
