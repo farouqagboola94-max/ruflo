@@ -17,7 +17,7 @@ export default function WhatsAppButton() {
 
   const handleSquadInvite = () => {
     const inviteMsg = encodeURIComponent(
-      "Yo! I'm pulling up to Sneakers Fest '26 at Muri Okunola Park, Lagos! 👟🔥\n\nLock in your passes, trade grails at LSX, and catch the live drops:\nhttps://sneakers-fest-55.netlify.app/?ref=squad\n\nOfficial: @s_fest26 | Convener: @catalystggg #SneakersFest26"
+      "Yo! I'm pulling up to Sneakers Fest '26 at Muri Okunola Park, Lagos! 👟🔥\n\nLock in your passes, trade grails at LSX, and catch the live drops:\nhttps://sneakers-fest-official-website.netlify.app/?ref=squad\n\nOfficial: @s_fest26 | Convener: @catalystggg #SneakersFest26"
     )
     window.open(`https://wa.me/?text=${inviteMsg}`, '_blank')
     awardXP(100, 'Squad WhatsApp Invite Dispatched')

@@ -106,7 +106,7 @@ export default function ShoeColorizer() {
 
   function shareColorway() {
     const code = ZONES.map(z => colors[z.id].replace('#', '')).join('-')
-    navigator.clipboard.writeText(`My Lagos 1-of-1 Custom: ${modelName} [${code}] · https://sneakers-fest-55.netlify.app/`)
+    navigator.clipboard.writeText(`My Lagos 1-of-1 Custom: ${modelName} [${code}] · https://sneakers-fest-official-website.netlify.app/`)
     setCopied(true)
     playFestivalSound('xp_gain')
     setTimeout(() => setCopied(false), 2500)

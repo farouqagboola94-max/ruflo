@@ -119,7 +119,7 @@ export default function MyDay() {
       text += `\n`
     })
 
-    text += `\n🔥 Catch me on the festival floor! Plan your day at: https://sneakers-fest-55.netlify.app#my-day`
+    text += `\n🔥 Catch me on the festival floor! Plan your day at: https://sneakers-fest-official-website.netlify.app#my-day`
 
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank')
   }

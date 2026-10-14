@@ -429,7 +429,7 @@ function InfoPanel({ zone, onClose, onSelectRoute, onPinZone, isPinned }) {
               📍 Meetup set at {zone.label}! Share coordinates with your squad:
             </span>
             <a
-              href={`https://wa.me/?text=${encodeURIComponent(`Yo! Meet me at ${zone.label} (${zone.short}) at Sneakers Fest '26, Muri Okunola Park! Check the venue map here: https://sneakers-fest-55.netlify.app#venue`)}`}
+              href={`https://wa.me/?text=${encodeURIComponent(`Yo! Meet me at ${zone.label} (${zone.short}) at Sneakers Fest '26, Muri Okunola Park! Check the venue map here: https://sneakers-fest-official-website.netlify.app#venue`)}`}
               target="_blank"
               rel="noopener noreferrer"
               style={{

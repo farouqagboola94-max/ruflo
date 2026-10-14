@@ -408,7 +408,7 @@ export default function FitCheckArena() {
             </button>
 
             <a
-              href="https://twitter.com/intent/tweet?text=Judging%20the%20heaviest%20on-foot%20streetwear%20clashes%20at%20Sneakers%20Fest%20'26!%20Vote%20now%20in%20the%20Live%20Fit-Check%20Arena%20%F0%9F%94%A5%20https%3A%2F%2Fsneakers-fest-55.netlify.app%23fitcheck-arena%20%40s_fest26%20%40catalystggg"
+              href="https://twitter.com/intent/tweet?text=Judging%20the%20heaviest%20on-foot%20streetwear%20clashes%20at%20Sneakers%20Fest%20'26!%20Vote%20now%20in%20the%20Live%20Fit-Check%20Arena%20%F0%9F%94%A5%20https%3A%2F%2Fsneakers-fest-official-website.netlify.app%23fitcheck-arena%20%40s_fest26%20%40catalystggg"
               target="_blank"
               rel="noopener noreferrer"
               style={{
