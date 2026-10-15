@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, AmberGlow, SectionTag } from '../components/Shared'
 import Egg from '../components/Egg'
@@ -39,9 +39,24 @@ export default function Highlights() {
   const [activeReelIdx, setActiveReelIdx] = useState(0)
   const [isPlaying, setIsPlaying] = useState(true)
   const [isMuted, setIsMuted] = useState(true)
+  const [dataSaver, setDataSaver] = useState(false)
   const videoRef = useRef(null)
 
   const currentReel = REELS[activeReelIdx]
+
+  useEffect(() => {
+    // Detect cellular / metered connection or browser Save-Data mode
+    if (typeof navigator !== 'undefined') {
+      const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection
+      if (conn && (conn.saveData || /^(slow-)?2g$/.test(conn.effectiveType || '') || conn.effectiveType === '3g')) {
+        setDataSaver(true)
+        setIsPlaying(false)
+        if (videoRef.current) {
+          videoRef.current.pause()
+        }
+      }
+    }
+  }, [])
 
   function switchReel(idx) {
     setActiveReelIdx(idx)
@@ -168,13 +183,30 @@ export default function Highlights() {
                 key={currentReel.src}
                 src={currentReel.src}
                 poster={currentReel.poster}
-                autoPlay
+                preload="metadata"
+                autoPlay={!dataSaver}
                 loop
                 muted={isMuted}
                 playsInline
+                aria-label={`Official Sneaker Fest video: ${currentReel.title}`}
                 onClick={togglePlay}
-                style={{ width: '100%', maxHeight: 480, objectFit: 'cover', display: 'block', cursor: 'pointer' }}
+                style={{ width: '100%', maxHeight: 480, objectFit: 'cover', display: 'block', cursor: 'pointer', aspectRatio: '16/9' }}
               />
+
+              {/* Data Saver Indicator for metered cellular bandwidth */}
+              {dataSaver && !isPlaying && (
+                <div style={{
+                  position: 'absolute', top: 14, left: 14,
+                  background: 'rgba(5,5,10,0.85)', backdropFilter: 'blur(8px)',
+                  border: `1px solid ${B.amber}`, borderRadius: 6,
+                  padding: '5px 10px', display: 'flex', alignItems: 'center', gap: 6,
+                  fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.amber,
+                  zIndex: 2,
+                }}>
+                  <span>⚡ DATA SAVER ACTIVE</span>
+                  <span style={{ color: B.smoke }}>· Tap Play to Stream</span>
+                </div>
+              )}
 
               {/* Floating Controls Bar */}
               <div style={{
@@ -189,6 +221,7 @@ export default function Highlights() {
                 <div style={{ display: 'flex', gap: 8 }}>
                   <button
                     onClick={togglePlay}
+                    aria-label={isPlaying ? 'Pause marketing video' : 'Play marketing video'}
                     style={{
                       padding: '6px 12px', borderRadius: 5, cursor: 'pointer',
                       background: currentReel.accent, border: 'none',
@@ -199,6 +232,7 @@ export default function Highlights() {
                   </button>
                   <button
                     onClick={toggleMute}
+                    aria-label={isMuted ? 'Unmute video audio' : 'Mute video audio'}
                     style={{
                       padding: '6px 12px', borderRadius: 5, cursor: 'pointer',
                       background: isMuted ? 'rgba(255,255,255,0.08)' : B.neonMagenta,
@@ -212,6 +246,7 @@ export default function Highlights() {
 
                 <button
                   onClick={requestFullScreen}
+                  aria-label="View video in fullscreen mode"
                   style={{
                     padding: '6px 10px', borderRadius: 5, cursor: 'pointer',
                     background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.15)',

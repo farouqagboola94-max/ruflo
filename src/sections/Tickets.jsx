@@ -129,12 +129,12 @@ function downloadCalendar() {
     "SUMMARY:Sneakers Fest '26 — The Sole Exhibition",
     "DESCRIPTION:West Africa's premier sneaker culture event. 200+ rare kicks\\, 30+ confirmed vendors\\, live sets\\, custom art and street food.",
     'LOCATION:Muri Okunola Park\\, Victoria Island\\, Lagos\\, Nigeria',
-    'URL:https://sneakers-fest-26.netlify.app','STATUS:CONFIRMED','END:VEVENT','END:VCALENDAR',
+    'URL:https://sneakers-fest-official-website.netlify.app','STATUS:CONFIRMED','END:VEVENT','END:VCALENDAR',
   ]
   const blob = new Blob([lines.join('\r\n')], { type:'text/calendar;charset=utf-8' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
-  a.href = url; a.download = 'sneakers-fest-26.ics'
+  a.href = url; a.download = 'sneakers-fest-2026.ics'
   document.body.appendChild(a); a.click()
   document.body.removeChild(a); URL.revokeObjectURL(url)
 }

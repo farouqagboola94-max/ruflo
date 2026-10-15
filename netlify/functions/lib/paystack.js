@@ -7,7 +7,7 @@
 const INIT_URL = 'https://api.paystack.co/transaction/initialize'
 
 /** Netlify sets URL in production; the fallback only matters locally. */
-export const siteUrl = () => process.env.URL || 'https://sneakers-fest-26.netlify.app'
+export const siteUrl = () => process.env.URL || 'https://sneakers-fest-official-website.netlify.app'
 
 /**
  * Initialise a Paystack transaction.

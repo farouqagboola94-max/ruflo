@@ -133,7 +133,7 @@ export default function SneakerDNA() {
 
   const handleShare = async () => {
     const a = ARCHETYPES[result]
-    const text = `My Sneaker DNA: ${a.title}\n\n"${a.description.slice(0, 100)}..."\n\nFind yours → sneakers-fest-26.netlify.app`
+    const text = `My Sneaker DNA: ${a.title}\n\n"${a.description.slice(0, 100)}..."\n\nFind yours → https://sneakers-fest-official-website.netlify.app/`
     if (navigator.share) {
       try { await navigator.share({ title: 'My Sneaker DNA', text, url: window.location.href }) } catch {}
     } else {

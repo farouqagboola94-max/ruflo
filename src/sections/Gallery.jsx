@@ -443,6 +443,7 @@ function LightboxModal({ item, items, onSelect, onClose, onHeat, liked, heatCoun
           <img
             src={item.imageData}
             alt={item.title}
+            decoding="async"
             style={{ width:'100%', height:'100%', maxHeight:'78vh', objectFit:'contain', display:'block' }}
           />
           {items.length > 1 && (
@@ -562,13 +563,16 @@ function GalleryCard({ item, onHeat, liked, heatCount, onOpen }) {
       {/* Top neon accent bar */}
       <div style={{ height:2, background:`linear-gradient(90deg, ${accent}, transparent)` }} />
 
-      <div style={{ position:'relative', overflow:'hidden', background:'#08080c' }}>
+      <div style={{ position:'relative', overflow:'hidden', background:'#08080c', aspectRatio:'4/5' }}>
         <img
           src={item.imageData}
           alt={item.title}
           loading="lazy"
+          decoding="async"
+          width="400"
+          height="500"
           style={{
-            width:'100%', display:'block', objectFit:'cover',
+            width:'100%', height:'100%', display:'block', objectFit:'cover',
             transition:'transform 0.45s cubic-bezier(0.16,1,0.3,1)',
             transform: hov ? 'scale(1.04)' : 'scale(1)',
           }}
