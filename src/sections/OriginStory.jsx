@@ -50,7 +50,7 @@ const CHAPTERS = [
     body:[
       "This is the event. Not the comeback story — that's just context. The event is the thing. Lagos. A full sneaker festival: drop market, collector's room, art installations, exclusive releases, community activation, vendor hub, live DJs. The whole infrastructure that the culture has been missing.",
       "We're not borrowing a template from Sneaker Con or Sole DXB. We're building something that has Lagos in its DNA — from the architecture to the energy to the curation. The city has been waiting for this. We're just doing the work.",
-      "First edition. 1,000 to 2,500 people. Invitation-curated vendors. A live event series that becomes an institution. Year 1 is the proof. Year 5 is the legacy.",
+      "First edition. 5,000 people at Muri Okunola Park, Victoria Island. Invitation-curated vendors. A live event series that becomes an institution. Year 1 is the proof. Year 5 is the legacy.",
     ],
   },
 ]
