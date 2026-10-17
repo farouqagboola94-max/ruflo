@@ -38,15 +38,15 @@ const MOBILE_LINKS = [
   { label: 'VENUE',           href: '#venue',     num: '12' },
   { label: 'MERCH',           href: '#merch',     num: '13' },
   { label: 'COMMUNITY',       href: '#community', num: '14' },
-  { label: 'EARLY ACCESS',    href: '#waitlist',  num: '15' },
-  { label: 'ARCHITECT VAULT', href: '#vault-200', num: '16' },
+  { label: 'TICKETS & PASSES', href: '#tickets',   num: '15' },
+  { label: 'FITCHECK ARENA',  href: '#fitcheck-arena', num: '16' },
   { label: 'SOLE REGISTRY',   href: '#sole-registry', num: '17' },
   { label: 'VENDORS',         href: '#vendors',   num: '18' },
   { label: 'VENDOR PORTAL',  href: '#vendor-dashboard', num: '19' },
   { label: 'SF\'26 APP',     href: '#app-promo', num: '20' },
-  { label: 'FAQ',             href: '#faq',       num: '21' },
-  { label: 'CONTACT',         href: '#contact',   num: '22' },
-  { label: 'CATALYST: THE AWAKENING ↗', href: 'https://catalyst-awakening.netlify.app/', num: '23', external: true },
+  { label: 'SAFETY & SOS',   href: '#safety-sos', num: '21' },
+  { label: 'FAQ',             href: '#faq',       num: '22' },
+  { label: 'CONTACT',         href: '#contact',   num: '23' },
 ]
 
 export default function Navbar() {
@@ -130,19 +130,17 @@ export default function Navbar() {
               >{link.label}</a>
             ))}
             <a
-              href="https://catalyst-awakening.netlify.app/"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#highlights"
               style={{
                 fontFamily: "'Space Mono', monospace", fontSize: 7.5, letterSpacing: '0.15em',
-                textDecoration: 'none', color: '#9B59FF',
-                border: '1px solid #9B59FF40', borderRadius: 3, padding: '5px 10px',
+                textDecoration: 'none', color: B.neonCyan,
+                border: `1px solid ${B.neonCyan}40`, borderRadius: 3, padding: '5px 10px',
                 transition: 'border-color 0.2s, box-shadow 0.2s',
               }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = '#9B59FF'; e.currentTarget.style.boxShadow = '0 0 12px #9B59FF40' }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = '#9B59FF40'; e.currentTarget.style.boxShadow = 'none' }}
-            >⚡ CATALYST</a>
-            <a href="#vault-200"
+              onMouseEnter={e => { e.currentTarget.style.borderColor = B.neonCyan; e.currentTarget.style.boxShadow = `0 0 12px ${B.neonCyan}40` }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = `${B.neonCyan}40`; e.currentTarget.style.boxShadow = 'none' }}
+            >🎬 HIGHLIGHTS</a>
+            <a href="#fitcheck-arena"
               style={{
                 fontFamily: "'Space Mono', monospace", fontSize: 7.5, letterSpacing: '0.15em',
                 textDecoration: 'none', color: B.amber,
@@ -151,7 +149,7 @@ export default function Navbar() {
               }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = B.amber; e.currentTarget.style.boxShadow = `0 0 12px ${B.amber}30` }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = `${B.amber}40`; e.currentTarget.style.boxShadow = 'none' }}
-            >🔐 VAULT</a>
+            >🏟 FITCHECK ARENA</a>
             <a href="#tickets"
               style={{ padding: '8px 16px', background: B.amber, color: B.black, fontFamily: "'Space Mono', monospace", fontSize: 7.5, fontWeight: 700, letterSpacing: '0.15em', textDecoration: 'none', borderRadius: 2, boxShadow: `0 0 15px ${B.amber}20`, transition: 'box-shadow 0.2s' }}
               onMouseEnter={e => e.currentTarget.style.boxShadow = `0 0 30px ${B.amber}50`}

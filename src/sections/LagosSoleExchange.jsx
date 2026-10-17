@@ -312,6 +312,7 @@ export default function LagosSoleExchange() {
       position: 'relative',
       fontFamily: FONTS?.body || 'sans-serif'
     }}>
+      <div id="lsx" style={{ position: 'absolute', top: 0, left: 0, width: '1px', height: '1px', pointerEvents: 'none', visibility: 'hidden' }} />
       {/* Background Ambience */}
       <div style={{
         position: 'absolute',

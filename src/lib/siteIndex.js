@@ -80,7 +80,6 @@ export const SECTIONS = [
   { id: 'live-now',        t: 'Happening Now',     c: 'culture', d: 'What is on right now',          k: 'now next live schedule running order today set times' },
   { id: 'the-200',         t: 'The 200',           c: 'culture', d: 'The canon, ranked',              k: 'bible 200 canon list ranking grails brands tiers' },
   { id: 'vault-200',       t: 'Architect Vault',   c: 'culture', d: 'For the deepest heads',          k: 'vault secret locked exclusive 200 architect' },
-  { id: 'sneaker-vault',   t: 'Sneaker Vault',     c: 'culture', d: 'The knowledge base',             k: 'knowledge learn encyclopedia reference vault' },
   { id: 'artists',         t: 'Artists',           c: 'culture', d: 'The creatives on the bill',      k: 'creators art performers spotlight' },
   { id: 'timeline',        t: 'Drops Timeline',    c: 'culture', d: 'The releases that mattered',     k: 'releases history drops dates timeline' },
   { id: 'fit-check-studio', t: 'FitCheck Studio AI', c: 'identity', d: 'Full streetwear styling & silhouette analysis', k: 'fitcheck studio ai styling streetwear outfit analysis photo look' },

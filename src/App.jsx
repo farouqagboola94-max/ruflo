@@ -69,7 +69,6 @@ const SneakerBingo   = lazy(() => import('./sections/SneakerBingo'))
 const ArtistSpotlight = lazy(() => import('./sections/ArtistSpotlight'))
 const DropsTimeline   = lazy(() => import('./sections/DropsTimeline'))
 const CommunityIntelligence   = lazy(() => import('./sections/CommunityIntelligence'))
-const SneakerKnowledgeVault   = lazy(() => import('./sections/SneakerKnowledgeVault'))
 const GrailAdvisor            = lazy(() => import('./sections/GrailAdvisor'))
 const DropAnalyzer            = lazy(() => import('./sections/DropAnalyzer'))
 const AITrivia                = lazy(() => import('./sections/AITrivia'))
@@ -568,13 +567,6 @@ export default function App() {
             {/* ECOSYSTEM */}
             <Reveal><Comics /></Reveal>
             <Reveal><Newsletter /></Reveal>
-          </Suspense></SectionBoundary>
-        </Defer>
-
-        {/* KNOWLEDGE */}
-        <Defer sections={1}>
-          <SectionBoundary><Suspense fallback={null}>
-            <Reveal><SneakerKnowledgeVault /></Reveal>
           </Suspense></SectionBoundary>
         </Defer>
 
