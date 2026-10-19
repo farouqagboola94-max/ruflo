@@ -57,7 +57,7 @@ const MemoryMatch    = lazy(() => import('./sections/MemoryMatch'))
 const Soledle        = lazy(() => import('./sections/Soledle'))
 const ShoeColorizer  = lazy(() => import('./sections/ShoeColorizer'))
 const OutfitMatcher  = lazy(() => import('./sections/OutfitMatcher'))
-const HypeCounter    = lazy(() => import('./sections/HypeCounter'))
+const DanfoCustomizerLab = lazy(() => import('./sections/DanfoCustomizerLab'))
 const SpinWheel      = lazy(() => import('./sections/SpinWheel'))
 const CrewVoteOff    = lazy(() => import('./sections/CrewVoteOff'))
 const BadgeMaker     = lazy(() => import('./sections/BadgeMaker'))
@@ -84,7 +84,7 @@ const StoryGenerator          = lazy(() => import('./sections/StoryGenerator'))
 const SneakerRoast            = lazy(() => import('./sections/SneakerRoast'))
 const HeatPredictor           = lazy(() => import('./sections/HeatPredictor'))
 const ColdDMGenerator         = lazy(() => import('./sections/ColdDMGenerator'))
-const SneakerEulogy           = lazy(() => import('./sections/SneakerEulogy'))
+const LagosPlugRadar          = lazy(() => import('./sections/LagosPlugRadar'))
 const CollectorCard           = lazy(() => import('./sections/CollectorCard'))
 const EarlyAccess     = lazy(() => import('./sections/EarlyAccess'))
 const Comics          = lazy(() => import('./sections/Comics'))
@@ -418,8 +418,8 @@ export default function App() {
             <Reveal><LagosSoleExchange /></Reveal>
             <Reveal><FitCheckStudio /></Reveal>
             <Reveal><FitCheckArena /></Reveal>
+            <Reveal><DanfoCustomizerLab /></Reveal>
             <Reveal><SneakerTrivia /></Reveal>
-            <Reveal><HypeCounter /></Reveal>
             <Reveal><AITrivia /></Reveal>
             <Reveal><SpinWheel /></Reveal>
             <Reveal><FitCheckAI /></Reveal>
@@ -525,7 +525,7 @@ export default function App() {
             <Reveal><CaptionGenerator /></Reveal>
             <Reveal><StoryGenerator /></Reveal>
             <Reveal><SneakerRoast /></Reveal>
-            <Reveal><SneakerEulogy /></Reveal>
+            <Reveal><LagosPlugRadar /></Reveal>
             <Reveal><PhotoTools /></Reveal>
             <Reveal><CrewVoteOff /></Reveal>
             <Reveal><BadgeMaker /></Reveal>

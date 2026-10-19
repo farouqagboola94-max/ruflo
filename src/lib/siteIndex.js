@@ -53,8 +53,7 @@ export const SECTIONS = [
   { id: 'bingo',        t: 'Sneaker Bingo',      c: 'play', d: 'Spot them on the day',               k: 'game card grid spot play' },
   { id: 'spin',         t: 'Spin to Win',        c: 'play', d: 'Take your shot at a prize',          k: 'wheel prize luck win game raffle' },
   { id: 'vote-off',     t: 'Crew Vote-Off',      c: 'play', d: 'Head-to-head, you decide',           k: 'vote versus battle poll choose game' },
-  { id: 'mystery',      t: 'Mystery Drop',       c: 'play', d: 'Something is behind the door',       k: 'surprise secret box drop reveal' },
-  { id: 'hype',         t: 'Hype Counter',       c: 'play', d: 'Crank the hype up',                  k: 'clicker counter game tap' },
+  { id: 'danfo-lab',    t: 'Danfo Customizer Lab', c: 'play', d: 'Interactive 1-of-1 sneaker customizer & on-site artist booking', k: 'danfo custom lab sneaker 1-of-1 design artist customize paint workshop booking' },
   { id: 'egg-hunt',     t: 'The Great Sole Hunt',c: 'play', d: 'Hidden eggs across the site',        k: 'easter egg hunt find secret hidden collect' },
   { id: 'fitcheck-arena', t: 'Fit-Check Arena',   c: 'play', d: '1v1 On-Foot Street Showdown & Crowd Voting', k: 'fit check arena battle 1v1 vote outfit drip kicks on court kicks street style' },
   { id: 'worth',        t: 'Collection Worth',   c: 'play', d: 'What is your rotation worth?',       k: 'value price estimate calculator collection' },
@@ -108,7 +107,7 @@ export const SECTIONS = [
   { id: 'caption-gen',    t: 'Caption Studio',  c: 'create', d: 'Captions for your posts',      k: 'caption instagram write post social generate' },
   { id: 'story-gen',      t: 'Sneaker Stories', c: 'create', d: 'Give your pair a backstory',   k: 'story write generate narrative' },
   { id: 'sneaker-roast',  t: 'Sneaker Roast',   c: 'create', d: 'Get your pair roasted',        k: 'roast joke funny burn insult' },
-  { id: 'sneaker-eulogy', t: 'Sneaker Eulogy',  c: 'create', d: 'Send a dead pair off right',   k: 'eulogy funeral retire dead worn out' },
+  { id: 'plug-radar',     t: 'Verified Plug Radar', c: 'market', d: 'Curated directory of authenticated Lagos boutiques & sneaker spas', k: 'radar plugs boutiques stores shops clean sneaker spa verified authentic lagos lekki vi yaba' },
   { id: 'photo-tools',    t: 'Photo Studio',    c: 'create', d: 'Make your shots look right',   k: 'photo edit filter camera picture studio' },
 
   // ---- Brand ---------------------------------------------------------
