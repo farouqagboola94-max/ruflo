@@ -23,9 +23,9 @@ const CATEGORIES = [
 const BOOTHS = [
   {
     id: 'standard',
-    label: 'Standard Booth',
+    label: 'Brick Pergola Bay (Wing B)',
     tag: 'MOST POPULAR',
-    size: '3 × 3 m (9 sqm)',
+    size: '3 × 3 m (Covered Brick Arch)',
     basePrice: 150000,
     capacity: 20,
     recommendedFor: 'Emerging streetwear labels, single-table sellers & customizers',
@@ -39,10 +39,10 @@ const BOOTHS = [
   },
   {
     id: 'double',
-    label: 'Double Retail Wing',
-    tag: 'HIGH VOLUME',
-    size: '6 × 3 m (18 sqm)',
-    basePrice: 280000,
+    label: 'Historic Grail Cell Vault (Block A)',
+    tag: 'GRAIL CELL VAULT',
+    size: '3.5 × 3.5 m (Walled Brick Cell)',
+    basePrice: 250000,
     capacity: 10,
     recommendedFor: 'Established footwear resellers, multibrand curators & apparel brands',
     features: [
@@ -56,7 +56,7 @@ const BOOTHS = [
   },
   {
     id: 'premium',
-    label: 'Premium Corner Pavilion',
+    label: 'Double Pergola Corner Pavilion',
     tag: 'PRIME JUNCTION',
     size: '4 × 4 m (16 sqm)',
     basePrice: 420000,
@@ -74,7 +74,7 @@ const BOOTHS = [
   },
   {
     id: 'collab',
-    label: 'Brand Experiential Activation',
+    label: 'Monument Experiential Takeover',
     tag: 'BESPOKE',
     size: '8 × 8 m (64 sqm)',
     basePrice: 750000,
@@ -127,7 +127,7 @@ const ADD_ONS = [
 const FAQ = [
   {
     q: 'Who attends Sneakers Fest Lagos?',
-    a: 'West Africa’s top sneakerheads, streetwear creators, archivist collectors, lifestyle photographers, musicians, and young urban professionals. Target Year 1 cohort: 1,000 to 2,500 qualified attendees ready to spend.',
+    a: 'West Africa’s top sneakerheads, streetwear creators, archivist collectors, lifestyle photographers, musicians, and young urban professionals. Target Year 1 cohort: 5,000 qualified attendees across Freedom Park, CMS ready to spend.',
   },
   {
     q: 'What is the selection and curation criteria?',

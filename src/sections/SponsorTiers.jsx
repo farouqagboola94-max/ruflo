@@ -7,80 +7,80 @@ import Egg from '../components/Egg'
 const TIERS = [
   {
     id: 'bronze',
-    name: 'BRONZE',
+    name: 'GATEHOUSE',
+    price: '₦3,500,000',
     color: '#CD7F32',
-    tag: 'ENTRY PARTNER',
-    capacity: 10,
-    taken: 4,
+    tag: 'MOBILITY & GATE PARTNER',
+    landmark: 'Hospital Rd / Broad St Turnstile Gatehouse',
+    capacity: 4,
+    taken: 1,
     perks: [
-      'Logo on event website (footer)',
-      'Brand mention in 2 social posts',
-      'Logo on event signage',
-      '2 complimentary General tickets',
-      'Post-event recap mention',
+      'Naming rights to the Broad St / Hospital Rd Fast-Track Gatehouse',
+      'Branded Ride-Hailing Drop-Off Loop & QR Turnstile Lane',
+      'Branded 3×3m Brick Pergola activation bay',
+      '5 complimentary VIP Passes + 2 social spotlight posts',
+      'Logo on digital wallet passes & post-event impact report',
     ],
   },
   {
     id: 'silver',
-    name: 'SILVER',
-    color: '#C0C0C0',
-    tag: 'BRAND PARTNER',
-    capacity: 6,
-    taken: 3,
+    name: 'PERGOLA',
+    price: '₦4,500,000',
+    color: B.neonLime,
+    tag: 'SOLE CRAFT WORKSHOP PARTNER',
+    landmark: 'Sole Craft Brick Pergola Pavilion',
+    capacity: 3,
+    taken: 1,
     perks: [
-      'Everything in Bronze',
-      'Branded 3×3m booth space on floor',
-      '5 complimentary VIP tickets',
-      'Dedicated social post (IG + X)',
-      'Logo on stage backdrop',
-      'Brand rep in press kit',
+      'Naming rights to the Sole Craft Customization Workshop Pergola',
+      'Co-branded 1-of-1 Artisan Benches & custom lace/dubrae bar',
+      '8 complimentary VIP Passes + dedicated IG/TikTok reel',
+      'Brand integration inside the interactive 3D Venue Navigator',
+      'Logo on Amphitheatre LED backdrop & festival merch tags',
     ],
   },
   {
     id: 'gold',
-    name: 'GOLD',
+    name: 'GRAIL CELLS',
+    price: '₦8,500,000',
     color: B.amber,
-    tag: 'STAGE PARTNER',
+    tag: 'ARCHITECTURAL WING PARTNER',
+    landmark: 'Historic Cell Block A OR Watchtower VIP Deck',
     featured: true,
-    capacity: 3,
+    capacity: 2,
     taken: 1,
     perks: [
-      'Everything in Silver',
-      'Named stage sponsorship',
-      'MC brand mentions throughout event',
-      '10 complimentary VVIP tickets',
-      'Exclusive product placement zone',
-      '3 dedicated social posts + reel',
-      'Co-branded event content',
-      'Logo on all printed materials',
+      'Exclusive naming rights to "The Grail Cells" (LSX Escrow Wing) OR Watchtower VIP Deck',
+      'Custom-branded Historic Brick Cell Vault for product drops',
+      'Live brand ticker integration on the Lagos Sole Index (LSI)',
+      '10 complimentary VVIP Passes + 1 Phalanx VIP Table',
+      'Main Amphitheatre MC shoutouts + 3 co-branded campaign reels',
     ],
   },
   {
     id: 'platinum',
-    name: 'PLATINUM',
+    name: 'AMPHITHEATRE',
+    price: '₦15,000,000',
     color: B.neonCyan,
-    tag: 'TITLE SPONSOR',
+    tag: 'HEADLINE TITLE SPONSOR',
+    landmark: 'Freedom Park Main Amphitheatre & Festival Title',
     capacity: 1,
     taken: 0,
     perks: [
-      'Everything in Gold',
-      'Title rights: "[Brand] presents Sneakers Fest \'26"',
-      'Full custom brand experience zone',
-      'Unlimited Phalanx tickets',
-      'Exclusive drop collaboration rights',
-      '3-month pre-event campaign inclusion',
-      'Opening ceremony presence',
-      'Priority press & media access',
-      'Post-event brand impact report',
+      'Headline Title Rights: "[Brand] Presents Sneakers Fest \'26: The Year of Freedom"',
+      'Full architectural takeover of the Freedom Park Main Amphitheatre Stage',
+      'Co-headline branding on the 1v1 Cobblestone Fit-Check Arena',
+      'Unlimited VVIP & Phalanx Watchtower hospitality access',
+      'Exclusive 1-of-1 festival sneaker collaboration & 90-day media rollout',
     ],
   },
 ]
 
 const STATS = [
-  { value: '2,500+', label: 'TARGET ATTENDEES' },
-  { value: '18–35',  label: 'AGE RANGE' },
-  { value: '70%+',   label: 'LAGOS MARKET' },
-  { value: '₦50M+',  label: 'COMBINED REACH' },
+  { value: '5,000',   label: 'FESTIVAL CAPACITY' },
+  { value: '7 ZONES', label: 'HERITAGE LANDMARKS' },
+  { value: '18–35',   label: 'CORE DEMOGRAPHIC' },
+  { value: '₦150M+',  label: 'PROJECTED GMV & REACH' },
 ]
 
 const CONTACT_EMAIL = 'sneakersfest088@gmail.com'
@@ -129,12 +129,12 @@ export default function SponsorTiers() {
 
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 64 }}>
-          <SectionTag>PARTNERSHIP OPPORTUNITIES</SectionTag>
+          <SectionTag>ARCHITECTURAL SPONSORSHIP · FREEDOM PARK, CMS</SectionTag>
           <div className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(40px,6vw,72px)', color: B.white, lineHeight: 0.9, marginBottom: 16 }}>
-            PARTNER<br /><span style={{ color: B.amber }}>WITH US</span>
+            OWN A <span style={{ color: B.amber }}>LANDMARK</span>
           </div>
-          <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: B.smoke, lineHeight: 1.8, maxWidth: 560, margin: '0 auto' }}>
-            Reach Lagos' most engaged sneaker and streetwear audience. Sneakers Fest '26 is the premier cultural drop event in West Africa — and we're building it with brands who get it.
+          <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: B.smoke, lineHeight: 1.8, maxWidth: 620, margin: '0 auto' }}>
+            Instead of generic field tents, claim exclusive naming rights to Freedom Park’s permanent historic monuments—the Main Amphitheatre, The Grail Cells, the Watchtower VIP Deck, the Sole Craft Pergola, or the Broad Street Gatehouse.
           </div>
         </div>
 
@@ -175,7 +175,9 @@ export default function SponsorTiers() {
                   <div style={{ marginBottom: 10 }}>
                     <span style={{ padding: '3px 10px', borderRadius: 2, background: tier.color + '18', border: `1px solid ${tier.color}40`, fontFamily: 'Space Mono,monospace', fontSize: 9, color: tier.color, letterSpacing: '0.18em' }}>{tier.tag}</span>
                   </div>
-                  <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 34, color: B.white, letterSpacing: '0.06em', marginBottom: 16 }}>{tier.name}</div>
+                  <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 34, color: B.white, letterSpacing: '0.06em', marginBottom: 4 }}>{tier.name}</div>
+                  <div style={{ fontFamily: "'Orbitron', monospace", fontSize: 18, fontWeight: 800, color: tier.color, marginBottom: 6 }}>{tier.price}</div>
+                  <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: B.mist, marginBottom: 16 }}>🏛️ {tier.landmark}</div>
 
                   {/* availability bar */}
                   <div style={{ marginBottom: 20 }}>
