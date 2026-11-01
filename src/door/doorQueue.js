@@ -1,6 +1,6 @@
 // Door List - pure offline-queue rules. No I/O, no DOM.
 //
-// Muri Okunola Park with a couple of thousand people on it will not have
+// Freedom Park, Lagos Island (CMS) with a couple of thousand people on it will not have
 // reliable data. A scan that cannot reach the server must never be lost and
 // must never be silently counted as admitted.
 

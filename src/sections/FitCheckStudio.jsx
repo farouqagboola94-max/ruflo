@@ -115,7 +115,7 @@ export default function FitCheckStudio() {
             color: '#9CA3AF',
             lineHeight: '1.6'
           }}>
-            Coordinate your festival drip before hitting Muri Okunola Park. Select your Lagos archetype, test virtual silhouette matching, and receive an instant AI Drip Scorecard.
+            Coordinate your festival drip before hitting Freedom Park, Lagos Island (CMS). Select your Lagos archetype, test virtual silhouette matching, and receive an instant AI Drip Scorecard.
           </p>
         </div>
 

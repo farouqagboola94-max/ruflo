@@ -28,7 +28,7 @@ const dayEnd = items => {
 }
 
 export const DAYS = [
-  { date: '2026-12-12', label: "SNEAKERS FEST '26 MAIN EVENT", venue: 'Muri Okunola Park, Victoria Island, Lagos', items: DAY2, endsAt: dayEnd(DAY2) },
+  { date: '2026-12-12', label: "SNEAKERS FEST '26 MAIN EVENT", venue: 'Freedom Park, Broad Street, Lagos Island (CMS)', items: DAY2, endsAt: dayEnd(DAY2) },
 ]
 
 /**

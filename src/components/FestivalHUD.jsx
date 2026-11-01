@@ -3,7 +3,7 @@
  * 
  * Persistent high-tech Lagos Noir floating command bar docked at the bottom of
  * the screen. Coordinates real-time situational awareness:
- * - Live Muri Okunola acoustic decibels
+ * - Live freedom park cms acoustic decibels
  * - Live drop radar & countdown
  * - Real-time attendee XP & level progression
  * - Quick teleportation to active 3D zones
@@ -61,7 +61,7 @@ export default function FestivalHUD() {
 
   const openAIChat = () => {
     playFestivalSound('zone_click')
-    window.dispatchEvent(new CustomEvent('sf26:open_ai_chat', { detail: { prompt: "What's the hottest drop right now at Muri Okunola Park?" } }))
+    window.dispatchEvent(new CustomEvent('sf26:open_ai_chat', { detail: { prompt: "What's the hottest drop right now at Freedom Park, Lagos Island (CMS)?" } }))
   }
 
   return (

@@ -13,7 +13,7 @@ export const OFFICIAL_GALLERY = [
   {
     id: 'sf_art_01',
     title: 'SNEAKERS FEST 26 · OFFICIAL KEY VISUAL',
-    subtitle: 'Canva Pro Master Poster · Muri Okunola Park Edition',
+    subtitle: 'Canva Pro Master Poster · Freedom Park, Lagos Island (CMS) Edition',
     category: 'OFFICIAL FLYERS',
     badge: 'KEY ARTWORK',
     city: 'Victoria Island, Lagos',
@@ -40,7 +40,7 @@ export const OFFICIAL_GALLERY = [
     subtitle: 'Official Festival Lineup & Experience Poster',
     category: 'OFFICIAL FLYERS',
     badge: 'DEC 12 · 2026',
-    city: 'Muri Okunola Park',
+    city: 'Freedom Park, Lagos Island (CMS)',
     creator: '@s_fest26',
     imageData: '/media/gallery/flyer_03_main.jpg',
     accent: B.neonMagenta,
@@ -100,7 +100,7 @@ export const OFFICIAL_GALLERY = [
     subtitle: 'Afrobeats · Amapiano · Alté · Grime Sets',
     category: 'CULTURE & DRIP',
     badge: 'LIVE SOUND',
-    city: 'Muri Okunola Park',
+    city: 'Freedom Park, Lagos Island (CMS)',
     creator: '@s_fest26',
     imageData: '/media/gallery/flyer_08_sound.jpg',
     accent: B.neonMagenta,
@@ -220,7 +220,7 @@ export const OFFICIAL_GALLERY = [
     subtitle: 'All-Day Lagos Culinary Fuel & Craft Refreshments',
     category: 'CULTURE & DRIP',
     badge: 'FOOD ZONE',
-    city: 'Muri Okunola Park',
+    city: 'Freedom Park, Lagos Island (CMS)',
     creator: '@s_fest26',
     imageData: '/media/gallery/flyer_18_food.jpg',
     accent: B.amber,
@@ -698,7 +698,7 @@ export default function Gallery() {
                 🔥 <span style={{ color:B.amber, fontWeight:700 }}>{totalHeat.toLocaleString()}</span> TOTAL CULTURE HEAT
               </div>
               <div style={{ fontFamily:'Space Mono,monospace', fontSize:10, color:B.neonCyan }}>
-                📍 MURI OKUNOLA PARK · DEC 12, 2026
+                📍 FREEDOM PARK, CMS · DEC 12, 2026
               </div>
             </div>
           </div>

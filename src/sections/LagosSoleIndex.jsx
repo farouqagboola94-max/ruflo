@@ -197,7 +197,7 @@ const LSI_ASSETS = [
   }
 ]
 
-// Simulated live on-site market orders at Muri Okunola Park
+// Simulated live on-site market orders at Freedom Park, Lagos Island (CMS)
 const LIVE_TICKER_ORDERS = [
   '₦1,850,000 TS1-MOCHA settled by @lekki_collector via Moniepoint',
   '₦680,000 AJ1-CHIC-85 authenticated at LSX Physical Pit Desk #2',
@@ -421,7 +421,7 @@ export default function LagosSoleIndex() {
             <span style={{ fontSize: 18 }}>📡</span>
             <div style={{ overflow: 'hidden' }}>
               <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.smoke, letterSpacing: '0.2em' }}>
-                ON-SITE TRADE FEED (MURI OKUNOLA PARK)
+                ON-SITE TRADE FEED (FREEDOM PARK, CMS)
               </div>
               <div style={{
                 fontFamily: "'Space Mono', monospace",

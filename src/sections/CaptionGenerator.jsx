@@ -25,7 +25,7 @@ const TIERS = [
   { label: 'PHALANX', value: 'Phalanx (ultra-exclusive)' },
 ]
 
-const SYSTEM = `You are a social media copywriter for Lagos sneaker culture and Sneakers Fest '26 (Dec 12 2026, Muri Okunola Park, Victoria Island, Lagos).
+const SYSTEM = `You are a social media copywriter for Lagos sneaker culture and Sneakers Fest '26 (Dec 12 2026, Freedom Park, Broad Street, Lagos Island (CMS)).
 
 Write ONE caption for the requested platform, mood, and ticket tier. The caption must:
 - Sound authentically Lagos — not generic global sneaker content
@@ -40,7 +40,7 @@ import { copyToClipboard } from '../lib/clipboard'
 function generateHeuristicCaption(platform, mood, tier, shoe) {
   const kick = shoe ? ` in my ${shoe}` : ''
   if (mood === 'GATEKEEP') {
-    return `You're asking for ID on the kicks, I'm already in Muri Okunola Park. Some grails aren't meant for everyone's algorithm. @s_fest26 Dec 12.`
+    return `You're asking for ID on the kicks, I'm already in Freedom Park, Lagos Island (CMS). Some grails aren't meant for everyone's algorithm. @s_fest26 Dec 12.`
   }
   if (mood === 'CHEF') {
     return `Cooked this rotation specifically for the Lagos tarmac. Box fresh, zero crease, 100% certified heat. See you at Sneakers Fest '26.`
@@ -48,7 +48,7 @@ function generateHeuristicCaption(platform, mood, tier, shoe) {
   if (mood === 'STREET') {
     return `Mainland grit, Island flex. Pulling up to @s_fest26${kick} with the full crew. Lagos sneaker culture is undefeated.`
   }
-  return `December 12. Muri Okunola Park. The biggest sole exhibition in West Africa. Pulling up${kick} with my ${tier} pass for @s_fest26. #SneakersFest26`
+  return `December 12. Freedom Park, Lagos Island (CMS). The biggest sole exhibition in West Africa. Pulling up${kick} with my ${tier} pass for @s_fest26. #SneakersFest26`
 }
 
 export default function CaptionGenerator() {

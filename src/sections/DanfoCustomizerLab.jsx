@@ -37,7 +37,7 @@ const ARTISAN_BENCHES = [
     name: 'Kola "BrushKing" Adeleke',
     specialty: 'Precision Airbrush, Graphic Stencils & Color Blocking',
     slot: 'Dec 12 · 13:00 - 15:00',
-    booth: 'Sole Craft Bench 01 (Covered Marquee)',
+    booth: 'Sole Craft Bench 01 (Freedom Park Pergola)',
     fee: '₦45,000',
     spots: '4 Slots Left'
   },
@@ -46,7 +46,7 @@ const ARTISAN_BENCHES = [
     name: 'Chioma "AdireSneaks" Eze',
     specialty: 'Hand-Stitched Adire Panels, Sashiko & Laser Etching',
     slot: 'Dec 12 · 15:30 - 17:30',
-    booth: 'Sole Craft Bench 02 (Covered Marquee)',
+    booth: 'Sole Craft Bench 02 (Freedom Park Pergola)',
     fee: '₦55,000',
     spots: '3 Slots Left'
   },
@@ -55,7 +55,7 @@ const ARTISAN_BENCHES = [
     name: 'Tunde "Patina" Bello',
     specialty: '1985 Coffee-Aging, Distressed Edges & Rope Lace Drilling',
     slot: 'Dec 12 · 18:00 - 20:00',
-    booth: 'Sole Craft Bench 03 (Covered Marquee)',
+    booth: 'Sole Craft Bench 03 (Freedom Park Pergola)',
     fee: '₦40,000',
     spots: '5 Slots Left'
   }
@@ -110,21 +110,21 @@ export default function DanfoCustomizerLab() {
       <GrainOverlay />
 
       <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 10 }}>
-        <SectionTag>LIVE ARTISAN MARQUEE · 1-OF-1 CRAFTSMANSHIP</SectionTag>
+        <SectionTag>FREEDOM PARK ARTISAN PERGOLA · 1-OF-1 CRAFTSMANSHIP</SectionTag>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 20, marginBottom: 40 }}>
           <div>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: `${B.amber}15`, border: `1px solid ${B.amber}50`, borderRadius: 999, padding: '4px 14px', marginBottom: 12 }}>
               <span style={{ width: 8, height: 8, borderRadius: '50%', background: B.amber, boxShadow: `0 0 10px ${B.amber}` }} />
               <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: B.amber, letterSpacing: '0.15em', fontWeight: 700 }}>
-                LIVE ARTISAN CUSTOMIZATION BENCHES · 1-OF-1 CRAFTSMANSHIP · MURI OKUNOLA PARK
+                LIVE ARTISAN CUSTOMIZATION BENCHES · 1-OF-1 CRAFTSMANSHIP · FREEDOM PARK, CMS
               </span>
             </div>
             <h2 style={{ fontFamily: "'Orbitron', monospace", fontWeight: 900, fontSize: 'clamp(28px, 4.5vw, 48px)', color: B.white, lineHeight: 1.1 }}>
               SOLE CRAFT <span style={{ color: B.amber, textShadow: `0 0 25px ${B.amber}50` }}>CUSTOMIZATION WORKSHOP</span>
             </h2>
             <p style={{ fontFamily: "'Space Mono', monospace", fontSize: 'clamp(11px, 1.4vw, 13px)', color: B.mist, marginTop: 10, maxWidth: 680, lineHeight: 1.6 }}>
-              Step into our covered, turf-protected artisan pavilion at Muri Okunola Park. Configure your 1-of-1 specification with Lagos textile paneling, airbrush stencils, brass dubraes, and coffee-dyed patinas—and lock your bench appointment for December 12.
+              Step into our heritage brick pergola workshop at Freedom Park, CMS. Configure your 1-of-1 specification with Lagos textile paneling, airbrush stencils, brass dubraes, and coffee-dyed patinas—and lock your bench appointment for December 12.
             </p>
           </div>
 
@@ -137,8 +137,8 @@ export default function DanfoCustomizerLab() {
             fontSize: 10,
             color: B.smoke
           }}>
-            <div style={{ color: B.amber, fontWeight: 700, marginBottom: 3 }}>LASPARK COMPLIANT ZONE</div>
-            <div>3 Modular Artisan Benches · Turf-Shield Flooring</div>
+            <div style={{ color: B.amber, fontWeight: 700, marginBottom: 3 }}>YEAR OF FREEDOM EDITION</div>
+            <div>3 Modular Artisan Benches · Brick Courtyard Pavilion</div>
           </div>
         </div>
 
@@ -374,7 +374,7 @@ export default function DanfoCustomizerLab() {
                   RESERVE ARTISAN WORKBENCH
                 </span>
                 <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: B.neonCyan }}>
-                  DEC 12 · MURI OKUNOLA PARK
+                  DEC 12 · FREEDOM PARK, CMS
                 </span>
               </div>
 

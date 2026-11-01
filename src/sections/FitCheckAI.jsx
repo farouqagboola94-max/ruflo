@@ -33,7 +33,7 @@ function generateHeuristicFit(fitText, contextLabel) {
   let headline = "Mainland heat meets Island polish — certified rotation."
   let positives = ["Strong silhouette coordination", "Natural color blocking with authentic street presence"]
   let fixes = ["Swap standard laces for sail or neon accents", "Keep the pant hem sitting cleanly above the ankle collar"]
-  let verdict = "Clean fit. You're entering Muri Okunola Park with zero apologies."
+  let verdict = "Clean fit. You're entering Freedom Park, Lagos Island (CMS) with zero apologies."
   let lagosContext = "Reads as calculated street luxury. You understand the culture without trying too hard."
 
   if (t.includes('jordan') || t.includes('retro')) {

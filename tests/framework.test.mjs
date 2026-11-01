@@ -43,7 +43,7 @@ assert.ok(state.vendor)
 
 dispatchFestivalAction(FESTIVAL_ACTIONS.ADD_NOTIFICATION, {
   title: 'VIP Fast-Pass Verified',
-  message: 'Gate accreditation confirmed for Muri Okunola Park'
+  message: 'Gate accreditation confirmed for Freedom Park, CMS'
 })
 
 const updated = getFestivalState()
@@ -93,7 +93,7 @@ assert.ok(Math.abs(time1 - time3) > 60) // No clash
 console.log('✅ Schedule clash detection logic verified.\n')
 
 // Test 7: Verified Brand Truth & Real Schedule Alignment
-console.log('Test 7: Validating official December 12 Muri Okunola Park schedule & handles...')
+console.log('Test 7: Validating official December 12 Freedom Park, CMS schedule & handles...')
 const { PHASES, DAY2 } = await import('../src/data/schedule.js')
 assert.ok(DAY2.length >= 10, 'Should have full December 12 run-of-show')
 assert.strictEqual(PHASES.length, 4, 'Should have 4 official festival phases')

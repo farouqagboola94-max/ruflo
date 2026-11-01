@@ -68,7 +68,7 @@ function SolePassModal({ pass, onClose }) {
           )}
 
           <p style={{ fontFamily:"'Space Mono',monospace", fontSize:9, color:B.smoke, lineHeight:1.8, margin:0 }}>
-            Show this pass at the event to claim your name on the physical Sole Registry wall. Dec 12, 2026 &middot; Muri Okunola Park, V/I Lagos.
+            Show this pass at the event to claim your name on the physical Sole Registry wall. Dec 12, 2026 &middot; Freedom Park, Old Prison Ground, CMS, Lagos Island Lagos.
           </p>
         </div>
 
@@ -208,7 +208,7 @@ export default function SoleRegistry() {
             YOUR <span style={{ color:B.amber, textShadow:`0 0 30px ${B.amber}50` }}>GRAIL</span> ON THE WALL
           </h2>
           <p style={{ fontFamily:"'Space Mono',monospace", fontSize:12, color:B.smoke, lineHeight:1.8, maxWidth:540, margin:'0 auto 32px' }}>
-            {TOTAL_WALL} physical spots on the official wall at Muri Okunola Park. Register your grail now &mdash; claim your name at the event on Dec 12.
+            {TOTAL_WALL} physical spots on the official wall at Freedom Park, Lagos Island (CMS). Register your grail now &mdash; claim your name at the event on Dec 12.
           </p>
 
           {/* Scarcity bar */}

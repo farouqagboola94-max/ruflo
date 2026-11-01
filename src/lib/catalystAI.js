@@ -188,7 +188,7 @@ function executeCatalystOSSkillEngine(messages, { feature, system }) {
         },
         {
           name: "New Balance 990v6 Made in USA 'Castlerock Grey'",
-          why: "Understated architectural prestige. FuelCell foam provides maximum comfort for 8+ hours on your feet at Muri Okunola Park.",
+          why: "Understated architectural prestige. FuelCell foam provides maximum comfort for 8+ hours on your feet at Freedom Park, Lagos Island (CMS).",
           price: "₦140K–₦175K estimated Lagos market price",
           at_sf26: "Check the independent boutique section near the Lagos Sole Exchange entrance.",
           lagos_intel: "The connoisseur's choice in Lagos right now — signifies taste over loud logo-chasing."
@@ -317,7 +317,7 @@ I'll give you credit for one thing though: that OG colorway underneath all the d
       return JSON.stringify({
         subject_line: "Cash Ready / SF26 Meetup for your Grail Pair",
         opening: "What's good boss, caught your drop listing on the SF26 community feed.",
-        body: "I'm looking to acquire the pair in size 10.5. I have instant bank transfer ready, zero back-and-forth, and we can do a verified physical handoff right at the Lagos Sole Exchange escrow table this Saturday at Muri Okunola Park.",
+        body: "I'm looking to acquire the pair in size 10.5. I have instant bank transfer ready, zero back-and-forth, and we can do a verified physical handoff right at the Lagos Sole Exchange escrow table this Saturday at Freedom Park, Lagos Island (CMS).",
         ask: "Can you do ₦160K for immediate closing on the spot?",
         closing: "Let me know if this works for you so I can lock the funds. Respect.",
         tone_tip: "Send via Instagram DM or WhatsApp during mid-morning (10 AM - 12 PM) for fastest response."
@@ -342,7 +342,7 @@ Rest easy, veteran of the Lagos pavement. You will not be forgotten or replaced 
         longest_flex: "Deadstock condition maintained across multiple rainy seasons in Lagos.",
         weakest_link: "Occasional hesitation on quick trades when market volatility spikes.",
         signature_move: "Inspects inner tongue tags with a magnifying eye while smiling politely at the vendor.",
-        sf26_predicted_behavior: "Arrives early at Muri Okunola Park, completes one legendary trade, and spends the afternoon mentoring younger collectors.",
+        sf26_predicted_behavior: "Arrives early at Freedom Park, Lagos Island (CMS), completes one legendary trade, and spends the afternoon mentoring younger collectors.",
         share_line: "In a city of loud noise, let your soles speak with quiet authority. ⚡"
       })
     }
@@ -378,12 +378,12 @@ Rest easy, veteran of the Lagos pavement. You will not be forgotten or replaced 
         return "Sneakers Fest '26 is founded and directed by Oluwatobiloba — The Catalyst (@catalystggg). The entire experience is powered by the Catalyst OS ecosystem, merging streetwear culture, intellectual property, and cutting-edge autonomous technology in Lagos."
       }
       if (q.includes('venue') || q.includes('where') || q.includes('location')) {
-        return "Sneakers Fest '26 takes place on Saturday, December 12, 2026, at Muri Okunola Park, Victoria Island, Lagos. Doors open at 12:00 PM (11:00 AM for Phalanx VIP pass holders)."
+        return "Sneakers Fest '26 takes place on Saturday, December 12, 2026, at Freedom Park, Broad Street, Lagos Island (CMS). Doors open at 12:00 PM (11:00 AM for Phalanx VIP pass holders)."
       }
       if (q.includes('skill') || q.includes('catalyst os')) {
         return "The Catalyst OS Skills Registry powers the entire intelligence infrastructure of Sneakers Fest '26, featuring 2,393 universal skills across Anthropics, Claude Skills, Antigravity, and VoltAgent, alongside 70 specialized priority modules for Event Management, AI Automation, Legal, Marketing, Content, and Business."
       }
-      return "Welcome to Sneakers Fest '26. Powered by Catalyst OS and founded by CEO @catalystggg. Whether you're hunting grails at the Lagos Sole Exchange, running a FitCheck in our studio, or securing your ticket for December 12 at Muri Okunola Park, we've got you covered. What would you like to explore?"
+      return "Welcome to Sneakers Fest '26. Powered by Catalyst OS and founded by CEO @catalystggg. Whether you're hunting grails at the Lagos Sole Exchange, running a FitCheck in our studio, or securing your ticket for December 12 at Freedom Park, Lagos Island (CMS), we've got you covered. What would you like to explore?"
     }
   }
 }

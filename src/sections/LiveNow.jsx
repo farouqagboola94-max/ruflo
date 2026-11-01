@@ -108,7 +108,7 @@ export default function LiveNow() {
         <p style={{ fontFamily: "'Syne'", fontSize: '0.88rem', color: B.smoke, lineHeight: 1.7, marginBottom: 24 }}>
           {s.state === 'live' && `${s.day.label} — ${s.day.venue}.`}
           {s.state === 'before' && `${s.day.label} at ${s.day.venue}. ${until ? `Doors ${until}.` : ''}`}
-          {s.state === 'between' && 'Finals night is done. The main event is tomorrow at Muri Okunola Park.'}
+          {s.state === 'between' && 'Finals night is done. The main event is tomorrow at Freedom Park, Lagos Island (CMS).'}
           {s.state === 'after' && 'That was it. Both days are done. See you next year.'}
         </p>
 

@@ -104,7 +104,7 @@ export default function SneakerBible() {
         </div>
         <div style={{ textAlign: 'right' }}>
           <div style={{ fontFamily: mono, fontSize: 10, color: B.dim, letterSpacing: '0.15em' }}>DEC 12 2026</div>
-          <div style={{ fontFamily: mono, fontSize: 10, color: B.dim, letterSpacing: '0.15em' }}>MURI OKUNOLA PARK, V/I</div>
+          <div style={{ fontFamily: mono, fontSize: 10, color: B.dim, letterSpacing: '0.15em' }}>FREEDOM PARK, CMS</div>
           <div style={{ fontFamily: mono, fontSize: 10, color: B.amber, letterSpacing: '0.15em', marginTop: 4 }}>200 SILHOUETTES</div>
         </div>
       </div>
@@ -239,7 +239,7 @@ export default function SneakerBible() {
             <div className="reveal-3d text-3d" style={{ ...s.hed, fontSize: 48, color: B.amber, marginBottom: 4 }}>EXHIBITION</div>
             <div className="reveal-3d text-3d" style={{ ...s.hed, fontSize: 48, marginBottom: 32, color: B.white }}>GUIDE</div>
             <div style={s.statRow}>
-              {[['Dec 12','Event Date 2026'],['Muri Okunola','Park, V/I Lagos'],['200','Silhouettes in The Vault'],['4','Exhibition Tiers']].map(([v, l]) => (
+              {[['Dec 12','Event Date 2026'],['freedom park cms','Park, V/I Lagos'],['200','Silhouettes in The Vault'],['4','Exhibition Tiers']].map(([v, l]) => (
                 <div key={v} className="card-3d" style={s.stat}><div style={s.statVal}>{v}</div><div style={s.statLbl}>{l}</div></div>
               ))}
             </div>

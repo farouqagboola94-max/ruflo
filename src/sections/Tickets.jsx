@@ -66,7 +66,7 @@ const COMPARE_ROWS = [
 
 const TICKET_FAQ = [
   { q:'When does the event start?',             a:'Doors open at 12:00 PM on December 12, 2026. Phalanx ticket holders get early entry from 11:00 AM.' },
-  { q:'Where is the venue?',                    a:'Muri Okunola Park, Victoria Island, Lagos. Full access and parking details will be sent via email 14 days before the event.' },
+  { q:'Where is the venue?',                    a:'Freedom Park, Broad Street, Lagos Island (CMS). Full access and parking details will be sent via email 14 days before the event.' },
   { q:'Can I transfer or resell my ticket?',    a:'Tickets are non-transferable and non-refundable. All sales are final. Your ticket is linked to the name and email you register with.' },
   { q:'How do I get my ticket after purchase?', a:'An e-ticket is sent to your email immediately. You can also view and download it from the MY TICKETS section on this page.' },
   { q:"What's the age requirement?",            a:'Ages 16 and above. Under-18s must be accompanied by an adult with a valid ticket.' },
@@ -128,7 +128,7 @@ function downloadCalendar() {
     'DTSTAMP:20260101T000000Z','DTSTART:20261212T120000','DTEND:20261212T220000',
     "SUMMARY:Sneakers Fest '26 — The Sole Exhibition",
     "DESCRIPTION:West Africa's premier sneaker culture event. 200+ rare kicks\\, 30+ confirmed vendors\\, live sets\\, custom art and street food.",
-    'LOCATION:Muri Okunola Park\\, Victoria Island\\, Lagos\\, Nigeria',
+    'LOCATION:Freedom Park, Lagos Island (CMS)\\, Victoria Island\\, Lagos\\, Nigeria',
     'URL:https://sneakers-fest-official-website.netlify.app','STATUS:CONFIRMED','END:VEVENT','END:VCALENDAR',
   ]
   const blob = new Blob([lines.join('\r\n')], { type:'text/calendar;charset=utf-8' })

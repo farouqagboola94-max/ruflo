@@ -1,5 +1,5 @@
 // The official Sneakers Fest '26 Run of Show — Saturday, December 12, 2026
-// Muri Okunola Park, Victoria Island, Lagos (12:00 PM – 10:00 PM WAT)
+// Freedom Park, Broad Street, Lagos Island (CMS) (12:00 PM – 10:00 PM WAT)
 
 import { B } from '../tokens.js'
 
@@ -34,7 +34,7 @@ const PHASES = [
     title: 'VENDOR & FLOOR ACCREDITATION',
     color: B.neonMagenta,
     lines: [
-      '30 curated vendor booths across Muri Okunola Park',
+      '30 curated vendor booths across Freedom Park, Lagos Island (CMS)',
       'Lagos Sole Exchange (LSX) physical escrow registration',
       'Danfo Custom Sneaker Lab maker bench onboarding',
       'Official Phase 1 music & DJ lineup reveal on @s_fest26'
@@ -46,7 +46,7 @@ const PHASES = [
     title: "SNEAKERS FEST '26 MAIN EVENT",
     color: B.neonCyan,
     lines: [
-      'Muri Okunola Park · Victoria Island, Lagos',
+      'Freedom Park, Lagos Island (CMS) · Victoria Island, Lagos',
       'Doors open 12:00 PM — 10:00 PM WAT',
       'Live Fit-Check Arena · Grail Auction · LSX Trading Pit',
       'Headline music performances & Lagos culture showcase'
@@ -55,7 +55,7 @@ const PHASES = [
 ]
 
 const DAY2 = [
-  { time: '12:00', period: 'PM', title: 'DOORS OPEN & TURNSTILES LIVE', desc: 'Muri Okunola Park gates open. QR ticket scanning, wristband collection, and full access to the 30+ vendor marketplace.', tag: 'OPEN', color: B.neonLime, stage: 'MAIN GATES' },
+  { time: '12:00', period: 'PM', title: 'DOORS OPEN & TURNSTILES LIVE', desc: 'Freedom Park, Lagos Island (CMS) gates open. QR ticket scanning, wristband collection, and full access to the 30+ vendor marketplace.', tag: 'OPEN', color: B.neonLime, stage: 'MAIN GATES' },
   { time: '12:30', period: 'PM', title: 'VENDOR FLOOR & LSX TRADING PIT OPEN', desc: 'Deadstock sneakers, Lagos streetwear brands, food court, and the Lagos Sole Exchange physical authentication desk go live.', tag: 'MARKET', color: B.neonCyan, stage: 'GRAIL ALLEY' },
   { time: '1:00',  period: 'PM', title: 'RESIDENT SOLE DJS — AFTERNOON SET', desc: 'Opening soundscape setting the tempo across the park. Afrobeats, Alté, hip-hop, and classic street anthems.', tag: 'MUSIC', color: B.amber, stage: 'MAIN STAGE' },
   { time: '2:00',  period: 'PM', title: 'PANEL: THE FUTURE OF LAGOS STREET CULTURE', desc: 'Founders, collectors, and designers discuss sneaker commerce, local manufacturing, and West African design identity.', tag: 'CULTURE', color: B.neonCyan, stage: 'MAIN STAGE' },
@@ -66,7 +66,7 @@ const DAY2 = [
   { time: '7:00',  period: 'PM', title: '⧡ SPECIAL GUEST SET [PHASE 1 REVEAL SOON]', desc: 'High-energy live showcase bridging music and street fashion. Official artist announcement dropping on @s_fest26.', tag: 'LIVE', color: B.neonMagenta, stage: 'MAIN STAGE' },
   { time: '8:00',  period: 'PM', title: '⧡ HEADLINE PERFORMANCE [PHASE 1 REVEAL SOON]', desc: 'The climax performance of Sneakers Fest \'26 under the Victoria Island night lights.', tag: 'HEADLINE', color: B.neonMagenta, featured: true, stage: 'MAIN STAGE' },
   { time: '9:30',  period: 'PM', title: 'GOLDEN VAULT & SOLE REGISTRY AWARDS', desc: 'Final recognition of top collectors, Grail Heist winners, and closing DJ set.', tag: 'AWARDS', color: B.amber, stage: 'MAIN STAGE' },
-  { time: '10:00', period: 'PM', title: 'DOORS CLOSE & FINAL ESCROW HANDOFF', desc: 'Final vendor pickups at Booth 14 and safe departure from Muri Okunola Park.', tag: 'CLOSE', color: B.smoke, stage: 'MAIN GATES' },
+  { time: '10:00', period: 'PM', title: 'DOORS CLOSE & FINAL ESCROW HANDOFF', desc: 'Final vendor pickups at Booth 14 and safe departure from Freedom Park, Lagos Island (CMS).', tag: 'CLOSE', color: B.smoke, stage: 'MAIN GATES' },
 ]
 
 // Export DAY1 as alias to DAY2 so any legacy imports remain 100% crash-free

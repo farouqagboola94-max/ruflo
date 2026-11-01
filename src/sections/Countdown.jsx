@@ -12,7 +12,7 @@ const MILESTONES = [250, 500, 1000, 1500, 2000, 2500]
 // This strip used to cycle ten invented people "just joining" from invented
 // neighbourhoods. These are things about the day that are true.
 const MARQUEE = [
-  'Muri Okunola Park, Victoria Island',
+  'Freedom Park, Broad Street, Lagos Island (CMS)',
   'Doors 12:00, last set 22:00',
   '30+ vendors on the floor',
   'General, VIP, VVIP, Phalanx',
@@ -121,7 +121,7 @@ async function downloadHypeCard({ name, daysLeft }) {
   c.beginPath(); c.moveTo(220, 590); c.lineTo(W - 220, 590); c.stroke()
 
   c.fillStyle = '#FFFFFF'; c.font = '700 34px monospace'
-  c.fillText('MURI OKUNOLA PARK, VICTORIA ISLAND', W/2, 650)
+  c.fillText('FREEDOM PARK, CMS, LAGOS ISLAND', W/2, 650)
   c.fillStyle = '#888'; c.font = '700 22px monospace'
   c.fillText('LAGOS, NIGERIA', W/2, 688)
 
@@ -228,7 +228,7 @@ export default function Countdown() {
       <div style={{ position:'relative', zIndex:10, maxWidth:900, margin:'0 auto' }}>
 
         <div style={{ textAlign:'center', marginBottom:56 }}>
-          <SectionTag>DECEMBER 12, 2026 · MURI OKUNOLA PARK, V/I</SectionTag>
+          <SectionTag>DECEMBER 12, 2026 · FREEDOM PARK, CMS</SectionTag>
           <div className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(44px,9vw,88px)', color:B.white, lineHeight:0.88, letterSpacing:2 }}>
             THE CLOCK<br /><span style={{ color:B.amber }}>IS RUNNING</span>
           </div>
@@ -337,7 +337,7 @@ export default function Countdown() {
               <div style={{ fontFamily:'Orbitron,monospace', fontSize:9, color:B.amber, letterSpacing:2 }}>SNEAKERS FEST '26</div>
               <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:'clamp(28px,7vw,48px)', color:B.white, lineHeight:0.9 }}>I'M</div>
               <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:'clamp(36px,9vw,64px)', color:B.amber, lineHeight:0.9 }}>GOING</div>
-              <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, letterSpacing:1, marginTop:4 }}>MURI OKUNOLA PARK, V/I</div>
+              <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, letterSpacing:1, marginTop:4 }}>FREEDOM PARK, CMS</div>
               <div style={{ fontFamily:'Orbitron,monospace', fontSize:'clamp(20px,5vw,36px)', color:B.amber, fontWeight:900, marginTop:4 }}>{time.days}</div>
               <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, letterSpacing:2 }}>DAYS AWAY</div>
               {cardName && <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:B.smoke, marginTop:4 }}>{cardName.toUpperCase()}</div>}

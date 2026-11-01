@@ -281,7 +281,7 @@ export default function VendorReg() {
     setPitchLoading(true)
     setPitchError('')
     try {
-      const prompt = `Write a compelling 250-character vendor application bio for Sneakers Fest '26 at Muri Okunola Park, Victoria Island, Lagos.
+      const prompt = `Write a compelling 250-character vendor application bio for Sneakers Fest '26 at Freedom Park, Broad Street, Lagos Island (CMS).
 Brand: ${form.business || 'Lagos Streetwear Collective'}
 Product Line: ${form.category}
 Booth Tier: ${selectedBooth.label}
@@ -532,7 +532,7 @@ Tone: Culturally rooted in Lagos street energy, razor-sharp commercial appeal, c
 
           <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: B.smoke, lineHeight: 1.7, maxWidth: 640, margin: '0 auto 24px' }}>
             Year 1 is strictly invitation-curated to showcase West Africa's finest sneaker boutiques, rare collectors, streetwear pioneers, and artisan customizers. 
-            Claim your space at Muri Okunola Park, Victoria Island.
+            Claim your space at Freedom Park, Broad Street, Lagos Island (CMS).
           </p>
 
           {/* Quick Action Pills */}
@@ -571,7 +571,7 @@ Tone: Culturally rooted in Lagos street energy, razor-sharp commercial appeal, c
           {[
             { n: '1,000–2,500', l: 'QUALIFIED BUYERS', c: B.neonCyan, hint: 'High-intent foot traffic' },
             { n: '30 SPOTS', l: 'CURATED LIMIT', c: B.amber, hint: 'No bootlegs / replica filter' },
-            { n: 'DEC 12', l: 'VICTORIA ISLAND', c: B.neonLime, hint: 'Muri Okunola Park' },
+            { n: 'DEC 12', l: 'VICTORIA ISLAND', c: B.neonLime, hint: 'Freedom Park, Lagos Island (CMS)' },
             { n: '10% OFF', l: 'EARLY BIRD TIER', c: B.neonMagenta, hint: 'First 15 confirmed brands' },
           ].map((s, i) => (
             <div key={i} className="card-3d" style={{ padding: '18px 16px', background: B.charcoal, border: `1px solid ${s.c}28`, borderRadius: 10, textAlign: 'center' }}>

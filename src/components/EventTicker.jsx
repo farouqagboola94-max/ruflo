@@ -4,7 +4,7 @@ import Egg from './Egg'
 const ITEMS = [
   "SNEAKERS FEST '26",
   'DECEMBER 12 · 2026',
-  'MURI OKUNOLA PARK · V/I',
+  'FREEDOM PARK, CMS · V/I',
   '200+ RARE PAIRS',
   '30+ CURATED VENDORS',
   '⧡ CLASSIFIED HEADLINER',

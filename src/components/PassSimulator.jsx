@@ -105,7 +105,7 @@ export default function PassSimulator({ onClose }) {
               {cleared ? '● GATE CLEARED' : 'TURNSTILE NFC SIMULATOR'}
             </span>
             <div style={{ fontFamily: 'Bebas Neue,sans-serif', fontSize: 22, color: B.white, letterSpacing: 1.5 }}>
-              MURI OKUNOLA TURNSTILE · GATE 1
+              FREEDOM PARK, CMS TURNSTILE · GATE 1
             </div>
           </div>
           {onClose && (

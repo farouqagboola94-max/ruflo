@@ -18,10 +18,10 @@ const VERIFIED_PLUGS = [
     address: 'Adeola Odeku St, Victoria Island, Lagos',
     specialty: 'Rare SB Dunks, Off-White & Trophy Room Grails',
     status: 'OFFICIAL BOOTH CONFIRMED',
-    booth: 'Booth A-01 (VIP Zone)',
+    booth: 'Grail Cell A-01 (VIP Wing)',
     rating: '5.0 ★ (140+ Authenticated Trades)',
     contact: '@grailvault_vi',
-    distance: '0.8 km from Muri Okunola Park'
+    distance: '5 mins from Freedom Park via Falomo/Marina'
   },
   {
     id: 'PLUG-02',
@@ -30,10 +30,10 @@ const VERIFIED_PLUGS = [
     address: 'Admiralty Way, Lekki Phase 1, Lagos',
     specialty: 'Jordan 1 Highs, Travis Scott Lows & Yeezy Archive',
     status: 'OFFICIAL BOOTH CONFIRMED',
-    booth: 'Booth A-02',
+    booth: 'Grail Cell A-02',
     rating: '4.9 ★ (210+ Verified Trades)',
     contact: '@kicksoflekki_ng',
-    distance: '3.2 km from Muri Okunola Park'
+    distance: '12 mins from Freedom Park, CMS'
   },
   {
     id: 'PLUG-03',
@@ -42,10 +42,10 @@ const VERIFIED_PLUGS = [
     address: 'Akin Adesola St, Victoria Island, Lagos',
     specialty: 'Travis Scott, Tiffany AF1 & Vintage 1985 AJ1s',
     status: 'OFFICIAL BOOTH CONFIRMED',
-    booth: 'Booth A-03',
+    booth: 'Grail Cell A-03',
     rating: '5.0 ★ (115+ Grails Sold)',
     contact: '@lagosdeadstock',
-    distance: '0.5 km from Muri Okunola Park'
+    distance: '5 mins from Freedom Park, CMS'
   },
   {
     id: 'PLUG-04',
@@ -54,10 +54,10 @@ const VERIFIED_PLUGS = [
     address: 'Fola Osibo Rd, Lekki Phase 1, Lagos',
     specialty: 'Jordan 4s, Kobe Protros & Luxury Streetwear',
     status: 'OFFICIAL BOOTH CONFIRMED',
-    booth: 'Booth A-04',
+    booth: 'Grail Cell A-04',
     rating: '4.9 ★ (180+ Verified Sales)',
     contact: '@solehouselagos',
-    distance: '3.8 km from Muri Okunola Park'
+    distance: '14 mins from Freedom Park, CMS'
   },
   {
     id: 'PLUG-05',
@@ -66,10 +66,10 @@ const VERIFIED_PLUGS = [
     address: 'Herbert Macaulay Way, Yaba, Lagos',
     specialty: 'Deep Ultrasonic Cleaning, Sole Unyellowing & Suede Revival',
     status: 'OFFICIAL BOOTH CONFIRMED',
-    booth: 'Clinic 01 (Sneaker Care Zone)',
+    booth: 'Clinic 01 (Freedom Courtyard)',
     rating: '4.9 ★ (320+ Restorations)',
     contact: '@mainlandsolelab',
-    distance: 'Mainland Flagship · 11 km via 3MB'
+    distance: '15 mins via Carter / 3MB to CMS'
   },
   {
     id: 'PLUG-06',
@@ -78,10 +78,10 @@ const VERIFIED_PLUGS = [
     address: 'Karimu Kotun St, Victoria Island, Lagos',
     specialty: 'Express Steam Clean, Midsole Repaint & Crease Removal',
     status: 'OFFICIAL BOOTH CONFIRMED',
-    booth: 'Clinic 02 (Sneaker Care Zone)',
+    booth: 'Clinic 02 (Freedom Courtyard)',
     rating: '5.0 ★ (290+ Pairs Restored)',
     contact: '@sneakerspalagos',
-    distance: '1.1 km from Muri Okunola Park'
+    distance: '6 mins from Freedom Park, CMS'
   },
   {
     id: 'PLUG-07',
@@ -90,10 +90,10 @@ const VERIFIED_PLUGS = [
     address: 'Allen Avenue, Ikeja, Lagos',
     specialty: 'New Balance 9060/1906R, Asics Gel-Kayano & Daily Runners',
     status: 'OFFICIAL BOOTH CONFIRMED',
-    booth: 'Booth B-01',
+    booth: 'Pergola B-01',
     rating: '4.8 ★ (160+ Verified Trades)',
     contact: '@ikeja_kickscollective',
-    distance: 'Ikeja Flagship · 19 km from Venue'
+    distance: 'Direct BRT / 3MB access to CMS'
   },
   {
     id: 'PLUG-08',
@@ -102,10 +102,10 @@ const VERIFIED_PLUGS = [
     address: 'Freedom Way, Ikate Lekki, Lagos',
     specialty: 'Corteiz, Bape, Supreme & Limited Collab Footwear',
     status: 'OFFICIAL BOOTH CONFIRMED',
-    booth: 'Booth B-02',
+    booth: 'Pergola B-02',
     rating: '4.9 ★ (150+ Drops Fulfilled)',
     contact: '@dripstation_lagos',
-    distance: '5.4 km from Muri Okunola Park'
+    distance: '18 mins from Freedom Park, CMS'
   },
   {
     id: 'PLUG-09',
@@ -114,10 +114,10 @@ const VERIFIED_PLUGS = [
     address: 'Bode Thomas St, Surulere, Lagos',
     specialty: 'Classic Air Max, Nike TN, Basketball Performance & Retros',
     status: 'OFFICIAL BOOTH CONFIRMED',
-    booth: 'Booth B-03',
+    booth: 'Pergola B-03',
     rating: '4.8 ★ (205+ Community Sales)',
     contact: '@suruleresolesupply',
-    distance: 'Surulere Hub · 12 km from Venue'
+    distance: '12 mins via Blue Line Rail to CMS'
   },
   {
     id: 'PLUG-10',
@@ -126,10 +126,10 @@ const VERIFIED_PLUGS = [
     address: 'Tejuosho Market Annex, Yaba, Lagos',
     specialty: 'Curated 90s Archive Sportswear, Samba OG & Rare Samples',
     status: 'OFFICIAL BOOTH CONFIRMED',
-    booth: 'Booth B-04',
+    booth: 'Pergola B-04',
     rating: '4.9 ★ (340+ Curated Finds)',
     contact: '@yabavintage_archive',
-    distance: 'Yaba Hub · 10.5 km from Venue'
+    distance: '14 mins via Carter / 3MB to CMS'
   }
 ]
 
@@ -194,7 +194,7 @@ export default function LagosPlugRadar() {
               VERIFIED PLUG <span style={{ color: B.neonCyan, textShadow: `0 0 25px ${B.neonCyan}50` }}>RADAR</span>
             </h2>
             <p style={{ fontFamily: "'Space Mono', monospace", fontSize: 'clamp(11px, 1.4vw, 13px)', color: B.mist, marginTop: 10, maxWidth: 660, lineHeight: 1.6 }}>
-              The master roster of 10 pre-vetted sneaker boutiques, restoration spas, and authenticated resellers across Victoria Island, Lekki, Yaba, Surulere, and Ikeja—each confirmed with an official physical booth at Muri Okunola Park on December 12.
+              The master roster of 10 pre-vetted sneaker boutiques, restoration spas, and authenticated resellers across Victoria Island, Lekki, Yaba, Surulere, and Ikeja—each confirmed with an official Grail Cell or Pergola booth at Freedom Park, CMS on December 12.
             </p>
           </div>
 
@@ -350,7 +350,7 @@ export default function LagosPlugRadar() {
                 PARTNER VOUCHER ACTIVATED
               </h3>
               <p style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, color: B.mist, marginBottom: 16, lineHeight: 1.5 }}>
-                Present this pass at <strong style={{ color: B.white }}>{selectedPlug.name}</strong> ({selectedPlug.booth}) on December 12 at Muri Okunola Park for 10% off grails, cleanings, and apparel.
+                Present this pass at <strong style={{ color: B.white }}>{selectedPlug.name}</strong> ({selectedPlug.booth}) on December 12 at Freedom Park, CMS for 10% off grails, cleanings, and apparel.
               </p>
               <div style={{
                 background: B.charcoal,

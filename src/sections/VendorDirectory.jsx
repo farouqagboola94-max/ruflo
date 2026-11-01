@@ -264,7 +264,7 @@ export default function VendorDirectory() {
               THE<span style={{ color: B.amber }}> FLOOR</span>
             </h2>
             <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: B.smoke, marginTop: 10, lineHeight: 1.7 }}>
-              Every confirmed vendor on the floor at Muri Okunola Park. Know who you are coming for
+              Every confirmed vendor on the floor at Freedom Park, Lagos Island (CMS). Know who you are coming for
               before you get there.
             </p>
           </div>

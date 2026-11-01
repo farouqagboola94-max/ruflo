@@ -842,7 +842,7 @@ function ScheduleTab() {
   return (
     <div>
       <p style={{ fontFamily: 'Orbitron, sans-serif', fontSize: 10, letterSpacing: 3, color: B.amber, marginBottom: 4 }}>DAY-OF SCHEDULE</p>
-      <p style={{ fontSize: 12, color: B.smoke, marginBottom: 24 }}>December 12, 2026 — Muri Okunola Park, Victoria Island, Lagos</p>
+      <p style={{ fontSize: 12, color: B.smoke, marginBottom: 24 }}>December 12, 2026 — Freedom Park, Broad Street, Lagos Island (CMS)</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
         {VENDOR_SCHEDULE.map((item, i) => (
           <div key={i} style={{ display: 'flex', gap: 16, paddingBottom: 0 }}>
@@ -944,7 +944,7 @@ function ChecklistTab() {
           background: `${B.neonLime}10`, border: `1px solid ${B.neonLime}30`, borderRadius: 12,
         }}>
           <p style={{ fontSize: 22, fontFamily: 'Bebas Neue, sans-serif', letterSpacing: 2, color: B.neonLime }}>YOU ARE READY.</p>
-          <p style={{ fontSize: 12, color: B.smoke, marginTop: 4 }}>See you at Muri Okunola Park, December 12.</p>
+          <p style={{ fontSize: 12, color: B.smoke, marginTop: 4 }}>See you at Freedom Park, Lagos Island (CMS), December 12.</p>
         </div>
       )}
     </div>

@@ -8,15 +8,15 @@ const HELPFUL_SEEDS = [89, 47, 62, 38, 55, 71, 44, 61, 33, 58, 27]
 
 const FAQS = [
   { q: "When and where is Sneakers Fest 2026?", popular: true,
-    a: "Saturday, December 12, 2026 at Muri Okunola Park, Adeola Odeku Street, Victoria Island, Lagos, Nigeria. Early access & VIP doors open at 11:00 AM and the festival runs until late." },
+    a: "Saturday, December 12, 2026 at Freedom Park, Lagos Island (CMS), Adeola Odeku Street, Victoria Island, Lagos, Nigeria. Early access & VIP doors open at 11:00 AM and the festival runs until late." },
   { q: "What is the minimum age for entry?",
     a: "Sneakers Fest is open to attendees aged 16 and above. Under-18s must be accompanied by a responsible adult. Valid ID may be requested at the gate." },
   { q: "Can I bring sneakers to sell or trade?", popular: true,
     a: "Registered vendors with a confirmed booth can sell on the day. Limited spaces are available on a first-come, first-served basis — DM @s_fest26 (or @catalystggg) on X/Instagram or email info@sneakersfest.com to apply. Walk-in commercial selling without a booth is not permitted, but peer-to-peer trading in the Trading Pit and via our SF26 Trade Board is welcome for all ticket holders." },
   { q: "Is there parking on-site?",
-    a: "Muri Okunola Park is located on Adeola Odeku Street, Victoria Island, with designated parking areas nearby and VIP/Table parking coordination. We strongly recommend ride-hailing (Uber, Bolt, or InDrive) on the day for fastest drop-off right at the main gate." },
+    a: "Freedom Park, Lagos Island (CMS) is located on Adeola Odeku Street, Victoria Island, with designated parking areas nearby and VIP/Table parking coordination. We strongly recommend ride-hailing (Uber, Bolt, or InDrive) on the day for fastest drop-off right at the main gate." },
   { q: "How do I get there by ride-hailing or public transport?",
-    a: "Bolt, Uber, and InDrive all serve Victoria Island directly. Set your destination to: Muri Okunola Park, Adeola Odeku Street, Victoria Island, Lagos. Public transit and buses also run along Ozumba Mbadiwe Avenue and Adeola Odeku Street." },
+    a: "Bolt, Uber, and InDrive all serve Victoria Island directly. Set your destination to: Freedom Park, Lagos Island (CMS), Adeola Odeku Street, Victoria Island, Lagos. Public transit and buses also run along Ozumba Mbadiwe Avenue and Adeola Odeku Street." },
   { q: "Are refunds available?",
     a: "Tickets are non-refundable. However, you may transfer your ticket to another person up to 48 hours before the event by contacting us directly at info@sneakersfest.com or sneakersfest088@gmail.com with your order reference and the new holder's name." },
   { q: "What payment methods are accepted?",
@@ -26,7 +26,7 @@ const FAQS = [
   { q: "Is photography allowed at the event?",
     a: "Personal photography and video for social media is 100% encouraged — tag @s_fest26 and @catalystggg! Commercial shoots, media crews, and brand content teams require press accreditation via the Press page or info@sneakersfest.com." },
   { q: "Will there be food and drinks on-site?",
-    a: "Yes. A curated Food & Refreshment Court runs all day at Muri Okunola Park featuring Lagos' finest suya, jollof, burgers, small chops, and chilled drinks. Outside glass bottles and unauthorized alcohol are not permitted." },
+    a: "Yes. A curated Food & Refreshment Court runs all day at Freedom Park, Lagos Island (CMS) featuring Lagos' finest suya, jollof, burgers, small chops, and chilled drinks. Outside glass bottles and unauthorized alcohol are not permitted." },
   { q: "How do I apply as a vendor or brand partner?",
     a: "Vendor and sponsor applications are open now via the Vendor Registration section on this website, or by emailing info@sneakersfest.com / DMing @s_fest26. Booth spots are strictly limited." },
 ]

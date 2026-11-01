@@ -21,7 +21,7 @@ export const EVENT = {
   name:    "Sneakers Fest '26",
   date:    'December 12, 2026',
   dateISO: '2026-12-12T12:00:00',
-  venue:   'Muri Okunola Park, Victoria Island, Lagos',
+  venue:   'Freedom Park, Old Prison Ground, CMS, Lagos Island',
   doors:   '12:00 PM',
   email:   'info@sneakersfest.com',
 }

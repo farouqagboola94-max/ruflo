@@ -131,7 +131,7 @@ export default function Schedule() {
             <div className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:'clamp(36px,5vw,60px)', color:B.white, lineHeight:0.9 }}>
               4 PHASES. 1 MOVEMENT.
             </div>
-            <div style={{ fontFamily:"'Space Mono',sans-serif", fontSize:12, color:B.smoke, marginTop:10 }}>Leading to Saturday, December 12, 2026 · Muri Okunola Park, Victoria Island, Lagos</div>
+            <div style={{ fontFamily:"'Space Mono',sans-serif", fontSize:12, color:B.smoke, marginTop:10 }}>Leading to Saturday, December 12, 2026 · Freedom Park, Broad Street, Lagos Island (CMS)</div>
           </div>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(180px, 1fr))', gap:12 }}>
             {PHASES.map((ph, i) => (
@@ -158,7 +158,7 @@ export default function Schedule() {
           <div style={{ display:'inline-flex', alignItems:'center', gap:10, marginTop:20, padding:'10px 24px', background:`${B.amber}15`, border:`1px solid ${B.amber}`, borderRadius:6 }}>
             <div style={{ textAlign:'center' }}>
               <div style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color:B.amber, letterSpacing:2, marginBottom:3 }}>DEC 12 · 12:00 PM — 10:00 PM WAT</div>
-              <div style={{ fontFamily:"'Syne',sans-serif", fontSize:12, color:B.white, fontWeight:700 }}>Muri Okunola Park, Victoria Island, Lagos</div>
+              <div style={{ fontFamily:"'Syne',sans-serif", fontSize:12, color:B.white, fontWeight:700 }}>Freedom Park, Broad Street, Lagos Island (CMS)</div>
             </div>
           </div>
         </div>

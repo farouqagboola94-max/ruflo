@@ -14,43 +14,43 @@ import {
 // ── zone data ──────────────────────────────────────────────────────────────────
 const ZONES = [
   {
-    id: 'stage', short: 'MAIN STAGE', label: 'Main Stage',
+    id: 'stage', short: 'AMPHITHEATRE', label: 'Freedom Park Amphitheatre Stage',
     color: B.amber, x:180, y:0, w:440, h:140,
-    icon:'🎤', tagline:'Where the culture peaks.',
-    desc:'Live DJ sets, sneaker drop auctions, panel discussions with Lagos\' top designers, and the official SF\'26 brand announcements.',
-    schedule:['12:00 — Doors open','14:00 — Panel: Future of Lagos Streetwear','18:00 — Main DJ set','21:00 — Headline drop reveal'],
-    tags:['MUSIC','PANELS','DROPS'],
-    category:'stage', sound:'98 dB · Live DJ', density:'92% Capacity',
+    icon:'🎤', tagline:'Where confinement turns to liberation.',
+    desc:'Open-air brick amphitheatre hosting live DJ sets, sneaker drop auctions, panel talks inside the heritage arena, and the Year of Freedom headline performances.',
+    schedule:['12:00 — Gates of Freedom open','14:00 — Panel: Year of Freedom & Lagos Streetwear','18:00 — Amphitheatre DJ Soundclash','21:00 — Headline Liberation Drop Reveal'],
+    tags:['AMPHITHEATRE','MUSIC','DROPS'],
+    category:'stage', sound:'98 dB · Live Arena', density:'92% Capacity',
     warpHash: '#schedule',
   },
   {
-    id: 'vip', short: 'VIP', label: 'VIP Lounge',
+    id: 'vip', short: 'WATCHTOWER VIP', label: 'Watchtower VIP & Phalanx Deck',
     color: B.neonMagenta, x:620, y:0, w:180, h:140,
-    icon:'💎', tagline:'Exclusive access. No exceptions.',
-    desc:'Private sneaker showcase, open bar, complimentary styling consultations, and meet-the-artist moments. VIP ticket required.',
-    schedule:['All-day access','Private drop at 20:00'],
-    tags:['VIP','EXCLUSIVE','BAR'],
+    icon:'💎', tagline:'Elevated above the historic walls.',
+    desc:'Elevated watchtower deck & pondside sanctuary overlooking the Amphitheatre. Private grail showcase, premium bottle service, and artist meet-and-greets.',
+    schedule:['All-day fast-track access','Private Watchtower Drop at 20:00'],
+    tags:['VIP','WATCHTOWER','PHALANX'],
     category:'vip', sound:'68 dB · Velvet Vibe', density:'45% Capacity', fastTrack: true,
     warpHash: '#tickets',
   },
   {
-    id: 'gallery', short: 'ART GALLERY', label: 'Art Gallery',
+    id: 'gallery', short: 'KONGI GALLERY', label: "Kongi's Harvest Art Gallery",
     color: B.neonCyan, x:0, y:140, w:180, h:180,
-    icon:'🖼️', tagline:'Lagos on canvas.',
-    desc:'Curated works from 12 Lagos-based visual artists. Prints available for purchase. All Culture Museum auction pieces on display.',
-    schedule:['Open all day','Artist walk-through at 15:00'],
-    tags:['ART','CULTURE','PRINTS'],
+    icon:'🖼️', tagline:'Liberation on canvas.',
+    desc:'Inside Freedom Park\'s iconic Kongi\'s Harvest Gallery: curated works from 12 Lagos visual artists, archival photography, and Culture Museum pieces.',
+    schedule:['Open all day','Curator liberation walk-through at 15:00'],
+    tags:['ART','GALLERY','ARCHIVE'],
     category:'art', sound:'62 dB · Curated', density:'55% Capacity',
     warpHash: '#auction',
   },
   {
-    id: 'floor', short: 'MAIN FLOOR', label: 'Main Floor & LSX Pit',
+    id: 'floor', short: 'CELL BLOCK A', label: 'The Grail Cells & LSX Escrow Pit',
     color:'#FFFFFF', x:180, y:140, w:260, h:180,
-    icon:'👟', tagline:'The epicentre & authenticated trade floor.',
-    desc:'30+ curated vendor booths across footwear, streetwear, and collectibles alongside the Lagos Sole Exchange physical escrow desk.',
-    schedule:['Open 12:00 — 22:00','Peak crowd: 16:00 — 20:00','Escrow trading desk active'],
-    tags:['VENDORS','TRADE','LSX'],
-    category:'vendors', sound:'84 dB · Buzzing', density:'88% Capacity',
+    icon:'👟', tagline:'Former prison cells turned Grail Vaults.',
+    desc:'Historic brick cell blocks reimagined as high-security sneaker trading vaults and the Lagos Sole Exchange (LSX) physical authentication & escrow pit.',
+    schedule:['Open 12:00 — 22:00','Peak trading: 16:00 — 20:00','Physical Escrow Cell active'],
+    tags:['GRAIL CELLS','TRADE','LSX'],
+    category:'vendors', sound:'84 dB · Trading Pit', density:'88% Capacity',
     warpHash: '#lsx',
   },
   {
@@ -64,107 +64,107 @@ const ZONES = [
     warpHash: '#lagos-sole-index',
   },
   {
-    id: 'museum', short: 'MUSEUM', label: 'Culture Museum & Vault',
+    id: 'museum', short: 'VAULT CELLS', label: 'Heritage Museum & Grail Crypt',
     color: B.neonMagenta, x:620, y:140, w:180, h:180,
-    icon:'🏛️', tagline:'Bid for the culture.',
-    desc:'8 exclusive digital artworks from Lagos creatives on live auction, plus the secret GPS beacon checkpoint for the Grail Heist.',
+    icon:'🏛️', tagline:'Where history meets the canon.',
+    desc:'Freedom Park\'s colonial history museum wing transformed to house The 200 Sneaker Canon, rare 1985 originals, and the Grail Heist checkpoint.',
     schedule:['Viewing all day','Heist Beacon active: 14:00','Auction closes 21:30'],
-    tags:['AUCTION','HEIST','VAULT'],
-    category:'vip', sound:'70 dB · Auction Room', density:'60% Capacity',
+    tags:['MUSEUM','HEIST','VAULT'],
+    category:'vip', sound:'70 dB · Vault Wing', density:'60% Capacity',
     warpHash: '#grail-heist',
   },
   {
-    id: 'vendor_w', short: 'VENDORS W', label: 'Vendor Hall West',
+    id: 'vendor_w', short: 'PERGOLA ROW', label: 'Brick Pergola Vendor Marketplace',
     color: B.neonLime, x:0, y:320, w:180, h:120,
-    icon:'🛍️', tagline:'Verified vendor zone.',
-    desc:'West wing vendor hall. Deadstock, rare collabs, custom kicks, and Lagos streetwear labels.',
+    icon:'🛍️', tagline:'Verified Lagos plugs under the arches.',
+    desc:'Open-air brick pergola walkways housing verified Lagos sneaker boutiques, deadstock resellers, and heavy streetwear labels.',
     schedule:['Open 12:00 — 21:30'],
-    tags:['DEADSTOCK','CUSTOMS','STREETWEAR'],
+    tags:['PERGOLAS','BOUTIQUES','STREETWEAR'],
     category:'vendors', sound:'78 dB · Marketplace', density:'75% Capacity',
-    warpHash: '#vendors',
+    warpHash: '#plug-radar',
   },
   {
-    id: 'photo', short: 'PHOTO ALLEY', label: 'Photo Booth Alley',
+    id: 'photo', short: 'FREEDOM ALLEY', label: 'Year of Freedom Photo Alley',
     color: B.neonCyan, x:180, y:320, w:220, h:120,
-    icon:'📸', tagline:'Make your moment.',
-    desc:'Four themed photo installations inspired by Lagos streetwear decades. Print on-site in 90 seconds. SF\'26 hype card moments guaranteed.',
-    schedule:['Open all day','Queue expected 16:00 — 19:00'],
-    tags:['PHOTO','PRINT','CONTENT'],
-    category:'art', sound:'74 dB · Hype Photos', density:'80% Capacity',
+    icon:'📸', tagline:'Immortalize your liberation fit.',
+    desc:'Four architectural photo installations set against Freedom Park\'s heritage brick walls and skeletal monuments. Instant 90-second magazine prints.',
+    schedule:['Open all day','Golden hour shoot: 16:30 — 18:30'],
+    tags:['PHOTO','HERITAGE','CONTENT'],
+    category:'art', sound:'74 dB · Flash Studio', density:'80% Capacity',
     warpHash: '#experience',
   },
   {
-    id: 'arena', short: 'FIT ARENA', label: 'Live Fit-Check Arena',
+    id: 'arena', short: 'FIT ARENA', label: 'Cobblestone Fit-Check Arena',
     color: B.amber, x:400, y:320, w:220, h:120,
     icon:'⚔️', tagline:'Head-to-head 1v1 drip battles.',
-    desc:'Center-stage street style runway. Attendees enter live 1v1 fit battles, crowd votes real-time, and top drips climb the leaderboard to win grails.',
+    desc:'Central cobblestone courtyard runway. Attendees enter live 1v1 fit battles, crowd votes real-time, and top drips claim the Crown of Freedom.',
     schedule:['Battles run every 30 mins','Mainland vs Island Derby: 17:00','Championship finals: 20:30'],
     tags:['BATTLES','VOTE','STREETWEAR'],
     category:'stage', sound:'96 dB · Crowd Roar', density:'95% Capacity',
     warpHash: '#fitcheck-arena',
   },
   {
-    id: 'care', short: 'SNEAKER CARE', label: 'Sneaker Care Station',
+    id: 'care', short: 'SNEAKER CARE', label: 'Sneaker Spa & Restoration Clinic',
     color: B.amber, x:620, y:320, w:180, h:120,
-    icon:'✨', tagline:'Keep your grails fresh.',
-    desc:'On-site deep cleaning, suede restoration, custom re-lacing, and sole protection by specialist sneaker care technicians all day.',
-    schedule:['Open 12:00 — 21:00','Walk-ins welcome'],
-    tags:['CLEANING','CARE','RESTORE'],
+    icon:'✨', tagline:'Keep your grails fresh on the cobblestones.',
+    desc:'On-site ultrasonic deep cleaning, suede revival, custom lace swaps, and hydrophobic sole shields by Mainland Sole Lab & Sneaker Spa Lagos.',
+    schedule:['Open 12:00 — 21:00','Walk-ins & Radar Vouchers accepted'],
+    tags:['CLEANING','CARE','SPA'],
     category:'care', sound:'66 dB · Restoration Lab', density:'50% Capacity',
-    warpHash: '#experience',
+    warpHash: '#plug-radar',
   },
   {
-    id: 'food', short: 'FOOD COURT', label: 'Food Court',
+    id: 'food', short: 'FOOD COURT', label: 'Freedom Food & Palmwine Court',
     color: B.neonLime, x:0, y:440, w:180, h:120,
-    icon:'🍽️', tagline:'Lagos eats, elevated.',
-    desc:'Street food meets curated dining. Jollof station, suya grill, cold drinks, and specialty Lagos bites from 8 vendors.',
+    icon:'🍽️', tagline:'Lagos Island flavours, elevated.',
+    desc:'Shaded heritage pergola dining court. Smokey party jollof, suya grills, palmwine cocktails, and craft street food from 8 flagship vendors.',
     schedule:['Open 12:00 — 22:00'],
-    tags:['FOOD','DRINKS','VIBES'],
-    category:'food', sound:'80 dB · Terrace Vibes', density:'70% Capacity',
+    tags:['FOOD','DRINKS','COURTYARD'],
+    category:'food', sound:'80 dB · Courtyard Vibes', density:'70% Capacity',
     warpHash: '#experience',
   },
   {
-    id: 'entrance', short: 'ENTRANCE', label: 'Entrance & Registration',
+    id: 'entrance', short: 'BROAD ST GATE', label: 'Hospital Rd / Broad St Turnstile Gate',
     color: B.amber, x:180, y:440, w:440, h:120,
-    icon:'🎟️', tagline:'Your journey starts here.',
-    desc:'Show your QR ticket at the gate. Collect your wristband, festival tote, and event guide. Early bird guests enter from 11:30 AM.',
+    icon:'🎟️', tagline:'Step through the Gates of Liberation.',
+    desc:'Fortress turnstile checkpoint on Hospital Road / Broad Street (CMS). Scan your QR pass, collect your RFID wristband, and enter the Year of Freedom.',
     schedule:['Early bird entry 11:30 AM','General entry 12:00 PM','Last entry 20:00'],
-    tags:['TICKETS','ENTRY','WRISTBAND'],
+    tags:['TICKETS','TURNSTILE','CMS GATE'],
     category:'entry', sound:'76 dB · Gate Chime', density:'Fast Moving', entry: true,
     warpHash: '#tickets',
   },
   {
-    id: 'danfo_lab', short: 'DANFO LAB', label: 'Danfo Custom Sneaker Lab',
+    id: 'danfo_lab', short: 'SOLE CRAFT', label: 'Sole Craft Customization Workshop',
     color: B.neonCyan, x:620, y:440, w:180, h:120,
-    icon:'🎨', tagline:'1-of-1 Workshop & Minting Engine.',
-    desc:'Danfo transit stencils, custom color blocking, sole dyeing masterclasses, and digital certificate minting. Limited maker benches.',
-    schedule:['Workshop drops at 13:00, 15:00, 17:00','1-of-1 minting open all day'],
-    tags:['CUSTOM','WORKSHOP','MINT'],
-    category:'care', sound:'72 dB · Maker Studio', density:'Limited Seats',
-    warpHash: '#colorizer',
+    icon:'🎨', tagline:'3 Live Artisan Benches · 1-of-1 Craftsmanship.',
+    desc:'Hand-dyed Adire panels, airbrush stencils, laser heel inscriptions, 10mm rope lace drilling, and brass SF\'26 dubraes crafted live on-site.',
+    schedule:['Artisan sessions at 13:00, 15:30, 18:00','Walk-in hardware swaps open all day'],
+    tags:['CUSTOM','WORKSHOP','ARTISAN'],
+    category:'care', sound:'72 dB · Maker Studio', density:'Limited Benches',
+    warpHash: '#custom-workshop',
   },
 ]
 
 const TRANSPORT = [
   {
-    icon: '🚗',
-    title: 'BY CAR',
-    desc: 'Exit at Falomo Bridge, enter via Adeola Odeku Street. Paid parking available at nearby malls from ₦1,000/hr. Arrive before 2PM to beat traffic.',
+    icon: '🚆',
+    title: 'BLUE LINE RAIL (FASTEST)',
+    desc: 'Take the Lagos Blue Line Electric Rail from Mile 2, Surulere/National Theatre, or Iganmu straight to Marina / CMS Station. Walk 4 minutes up Odunlami / Broad Street to Freedom Park.',
   },
   {
     icon: '🚕',
-    title: 'RIDE-HAILING',
-    desc: 'Bolt and Uber drop-offs at the main gate on Adeola Odeku. Pre-book your return — demand surges after 9PM. Allow extra wait time.',
+    title: 'CAR & RIDE-HAILING',
+    desc: 'Set Uber/Bolt drop-off to Freedom Park, 1 Hospital Road, Old Prison Ground (beside St. Nicholas Hospital / Broad Street, Lagos Island). Secured parking at Marina & Broad Street Car Parks.',
   },
   {
     icon: '🚌',
-    title: 'BY BUS',
-    desc: 'BRT from CMS Terminal to Victoria Island. Alight at VI Terminal then take a short keke or walk to the park. Cheapest option.',
+    title: 'CMS BRT & EXPRESS BUS',
+    desc: 'Direct BRT buses from Ikeja, Oshodi, Yaba, Surulere, and Lekki terminate at CMS / Marina BRT Hub—just 400 metres from the Freedom Park heritage gates.',
   },
   {
     icon: '🚢',
-    title: 'BY BOAT',
-    desc: 'Ferry from Five Cowries Terminal, Ikoyi. Scenic 8-minute ride. Last return ferry departs 11:00 PM. Book early at the jetty.',
+    title: 'LAGFERRY / WATERWAY',
+    desc: 'Arrive by boat from Falomo (Victoria Island), Ikoyi, Lekki, Ikorodu, or Apapa into Marina / CMS Ferry Terminal, then take a 5-minute stroll to Broad Street.',
   },
 ]
 
@@ -429,7 +429,7 @@ function InfoPanel({ zone, onClose, onSelectRoute, onPinZone, isPinned }) {
               📍 Meetup set at {zone.label}! Share coordinates with your squad:
             </span>
             <a
-              href={`https://wa.me/?text=${encodeURIComponent(`Yo! Meet me at ${zone.label} (${zone.short}) at Sneakers Fest '26, Muri Okunola Park! Check the venue map here: https://sneakers-fest-official-website.netlify.app#venue`)}`}
+              href={`https://wa.me/?text=${encodeURIComponent(`Yo! Meet me at ${zone.label} (${zone.short}) at Sneakers Fest '26, Freedom Park CMS, Lagos Island! Check the venue map here: https://sneakers-fest-official-55.netlify.app#venue`)}`}
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -448,18 +448,18 @@ function InfoPanel({ zone, onClose, onSelectRoute, onPinZone, isPinned }) {
 
 // ── legend ─────────────────────────────────────────────────────────────────────
 const LEGEND = [
-  { color: B.amber,       label: 'Stage / Arena / Entry' },
-  { color: B.neonCyan,    label: 'Art / Photo / Danfo Lab' },
-  { color: B.neonMagenta, label: 'VIP / Museum / Heist Vault' },
-  { color: B.neonLime,    label: 'Vendors / LSI / Food' },
+  { color: B.amber,       label: 'Amphitheatre / Arena / Gate' },
+  { color: B.neonCyan,    label: 'Kongi Gallery / Sole Craft' },
+  { color: B.neonMagenta, label: 'Watchtower VIP / Grail Crypt' },
+  { color: B.neonLime,    label: 'Grail Cells / Pergolas / Food' },
 ]
 
 const ROUTES = [
   { id: 'none', label: 'OFF', name: 'No Route', color: '#555', path: null },
-  { id: 'grail', label: '🔥 GRAIL DROP RUSH', name: 'Entrance ➔ West Vendors ➔ Main Floor ➔ Stage', color: B.amber, path: 'M 400 480 L 90 380 L 310 230 L 400 70' },
-  { id: 'vip', label: '👑 VIP FAST-TRACK', name: 'Entrance ➔ VIP Lounge ➔ Museum ➔ Stage', color: B.neonMagenta, path: 'M 400 480 L 710 70 L 710 230 L 400 70' },
-  { id: 'arena', label: '⚔️ ARENA & HEIST RUN', name: 'Entrance ➔ Fit Arena ➔ LSI Ticker ➔ Vault', color: B.neonLime, path: 'M 400 480 L 510 380 L 530 230 L 710 230' },
-  { id: 'care', label: '✨ CARE & CUSTOM LAB', name: 'Entrance ➔ Sneaker Care ➔ Danfo Lab ➔ Gallery', color: B.neonCyan, path: 'M 400 480 L 710 380 L 710 500 L 90 230' },
+  { id: 'grail', label: '🔥 GRAIL CELL RUSH', name: 'Broad St Gate ➔ Pergola Row ➔ Grail Cells ➔ Amphitheatre', color: B.amber, path: 'M 400 480 L 90 380 L 310 230 L 400 70' },
+  { id: 'vip', label: '👑 WATCHTOWER FAST-TRACK', name: 'Broad St Gate ➔ Watchtower VIP ➔ Vault Cells ➔ Amphitheatre', color: B.neonMagenta, path: 'M 400 480 L 710 70 L 710 230 L 400 70' },
+  { id: 'arena', label: '⚔️ ARENA & HEIST RUN', name: 'Broad St Gate ➔ Fit Arena ➔ LSI Ticker ➔ Vault Cells', color: B.neonLime, path: 'M 400 480 L 510 380 L 530 230 L 710 230' },
+  { id: 'care', label: '✨ CARE & SOLE CRAFT', name: 'Broad St Gate ➔ Sneaker Care ➔ Sole Craft ➔ Kongi Gallery', color: B.neonCyan, path: 'M 400 480 L 710 380 L 710 500 L 90 230' },
 ]
 
 // ── main section ───────────────────────────────────────────────────────────────
@@ -556,22 +556,22 @@ export default function Venue() {
 
         {/* Header */}
         <div style={{ textAlign:'center', marginBottom:40 }}>
-          <SectionTag>DEC 12, 2026 · MURI OKUNOLA PARK, V/I</SectionTag>
+          <SectionTag>DEC 12, 2026 · FREEDOM PARK, CMS, LAGOS ISLAND · YEAR OF FREEDOM</SectionTag>
           <h2 className="reveal-3d text-3d" style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:'clamp(54px,9vw,100px)', color:B.white, lineHeight:0.88, letterSpacing:2, marginBottom:16 }}>
-            EXPLORE<br /><span style={{ color:B.amber }}>THE VENUE</span>
+            FREEDOM PARK<br /><span style={{ color:B.amber }}>CMS · LAGOS</span>
           </h2>
-          <p style={{ fontFamily:"'Syne', sans-serif", fontSize:15, color:'#888', maxWidth:460, margin:'0 auto' }}>
-            Interactive 3D floor plan navigator — click any zone, trace arrival routes, or preview live crowd acoustics.
+          <p style={{ fontFamily:"'Syne', sans-serif", fontSize:15, color:'#aaa', maxWidth:560, margin:'0 auto' }}>
+            From former colonial confinement to the liberation capital of African sneaker culture — explore the Amphitheatre, Brick Grail Cells, Watchtower VIP Deck, and Pergola Marketplace.
           </p>
         </div>
 
         {/* Event details strip */}
         <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(160px, 1fr))', gap:1, marginBottom:28, border:`1px solid rgba(255,255,255,0.07)`, borderRadius:12, overflow:'hidden' }}>
           {[
-            { label:'DATE',    value:'Saturday, Dec 12, 2026',        color:B.amber },
-            { label:'DOORS',   value:'11:00 AM — Late',               color:B.neonCyan },
-            { label:'VENUE',   value:'Muri Okunola Park, V/I',        color:B.neonLime },
-            { label:'OFFICIAL', value:'@s_fest26 · @catalystggg',     color:B.neonMagenta },
+            { label:'DATE',    value:'Saturday, Dec 12, 2026',          color:B.amber },
+            { label:'EDITION', value:'The Year of Freedom',             color:B.neonCyan },
+            { label:'VENUE',   value:'Freedom Park, CMS, Lagos Island', color:B.neonLime },
+            { label:'OFFICIAL', value:'@s_fest26 · @catalystggg',       color:B.neonMagenta },
           ].map(({ label, value, color }) => (
             <div key={label} style={{ padding:'18px 20px', background:'rgba(255,255,255,0.025)' }}>
               <div style={{ fontFamily:'Space Mono,monospace', fontSize: 9, color: B.dim, letterSpacing:3, marginBottom:6 }}>{label}</div>
@@ -758,7 +758,7 @@ export default function Venue() {
               <line x1="772" y1="24" x2="772" y2="38" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
               <polygon points="772,14 769,24 775,24" fill="rgba(255,255,255,0.2)" />
               <text x="22" y="550" fontFamily="Space Mono,monospace" fontSize={7} fill="rgba(255,255,255,0.2)" letterSpacing={1}>
-                {routeObj?.path ? `ACTIVE ROUTE: ${routeObj.name.toUpperCase()}` : 'EXPECTED LAYOUT · MURI OKUNOLA PARK, VICTORIA ISLAND'}
+                {routeObj?.path ? `ACTIVE ROUTE: ${routeObj.name.toUpperCase()}` : 'ARCHITECTURAL BLUEPRINT · FREEDOM PARK (OLD PRISON GROUND), CMS, LAGOS ISLAND'}
               </text>
             </svg>
           </div>
@@ -770,8 +770,8 @@ export default function Venue() {
             { label:'⚔️ 1v1 FIT ARENA', hash:'#fitcheck-arena', color:B.amber },
             { label:'📈 LAGOS SOLE INDEX', hash:'#lagos-sole-index', color:B.neonLime },
             { label:'🏆 GRAIL HEIST CRYPT', hash:'#grail-heist', color:B.neonMagenta },
-            { label:'🎨 DANFO SNEAKER LAB', hash:'#colorizer', color:B.neonCyan },
-            { label:'🤝 LSX ESCROW PIT', hash:'#lsx', color:B.white },
+            { label:'🎨 SOLE CRAFT WORKSHOP', hash:'#custom-workshop', color:B.neonCyan },
+            { label:'🤝 LSX ESCROW CELLS', hash:'#lsx', color:B.white },
           ].map(h => (
             <a
               key={h.hash}
@@ -841,7 +841,7 @@ export default function Venue() {
             }}>
               <span style={{ fontSize:14 }}>📍</span>
               <span style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:'#888', letterSpacing:'0.12em' }}>
-                Muri Okunola Park, Adeola Odeku Street, Victoria Island, Lagos State, Nigeria
+                Freedom Park (Old Prison Ground), 1 Hospital Road / Broad Street, CMS, Lagos Island, Nigeria
               </span>
             </div>
           </div>

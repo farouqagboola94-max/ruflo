@@ -2,14 +2,14 @@
  * Sneakers Fest '26 — Native Apple Wallet (.pkpass) & Google Wallet Pass Generator
  * 
  * Generates standards-compliant pass manifests and downloadable wallet bundles
- * with GPS geofencing for Muri Okunola Park, Victoria Island, Lagos.
+ * with GPS geofencing for Freedom Park, Broad Street, Lagos Island (CMS).
  */
 
-// Muri Okunola Park GPS Coordinates for lock-screen geo-notifications
+// Freedom Park, Lagos Island (CMS) GPS Coordinates for lock-screen geo-notifications
 const VENUE_COORDS = {
-  latitude: 6.4312,
-  longitude: 3.4241,
-  relevantText: "You are near Muri Okunola Park! Your Sneakers Fest '26 pass is ready to scan at Gate 1.",
+  latitude: 6.4519,
+  longitude: 3.3958,
+  relevantText: "You are near Freedom Park, Lagos Island (CMS)! Your Sneakers Fest '26 pass is ready to scan at Gate 1.",
 }
 
 /**
@@ -67,7 +67,7 @@ export function buildAppleWalletPassData({ name, tier, tierColor, ref, price }) 
         {
           key: 'venue',
           label: 'VENUE',
-          value: 'Muri Okunola Park, V/I',
+          value: 'Freedom Park, Old Prison Ground, CMS, Lagos Island',
         },
       ],
       backFields: [
@@ -115,7 +115,7 @@ export function buildGoogleWalletPassData({ name, tier, ref, price }) {
     hexBackgroundColor: '#0A0A0E',
     details: [
       { header: 'Event Date', body: 'Saturday, December 12, 2026' },
-      { header: 'Location', body: 'Muri Okunola Park, Victoria Island, Lagos' },
+      { header: 'Location', body: 'Freedom Park, Broad Street, Lagos Island (CMS)' },
       { header: 'Organized by', body: 'The Catalyst (@catalystggg) & Sneakers Fest (@s_fest26)' },
     ],
   }

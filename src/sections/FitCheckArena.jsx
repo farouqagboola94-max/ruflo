@@ -53,7 +53,7 @@ const INITIAL_BATTLES = [
       winStreak: 7,
       imageTag: '⚡ ISLAND SUPREME',
       accentColor: B.neonCyan,
-      quote: "Immaculate leather, pristine neutral tones. Made for the front row at Muri Okunola Park."
+      quote: "Immaculate leather, pristine neutral tones. Made for the front row at Freedom Park, Lagos Island (CMS)."
     }
   },
   {
@@ -865,7 +865,7 @@ export default function FitCheckArena() {
               🏆 ARENA HALL OF FAME · TOP CROWD FAVORITES
             </div>
             <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke }}>
-              UPDATED LIVE AT MURI OKUNOLA PARK
+              UPDATED LIVE AT FREEDOM PARK, CMS
             </div>
           </div>
 

@@ -110,7 +110,7 @@ export default function MyDay() {
     playFestivalSound('tap')
     
     let text = `👟 *MY SNEAKERS FEST '26 ITINERARY* 🇳🇬\n`
-    text += `📍 *Muri Okunola Park, Victoria Island*\n`
+    text += `📍 *Freedom Park, Broad Street, Lagos Island (CMS)*\n`
     text += `🗓️ *Saturday, Dec 12, 2026* | ${window_ || 'Full Day'}\n\n`
     
     chosen.forEach(item => {
@@ -325,7 +325,7 @@ export default function MyDay() {
         </div>
 
         <p style={{ fontFamily: MONO, fontSize: 8, color: B.dim, marginTop: 18, lineHeight: 1.8 }}>
-          Times are West Africa Time (WAT) on December 12 at Muri Okunola Park. Unlocks +75 XP and the Master Strategist badge when you construct your itinerary.
+          Times are West Africa Time (WAT) on December 12 at Freedom Park, Lagos Island (CMS). Unlocks +75 XP and the Master Strategist badge when you construct your itinerary.
         </p>
       </div>
     </section>

@@ -63,10 +63,10 @@ const PRICE_TIERS = [
 // "just securing" tickets - names, cities and tiers that were never real
 // purchases. These are facts about the festival that we can stand behind.
 const HERO_FACTS = [
-  { text: 'Muri Okunola Park, Victoria Island',  color: B.neonCyan    },
-  { text: '12:00 to 22:00 - ten hours',           color: B.amber       },
-  { text: '30+ vendors on the floor',             color: B.neonLime    },
-  { text: 'Four tiers, from 5,000 naira',         color: B.neonMagenta },
+  { text: 'Freedom Park (Old Prison Ground), CMS, Lagos Island', color: B.neonCyan    },
+  { text: 'The Year of Freedom — 12:00 to 22:00',                color: B.amber       },
+  { text: '30+ verified vendors & Grail Cells on the floor',     color: B.neonLime    },
+  { text: 'Four tiers, from 5,000 naira',                        color: B.neonMagenta },
 ]
 
 export default function Hero() {
@@ -180,12 +180,12 @@ export default function Hero() {
         <div className="reveal-3d delay-1" style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:16, marginBottom:32, flexWrap:'wrap' }}>
           <div style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'6px 18px', background:'rgba(255,255,255,0.04)', backdropFilter:'blur(14px)', WebkitBackdropFilter:'blur(14px)', border:`1px solid ${B.neonCyan}32`, borderRadius:100 }}>
             <div style={{ width:5, height:5, borderRadius:'50%', background:B.neonLime, animation:'pulse 2s infinite', boxShadow:`0 0 8px ${B.neonLime}` }} />
-            <span style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color:B.neonCyan, letterSpacing:'0.45em' }}>DECEMBER 12 · LAGOS, NIGERIA</span>
+            <span style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color:B.neonCyan, letterSpacing:'0.35em' }}>DEC 12 · FREEDOM PARK, CMS · LAGOS ISLAND</span>
           </div>
           <div style={{ display:'inline-flex', alignItems:'center', gap:6, padding:'6px 14px', background:'rgba(255,255,255,0.04)', backdropFilter:'blur(14px)', WebkitBackdropFilter:'blur(14px)', border:`1px solid ${B.amber}28`, borderRadius:100 }}>
             <div style={{ width:5, height:5, borderRadius:'50%', background:B.amber, animation:'viewerBlink 1.8s ease-in-out infinite', boxShadow:`0 0 6px ${B.amber}` }} />
             <span style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color:B.amber, letterSpacing:'0.3em' }}>
-              {time.days > 0 ? `${time.days} DAYS TO GO` : 'HAPPENING TODAY'}
+              {time.days > 0 ? `${time.days} DAYS TO GO · YEAR OF FREEDOM` : 'HAPPENING TODAY'}
             </span>
           </div>
         </div>
@@ -195,7 +195,7 @@ export default function Hero() {
           position: 'absolute', width: 1, height: 1, padding: 0, margin: -1,
           overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap', border: 0,
         }}>
-          Sneakers Fest '26 — Lagos, December 12
+          Sneakers Fest '26 — Freedom Park, CMS, Lagos, December 12
         </h1>
 
         <div
@@ -227,13 +227,13 @@ export default function Hero() {
         {/* Lagos noir divider */}
         <div className="lagos-divider reveal-3d delay-3" style={{ margin:'26px 0' }} />
 
-        <div className="reveal-3d delay-3" style={{ fontFamily:"'Space Mono',monospace", fontSize:'clamp(8px,1.1vw,12px)', color:B.smoke, letterSpacing:'0.6em', marginBottom:10, textTransform:'uppercase' }}>
-          The Sole Exhibition
+        <div className="reveal-3d delay-3" style={{ fontFamily:"'Space Mono',monospace", fontSize:'clamp(8px,1.1vw,12px)', color:B.smoke, letterSpacing:'0.45em', marginBottom:10, textTransform:'uppercase' }}>
+          The Year of Freedom · The Sole Exhibition
         </div>
 
-        <div className="reveal-3d delay-4" style={{ fontFamily:"'Inter','Syne',sans-serif", fontSize:'clamp(13px,1.6vw,17px)', color:'rgba(240,237,230,0.6)', lineHeight:1.75, maxWidth:520, margin:'0 auto 50px', fontWeight:300 }}>
-          Rare kicks · 30+ confirmed vendors · Live sets · Custom art · Street food<br />
-          <span style={{ color:B.amber, fontWeight:500 }}>West Africa's first dedicated sneaker culture festival.</span>
+        <div className="reveal-3d delay-4" style={{ fontFamily:"'Inter','Syne',sans-serif", fontSize:'clamp(13px,1.6vw,17px)', color:'rgba(240,237,230,0.6)', lineHeight:1.75, maxWidth:560, margin:'0 auto 50px', fontWeight:300 }}>
+          From the former colonial prison walls of Freedom Park, CMS to the capital of African streetwear.<br />
+          <span style={{ color:B.amber, fontWeight:500 }}>Rare kicks · 30+ Grail Cell vendors · Live Amphitheatre sets · Sole Craft Workshop.</span>
         </div>
 
         {/* Countdown — floating in 3D space */}

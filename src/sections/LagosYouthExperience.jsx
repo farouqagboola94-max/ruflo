@@ -256,7 +256,7 @@ export default function LagosYouthExperience() {
     ctx.fillText('DECEMBER 12, 2026', 30, 420)
     ctx.fillStyle = '#8C8578'
     ctx.font = '11px sans-serif'
-    ctx.fillText('Muri Okunola Park · Victoria Island, Lagos', 30, 438)
+    ctx.fillText('Freedom Park, Lagos Island (CMS) · Victoria Island, Lagos', 30, 438)
 
     for (let x = 30; x < 330; x += 4) {
       if (Math.sin(x * 12.3) > -0.2) {
@@ -477,7 +477,7 @@ export default function LagosYouthExperience() {
           </div>
           <div className="p-3">
             <h4 className="text-white font-bold text-sm mb-1">200+ Rare Grails</h4>
-            <p className="text-gray-400 text-xs">Muri Okunola Park arena.</p>
+            <p className="text-gray-400 text-xs">Freedom Park, Lagos Island (CMS) arena.</p>
           </div>
         </div>
 
@@ -712,7 +712,7 @@ export default function LagosYouthExperience() {
 
       {/* 5. SCRATCH-TO-WIN GOLDEN TICKET */}
       <div className="max-w-md mx-auto glass-noir rounded-3xl border border-amber-500/20 p-6 text-center">
-        <div className="text-xs font-mono text-amber-400 mb-2">DECEMBER 12 · MURI OKUNOLA</div>
+        <div className="text-xs font-mono text-amber-400 mb-2">DECEMBER 12 · FREEDOM PARK, CMS</div>
         <h4 className="text-white font-bold text-lg mb-4">Scratch For Secret Discount Voucher</h4>
         <div className="relative w-[320px] h-[150px] mx-auto rounded-xl overflow-hidden mb-4 shadow-xl">
           <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-orange-500 flex flex-col items-center justify-center text-black font-black">

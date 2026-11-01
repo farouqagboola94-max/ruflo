@@ -44,7 +44,7 @@ function generateHeuristicDM(target, shoe, offer, context) {
     opening: `Respect chief, hope festival prep is moving solid.`,
     body: `Saw your rotation and wanted to reach out regarding the ${shoe || 'grails'}. I am pulling up to Sneakers Fest '26 on Dec 12 with ${offer || 'liquid payment ready'}.`,
     ask: `Are you available for a quick 5-min link-up around the Trade Board or VIP Lounge?`,
-    closing: `Blessings, let's link up at Muri Okunola.`,
+    closing: `Blessings, let's link up at freedom park cms.`,
     why_it_works: `Direct, acknowledges their positioning, and sets a clear, zero-friction festival meetup.`
   }
 }

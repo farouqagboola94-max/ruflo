@@ -68,7 +68,7 @@ export function foldLine(line, limit = 74) {
  */
 export function buildICS(items, {
   dateISO = '2026-12-12',
-  location = 'Muri Okunola Park, Victoria Island, Lagos',
+  location = 'Freedom Park, Broad Street, Lagos Island (CMS)',
   defaultMins = 60,
   alarmMins = 30,
   stamp = '20260101T000000Z',

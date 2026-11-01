@@ -31,7 +31,7 @@ export default function Stats() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <div style={{ width: 7, height: 7, borderRadius: '50%', background: B.neonLime, boxShadow: `0 0 8px ${B.neonLime}`, animation: 'dotBlink 1.8s ease-in-out infinite' }} />
           <span style={{ fontFamily: 'Space Mono,monospace', fontSize: 9, color: B.smoke, letterSpacing: 2 }}>
-            DECEMBER 12 · MURI OKUNOLA PARK, VICTORIA ISLAND
+            DECEMBER 12 · FREEDOM PARK, CMS, LAGOS ISLAND
           </span>
         </div>
       </div>

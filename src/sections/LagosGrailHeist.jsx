@@ -9,8 +9,8 @@ import {
   FESTIVAL_ACTIONS
 } from '../framework/festivalFramework'
 
-// Coordinates centered around Muri Okunola Park, Victoria Island, Lagos
-const PARK_CENTER = { lat: 6.4312, lng: 3.4241 }
+// Coordinates centered around Freedom Park, Broad Street, Lagos Island (CMS)
+const PARK_CENTER = { lat: 6.4519, lng: 3.3958 }
 
 const CHECKPOINTS = [
   {
@@ -50,7 +50,7 @@ const CHECKPOINTS = [
     id: 'CP-VIP',
     name: 'Checkpoint Delta · VIP Canopy',
     locationName: 'VIP Grail Crypt · Front Row',
-    coords: { lat: 6.4312, lng: 3.4241 },
+    coords: { lat: 6.4519, lng: 3.3958 },
     clue: "Who is the visionary CEO & Convener spearheading Sneakers Fest '26?",
     acceptedAnswers: ['@CATALYSTGGG', 'CATALYSTGGG', 'CATALYST'],
     hint: "The executive behind @s_fest26 (handle starts with @)",
@@ -118,7 +118,7 @@ export default function LagosGrailHeist() {
           playFestivalSound('zone_click')
         },
         () => {
-          // Fallback simulation inside Muri Okunola Park
+          // Fallback simulation inside Freedom Park, Lagos Island (CMS)
           setSimulatedOffset(prev => (prev === 0 ? 12 : Math.max(4, prev - 8)))
           setRadarPinging(false)
           playFestivalSound('zone_click')
@@ -195,7 +195,7 @@ export default function LagosGrailHeist() {
               LAGOS GRAIL <span style={{ color: B.amber }}>HEIST</span>
             </h2>
             <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14.5, color: B.smoke, marginTop: 10, maxWidth: 620, lineHeight: 1.7 }}>
-              Four encrypted satellite beacons hidden across Muri Okunola Park. Track the radar, solve the street clues, and unlock the secret Deadstock Crypt on the Main Stage.
+              Four encrypted satellite beacons hidden across Freedom Park, Lagos Island (CMS). Track the radar, solve the street clues, and unlock the secret Deadstock Crypt on the Main Stage.
             </p>
           </div>
 
@@ -223,7 +223,7 @@ export default function LagosGrailHeist() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', background: B.neonLime, boxShadow: `0 0 10px ${B.neonLime}` }}></span>
               <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, letterSpacing: '0.15em', color: B.neonLime, fontWeight: 700 }}>
-                SATELLITE RADAR · MURI OKUNOLA PARK
+                SATELLITE RADAR · FREEDOM PARK, CMS
               </span>
             </div>
             <button

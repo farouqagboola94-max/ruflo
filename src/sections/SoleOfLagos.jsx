@@ -49,7 +49,7 @@ const PARTS = [
     num: '08', era: 'DEC 12, 2026', color: B.neonMagenta,
     title: 'SNEAKERS FEST 2026', sub: 'The Watershed Moment',
     pull: 'Lagos has been talking about sneakers for decades. Sneakers Fest 2026 is Lagos finally speaking into a microphone.',
-    body: `Every culture reaches a moment when its informal expressions demand formal recognition. The things happening in bedrooms, markets, and comment sections need a stage large enough to match their actual significance.\n\nThat moment for Lagos sneaker culture is December 12, 2026, at Muri Okunola Park.\n\nThe 200 sneakers documented in the Vault 200 represent the greatest footwear ever manufactured. They represent the language Lagos youth have been speaking for forty years. They represent the aspirations of a generation that watched Nike on satellite television and decided to take it for themselves. They represent the ambition of resellers who woke up at 3am to buy a shoe from a server in New Jersey to sell it at a premium in Lekki. They represent the Metal Dragon energy of a city that refuses to be peripheral. Lagos has been talking about sneakers for decades. Sneakers Fest 2026 is Lagos finally speaking into a microphone.`,
+    body: `Every culture reaches a moment when its informal expressions demand formal recognition. The things happening in bedrooms, markets, and comment sections need a stage large enough to match their actual significance.\n\nThat moment for Lagos sneaker culture is December 12, 2026, at Freedom Park, Lagos Island (CMS).\n\nThe 200 sneakers documented in the Vault 200 represent the greatest footwear ever manufactured. They represent the language Lagos youth have been speaking for forty years. They represent the aspirations of a generation that watched Nike on satellite television and decided to take it for themselves. They represent the ambition of resellers who woke up at 3am to buy a shoe from a server in New Jersey to sell it at a premium in Lekki. They represent the Metal Dragon energy of a city that refuses to be peripheral. Lagos has been talking about sneakers for decades. Sneakers Fest 2026 is Lagos finally speaking into a microphone.`,
   },
 ]
 
@@ -111,7 +111,7 @@ export default function SoleOfLagos() {
 
         <div style={{ borderTop: `1px solid ${B.amber}30`, paddingTop: 40, marginTop: 24, textAlign: 'center' }}>
           <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: B.smoke, letterSpacing: '0.25em' }}>
-            SNEAKERS FEST 2026 &mdash; MURI OKUNOLA PARK, V/I, LAGOS &mdash; DECEMBER 12
+            SNEAKERS FEST 2026 &mdash; FREEDOM PARK, CMS, LAGOS &mdash; DECEMBER 12
           </div>
         </div>
 

@@ -131,7 +131,7 @@ export default function SafetySOS() {
         </div>
         
         <p style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.75rem', marginBottom: 28, letterSpacing: '0.04em' }}>
-          Real-time security beacon · Lost & Found property ledger · First Aid & Paramedic emergency dispatch at Muri Okunola Park.
+          Real-time security beacon · Lost & Found property ledger · First Aid & Paramedic emergency dispatch at Freedom Park, Lagos Island (CMS).
         </p>
 
         {/* Tab Selector */}
@@ -391,7 +391,7 @@ export default function SafetySOS() {
               {[
                 { title: 'CENTRAL RED CROSS MEDICAL TENT', loc: 'Adjacent to Zone B (Arena Entrance)', status: 'Full Triage, Defibrillators & Hydration', badge: 'MEDICAL' },
                 { title: 'LAGOS STATE AMBULANCE SERVICE (LASAMBUS)', loc: 'Dedicated Exit Lane, Gate 1', status: '2 Mobile ICU Units On Standby', badge: 'PARAMEDIC' },
-                { title: 'SF26 FESTIVAL SECURITY COMMAND', loc: 'Control Booth 01, Muri Okunola Pavilion', status: 'Radios: Channel 4 (Security Main)', badge: 'COMMAND' },
+                { title: 'SF26 FESTIVAL SECURITY COMMAND', loc: 'Control Booth 01, freedom park cms Pavilion', status: 'Radios: Channel 4 (Security Main)', badge: 'COMMAND' },
               ].map((m, idx) => (
                 <div key={idx} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8, padding: '16px' }}>
                   <div style={{ display: 'inline-block', fontFamily: "'Space Mono'", fontSize: 8, fontWeight: 700, color: B.neonCyan, background: 'rgba(0,245,255,0.1)', padding: '2px 8px', borderRadius: 4, marginBottom: 8 }}>

@@ -100,7 +100,7 @@ export default function ShoeColorizer() {
     playFestivalSound('badge_unlock')
     dispatchFestivalAction(FESTIVAL_ACTIONS.ADD_NOTIFICATION, {
       title: '🎨 1-OF-1 CUSTOM SNEAKER MINTED (+150 XP)',
-      message: `${pass.name} entered into Muri Okunola Park Custom Battle! Serial: ${serial}`
+      message: `${pass.name} entered into Freedom Park, Lagos Island (CMS) Custom Battle! Serial: ${serial}`
     })
   }
 
@@ -344,7 +344,7 @@ export default function ShoeColorizer() {
                     ✓ MINTED SERIAL: {mintedPass.serial}
                   </div>
                   <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, marginTop: 2 }}>
-                    By {mintedPass.creator} · Registered for Muri Okunola Park Custom Battle
+                    By {mintedPass.creator} · Registered for Freedom Park, Lagos Island (CMS) Custom Battle
                   </div>
                 </div>
                 <span style={{ fontSize: 16 }}>🏆</span>

@@ -353,7 +353,7 @@ export default function CollectorCard() {
 
   function shareToTwitter() {
     const tag = handle ? (handle.startsWith('@') ? handle : `@${handle}`) : ''
-    const text = `${result.share_line}\n\n${tag ? tag + ' · ' : ''}Rank: ${result.rank} (${result.rep_score} REP)\nDec 12 · Muri Okunola Park, Lagos\n@s_fest26 @catalystggg #SneakersFest26`
+    const text = `${result.share_line}\n\n${tag ? tag + ' · ' : ''}Rank: ${result.rank} (${result.rep_score} REP)\nDec 12 · Freedom Park, Lagos Island (CMS), Lagos\n@s_fest26 @catalystggg #SneakersFest26`
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank')
   }
 
@@ -572,7 +572,7 @@ export default function CollectorCard() {
                     letterSpacing: '0.08em'
                   }}>
                     <span>✅</span>
-                    <span><strong>NFC GATE ACCREDITED:</strong> DEC 12 MURI OKUNOLA VIP FAST-LANE ACTIVE (+50 XP)</span>
+                    <span><strong>NFC GATE ACCREDITED:</strong> DEC 12 FREEDOM PARK, CMS VIP FAST-LANE ACTIVE (+50 XP)</span>
                   </div>
                 ) : (
                   <button

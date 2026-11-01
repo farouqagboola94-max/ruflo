@@ -32,7 +32,7 @@ function generateHeuristicTrade(offering, getting, context) {
     summary: "Balanced swap with healthy reciprocal liquidity for both collectors.",
     value_analysis: `Your ${offering} carries strong local hype, while the ${getting} provides reliable long-term grail appreciation on the Lagos secondary market.`,
     cash_to_balance: "₦0 (Direct 1:1 Swap)",
-    offer_message: `"Hey bro, saw your ${getting}. I've got my box-fresh ${offering} confirmed for SF26. Let's do a direct table trade at Muri Okunola Park on Dec 12."`,
+    offer_message: `"Hey bro, saw your ${getting}. I've got my box-fresh ${offering} confirmed for SF26. Let's do a direct table trade at Freedom Park, Lagos Island (CMS) on Dec 12."`,
     warning: "Inspect box condition, inner sole stitching, and original extra lace bags before shaking hands at the Trade Board."
   }
 }

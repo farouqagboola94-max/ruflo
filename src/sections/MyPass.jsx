@@ -60,7 +60,7 @@ function Pass({ pass, onForget }) {
           <div style={{ ...label, textAlign: 'right', lineHeight: 1.9 }}>
             DEC 12, 2026<br />
             12:00 - 22:00<br />
-            MURI OKUNOLA PARK
+            FREEDOM PARK, CMS
           </div>
         </div>
 

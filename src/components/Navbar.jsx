@@ -314,7 +314,7 @@ export default function Navbar() {
               >SIGN IN / REGISTER</button>
             )}
             <div style={{ marginTop: 4, fontFamily: "'Space Mono', monospace", fontSize: 9, color: '#1e1e1e', letterSpacing: '0.22em', textAlign: 'center' }}>
-              DEC 12, 2026 · MURI OKUNOLA PARK · LAGOS
+              DEC 12, 2026 · FREEDOM PARK, CMS · LAGOS
             </div>
           </div>
         </div>

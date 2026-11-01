@@ -341,7 +341,7 @@ function Gate({ secret, onLoseAuth }) {
       <div style={{ marginBottom: 14, background: B.charcoal, border: `1px solid ${B.gunmetal}`, borderRadius: 8, padding: '12px 14px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
           <span style={{ ...mono, fontSize: 8, color: B.mist, letterSpacing: '0.15em' }}>
-            VENUE CAPACITY TELEMETRY · MURI OKUNOLA PARK
+            VENUE CAPACITY TELEMETRY · FREEDOM PARK, CMS
           </span>
           <span style={{ ...mono, fontSize: 9, color: capColor, fontWeight: 700 }}>
             {t.admitted.toLocaleString()} / {PARK_CAPACITY.toLocaleString()} ({capPercent}%)
@@ -739,7 +739,7 @@ export default function DoorApp() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
           <div>
             <div style={{ fontFamily: "'Orbitron', monospace", fontWeight: 900, fontSize: 16, color: B.amber }}>THE DOOR LIST</div>
-            <div style={{ ...mono, fontSize: 6.5, color: B.smoke, letterSpacing: '0.24em' }}>MURI OKUNOLA PARK</div>
+            <div style={{ ...mono, fontSize: 6.5, color: B.smoke, letterSpacing: '0.24em' }}>FREEDOM PARK, CMS</div>
           </div>
           <button onClick={clearSecret} style={{ ...mono, fontSize: 8, letterSpacing: '0.14em', color: B.smoke, background: 'transparent', border: `1px solid ${B.gunmetal}`, borderRadius: 4, padding: '7px 11px', cursor: 'pointer' }}>LOCK</button>
         </div>

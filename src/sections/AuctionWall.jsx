@@ -240,7 +240,7 @@ export default function AuctionWall() {
               GRAIL AUCTION WALL
             </h2>
             <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.amber, letterSpacing: '0.15em', marginTop: 4 }}>
-              PHYSICAL ESCROW AT MURI OKUNOLA PARK · AUTHENTICATED BY LAGOS SOLE EXCHANGE (LSX)
+              PHYSICAL ESCROW AT FREEDOM PARK, CMS · AUTHENTICATED BY LAGOS SOLE EXCHANGE (LSX)
             </div>
           </div>
 
@@ -512,7 +512,7 @@ export default function AuctionWall() {
               🔒 100% LSX PHYSICAL ESCROW GUARANTEE
             </div>
             <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.dim, marginTop: 4 }}>
-              Funds held in escrow until in-person physical authentication at Muri Okunola Park on Dec 12.
+              Funds held in escrow until in-person physical authentication at Freedom Park, Lagos Island (CMS) on Dec 12.
             </div>
           </div>
           <div style={{ fontFamily: "'Space Mono'", fontSize: 8, color: B.amber, letterSpacing: '0.15em' }}>
@@ -590,7 +590,7 @@ export default function AuctionWall() {
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim }}>COLLECTION DESK:</span>
                 <span style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.neonCyan }}>
-                  Zone C, Booth 14 (Muri Okunola Park)
+                  Zone C, Booth 14 (Freedom Park, Lagos Island (CMS))
                 </span>
               </div>
             </div>

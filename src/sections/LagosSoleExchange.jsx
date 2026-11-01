@@ -269,7 +269,7 @@ export default function LagosSoleExchange() {
     playFestivalSound('badge_unlock')
     dispatchFestivalAction(FESTIVAL_ACTIONS.ADD_NOTIFICATION, {
       title: 'LSX Trade Rendezvous Confirmed!',
-      message: `Reserved ${assignedDesk} at Muri Okunola Park. Pass: ${code}`
+      message: `Reserved ${assignedDesk} at Freedom Park, Lagos Island (CMS). Pass: ${code}`
     })
   }
 
@@ -698,7 +698,7 @@ export default function LagosSoleExchange() {
               </div>
 
               <div style={{ marginTop: 12, fontSize: 12, color: '#9CA3AF', fontFamily: "'Syne', sans-serif", lineHeight: 1.5 }}>
-                🛡️ <strong style={{ color: B.white }}>Sneakers Fest Authentication Pit Guarantee:</strong> Both sneakers undergo mandatory dual-authenticator inspection at Muri Okunola Park Zone B with ultraviolet spectroscopy, stitch-density check, and anti-swap tamper tags before handover.
+                🛡️ <strong style={{ color: B.white }}>Sneakers Fest Authentication Pit Guarantee:</strong> Both sneakers undergo mandatory dual-authenticator inspection at Freedom Park, Lagos Island (CMS) Zone B with ultraviolet spectroscopy, stitch-density check, and anti-swap tamper tags before handover.
               </div>
             </div>
 
@@ -727,7 +727,7 @@ export default function LagosSoleExchange() {
                   <div style={{ background: '#080a0f', padding: '12px', borderRadius: 8, border: `1px solid ${B.gunmetal}` }}>
                     <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: '#9CA3AF' }}>RENDEZVOUS LOCATION</div>
                     <div style={{ color: B.white, fontWeight: 700, fontSize: 13, marginTop: 4 }}>{rendezvousPass.desk}</div>
-                    <div style={{ color: B.smoke, fontSize: 11, marginTop: 2 }}>Muri Okunola Park, VI</div>
+                    <div style={{ color: B.smoke, fontSize: 11, marginTop: 2 }}>Freedom Park, Lagos Island (CMS), VI</div>
                   </div>
                   <div style={{ background: '#080a0f', padding: '12px', borderRadius: 8, border: `1px solid ${B.gunmetal}` }}>
                     <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: '#9CA3AF' }}>AUTHENTICATION TIME SLOT</div>
@@ -1088,7 +1088,7 @@ export default function LagosSoleExchange() {
               {escrowStep === 1 && (
                 <div>
                   <p style={{ fontSize: '13px', color: '#A0AEC0', lineHeight: '1.5', marginBottom: '20px' }}>
-                    When you click "Initialize Escrow Lock", your funds are held safely in the Sneakers Fest Verification Vault. The seller (@{escrowModal.seller}) must hand deliver the pair to the Muri Okunola Park Festival Authentication Booth or Lagos Express Dispatch before funds are disbursed.
+                    When you click "Initialize Escrow Lock", your funds are held safely in the Sneakers Fest Verification Vault. The seller (@{escrowModal.seller}) must hand deliver the pair to the Freedom Park, Lagos Island (CMS) Festival Authentication Booth or Lagos Express Dispatch before funds are disbursed.
                   </p>
                   <button
                     onClick={handleEscrowLock}
@@ -1125,7 +1125,7 @@ export default function LagosSoleExchange() {
                     Contacting Lagos Escrow Smart Ledger...
                   </div>
                   <div style={{ color: '#718096', fontSize: '13px', marginTop: '6px' }}>
-                    Generating QR Token for Muri Okunola physical check-in...
+                    Generating QR Token for freedom park cms physical check-in...
                   </div>
                 </div>
               )}
