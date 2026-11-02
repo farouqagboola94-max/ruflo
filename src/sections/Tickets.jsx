@@ -129,7 +129,7 @@ function downloadCalendar() {
     "SUMMARY:Sneakers Fest '26 — The Sole Exhibition",
     "DESCRIPTION:West Africa's premier sneaker culture event. 200+ rare kicks\\, 30+ confirmed vendors\\, live sets\\, custom art and street food.",
     'LOCATION:Freedom Park, Lagos Island (CMS)\\, Victoria Island\\, Lagos\\, Nigeria',
-    'URL:https://sneakers-fest-official-website.netlify.app','STATUS:CONFIRMED','END:VEVENT','END:VCALENDAR',
+    'URL:https://sneakers-fest-official-55.netlify.app','STATUS:CONFIRMED','END:VEVENT','END:VCALENDAR',
   ]
   const blob = new Blob([lines.join('\r\n')], { type:'text/calendar;charset=utf-8' })
   const url = URL.createObjectURL(blob)

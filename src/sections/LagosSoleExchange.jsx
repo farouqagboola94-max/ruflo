@@ -1088,7 +1088,7 @@ export default function LagosSoleExchange() {
               {escrowStep === 1 && (
                 <div>
                   <p style={{ fontSize: '13px', color: '#A0AEC0', lineHeight: '1.5', marginBottom: '20px' }}>
-                    When you click "Initialize Escrow Lock", your funds are held safely in the Sneakers Fest Verification Vault. The seller (@{escrowModal.seller}) must hand deliver the pair to the Freedom Park, Lagos Island (CMS) Festival Authentication Booth or Lagos Express Dispatch before funds are disbursed.
+                    When you click "Initialize Escrow Lock", your funds are held safely in the Sneakers Fest Verification Vault. The seller (@{escrowModal.seller}) must hand deliver the pair to The Grail Cells & LSX Escrow Vault (Cell Block A, Freedom Park, CMS) or Lagos Express Dispatch before funds are disbursed.
                   </p>
                   <button
                     onClick={handleEscrowLock}
@@ -1125,7 +1125,7 @@ export default function LagosSoleExchange() {
                     Contacting Lagos Escrow Smart Ledger...
                   </div>
                   <div style={{ color: '#718096', fontSize: '13px', marginTop: '6px' }}>
-                    Generating QR Token for freedom park cms physical check-in...
+                    Generating QR Token for The Grail Cells (Freedom Park, CMS) physical check-in...
                   </div>
                 </div>
               )}
