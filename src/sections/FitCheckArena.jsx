@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { B } from '../tokens'
+import { SOCIAL_LINKS } from '../config'
 import { GrainOverlay, SectionTag, Divider } from '../components/Shared'
 import {
   useFestivalGamification,
@@ -193,6 +194,9 @@ export default function FitCheckArena() {
     quote: ''
   })
   const [submitFeedback, setSubmitFeedback] = useState(null)
+  const [seedPass, setSeedPass] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('sf26:fitcheck:seedpass') || 'null') } catch { return null }
+  })
 
   const activeBattle = battles[activeBattleIndex] || battles[0]
   const currentBattleUserVote = userVotes[activeBattle.id] || null
@@ -298,11 +302,29 @@ export default function FitCheckArena() {
     setBattles(nextBattles)
     setActiveBattleIndex(0)
 
+    const isIsland = submitForm.district.toLowerCase().includes('island')
+    const factionPrefix = isIsland ? 'IS' : 'ML'
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+    let code = ''
+    for (let i = 0; i < 4; i++) code += chars[Math.floor(Math.random() * chars.length)]
+    const seedCode = `ARENA-${factionPrefix}-${code}`
+    const newSeedPass = {
+      seedCode,
+      faction: isIsland ? 'ISLAND DYNASTY BRACKET' : 'MAINLAND VANGUARD BRACKET',
+      alias: submitForm.alias,
+      handle: newContender.handle,
+      district: submitForm.district,
+      kicks: submitForm.kicks,
+      checkInSlot: 'Sat, Dec 12 · 2:30 PM WAT · Cobblestone Fit Arena (Freedom Park, CMS)',
+    }
+    setSeedPass(newSeedPass)
+
     try {
       localStorage.setItem('sf26:fitcheck:battles', JSON.stringify(nextBattles))
+      localStorage.setItem('sf26:fitcheck:seedpass', JSON.stringify(newSeedPass))
     } catch {}
 
-    awardXP(150, 'Entered Live Fit-Check Arena')
+    awardXP(150, `Claimed Cobblestone Arena Seed ${seedCode}`)
     unlockBadge('BEST_DRESSED_STREET')
     setShowSubmitModal(false)
     setSubmitFeedback(null)
@@ -430,6 +452,52 @@ export default function FitCheckArena() {
             </a>
           </div>
         </div>
+
+        {/* Registered Challenger 32-Seed Pass Banner */}
+        {seedPass && (
+          <div style={{
+            marginBottom: 28,
+            padding: '20px 24px',
+            background: 'linear-gradient(135deg, rgba(245,166,35,0.12) 0%, rgba(0,240,255,0.08) 100%)',
+            border: `1.5px solid ${B.neonLime}`,
+            borderRadius: 12,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: 16,
+          }}>
+            <div>
+              <div style={{ fontFamily: "'Orbitron', monospace", fontSize: 10, color: B.neonLime, letterSpacing: '0.2em', fontWeight: 700 }}>
+                ✓ COBBLESTONE 32-BRACKET SEED LOCKED · ₦500,000 GRAIL PRIZE POOL
+              </div>
+              <div style={{ fontFamily: "'Orbitron', monospace", fontSize: 22, color: B.amber, fontWeight: 900, marginTop: 4, letterSpacing: '0.12em' }}>
+                {seedPass.seedCode} · <span style={{ color: B.white, fontSize: 16 }}>{seedPass.alias} ({seedPass.faction})</span>
+              </div>
+              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: B.mist, marginTop: 4 }}>
+                👟 {seedPass.kicks} · 📍 {seedPass.checkInSlot}
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+              <a
+                href={`${SOCIAL_LINKS.whatsappContact1 || SOCIAL_LINKS.whatsapp}?text=${encodeURIComponent(`Hello SF26 Arena Ringmasters, I have locked my 1v1 Cobblestone Fit-Check Seed [${seedPass.seedCode}] at Freedom Park, CMS:\n\n• Challenger: ${seedPass.alias} (${seedPass.handle})\n• Bracket: ${seedPass.faction} (${seedPass.district})\n• On-Foot Weapon: ${seedPass.kicks}\n\nKindly confirm my 3:00 PM Cobblestone Arena check-in slot.`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ padding: '11px 16px', background: B.neonLime, color: B.black, borderRadius: 6, fontFamily: "'Space Mono', monospace", fontSize: 9.5, fontWeight: 700, textDecoration: 'none', letterSpacing: '0.1em' }}
+              >
+                💬 CONFIRM SLOT WITH ARENA DESK →
+              </a>
+              <a
+                href={`https://wa.me/?text=${encodeURIComponent(`I just locked Seed [${seedPass.seedCode}] in the 1v1 Cobblestone Fit-Check Arena (${seedPass.faction}) at Sneakers Fest '26 — Freedom Park, CMS (Dec 12)! Vote for my fit (${seedPass.kicks}) and grab your pass: https://sneakers-fest-official-55.netlify.app/#fitcheck-arena`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ padding: '11px 16px', background: 'rgba(0,240,255,0.12)', border: `1px solid ${B.neonCyan}60`, color: B.neonCyan, borderRadius: 6, fontFamily: "'Space Mono', monospace", fontSize: 9.5, fontWeight: 700, textDecoration: 'none', letterSpacing: '0.1em' }}
+              >
+                📲 RALLY CREW ON WHATSAPP →
+              </a>
+            </div>
+          </div>
+        )}
 
         {/* Battle Round Selector Bar */}
         <div style={{

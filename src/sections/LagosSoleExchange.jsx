@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import { SNEAKERS } from '../data/sneakers'
 import { B, FONTS } from '../tokens'
+import { SOCIAL_LINKS } from '../config'
 import {
   useFestivalGamification,
   useFestivalTelemetry,
@@ -215,6 +216,18 @@ export default function LagosSoleExchange() {
   const [escrowStep, setEscrowStep] = useState(1)
   const [orderConfirmed, setOrderConfirmed] = useState(false)
   const [userOffer, setUserOffer] = useState('')
+  const [consignLots, setConsignLots] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('sf26_lsx_consign_lots') || '[]') } catch { return [] }
+  })
+  const [consignForm, setConsignForm] = useState({
+    sellerName: '',
+    phone: '',
+    sneakerTitle: '',
+    size: 'US 10.0',
+    condition: 'Deadstock (DS) · OG All',
+    reservePrice: '450000',
+  })
+  const [latestLot, setLatestLot] = useState(null)
 
   // Level 1-3 Framework Hooks
   const { awardXP, unlockBadge } = useFestivalGamification()
@@ -271,6 +284,68 @@ export default function LagosSoleExchange() {
       title: 'LSX Trade Rendezvous Confirmed!',
       message: `Reserved ${assignedDesk} at Freedom Park, Lagos Island (CMS). Pass: ${code}`
     })
+  }
+
+  const handleCreateConsignmentLot = (autoOpenWhatsApp = false) => {
+    if (!consignForm.sneakerTitle.trim() || !consignForm.sellerName.trim()) return
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+    let suffix = ''
+    for (let i = 0; i < 4; i++) suffix += chars[Math.floor(Math.random() * chars.length)]
+    const lotCode = `LSX-LOT-${suffix}`
+    const numericReserve = Math.max(50000, parseInt(String(consignForm.reservePrice).replace(/[^0-9]/g, ''), 10) || 450000)
+    const lot = {
+      lotCode,
+      sellerName: consignForm.sellerName.trim(),
+      phone: consignForm.phone.trim(),
+      sneakerTitle: consignForm.sneakerTitle.trim(),
+      size: consignForm.size,
+      condition: consignForm.condition,
+      reservePrice: numericReserve,
+      vaultCell: 'Cell Block A · Vaults A-09 & A-10 (Freedom Park, CMS)',
+      auctionTime: 'Sat, Dec 12, 2026 · 5:00 PM WAT Live Gavel',
+      createdAt: new Date().toISOString(),
+    }
+    const updated = [lot, ...consignLots].slice(0, 15)
+    setConsignLots(updated)
+    setLatestLot(lot)
+    try { localStorage.setItem('sf26_lsx_consign_lots', JSON.stringify(updated)) } catch {}
+    awardXP(100, `Consigned Grail Lot ${lotCode} for 5:00 PM Cell Block A Auction`)
+    unlockBadge('LSX_TRADER_VERIFIED')
+    playFestivalSound('badge_unlock')
+
+    if (autoOpenWhatsApp && typeof window !== 'undefined') {
+      const msg = `Hello LSX Grail Cell Escrow Desk, I have registered Consignment Lot [${lotCode}] for the 5:00 PM Live Grail Auction at Freedom Park, CMS (Cell Block A):\n\n• Seller: ${lot.sellerName} (${lot.phone || 'N/A'})\n• Pair: ${lot.sneakerTitle} (${lot.size})\n• Condition: ${lot.condition}\n• Starting Reserve: ₦${lot.reservePrice.toLocaleString()}\n\nKindly confirm my 12:30 PM physical UV authentication & Cell Block A vault drop-off slot.`
+      window.open(`${SOCIAL_LINKS.whatsappContact1 || SOCIAL_LINKS.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer')
+    }
+  }
+
+  const downloadConsignTagTxt = (lot) => {
+    if (!lot) return
+    const lines = [
+      "================================================================",
+      "LAGOS SOLE EXCHANGE (LSX) — GRAIL CELL VAULT INTAKE TAG",
+      "5:00 PM LIVE GRAIL AUCTION · CELL BLOCK A (FREEDOM PARK, CMS)",
+      "================================================================",
+      `CONSIGNMENT LOT ID : ${lot.lotCode}`,
+      `SELLER / COLLECTOR : ${lot.sellerName} (${lot.phone || 'Verified Seller'})`,
+      `SNEAKER & COLORWAY : ${lot.sneakerTitle}`,
+      `SIZE & CONDITION   : ${lot.size} | ${lot.condition}`,
+      `RESERVE STARTING   : NGN ${lot.reservePrice.toLocaleString()}`,
+      `PHYSICAL DROP-OFF  : Cell Block A (Cells A-09 & A-10) by 2:00 PM WAT`,
+      `LIVE GAVEL TIME    : Saturday, December 12, 2026 @ 5:00 PM WAT`,
+      "================================================================",
+      "LSX ESCROW DESK (WHATSAPP): +234 708 411 1516 | +234 905 268 5799",
+      "================================================================",
+    ].join('\n')
+    const blob = new Blob([lines], { type: 'text/plain;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `SF26-${lot.lotCode}-Intake-Tag.txt`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
   }
 
   const filteredListings = useMemo(() => {
@@ -425,7 +500,168 @@ export default function LagosSoleExchange() {
           >
             <span>🛒 LIVE ESCROW DROPS ({filteredListings.length})</span>
           </button>
+
+          <button
+            onClick={() => {
+              setExchangeMode('consign')
+              playFestivalSound('zone_click')
+            }}
+            style={{
+              padding: '12px 22px',
+              borderRadius: '10px',
+              border: exchangeMode === 'consign' ? `1px solid ${B.neonLime}` : `1px solid ${B.gunmetal}`,
+              background: exchangeMode === 'consign' ? 'rgba(184, 255, 0, 0.16)' : 'rgba(255, 255, 255, 0.03)',
+              color: exchangeMode === 'consign' ? B.neonLime : '#9CA3AF',
+              fontFamily: "'Space Mono', monospace",
+              fontSize: '11px',
+              fontWeight: 700,
+              letterSpacing: '0.12em',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              boxShadow: exchangeMode === 'consign' ? '0 0 20px rgba(184, 255, 0, 0.25)' : 'none',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <span>🏛️ 5:00 PM GRAIL CELL AUCTION CONSIGNMENT (+100 XP)</span>
+            {consignLots.length > 0 && <span style={{ padding: '2px 6px', background: B.neonLime, color: B.black, borderRadius: 3, fontSize: 8 }}>{consignLots.length} LOT{consignLots.length > 1 ? 'S' : ''}</span>}
+          </button>
         </div>
+
+        {/* 5:00 PM GRAIL CELL AUCTION CONSIGNMENT PANEL */}
+        {exchangeMode === 'consign' && (
+          <div style={{
+            background: 'rgba(15, 18, 24, 0.94)',
+            border: `1.5px solid ${B.neonLime}55`,
+            borderRadius: '20px',
+            padding: 'clamp(20px, 4vw, 36px)',
+            marginBottom: '40px',
+            boxShadow: '0 12px 40px rgba(0,0,0,0.65)',
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12, marginBottom: 24 }}>
+              <div>
+                <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: B.neonLime, letterSpacing: '0.18em' }}>
+                  THE GRAIL CELLS · CELL BLOCK A (VAULTS A-09 & A-10) · 5:00 PM WAT
+                </div>
+                <h3 style={{ fontFamily: "'Orbitron', monospace", fontSize: 'clamp(20px, 3vw, 28px)', color: B.white, margin: '6px 0 0 0' }}>
+                  CONSIGN A GRAIL FOR THE <span style={{ color: B.neonLime }}>LIVE AUCTION</span>
+                </h3>
+                <p style={{ fontSize: 13, color: '#9CA3AF', marginTop: 6, maxWidth: 640 }}>
+                  Register your deadstock or 1-of-1 pair for the 5:00 PM Live Grail Auction at Freedom Park, CMS. Receive an official LSX Vault Intake Tag (`LSX-LOT-XXXX`) for priority UV authentication and escrow lock.
+                </p>
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16, marginBottom: 20 }}>
+              <div>
+                <label style={{ display: 'block', fontSize: 10, color: '#9CA3AF', marginBottom: 6, fontFamily: "'Space Mono', monospace" }}>SELLER / COLLECTOR NAME *</label>
+                <input
+                  value={consignForm.sellerName}
+                  onChange={e => setConsignForm(f => ({ ...f, sellerName: e.target.value }))}
+                  placeholder="e.g. Dapo 'VaultKing'"
+                  style={{ width: '100%', padding: '11px 14px', borderRadius: 8, background: '#151922', border: '1px solid rgba(255,255,255,0.15)', color: '#fff', fontSize: 13, boxSizing: 'border-box' }}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: 10, color: '#9CA3AF', marginBottom: 6, fontFamily: "'Space Mono', monospace" }}>WHATSAPP / PHONE *</label>
+                <input
+                  value={consignForm.phone}
+                  onChange={e => setConsignForm(f => ({ ...f, phone: e.target.value }))}
+                  placeholder="+234 80..."
+                  style={{ width: '100%', padding: '11px 14px', borderRadius: 8, background: '#151922', border: '1px solid rgba(255,255,255,0.15)', color: '#fff', fontSize: 13, boxSizing: 'border-box' }}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: 10, color: '#9CA3AF', marginBottom: 6, fontFamily: "'Space Mono', monospace" }}>SNEAKER MODEL & COLORWAY *</label>
+                <input
+                  value={consignForm.sneakerTitle}
+                  onChange={e => setConsignForm(f => ({ ...f, sneakerTitle: e.target.value }))}
+                  placeholder="e.g. AJ1 High OG 'Lost & Found'"
+                  style={{ width: '100%', padding: '11px 14px', borderRadius: 8, background: '#151922', border: '1px solid rgba(255,255,255,0.15)', color: '#fff', fontSize: 13, boxSizing: 'border-box' }}
+                />
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 16, marginBottom: 24 }}>
+              <div>
+                <label style={{ display: 'block', fontSize: 10, color: '#9CA3AF', marginBottom: 6, fontFamily: "'Space Mono', monospace" }}>SIZE</label>
+                <select
+                  value={consignForm.size}
+                  onChange={e => setConsignForm(f => ({ ...f, size: e.target.value }))}
+                  style={{ width: '100%', padding: '11px', borderRadius: 8, background: '#151922', border: '1px solid rgba(255,255,255,0.15)', color: '#fff', fontSize: 13 }}
+                >
+                  {['US 7.5', 'US 8.0', 'US 8.5', 'US 9.0', 'US 9.5', 'US 10.0', 'US 10.5', 'US 11.0', 'US 11.5', 'US 12.0', 'US 13.0'].map(s => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: 10, color: '#9CA3AF', marginBottom: 6, fontFamily: "'Space Mono', monospace" }}>CONDITION</label>
+                <select
+                  value={consignForm.condition}
+                  onChange={e => setConsignForm(f => ({ ...f, condition: e.target.value }))}
+                  style={{ width: '100%', padding: '11px', borderRadius: 8, background: '#151922', border: '1px solid rgba(255,255,255,0.15)', color: '#fff', fontSize: 13 }}
+                >
+                  <option value="Deadstock (DS) · OG All">Deadstock (DS) · OG All</option>
+                  <option value="VNDS (Tried On / Mint)">VNDS (Tried On / Mint)</option>
+                  <option value="1-of-1 Bespoke Custom">1-of-1 Bespoke Custom</option>
+                  <option value="Archival Vintage Grail">Archival Vintage Grail</option>
+                </select>
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: 10, color: '#9CA3AF', marginBottom: 6, fontFamily: "'Space Mono', monospace" }}>STARTING RESERVE BID (₦)</label>
+                <input
+                  type="number"
+                  value={consignForm.reservePrice}
+                  onChange={e => setConsignForm(f => ({ ...f, reservePrice: e.target.value }))}
+                  placeholder="450000"
+                  style={{ width: '100%', padding: '11px 14px', borderRadius: 8, background: '#151922', border: '1px solid rgba(255,255,255,0.15)', color: B.amber, fontFamily: "'Orbitron', monospace", fontSize: 13, fontWeight: 700, boxSizing: 'border-box' }}
+                />
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <button
+                type="button"
+                onClick={() => handleCreateConsignmentLot(true)}
+                style={{ flex: '1 1 260px', padding: '14px 20px', background: B.neonLime, color: B.black, border: 'none', borderRadius: 10, fontFamily: "'Orbitron', monospace", fontSize: 11, fontWeight: 900, letterSpacing: '0.1em', cursor: 'pointer' }}
+              >
+                ⚡ ISSUE LOT TAG & LOCK VIA WHATSAPP ESCROW DESK →
+              </button>
+              <button
+                type="button"
+                onClick={() => handleCreateConsignmentLot(false)}
+                style={{ flex: '1 1 220px', padding: '14px 20px', background: 'rgba(255,184,0,0.15)', border: `1px solid ${B.amber}`, color: B.amber, borderRadius: 10, fontFamily: "'Orbitron', monospace", fontSize: 11, fontWeight: 800, letterSpacing: '0.1em', cursor: 'pointer' }}
+              >
+                🎟️ GENERATE LSX VAULT INTAKE TAG (+100 XP) →
+              </button>
+            </div>
+
+            {latestLot && (
+              <div style={{ marginTop: 22, padding: '20px', background: '#080a0f', border: `1.5px solid ${B.neonLime}`, borderRadius: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 14 }}>
+                <div>
+                  <div style={{ fontFamily: "'Orbitron', monospace", fontSize: 10, color: B.neonLime, fontWeight: 700 }}>
+                    ✓ GRAIL CELL AUCTION LOT REGISTERED: {latestLot.lotCode}
+                  </div>
+                  <div style={{ fontFamily: "'Orbitron', monospace", fontSize: 17, color: B.white, fontWeight: 800, marginTop: 4 }}>
+                    {latestLot.sneakerTitle} ({latestLot.size}) — Reserve: ₦{latestLot.reservePrice.toLocaleString()}
+                  </div>
+                  <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: '#9CA3AF', marginTop: 4 }}>
+                    📍 Drop-Off: {latestLot.vaultCell} · 🔨 {latestLot.auctionTime}
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                  <button
+                    type="button"
+                    onClick={() => downloadConsignTagTxt(latestLot)}
+                    style={{ padding: '10px 16px', background: B.amber, color: B.black, border: 'none', borderRadius: 6, fontFamily: "'Space Mono', monospace", fontSize: 10, fontWeight: 700, cursor: 'pointer' }}
+                  >
+                    📄 DOWNLOAD INTAKE TAG (.TXT) →
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* P2P TRADE MATCHER & RENDEZVOUS ENGINE */}
         {exchangeMode === 'matcher' && (
