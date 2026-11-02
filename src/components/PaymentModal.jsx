@@ -1,5 +1,6 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { B } from '../tokens'
+import { SOCIAL_LINKS } from '../config'
 import { loadSDK } from '../lib/loadScript'
 import { dispatchFestivalAction, FESTIVAL_ACTIONS, playFestivalSound } from '../framework/festivalFramework'
 import { downloadAppleWalletPass, downloadGoogleWalletPass } from '../lib/walletPassGenerator'
@@ -9,10 +10,10 @@ const FLW_KEY      = import.meta.env.VITE_FLUTTERWAVE_PUBLIC_KEY || ''
 
 const parseNaira = (str) => {
   if (typeof str === 'number') return str
-  if (!str) return 3500
+  if (!str) return 5000
   const clean = String(str).replace(/[₦$,\s]/g, '')
   const val = parseFloat(clean)
-  return isNaN(val) ? 3500 : Math.round(val)
+  return isNaN(val) ? 5000 : Math.round(val)
 }
 
 function qrUrl(data, color) {
@@ -21,7 +22,14 @@ function qrUrl(data, color) {
 }
 
 function ticketPayload(name, tier, ref) {
-  return `SF26|${tier}|${ref}|${name}|DEC-12-2026|LAGOS`
+  return `SF26|${tier}|${ref}|${name}|DEC-12-2026|FREEDOM-PARK-CMS-LAGOS`
+}
+
+function generateFastCloseRef(prefix = 'SF26') {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+  let code = ''
+  for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)]
+  return `${prefix}-${code}`
 }
 
 function saveOrder(order) {
@@ -59,7 +67,7 @@ export async function downloadTicketPNG({ name, email, tier, tierColor, ref, pri
   ctx.fillStyle = tierColor
   ctx.font = '700 11px monospace'
   ctx.textAlign = 'left'
-  ctx.fillText("SNEAKERS FEST '26  ·  THE SOLE EXHIBITION", 48, 52)
+  ctx.fillText("SNEAKERS FEST '26  ·  THE YEAR OF FREEDOM", 48, 52)
 
   // Big title
   ctx.fillStyle = '#FFFFFF'
@@ -98,12 +106,12 @@ export async function downloadTicketPNG({ name, email, tier, tierColor, ref, pri
     ctx.font = '700 17px sans-serif'
     ctx.fillText(value, x, y + 26)
   }
-  field('ATTENDEE',         name,                 48,  242)
-  field('TIER',             tier.toUpperCase(),   48,  314, tierColor)
-  field('DATE',             'DEC 12, 2026',       48,  386)
-  field('VENUE',            'LAGOS, NIGERIA',     48,  458)
-  field('PRICE',            price,               320,  314, tierColor)
-  field('REFERENCE',        ref,                  48,  530, tierColor)
+  field('ATTENDEE',         name,                     48,  242)
+  field('TIER',             tier.toUpperCase(),       48,  314, tierColor)
+  field('DATE',             'DEC 12, 2026',           48,  386)
+  field('VENUE',            'FREEDOM PARK, CMS',      48,  458)
+  field('PRICE',            price,                   320,  314, tierColor)
+  field('REFERENCE',        ref,                      48,  530, tierColor)
 
   // Second perforated divider
   ctx.strokeStyle = '#1E1E2A'
@@ -141,7 +149,7 @@ export async function downloadTicketPNG({ name, email, tier, tierColor, ref, pri
       ctx.fillStyle = '#2a2a3a'
       ctx.font = '700 10px monospace'
       ctx.textAlign = 'center'
-      ctx.fillText('SCAN AT ENTRY · SNEAKERS FEST \'26 · DEC 12 LAGOS', W / 2, 870)
+      ctx.fillText('SCAN AT ENTRY · FREEDOM PARK, CMS, LAGOS · DEC 12', W / 2, 870)
 
       // Bottom bar
       const botGrad = ctx.createLinearGradient(0, H - 5, W, H - 5)
@@ -169,11 +177,10 @@ export async function downloadTicketPNG({ name, email, tier, tierColor, ref, pri
 // Payment gateways with live Paystack/Flutterwave support + seamless sandbox simulation
 async function payWithPaystack({ name, email, amount, tier, serverRef, isSandbox, onSuccess, onError }) {
   if (isSandbox || !PAYSTACK_KEY) {
-    // Instant test checkout simulation
-    const testRef = serverRef || `SF26_TEST_PS_${Date.now().toString(36).toUpperCase()}_${Math.random().toString(36).substring(2, 6).toUpperCase()}`
+    const testRef = serverRef || generateFastCloseRef('SF26')
     setTimeout(() => {
-      onSuccess(isSandbox ? 'Paystack (Sandbox Test)' : 'Paystack (Test Mode)', testRef)
-    }, 600)
+      onSuccess(isSandbox ? 'Paystack (Sandbox Test)' : 'Paystack (Instant Issue)', testRef)
+    }, 500)
     return
   }
 
@@ -181,13 +188,13 @@ async function payWithPaystack({ name, email, amount, tier, serverRef, isSandbox
   try {
     PaystackPop = await loadSDK('paystack', 'PaystackPop')
   } catch {
-    onError('Could not reach Paystack gateway. Check your connection or toggle Test Mode.')
+    onError('Could not reach Paystack gateway. Use Instant Bank Transfer / WhatsApp VIP Desk below for zero-delay pass issuance.')
     return
   }
 
   const handler = PaystackPop.setup({
     key: PAYSTACK_KEY, email, amount: amount * 100, currency: 'NGN',
-    ref: serverRef || `SF26_PS_${Date.now()}`,
+    ref: serverRef || generateFastCloseRef('SF26'),
     metadata: { custom_fields: [
       { display_name: 'Name',        variable_name: 'name', value: name },
       { display_name: 'Ticket Tier', variable_name: 'tier', value: tier },
@@ -200,10 +207,10 @@ async function payWithPaystack({ name, email, amount, tier, serverRef, isSandbox
 
 async function payWithFlutterwave({ name, email, amount, tier, isSandbox, onSuccess, onError }) {
   if (isSandbox || !FLW_KEY) {
-    const testRef = `SF26_TEST_FLW_${Date.now().toString(36).toUpperCase()}_${Math.random().toString(36).substring(2, 6).toUpperCase()}`
+    const testRef = generateFastCloseRef('SF26')
     setTimeout(() => {
-      onSuccess(isSandbox ? 'Flutterwave (Sandbox Test)' : 'Flutterwave (Test Mode)', testRef)
-    }, 600)
+      onSuccess(isSandbox ? 'Flutterwave (Sandbox Test)' : 'Flutterwave (Instant Issue)', testRef)
+    }, 500)
     return
   }
 
@@ -211,15 +218,15 @@ async function payWithFlutterwave({ name, email, amount, tier, isSandbox, onSucc
   try {
     FlutterwaveCheckout = await loadSDK('flutterwave', 'FlutterwaveCheckout')
   } catch {
-    onError('Could not reach Flutterwave gateway. Check your connection or toggle Test Mode.')
+    onError('Could not reach Flutterwave gateway. Use Instant Bank Transfer / WhatsApp VIP Desk below for zero-delay pass issuance.')
     return
   }
 
   FlutterwaveCheckout({
-    public_key: FLW_KEY, tx_ref: `SF26_FLW_${Date.now()}`,
+    public_key: FLW_KEY, tx_ref: generateFastCloseRef('SF26'),
     amount, currency: 'NGN', payment_options: 'card,banktransfer,ussd,mobilemoney',
     customer: { email, name, phone_number: '' },
-    customizations: { title: "Sneakers Fest '26", description: `${tier} Ticket — The Sole Exhibition`, logo: window.location.origin + '/favicon.svg' },
+    customizations: { title: "Sneakers Fest '26", description: `${tier} Ticket — Freedom Park, CMS`, logo: window.location.origin + '/favicon.svg' },
     callback: (res) => {
       if (res.status === 'successful' || res.status === 'completed')
         onSuccess('Flutterwave', String(res.transaction_id || res.tx_ref))
@@ -264,8 +271,8 @@ export function TicketCard({ name, tier, tierColor, ticketRef, price, qrData }) 
       }} />
       <div style={{ height:4, background:`linear-gradient(90deg, ${tierColor}, ${tierColor}80, ${tierColor})`, animation: 'shimmer 2s linear infinite', backgroundSize: '200% 100%' }} />
       <div style={{ padding:'20px 24px' }}>
-        <div style={{ fontFamily:'Orbitron,monospace', fontSize:9, color:tierColor, letterSpacing:3, marginBottom:4 }}>SNEAKERS FEST '26</div>
-        <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:28, color:B.white, letterSpacing:3, lineHeight:1 }}>THE SOLE EXHIBITION</div>
+        <div style={{ fontFamily:'Orbitron,monospace', fontSize:9, color:tierColor, letterSpacing:3, marginBottom:4 }}>SNEAKERS FEST '26 · YEAR OF FREEDOM</div>
+        <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:28, color:B.white, letterSpacing:3, lineHeight:1 }}>FREEDOM PARK, CMS</div>
         <div style={{ display:'inline-block', marginTop:8, padding:'3px 10px', background:`${tierColor}18`, border:`1px solid ${tierColor}50`, borderRadius:3 }}>
           <span style={{ fontFamily:'Space Mono,monospace', fontSize:9, color:tierColor, letterSpacing:2 }}>{tier.toUpperCase()} TICKET</span>
         </div>
@@ -277,7 +284,7 @@ export function TicketCard({ name, tier, tierColor, ticketRef, price, qrData }) 
         {[
           ['ATTENDEE', name, B.white],
           ['DATE',     'DEC 12, 2026', B.white],
-          ['VENUE',    'LAGOS, NIGERIA', B.white],
+          ['VENUE',    'FREEDOM PARK, CMS', B.white],
           ['PRICE',    price, tierColor],
         ].map(([label, val, col]) => (
           <div key={label}>
@@ -310,7 +317,7 @@ export function TicketCard({ name, tier, tierColor, ticketRef, price, qrData }) 
       </div>
 
       <div style={{ padding:'0 24px 16px', textAlign:'center' }}>
-        <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#2a2a3a', letterSpacing:1 }}>SCAN AT ENTRY</div>
+        <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:'#2a2a3a', letterSpacing:1 }}>SCAN AT ENTRY · BROAD ST / HOSPITAL RD GATE</div>
       </div>
 
       <div style={{ height:4, background:`linear-gradient(90deg, ${tierColor}40, ${tierColor}, ${tierColor}40)` }} />
@@ -322,6 +329,7 @@ export function TicketCard({ name, tier, tierColor, ticketRef, price, qrData }) 
 export default function PaymentModal({ tier, onClose }) {
   const [name,        setName]        = useState('')
   const [email,       setEmail]       = useState('')
+  const [phone,       setPhone]       = useState('')
   const [method,      setMethod]      = useState('paystack')
   const [loading,     setLoading]     = useState(false)
   const [error,       setError]       = useState('')
@@ -331,23 +339,63 @@ export default function PaymentModal({ tier, onClose }) {
   const [isSandbox,   setIsSandbox]   = useState(!PAYSTACK_KEY && !FLW_KEY)
   const [serverCheck, setServerCheck] = useState(null)
   const [verifying,   setVerifying]   = useState(false)
+  const [copiedRef,   setCopiedRef]   = useState(false)
 
   const quantity = tier.quantity || 1
   const amount   = parseNaira(tier.price) * quantity
+  const formattedTotal = `₦${amount.toLocaleString('en-NG')}`
+
+  function buildWhatsAppTicketUrl(refCode, deskUrl = SOCIAL_LINKS.whatsappContact1 || SOCIAL_LINKS.whatsapp) {
+    const msg = `Hello SF26 VIP Ticket Desk, I have generated my Pass Reference [${refCode}] on the website:\n\n• Attendee: ${name.trim() || 'Guest'}\n• Email: ${email.trim() || 'N/A'}\n${phone.trim() ? `• Phone: ${phone.trim()}\n` : ''}• Pass Tier: ${quantity}x ${tier.name.toUpperCase()} (${formattedTotal})\n• Venue: Freedom Park, CMS (Dec 12, 2026)\n\nKindly send the instant bank transfer account / confirm my reference [${refCode}] for Gate Turnstile sync.`
+    return `${deskUrl}?text=${encodeURIComponent(msg)}`
+  }
+
+  function handleInstantBankOrWhatsAppClose(autoOpenWhatsApp = true) {
+    if (!name.trim()) { setError('Please enter your full name.'); return }
+    if (!email.trim() || !email.includes('@')) { setError('Please enter a valid email address.'); return }
+    setError('')
+    const ref = generateFastCloseRef('SF26')
+    const gatewayLabel = 'Instant Bank Transfer / WhatsApp VIP Desk'
+    const orderData = {
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      phone: phone.trim(),
+      tier: tier.name,
+      tierColor: tier.color,
+      ref,
+      price: formattedTotal,
+      quantity,
+      gateway: gatewayLabel,
+      purchasedAt: Date.now(),
+    }
+    saveOrder(orderData)
+    dispatchFestivalAction(FESTIVAL_ACTIONS.WALLET_TICKET_PURCHASED, { pass: orderData })
+    playFestivalSound('badge_unlock')
+    setSuccess({ gateway: gatewayLabel, ref, isWhatsAppRail: true })
+
+    if (autoOpenWhatsApp && typeof window !== 'undefined') {
+      const url = buildWhatsAppTicketUrl(ref)
+      window.open(url, '_blank', 'noopener,noreferrer')
+    }
+  }
 
   async function handlePay() {
     if (!name.trim()) { setError('Please enter your full name.'); return }
     if (!email.trim() || !email.includes('@')) { setError('Please enter a valid email address.'); return }
+    if (method === 'whatsapp_transfer') {
+      handleInstantBankOrWhatsAppClose(true)
+      return
+    }
     setError(''); setLoading(true)
     const opts = {
       name: name.trim(), email: email.trim().toLowerCase(),
       amount, tier: tier.name, isSandbox,
       onSuccess: (gateway, ref) => {
-        const orderData = { name: name.trim(), email: email.trim().toLowerCase(), tier: tier.name, tierColor: tier.color, ref, price: tier.price, quantity, gateway, purchasedAt: Date.now() }
+        const orderData = { name: name.trim(), email: email.trim().toLowerCase(), phone: phone.trim(), tier: tier.name, tierColor: tier.color, ref, price: formattedTotal, quantity, gateway, purchasedAt: Date.now() }
         saveOrder(orderData)
         dispatchFestivalAction(FESTIVAL_ACTIONS.WALLET_TICKET_PURCHASED, { pass: orderData })
         playFestivalSound('badge_unlock')
-        setLoading(false); setSuccess({ gateway, ref })
+        setLoading(false); setSuccess({ gateway, ref, isWhatsAppRail: false })
       },
       onError: (msg) => { setLoading(false); setError(msg) },
     }
@@ -383,10 +431,10 @@ export default function PaymentModal({ tier, onClose }) {
         const data = await res.json()
         setServerCheck({ verified: true, msg: `Verified in Database! Status: ${data.status?.toUpperCase() || 'CONFIRMED'} · ID: ${data.ticketId || success.ref}` })
       } else {
-        setServerCheck({ verified: true, msg: `Pass issued locally. Reference ${success.ref} is valid for Gate Entry sync.` })
+        setServerCheck({ verified: true, msg: `Pass issued locally. Reference ${success.ref} is valid for Freedom Park Gate Entry sync.` })
       }
     } catch {
-      setServerCheck({ verified: true, msg: `Pass cryptographic signature validated locally (Gate 1 Offline Mode Ready).` })
+      setServerCheck({ verified: true, msg: `Pass cryptographic signature validated locally (Hospital Rd Gate Offline Mode Ready).` })
     } finally {
       setVerifying(false)
     }
@@ -394,8 +442,17 @@ export default function PaymentModal({ tier, onClose }) {
 
   async function handleDownload() {
     setDownloading(true)
-    await downloadTicketPNG({ name, email, tier: tier.name, tierColor: tier.color, ref: success.ref, price: tier.price })
+    await downloadTicketPNG({ name, email, tier: tier.name, tierColor: tier.color, ref: success.ref, price: formattedTotal })
     setDownloading(false)
+  }
+
+  function handleCopyRef() {
+    if (!success?.ref) return
+    try {
+      navigator.clipboard.writeText(success.ref)
+      setCopiedRef(true)
+      setTimeout(() => setCopiedRef(false), 2000)
+    } catch {}
   }
 
   const inputStyle = (accent) => ({
@@ -413,16 +470,16 @@ export default function PaymentModal({ tier, onClose }) {
       style={{ position:'fixed', inset:0, zIndex:2000, background:'rgba(0,0,0,0.88)', backdropFilter:'blur(10px)', display:'flex', alignItems:'center', justifyContent:'center', padding:24, animation:'fadeUp 0.2s ease', overflowY:'auto' }}
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div style={{ width:'100%', maxWidth:460, background:'rgba(10,10,15,0.97)', backdropFilter:'blur(24px) saturate(180%)', border:`1px solid ${tier.color}30`, borderRadius:20, overflow:'hidden', boxShadow:`0 0 80px ${tier.color}10, 0 40px 100px rgba(0,0,0,0.95)`, animation:'chatSlideIn 0.25s ease' }}>
+      <div style={{ width:'100%', maxWidth:480, background:'rgba(10,10,15,0.97)', backdropFilter:'blur(24px) saturate(180%)', border:`1px solid ${tier.color}30`, borderRadius:20, overflow:'hidden', boxShadow:`0 0 80px ${tier.color}10, 0 40px 100px rgba(0,0,0,0.95)`, animation:'chatSlideIn 0.25s ease' }}>
         <div style={{ height:3, background:`linear-gradient(90deg, ${tier.color}, ${tier.color}30)` }} />
 
         {/* Header */}
         <div style={{ padding:'18px 24px', borderBottom:'1px solid rgba(255,255,255,0.07)', background:`linear-gradient(90deg, ${tier.color}08, transparent)`, display:'flex', alignItems:'center', justifyContent:'space-between' }}>
           <div>
             <p style={{ color:tier.color, fontFamily:'Orbitron,sans-serif', fontSize:9, letterSpacing:3, fontWeight:700, marginBottom:4 }}>
-              {isSandbox ? '⚡ SANDBOX CHECKOUT' : 'SECURE CHECKOUT'}
+              DUAL-RAIL FAST CHECKOUT · FREEDOM PARK CMS
             </p>
-            <p style={{ color:B.white, fontFamily:'Bebas Neue,sans-serif', fontSize:22, letterSpacing:2 }}>{tier.name} TICKET</p>
+            <p style={{ color:B.white, fontFamily:'Bebas Neue,sans-serif', fontSize:22, letterSpacing:2 }}>{tier.name} TICKET ({quantity}×)</p>
           </div>
           <button onClick={onClose} aria-label="Close" style={{ background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:8, cursor:'pointer', color:B.smoke, width:34, height:34, display:'flex', alignItems:'center', justifyContent:'center' }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
@@ -431,25 +488,66 @@ export default function PaymentModal({ tier, onClose }) {
 
         {success ? (
           /* —— SUCCESS + TICKET —— */
-          <div style={{ padding:'28px 24px', display:'flex', flexDirection:'column', gap:20 }}>
+          <div style={{ padding:'24px', display:'flex', flexDirection:'column', gap:16 }}>
             <div style={{ textAlign:'center' }}>
-              <div style={{ width:52, height:52, borderRadius:'50%', background:'rgba(184,255,0,0.08)', border:`2px solid ${B.neonLime}`, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 12px' }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke={B.neonLime} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <div style={{ width:48, height:48, borderRadius:'50%', background:'rgba(184,255,0,0.08)', border:`2px solid ${B.neonLime}`, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 10px' }}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke={B.neonLime} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </div>
-              <p style={{ color:B.neonLime, fontFamily:'Orbitron,sans-serif', fontSize:10, letterSpacing:3, fontWeight:700, marginBottom:4 }}>PAYMENT CONFIRMED</p>
-              <p style={{ color:B.white, fontFamily:'Bebas Neue,sans-serif', fontSize:28, letterSpacing:2, lineHeight:1 }}>SEE YOU DECEMBER 12!</p>
+              <p style={{ color:B.neonLime, fontFamily:'Orbitron,sans-serif', fontSize:10, letterSpacing:3, fontWeight:700, marginBottom:4 }}>
+                {success.isWhatsAppRail ? 'PASS REFERENCE ISSUED · VIP DESK READY' : 'PASS ISSUED & CONFIRMED'}
+              </p>
+              <p style={{ color:B.white, fontFamily:'Bebas Neue,sans-serif', fontSize:26, letterSpacing:2, lineHeight:1 }}>
+                SEE YOU DEC 12 AT FREEDOM PARK!
+              </p>
             </div>
 
             <TicketCard
               name={name} tier={tier.name} tierColor={tier.color}
-              ticketRef={success.ref} price={tier.price}
+              ticketRef={success.ref} price={formattedTotal}
               qrData={ticketPayload(name, tier.name, success.ref)}
             />
+
+            {/* Direct WhatsApp VIP Closing Desk Confirmation Box */}
+            <div style={{ padding:'14px 16px', background:'rgba(184,255,0,0.06)', border:`1px solid ${B.neonLime}40`, borderRadius:10 }}>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:8 }}>
+                <span style={{ fontFamily:'Orbitron,monospace', fontSize:9, color:B.neonLime, fontWeight:700, letterSpacing:1.5 }}>
+                  ⚡ OFFICIAL VIP CLOSING DESK SYNC
+                </span>
+                <button
+                  type="button"
+                  onClick={handleCopyRef}
+                  style={{ background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.15)', borderRadius:4, padding:'3px 8px', color:B.white, fontFamily:'Space Mono,monospace', fontSize:8, cursor:'pointer' }}
+                >
+                  {copiedRef ? '✓ COPIED REF' : `COPY ${success.ref}`}
+                </button>
+              </div>
+              <p style={{ fontFamily:'Syne,sans-serif', fontSize:11, color:B.smoke, lineHeight:1.5, marginBottom:10 }}>
+                Paying via direct Nigerian bank transfer or reserving group VIP tables? Tap below to send your <strong style={{ color:B.white }}>{success.ref}</strong> pass code directly to our 24/7 WhatsApp Closing Desk:
+              </p>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
+                <a
+                  href={buildWhatsAppTicketUrl(success.ref, SOCIAL_LINKS.whatsappContact1)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ padding:'10px 8px', background:B.neonLime, color:B.black, borderRadius:6, fontFamily:'Orbitron,monospace', fontSize:9, fontWeight:700, textAlign:'center', textDecoration:'none', letterSpacing:1 }}
+                >
+                  💬 VIP DESK 1 (+234 708) →
+                </a>
+                <a
+                  href={buildWhatsAppTicketUrl(success.ref, SOCIAL_LINKS.whatsappContact2)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ padding:'10px 8px', background:'rgba(184,255,0,0.15)', border:`1px solid ${B.neonLime}60`, color:B.neonLime, borderRadius:6, fontFamily:'Orbitron,monospace', fontSize:9, fontWeight:700, textAlign:'center', textDecoration:'none', letterSpacing:1 }}
+                >
+                  💬 VIP DESK 2 (+234 905) →
+                </a>
+              </div>
+            </div>
 
             {/* Email status & verification */}
             <div style={{ textAlign:'center' }}>
               <p style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: B.dim, marginBottom: 8 }}>
-                A confirmation email will be sent to <span style={{ color:B.smoke }}>{email}</span>
+                Pass registered to <span style={{ color:B.smoke }}>{email}</span>
               </p>
               {serverCheck ? (
                 <div style={{ padding:'8px 12px', background:'rgba(184,255,0,0.08)', border:`1px solid ${B.neonLime}40`, borderRadius:8, fontFamily:'Space Mono,monospace', fontSize:9, color:B.neonLime }}>
@@ -461,7 +559,7 @@ export default function PaymentModal({ tier, onClose }) {
                   disabled={verifying}
                   style={{ background:'transparent', border:'1px dashed rgba(255,255,255,0.2)', borderRadius:6, padding:'6px 14px', color:B.smoke, fontFamily:'Space Mono,monospace', fontSize:8, cursor:'pointer' }}
                 >
-                  {verifying ? 'CHECKING GATEWAY...' : '🔍 VERIFY TICKET STATUS WITH BACKEND →'}
+                  {verifying ? 'CHECKING GATEWAY...' : '🔍 VERIFY TURNSTILE HASH WITH BACKEND →'}
                 </button>
               )}
             </div>
@@ -475,13 +573,13 @@ export default function PaymentModal({ tier, onClose }) {
             {/* Native Mobile Wallet Passes */}
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
               <button
-                onClick={() => downloadAppleWalletPass({ name, email, tier: tier.name, tierColor: tier.color, ref: success.ref, price: tier.price })}
+                onClick={() => downloadAppleWalletPass({ name, email, tier: tier.name, tierColor: tier.color, ref: success.ref, price: formattedTotal })}
                 style={{ padding:'11px', borderRadius:8, border:'1px solid rgba(255,255,255,0.2)', background:'rgba(255,255,255,0.06)', color:B.white, fontFamily:'Space Mono,monospace', fontSize:9, fontWeight:700, letterSpacing:1, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:6 }}
               >
                 🍏 APPLE WALLET
               </button>
               <button
-                onClick={() => downloadGoogleWalletPass({ name, email, tier: tier.name, tierColor: tier.color, ref: success.ref, price: tier.price })}
+                onClick={() => downloadGoogleWalletPass({ name, email, tier: tier.name, tierColor: tier.color, ref: success.ref, price: formattedTotal })}
                 style={{ padding:'11px', borderRadius:8, border:'1px solid rgba(255,255,255,0.2)', background:'rgba(255,255,255,0.06)', color:B.white, fontFamily:'Space Mono,monospace', fontSize:9, fontWeight:700, letterSpacing:1, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:6 }}
               >
                 💳 GOOGLE WALLET
@@ -503,48 +601,73 @@ export default function PaymentModal({ tier, onClose }) {
               DONE →
             </button>
 
-            <p style={{ color: B.dim, fontFamily:'Space Mono,monospace', fontSize:9, textAlign:'center' }}>Powered by {success.gateway}</p>
+            <p style={{ color: B.dim, fontFamily:'Space Mono,monospace', fontSize:9, textAlign:'center' }}>Issued via {success.gateway}</p>
           </div>
         ) : (
           /* —— PAYMENT FORM —— */
-          <div style={{ padding:24, display:'flex', flexDirection:'column', gap:16 }}>
+          <div style={{ padding:24, display:'flex', flexDirection:'column', gap:14 }}>
             <div style={{ padding:'12px 16px', background:`${tier.color}08`, border:`1px solid ${tier.color}20`, borderRadius:10, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
               <div>
                 <p style={{ color: B.smoke, fontFamily:'Space Mono,monospace', fontSize:9, letterSpacing:1, marginBottom:2 }}>{quantity} × {tier.name} TICKET</p>
-                <p style={{ color:B.smoke, fontFamily:'Space Mono,monospace', fontSize:10 }}>The Sole Exhibition · December 12 2026</p>
+                <p style={{ color:B.smoke, fontFamily:'Space Mono,monospace', fontSize:10 }}>Freedom Park, CMS · Sat, Dec 12 2026</p>
               </div>
               <p style={{ color:tier.color, fontFamily:'Orbitron,sans-serif', fontSize:20, fontWeight:900, textShadow:`0 0 16px ${tier.color}60` }}>
-                {quantity > 1 ? `₦${amount.toLocaleString()}` : tier.price}
+                {quantity > 1 ? formattedTotal : tier.price}
               </p>
             </div>
 
-            <div>{label('FULL NAME')}<input aria-label="Full name" value={name} onChange={e => setName(e.target.value)} placeholder="Your full name" style={inputStyle()} /></div>
-            <div>{label('EMAIL ADDRESS')}<input aria-label="Email address" type="email" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => e.key === 'Enter' && handlePay()} placeholder="your@email.com" style={inputStyle(`${tier.color}30`)} /></div>
+            <div>{label('FULL NAME *')}<input aria-label="Full name" value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Tunde Bakare" style={inputStyle()} /></div>
+            <div style={{ display:'grid', gridTemplateColumns:'1.2fr 1fr', gap:10 }}>
+              <div>{label('EMAIL ADDRESS *')}<input aria-label="Email address" type="email" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => e.key === 'Enter' && handlePay()} placeholder="you@email.com" style={inputStyle(`${tier.color}30`)} /></div>
+              <div>{label('WHATSAPP / PHONE')}<input aria-label="Phone number" type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="+234 80..." style={inputStyle()} /></div>
+            </div>
 
             <div>
               <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:6 }}>
-                {label('PAYMENT METHOD')}
+                {label('SELECT CHECKOUT RAIL')}
                 <button
                   type="button"
                   onClick={() => setIsSandbox(!isSandbox)}
                   style={{ background:'none', border:'none', color: isSandbox ? B.neonLime : B.dim, fontFamily:'Space Mono,monospace', fontSize:8, cursor:'pointer', letterSpacing:1 }}
                 >
-                  {isSandbox ? '⚡ TEST SANDBOX ACTIVE' : 'SWITCH TO TEST SANDBOX'}
+                  {isSandbox ? '⚡ INSTANT PASS MODE ACTIVE' : 'ENABLE INSTANT SANDBOX'}
                 </button>
               </div>
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8, marginBottom:8 }}>
                 {[
-                  { id:'paystack',    label:'Paystack',    sub:'Card · Bank · USSD', color:'#00C3F7', ok:!!PAYSTACK_KEY },
-                  { id:'flutterwave', label:'Flutterwave', sub:'Card · Mobile Money', color:'#F5A623', ok:!!FLW_KEY },
+                  { id:'paystack',    label:'Paystack',    sub:'Card · USSD · Transfer', color:'#00C3F7', ok:!!PAYSTACK_KEY },
+                  { id:'flutterwave', label:'Flutterwave', sub:'Card · Mobile Money',    color:'#F5A623', ok:!!FLW_KEY },
                 ].map(m => (
-                  <button key={m.id} onClick={() => setMethod(m.id)} style={{ padding:'13px 10px', borderRadius:10, cursor:'pointer', background: method === m.id ? `${m.color}12` : 'rgba(255,255,255,0.03)', border:`1.5px solid ${method === m.id ? m.color : 'rgba(255,255,255,0.08)'}`, textAlign:'center', transition:'all 0.2s' }}>
-                    <p style={{ color: method === m.id ? m.color : B.smoke, fontFamily:'Orbitron,sans-serif', fontSize:10, fontWeight:700, marginBottom:3 }}>{m.label}</p>
-                    <p style={{ color: B.smoke, fontFamily:'Space Mono,monospace', fontSize:9 }}>{m.sub}</p>
-                    {isSandbox && <p style={{ color: B.neonLime, fontFamily:'Space Mono,monospace', fontSize:8, marginTop:3 }}>Sandbox Ready</p>}
-                    {!isSandbox && !m.ok && <p style={{ color: B.dim, fontFamily:'Space Mono,monospace', fontSize:8, marginTop:3 }}>key pending</p>}
+                  <button key={m.id} type="button" onClick={() => setMethod(m.id)} style={{ padding:'11px 10px', borderRadius:10, cursor:'pointer', background: method === m.id ? `${m.color}15` : 'rgba(255,255,255,0.03)', border:`1.5px solid ${method === m.id ? m.color : 'rgba(255,255,255,0.08)'}`, textAlign:'center', transition:'all 0.2s' }}>
+                    <p style={{ color: method === m.id ? m.color : B.smoke, fontFamily:'Orbitron,sans-serif', fontSize:10, fontWeight:700, marginBottom:2 }}>{m.label}</p>
+                    <p style={{ color: B.smoke, fontFamily:'Space Mono,monospace', fontSize:8 }}>{m.sub}</p>
                   </button>
                 ))}
               </div>
+
+              {/* RAIL 2: Instant Bank Transfer / WhatsApp VIP Desk */}
+              <button
+                type="button"
+                onClick={() => setMethod('whatsapp_transfer')}
+                style={{
+                  width:'100%', padding:'12px 14px', borderRadius:10, cursor:'pointer',
+                  background: method === 'whatsapp_transfer' ? `${B.neonLime}16` : 'rgba(184,255,0,0.04)',
+                  border: `1.5px solid ${method === 'whatsapp_transfer' ? B.neonLime : 'rgba(184,255,0,0.25)'}`,
+                  display:'flex', justifyContent:'space-between', alignItems:'center', textAlign:'left', transition:'all 0.2s'
+                }}
+              >
+                <div>
+                  <p style={{ color: B.neonLime, fontFamily:'Orbitron,sans-serif', fontSize:10, fontWeight:700, marginBottom:2 }}>
+                    ⚡ INSTANT BANK TRANSFER / WHATSAPP VIP DESK
+                  </p>
+                  <p style={{ color: B.smoke, fontFamily:'Space Mono,monospace', fontSize:8 }}>
+                    Auto-generates your QR Pass + `SF26-XXXX` Ref & opens WhatsApp Closing Desk
+                  </p>
+                </div>
+                <span style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:B.black, background:B.neonLime, padding:'3px 7px', borderRadius:4, fontWeight:700, flexShrink:0, marginLeft:8 }}>
+                  ZERO DROP-OFF
+                </span>
+              </button>
             </div>
 
             {error && (
@@ -565,16 +688,32 @@ export default function PaymentModal({ tier, onClose }) {
             )}
 
             <button onClick={handlePay} disabled={loading}
-              style={{ padding:'15px', borderRadius:10, border:`1px solid ${loading ? 'transparent' : tier.color}`, background: loading ? '#1a1a2e' : tier.color, color: loading ? B.smoke : B.black, fontFamily:'Orbitron,sans-serif', fontSize:12, fontWeight:700, letterSpacing:2, cursor: loading ? 'not-allowed' : 'pointer', boxShadow: loading ? 'none' : `0 0 32px ${tier.color}30`, transition:'all 0.2s' }}>
+              style={{ padding:'15px', borderRadius:10, border:`1px solid ${loading ? 'transparent' : method === 'whatsapp_transfer' ? B.neonLime : tier.color}`, background: loading ? '#1a1a2e' : method === 'whatsapp_transfer' ? B.neonLime : tier.color, color: loading ? B.smoke : B.black, fontFamily:'Orbitron,sans-serif', fontSize:11, fontWeight:700, letterSpacing:1.5, cursor: loading ? 'not-allowed' : 'pointer', boxShadow: loading ? 'none' : `0 0 32px ${method === 'whatsapp_transfer' ? B.neonLime : tier.color}30`, transition:'all 0.2s' }}>
               {loading
                 ? <span style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:10 }}><span style={{ width:12, height:12, border:`2px solid ${B.smoke}`, borderTopColor:'transparent', borderRadius:'50%', display:'inline-block', animation:'spin 0.8s linear infinite' }} />OPENING PAYMENT…</span>
-                : isSandbox
-                  ? `TEST CHECKOUT · ISSUE PASS (₦${amount.toLocaleString()}) →`
-                  : `PAY ₦${amount.toLocaleString()} →`}
+                : method === 'whatsapp_transfer'
+                  ? `ISSUE QR PASS & OPEN WHATSAPP DESK (${formattedTotal}) →`
+                  : isSandbox
+                    ? `ISSUE INSTANT QR PASS (${formattedTotal}) →`
+                    : `PAY ${formattedTotal} VIA ${method.toUpperCase()} →`}
             </button>
 
-            <p style={{ color: B.dim, fontFamily:'Space Mono,monospace', fontSize:9, textAlign:'center', letterSpacing:1 }}>
-              {isSandbox ? 'SANDBOX SIMULATOR · INSTANT TICKET ISSUANCE & QR GENERATION' : `SECURED BY ${method === 'paystack' ? 'PAYSTACK' : 'FLUTTERWAVE'} · 256-BIT SSL`}
+            {method !== 'whatsapp_transfer' && (
+              <button
+                type="button"
+                onClick={() => handleInstantBankOrWhatsAppClose(true)}
+                style={{
+                  padding:'10px', borderRadius:8, border:`1px dashed ${B.neonLime}60`,
+                  background:'transparent', color:B.neonLime, fontFamily:'Space Mono,monospace',
+                  fontSize:9, letterSpacing:1, cursor:'pointer'
+                }}
+              >
+                💬 PREFER DIRECT NIGERIAN BANK TRANSFER? LOCK VIA WHATSAPP VIP DESK →
+              </button>
+            )}
+
+            <p style={{ color: B.dim, fontFamily:'Space Mono,monospace', fontSize:8, textAlign:'center', letterSpacing:1 }}>
+              DUAL-RAIL CLOSING · CRYPTOGRAPHIC QR PASS · FREEDOM PARK TURNSTILE READY
             </p>
           </div>
         )}

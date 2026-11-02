@@ -1,82 +1,47 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, ScanLines, SectionTag } from '../components/Shared'
 import Egg from '../components/Egg'
 
 const ARTISTS = [
   {
-    name: '⧡ CLASSIFIED',
-    role: 'Headline Act',
-    tag: '⧡ CLASSIFIED',
-    bio: 'Identity locked. This act will be announced closer to the event. Loyalty unlocks the reveal.',
-    genres: ['⧡ CLASSIFIED', '⧡ CLASSIFIED', '⧡ CLASSIFIED'],
-    stat1: { label: 'Years Active', value: '??+' },
-    stat2: { label: 'Collabs', value: '???+' },
+    name: 'THE 4-WAY DJ SOUNDCLASH ARCHITECTS',
+    role: 'Main Amphitheatre Deck Generals · 7:00 PM WAT',
+    tag: 'PHASE 1 CONFIRMED · 4-DECK CLASH',
+    bio: 'Four of Lagos’s premier turntable architects face off inside the Freedom Park brick Amphitheatre across four high-voltage rounds: Afrobeats Vanguard vs. Alté Syndicate vs. UK Drill/Grime vs. Amapiano Log Drum.',
+    genres: ['AFROBEATS', 'ALTÉ WAVE', 'DRILL / GRIME', 'AMAPIANO'],
+    stat1: { label: 'Sound Systems', value: '4 DECKS' },
+    stat2: { label: 'Clash Format', value: '4 ROUNDS' },
     color: '#F5A623',
-    initials: '?',
+    initials: '4X',
   },
   {
-    name: '⧡ CLASSIFIED',
-    role: 'Live Producer',
-    tag: '⧡ CLASSIFIED',
-    bio: 'Identity locked. This act will be announced closer to the event. Loyalty unlocks the reveal.',
-    genres: ['⧡ CLASSIFIED', '⧡ CLASSIFIED', '⧡ CLASSIFIED'],
-    stat1: { label: 'Records Made', value: '???+' },
-    stat2: { label: 'Platinum Hits', value: '??+' },
+    name: 'COBBLESTONE ARENA RINGMASTERS',
+    role: 'Official 1v1 Fit-Check Hosts & MCs · 3:00 PM & 6:00 PM WAT',
+    tag: 'PHASE 1 CONFIRMED · ARENA HOSTS',
+    bio: 'Commanding the colonial cobblestone courtyard for the Mainland vs. Island 1v1 Fit-Check Battles. Expect razor-sharp fit critiques, live decibel crowd judging, and the crowning of the ₦500K Crown of Freedom.',
+    genres: ['FIT-CHECK ARENA', 'CROWD DECIBEL', 'MAINLAND VS ISLAND'],
+    stat1: { label: 'Bracket Size', value: '32 CREWS' },
+    stat2: { label: 'Grail Pool', value: '₦500K+' },
     color: '#00F0FF',
-    initials: '?',
+    initials: 'MC',
   },
   {
-    name: '⧡ CLASSIFIED',
-    role: 'Live Performance',
-    tag: '⧡ CLASSIFIED',
-    bio: 'Identity locked. This act will be announced closer to the event. Loyalty unlocks the reveal.',
-    genres: ['⧡ CLASSIFIED', '⧡ CLASSIFIED', '⧡ CLASSIFIED'],
-    stat1: { label: 'Streams (M)', value: '???+' },
-    stat2: { label: 'Countries', value: '??+' },
+    name: 'CULTURAL LIBERATION PANEL & CYPHER',
+    role: 'Founders, Archivists & Headline Set · 2:00 PM & 8:00 PM WAT',
+    tag: 'PHASE 1 CONFIRMED · CULTURE & LIVE',
+    bio: 'Daytime panel featuring West Africa’s top sneaker boutique founders, Sole Craft customs masters, and archival collectors — followed at 8:00 PM by the Year of Freedom Headline Set and surprise Lagos All-Star Cypher.',
+    genres: ['DESIGN SOVEREIGNTY', 'HEADLINE CYPHER', 'SOLE ARCHIVE'],
+    stat1: { label: 'Stage Time', value: '2PM & 8PM' },
+    stat2: { label: 'Landmark', value: 'AMPHITHEATRE' },
     color: '#FF2D7B',
-    initials: '?',
+    initials: 'YF',
   },
 ]
 
-const REVEAL_DAYS = 60
-
-function recordVisitAndCheck() {
-  try {
-    const now = Date.now()
-    const first = localStorage.getItem('sf26_first_visit')
-    if (!first) {
-      localStorage.setItem('sf26_first_visit', String(now))
-      return { revealed: false, daysActive: 0 }
-    }
-    const daysActive = Math.floor((now - Number(first)) / 86400000)
-
-    // Track last visit for streak (visit counts if last visit was a different calendar day)
-    const lastVisit = localStorage.getItem('sf26_last_visit')
-    const todayKey = new Date().toDateString()
-    if (lastVisit !== todayKey) {
-      const streak = Number(localStorage.getItem('sf26_visit_streak') || 0) + 1
-      localStorage.setItem('sf26_visit_streak', String(streak))
-      localStorage.setItem('sf26_last_visit', todayKey)
-    }
-
-    return { revealed: daysActive >= REVEAL_DAYS, daysActive }
-  } catch {
-    return { revealed: false, daysActive: 0 }
-  }
-}
-
 export default function ArtistSpotlight() {
-  const [revealed, setRevealed] = useState(false)
-  const [daysActive, setDaysActive] = useState(0)
-
-  useEffect(() => {
-    const { revealed: r, daysActive: d } = recordVisitAndCheck()
-    setRevealed(r)
-    setDaysActive(d)
-  }, [])
-
-  const daysLeft = Math.max(0, REVEAL_DAYS - daysActive)
+  const [vaultMode, setVaultMode] = useState(false)
+  const revealed = !vaultMode
 
   return (
     <section id="artists" style={{
@@ -95,29 +60,34 @@ export default function ArtistSpotlight() {
       `}</style>
 
       <div style={{ maxWidth: 960, margin: '0 auto' }}>
-        <SectionTag>ARTIST SPOTLIGHT</SectionTag>
-        <h2 className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
-          THE ONES ON THE DECKS
-        </h2>
-        <p className="reveal-3d" style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.78rem', marginBottom: revealed ? 48 : 24 }}>
-          Three legends. One stage. December 12.
-        </p>
-
-        {!revealed && (
-          <div className="reveal-3d" style={{
-            background: '#0a0a0a', border: '1px solid #1a1a1a',
-            padding: '14px 20px', marginBottom: 36,
-            display: 'flex', alignItems: 'center', gap: 12,
-          }}>
-            <div style={{ fontFamily: "'Orbitron'", fontSize: 11, color: B.amber, fontWeight: 900, letterSpacing: '0.1em', animation: 'artistPulse 2s infinite' }}>⬡ CLASSIFIED</div>
-            <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.smoke, flex: 1 }}>
-              Full lineup is locked for loyal community members.
-              {daysLeft > 0
-                ? ` Come back in ${daysLeft} more day${daysLeft !== 1 ? 's' : ''} to unlock.`
-                : ` You're almost there — return soon to reveal.`}
-            </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 16, marginBottom: 32 }}>
+          <div>
+            <SectionTag>ARTIST & STAGE SPOTLIGHT</SectionTag>
+            <h2 className="reveal-3d text-3d" style={{ fontFamily: "'Bebas Neue'", fontSize: 'clamp(2.5rem,6vw,4rem)', color: B.white, letterSpacing: '0.05em', marginBottom: 8 }}>
+              THE ONES ON THE DECKS & MIC
+            </h2>
+            <p className="reveal-3d" style={{ color: B.smoke, fontFamily: "'Space Mono'", fontSize: '0.78rem' }}>
+              Phase 1 Amphitheatre & Cobblestone Arena Roster · Freedom Park, CMS · December 12, 2026
+            </p>
           </div>
-        )}
+          <button
+            type="button"
+            onClick={() => setVaultMode(v => !v)}
+            style={{
+              padding: '8px 14px',
+              background: vaultMode ? `${B.amber}20` : 'rgba(255,255,255,0.04)',
+              border: `1px solid ${vaultMode ? B.amber : 'rgba(255,255,255,0.12)'}`,
+              borderRadius: 6,
+              color: vaultMode ? B.amber : B.smoke,
+              fontFamily: "'Space Mono', monospace",
+              fontSize: 9,
+              letterSpacing: '0.12em',
+              cursor: 'pointer',
+            }}
+          >
+            {vaultMode ? '🔓 VIEW PHASE 1 ROSTER' : '🔒 PREVIEW PHASE 2 CLASSIFIED VAULT'}
+          </button>
+        </div>
 
         <div className="reveal-3d" style={{
           display: 'grid',
@@ -168,9 +138,9 @@ export default function ArtistSpotlight() {
                   alignItems: 'center', justifyContent: 'center',
                   gap: 8, borderRadius: 12,
                 }}>
-                  <div style={{ fontFamily: "'Orbitron'", fontSize: 28, color: '#222', fontWeight: 900 }}>?</div>
-                  <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.dim, letterSpacing: '0.25em', textAlign: 'center', padding: '0 16px' }}>
-                    CLASSIFIED<br />LOYAL FANS ONLY
+                  <div style={{ fontFamily: "'Orbitron'", fontSize: 28, color: B.amber, fontWeight: 900 }}>⧡</div>
+                  <div style={{ fontFamily: "'Space Mono'", fontSize: 9, color: B.white, letterSpacing: '0.2em', textAlign: 'center', padding: '0 16px' }}>
+                    PHASE 2 SPECIAL GUEST<br />DROPPING ON @S_FEST26
                   </div>
                 </div>
               )}
@@ -192,14 +162,14 @@ export default function ArtistSpotlight() {
               {/* Tag */}
               <div style={{
                 fontFamily: "'Space Mono'", fontSize: '0.58rem',
-                letterSpacing: '0.3em', color: a.color, marginBottom: 6,
+                letterSpacing: '0.22em', color: a.color, marginBottom: 6,
                 filter: revealed ? 'none' : 'blur(6px)',
                 userSelect: revealed ? 'auto' : 'none',
               }}>{a.tag}</div>
 
               {/* Name */}
               <h3 style={{
-                fontFamily: "'Bebas Neue'", fontSize: '1.8rem',
+                fontFamily: "'Bebas Neue'", fontSize: '1.75rem',
                 color: B.white, letterSpacing: '0.05em', marginBottom: 4,
                 filter: revealed ? 'none' : 'blur(10px)',
                 userSelect: revealed ? 'auto' : 'none',
@@ -208,7 +178,7 @@ export default function ArtistSpotlight() {
               {/* Role */}
               <div style={{
                 fontFamily: "'Space Mono'", fontSize: '0.65rem',
-                color: B.smoke, letterSpacing: '0.1em', marginBottom: 16,
+                color: B.smoke, letterSpacing: '0.08em', marginBottom: 16,
                 filter: revealed ? 'none' : 'blur(5px)',
               }}>{a.role}</div>
 
@@ -242,7 +212,7 @@ export default function ArtistSpotlight() {
                     background: B.black, borderRadius: 6,
                     padding: '10px 12px', textAlign: 'center',
                   }}>
-                    <div style={{ fontFamily: "'Orbitron'", fontSize: '1.1rem', color: a.color, fontWeight: 700 }}>
+                    <div style={{ fontFamily: "'Orbitron'", fontSize: '1.05rem', color: a.color, fontWeight: 700 }}>
                       {s.value}
                     </div>
                     <div style={{ fontFamily: "'Space Mono'", fontSize: '0.55rem', color: B.smoke, marginTop: 3, letterSpacing: '0.1em' }}>
@@ -254,15 +224,6 @@ export default function ArtistSpotlight() {
             </div>
           ))}
         </div>
-
-        {!revealed && (
-          <p className="reveal-3d" style={{
-            fontFamily: "'Space Mono'", fontSize: 8, color: B.dim,
-            textAlign: 'center', marginTop: 24, letterSpacing: '0.15em',
-          }}>
-            RETURN REGULARLY · LOYALTY UNLOCKS THE LINEUP · {daysLeft} DAY{daysLeft !== 1 ? 'S' : ''} REMAINING
-          </p>
-        )}
       </div>
     </section>
   )

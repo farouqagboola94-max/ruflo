@@ -161,10 +161,10 @@ const CONFIRMED_VENDORS = [
 ]
 
 const MAP_ZONES = [
-  { id: 'collab', label: 'STAGE / COLLAB ZONE', hint: '64 sqm Activation Footprint' },
-  { id: 'premium', label: 'PREMIUM CORNERS', hint: '16 sqm 270° Crossways' },
-  { id: 'double', label: 'DOUBLE RETAIL WINGS', hint: '18 sqm High-Traffic Corridor' },
-  { id: 'standard', label: 'STANDARD FLOOR', hint: '9 sqm Curated Arcade' },
+  { id: 'collab', label: 'MONUMENT TAKEOVER', hint: '64 sqm Activation Footprint' },
+  { id: 'premium', label: 'DOUBLE PERGOLA CORNERS', hint: '16 sqm 270° Crossways' },
+  { id: 'double', label: 'GRAIL CELL VAULTS (BLOCK A)', hint: 'Walled Colonial Brick Cells' },
+  { id: 'standard', label: 'BRICK PERGOLA BAYS (WING B)', hint: '9 sqm Covered Brick Arch' },
 ]
 
 function genAppId() {
@@ -310,8 +310,49 @@ Tone: Culturally rooted in Lagos street energy, razor-sharp commercial appeal, c
     return true
   }
 
-  // Application submission
-  async function submit() {
+  function buildVendorWhatsAppUrl(refId, deskUrl = SOCIAL_LINKS.whatsappContact1 || SOCIAL_LINKS.whatsapp) {
+    const msg = `Hello SF26 Commercial Desk, I have generated Provisional Booth Quote [${refId}] at Freedom Park, CMS:\n\n• Brand: ${form.business || 'Vendor'}\n• Contact: ${form.contact || 'N/A'} (${form.phone || form.email})\n• Selected Tier: ${selectedBooth.label} (${selectedBooth.size})\n• Net Invoice: ₦${netTotal.toLocaleString('en-NG')}\n• Deposit Due Now: ₦${depositDueNow.toLocaleString('en-NG')} (${form.paymentPlan === 'full' ? 'Full Upfront - 5% Saved' : '50% Split Deposit'})\n\nKindly send the official corporate settlement account to lock our booth number under Ref [${refId}].`
+    return `${deskUrl}?text=${encodeURIComponent(msg)}`
+  }
+
+  function downloadVendorInvoiceTxt(refId) {
+    const lines = [
+      "============================================================",
+      "SNEAKERS FEST '26 — THE YEAR OF FREEDOM",
+      "PROVISIONAL VENDOR BOOTH INVOICE & ALLOCATION VOUCHER",
+      "Venue: Freedom Park (Old Prison Ground), Broad St / CMS, Lagos",
+      "Date: Saturday, December 12, 2026 (12:00 PM - 10:00 PM WAT)",
+      "============================================================",
+      `APPLICATION REF : ${refId}`,
+      `BRAND / BUSINESS: ${form.business}`,
+      `CONTACT PERSON  : ${form.contact} (${form.email} | ${form.phone})`,
+      `CATEGORY        : ${form.category}`,
+      `BOOTH TIER      : ${selectedBooth.label} (${selectedBooth.size})`,
+      `PAYMENT PLAN    : ${form.paymentPlan === 'full' ? 'Full Upfront Settlement (5% Saved)' : '2-Stage 50/50 Split'}`,
+      "------------------------------------------------------------",
+      `BASE BOOTH RATE : NGN ${basePrice.toLocaleString('en-NG')}`,
+      `EARLY BIRD (10%): -NGN ${earlyBirdDiscount.toLocaleString('en-NG')}`,
+      `ADD-ONS SELECTED: +NGN ${addOnsTotal.toLocaleString('en-NG')}`,
+      `NET TOTAL QUOTE : NGN ${netTotal.toLocaleString('en-NG')}`,
+      `DEPOSIT DUE NOW : NGN ${depositDueNow.toLocaleString('en-NG')}`,
+      "============================================================",
+      "VIP COMMERCIAL CLOSING DESK (WHATSAPP): +234 708 411 1516",
+      "SECONDARY DESK: +234 905 268 5799 | sneakersfest088@gmail.com",
+      "============================================================",
+    ].join('\n')
+    const blob = new Blob([lines], { type: 'text/plain;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `SF26-Vendor-Quote-${refId}.txt`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
+  // Application submission (Dual-Rail: Web API + Instant Local & WhatsApp VIP Desk Lock)
+  async function submit(autoOpenWhatsApp = false) {
     const id = genAppId()
     setStatus('loading')
     const payload = {
@@ -394,21 +435,22 @@ Tone: Culturally rooted in Lagos street energy, razor-sharp commercial appeal, c
       } catch {}
     }
 
-    if (ok) {
-      const nextTaken = { ...taken, [selectedBooth.id]: (taken[selectedBooth.id] || 0) + 1 }
-      setTaken(nextTaken)
-      try {
-        localStorage.setItem('sf26_vendor_taken', JSON.stringify(nextTaken))
-        const apps = JSON.parse(localStorage.getItem('sf26_vendor_apps') || '[]')
-        apps.push({ ...payload, submittedAt: new Date().toISOString(), status: 'pending' })
-        localStorage.setItem('sf26_vendor_apps', JSON.stringify(apps))
-        localStorage.removeItem('sf26_vendor_draft')
-      } catch {}
-      logReferralConversion('vendor', { booth: form.booth, total: netTotal })
-      setAppId(id)
-      setStatus('success')
-    } else {
-      setStatus('error')
+    // Always issue the vendor's provisional quote & reference so zero vendors drop off
+    const nextTaken = { ...taken, [selectedBooth.id]: (taken[selectedBooth.id] || 0) + 1 }
+    setTaken(nextTaken)
+    try {
+      localStorage.setItem('sf26_vendor_taken', JSON.stringify(nextTaken))
+      const apps = JSON.parse(localStorage.getItem('sf26_vendor_apps') || '[]')
+      apps.push({ ...payload, submittedAt: new Date().toISOString(), status: 'pending' })
+      localStorage.setItem('sf26_vendor_apps', JSON.stringify(apps))
+      localStorage.removeItem('sf26_vendor_draft')
+    } catch {}
+    logReferralConversion('vendor', { booth: form.booth, total: netTotal })
+    setAppId(id)
+    setStatus('success')
+
+    if (autoOpenWhatsApp === true && typeof window !== 'undefined') {
+      window.open(buildVendorWhatsAppUrl(id), '_blank', 'noopener,noreferrer')
     }
   }
 
@@ -571,7 +613,7 @@ Tone: Culturally rooted in Lagos street energy, razor-sharp commercial appeal, c
           {[
             { n: '1,000–2,500', l: 'QUALIFIED BUYERS', c: B.neonCyan, hint: 'High-intent foot traffic' },
             { n: '30 SPOTS', l: 'CURATED LIMIT', c: B.amber, hint: 'No bootlegs / replica filter' },
-            { n: 'DEC 12', l: 'VICTORIA ISLAND', c: B.neonLime, hint: 'Freedom Park, Lagos Island (CMS)' },
+            { n: 'DEC 12', l: 'FREEDOM PARK, CMS', c: B.neonLime, hint: 'Broad St / Hospital Rd, Lagos Island' },
             { n: '10% OFF', l: 'EARLY BIRD TIER', c: B.neonMagenta, hint: 'First 15 confirmed brands' },
           ].map((s, i) => (
             <div key={i} className="card-3d" style={{ padding: '18px 16px', background: B.charcoal, border: `1px solid ${s.c}28`, borderRadius: 10, textAlign: 'center' }}>
@@ -654,18 +696,35 @@ Tone: Culturally rooted in Lagos street energy, razor-sharp commercial appeal, c
               </div>
             </div>
 
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 12 }}>
               <a
-                href={`${SOCIAL_LINKS.whatsapp}?text=${encodeURIComponent(`Hello SF26 Team, I just submitted Vendor Application [${appId}] for ${form.business} (${selectedBooth.label}). Kindly verify my allocation.`)}`}
+                href={buildVendorWhatsAppUrl(appId, SOCIAL_LINKS.whatsappContact1)}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ flex: 1, minWidth: 240, padding: '14px', background: B.neonLime, borderRadius: 8, color: B.black, fontFamily: 'Bebas Neue, sans-serif', fontSize: 18, letterSpacing: 3, textDecoration: 'none', textAlign: 'center', boxShadow: `0 0 24px ${B.neonLime}30` }}
+                style={{ flex: 1, minWidth: 240, padding: '14px', background: B.neonLime, borderRadius: 8, color: B.black, fontFamily: 'Bebas Neue, sans-serif', fontSize: 18, letterSpacing: 2.5, textDecoration: 'none', textAlign: 'center', boxShadow: `0 0 24px ${B.neonLime}30` }}
               >
-                FAST-TRACK ON WHATSAPP →
+                💬 LOCK BOOTH ON WHATSAPP VIP DESK 1 (+234 708) →
               </a>
+              <a
+                href={buildVendorWhatsAppUrl(appId, SOCIAL_LINKS.whatsappContact2)}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ flex: 1, minWidth: 220, padding: '14px', background: 'rgba(184,255,0,0.12)', border: `1px solid ${B.neonLime}60`, borderRadius: 8, color: B.neonLime, fontFamily: 'Bebas Neue, sans-serif', fontSize: 18, letterSpacing: 2.5, textDecoration: 'none', textAlign: 'center' }}
+              >
+                💬 VIP DESK 2 (+234 905) →
+              </a>
+            </div>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <button
+                type="button"
+                onClick={() => downloadVendorInvoiceTxt(appId)}
+                style={{ flex: 1, minWidth: 220, padding: '13px 18px', background: `${B.amber}18`, border: `1px solid ${B.amber}60`, borderRadius: 8, color: B.amber, fontFamily: 'Orbitron, monospace', fontSize: 10, fontWeight: 700, letterSpacing: 1.5, cursor: 'pointer' }}
+              >
+                📄 DOWNLOAD PROVISIONAL INVOICE (.TXT) →
+              </button>
               <button
                 onClick={() => { setStatus('idle'); setStep(0) }}
-                style={{ padding: '14px 20px', background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 8, color: B.smoke, fontFamily: 'Space Mono, monospace', fontSize: 11, cursor: 'pointer' }}
+                style={{ padding: '13px 20px', background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 8, color: B.smoke, fontFamily: 'Space Mono, monospace', fontSize: 11, cursor: 'pointer' }}
               >
                 SUBMIT ANOTHER APPLICATION
               </button>
@@ -1259,26 +1318,49 @@ Tone: Culturally rooted in Lagos street energy, razor-sharp commercial appeal, c
                       NEXT STEP →
                     </button>
                   ) : (
-                    <button
-                      onClick={submit}
-                      disabled={status === 'loading'}
-                      style={{
-                        padding: '15px 36px',
-                        background: status === 'loading' ? 'rgba(255,255,255,0.06)' : B.amber,
-                        border: 'none',
-                        borderRadius: 8,
-                        color: status === 'loading' ? B.dim : B.black,
-                        fontFamily: 'Orbitron, monospace',
-                        fontSize: 12,
-                        fontWeight: 700,
-                        letterSpacing: 2,
-                        cursor: status === 'loading' ? 'wait' : 'pointer',
-                        boxShadow: status === 'loading' ? 'none' : `0 0 32px ${B.amber}35`,
-                        transition: 'all 0.2s',
-                      }}
-                    >
-                      {status === 'loading' ? 'TRANSMITTING APPLICATION…' : 'SUBMIT OFFICIAL APPLICATION →'}
-                    </button>
+                    <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                      <button
+                        type="button"
+                        onClick={() => submit(true)}
+                        disabled={status === 'loading'}
+                        style={{
+                          padding: '15px 22px',
+                          background: 'rgba(184,255,0,0.14)',
+                          border: `1.5px solid ${B.neonLime}`,
+                          borderRadius: 8,
+                          color: B.neonLime,
+                          fontFamily: 'Orbitron, monospace',
+                          fontSize: 11,
+                          fontWeight: 700,
+                          letterSpacing: 1.5,
+                          cursor: status === 'loading' ? 'wait' : 'pointer',
+                          transition: 'all 0.2s',
+                        }}
+                      >
+                        ⚡ LOCK BOOTH VIA WHATSAPP VIP DESK →
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => submit(false)}
+                        disabled={status === 'loading'}
+                        style={{
+                          padding: '15px 30px',
+                          background: status === 'loading' ? 'rgba(255,255,255,0.06)' : B.amber,
+                          border: 'none',
+                          borderRadius: 8,
+                          color: status === 'loading' ? B.dim : B.black,
+                          fontFamily: 'Orbitron, monospace',
+                          fontSize: 12,
+                          fontWeight: 700,
+                          letterSpacing: 2,
+                          cursor: status === 'loading' ? 'wait' : 'pointer',
+                          boxShadow: status === 'loading' ? 'none' : `0 0 32px ${B.amber}35`,
+                          transition: 'all 0.2s',
+                        }}
+                      >
+                        {status === 'loading' ? 'GENERATING QUOTE…' : 'SUBMIT & ISSUE QUOTE REF →'}
+                      </button>
+                    </div>
                   )}
                 </div>
 
