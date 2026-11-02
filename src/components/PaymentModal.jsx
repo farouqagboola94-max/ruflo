@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { B } from '../tokens'
-import { SOCIAL_LINKS } from '../config'
+import { SOCIAL_LINKS, SETTLEMENT_DESK, buildWhatsAppLink } from '../config'
 import { loadSDK } from '../lib/loadScript'
 import { dispatchFestivalAction, FESTIVAL_ACTIONS, playFestivalSound } from '../framework/festivalFramework'
 import { downloadAppleWalletPass, downloadGoogleWalletPass } from '../lib/walletPassGenerator'
@@ -345,9 +345,9 @@ export default function PaymentModal({ tier, onClose }) {
   const amount   = parseNaira(tier.price) * quantity
   const formattedTotal = `₦${amount.toLocaleString('en-NG')}`
 
-  function buildWhatsAppTicketUrl(refCode, deskUrl = SOCIAL_LINKS.whatsappContact1 || SOCIAL_LINKS.whatsapp) {
+  function buildWhatsAppTicketUrl(refCode, deskUrl = SOCIAL_LINKS.whatsappDirect1 || SOCIAL_LINKS.whatsappContact1) {
     const msg = `Hello SF26 VIP Ticket Desk, I have generated my Pass Reference [${refCode}] on the website:\n\n• Attendee: ${name.trim() || 'Guest'}\n• Email: ${email.trim() || 'N/A'}\n${phone.trim() ? `• Phone: ${phone.trim()}\n` : ''}• Pass Tier: ${quantity}x ${tier.name.toUpperCase()} (${formattedTotal})\n• Venue: Freedom Park, CMS (Dec 12, 2026)\n\nKindly send the instant bank transfer account / confirm my reference [${refCode}] for Gate Turnstile sync.`
-    return `${deskUrl}?text=${encodeURIComponent(msg)}`
+    return buildWhatsAppLink(deskUrl, msg)
   }
 
   function handleInstantBankOrWhatsAppClose(autoOpenWhatsApp = true) {
@@ -668,6 +668,21 @@ export default function PaymentModal({ tier, onClose }) {
                   ZERO DROP-OFF
                 </span>
               </button>
+
+              {method === 'whatsapp_transfer' && (
+                <div style={{ marginTop:8, padding:'11px 13px', background:'rgba(184,255,0,0.05)', border:`1px dashed ${B.neonLime}50`, borderRadius:8 }}>
+                  <div style={{ fontFamily:'Orbitron,monospace', fontSize:8.5, color:B.neonLime, fontWeight:700, letterSpacing:1.5, marginBottom:6 }}>
+                    HOW INSTANT BANK TRANSFER WORKS ({SETTLEMENT_DESK.accountName.toUpperCase()}):
+                  </div>
+                  <div style={{ display:'flex', flexDirection:'column', gap:4 }}>
+                    {SETTLEMENT_DESK.steps.map(step => (
+                      <div key={step} style={{ fontFamily:'Space Mono,monospace', fontSize:8, color:B.smoke, lineHeight:1.45 }}>
+                        {step}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {error && (

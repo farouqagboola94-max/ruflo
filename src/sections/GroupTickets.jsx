@@ -72,7 +72,7 @@ function GroupPanel({ group, onReset, onClaim, claiming, error, lastClaimedPass 
   const filled = group.size - group.slotsLeft
   const pct = Math.round((group.paidCount / group.size) * 100)
 
-  const whatsappGroupDeskUrl = `${SOCIAL_LINKS.whatsappContact1 || SOCIAL_LINKS.whatsapp}?text=${encodeURIComponent(
+  const whatsappGroupDeskUrl = `${(SOCIAL_LINKS.whatsappDirect1 || String(SOCIAL_LINKS.whatsappContact1 || 'https://wa.me/2347084111516').split('?')[0])}?text=${encodeURIComponent(
     `Hello SF26 VIP Crew Desk, we have opened Group Split Code [${group.code}] at Freedom Park, CMS:\n\n• Organiser: ${group.organiserName}\n• Tier: ${group.tierLabel} (${naira(group.priceNGN)} each × ${group.size} slots = ${naira(group.priceNGN * group.size)})\n• Current Progress: ${group.paidCount} of ${group.size} slots claimed\n\nKindly share the instant bank transfer settlement details for Group Code [${group.code}].`
   )}`
 

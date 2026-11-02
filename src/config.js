@@ -12,8 +12,26 @@ export const SOCIAL_LINKS = {
   // Direct DM links for the floating contact button
   whatsappContact1:  'https://wa.me/2347084111516?text=Hi%21%20I%20have%20a%20question%20about%20Sneakers%20Fest%20%2726%20%28December%2012%2C%20Lagos%29',
   whatsappContact2:  'https://wa.me/2349052685799?text=Hi%21%20I%20have%20a%20question%20about%20Sneakers%20Fest%20%2726%20%28December%2012%2C%20Lagos%29',
+  whatsappDirect1:   'https://wa.me/2347084111516',
+  whatsappDirect2:   'https://wa.me/2349052685799',
   // Catalyst Concepts brands
   catalystTalents:   'https://catalyst-talents-lagos.netlify.app/',
+}
+
+export const SETTLEMENT_DESK = {
+  accountName: 'Catalyst Concepts / Sneakers Fest ’26 Desk',
+  deskPhone1: '+234 708 411 1516',
+  deskPhone2: '+234 905 268 5799',
+  steps: [
+    '1. Generate your official SF26 Reference & QR Pass instantly on this screen',
+    '2. Tap VIP Desk 1 (+234 708 411 1516) or Desk 2 (+234 905 268 5799) to receive the Instant Bank Transfer account & drop your receipt',
+    '3. Download your high-res PNG Pass or Wallet Pass for Hospital Rd / Broad St Gate clearance',
+  ],
+}
+
+export function buildWhatsAppLink(rawUrl, message) {
+  const base = String(rawUrl || SOCIAL_LINKS.whatsappDirect1 || 'https://wa.me/2347084111516').split('?')[0]
+  return `${base}?text=${encodeURIComponent(message)}`
 }
 // ──────────────────────────────────────────────────────────────────────────
 

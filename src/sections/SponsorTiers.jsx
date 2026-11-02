@@ -115,7 +115,8 @@ export default function SponsorTiers() {
 
   function buildSponsorWhatsAppUrl(refCode, tierObj = selectedTierObj, deskUrl = SOCIAL_LINKS.whatsappContact1 || SOCIAL_LINKS.whatsapp) {
     const msg = `Hello SF26 Executive Sponsorship Desk, we have generated Landmark Hold Reference [${refCode}] for Sneakers Fest '26 at Freedom Park, CMS:\n\n• Brand / Company: ${form.brand || 'Corporate Partner'}\n• Contact: ${form.contact || 'Brand Lead'} (${form.email || 'N/A'}${form.phone ? ` | ${form.phone}` : ''})\n• Landmark Tier: ${tierObj.name} (${tierObj.price})\n• Monument: ${tierObj.landmark}\n${form.note ? `• Objectives: ${form.note}\n` : ''}\nKindly confirm our 72-hour category exclusivity hold under Ref [${refCode}] and share the corporate settlement & walkthrough schedule.`
-    return `${deskUrl}?text=${encodeURIComponent(msg)}`
+    const base = String(deskUrl || 'https://wa.me/2347084111516').split('?')[0]
+    return `${base}?text=${encodeURIComponent(msg)}`
   }
 
   function downloadSponsorTermSheetTxt(refCode, tierObj = selectedTierObj) {

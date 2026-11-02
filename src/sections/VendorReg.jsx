@@ -312,7 +312,8 @@ Tone: Culturally rooted in Lagos street energy, razor-sharp commercial appeal, c
 
   function buildVendorWhatsAppUrl(refId, deskUrl = SOCIAL_LINKS.whatsappContact1 || SOCIAL_LINKS.whatsapp) {
     const msg = `Hello SF26 Commercial Desk, I have generated Provisional Booth Quote [${refId}] at Freedom Park, CMS:\n\n• Brand: ${form.business || 'Vendor'}\n• Contact: ${form.contact || 'N/A'} (${form.phone || form.email})\n• Selected Tier: ${selectedBooth.label} (${selectedBooth.size})\n• Net Invoice: ₦${netTotal.toLocaleString('en-NG')}\n• Deposit Due Now: ₦${depositDueNow.toLocaleString('en-NG')} (${form.paymentPlan === 'full' ? 'Full Upfront - 5% Saved' : '50% Split Deposit'})\n\nKindly send the official corporate settlement account to lock our booth number under Ref [${refId}].`
-    return `${deskUrl}?text=${encodeURIComponent(msg)}`
+    const base = String(deskUrl || 'https://wa.me/2347084111516').split('?')[0]
+    return `${base}?text=${encodeURIComponent(msg)}`
   }
 
   function downloadVendorInvoiceTxt(refId) {

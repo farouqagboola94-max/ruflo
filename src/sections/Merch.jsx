@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { B } from '../tokens'
 import { GrainOverlay, SectionTag } from '../components/Shared'
-import { SOCIAL_LINKS } from '../config'
+import { SOCIAL_LINKS, buildWhatsAppLink } from '../config'
+import { dispatchFestivalAction, FESTIVAL_ACTIONS, playFestivalSound } from '../framework/festivalFramework'
 import Egg from '../components/Egg'
 
 const ITEMS = [
@@ -135,6 +136,7 @@ function CartDrawer({ cart, setCart, onClose }) {
   const [view,    setView]    = useState('cart')
   const [form,    setForm]    = useState({ name:'', email:'', phone:'', delivery:'pickup', address:'' })
   const [orderId, setOrderId] = useState('')
+  const [lastOrder, setLastOrder] = useState(null)
   const [busy,    setBusy]    = useState(false)
   const [err,     setErr]     = useState('')
   const [promo,   setPromo]   = useState({ code:'', applied:null, err:'' })
@@ -173,8 +175,52 @@ function CartDrawer({ cart, setCart, onClose }) {
     let ok = false
     if (BACKEND)          { try { const r = await fetch(`${BACKEND}/api/merch-orders`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(order) }); ok = r.ok } catch {} }
     if (!ok && FORMSPREE) { try { const r = await fetch(`https://formspree.io/f/${FORMSPREE}`, { method:'POST', headers:{'Content-Type':'application/json', Accept:'application/json'}, body:JSON.stringify(order) }); ok = r.ok } catch {} }
+    dispatchFestivalAction(FESTIVAL_ACTIONS.ADD_XP, { amount: 50 })
+    playFestivalSound('badge_unlock')
+    setLastOrder(order)
     setCart([]); persist([])
     setOrderId(id); setBusy(false); setView('done')
+  }
+
+  function downloadMerchVoucher() {
+    if (!lastOrder) return
+    const text = [
+      '==========================================================',
+      "SNEAKERS FEST '26 — OFFICIAL MERCH PRE-ORDER VOUCHER",
+      '==========================================================',
+      `VOUCHER ID:     ${lastOrder.orderId}`,
+      `BUYER NAME:     ${lastOrder.name}`,
+      `EMAIL / PHONE:  ${lastOrder.email} · ${lastOrder.phone}`,
+      `FULFILLMENT:    ${lastOrder.delivery === 'pickup' ? 'Freedom Park Merch Pavilion Pickup (Sat, Dec 12, 2026)' : `Lagos Delivery (${lastOrder.address})`}`,
+      '----------------------------------------------------------',
+      'ITEMS RESERVED:',
+      ...lastOrder.items.map(item => `  • ${item}`),
+      '----------------------------------------------------------',
+      `SUBTOTAL:       ${fmt(lastOrder.subtotal)}`,
+      ...(lastOrder.discount > 0 ? [`PROMO DISCOUNT: -${fmt(lastOrder.discount)} (${lastOrder.promo})`] : []),
+      ...(lastOrder.delivery === 'delivery' ? ['DELIVERY FEE:   ₦2,500'] : []),
+      `TOTAL DUE:      ${fmt(lastOrder.total)}`,
+      '==========================================================',
+      'Present this Voucher ID at the Pergola Bay Merch Pavilion',
+      '(Freedom Park, 1 Hospital Rd / Broad St, CMS, Lagos Island)',
+      'or confirm via WhatsApp VIP Desk: +234 708 411 1516',
+      '==========================================================',
+    ].join('\n')
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `SF26-Merch-Voucher-${lastOrder.orderId}.txt`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
+  function buildMerchWhatsAppUrl(deskUrl) {
+    const o = lastOrder || { orderId, name: form.name, items: [], total, delivery: form.delivery }
+    const msg = `Hello SF26 Merch Desk, I have locked my Official Merch Pre-Order Voucher [${o.orderId}]:\n\n• Buyer: ${o.name}\n• Items: ${(o.items || []).join(', ')}\n• Total: ${fmt(o.total)}\n• Collection: ${o.delivery === 'pickup' ? 'Freedom Park Merch Pavilion Pickup (Dec 12)' : `Lagos Delivery (${o.address || ''})`}\n\nKindly confirm my merch reservation / send instant transfer details.`
+    return buildWhatsAppLink(deskUrl, msg)
   }
 
   const IS = { width:'100%', padding:'11px 14px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:8, color:B.white, fontFamily:'Space Mono,monospace', fontSize:12, outline:'none', boxSizing:'border-box', transition:'border-color 0.2s' }
@@ -302,21 +348,36 @@ function CartDrawer({ cart, setCart, onClose }) {
 
           {/* ── SUCCESS ── */}
           {view === 'done' && (
-            <div style={{ textAlign:'center', padding:'30px 0' }}>
-              <div style={{ fontSize:48, marginBottom:16 }}>🎉</div>
-              <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:32, color:B.white, letterSpacing:3, marginBottom:8 }}>ORDER PLACED</div>
-              <div style={{ fontFamily:'Syne,sans-serif', fontSize:13, color:'#888', lineHeight:1.7, marginBottom:24 }}>
-                We'll confirm your order via email shortly. Payment is on collection.
+            <div style={{ textAlign:'center', padding:'24px 0' }}>
+              <div style={{ fontSize:44, marginBottom:12 }}>🎉</div>
+              <div style={{ fontFamily:'Orbitron,monospace', fontSize:9, color:B.neonLime, letterSpacing:2, marginBottom:6 }}>+50 XP UNLOCKED · PRE-ORDER LOCKED</div>
+              <div style={{ fontFamily:'Bebas Neue,sans-serif', fontSize:32, color:B.white, letterSpacing:3, marginBottom:8 }}>MERCH VOUCHER ISSUED</div>
+              <div style={{ fontFamily:'Syne,sans-serif', fontSize:13, color:'#888', lineHeight:1.65, marginBottom:20 }}>
+                Your limited-run SF ’26 gear is reserved. Present this voucher at the Freedom Park Merch Pavilion on Dec 12 or lock fast settlement on WhatsApp below.
               </div>
-              <div className="card-3d" style={{ background:`${B.amber}12`, border:`1px solid ${B.amber}40`, borderRadius:12, padding:'20px', marginBottom:20 }}>
-                <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, letterSpacing:3, marginBottom:8 }}>ORDER ID</div>
+              <div className="card-3d" style={{ background:`${B.amber}12`, border:`1px solid ${B.amber}40`, borderRadius:12, padding:'18px', marginBottom:16 }}>
+                <div style={{ fontFamily:'Space Mono,monospace', fontSize:8, color: B.smoke, letterSpacing:3, marginBottom:6 }}>MERCH PICKUP VOUCHER ID</div>
                 <div style={{ fontFamily:'Orbitron,monospace', fontSize:20, color:B.amber, letterSpacing:4, fontWeight:900 }}>{orderId}</div>
               </div>
-              <div style={{ fontFamily:'Space Mono,monospace', fontSize:9, color: B.dim, letterSpacing:2, marginBottom:20 }}>SAVE YOUR ORDER ID FOR COLLECTION</div>
-              <a href={SOCIAL_LINKS.whatsapp} target="_blank" rel="noopener noreferrer"
-                style={{ display:'block', width:'100%', padding:'14px', background:B.neonLime, borderRadius:8, color:B.black, fontFamily:'Bebas Neue,sans-serif', fontSize:18, letterSpacing:3, textDecoration:'none', boxShadow:`0 0 24px ${B.neonLime}30` }}>
-                CONFIRM ON WHATSAPP →
-              </a>
+
+              <button
+                type="button"
+                onClick={downloadMerchVoucher}
+                style={{ width:'100%', padding:'13px', marginBottom:10, background:'rgba(245,166,35,0.14)', border:`1px solid ${B.amber}`, borderRadius:8, color:B.amber, fontFamily:'Orbitron,monospace', fontSize:10, fontWeight:700, letterSpacing:1.5, cursor:'pointer' }}
+              >
+                ⬇ DOWNLOAD FREEDOM PARK PICKUP VOUCHER (.TXT) →
+              </button>
+
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
+                <a href={buildMerchWhatsAppUrl(SOCIAL_LINKS.whatsappDirect1)} target="_blank" rel="noopener noreferrer"
+                  style={{ display:'block', padding:'13px 8px', background:B.neonLime, borderRadius:8, color:B.black, fontFamily:'Orbitron,monospace', fontSize:9.5, fontWeight:700, letterSpacing:1, textDecoration:'none', boxShadow:`0 0 24px ${B.neonLime}30` }}>
+                  💬 MERCH DESK 1 (+234 708) →
+                </a>
+                <a href={buildMerchWhatsAppUrl(SOCIAL_LINKS.whatsappDirect2)} target="_blank" rel="noopener noreferrer"
+                  style={{ display:'block', padding:'13px 8px', background:'rgba(184,255,0,0.14)', border:`1px solid ${B.neonLime}60`, borderRadius:8, color:B.neonLime, fontFamily:'Orbitron,monospace', fontSize:9.5, fontWeight:700, letterSpacing:1, textDecoration:'none' }}>
+                  💬 MERCH DESK 2 (+234 905) →
+                </a>
+              </div>
             </div>
           )}
         </div>
