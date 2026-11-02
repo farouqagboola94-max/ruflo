@@ -131,7 +131,7 @@ export default function ShoeColorizer() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 14, marginBottom: 28 }}>
           <div>
             <h2 className="reveal-3d" style={{ fontFamily: "'Orbitron', monospace", fontWeight: 900, fontSize: 'clamp(24px, 4.5vw, 40px)', color: B.white, lineHeight: 1.1 }}>
-              DANFO CUSTOM <span style={{ color: B.amber }}>SNEAKER LAB</span>
+              SOLE CRAFT <span style={{ color: B.amber }}>CUSTOMIZER LAB</span>
             </h2>
             <p style={{ color: B.smoke, fontFamily: "'Syne', sans-serif", fontSize: 14, marginTop: 8, maxWidth: 580, lineHeight: 1.6 }}>
               Design your bespoke 1-of-1 Lagos custom shoe. Apply transit stencils, Adire indigo patterns, and industrial quotation typography, then mint your creation to battle on festival day.

@@ -122,7 +122,7 @@ export default function FestivalHUD() {
               { id: 'arena', section: 'fitcheck-arena', label: '⚔️ Fit Battle Arena', color: B.neonMagenta },
               { id: 'lsi', section: 'lagos-sole-index', label: '📈 Lagos Sole Index', color: B.neonLime },
               { id: 'heist', section: 'grail-heist', label: '🏆 Grail Heist Quest', color: B.amberGlow },
-              { id: 'custom', section: 'colorizer', label: '🎨 Danfo Custom Lab', color: B.danfoYellow },
+              { id: 'custom', section: 'colorizer', label: '🎨 Sole Craft Workshop', color: B.danfoYellow },
               { id: 'lsx', section: 'lsx', label: '🤝 LSX Trade Pit', color: B.neonCyan },
               { id: 'vip', section: 'venue', label: '💎 VIP Lounge', color: B.neonMagenta },
               { id: 'entrance', section: 'my-pass', label: '🎟️ Gate Turnstile', color: B.amber },

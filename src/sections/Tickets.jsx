@@ -23,7 +23,7 @@ const TIERS = [
   {
     name: 'VVIP', price: '₦25,000', priceNum: 25000,
     tag: 'EXCLUSIVE', color: B.neonMagenta,
-    perks: ['Everything in VIP','Private collector room','Danfo Custom Lab fast-track','Grail Heist Golden Pass eligibility','Signed memorabilia','Priority entry & exit'],
+    perks: ['Everything in VIP','Private collector room','Sole Craft Custom Workshop fast-track','Grail Heist Golden Pass eligibility','Signed memorabilia','Priority entry & exit'],
     cta: 'GO VVIP', featured: false, avail: 38, total: 150,
   },
   {

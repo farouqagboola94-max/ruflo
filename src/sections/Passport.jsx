@@ -32,7 +32,7 @@ const EARN_WAYS = [
   { href: '#fitcheck-arena',   label: 'Judge Live Fit-Check Clash', pts: '50-150 XP' },
   { href: '#lagos-sole-index', label: 'Track Lagos Sole Index',     pts: '75 XP' },
   { href: '#grail-heist',      label: 'Solve Lagos Grail Heist',     pts: '250 XP' },
-  { href: '#colorizer',        label: 'Mint Danfo Custom Kicks',    pts: '150 XP' },
+  { href: '#custom-workshop',  label: 'Reserve Sole Craft Bench',   pts: '150 XP' },
   { href: '#lsx',              label: 'Trade in the LSX Pit',        pts: '100 XP' },
   { href: '#trivia',           label: 'Play Sneaker Trivia',         pts: `up to ${TRIVIA_MAX_XP.toLocaleString()} XP` },
   { href: '#memory-match',     label: 'Play Sole Memory',            pts: `up to ${XP_VALUES.memoryMatch} XP` },
