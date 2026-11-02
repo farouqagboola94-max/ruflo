@@ -72,6 +72,7 @@ function todayKey() { return new Date().toISOString().slice(0, 10) }
 
 export default function Lineup() {
   const [votes,    setVotes]    = useState({})
+  const [revealedCiphers, setRevealedCiphers] = useState({})
   const [faction,  setFaction]  = useState(() => {
     try { return localStorage.getItem('sf26_soundclash_faction') || '' } catch { return '' }
   })
@@ -315,6 +316,99 @@ export default function Lineup() {
               </div>
             )
           })}
+        </div>
+
+        {/* PHASE 1 MYSTERY HEADLINER CIPHER REVEAL */}
+        <div style={{ marginTop: 40, padding: 24, background: 'rgba(184,255,0,0.03)', border: `1px solid ${B.neonLime}30`, borderRadius: 12 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10, marginBottom: 16 }}>
+            <div>
+              <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.neonLime, letterSpacing: '0.2em', fontWeight: 700 }}>
+                🔓 DECRYPT TO REVEAL CLUES · OFFICIAL PHASE 1 TEASER
+              </span>
+              <h4 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 24, color: B.white, margin: '4px 0 0', letterSpacing: 1 }}>
+                SECRET HEADLINER & GUEST CIPHER VAULT
+              </h4>
+            </div>
+            <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: B.smoke, background: 'rgba(255,255,255,0.05)', padding: '4px 10px', borderRadius: 4 }}>
+              DEC 12 · FREEDOM PARK AMPHITHEATRE
+            </span>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 14 }}>
+            {[
+              {
+                id: 'cipher1',
+                role: 'SECRET AFROBEATS HEADLINER',
+                stage: 'MAIN AMPHITHEATRE (9:00 PM)',
+                clue: 'Lagos Island Roots · Multi-Platinum Street Anthems · Rare SB Dunk Collector',
+                revealAt: 'Official announcement dropping on @s_fest26',
+                color: B.amber,
+              },
+              {
+                id: 'cipher2',
+                role: 'ALTÉ & STREET SOUL QUEEN',
+                stage: 'AMPHITHEATRE SUNSET SET (6:30 PM)',
+                clue: 'London/Lagos Alté Pioneer · 1-of-1 Customizer Collaborator · Global Fashion Week Headliner',
+                revealAt: 'Official reveal Phase 1 drop',
+                color: B.neonMagenta,
+              },
+              {
+                id: 'cipher3',
+                role: 'AMPHITHEATRE SOUNDCLASH GENERAL',
+                stage: '4-DECK LIVE ARENA (7:30 PM)',
+                clue: 'Boiler Room Lagos Champion · 10,000+ Vinyl Vault · Master of Afrobeats-to-Amapiano transition',
+                revealAt: 'Winner decided by crowd decibel meter',
+                color: B.neonLime,
+              },
+            ].map(c => {
+              const isRevealed = !!revealedCiphers[c.id]
+              return (
+                <div
+                  key={c.id}
+                  onClick={() => {
+                    if (!isRevealed) {
+                      setRevealedCiphers(prev => ({ ...prev, [c.id]: true }))
+                      playFestivalSound('xp_gain')
+                      dispatchFestivalAction(FESTIVAL_ACTIONS.XP_EARNED, { amount: 50, reason: 'Lineup Cipher Decrypted' })
+                    }
+                  }}
+                  style={{
+                    background: isRevealed ? `${c.color}10` : 'rgba(10,10,15,0.85)',
+                    border: `1px solid ${isRevealed ? c.color : 'rgba(255,255,255,0.1)'}`,
+                    borderRadius: 8,
+                    padding: 18,
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                    <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: c.color, letterSpacing: '0.15em', fontWeight: 700 }}>
+                      {c.role}
+                    </span>
+                    <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: isRevealed ? B.neonLime : B.dim }}>
+                      {isRevealed ? '✓ DECRYPTED (+50 XP)' : '🔒 CLICK TO DECRYPT'}
+                    </span>
+                  </div>
+                  <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 18, color: B.white, letterSpacing: 0.5, marginBottom: 4 }}>
+                    {c.stage}
+                  </div>
+                  <p style={{
+                    fontFamily: "'Syne', sans-serif", fontSize: 12,
+                    color: isRevealed ? B.white : B.smoke,
+                    lineHeight: 1.5, margin: 0,
+                    filter: isRevealed ? 'none' : 'blur(4px)',
+                    transition: 'filter 0.4s ease',
+                    userSelect: isRevealed ? 'auto' : 'none',
+                  }}>
+                    {c.clue}
+                  </p>
+                  <div style={{ marginTop: 10, fontFamily: "'Space Mono', monospace", fontSize: 8, color: B.dim }}>
+                    {c.revealAt}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
         </div>
 
         <div style={{ marginTop: 28, textAlign: "center" }}>

@@ -13,6 +13,12 @@
   to     = "/door.html"
   status = 200
 
+# Emergency Accreditation Manifest for gate security
+[[redirects]]
+  from   = "/manifest"
+  to     = "/emergency-manifest.html"
+  status = 200
+
 # SPA fallback — all remaining routes serve index.html
 [[redirects]]
   from   = "/*"
