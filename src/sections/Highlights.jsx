@@ -8,7 +8,7 @@ const REELS = [
     id: 'trailer-1080p',
     tag: 'OFFICIAL MARKETING FILM · 1080P MASTER CUT',
     title: 'SNEAKERS FEST LAGOS 2026 · THE MOVEMENT',
-    desc: 'Edited for maximum cultural impact — rare grails, Lagos street energy, live customization, and 5,000+ sneakerheads converging at Freedom Park, Broad Street, Lagos Island (CMS) on Saturday, December 12, 2026.',
+    desc: 'Edited for maximum cultural impact — rare grails, Lagos street energy, live customization, and 5,000+ sneakerheads converging at Muri Okunola Park, Victoria Island, Lagos on Saturday, December 12, 2026.',
     src: '/media/video/fest_trailer_1080p.mp4',
     poster: '/media/gallery/flyer_01_hero.jpg',
     badge: 'FEATURED TRAILER',
@@ -27,7 +27,7 @@ const REELS = [
 ]
 
 const FEATURES = [
-  { label: '200+ GRAIL PAIRS', title: 'RARE KICKS', desc: 'Collectors from across Africa and beyond bring their grails. Cop, trade, or just soak in the heat — all at Freedom Park, Lagos Island (CMS).', color: B.amber, img: '/media/gallery/flyer_06_grail.jpg' },
+  { label: '200+ GRAIL PAIRS', title: 'RARE KICKS', desc: 'Collectors from across Africa and beyond bring their grails. Cop, trade, or just soak in the heat — all at Muri Okunola Park, Victoria Island, Lagos.', color: B.amber, img: '/media/gallery/flyer_06_grail.jpg' },
   { label: '30+ CONFIRMED', title: 'CURATED VENDORS', desc: 'Invitation-only vendors: sneakers, apparel, customs, accessories, and food — handpicked for quality. No random stalls.', color: B.neonCyan, img: '/media/gallery/flyer_05_street.jpg' },
   { label: 'LIVE SETS', title: 'DJ CULTURE', desc: 'Headline DJs, hypemen, and live performers keep the energy peaking from the moment gates open at 11:00 AM until the closing rave.', color: B.neonMagenta, img: '/media/gallery/flyer_08_sound.jpg' },
   { label: 'ON-SITE', title: 'CUSTOM ART', desc: 'Bring your blank pair and watch artists turn them into one-of-a-kind masterpieces in real time. Walkable, watchable, wearable.', color: B.neonLime, img: '/media/gallery/flyer_13_culture.jpg' },

@@ -167,6 +167,36 @@ const MAP_ZONES = [
   { id: 'standard', label: 'BRICK PERGOLA BAYS (WING B)', hint: '9 sqm Covered Brick Arch' },
 ]
 
+export const FREEDOM_PARK_STALLS = [
+  // Brick Pergola Bays (standard - 3x3m)
+  { id: 'P-01', tier: 'standard', zone: 'Pergola West', label: 'Arch Bay P-01', size: '3×3m', status: 'taken', reservedBy: 'Sole Lagos' },
+  { id: 'P-02', tier: 'standard', zone: 'Pergola West', label: 'Arch Bay P-02', size: '3×3m', status: 'available' },
+  { id: 'P-03', tier: 'standard', zone: 'Pergola West', label: 'Arch Bay P-03', size: '3×3m', status: 'taken', reservedBy: 'Afro Threads' },
+  { id: 'P-04', tier: 'standard', zone: 'Pergola East', label: 'Arch Bay P-04', size: '3×3m', status: 'available' },
+  { id: 'P-05', tier: 'standard', zone: 'Pergola East', label: 'Arch Bay P-05', size: '3×3m', status: 'available' },
+  { id: 'P-06', tier: 'standard', zone: 'Pergola East', label: 'Arch Bay P-06', size: '3×3m', status: 'available' },
+  { id: 'P-07', tier: 'standard', zone: 'Pergola East', label: 'Arch Bay P-07', size: '3×3m', status: 'taken', reservedBy: 'Street Eats' },
+  { id: 'P-08', tier: 'standard', zone: 'Pergola East', label: 'Arch Bay P-08', size: '3×3m', status: 'available' },
+
+  // Historic Grail Cell Vaults (double - 3.5x3.5m)
+  { id: 'C-01', tier: 'double', zone: 'The Grail Cells', label: 'Cell Vault C-01', size: '3.5×3.5m', status: 'taken', reservedBy: 'Kicksurge NG' },
+  { id: 'C-02', tier: 'double', zone: 'The Grail Cells', label: 'Cell Vault C-02', size: '3.5×3.5m', status: 'available' },
+  { id: 'C-03', tier: 'double', zone: 'The Grail Cells', label: 'Cell Vault C-03', size: '3.5×3.5m', status: 'available' },
+  { id: 'C-04', tier: 'double', zone: 'The Grail Cells', label: 'Cell Vault C-04', size: '3.5×3.5m', status: 'taken', reservedBy: 'Lagos Drip Haus' },
+  { id: 'C-05', tier: 'double', zone: 'The Grail Cells', label: 'Cell Vault C-05', size: '3.5×3.5m', status: 'available' },
+  { id: 'C-06', tier: 'double', zone: 'The Grail Cells', label: 'Cell Vault C-06', size: '3.5×3.5m', status: 'available' },
+
+  // Double Pergola Corner Pavilion (premium - 4x4m)
+  { id: 'A-01', tier: 'premium', zone: 'Amphitheatre North Corner', label: 'Junction Corner A-01', size: '4×4m', status: 'taken', reservedBy: 'The Sneaker Lab' },
+  { id: 'A-02', tier: 'premium', zone: 'Amphitheatre South Corner', label: 'Junction Corner A-02', size: '4×4m', status: 'available' },
+  { id: 'A-03', tier: 'premium', zone: 'Pergola East Crossway', label: 'Junction Corner A-03', size: '4×4m', status: 'available' },
+  { id: 'A-04', tier: 'premium', zone: 'Pergola West Crossway', label: 'Junction Corner A-04', size: '4×4m', status: 'available' },
+
+  // Monument Experiential Takeover (collab - 8x8m)
+  { id: 'M-01', tier: 'collab', zone: 'Central Colonial Monument', label: 'Monument Plinth M-01', size: '8×8m', status: 'taken', reservedBy: 'Catalyst Lab' },
+  { id: 'M-02', tier: 'collab', zone: 'Fountain Promenade Stage', label: 'Promenade Stage M-02', size: '8×8m', status: 'available' },
+]
+
 function genAppId() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
   let id = 'VSF26-'
@@ -191,6 +221,7 @@ export default function VendorReg() {
     exclusiveDrop: 'YES — I WANT A DROP',
     bio: '',
     paymentPlan: 'full', // 'full' or 'split'
+    selectedStall: 'P-04',
     selectedAddOns: [],
     estimatedMargin: 25000,
   })
@@ -204,6 +235,7 @@ export default function VendorReg() {
   const [pitchLoading, setPitchLoading] = useState(false)
   const [pitchError, setPitchError] = useState('')
   const [vendorCatFilter, setVendorCatFilter] = useState('ALL')
+  const [stallZoneFilter, setStallZoneFilter] = useState('ALL')
 
   // Real-time Status Lookup Tool State
   const [trackerOpen, setTrackerOpen] = useState(false)
@@ -311,7 +343,7 @@ Tone: Culturally rooted in Lagos street energy, razor-sharp commercial appeal, c
   }
 
   function buildVendorWhatsAppUrl(refId, deskUrl = SOCIAL_LINKS.whatsappContact1 || SOCIAL_LINKS.whatsapp) {
-    const msg = `Hello SF26 Commercial Desk, I have generated Provisional Booth Quote [${refId}] at Freedom Park, CMS:\n\n• Brand: ${form.business || 'Vendor'}\n• Contact: ${form.contact || 'N/A'} (${form.phone || form.email})\n• Selected Tier: ${selectedBooth.label} (${selectedBooth.size})\n• Net Invoice: ₦${netTotal.toLocaleString('en-NG')}\n• Deposit Due Now: ₦${depositDueNow.toLocaleString('en-NG')} (${form.paymentPlan === 'full' ? 'Full Upfront - 5% Saved' : '50% Split Deposit'})\n\nKindly send the official corporate settlement account to lock our booth number under Ref [${refId}].`
+    const msg = `Hello SF26 Commercial Desk, I have generated Provisional Booth Quote [${refId}] at Freedom Park, CMS:\n\n• Brand: ${form.business || 'Vendor'}\n• Contact: ${form.contact || 'N/A'} (${form.phone || form.email})\n• Selected Tier: ${selectedBooth.label} (${selectedBooth.size})\n• Allocated Spot: Stall [${form.selectedStall || 'P-04'}] (Freedom Park, CMS)\n• Net Invoice: ₦${netTotal.toLocaleString('en-NG')}\n• Deposit Due Now: ₦${depositDueNow.toLocaleString('en-NG')} (${form.paymentPlan === 'full' ? 'Full Upfront - 5% Saved' : '50% Split Deposit'})\n\nKindly send the official corporate settlement account to lock our booth number under Ref [${refId}].`
     const base = String(deskUrl || 'https://wa.me/2347084111516').split('?')[0]
     return `${base}?text=${encodeURIComponent(msg)}`
   }
@@ -329,6 +361,7 @@ Tone: Culturally rooted in Lagos street energy, razor-sharp commercial appeal, c
       `CONTACT PERSON  : ${form.contact} (${form.email} | ${form.phone})`,
       `CATEGORY        : ${form.category}`,
       `BOOTH TIER      : ${selectedBooth.label} (${selectedBooth.size})`,
+      `ALLOCATED STALL : STALL [${form.selectedStall || 'P-04'}] (Freedom Park, CMS)`, 
       `PAYMENT PLAN    : ${form.paymentPlan === 'full' ? 'Full Upfront Settlement (5% Saved)' : '2-Stage 50/50 Split'}`,
       "------------------------------------------------------------",
       `BASE BOOTH RATE : NGN ${basePrice.toLocaleString('en-NG')}`,
@@ -780,42 +813,112 @@ Tone: Culturally rooted in Lagos street energy, razor-sharp commercial appeal, c
                       </span>
                     </div>
 
-                    {/* Venue Floor Plan Visualizer */}
-                    <div style={{ marginBottom: 20 }}>
-                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 8 }}>
-                        {MAP_ZONES.map(z => {
-                          const booth = BOOTHS.find(b => b.id === z.id)
-                          const isSel = form.booth === z.id
-                          const spotsTaken = taken[z.id] || 0
-                          const spotsLeft = (booth ? booth.capacity : 0) - spotsTaken
-                          const isFull = spotsLeft <= 0
-                          return (
-                            <div
-                              key={z.id}
-                              onClick={() => !isFull && setForm(f => ({ ...f, booth: z.id }))}
+                    {/* INTERACTIVE FREEDOM PARK STALL VISUALIZER & RESERVATION MAP */}
+                    <div style={{ marginBottom: 26, padding: '18px 20px', background: 'rgba(0,240,255,0.02)', border: `1px solid ${B.neonCyan}25`, borderRadius: 14 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10, marginBottom: 14 }}>
+                        <div>
+                          <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 10, color: B.neonCyan, letterSpacing: 2, fontWeight: 700 }}>
+                            📍 FREEDOM PARK, CMS — INTERACTIVE STALL SELECTOR
+                          </div>
+                          <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.smoke, marginTop: 2 }}>
+                            Click any available physical bay or cell to lock your brand's footprint on the floorplan.
+                          </div>
+                        </div>
+
+                        {/* Zone Filter Tabs */}
+                        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                          {[
+                            { id: 'ALL', label: 'ALL 20 STALLS' },
+                            { id: 'standard', label: 'PERGOLA BAYS (P)' },
+                            { id: 'double', label: 'GRAIL CELLS (C)' },
+                            { id: 'premium', label: 'CORNER JUNCTIONS (A)' },
+                            { id: 'collab', label: 'MONUMENT (M)' },
+                          ].map(t => (
+                            <button
+                              key={t.id}
+                              type="button"
+                              onClick={() => setStallZoneFilter(t.id)}
                               style={{
-                                padding: '12px 14px',
-                                borderRadius: 8,
-                                cursor: isFull ? 'not-allowed' : 'pointer',
-                                background: isSel ? `${B.neonCyan}15` : 'rgba(255,255,255,0.02)',
-                                border: `1px solid ${isSel ? B.neonCyan : 'rgba(255,255,255,0.08)'}`,
-                                opacity: isFull ? 0.45 : 1,
-                                transition: 'all 0.2s',
+                                padding: '4px 9px',
+                                borderRadius: 4,
+                                border: `1px solid ${stallZoneFilter === t.id ? B.neonCyan : 'rgba(255,255,255,0.1)'}`,
+                                background: stallZoneFilter === t.id ? `${B.neonCyan}20` : 'transparent',
+                                color: stallZoneFilter === t.id ? B.neonCyan : B.smoke,
+                                fontFamily: 'Space Mono, monospace',
+                                fontSize: 8,
+                                letterSpacing: 1,
+                                cursor: 'pointer',
                               }}
                             >
-                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-                                <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 10, color: isSel ? B.neonCyan : B.white, fontWeight: 700 }}>
-                                  {z.label}
-                                </span>
-                                <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 8, color: isFull ? B.neonMagenta : isSel ? B.neonCyan : B.smoke }}>
-                                  {isFull ? 'FULL' : `${spotsLeft} LEFT`}
-                                </span>
-                              </div>
-                              <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.dim }}>{z.hint}</div>
-                            </div>
-                          )
-                        })}
+                              {t.label}
+                            </button>
+                          ))}
+                        </div>
                       </div>
+
+                      {/* Interactive Stalls Grid */}
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: 10, maxHeight: 260, overflowY: 'auto', paddingRight: 4 }}>
+                        {FREEDOM_PARK_STALLS
+                          .filter(s => stallZoneFilter === 'ALL' || s.tier === stallZoneFilter)
+                          .map(s => {
+                            const isSelected = form.selectedStall === s.id
+                            const isTaken = s.status === 'taken'
+                            const tierColor = s.tier === 'collab' ? B.neonMagenta : s.tier === 'premium' ? B.amber : s.tier === 'double' ? B.neonCyan : B.neonLime
+
+                            return (
+                              <div
+                                key={s.id}
+                                onClick={() => {
+                                  if (!isTaken) {
+                                    setForm(f => ({ ...f, booth: s.tier, selectedStall: s.id }))
+                                  }
+                                }}
+                                style={{
+                                  padding: '10px 10px',
+                                  borderRadius: 8,
+                                  border: `1.5px solid ${isSelected ? B.neonCyan : isTaken ? 'rgba(255,255,255,0.06)' : `${tierColor}40`}`,
+                                  background: isSelected ? `${B.neonCyan}20` : isTaken ? 'rgba(15,15,20,0.6)' : 'rgba(255,255,255,0.02)',
+                                  cursor: isTaken ? 'not-allowed' : 'pointer',
+                                  opacity: isTaken ? 0.45 : 1,
+                                  transition: 'all 0.2s ease',
+                                  position: 'relative',
+                                }}
+                              >
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                                  <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 11, fontWeight: 700, color: isSelected ? B.white : tierColor }}>
+                                    {s.id}
+                                  </span>
+                                  <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 7, color: isTaken ? '#ff4d4d' : isSelected ? B.neonCyan : B.neonLime }}>
+                                    {isTaken ? 'TAKEN' : isSelected ? 'SELECTED' : 'FREE'}
+                                  </span>
+                                </div>
+                                <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 8, color: isSelected ? B.white : B.smoke, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                  {s.label}
+                                </div>
+                                <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 7, color: B.dim, marginTop: 2 }}>
+                                  {s.size} · {s.zone}
+                                </div>
+                                {isTaken && s.reservedBy && (
+                                  <div style={{ fontFamily: 'Space Mono, monospace', fontSize: 7, color: '#888', marginTop: 4, fontStyle: 'italic', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                    @{s.reservedBy}
+                                  </div>
+                                )}
+                              </div>
+                            )
+                          })}
+                      </div>
+
+                      {/* Selected Stall Callout Pill */}
+                      {form.selectedStall && (
+                        <div style={{ marginTop: 12, padding: '8px 14px', background: `${B.neonCyan}12`, border: `1px solid ${B.neonCyan}40`, borderRadius: 6, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 6 }}>
+                          <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, color: B.white }}>
+                            🎯 ALLOCATED SPOT: <strong style={{ color: B.neonCyan }}>STALL [{form.selectedStall}]</strong> ({selectedBooth.label}) &bull; Freedom Park, CMS
+                          </span>
+                          <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 8, color: B.neonLime }}>
+                            ✓ RESERVATION LOCKED IN PROFORMA INVOICE
+                          </span>
+                        </div>
+                      )}
                     </div>
 
                     {/* Tier Selection Cards */}

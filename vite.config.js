@@ -111,6 +111,7 @@ function swPrecache() {
 export default defineConfig({
   plugins: [react(), swPrecache()],
   build: {
+    reportCompressedSize: false,
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       // Two entry points: the festival site, and the staff door app which
