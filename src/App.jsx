@@ -21,6 +21,7 @@ import ReactivationBanner from './components/ReactivationBanner'
 import LiveActivity from './components/LiveActivity'
 import CommandPalette from './components/CommandPalette'
 import FestivalHUD from './components/FestivalHUD'
+import RadioFreedomPlayer from './components/RadioFreedomPlayer'
 import SectionBoundary from './components/SectionBoundary'
 import Defer, { mountAll, goToSection } from './components/Defer'
 import { SECTIONS } from './lib/siteIndex'
@@ -394,6 +395,7 @@ export default function App() {
         <SocialDock />
         <AIChat />
         <FestivalHUD />
+        <RadioFreedomPlayer />
         <BackToTop />
         <WhatsAppButton />
         <ShareButton />
