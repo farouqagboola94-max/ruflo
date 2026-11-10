@@ -397,19 +397,6 @@ export default function CultureMuseum() {
       const saved = JSON.parse(localStorage.getItem('sf26_museum_bids') || '{}')
       setBids(saved)
     } catch {}
-    watchRef.current = setInterval(() => {
-      setWatcherMap(prev => {
-        const next = { ...prev }
-        ARTWORKS.forEach((aw, i) => {
-          const base  = AW_WATCHERS[i]
-          const delta = Math.floor(Math.random() * 5) - 2
-          next[aw.id] = Math.max(base - 5, (prev[aw.id] || base) + delta)
-        })
-        return next
-      })
-    }, 9000)
-    bidRef.current = setInterval(() => setTickerIdx(p => (p + 1) % BID_ACTIVITY.length), 4500)
-    return () => { clearInterval(watchRef.current); clearInterval(bidRef.current) }
   }, [])
 
   function handleBid(id, amount) {
@@ -441,19 +428,10 @@ export default function CultureMuseum() {
           {totalBid > 0 && (
             <div style={{ display:'inline-flex', alignItems:'center', gap:10, marginTop:20,
               background:`${B.amber}12`, border:`1px solid ${B.amber}40`, borderRadius:40, padding:'8px 20px' }}>
-              <span style={{ fontFamily:'Space Mono', fontSize:10, color:B.amber, letterSpacing:1 }}>TOTAL BIDS PLACED</span>
+              <span style={{ fontFamily:'Space Mono', fontSize:10, color:B.amber, letterSpacing:1 }}>YOUR BIDS PLACED</span>
               <span style={{ fontFamily:'Bebas Neue', fontSize:18, color:B.amber, letterSpacing:2 }}>{fmt(totalBid)}</span>
             </div>
           )}
-          <style>{`@keyframes bidTick { 0%,100%{opacity:1} 50%{opacity:0.3} }`}</style>
-          <div className="reveal-3d" style={{ marginTop:14, display:'flex', justifyContent:'center' }}>
-            <div style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(255,255,255,0.025)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:4, padding:'7px 14px', maxWidth:380, overflow:'hidden' }}>
-              <span style={{ width:5, height:5, borderRadius:'50%', background:B.neonCyan, flexShrink:0, animation:'bidTick 3s ease infinite' }} />
-              <span style={{ fontFamily:"'Space Mono',monospace", fontSize:8, color: B.smoke, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>
-                {BID_ACTIVITY[tickerIdx]}
-              </span>
-            </div>
-          </div>
         </div>
 
         <div className="reveal-3d" style={{ columns:'auto 280px', columnGap:20, orphans:1, widows:1 }}>

@@ -96,7 +96,7 @@ export default function AuctionWall() {
     const tickId = setInterval(() => {
       setLots(prev => prev.map(lot => {
         if (lot.locked) return lot
-        const t = lot.timeLeft - 1
+        const t = Math.max(0, lot.timeLeft - 1)
         if (t <= 0) {
           // Check if user won this lot
           if (lot.highBidder === 'YOU (You are winning!)' || lot.highBidder === 'YOU') {
@@ -110,53 +110,7 @@ export default function AuctionWall() {
       }))
     }, 1000)
 
-    const bidId = setInterval(() => {
-      setLots(prev => {
-        const active = prev.filter(l => !l.locked)
-        if (!active.length) return prev
-        const target = active[Math.floor(Math.random() * active.length)]
-        const randomNames = ['LagosKicksGuru', 'EkoHypeBeast', 'GrailSniper_99', 'IslandSoleHunter', 'MainlandDon']
-        const randomBidder = randomNames[Math.floor(Math.random() * randomNames.length)]
-
-        return prev.map(lot => {
-          if (lot.id !== target.id || lot.locked) return lot
-          
-          const willAntiSnipe = lot.timeLeft <= 18
-          const newTime = willAntiSnipe ? Math.min(lot.timeLeft + 20, DURATION) : Math.min(lot.timeLeft + 8, DURATION)
-
-          // If user had high bid, mark them outbid in myBids
-          setMyBids(mb => {
-            if (mb[lot.id]) {
-              return {
-                ...mb,
-                [lot.id]: {
-                  ...mb[lot.id],
-                  status: 'OUTBID',
-                  topBid: Math.round(lot.currentBid * 1.03)
-                }
-              }
-            }
-            return mb
-          })
-
-          return {
-            ...lot,
-            currentBid: Math.round(lot.currentBid * 1.03),
-            bidCount: lot.bidCount + 1,
-            timeLeft: newTime,
-            highBidder: randomBidder,
-            flash: true,
-            antiSnipe: willAntiSnipe
-          }
-        })
-      })
-
-      setTimeout(() => {
-        setLots(prev => prev.map(l => ({ ...l, flash: false })))
-      }, 400)
-    }, 3800)
-
-    return () => { clearInterval(tickId); clearInterval(bidId) }
+    return () => { clearInterval(tickId) }
   }, [awardXP, unlockBadge])
 
   function placeBid(id) {
